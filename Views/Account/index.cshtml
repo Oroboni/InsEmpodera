@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-circles">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        <div class="circle circle-4"></div>
+        <div class="circle circle-5"></div>
+        <div class="circle circle-6"></div>
+    </div>
+
+    <main class="container-geral">
+        
+        <section class="painel-info">
+            <h1>Seja bem-vindo!</h1>
+            <p>Coloque usuário e senha para entrar</p>
+        </section>
+
+        <section class="painel-login">
+            <div class="logo">
+                <img src="~/img/logo-empodera.svg" alt="Logo">
+            </div>
+
+            <form class="login-form" method="post" asp-action="Login" asp-controller="Account">
+                @Html.AntiForgeryToken()
+                
+                <h2>Faça seu Login:</h2>
+                
+                <div class="form-group">
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        placeholder="Digite seu e-mail"
+                        name="Email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <input 
+                        type="password" 
+                        id="passwordInput"
+                        class="form-input" 
+                        placeholder="Digite sua senha"
+                        name="Password"
+                        required
+                    >
+                </div>
+
+                <div class="form-options">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword">Mostrar senha</label>
+                    </div>
+                    <a asp-action="Forgot" asp-controller="Account" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="login-button">ENTRAR</button>
+            </form>
+        </section>
+
+    </main>
+
+    <script src="~/js/login.js"></script>
+</body>
+</html>

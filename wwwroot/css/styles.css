@@ -1,0 +1,332 @@
+/* --- Configurações Globais e Variáveis de Cor --- */
+:root {
+    --cor-fundo: #7C4288;
+    --cor-painel-info: #7C4288;
+    --cor-destaque: #6BC0B7;
+    --cor-texto-claro: #FFFFFF;
+    --cor-texto-escuro: #333333;
+    --cor-texto-placeholder: #A0AEC0;
+    --cor-fundo-input: #F7F7F7;
+    --cor-sombra: rgba(35, 33, 39, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cor-fundo);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- Círculos Decorativos de Fundo COM ANIMAÇÃO --- */
+.background-circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    border-style: solid;
+    opacity: 0.4;
+    animation: floatCircles 6s ease-in-out infinite;
+}
+
+/* ANIMAÇÃO DAS BOLHAS */
+@keyframes floatCircles {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg); 
+    }
+    25% { 
+        transform: translateY(-15px) translateX(10px) rotate(2deg); 
+    }
+    50% { 
+        transform: translateY(-10px) translateX(-5px) rotate(-1deg); 
+    }
+    75% { 
+        transform: translateY(-20px) translateX(8px) rotate(3deg); 
+    }
+}
+
+.circle-1 { 
+    width: 200px; 
+    height: 200px; 
+    border: 12px solid var(--cor-texto-claro); 
+    top: 10%; 
+    left: 5%; 
+    animation-delay: 0s;
+    animation-duration: 8s;
+}
+
+.circle-2 { 
+    width: 150px; 
+    height: 150px; 
+    border: 10px solid var(--cor-destaque); 
+    top: 5%; 
+    right: 15%; 
+    animation-delay: 1s;
+    animation-duration: 7s;
+}
+
+.circle-3 { 
+    width: 250px; 
+    height: 250px; 
+    border: 15px solid var(--cor-texto-claro); 
+    bottom: 10%; 
+    right: 5%; 
+    animation-delay: 2s;
+    animation-duration: 9s;
+}
+
+.circle-4 { 
+    width: 120px; 
+    height: 120px; 
+    border: 8px solid var(--cor-destaque); 
+    bottom: 15%; 
+    left: 10%; 
+    animation-delay: 0.5s;
+    animation-duration: 6s;
+}
+
+.circle-5 { 
+    width: 180px; 
+    height: 180px; 
+    border: 10px solid var(--cor-destaque); 
+    top: 60%; 
+    left: -50px; 
+    animation-delay: 1.5s;
+    animation-duration: 7.5s;
+}
+
+.circle-6 { 
+    width: 100px; 
+    height: 100px; 
+    border: 8px solid var(--cor-texto-claro); 
+    top: 25%; 
+    right: -30px; 
+    animation-delay: 3s;
+    animation-duration: 5s;
+}
+
+/* --- Container Principal --- */
+.container-geral {
+    display: flex;
+    width: 800px;
+    height: 500px;
+    background-color: var(--cor-texto-claro);
+    border-radius: 25px;
+    box-shadow: 0 20px 40px var(--cor-sombra);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- Painel da Esquerda (Roxo) --- */
+.painel-info {
+    background-color: var(--cor-painel-info);
+    color: var(--cor-texto-claro);
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 50px;
+}
+
+.painel-info h1 {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.painel-info p {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* --- Painel da Direita (Branco com Formulário) --- */
+.painel-login {
+    background-color: var(--cor-texto-claro);
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 60px;
+}
+
+.logo img {
+    width: 100%;
+}
+
+.login-form {
+    width: 100%;
+}
+
+.login-form h2 {
+    color: var(--cor-texto-escuro);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    background-color: var(--cor-fundo-input);
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--cor-destaque);
+    border-width: 2px;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 192, 183, 0.2);
+}
+
+.form-input::placeholder {
+    color: var(--cor-texto-placeholder);
+}
+
+/* --- Opções do Formulário (Checkbox e Link) --- */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.checkbox-container label {
+    color: var(--cor-texto-escuro);
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--cor-destaque);
+    width: 14px;
+    height: 14px;
+}
+
+.forgot-password {
+    color: var(--cor-texto-escuro);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: var(--cor-destaque);
+}
+
+/* --- Botão de Login --- */
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--cor-destaque);
+    color: var(--cor-texto-claro);
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.login-button:hover {
+    background-color: #5BA8A0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 192, 183, 0.3);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+/* --- Responsividade para Telas Menores --- */
+@media (max-width: 850px) {
+    .container-geral {
+        flex-direction: column;
+        width: 90%;
+        max-width: 400px;
+        height: auto;
+    }
+
+    .painel-info {
+        padding: 30px 25px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .painel-info h1 {
+        font-size: 1.8rem;
+    }
+
+    .painel-login {
+        padding: 30px;
+    }
+
+    .logo {
+        top: 15px;
+        right: 20px;
+        width: 50px;
+    }
+
+    .login-form h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-geral {
+        width: 95%;
+        margin: 20px;
+    }
+
+    .painel-info {
+        padding: 25px 20px;
+    }
+
+    .painel-login {
+        padding: 25px;
+    }
+}
