@@ -23,7 +23,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Login(string username, string password)
     {
-        // Exemplo de validação simples (trocar por autenticação real depois)
         if (username == "user" && password == "123")
         {
             return RedirectToAction("HomePage");
@@ -38,20 +37,7 @@ public class HomeController : Controller
     {
         return View("~/Views/Home/Sidebar/HomePage.cshtml");
     }
-    // código que talvez usemos futuramente
-    //  public IActionResult Login(string username, string password)
-    // {
-    //     // Sua lógica de autenticação aqui
-    //     if (ValidateUser(username, password))
-    //     {
-    //         // Redireciona para HomePage após login bem-sucedido
-    //         return RedirectToAction("HomePage");
-    //     }
-        
-    //     // Se falhou, volta para Index com erro
-    //     ViewBag.Error = "Usuário ou senha inválidos";
-    //     return View("Index");
-    // }
+    
      public IActionResult Comunidades()
     {
         return View("~/Views/Home/Sidebar/Comunidades.cshtml");
@@ -117,14 +103,6 @@ public class HomeController : Controller
         // espaçozinho para talvez futura lógica de logout
         return RedirectToAction("Home");
     }
-
-
-    // código que também talvez usemos futuramente
-    // private bool ValidateUser(string username, string password)
-    // {
-    //     // Implementar sua lógica de validação aqui
-    //     return true; // placeholder
-    // }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
