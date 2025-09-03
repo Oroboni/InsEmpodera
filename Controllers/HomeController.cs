@@ -16,8 +16,9 @@ public class HomeController : Controller
     //aí quando iniciar o site ele ja inicia no login
     public IActionResult Index()
     {
-        return View("~/Views/Home/Sidebar/HomePage.cshtml");
+        return RedirectToAction("HomePage");
     }
+
     public IActionResult HomePage()
     {
         return View("~/Views/Home/Sidebar/HomePage.cshtml");
