@@ -12,8 +12,6 @@ public class HomeController : Controller
     {
         _logger = logger;
     }
-    //pessoal, o plano é q a página de login fique aqui
-    //aí quando iniciar o site ele ja inicia no login
 
     public IActionResult Index()
     {

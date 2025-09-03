@@ -1,10 +1,10 @@
-﻿@functions {
+﻿@* @functions {
     string IsActive(string actionName)
     {
         var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
         return string.Equals(currentAction, actionName, StringComparison.OrdinalIgnoreCase) ? "active" : "";
     }
-}
+} *@
 
 <!DOCTYPE html>
 <html lang="pt-br">
