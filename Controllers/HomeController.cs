@@ -19,7 +19,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         // Aqui você mostra a tela de login
-        return View("~/Views/Home/Login.cshtml");
+        return View("~/Views/Account/index.cshtml");
     }
     [HttpPost]
     public IActionResult Login(string username, string password)
