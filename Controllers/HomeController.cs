@@ -14,10 +14,25 @@ public class HomeController : Controller
     }
     //pessoal, o plano é q a página de login fique aqui
     //aí quando iniciar o site ele ja inicia no login
+
     public IActionResult Index()
     {
-        return RedirectToAction("HomePage");
+        // Aqui você mostra a tela de login
+        return View("~/Views/Home/Login.cshtml");
     }
+    [HttpPost]
+    public IActionResult Login(string username, string password)
+    {
+        // Exemplo de validação simples (trocar por autenticação real depois)
+        if (username == "user" && password == "123")
+        {
+            return RedirectToAction("HomePage");
+        }
+
+        ViewBag.Error = "Usuário ou senha inválidos";
+        return View("Login");
+    }
+
 
     public IActionResult HomePage()
     {

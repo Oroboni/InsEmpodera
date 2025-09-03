@@ -17,37 +17,24 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 
-// Rota para homepage (dashboard após login)
+// 🔹 Rota padrão → abre no Login
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// 🔹 Alias /homepage → HomePage
 app.MapControllerRoute(
     name: "homepage",
     pattern: "homepage",
     defaults: new { controller = "Home", action = "HomePage" });
 
-// Rota alternativa para home
+// 🔹 Alias /home → HomePage
 app.MapControllerRoute(
     name: "home-alt",
     pattern: "home",
     defaults: new { controller = "Home", action = "HomePage" });
 
-// Rotas específicas da sidebar (só acessíveis após login)
-app.MapControllerRoute(
-    name: "comunidades",
-    pattern: "comunidades",
-    defaults: new { controller = "Home", action = "Comunidades" });
-
-app.MapControllerRoute(
-    name: "atores",
-    pattern: "atores",
-    defaults: new { controller = "Home", action = "Atores" });
-
-// ... outras rotas da sidebar ...
-
-// Rota padrão (Index = Login)
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Fallback para aplicação logada
+// 🔹 Fallback → se rota não existir, cai no HomePage
 app.MapFallbackToController("HomePage", "Home");
 
 app.Run();

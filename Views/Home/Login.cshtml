@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = null; <!-- sem layout para ficar isolado -->
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <title>Login - Empodera</title>
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+    <div class="login-container">
+        <h2>Instituto Empodera</h2>
+        <form method="post" asp-action="Login">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="error">@ViewBag.Error</p>
+            }
+
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+</body>
+</html>
