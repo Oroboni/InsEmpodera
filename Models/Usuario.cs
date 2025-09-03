@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class Usuario
     {
+        [Key]
         public int IdUsuario { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;

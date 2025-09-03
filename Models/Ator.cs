@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class Ator
     {
+        [Key]
         public int IdAtores { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Genero { get; set; } = string.Empty;

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class FichaPrimeiroContato
     {
+        [Key]
         public int IdFicha { get; set; }
         public int AtorId { get; set; }
         public string Localizacao { get; set; } = string.Empty;

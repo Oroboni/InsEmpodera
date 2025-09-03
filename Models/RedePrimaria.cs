@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class RedePrimaria
     {
+        [Key]
         public int IdRedePrimaria { get; set; }
         public int AtorPrincipalId { get; set; }
         public int AtorRelacionadoId { get; set; }

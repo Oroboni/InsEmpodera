@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class PerfilAcesso
     {
+        [Key]
         public int IdPAcesso { get; set; }
     }
 }

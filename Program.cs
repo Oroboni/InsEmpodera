@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Entre.Data;
+using Empodera.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

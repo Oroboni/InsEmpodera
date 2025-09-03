@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class Comunidade
     {
+        [Key]
         public int IdComunidade { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Local { get; set; } = string.Empty;

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Entre.Models;
+using Empodera.Models;
 
-namespace Entre.Data
+namespace Empodera.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -9,36 +9,63 @@ namespace Entre.Data
         {
         }
 
-        public DbSet<Acao> Acoes { get; set; }
-        public DbSet<AcoesAtores> AcoesAtores { get; set; }
-        public BdSet<AnexoDiario> AnexosDiario { get; set; }
-        public DbSet<Atividade> Atividades { get; set; }
-        public DbSet<AtividadeEixo> AtividadeEixos { get; set; }
-        public DbSet<Ator> Atores { get; set; }
-        public DbSet<AtorComunidade> AtorComunidades { get; set; }
-        public DbSet<AvaliacaoPessoa> AvaliacaoPessoa { get; set; }
-        public DbSet<Comunidade> Comunidades { get; set; }
-        public DbSet<DiarioAcoes> DiarioAcoes { get; set; }
-        public DbSet<DiarioCampo> DiariosCampo { get; set; }
-        public DbSet<DiarioEixo> DiarioEixos { get; set; }
-        public DbSet<Eixo> Eixos { get; set; }
-        public DbSet<FichaCondicoes> FichasCondicoes { get; set; }
-        public DbSet<FichaPeticoes> FichaPeticoes { get; set; }
-        public DbSet<FichaResp> FichaResp { get; set; }
-        public DbSet<FichaResult> FichaResult { get; set; }
-        public DbSet<PerfilAcesso> PerfilAcesso { get; set; }
-        public DbSet<Rede> Redes { get; set; }
-        public DbSet<RedeEixo> RedeEixos { get; set; }
-        public DbSet<RedePrimaria> RedePrimaria { get; set; }
-        public DbSet<RedeRecurso> RedeRecursos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<UsuarioPerfil> UsuarioPerfis { get; set; }
-        public DbSet<Vulnerabilidade> Vulnerabilidade { get; set; }
-        public DbSet<VulnerabilidadesEixo> VulnerabilidadesEixo { get; set; }
+        public DbSet<PerfilAcesso> PerfisAcesso { get; set; }
+        public DbSet<Permissao> Permissoes { get; set; }
+        public DbSet<Comunidade> Comunidades { get; set; }
+        public DbSet<Ator> Atores { get; set; }
+        public DbSet<RedeRecurso> Redes { get; set; }
+        public DbSet<Eixo> Eixos { get; set; }
+        public DbSet<RedeEixo> RedeEixos { get; set; }
+        public DbSet<AtorComunidade> AtorComunidades { get; set; }
+        public DbSet<DiarioCampo> DiariosCampo { get; set; }
+        public DbSet<DiarioAcoes> DiarioAcoes { get; set; }
+        public DbSet<DiarioEixo> DiarioEixos { get; set; }
+        public DbSet<Acoes> Acoes { get; set; }
+        public DbSet<AcoesAtores> AcoesAtores { get; set; }
+        public DbSet<AnexosDiario> AnexosDiario { get; set; }
+        public DbSet<Vulnerabilidade> Vulnerabilidades { get; set; }
+        public DbSet<VulnerabilidadesEixo> VulnerabilidadeEixos { get; set; }
+        public DbSet<RedePrimaria> RedesPrimarias { get; set; }
+        public DbSet<AvaliacaoPessoal> AvaliacoesPessoais { get; set; }
+        public DbSet<FichaPrimeiroContato> FichasPrimeiroContato { get; set; }
+        public DbSet<FichaCondicoes> FichaCondicoes { get; set; }
+        public DbSet<FichaPeticoes> FichaPeticoes { get; set; }
+        public DbSet<FichaResp> FichaRespostas { get; set; }
+        public DbSet<FichaResult> FichaResultados { get; set; }
+        public DbSet<Atividade> Atividades { get; set; }
+        public DbSet<AtividadesEixo> AtividadeEixos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
+            modelBuilder.Entity<UsuarioPerfil>().HasKey(up => up.IdPUsuario);
+            modelBuilder.Entity<PerfilAcesso>().HasKey(p => p.IdPAcesso);
+            modelBuilder.Entity<Permissao>().HasKey(p => p.IdPermissoes);
+            modelBuilder.Entity<Comunidade>().HasKey(c => c.IdComunidade);
+            modelBuilder.Entity<Ator>().HasKey(a => a.IdAtores);
+            modelBuilder.Entity<RedeRecurso>().HasKey(r => r.IdRede);
+            modelBuilder.Entity<Eixo>().HasKey(e => e.IdEixo);
+            modelBuilder.Entity<RedeEixo>().HasKey(re => re.IdRedeEixo);
+            modelBuilder.Entity<AtorComunidade>().HasKey(ac => ac.IdAComunidade);
+            modelBuilder.Entity<DiarioCampo>().HasKey(dc => dc.IdDCampo);
+            modelBuilder.Entity<DiarioAcoes>().HasKey(da => da.IdDAcoes);
+            modelBuilder.Entity<DiarioEixo>().HasKey(de => de.IdDiarioEixo);
+            modelBuilder.Entity<Acoes>().HasKey(a => a.IdAcoes);
+            modelBuilder.Entity<AcoesAtores>().HasKey(aa => aa.IdAAtores);
+            modelBuilder.Entity<AnexosDiario>().HasKey(ad => ad.IdAnexos);
+            modelBuilder.Entity<Vulnerabilidade>().HasKey(v => v.IdVulnerabilidade);
+            modelBuilder.Entity<VulnerabilidadesEixo>().HasKey(ve => ve.IdVEixo);
+            modelBuilder.Entity<RedePrimaria>().HasKey(rp => rp.IdRedePrimaria);
+            modelBuilder.Entity<AvaliacaoPessoal>().HasKey(ap => ap.IdAvaliacao);
+            modelBuilder.Entity<FichaPrimeiroContato>().HasKey(fp => fp.IdFicha);
+            modelBuilder.Entity<FichaCondicoes>().HasKey(fc => fc.IdCondicoes);
+            modelBuilder.Entity<FichaPeticoes>().HasKey(fp => fp.IdPeticoes);
+            modelBuilder.Entity<FichaResp>().HasKey(fr => fr.IdCondicoes);
+            modelBuilder.Entity<FichaResult>().HasKey(fr => fr.IdCondicoes);
+            modelBuilder.Entity<Atividade>().HasKey(at => at.IdAtividade);
+            modelBuilder.Entity<AtividadesEixo>().HasKey(ae => ae.IdAEixo);
 
             // UsuarioPerfil -> Usuario (N:1)
             modelBuilder.Entity<RedePrimaria>()
@@ -113,11 +140,11 @@ namespace Entre.Data
 
             // Usuario
             modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { IdUsuario = 1, Nome = "João Silva", Senha = "123456", Foto = "joao.png", Email = "joao@email.com", Ocupacao = "Professor", Genero = "Masculino", DtNascimento = new DateTime(1990, 5, 12), NivelPermissao = 1, DtCriacao = DateTime.Now },
-                new Usuario { IdUsuario = 2, Nome = "Maria Souza", Senha = "123456", Foto = "maria.png", Email = "maria@email.com", Ocupacao = "Engenheira", Genero = "Feminino", DtNascimento = new DateTime(1988, 3, 22), NivelPermissao = 2, DtCriacao = DateTime.Now },
-                new Usuario { IdUsuario = 3, Nome = "Carlos Lima", Senha = "123456", Foto = "carlos.png", Email = "carlos@email.com", Ocupacao = "Estudante", Genero = "Masculino", DtNascimento = new DateTime(2000, 7, 15), NivelPermissao = 1, DtCriacao = DateTime.Now },
-                new Usuario { IdUsuario = 4, Nome = "Ana Pereira", Senha = "123456", Foto = "ana.png", Email = "ana@email.com", Ocupacao = "Médica", Genero = "Feminino", DtNascimento = new DateTime(1995, 11, 5), NivelPermissao = 3, DtCriacao = DateTime.Now },
-                new Usuario { IdUsuario = 5, Nome = "Pedro Santos", Senha = "123456", Foto = "pedro.png", Email = "pedro@email.com", Ocupacao = "Advogado", Genero = "Masculino", DtNascimento = new DateTime(1985, 1, 30), NivelPermissao = 2, DtCriacao = DateTime.Now }
+                new Usuario { IdUsuario = 1, Nome = "João Silva", Senha = "123456", Foto = "joao.png", Email = "joao@email.com", Ocupacao = "Professor", Genero = "Masculino", DtNascimento = new DateTime(1990, 5, 12), NivelPermissao = 1, DtCriacao = new DateTime(2023, 01, 01) },
+                new Usuario { IdUsuario = 2, Nome = "Maria Souza", Senha = "123456", Foto = "maria.png", Email = "maria@email.com", Ocupacao = "Engenheira", Genero = "Feminino", DtNascimento = new DateTime(1988, 3, 22), NivelPermissao = 2, DtCriacao = new DateTime(2023, 01, 01) },
+                new Usuario { IdUsuario = 3, Nome = "Carlos Lima", Senha = "123456", Foto = "carlos.png", Email = "carlos@email.com", Ocupacao = "Estudante", Genero = "Masculino", DtNascimento = new DateTime(2000, 7, 15), NivelPermissao = 1, DtCriacao = new DateTime(2023, 01, 01) },
+                new Usuario { IdUsuario = 4, Nome = "Ana Pereira", Senha = "123456", Foto = "ana.png", Email = "ana@email.com", Ocupacao = "Médica", Genero = "Feminino", DtNascimento = new DateTime(1995, 11, 5), NivelPermissao = 3, DtCriacao = new DateTime(2023, 01, 01) },
+                new Usuario { IdUsuario = 5, Nome = "Pedro Santos", Senha = "123456", Foto = "pedro.png", Email = "pedro@email.com", Ocupacao = "Advogado", Genero = "Masculino", DtNascimento = new DateTime(1985, 1, 30), NivelPermissao = 2, DtCriacao = new DateTime(2023, 01, 01) }
             );
 
             modelBuilder.Entity<PerfilAcesso>().HasData(
@@ -139,33 +166,13 @@ namespace Entre.Data
             );
 
 
-            // ===================== Permissoes =====================
-            modelBuilder.Entity<Permissao>().HasData(
-            new Permissao { IdPermissoes = 1, PerfilAcessoId = 1, PermissaoNome = "Ler" },
-            new Permissao { IdPermissoes = 2, PerfilAcessoId = 2, PermissaoNome = "Escrever" },
-            new Permissao { IdPermissoes = 3, PerfilAcessoId = 3, PermissaoNome = "Editar" },
-            new Permissao { IdPermissoes = 4, PerfilAcessoId = 4, PermissaoNome = "Excluir" },
-            new Permissao { IdPermissoes = 5, PerfilAcessoId = 5, PermissaoNome = "Administrador" }
-            );
-
-
             // ===================== Comunidade =====================
             modelBuilder.Entity<Comunidade>().HasData(
-            new Comunidade { IdComunidade = 1, Nome = "Comunidade A", Local = "São Paulo", Status = "Ativa", Complemento = "Zona Leste", Descricao = "Comunidade em SP", DescricaoAcessibilidade = "Acessível", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Comunidade { IdComunidade = 2, Nome = "Comunidade B", Local = "Rio de Janeiro", Status = "Ativa", Complemento = "Zona Norte", Descricao = "Comunidade no RJ", DescricaoAcessibilidade = "Parcial", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Comunidade { IdComunidade = 3, Nome = "Comunidade C", Local = "Belo Horizonte", Status = "Inativa", Complemento = "Centro", Descricao = "Comunidade em BH", DescricaoAcessibilidade = "Baixa", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Comunidade { IdComunidade = 4, Nome = "Comunidade D", Local = "Curitiba", Status = "Ativa", Complemento = "Sul", Descricao = "Comunidade no PR", DescricaoAcessibilidade = "Alta", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Comunidade { IdComunidade = 5, Nome = "Comunidade E", Local = "Salvador", Status = "Ativa", Complemento = "Norte", Descricao = "Comunidade na BA", DescricaoAcessibilidade = "Média", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
-            );
-
-
-            // ===================== Atores =====================
-            modelBuilder.Entity<Ator>().HasData(
-            new Ator { IdAtores = 1, Nome = "Lucas Andrade", Genero = "Masculino", Idade = 30, PapelSocial1 = "Líder", PapelSocial2 = "Professor", Telefone = 119111111, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Ator { IdAtores = 2, Nome = "Fernanda Costa", Genero = "Feminino", Idade = 28, PapelSocial1 = "Médica", PapelSocial2 = "Voluntária", Telefone = 219222222, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Ator { IdAtores = 3, Nome = "Roberto Alves", Genero = "Masculino", Idade = 35, PapelSocial1 = "Advogado", PapelSocial2 = "Consultor", Telefone = 319333333, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Ator { IdAtores = 4, Nome = "Juliana Prado", Genero = "Feminino", Idade = 26, PapelSocial1 = "Estudante", PapelSocial2 = "Estagiária", Telefone = 419444444, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-            new Ator { IdAtores = 5, Nome = "Marcelo Nunes", Genero = "Masculino", Idade = 40, PapelSocial1 = "Empresário", PapelSocial2 = "Mentor", Telefone = 519555555, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
+            new Comunidade { IdComunidade = 1, Nome = "Comunidade A", Local = "São Paulo", Status = "Ativa", Complemento = "Zona Leste", Descricao = "Comunidade em SP", DescricaoAcessibilidade = "Acessível", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+            new Comunidade { IdComunidade = 2, Nome = "Comunidade B", Local = "Rio de Janeiro", Status = "Ativa", Complemento = "Zona Norte", Descricao = "Comunidade no RJ", DescricaoAcessibilidade = "Parcial", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+            new Comunidade { IdComunidade = 3, Nome = "Comunidade C", Local = "Belo Horizonte", Status = "Inativa", Complemento = "Centro", Descricao = "Comunidade em BH", DescricaoAcessibilidade = "Baixa", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+            new Comunidade { IdComunidade = 4, Nome = "Comunidade D", Local = "Curitiba", Status = "Ativa", Complemento = "Sul", Descricao = "Comunidade no PR", DescricaoAcessibilidade = "Alta", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+            new Comunidade { IdComunidade = 5, Nome = "Comunidade E", Local = "Salvador", Status = "Ativa", Complemento = "Norte", Descricao = "Comunidade na BA", DescricaoAcessibilidade = "Média", DtCriacao = new DateTime(2023, 01, 01), DtModificacao =new DateTime(2023, 01, 01) }
             );
 
             // ===================== Permissoes =====================
@@ -177,31 +184,22 @@ namespace Entre.Data
                 new Permissao { IdPermissoes = 5, PerfilAcessoId = 5, PermissaoNome = "Administrador" }
             );
 
-            // ===================== Comunidade =====================
-            modelBuilder.Entity<Comunidade>().HasData(
-                new Comunidade { IdComunidade = 1, Nome = "Comunidade A", Local = "São Paulo", Status = "Ativa", Complemento = "Zona Leste", Descricao = "Comunidade em SP", DescricaoAcessibilidade = "Acessível", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Comunidade { IdComunidade = 2, Nome = "Comunidade B", Local = "Rio de Janeiro", Status = "Ativa", Complemento = "Zona Norte", Descricao = "Comunidade no RJ", DescricaoAcessibilidade = "Parcial", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Comunidade { IdComunidade = 3, Nome = "Comunidade C", Local = "Belo Horizonte", Status = "Inativa", Complemento = "Centro", Descricao = "Comunidade em BH", DescricaoAcessibilidade = "Baixa", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Comunidade { IdComunidade = 4, Nome = "Comunidade D", Local = "Curitiba", Status = "Ativa", Complemento = "Sul", Descricao = "Comunidade no PR", DescricaoAcessibilidade = "Alta", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Comunidade { IdComunidade = 5, Nome = "Comunidade E", Local = "Salvador", Status = "Ativa", Complemento = "Norte", Descricao = "Comunidade na BA", DescricaoAcessibilidade = "Média", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
-            );
-
             // ===================== Atores =====================
             modelBuilder.Entity<Ator>().HasData(
-                new Ator { IdAtores = 1, Nome = "Lucas Andrade", Genero = "Masculino", Idade = 30, PapelSocial1 = "Líder", PapelSocial2 = "Professor", Telefone = 119111111, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Ator { IdAtores = 2, Nome = "Fernanda Costa", Genero = "Feminino", Idade = 28, PapelSocial1 = "Médica", PapelSocial2 = "Voluntária", Telefone = 219222222, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Ator { IdAtores = 3, Nome = "Roberto Alves", Genero = "Masculino", Idade = 35, PapelSocial1 = "Advogado", PapelSocial2 = "Consultor", Telefone = 319333333, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Ator { IdAtores = 4, Nome = "Juliana Prado", Genero = "Feminino", Idade = 26, PapelSocial1 = "Estudante", PapelSocial2 = "Estagiária", Telefone = 419444444, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new Ator { IdAtores = 5, Nome = "Marcelo Nunes", Genero = "Masculino", Idade = 40, PapelSocial1 = "Empresário", PapelSocial2 = "Mentor", Telefone = 519555555, Extra = "Ativo", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
+                new Ator { IdAtores = 1, Nome = "Lucas Andrade", Genero = "Masculino", Idade = 30, PapelSocial1 = "Líder", PapelSocial2 = "Professor", Telefone = 119111111, Extra = "Ativo", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new Ator { IdAtores = 2, Nome = "Fernanda Costa", Genero = "Feminino", Idade = 28, PapelSocial1 = "Médica", PapelSocial2 = "Voluntária", Telefone = 219222222, Extra = "Ativo", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new Ator { IdAtores = 3, Nome = "Roberto Alves", Genero = "Masculino", Idade = 35, PapelSocial1 = "Advogado", PapelSocial2 = "Consultor", Telefone = 319333333, Extra = "Ativo", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new Ator { IdAtores = 4, Nome = "Juliana Prado", Genero = "Feminino", Idade = 26, PapelSocial1 = "Estudante", PapelSocial2 = "Estagiária", Telefone = 419444444, Extra = "Ativo", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new Ator { IdAtores = 5, Nome = "Marcelo Nunes", Genero = "Masculino", Idade = 40, PapelSocial1 = "Empresário", PapelSocial2 = "Mentor", Telefone = 519555555, Extra = "Ativo", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
             );
 
             // ===================== Rede_Recursos =====================
             modelBuilder.Entity<RedeRecurso>().HasData(
-                new RedeRecurso { IdRede = 1, AtorId = 1, ComunidadeId = 1, Tipo = "Internet", Dispositivo = "PC", Servicos = "Acesso remoto", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new RedeRecurso { IdRede = 2, AtorId = 2, ComunidadeId = 2, Tipo = "Telefonia", Dispositivo = "Celular", Servicos = "Chamadas", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new RedeRecurso { IdRede = 3, AtorId = 3, ComunidadeId = 3, Tipo = "Energia", Dispositivo = "Gerador", Servicos = "Suporte elétrico", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new RedeRecurso { IdRede = 4, AtorId = 4, ComunidadeId = 4, Tipo = "Água", Dispositivo = "Reservatório", Servicos = "Abastecimento", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new RedeRecurso { IdRede = 5, AtorId = 5, ComunidadeId = 5, Tipo = "Saúde", Dispositivo = "Clínica", Servicos = "Atendimento médico", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
+                new RedeRecurso { IdRede = 1, AtorId = 1, ComunidadeId = 1, Tipo = "Internet", Dispositivo = "PC", Servicos = "Acesso remoto", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new RedeRecurso { IdRede = 2, AtorId = 2, ComunidadeId = 2, Tipo = "Telefonia", Dispositivo = "Celular", Servicos = "Chamadas", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new RedeRecurso { IdRede = 3, AtorId = 3, ComunidadeId = 3, Tipo = "Energia", Dispositivo = "Gerador", Servicos = "Suporte elétrico", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new RedeRecurso { IdRede = 4, AtorId = 4, ComunidadeId = 4, Tipo = "Água", Dispositivo = "Reservatório", Servicos = "Abastecimento", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new RedeRecurso { IdRede = 5, AtorId = 5, ComunidadeId = 5, Tipo = "Saúde", Dispositivo = "Clínica", Servicos = "Atendimento médico", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
             );
 
             // ===================== Eixo =====================
@@ -233,11 +231,11 @@ namespace Entre.Data
 
             // ===================== Diario_Campo =====================
             modelBuilder.Entity<DiarioCampo>().HasData(
-                new DiarioCampo { IdDCampo = 1, ComunidadeId = 1, Data = DateTime.Now, Descricao = "Reunião comunitária", Localizacao = "Praça central", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new DiarioCampo { IdDCampo = 2, ComunidadeId = 2, Data = DateTime.Now, Descricao = "Atividade esportiva", Localizacao = "Quadra", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new DiarioCampo { IdDCampo = 3, ComunidadeId = 3, Data = DateTime.Now, Descricao = "Feira cultural", Localizacao = "Centro comunitário", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new DiarioCampo { IdDCampo = 4, ComunidadeId = 4, Data = DateTime.Now, Descricao = "Ação social", Localizacao = "Escola local", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new DiarioCampo { IdDCampo = 5, ComunidadeId = 5, Data = DateTime.Now, Descricao = "Encontro de líderes", Localizacao = "Associação", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
+                new DiarioCampo { IdDCampo = 1, ComunidadeId = 1, Data = new DateTime(2023, 01, 01), Descricao = "Reunião comunitária", Localizacao = "Praça central", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { IdDCampo = 2, ComunidadeId = 2, Data = new DateTime(2023, 01, 01), Descricao = "Atividade esportiva", Localizacao = "Quadra", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { IdDCampo = 3, ComunidadeId = 3, Data = new DateTime(2023, 01, 01), Descricao = "Feira cultural", Localizacao = "Centro comunitário", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { IdDCampo = 4, ComunidadeId = 4, Data = new DateTime(2023, 01, 01), Descricao = "Ação social", Localizacao = "Escola local", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { IdDCampo = 5, ComunidadeId = 5, Data = new DateTime(2023, 01, 01), Descricao = "Encontro de líderes", Localizacao = "Associação", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
             );
             
                 // ===================== Diario_Acoes =====================
@@ -278,11 +276,11 @@ namespace Entre.Data
 
             // ===================== Acoes_Atores =====================
             modelBuilder.Entity<AcoesAtores>().HasData(
-                new AcoesAtores { IdAAtores = 1, AtoresId = 1, AcoesId = 1 },
-                new AcoesAtores { IdAAtores = 2, AtoresId = 2, AcoesId = 2 },
-                new AcoesAtores { IdAAtores = 3, AtoresId = 3, AcoesId = 3 },
-                new AcoesAtores { IdAAtores = 4, AtoresId = 4, AcoesId = 4 },
-                new AcoesAtores { IdAAtores = 5, AtoresId = 5, AcoesId = 5 }
+                new AcoesAtores { IdAAtores = 1, AtorId = 1, AcoesId = 1 },
+                new AcoesAtores { IdAAtores = 2, AtorId = 2, AcoesId = 2 },
+                new AcoesAtores { IdAAtores = 3, AtorId = 3, AcoesId = 3 },
+                new AcoesAtores { IdAAtores = 4, AtorId = 4, AcoesId = 4 },
+                new AcoesAtores { IdAAtores = 5, AtorId = 5, AcoesId = 5 }
             );
 
             // ===================== Anexos_Diario =====================
@@ -323,29 +321,20 @@ namespace Entre.Data
 
             // ===================== Avaliacao_Pessoal =====================
             modelBuilder.Entity<AvaliacaoPessoal>().HasData(
-                new AvaliacaoPessoal { IdAvaliacao = 1, AtorId = 1, CCrimes = 1, Substancias = 0, Moradia = 1, Prevenção = 1, AssBasica = 2, Educacao = 3, Saude = 2, Ocupacao = 1, Lazer = 2, DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new AvaliacaoPessoal { IdAvaliacao = 2, AtorId = 2, CCrimes = 0, Substancias = 1, Moradia = 2, Prevenção = 1, AssBasica = 2, Educacao = 4, Saude = 3, Ocupacao = 2, Lazer = 3, DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new AvaliacaoPessoal { IdAvaliacao = 3, AtorId = 3, CCrimes = 2, Substancias = 1, Moradia = 3, Prevenção = 2, AssBasica = 3, Educacao = 2, Saude = 2, Ocupacao = 3, Lazer = 1, DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new AvaliacaoPessoal { IdAvaliacao = 4, AtorId = 4, CCrimes = 0, Substancias = 0, Moradia = 1, Prevenção = 2, AssBasica = 4, Educacao = 4, Saude = 3, Ocupacao = 2, Lazer = 4, DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new AvaliacaoPessoal { IdAvaliacao = 5, AtorId = 5, CCrimes = 1, Substancias = 2, Moradia = 2, Prevenção = 3, AssBasica = 2, Educacao = 3, Saude = 2, Ocupacao = 3, Lazer = 2, DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
-            );
-
-            // ===================== FonteInf =====================
-            modelBuilder.Entity<FonteInf>().HasData(
-                new FonteInf { IdFonte = 1 },
-                new FonteInf { IdFonte = 2 },
-                new FonteInf { IdFonte = 3 },
-                new FonteInf { IdFonte = 4 },
-                new FonteInf { IdFonte = 5 }
+                new AvaliacaoPessoal { IdAvaliacao = 1, AtorId = 1, CCrimes = 1, Substancias = 0, Moradia = 1, Prevenção = 1, AssBasica = 2, Educacao = 3, Saude = 2, Ocupacao = 1, Lazer = 2, DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new AvaliacaoPessoal { IdAvaliacao = 2, AtorId = 2, CCrimes = 0, Substancias = 1, Moradia = 2, Prevenção = 1, AssBasica = 2, Educacao = 4, Saude = 3, Ocupacao = 2, Lazer = 3, DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new AvaliacaoPessoal { IdAvaliacao = 3, AtorId = 3, CCrimes = 2, Substancias = 1, Moradia = 3, Prevenção = 2, AssBasica = 3, Educacao = 2, Saude = 2, Ocupacao = 3, Lazer = 1, DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new AvaliacaoPessoal { IdAvaliacao = 4, AtorId = 4, CCrimes = 0, Substancias = 0, Moradia = 1, Prevenção = 2, AssBasica = 4, Educacao = 4, Saude = 3, Ocupacao = 2, Lazer = 4, DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new AvaliacaoPessoal { IdAvaliacao = 5, AtorId = 5, CCrimes = 1, Substancias = 2, Moradia = 2, Prevenção = 3, AssBasica = 2, Educacao = 3, Saude = 2, Ocupacao = 3, Lazer = 2, DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
             );
 
             // ===================== Ficha_Primeiro_Contato =====================
             modelBuilder.Entity<FichaPrimeiroContato>().HasData(
-                new FichaPrimeiroContato { IdFicha = 1, AtorId = 1, Localizacao = "Zona Norte", Data = DateTime.Now, LContato = "Vizinho", FonteDados = "Censo", EstaFamiliar = "Sim", EstruFamiliar = "Completa", NFilhos = 2, NFilhas = 1, AEscola = 1, SLer = "Sim", SCalc = "Sim", SComp = "Não", QReabili = 0, LTrat = "Nenhum", Coment = "Boa integração", CPrimeiroContato = "2023-1", EParceiro = "Sim", FPeloParceirto = "Não", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new FichaPrimeiroContato { IdFicha = 2, AtorId = 2, Localizacao = "Zona Sul", Data = DateTime.Now, LContato = "ONG", FonteDados = "Entrevista", EstaFamiliar = "Não", EstruFamiliar = "Parcial", NFilhos = 1, NFilhas = 0, AEscola = 0, SLer = "Sim", SCalc = "Não", SComp = "Não", QReabili = 1, LTrat = "Clínica", Coment = "Necessita apoio", CPrimeiroContato = "2023-2", EParceiro = "Não", FPeloParceirto = "Não", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new FichaPrimeiroContato { IdFicha = 3, AtorId = 3, Localizacao = "Zona Leste", Data = DateTime.Now, LContato = "Assistente social", FonteDados = "Formulário", EstaFamiliar = "Sim", EstruFamiliar = "Completa", NFilhos = 3, NFilhas = 2, AEscola = 1, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Boa situação", CPrimeiroContato = "2023-3", EParceiro = "Sim", FPeloParceirto = "Sim", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new FichaPrimeiroContato { IdFicha = 4, AtorId = 4, Localizacao = "Zona Oeste", Data = DateTime.Now, LContato = "Igreja", FonteDados = "Entrevista", EstaFamiliar = "Não", EstruFamiliar = "Incompleta", NFilhos = 0, NFilhas = 1, AEscola = 1, SLer = "Não", SCalc = "Não", SComp = "Não", QReabili = 2, LTrat = "Hospital", Coment = "Vulnerável", CPrimeiroContato = "2023-4", EParceiro = "Não", FPeloParceirto = "Não", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now },
-                new FichaPrimeiroContato { IdFicha = 5, AtorId = 5, Localizacao = "Centro", Data = DateTime.Now, LContato = "Escola", FonteDados = "Censo escolar", EstaFamiliar = "Sim", EstruFamiliar = "Completa", NFilhos = 2, NFilhas = 2, AEscola = 1, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Estável", CPrimeiroContato = "2023-5", EParceiro = "Sim", FPeloParceirto = "Não", DtCriacao = DateTime.Now, DtModificacao = DateTime.Now }
+                new FichaPrimeiroContato { IdFicha = 1, AtorId = 1, Localizacao = "Zona Norte", Data = new DateTime(2023, 01, 01), LContato = "Vizinho", FonteDados = "Censo", EstaFamiliar = "Sim", EstruFamiliar = "Completa", NFilhos = 2, NFilhas = 1, AEscola = 1, SLer = "Sim", SCalc = "Sim", SComp = "Não", QReabili = 0, LTrat = "Nenhum", Coment = "Boa integração", CPrimeiroContato = "2023-1", EParceiro = "Sim", FPeloParceirto = "Não", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new FichaPrimeiroContato { IdFicha = 2, AtorId = 2, Localizacao = "Zona Sul", Data = new DateTime(2023, 01, 01), LContato = "ONG", FonteDados = "Empoderavista", EstaFamiliar = "Não", EstruFamiliar = "Parcial", NFilhos = 1, NFilhas = 0, AEscola = 0, SLer = "Sim", SCalc = "Não", SComp = "Não", QReabili = 1, LTrat = "Clínica", Coment = "Necessita apoio", CPrimeiroContato = "2023-2", EParceiro = "Não", FPeloParceirto = "Não", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new FichaPrimeiroContato { IdFicha = 3, AtorId = 3, Localizacao = "Zona Leste", Data = new DateTime(2023, 01, 01), LContato = "Assistente social", FonteDados = "Formulário", EstaFamiliar = "Sim", EstruFamiliar = "Completa", NFilhos = 3, NFilhas = 2, AEscola = 1, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Boa situação", CPrimeiroContato = "2023-3", EParceiro = "Sim", FPeloParceirto = "Sim", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new FichaPrimeiroContato { IdFicha = 4, AtorId = 4, Localizacao = "Zona Oeste", Data = new DateTime(2023, 01, 01), LContato = "Igreja", FonteDados = "Empoderavista", EstaFamiliar = "Não", EstruFamiliar = "Incompleta", NFilhos = 0, NFilhas = 1, AEscola = 1, SLer = "Não", SCalc = "Não", SComp = "Não", QReabili = 2, LTrat = "Hospital", Coment = "Vulnerável", CPrimeiroContato = "2023-4", EParceiro = "Não", FPeloParceirto = "Não", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
+                new FichaPrimeiroContato { IdFicha = 5, AtorId = 5, Localizacao = "Centro", Data = new DateTime(2023, 01, 01), LContato = "Escola", FonteDados = "Censo escolar", EstaFamiliar = "Sim", EstruFamiliar = "Completa", NFilhos = 2, NFilhas = 2, AEscola = 1, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Estável", CPrimeiroContato = "2023-5", EParceiro = "Sim", FPeloParceirto = "Não", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
             );
 
             // ===================== Ficha_Condicoes =====================

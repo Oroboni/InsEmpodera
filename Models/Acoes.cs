@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
-    public class Acao
+    public class Acoes
     {
+        [Key]
         public int IdAcoes { get; set; }
         public int Quantidade { get; set; }
         public int AtividadeId { get; set; }

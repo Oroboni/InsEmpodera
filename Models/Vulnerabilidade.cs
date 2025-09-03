@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace entre.Models
+namespace Empodera.Models
 {
     public class Vulnerabilidade
     {
+        [Key]
         public int IdVulnerabilidade { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Localizacao { get; set; } = string.Empty;

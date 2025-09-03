@@ -192,9 +192,17 @@ namespace Projeto.Data
     {
         public int IdAvaliacao { get; set; }
         public int AtorId { get; set; }
-        public DateTime Data { get; set; }
-        public string Indicador { get; set; } = string.Empty;
-        public int Nota { get; set; }
+        public int CCrimes { get; set; }
+        public int Substancias { get; set; }
+        public int Moradia { get; set; }
+        public int Prevencao { get; set; }
+        public int AssBasica { get; set; }
+        public int Educacao { get; set; }
+        public int Saude { get; set; }
+        public int Ocupacao { get; set; }
+        public int Lazer { get; set; }
+        public DateTime Dt_Criacao { get; set; }
+        public DateTime Dt_Modificacao { get; set; }
     }
 
     public class FichaPrimeiroContatoSeed
