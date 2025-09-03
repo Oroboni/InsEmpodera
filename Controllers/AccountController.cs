@@ -18,6 +18,11 @@ public class AccountController : Controller
         return View();
     }
 
+    public IActionResult Forgot()
+    {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();

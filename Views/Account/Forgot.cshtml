@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Recuperar Senha";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/forget.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-circles">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        <div class="circle circle-4"></div>
+        <div class="circle circle-5"></div>
+        <div class="circle circle-6"></div>
+    </div>
+
+    <main class="container-geral">
+        <!-- PAINEL ESQUERDO - FORMULÁRIO (INVERTIDO) -->
+        <section class="painel-recovery">
+            <div class="logo">
+                <img src="~/img/logo-empodera.svg" alt="Logo">
+            </div>
+
+            <form class="recovery-form" method="post" asp-action="ForgotPassword" asp-controller="Account">
+                @Html.AntiForgeryToken()
+                
+                <h2>Esqueci minha senha</h2>
+                <p class="recovery-description">
+                    Informe o e-mail associado à sua conta e enviaremos um link para redefinir sua senha.
+                </p>
+
+                <div class="success-message" id="successMessage">
+                    <div class="success-icon">✓</div>
+                    <div class="success-text">
+                        E-mail enviado com sucesso! Verifique sua caixa de entrada.
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        placeholder="Digite seu e-mail"
+                        name="Email"
+                        id="emailInput"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="recovery-button" id="recoveryBtn">
+                    ENVIAR LINK
+                </button>
+                
+                <button type="button" class="cancel-button" onclick="goBackToLogin()">
+                    CANCELAR
+                </button>
+            </form>
+        </section>
+
+        <!-- PAINEL DIREITO - INFORMAÇÕES (INVERTIDO) -->
+        <section class="painel-info">
+            <h1>Recuperar Senha</h1>
+            <p>Digite seu e-mail para receber as instruções de recuperação de senha.</p>
+            <a href="Index" class="back-to-login" onclick="goBackToLogin()">
+                <span class="back-arrow">←</span>
+                Voltar ao Login
+            </a>
+        </section>
+    </main>
+
+    <script src="~/js/forget.js"></script>
+</body>
+</html>
