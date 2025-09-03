@@ -1,0 +1,40 @@
+.main-content-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.section-1 {
+    flex: 0 0 auto;
+    background-color:var(--color-primary-600);
+    padding: 0.5rem 2rem 0.5rem 0rem;
+    box-sizing: border-box; 
+    border-radius: 0 14px 14px 0;
+    color: var(--color-gray-100);
+}
+
+ul:last-child{
+    margin-top: 3rem;
+}
+li{
+    list-style-type: none;
+}
+li.active{
+    color: var(--color-primary-200);
+}
+
+.section-2 {
+    flex: 1; 
+    background-color: #eee;
+    padding: 20px;
+    box-sizing: border-box; 
+    overflow-y: auto; /* Adiciona scroll se o conteúdo for muito longo */
+    padding-left: 4rem;
+}
+i{
+    margin: 0rem 0.8rem 0rem 0rem;
+}
+
+container {
+    display: block;
+}

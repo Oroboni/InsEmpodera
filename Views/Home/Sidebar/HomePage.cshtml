@@ -1,7 +1,49 @@
 @{
     ViewData["Title"] = "HomePage";
-    Layout = "_Layout";
+    ViewData["PageCSS"] = "homepage"; // aqui inserimos nome do arquivo css a ser carregado sem o .css
+    //exemplo: o arquivo Views/Home/Sidebar/HomePage.cshtml
+    //carregaria o CSS em wwwroot/css/pages/homepage.css
+    //mas só escrevemos "homepage".
+
+    Layout = "_Layout"; // usa o Layout padrão (aquele do qual contém a sidebar)
 }
-<a href="/Home/Comunidades">Comunidades</a>
-<img id="logo-empodera" src="~/images/logo-empodera.svg" alt="Logo Empodera">
-<h1 id="instituto-text">instituto</h1><h1 id="empodera-text">empodera</h1>
+
+
+    @* a página de fato vem abaixo! *@
+<div class="header">
+    <img id="logo-empodera" src="~/images/logo-empodera.svg" alt="Logo Empodera">
+    <div class="text-box">
+        <h1 id="instituto-text">instituto</h1>
+        <h1 id="empodera-text">empodera</h1>
+    </div>
+</div>
+
+<div class="cards-container">
+    <div class="card">
+        <h2>44</h2>
+        <p>Comunidades</p>
+        <button>Visualizar</button>
+    </div>
+    <div class="card">
+        <h2>684</h2>
+        <p>Atores</p>
+        <button>Visualizar</button>
+    </div>
+    <div class="card">
+        <h2>684</h2>
+        <p>Atores</p>
+        <button>Visualizar</button>
+    </div>
+    <div class="card">
+        <h2>684</h2>
+        <p>Atores</p>
+        <button>Visualizar</button>
+    </div>
+    
+    <div class="card">
+        <h2>77</h2>
+        <p>Usuários</p>
+        <button>Visualizar</button>
+    </div>
+    
+</div>

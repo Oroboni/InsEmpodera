@@ -1,22 +1,19 @@
 @{
     ViewData["Title"] = "Dashboard";
+    ViewData["PageCSS"] = "dashboard"; // Carrega dashboard.css
     Layout = "_Layout";
 }
 
 <div class="dashboard-container">
     <h2>📈 Dashboard</h2>
-    <div class="dashboard-cards">
-        <div class="card">
-            <h3>Comunidades Ativas</h3>
-            <p class="metric">12</p>
+    <div class="dashboard-grid">
+        <div class="metric-card">
+            <h3>Comunidades</h3>
+            <div class="metric-value">44</div>
         </div>
-        <div class="card">
-            <h3>Atores Cadastrados</h3>
-            <p class="metric">248</p>
-        </div>
-        <div class="card">
-            <h3>Atividades do Mês</h3>
-            <p class="metric">36</p>
+        <div class="metric-card">
+            <h3>Atores</h3>
+            <div class="metric-value">684</div>
         </div>
     </div>
 </div>

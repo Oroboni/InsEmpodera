@@ -4,55 +4,82 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Instituto Empodera</title>
-    <link rel="stylesheet" href="~/css/homepage/sidebar.css" />
+    
+    @* CSS Variables - carregadas primeiro *@
+    <link rel="stylesheet" href="~/css/_variaveis.css" />
+
+    @* CSS Global - carregado após variáveis *@
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @* Font Awesome *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+    @* CSS específico da sidebar - pode sobrescrever estilos globais se necessário *@
+    <link rel="stylesheet" href="~/css/sidebar/sidebar.css"/>
+
+    
+    @* CSS específico para cada página - carregado por último para ter prioridade *@
+    @if (ViewData["PageCSS"] != null)
+    {
+        <link rel="stylesheet" href="~/css/pages/@(ViewData["PageCSS"]).css" />
+    }
+
+    @* Seção para estilos adicionais específicos da página *@
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body>
     <div class="body-page">
         <div class="main-content-wrapper">
             <div class="section-1">
-                <h2>Seção 1</h2>
-                <ul>
+                <h2>Seção 1 - USER</h2>
+                <ul> 
+                    <p>Principais</p>
                     <li data-page="home" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
-                        <p>🏠 Home</p>
+                        <p><i class="fas fa-home"></i> Home</p>
                     </li>
                     <li data-page="Comunidades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
-                        <p>🏘️ Comunidades</p>
+                        <p><i class="fas fa-city"></i> Comunidades</p>
                     </li>
                     <li data-page="Atores" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atores" ? "active" : "")">
-                        <p>👥 Atores</p>
+                        <p><i class="fas fa-users"></i> Atores</p>
                     </li>
                     <li data-page="FichaPrimeiroContato" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
-                        <p>📋 Ficha Primeiro Contato</p>
+                        <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
                     </li>
                     <li data-page="DiariosDeCampo" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
-                        <p>📓 Diários de Campo</p>
+                        <p><i class="fas fa-book"></i> Diários de Campo</p>
                     </li>
                     <li data-page="DiarioProcessoPessoal" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
-                        <p>📖 Diário Processo Pessoal</p>
+                        <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
                     </li>
                     <li data-page="Relatorios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
-                        <p>📊 Relatórios</p>
+                        <p><i class="fas fa-chart-bar"></i> Relatórios</p>
                     </li>
                     <li data-page="Dashboard" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
-                        <p>📈 Dashboard</p>
+                        <p><i class="fas fa-chart-line"></i> Dashboard</p>
                     </li>
                     <li data-page="Atividades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
-                        <p>⚡ Atividades</p>
+                        <p><i class="fas fa-bolt"></i> Atividades</p>
                     </li>
                     <li data-page="Usuarios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
-                        <p>👤 Usuários</p>
+                        <p><i class="fas fa-user"></i> Usuários</p>
                     </li>
                     <li data-page="PerfisDeAcesso" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
-                        <p>🔐 Perfis de Acesso</p>
+                        <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
                     </li>
+                </ul>
+
+                <ul> 
+                    <p>Conta</p>
                     <li data-page="Ajuda" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
-                        <p>❓ Ajuda</p>
+                        <p><i class="fas fa-question-circle"></i> Ajuda</p>
                     </li>
                     <li data-page="Configuracoes" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
-                        <p>⚙️ Configurações</p>
+                        <p><i class="fas fa-cog"></i> Configurações</p>
                     </li>
                     <li data-page="Logout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
-                        <p>🚪 Logout</p>
+                        <p><i class="fas fa-sign-out-alt"></i> Logout</p>
                     </li>
                 </ul>
             </div>
