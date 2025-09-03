@@ -1,0 +1,35 @@
+.main-content-wrapper {
+    display: flex; /* Transforma o container em um container flex */
+    width: 100%; /* Garante que ocupe a largura total disponível */
+    min-height: 100vh; /* Opcional: faz com que o wrapper ocupe a altura total da viewport */
+}
+.container{
+    margin:0;
+}
+
+.section-1 {
+    flex: 0 0 auto;
+    background-color: #7A3288; /* Para visualizar melhor */
+    padding: 0.5rem;
+    box-sizing: border-box; /* Garante que padding não adicione largura extra */
+    border-radius: 0 14px 14px 0;
+}
+
+.section-2 {
+    flex: 1; /* Esta seção vai crescer para preencher o espaço restante */
+    background-color: #eee; /* Para visualizar melhor */
+    padding: 20px;
+    box-sizing: border-box; /* Garante que padding não adicione largura extra */
+    overflow-y: auto; /* Adiciona scroll se o conteúdo for muito longo */
+    padding-left: 4rem;
+}
+
+/* Remover estilos padrão dos containers se não forem mais usados */
+container {
+    display: block; /* Garante que containers se comportem como blocos */
+}
+#logo-empodera {
+    width: 10%;
+    height: auto;
+}
+
