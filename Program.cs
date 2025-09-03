@@ -46,12 +46,24 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
+// Rota padrão → abre no Login
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// 🔹 Alias /homepage → HomePage
+app.MapControllerRoute(
+    name: "homepage",
+    pattern: "homepage",
+    defaults: new { controller = "Home", action = "HomePage" });
+
+// 🔹 Alias /home → HomePage
+app.MapControllerRoute(
+    name: "home-alt",
+    pattern: "home",
+    defaults: new { controller = "Home", action = "HomePage" });
+
+// 🔹 Fallback → se rota não existir, cai no HomePage
+app.MapFallbackToController("HomePage", "Home");
 
 app.Run();
