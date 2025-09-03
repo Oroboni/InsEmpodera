@@ -7,20 +7,28 @@
 .section-1 {
     flex: 0 0 auto;
     background-color:var(--color-primary-600);
-    padding: 0.5rem 2rem 0.5rem 0rem;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
     box-sizing: border-box; 
     border-radius: 0 14px 14px 0;
     color: var(--color-gray-100);
+    padding-right: 0;
 }
-
+ul{
+    padding: 5px 0px 5px 20px;
+}
 ul:last-child{
     margin-top: 3rem;
 }
 li{
     list-style-type: none;
+    cursor: pointer;
+    padding: 1px 20px 1px 10px;
+    user-select: none; /* impede selecionar o texto */
+    border-radius: 8px 0px 0px 8px;
 }
 li.active{
-    color: var(--color-primary-200);
+    color: var(--color-primary-600);
+    background-color: var(--color-gray-300);
 }
 
 .section-2 {

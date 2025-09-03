@@ -1,17 +1,16 @@
-
 #logo-empodera {
     width: 10%;
     height: auto;
 }
 #instituto-text {
     font-family: var(--font-family-thin);
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-5xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-secondary);
     text-transform: uppercase;
 }
 #empodera-text {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-5xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-primary);
     text-transform: uppercase;
