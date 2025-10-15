@@ -1,26 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Login - Instituto Empodera";
-    Layout = "_LoginLayout"; // Layout específico para login
+    ViewData["Title"] = "HomePage";
+    ViewData["PageCSS"] = "homepage"; 
+    // aqui inserimos nome do arquivo css a ser carregado sem o .css
+    //exemplo: o arquivo Views/Home/Sidebar/HomePage.cshtml
+    //carregaria o CSS em wwwroot/css/pages/homepage.css
+    //mas só escrevemos "homepage".
+
+    Layout = "_Layout"; // usa o Layout padrão (aquele do qual contém a sidebar)
 }
 
-<div class="login-container">
-    <div class="login-form">
-        <img src="~/images/logo-empodera.svg" alt="Logo Instituto Empodera" class="login-logo">
-        <h1>Instituto Empodera</h1>
-        
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger">@ViewBag.Error</div>
-        }
-        
-        <form asp-action="Login" method="post">
-            <div class="form-group">
-                <input type="text" name="username" placeholder="Usuário" required class="form-control">
-            </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Senha" required class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-        </form>
+
+    @* a página de fato vem abaixo! *@
+<div class="header">
+    <img id="logo-empodera" src="~/images/logo-empodera.svg" alt="Logo Empodera">
+    <div class="text-box">
+        <h1 id="instituto-text">instituto</h1>
+        <h1 id="empodera-text">empodera</h1>
     </div>
+</div>
+
+<div class="cards-container">
+    <div class="card">
+        <h2>44</h2>
+        <p>Comunidades</p>
+        <button>Visualizar</button>
+    </div>
+    <div class="card">
+        <h2>684</h2>
+        <p>Atores</p>
+        <button>Visualizar</button>
+    </div>
+    <div class="card">
+        <h2>684</h2>
+        <p>Atores</p>
+        <button>Visualizar</button>
+    </div>
+    <div class="card">
+        <h2>684</h2>
+        <p>Atores</p>
+        <button>Visualizar</button>
+    </div>
+    
+    <div class="card">
+        <h2>77</h2>
+        <p>Usuários</p>
+        <button>Visualizar</button>
+    </div>
+    
 </div>
