@@ -1,8 +1,26 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Login - Instituto Empodera";
+    Layout = "_LoginLayout"; // Layout específico para login
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="login-container">
+    <div class="login-form">
+        <img src="~/images/logo-empodera.svg" alt="Logo Instituto Empodera" class="login-logo">
+        <h1>Instituto Empodera</h1>
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+        
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Usuário" required class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Senha" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+    </div>
 </div>
