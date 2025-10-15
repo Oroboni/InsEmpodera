@@ -1,50 +1,107 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@* @functions {
+    string IsActive(string actionName)
+    {
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        return string.Equals(currentAction, actionName, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+} *@
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - InsEmpodera</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/InsEmpodera.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Instituto Empodera</title>
+    
+    
+    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+
+    @* CSS Variables - carregadas primeiro *@
+    <link rel="stylesheet" href="~/css/_variaveis.css" />
+
+    @* CSS Global - carregado após variáveis *@
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @* Font Awesome *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+    @* CSS específico da sidebar - pode sobrescrever estilos globais se necessário *@
+    <link rel="stylesheet" href="~/css/sidebar/sidebar.css"/>
+
+    
+    @* CSS específico para cada página - carregado por último para ter prioridade *@
+    @if (ViewData["PageCSS"] != null)
+    {
+        <link rel="stylesheet" href="~/css/pages/@(ViewData["PageCSS"]).css" />
+    }
+
+    @* Seção para estilos adicionais específicos da página *@
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InsEmpodera</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+    <div class="body-page">
+        <div class="main-content-wrapper">
+            <div class="section-1">
+                <h2>Seção 1 - USER</h2>
+                <ul> 
+                    <p>Principais</p>
+                    <li data-page="home" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
+                        <p><i class="fas fa-home"></i> Home</p>
+                    </li>
+                    <li data-page="Comunidades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
+                        <p><i class="fas fa-city"></i> Comunidades</p>
+                    </li>
+                    <li data-page="Atores" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atores" ? "active" : "")">
+                        <p><i class="fas fa-users"></i> Atores</p>
+                    </li>
+                    <li data-page="FichaPrimeiroContato" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
+                        <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
+                    </li>
+                    <li data-page="DiariosDeCampo" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
+                        <p><i class="fas fa-book"></i> Diários de Campo</p>
+                    </li>
+                    <li data-page="DiarioProcessoPessoal" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
+                        <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
+                    </li>
+                    <li data-page="Relatorios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
+                        <p><i class="fas fa-chart-bar"></i> Relatórios</p>
+                    </li>
+                    <li data-page="Dashboard" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <p><i class="fas fa-chart-line"></i> Dashboard</p>
+                    </li>
+                    <li data-page="Atividades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
+                        <p><i class="fas fa-bolt"></i> Atividades</p>
+                    </li>
+                    <li data-page="Usuarios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
+                        <p><i class="fas fa-user"></i> Usuários</p>
+                    </li>
+                    <li data-page="PerfisDeAcesso" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
+                        <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
+                    </li>
+                </ul>
+
+                <ul> 
+                    <p>Conta</p>
+                    <li data-page="Ajuda" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
+                        <p><i class="fas fa-question-circle"></i> Ajuda</p>
+                    </li>
+                    <li data-page="Configuracoes" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
+                        <p><i class="fas fa-cog"></i> Configurações</p>
+                    </li>
+                    <li data-page="Logout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
+                        <a href="./account/logout">
+                            <p><i class="fas fa-sign-out-alt"></i> Logout</p>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <div class="section-2" id="content">
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - InsEmpodera - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/sidebar.js"></script>
 </body>
 </html>

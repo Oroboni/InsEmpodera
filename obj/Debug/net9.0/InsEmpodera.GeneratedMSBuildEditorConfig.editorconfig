@@ -50,8 +50,68 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Ajuda.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEFqdWRhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Atividades.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEF0aXZpZGFkZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Atores.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEF0b3Jlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Comunidades.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXENvbXVuaWRhZGVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Configuracoes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXENvbmZpZ3VyYWNvZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXERhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/DiarioProcessoPessoal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXERpYXJpb1Byb2Nlc3NvUGVzc29hbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/DiariosDeCampo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXERpYXJpb3NEZUNhbXBvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/FichaPrimeiroContato.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEZpY2hhUHJpbWVpcm9Db250YXRvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/HomePage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEhvbWVQYWdlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/PerfisDeAcesso.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFBlcmZpc0RlQWNlc3NvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFByaXZhY3kuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Relatorios.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFJlbGF0b3Jpb3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Usuarios.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFVzdWFyaW9zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/melio/Downloads/InsEmpodera/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Shared/_LoginLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melio/Downloads/InsEmpodera/Views/Shared/_ValidationScriptsPartial.cshtml]
