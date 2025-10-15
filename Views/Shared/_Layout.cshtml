@@ -90,7 +90,9 @@
                         <p><i class="fas fa-cog"></i> Configurações</p>
                     </li>
                     <li data-page="Logout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
-                        <p><i class="fas fa-sign-out-alt"></i> Logout</p>
+                        <a href="./account/logout">
+                            <p><i class="fas fa-sign-out-alt"></i> Logout</p>
+                        </a>
                     </li>
                 </ul>
             </div>

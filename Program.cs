@@ -43,27 +43,14 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-Comerce A
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
 app.UseAuthorization();
 
-// Rota padrão → abre no Login
+app.MapStaticAssets();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
-// 🔹 Alias /homepage → HomePage
-app.MapControllerRoute(
-    name: "homepage",
-    pattern: "homepage",
-    defaults: new { controller = "Home", action = "HomePage" });
-
-// 🔹 Alias /home → HomePage
-app.MapControllerRoute(
-    name: "home-alt",
-    pattern: "home",
-    defaults: new { controller = "Home", action = "HomePage" });
-
-// 🔹 Fallback → se rota não existir, cai no HomePage
-app.MapFallbackToController("HomePage", "Home");
 
 app.Run();
