@@ -8,7 +8,9 @@ a.navbar-brand {
 }
 
 a {
-  color: #0077cc;
+  color: #ffffff;
+  
+  text-decoration: none;
 }
 
 .btn-primary {

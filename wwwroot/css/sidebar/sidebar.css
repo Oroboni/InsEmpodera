@@ -19,6 +19,10 @@ ul{
 ul:last-child{
     margin-top: 3rem;
 }
+a{
+    color: #eee;
+    text-decoration: none;
+}
 li{
     list-style-type: none;
     cursor: pointer;
@@ -27,6 +31,10 @@ li{
     border-radius: 8px 0px 0px 8px;
 }
 li.active{
+    color: var(--color-primary-600);
+    background-color: var(--color-gray-300);
+}
+a.active{
     color: var(--color-primary-600);
     background-color: var(--color-gray-300);
 }

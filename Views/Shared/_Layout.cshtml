@@ -52,8 +52,11 @@
                     <li data-page="Comunidades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
                         <p><i class="fas fa-city"></i> Comunidades</p>
                     </li>
-                    <li data-page="Atores" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atores" ? "active" : "")">
-                        <p><i class="fas fa-users"></i> Atores</p>
+                    
+                    <li data-page="Atores" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
+                        <a href="./Actor/Index">
+                            <p><i class="fas fa-users"></i> Atores</p>
+                        </a>
                     </li>
                     <li data-page="FichaPrimeiroContato" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
                         <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>

@@ -15,117 +15,135 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v9.0
 build_property.RootNamespace = InsEmpodera
 build_property.RootNamespace = InsEmpodera
-build_property.ProjectDir = C:\Users\melio\Downloads\InsEmpodera\
+build_property.ProjectDir = C:\Users\elian\OneDrive\Documents\GitHub\tapwm\InsEmpodera\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\melio\Downloads\InsEmpodera
+build_property.MSBuildProjectDirectory = C:\Users\elian\OneDrive\Documents\GitHub\tapwm\InsEmpodera
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Account/Forgot.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Account/Forgot.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Account/index.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Account/index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxpbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Account/Logout.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Account/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Index.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Actor/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0b3JcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Actor/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0b3JcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Actor/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0b3JcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Actor/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0b3JcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Privacy.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Ajuda.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Ajuda.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEFqdWRhLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Atividades.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Atividades.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEF0aXZpZGFkZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Atores.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Atores.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEF0b3Jlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Comunidades.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Comunidades.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXENvbXVuaWRhZGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Configuracoes.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Configuracoes.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXENvbmZpZ3VyYWNvZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Dashboard.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXERhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/DiarioProcessoPessoal.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/DiarioProcessoPessoal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXERpYXJpb1Byb2Nlc3NvUGVzc29hbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/DiariosDeCampo.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/DiariosDeCampo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXERpYXJpb3NEZUNhbXBvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/FichaPrimeiroContato.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/FichaPrimeiroContato.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEZpY2hhUHJpbWVpcm9Db250YXRvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/HomePage.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/HomePage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXEhvbWVQYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/PerfisDeAcesso.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/PerfisDeAcesso.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFBlcmZpc0RlQWNlc3NvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Privacy.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFByaXZhY3kuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Relatorios.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Relatorios.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFJlbGF0b3Jpb3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Sidebar/Usuarios.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Home/Sidebar/Usuarios.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTaWRlYmFyXFVzdWFyaW9zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Shared/Error.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Shared/_LoginLayout.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Shared/_LoginLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/_ViewImports.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/_ViewStart.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Shared/_Layout.cshtml]
+[C:/Users/elian/OneDrive/Documents/GitHub/tapwm/InsEmpodera/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-xrwzje9gjj
