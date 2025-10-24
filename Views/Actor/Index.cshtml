@@ -8,60 +8,45 @@
     <h1>Atores</h1>
     <div class="header-actions">
         <div class="search-bar">
-            <i class="fa-solid fa-search"></i>
             <input type="search" placeholder="Pesquise por atores...">
+            <i class="fa-solid fa-search"></i>
         </div>
-        <a href="#" class="btn-add" title="Adicionar Novo Ator">
-            <i class="fa-solid fa-plus"></i>
-        </a>
+        <a asp-controller="Actor" asp-action="create" class="btn-add" title="Adicionar Novo Ator"> <i class="fa-solid fa-plus"></i> </a>
     </div>
 </header>
 
 <div class="actors-list-container">
     <ul class="actors-list">
+        
         <li class="actor-item">
             <div class="actor-info">
                 <p class="actor-name">Adaiane Zamonier - Dai</p>
+                <span class="tag tag-processo">Em processo</span>
             </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
+            <div class="actor-actions">
+                <a href="#" class="btn-action" title="Ação 1">
+                    <i class="fa-solid fa-play"></i>
+                </a>
+                <a href="#" class="btn-action" title="Ver detalhes">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+            </div>
         </li>
+
         <li class="actor-item">
             <div class="actor-info">
                 <p class="actor-name">Adriana de Souza Santos</p>
+                <span class="tag tag-diagnostico">Em diagnóstico</span>
             </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
-        </li>
-        <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Adriele</p>
-                <span class="tag-equipe">Equipe</span>
+            <div class="actor-actions">
+                <a href="#" class="btn-action" title="Ação 1">
+                    <i class="fa-solid fa-play"></i>
+                </a>
+                <a href="#" class="btn-action" title="Ver detalhes">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
             </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
         </li>
-            <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Adriano Medeiros - Pipoca</p>
-            </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
-        </li>
-        <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Alessa</p>
-                    <span class="tag-equipe">Equipe</span>
-            </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
-        </li>
-        <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Sthepanie Martins</p>
-            </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
-        </li>
-        <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Kelly Moraes</p>
-            </div>
-            <a href="#" class="btn-view" title="Ver detalhes"><i class="fa-regular fa-eye"></i></a>
-        </li>
-    </ul>
+
+        </ul>
 </div>
