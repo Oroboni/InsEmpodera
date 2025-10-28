@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj": {}
+    "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj": {}
   },
   "projects": {
-    "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj": {
+    "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
+        "projectUniqueName": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj",
         "projectName": "InsEmpodera",
-        "projectPath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
+        "projectPath": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj",
         "packagesPath": "C:\\Users\\melio\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\obj\\",
+        "outputPath": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "ExcelLibrary": {
+              "target": "Package",
+              "version": "[1.2011.7.31, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.10, )"

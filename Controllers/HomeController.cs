@@ -6,10 +6,22 @@ using SQLitePCL;
 using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
+using Empodera.Services;
+using System.Linq;
 
 namespace InsEmpodera.Controllers;
 public class HomeController : Controller
 {
+    private readonly ILogger<HomeController> _logger;
+    private readonly ApplicationDbContext _context;
+    private readonly RelatorioExcelService _relatorioService;
+
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, RelatorioExcelService relatorioService)
+    {
+        _logger = logger;
+        _context = context;
+        _relatorioService = relatorioService;
+    }
     public IActionResult Index()
     {
         if (HttpContext.Session.GetString("Email") == null)
@@ -27,14 +39,110 @@ public class HomeController : Controller
         }
         return View("~/Views/Home/Sidebar/HomePage.cshtml");
     }
-    
-     public IActionResult Comunidades()
+
+    public IActionResult Comunidades()
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/Comunidades.cshtml");
+
+        var comunidades = _context.Comunidades
+            .Select(c => new Empodera.Models.ComunidadeDto
+            {
+                Id = c.IdComunidade,
+                Nome = c.Nome,
+                Status = c.Status
+            })
+            .ToList();
+
+        return View("~/Views/Home/Sidebar/Comunidades.cshtml", comunidades);
+    }
+
+    [HttpGet]
+    public IActionResult ComunidadesCriar()
+    {
+        var comunidade = new Empodera.Models.Comunidade
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now
+        };
+        return View("~/Views/Home/Sidebar/ComunidadesCriar.cshtml", comunidade);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ComunidadesCriar(Empodera.Models.Comunidade comunidade)
+    {
+        if (ModelState.IsValid)
+        {
+            comunidade.DtCriacao = DateTime.Now;
+            comunidade.DtModificacao = DateTime.Now;
+
+            _context.Comunidades.Add(comunidade);
+            _context.SaveChanges();
+
+            return RedirectToAction("Comunidades");
+        }
+
+        return View("~/Views/Home/Sidebar/ComunidadesCriar.cshtml", comunidade);
+    }
+
+    [HttpGet]
+    public IActionResult ExportarExcel()
+    {
+        var comunidades = _context.Comunidades.ToList();
+        var arquivo = _relatorioService.GerarRelatorioExcel(comunidades);
+        return File(arquivo, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Relatorio_Comunidades.xlsx");
+    }
+
+
+    [HttpGet]
+    public IActionResult ComunidadesDetalhes(int id)
+    {        
+        var comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+        
+        if (comunidade == null)
+        {
+            Console.WriteLine($"Comunidade com ID {id} não encontrada no GET");
+            return RedirectToAction("Comunidades");
+        }
+        
+        Console.WriteLine($"Comunidade encontrada: {comunidade.Nome}");
+        
+        return View("~/Views/Home/Sidebar/ComunidadesDetalhes.cshtml", comunidade);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade)
+    {    
+        var existingComunidade = _context.Comunidades
+            .FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);
+        
+        if (existingComunidade == null)
+        {
+            return RedirectToAction("Comunidades");
+        }
+        
+        existingComunidade.Nome = comunidade.Nome;
+        existingComunidade.Local = comunidade.Local;
+        existingComunidade.Status = comunidade.Status;
+        existingComunidade.Complemento = comunidade.Complemento;
+        existingComunidade.Descricao = comunidade.Descricao;
+        existingComunidade.DescricaoAcessibilidade = comunidade.DescricaoAcessibilidade;
+        existingComunidade.DtModificacao = DateTime.Now;
+
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            return RedirectToAction("Comunidades");
+        }
+        
+        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
     }
 
     public IActionResult Atores()

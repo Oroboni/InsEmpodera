@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Empodera.Data;
+using Empodera.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSession();
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<RelatorioExcelService>();
 
 var app = builder.Build();
 
@@ -35,11 +38,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseStaticFiles();
 
+app.UseRouting();
+
 app.UseSession();
 
-app.UseSwagger();
-
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-Comerce API v1"));  
+
+app.UseSwagger();
 
 app.UseHttpsRedirection();
 
