@@ -17,6 +17,21 @@ namespace InsEmpodera.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
+            modelBuilder.Entity("AtorComunidadeComunidade", b =>
+                {
+                    b.Property<int>("AtoresIdAComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ComunidadesIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AtoresIdAComunidade", "ComunidadesIdComunidade");
+
+                    b.HasIndex("ComunidadesIdComunidade");
+
+                    b.ToTable("AtorComunidadeComunidade");
+                });
+
             modelBuilder.Entity("Empodera.Models.Acoes", b =>
                 {
                     b.Property<int>("IdAcoes")
@@ -275,6 +290,9 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AtorComunidadeIdAComunidade")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("TEXT");
 
@@ -308,6 +326,8 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAtores");
+
+                    b.HasIndex("AtorComunidadeIdAComunidade");
 
                     b.ToTable("Atores");
 
@@ -392,8 +412,6 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAComunidade");
-
-                    b.HasIndex("ComunidadeId");
 
                     b.ToTable("AtorComunidades");
 
@@ -1876,6 +1894,21 @@ namespace InsEmpodera.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AtorComunidadeComunidade", b =>
+                {
+                    b.HasOne("Empodera.Models.AtorComunidade", null)
+                        .WithMany()
+                        .HasForeignKey("AtoresIdAComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Comunidade", null)
+                        .WithMany()
+                        .HasForeignKey("ComunidadesIdComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
                 {
                     b.HasOne("Empodera.Models.Atividade", null)
@@ -1891,13 +1924,11 @@ namespace InsEmpodera.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
+            modelBuilder.Entity("Empodera.Models.Ator", b =>
                 {
-                    b.HasOne("Empodera.Models.Comunidade", null)
+                    b.HasOne("Empodera.Models.AtorComunidade", null)
                         .WithMany("Atores")
-                        .HasForeignKey("ComunidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AtorComunidadeIdAComunidade");
                 });
 
             modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>
@@ -1981,10 +2012,13 @@ namespace InsEmpodera.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Empodera.Models.Comunidade", b =>
+            modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
                 {
                     b.Navigation("Atores");
+                });
 
+            modelBuilder.Entity("Empodera.Models.Comunidade", b =>
+                {
                     b.Navigation("Diarios");
 
                     b.Navigation("Redes");

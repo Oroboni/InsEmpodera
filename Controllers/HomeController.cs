@@ -88,14 +88,49 @@ public class HomeController : Controller
         return View("~/Views/Home/Sidebar/ComunidadesCriar.cshtml", comunidade);
     }
 
+
     [HttpGet]
     public IActionResult ExportarExcel()
     {
-        var comunidades = _context.Comunidades.ToList();
-        var arquivo = _relatorioService.GerarRelatorioExcel(comunidades);
-        return File(arquivo, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Relatorio_Comunidades.xlsx");
-    }
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
 
+        var atores = _context.Atores.ToList();
+        var atoresComunidade = _context.AtorComunidades.ToList();
+        var comunidades = _context.Comunidades.ToList();
+
+        var relatorios = atores.Select(a =>
+        {
+            var nomesComunidades = atoresComunidade
+                .Where(ac => ac.AtorId == a.IdAtores)
+                .Join(comunidades,
+                    ac => ac.ComunidadeId,
+                    c => c.IdComunidade,
+                    (ac, c) => c.Nome)
+                .ToList();
+
+            return new AtorRelatorioDto
+            {
+                IdAtor = a.IdAtores,
+                Nome = a.Nome,
+                Genero = a.Genero,
+                Idade = a.Idade,
+                PapelSocial1 = a.PapelSocial1,
+                PapelSocial2 = a.PapelSocial2,
+                Telefone = a.Telefone.ToString(),
+                Extra = a.Extra,
+                DtCriacao = a.DtCriacao,
+                DtModificacao = a.DtModificacao,
+                Comunidades = nomesComunidades.Any() ? string.Join(", ", nomesComunidades) : "-"
+            };
+        }).ToList();
+
+        var arquivo = _relatorioService.GerarRelatorioAtores(relatorios);
+
+        return File(arquivo,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Relatorio_Atores.xlsx");
+    }
 
     [HttpGet]
     public IActionResult ComunidadesDetalhes(int id)

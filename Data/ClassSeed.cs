@@ -74,6 +74,7 @@ namespace Projeto.Data
         public List<RedeRecursoSeed>? Redes { get; set; }
         public List<AtorComunidadeSeed>? Comunidades { get; set; }
         public List<AcoesAtorSeed>? Acoes { get; set; }
+        public ICollection<AtorComunidadeSeed> AtorComunidades { get; set; } = new List<AtorComunidadeSeed>();
     }
 
     public class RedeRecursoSeed
@@ -108,6 +109,8 @@ namespace Projeto.Data
         public int IdAComunidade { get; set; }
         public int ComunidadeId { get; set; }
         public int AtorId { get; set; }
+        public List<AtorSeed>? Atores { get; set; }
+        public List<ComunidadeSeed>? Comunidades { get; set; }
     }
 
     public class DiarioCampoSeed
