@@ -8,6 +8,7 @@
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,7 +27,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 
     @* CSS específico da sidebar - pode sobrescrever estilos globais se necessário *@
-    <link rel="stylesheet" href="~/css/sidebar/sidebar.css"/>
+    <link rel="stylesheet" href="~/css/sidebar/sidebar.css" />
 
 
     @* CSS específico para cada página - carregado por último para ter prioridade *@
@@ -39,6 +40,7 @@
     @await RenderSectionAsync("Styles", required: false)
 
 </head>
+
 <body>
     <div class="body-page">
         <div class="main-content-wrapper">
@@ -46,72 +48,103 @@
                 <h2>Seção 1 - USER</h2>
                 <ul>
                     <p>Principais</p>
-                    <li data-page="home" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
-                         <a href="/Home/HomePage">
+                    <li data-page="home"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
+                        <a href="/Home/HomePage">
                             <p><i class="fas fa-home"></i> Home</p>
-                         </a>
+                        </a>
                     </li>
-                    <li data-page="Comunidades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
-                         <a href="/Home/Comunidades"> <p><i class="fas fa-city"></i> Comunidades</p>
-                         </a>
+                    <li data-page="Comunidades"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
+                        <a href="/Home/Comunidades">
+                            <p><i class="fas fa-city"></i> Comunidades</p>
+                        </a>
                     </li>
 
-                    <li data-page="Atores" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Actor" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"> <a href="/Actor/Index">
+                    <li data-page="Atores"
+                        class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Actor" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                        <a href="/Actor/Index">
                             <p><i class="fas fa-users"></i> Atores</p>
                         </a>
                     </li>
-                    <li data-page="FichaPrimeiroContato" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
-                        <a href="/Home/FichaPrimeiroContato"> <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
+                    <li data-page="FichaPrimeiroContato"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
+                        <a href="/Home/FichaPrimeiroContato">
+                            <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
                         </a>
                     </li>
-                    <li data-page="DiariosDeCampo" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
-                         <a href="/Home/DiariosDeCampo"> <p><i class="fas fa-book"></i> Diários de Campo</p>
+                    <li data-page="DiariosDeCampo"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
+                        <a href="/Home/DiariosDeCampo">
+                            <p><i class="fas fa-book"></i> Diários de Campo</p>
                         </a>
                     </li>
-                    <li data-page="DiarioProcessoPessoal" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
-                         <a href="/Home/DiarioProcessoPessoal"> <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
+                    <li data-page="DiarioProcessoPessoal"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
+                        <a href="/Home/DiarioProcessoPessoal">
+                            <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
                         </a>
                     </li>
-                    <li data-page="Relatorios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
-                         <a href="/Home/Relatorios"> <p><i class="fas fa-chart-bar"></i> Relatórios</p>
+                    <li data-page="Relatorios"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
+                        <a href="/Home/Relatorios">
+                            <p><i class="fas fa-chart-bar"></i> Relatórios</p>
                         </a>
                     </li>
-                    <li data-page="Dashboard" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
-                         <a href="/Home/Dashboard"> <p><i class="fas fa-chart-line"></i> Dashboard</p>
+                    <li data-page="Dashboard"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <a href="/Home/Dashboard">
+                            <p><i class="fas fa-chart-line"></i> Dashboard</p>
                         </a>
                     </li>
-                    <li data-page="Atividades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
-                         <a href="/Home/Atividades"> <p><i class="fas fa-bolt"></i> Atividades</p>
+                    <li data-page="Atividades"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
+                        <a href="/Home/Atividades">
+                            <p><i class="fas fa-bolt"></i> Atividades</p>
                         </a>
                     </li>
-                    <li data-page="Usuarios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
-                         <a href="/Home/Usuarios"> <p><i class="fas fa-user"></i> Usuários</p>
+                    <li data-page="Usuarios"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
+                        <a href="/Home/Usuarios">
+                            <p><i class="fas fa-user"></i> Usuários</p>
                         </a>
                     </li>
-                    <li data-page="PerfisDeAcesso" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
-                         <a href="/Home/PerfisDeAcesso"> <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
+                    <li data-page="PerfisDeAcesso"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
+                        <a href="/Home/PerfisDeAcesso">
+                            <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
                         </a>
                     </li>
                 </ul>
 
                 <ul>
                     <p>Conta</p>
-                    <li data-page="Ajuda" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
-                         <a href="/Home/Ajuda"> <p><i class="fas fa-question-circle"></i> Ajuda</p>
+                    <li data-page="Ajuda"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
+                        <a href="/Home/Ajuda">
+                            <p><i class="fas fa-question-circle"></i> Ajuda</p>
                         </a>
                     </li>
-                    <li data-page="Configuracoes" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
-                         <a href="/Home/Configuracoes"> <p><i class="fas fa-cog"></i> Configurações</p>
+                    <li data-page="Configuracoes"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
+                        <a href="/Home/Configuracoes">
+                            <p><i class="fas fa-cog"></i> Configurações</p>
                         </a>
                     </li>
-                    <li data-page="Logout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
+                    <li data-page="Logout"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
                         <a href="/Account/Logout">
                             <p><i class="fas fa-sign-out-alt"></i> Logout</p>
                         </a>
                     </li>
                 </ul>
             </div>
-            <div class="section-2" id="content">
+            @{
+                // Verifica se a View pediu para desativar o scroll principal
+                string sectionClass = ViewData["DisableMainScroll"] as string == "true" ? "no-scroll" : "with-scroll";
+            }
+
+            <div class="section-2 @sectionClass" id="content">
                 @RenderBody()
             </div>
         </div>
@@ -119,4 +152,5 @@
 
     <script src="~/js/sidebar.js"></script>
 </body>
+
 </html>

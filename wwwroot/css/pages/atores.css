@@ -55,7 +55,13 @@ label {
     width: 100%;
 }
 
-.input-wrapper > .fa-solid:not(.select-arrow) {
+/* [CORREÇÃO APLICADA AQUI]
+  Adicionamos ".select-wrapper > .fa-solid:not(.select-arrow)"
+  para que o ícone da esquerda (ex: 'fa-city') também
+  seja posicionado corretamente dentro dos dropdowns.
+*/
+.input-wrapper > .fa-solid:not(.select-arrow),
+.select-wrapper > .fa-solid:not(.select-arrow) {
     position: absolute;
     top: 50%;
     left: 12px;

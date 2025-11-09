@@ -5,12 +5,12 @@
 
 /* --- AJUSTE NA ESTRUTURA PRINCIPAL (section-2) --- */
 .section-2 {
-    overflow: hidden !important;
     display: flex;
     flex-direction: column;
     padding: var(--space-8) var(--space-10) !important;
     border-radius: 0 !important;
     background-color: var(--color-gray-50) !important;
+    overflow-y: inherit;
 }
 
 
@@ -78,6 +78,14 @@
     color: var(--color-primary);
 }
 
+
+.form-group {
+    margin-bottom: var(--space-5);
+}
+ /* Reduz espaçamento entre campos */
+    .form-group {
+        margin-bottom: var(--space-4);
+    }
 .btn-add {
     display: flex;
     align-items: center;

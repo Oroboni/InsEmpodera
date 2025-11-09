@@ -156,13 +156,13 @@ select {
 }
 .breadcrumb strong {
     font-weight: var(--font-weight-semibold);
-}
+/* }
 form {
     background-color: var(--color-bg-primary);
     padding: var(--space-8);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-md);
-}
+} */
 .form-group {
     margin-bottom: var(--space-5);
     position: relative;
@@ -589,4 +589,5 @@ details[open] > summary .select-wrapper {
     form { padding: var(--space-3); }
     .action-card { min-height: 100px; padding: var(--space-3); }
     .btn { padding: var(--space-2) var(--space-4); font-size: var(--font-size-xs); }
+}
 }

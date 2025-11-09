@@ -5478,11 +5478,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\elian\\OneDrive\\Documents\\GitHub\\tapwm\\InsEmpodera\\InsEmpodera.csproj",
+      "projectUniqueName": "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\InsEmpodera.csproj",
       "projectName": "InsEmpodera",
-      "projectPath": "C:\\Users\\elian\\OneDrive\\Documents\\GitHub\\tapwm\\InsEmpodera\\InsEmpodera.csproj",
+      "projectPath": "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\InsEmpodera.csproj",
       "packagesPath": "C:\\Users\\elian\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\elian\\OneDrive\\Documents\\GitHub\\tapwm\\InsEmpodera\\obj\\",
+      "outputPath": "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

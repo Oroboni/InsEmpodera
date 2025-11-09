@@ -3,136 +3,150 @@
     ViewData["PageCSS"] = "create-form"; 
 }
 
-<div class="breadcrumb">
-    <h1>Adicionar Novo Ator</h1>
-</div>
-
-<form>
-       <div class="form-group create-field">
-        <label for="nome">Nome</label>
-        <div class="input-with-buttons">
-            <div class="input-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <input id="nome" name="nome" type="text" placeholder="Nome do Ator" />
-            </div>
-            <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
-            <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <label for="tipoRelacionamento">Tipo de relacionamento</label>
-        <div class="select-wrapper">
-            <i class="fa-solid fa-heart"></i> <select id="tipoRelacionamento" name="tipoRelacionamento">
-                <option value="">Selecione um tipo</option>
-                <option value="1">Amigo</option>
-                <option value="2">Colega de trabalho</option>
-                <option value="3">Conhecido</option>
-                <option value="4">Familiar</option>
-                <option value="5">Vizinho</option>
-            </select>
-            <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Adicionar Novo Ator</h1>
     </div>
 
-    <details class="form-group multiselect-wrapper">
-        <summary>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-star"></i> <span class="multiselect-placeholder">Recursos agregados</span>
-                <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
-        </summary>
-        <div class="multiselect-panel">
-            <ul>
-                <li><input type="checkbox" id="r1"><label for="r1">Rede primária</label></li>
-                <li><input type="checkbox" id="r2"><label for="r2">Seguridade Social</label></li>
-                <li><input type="checkbox" id="r3"><label for="r3">Substâncias</label></li>
-                <li><input type="checkbox" id="r4"><label for="r4">Moradia</label></li>
-                <li><input type="checkbox" id="r5"><label for="r5">Prevenção</label></li>
-                <li><input type="checkbox" id="r6"><label for="r6">Assistência Básica</label></li>
-                <li><input type="checkbox" id="r7"><label for="r7">Educação</label></li>
-                <li><input type="checkbox" id="r8"><label for="r8">Saúde</label></li>
-                <li><input type="checkbox" id="r9"><label for="r9">Ocupação</label></li>
-                <li><input type="checkbox" id="r10"><label for="r10">Lazer</label></li>
-            </ul>
-        </div>
-    </details>
-
-    <details class="form-group multiselect-wrapper">
-        <summary>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-shield-halved"></i> <span class="multiselect-placeholder">Vulnerabilidades agregadas</span>
-                <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
-        </summary>
-        <div class="multiselect-panel">
-            <ul>
-                <li><input type="checkbox" id="v1"><label for="v1">Rede primária</label></li>
-                <li><input type="checkbox" id="v2"><label for="v2">Seguridade Social</label></li>
-                <li><input type="checkbox" id="v3"><label for="v3">Substâncias</label></li>
-                <li><input type="checkbox" id="v4"><label for="v4">Moradia</label></li>
-                <li><input type="checkbox" id="v5"><label for="v5">Prevenção</label></li>
-                <li><input type="checkbox" id="v6"><label for="v6">Assistência Básica</label></li>
-                <li><input type="checkbox" id="v7"><label for="v7">Educação</label></li>
-                <li><input type="checkbox" id="v8"><label for="v8">Saúde</label></li>
-                <li><input type="checkbox" id="v9"><label for="v9">Ocupação</label></li>
-                <li><input type="checkbox" id="v10"><label for="v10">Lazer</label></li>
-            </ul>
-        </div>
-    </details>
-
-    <div class="form-row">
+    <form>
+        
         <div class="form-group">
-            <label for="genero">Gênero</label>
+            <label for="comunidadeId">Comunidade</label>
             <div class="select-wrapper">
-                <i class="fa-solid fa-venus-mars"></i>
-                <select id="genero" name="genero">
-                    <option value="" disabled selected>Selecione</option>
-                    <option value="feminino">Feminino</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="masculino">Não declarado</option>
-                    <option value="masculino">Transgênero</option>
+                <i class="fa-solid fa-city"></i>
+                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione a comunidade</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="dataNascimento">Data de Nascimento</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-calendar-day"></i> <input id="dataNascimento" name="dataNascimento" type="date" placeholder="dd/mm/aaaa" />
+        <div class="form-group create-field">
+            <label for="nome">Nome</label>
+            <div class="input-with-buttons">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input id="nome" name="nome" type="text" placeholder="Nome do Ator" />
+                </div>
+                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
+                <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
             </div>
         </div>
-    </div>
-
-    <div class="form-group-checkbox">
-        <input id="daEquipeCheckbox" name="daEquipe" type="checkbox" />
-        <label for="daEquipeCheckbox">Da Equipe</label>
-    </div>
-
-    <div class="form-group">
-        <label for="papelSocial1">Papel Social</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-briefcase"></i>
-            <input id="papelSocial1" name="papelSocial1" type="text" placeholder="Digite o papel social" />
+        
+        <div class="form-group">
+            <label for="tipoRelacionamento">Tipo de relacionamento</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-heart"></i> <select id="tipoRelacionamento" name="tipoRelacionamento">
+                    <option value="">Selecione um tipo</option>
+                    <option value="1">Amigo</option>
+                    <option value="2">Colega de trabalho</option>
+                    <option value="3">Conhecido</option>
+                    <option value="4">Familiar</option>
+                    <option value="5">Vizinho</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="papelSocial2">Papel Social</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-briefcase"></i>
-            <input id="papelSocial2" name="papelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
+        <details class="form-group multiselect-wrapper">
+            <summary>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-star"></i> <span class="multiselect-placeholder">Recursos agregados</span>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
+            </summary>
+            <div class="multiselect-panel">
+                <ul>
+                    <li><input type="checkbox" id="r1"><label for="r1">Rede primária</label></li>
+                    <li><input type="checkbox" id="r2"><label for="r2">Seguridade Social</label></li>
+                    <li><input type="checkbox" id="r3"><label for="r3">Substâncias</label></li>
+                    <li><input type="checkbox" id="r4"><label for="r4">Moradia</label></li>
+                    <li><input type="checkbox" id="r5"><label for="r5">Prevenção</label></li>
+                    <li><input type="checkbox" id="r6"><label for="r6">Assistência Básica</label></li>
+                    <li><input type="checkbox" id="r7"><label for="r7">Educação</label></li>
+                    <li><input type="checkbox" id="r8"><label for="r8">Saúde</label></li>
+                    <li><input type="checkbox" id="r9"><label for="r9">Ocupação</label></li>
+                    <li><input type="checkbox" id="r10"><label for="r10">Lazer</label></li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="form-group multiselect-wrapper">
+            <summary>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-shield-halved"></i> <span class="multiselect-placeholder">Vulnerabilidades agregadas</span>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
+            </summary>
+            <div class="multiselect-panel">
+                <ul>
+                    <li><input type="checkbox" id="v1"><label for="v1">Rede primária</label></li>
+                    <li><input type="checkbox" id="v2"><label for="v2">Seguridade Social</label></li>
+                    <li><input type="checkbox" id="v3"><label for="v3">Substâncias</label></li>
+                    <li><input type="checkbox" id="v4"><label for="v4">Moradia</label></li>
+                    <li><input type="checkbox" id="v5"><label for="v5">Prevenção</label></li>
+                    <li><input type="checkbox" id="v6"><label for="v6">Assistência Básica</label></li>
+                    <li><input type="checkbox" id="v7"><label for="v7">Educação</label></li>
+                    <li><input type="checkbox" id="v8"><label for="v8">Saúde</label></li>
+                    <li><input type="checkbox" id="v9"><label for="v9">Ocupação</label></li>
+                    <li><input type="checkbox" id="v10"><label for="v10">Lazer</label></li>
+                </ul>
+            </div>
+        </details>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-venus-mars"></i>
+                    <select id="genero" name="genero">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="nao-declarado">Não declarado</option>
+                        <option value="transgenero">Transgênero</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-calendar-day"></i> <input id="dataNascimento" name="dataNascimento" type="date" placeholder="dd/mm/aaaa" />
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="telefone">Telefone</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-phone"></i>
-            <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" />
+        <div class="form-group-checkbox">
+            <input id="daEquipeCheckbox" name="daEquipe" type="checkbox" />
+            <label for="daEquipeCheckbox">Da Equipe</label>
         </div>
-    </div>
 
-    <div class="form-buttons">
-        <a href="#" class="btn btn-secondary">CANCELAR</a>
-        <button type="button" class="btn btn-primary">ADICIONAR ATOR</button>
-    </div>
-</form>
+        <div class="form-group">
+            <label for="papelSocial1">Papel Social</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+                <input id="papelSocial1" name="papelSocial1" type="text" placeholder="Digite o papel social" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="papelSocial2">Papel Social</f>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+                <input id="papelSocial2" name="papelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-phone"></i>
+                <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" />
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="button" class="btn btn-primary">ADICIONAR ATOR</button>
+        </div>
+    </form>
+</div>

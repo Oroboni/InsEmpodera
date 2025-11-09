@@ -1,52 +1,117 @@
-@* Isso dirá ao seu _Layout para carregar o CSS específico desta página *@
 @{
     ViewData["Title"] = "Atores";
-    ViewData["PageCSS"] = "atores-index";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true"; // <-- ADICIONE ESTA LINHA
 }
 
-<header class="main-header">
-    <h1>Atores</h1>
-    <div class="header-actions">
-        <div class="search-bar">
-            <input type="search" placeholder="Pesquise por atores...">
-            <i class="fa-solid fa-search"></i>
-        </div>
-        <a asp-controller="Actor" asp-action="create" class="btn-add" title="Adicionar Novo Ator"> <i class="fa-solid fa-plus"></i> </a>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Ator</title>
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css">
+</head>
+<body>
+<div class="atores-content-area">
+
+    <div class="atores-header">
+        <h2>Atores</h2>
     </div>
-</header>
 
-<div class="actors-list-container">
-    <ul class="actors-list">
+    <div class="atores-search-container">
+        <form class="atores-search-bar" method="get">
+            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </form>
+
+        <a asp-controller="Actor" asp-action="Create" class="atores-add-button">+</a>
+    </div>
+
+    <div class="atores-list-container">
         
-        <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Adaiane Zamonier - Dai</p>
-                <span class="tag tag-processo">Em processo</span>
-            </div>
-            <div class="actor-actions">
-                <a href="#" class="btn-action" title="Ação 1">
-                    <i class="fa-solid fa-play"></i>
-                </a>
-                <a href="#" class="btn-action" title="Ver detalhes">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
-            </div>
-        </li>
+        <div class="ator-card">
+            <span class="ator-name">Jéssica Maria</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="1">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="ator-card">
+            <span class="ator-name">Fábio Mota</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="2">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
 
-        <li class="actor-item">
-            <div class="actor-info">
-                <p class="actor-name">Adriana de Souza Santos</p>
-                <span class="tag tag-diagnostico">Em diagnóstico</span>
-            </div>
-            <div class="actor-actions">
-                <a href="#" class="btn-action" title="Ação 1">
-                    <i class="fa-solid fa-play"></i>
-                </a>
-                <a href="#" class="btn-action" title="Ver detalhes">
-                    <i class="fa-solid fa-eye"></i>
-                </a>
-            </div>
-        </li>
+        <div class="ator-card">
+            <span class="ator-name">Aninha</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="3">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
 
-        </ul>
+        <div class="ator-card">
+            <span class="ator-name">Claudete Magnus</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="4">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Bianca Fernanda</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="5">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Sthephanie Martins</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="6">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Kelly Moraes</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="7">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Edson Pereira</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="8">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Isaura Gomes</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="9">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+    </div>
 </div>
+
+</body>
