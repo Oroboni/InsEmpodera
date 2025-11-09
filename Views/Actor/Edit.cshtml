@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Ator</title>
+    <link rel="stylesheet" href="~/css/pages/atores.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <h1>Atores > <strong>Detalhes</strong></h1>
+        </div>
+        
+        <form action="#" method="post">
+
+    <div class="form-group">
+            <label for="comunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+                
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <div class="input-wrapper">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="nome" name="nome" placeholder="Adicione o nome da comunidade aqui...">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+        <label for="dataNascimento">Data de Nascimento</label>
+        <div class="input-wrapper">
+            <i class="fa-solid fa-calendar-days"></i>
+            <input type="date" id="dataNascimento" name="dataNascimento">
+        </div>
+    </div>
+        <div class="form-group">
+            <label for="genero">Gênero</label>
+            <div class="input-wrapper select-wrapper">
+                <i class="fa-solid fa-venus-mars"></i>
+                <select id="genero" name="genero">
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="feminino">Feminino</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="masculino">Não declarado</option>
+                    <option value="masculino">Transgênero</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group-checkbox">
+        <input type="checkbox" id="da-equipe" name="da-equipe">
+        <label for="da-equipe">Da Equipe</label>
+    </div>
+
+    <div class="form-group">
+        <label for="papel-social">Papel Social</label>
+        <div class="input-wrapper">
+            <i class="fa-solid fa-people-group"></i>
+            <input type="text" id="papel-social" name="papel-social" placeholder="Adicione o papel social aqui...">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="interesses">Interesses</label>
+        <div class="input-wrapper">
+            <i class="fa-solid fa-heart"></i>
+            <input type="text" id="interesses" name="interesses" placeholder="Adicione os interesses aqui...">
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <div class="input-wrapper">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" id="telefone" name="telefone" placeholder="Adicione o telefone aqui...">
+        </div>
+    </div>
+
+    <div class="actions-grid">
+        <button type="button" class="action-card">
+            <span class="card-title">Rede Primária</span>
+            <span class="card-subtitle">Adicionar Ator</span>
+            <div class="card-icons">
+                <i class="fa-solid fa-plus"></i>
+                <i class="fa-solid fa-eye"></i>
+            </div>
+        </button>
+        <button type="button" class="action-card">
+            <span class="card-title">Adjacência</span>
+            <span class="card-subtitle">da RPP</span>
+            <div class="card-icons">
+                <i class="fa-solid fa-eye"></i>
+            </div>
+        </button>
+        <button type="button" class="action-card">
+            <span class="card-title">Avaliações</span>
+            <span class="card-subtitle">Pessoais</span>
+            <div class="card-icons">
+                <i class="fa-solid fa-pen"></i>
+            </div>
+        </button>
+        <button type="button" class="action-card">
+            <span class="card-title">Diário de</span>
+            <span class="card-subtitle">Processos Pessoal</span>
+            <div class="card-icons">
+                <i class="fa-solid fa-book"></i>
+            </div>
+        </button>
+    </div>
+
+    <div class="form-footer">
+        <i class="fa-solid fa-user"></i>
+        <div class="footer-text">
+            <span>Atualizado por:</span>
+            <strong>Mike Willy Franguelli</strong>
+        </div>
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
+
+    <div class="form-buttons">
+    <button type="button" class="btn btn-delete">DELETAR</button>
+    <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+    <button type="submit" class="btn btn-primary">EDITAR</button>
+</div>
+</form>
+    </div>
+</body>
+
+</body>
+</html>
