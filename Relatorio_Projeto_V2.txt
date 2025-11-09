@@ -1,5 +1,5 @@
 ========================================================== 
-RELATORIO DE PROJETO ASP.NET - Gerado em 09/11/2025 11:51:29,96 
+RELATORIO DE PROJETO ASP.NET - Gerado em 09/11/2025 17:19:10,30 
 ========================================================== 
 Diretorio base: C:\Users\elian\�rea de Trabalho\InsEmpodera 
 ========================================================== 
@@ -298,6 +298,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |                   Microsoft.CodeAnalysis.Workspaces.resources.dll
 |                   
 +---Controllers
+|       AccessProfileController.cs
 |       AccountController.cs
 |       ActorController.cs
 |       HomeController.cs
@@ -387,7 +388,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       0hw3yfzrfx-ausgxo2sd3.gz
 |           |       0nxxz7ek8t-m9qm4tazc0.gz
 |           |       0nxxz7ek8t-o1o13a6vjx.gz
-|           |       0pifp25xah-h82e5m4lza.gz
+|           |       0pifp25xah-ckejqisvjv.gz
 |           |       1wsjos9brx-jii89g3yp0.gz
 |           |       2q6g8nex9u-8vyfqsqgz1.gz
 |           |       2q6g8nex9u-jj8uyg4cgr.gz
@@ -409,6 +410,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       746p2nlz7s-vb3pewohpf.gz
 |           |       7lt7trtbta-03hjc8e09r.gz
 |           |       7lt7trtbta-47otxtyo56.gz
+|           |       7qzo0gj0un-dzr80toe9l.gz
 |           |       85b7sr6c25-48y08845bh.gz
 |           |       85b7sr6c25-4v8eqarkd7.gz
 |           |       8fsc547043-lzl9nlhx6b.gz
@@ -451,7 +453,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       kdzexy1uar-wl58j5mj3v.gz
 |           |       kzojn92md9-v0zj4ognzu.gz
 |           |       lrgrl0ftv4-5ipweew5fc.gz
-|           |       m1f5asq9k8-bgzjdyks8s.gz
+|           |       m1f5asq9k8-bhkqi2a9q6.gz
 |           |       m25uig1e0e-fsbi9cje9m.gz
 |           |       m2jkmlbab8-5ipweew5fc.gz
 |           |       m7ktip0l6e-b7pk76d08c.gz
@@ -466,12 +468,12 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       oeabivif52-ttgo8qnofa.gz
 |           |       p1sc2qzn78-y4eix5dq6r.gz
 |           |       p2nlngv9ez-5ipweew5fc.gz
-|           |       pf4y6cunxp-kaxyqc6qj7.gz
+|           |       pf4y6cunxp-pld001ldhm.gz
 |           |       q7o662deot-06098lyss8.gz
 |           |       q7o662deot-keugtjm085.gz
 |           |       q9b86fh14t-dxx9fxp4il.gz
 |           |       q9b86fh14t-q9ht133ko3.gz
-|           |       qqn68rgd62-bv57eueafz.gz
+|           |       qqn68rgd62-0ql2wvv3xz.gz
 |           |       rg44okjgg2-kbrnm935zg.gz
 |           |       ro3wkd67ji-493y06b0oq.gz
 |           |       ro3wkd67ji-hd3gran6i8.gz
@@ -490,7 +492,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       wdyov8518o-advetj6r88.gz
 |           |       wjhd2zy1ml-aexeepp0ev.gz
 |           |       wkzctbk4by-iovd86k7lj.gz
-|           |       wszr71lcab-oi65v9hs05.gz
+|           |       wszr71lcab-40tm5z0787.gz
 |           |       wwi6mflget-2z0ns9nrw6.gz
 |           |       wwi6mflget-jjsuc0puko.gz
 |           |       ydgq9k1btt-rxsg74s51o.gz
@@ -526,6 +528,11 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |   |   _ViewImports.cshtml
 |   |   _ViewStart.cshtml
 |   |   
+|   +---AccessProfile
+|   |       Create.cshtml
+|   |       Edit.cshtml
+|   |       Index.cshtml
+|   |       
 |   +---Account
 |   |       Forgot.cshtml
 |   |       index.cshtml
@@ -575,6 +582,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
     |   |   _variaveis.css
     |   |   
     |   +---pages
+    |   |       access-profile-form.css
     |   |       ajuda.css
     |   |       atores-index.css
     |   |       atores.css
@@ -712,6 +720,7 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 ========================================================== 
  
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Program.cs 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AccountController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ActorController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
@@ -747,6 +756,9 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Models\VulnerabilidadesEixo.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\_ViewImports.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\index.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml 
@@ -780,7 +792,7 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.Development.json 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.json 
  
-Total de arquivos a processar: 68 
+Total de arquivos a processar: 72 
  
  
 ========================================================== 
@@ -849,6 +861,73 @@ app.MapControllerRoute(
 
 app.Run();
  
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
+========================================================== 
+ 
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using InsEmpodera.Models;
+using Empodera.Data;
+using Empodera.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace InsEmpodera.Controllers;
+
+public class AccessProfileController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public AccessProfileController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    // GET: /AccessProfile/
+    public async Task<IActionResult> Index()
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        
+        // Flag para o _Layout desativar o scroll principal (mesma lógica do Actor)
+        ViewData["DisableMainScroll"] = "true"; 
+        
+        // No futuro, você carregará os perfis do banco:
+        // var perfis = await _context.PerfisAcesso.ToListAsync();
+        // return View(perfis);
+
+        return View();
+    }
+
+    // GET: /AccessProfile/Create
+    public IActionResult Create()
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        return View();
+    }
+
+    // GET: /AccessProfile/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        
+        // No futuro, você buscará o perfil e suas permissões aqui:
+        // var perfil = await _context.PerfisAcesso.FindAsync(id);
+        // if (perfil == null) return NotFound();
+        
+        return View(); // Em um caso real: return View(perfil);
+    }
+} 
  
  
 ========================================================== 
@@ -928,8 +1007,8 @@ using InsEmpodera.Models;
 using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
-using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering; // <-- ADICIONADO
 
 namespace InsEmpodera.Controllers;
 
@@ -944,11 +1023,16 @@ public class ActorController : Controller
         _context = context;
     }
 
-     public async Task<IActionResult> Index(){
+    public async Task<IActionResult> Index()
+    {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
         }
+        
+        // Flag para o _Layout desativar o scroll principal
+        ViewData["DisableMainScroll"] = "true"; 
+        
         return View();
     }
 
@@ -957,24 +1041,43 @@ public class ActorController : Controller
         return View();
     }
 
-    public IActionResult Edit()
+    // GET: /Actor/Edit/5
+    public async Task<IActionResult> Edit(int? id) // <-- AJUSTADO
     {
-        return View();
+        // Aqui você buscaria o ator pelo ID, por exemplo:
+        // var ator = await _context.Atores.FindAsync(id);
+        // if (ator == null) return NotFound();
+
+        // [NOVO] Carrega as comunidades para o dropdown
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+            "IdComunidade", 
+            "Nome"
+            //, ator.ComunidadeId // Descomente e ajuste para pré-selecionar
+        );
+
+        return View(); // Em um caso real: return View(ator);
     }
 
-    public IActionResult Create()
+    // GET: /Actor/Create
+    public async Task<IActionResult> Create() // <-- AJUSTADO
     {
+        // [NOVO] Carrega as comunidades para o dropdown
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+            "IdComunidade", 
+            "Nome"
+        );
+        
         return View();
     }
     
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-}
- 
+} 
  
  
 ========================================================== 
@@ -2460,6 +2563,334 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml
  
  
 ========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
+========================================================== 
+ 
+@{
+    ViewData["Title"] = "Criar Perfil de Acesso";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <!-- 1. CSS do formulário base (que você já tinha) -->
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    
+    <!-- 2. NOSSO NOVO CSS -->
+    <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Perfis de acesso > <strong>Novo perfil de acesso</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved"></i>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Visitante" required>
+            </div>
+        </div>
+
+        <!-- [MUDANÇA] A classe da tabela agora é "permission-table" -->
+        <table class="permission-table">
+            <thead>
+                <tr>
+                    <th>Permissão</th>
+                    <th>Listar</th>
+                    <th>Detalhar</th>
+                    <th>Criar</th>
+                    <th>Atualizar</th>
+                    <th>Deletar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Todos começam desligados -->
+                <tr>
+                    <td>Usuários</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Perfis de Acesso</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                
+                <!-- ... Adicione as outras linhas aqui ... -->
+
+                <tr>
+                    <td>Atores</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>SER</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-footer">
+            <div class="footer-text" style="flex-grow: 1;">
+                <span>Criado em <strong>@DateTime.Now.ToString("dd/MM/yyyy")</strong> por <strong>Usuário Logado</strong></span>
+            </div>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <div class="form-buttons">
+            <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">CRIAR PERFIL</button>
+        </div>
+    </form>
+</div> 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
+========================================================== 
+ 
+@{
+    ViewData["Title"] = "Detalhes do Perfil de Acesso";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <!-- 1. CSS do formulário base (que você já tinha) -->
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    
+    <!-- 2. NOSSO NOVO CSS (substitui o perfis-acesso.css antigo) -->
+    <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Perfis de acesso > <strong>Detalhes do perfil de acesso</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved"></i>
+                <input type="text" id="nome" name="nome" value="Admin" required>
+            </div>
+        </div>
+
+        <!-- [MUDANÇA] A classe da tabela agora é "permission-table" -->
+        <table class="permission-table">
+            <thead>
+                <tr>
+                    <th>Permissão</th>
+                    <th>Listar</th>
+                    <th>Detalhar</th>
+                    <th>Criar</th>
+                    <th>Atualizar</th>
+                    <th>Deletar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo: Perfil "Admin" (tudo marcado) -->
+                <tr>
+                    <td>Usuários</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Perfis de Acesso</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                
+                <!-- ... Adicione as outras linhas aqui ... -->
+                
+                <tr>
+                    <td>Atores</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>SER</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-footer">
+            <div class="footer-text" style="flex-grow: 1;">
+                <span>Atualizado em <strong>25/09/2023</strong> por <strong>Maysa Mazzon Camargo</strong></span>
+            </div>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR MUDANÇAS</button>
+        </div>
+    </form>
+</div> 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.cshtml 
+========================================================== 
+ 
+@{
+    ViewData["Title"] = "Atores";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+}
+
+@* A tag <link> do CSS deve vir aqui, na @section Styles.
+  Isso garante que ela seja carregada dentro do <head> do _Layout.
+*@
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
+    
+    @* OBS: Se você renomeou o arquivo para 'index-list.css' (como eu sugeri),
+      mude a linha acima para:
+      <link rel="stylesheet" href="~/css/pages/index-list.css" />
+    *@
+}
+
+@* As tags <html>, <head> e <body> foram REMOVIDAS daqui.
+  Elas não podem existir em uma View que usa um Layout.
+*@
+<div class="atores-content-area">
+
+    <div class="atores-header">
+        <h2>Atores</h2>
+    </div>
+
+    <div class="atores-search-container">
+        <form class="atores-search-bar" method="get">
+            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
+            
+            @* Eu já troquei o ícone de SVG para FontAwesome, como você pediu antes *@
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </form>
+
+        <a asp-controller="Actor" asp-action="Create" class="atores-add-button">+</a>
+    </div>
+
+    <div class="atores-list-container">
+        
+        <div class="ator-card">
+            <span class="ator-name">Jéssica Maria</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="1">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="ator-card">
+            <span class="ator-name">Fábio Mota</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="2">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Aninha</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="3">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Claudete Magnus</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="4">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Bianca Fernanda</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="5">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Sthephanie Martins</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="6">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Kelly Moraes</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="7">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Edson Pereira</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="8">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Isaura Gomes</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="9">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+    </div>
+</div> 
+ 
+ 
+========================================================== 
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
 ========================================================== 
  
@@ -2652,139 +3083,153 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Create.cshtml
     ViewData["PageCSS"] = "create-form"; 
 }
 
-<div class="breadcrumb">
-    <h1>Adicionar Novo Ator</h1>
-</div>
-
-<form>
-       <div class="form-group create-field">
-        <label for="nome">Nome</label>
-        <div class="input-with-buttons">
-            <div class="input-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <input id="nome" name="nome" type="text" placeholder="Nome do Ator" />
-            </div>
-            <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
-            <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <label for="tipoRelacionamento">Tipo de relacionamento</label>
-        <div class="select-wrapper">
-            <i class="fa-solid fa-heart"></i> <select id="tipoRelacionamento" name="tipoRelacionamento">
-                <option value="">Selecione um tipo</option>
-                <option value="1">Amigo</option>
-                <option value="2">Colega de trabalho</option>
-                <option value="3">Conhecido</option>
-                <option value="4">Familiar</option>
-                <option value="5">Vizinho</option>
-            </select>
-            <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Adicionar Novo Ator</h1>
     </div>
 
-    <details class="form-group multiselect-wrapper">
-        <summary>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-star"></i> <span class="multiselect-placeholder">Recursos agregados</span>
-                <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
-        </summary>
-        <div class="multiselect-panel">
-            <ul>
-                <li><input type="checkbox" id="r1"><label for="r1">Rede primária</label></li>
-                <li><input type="checkbox" id="r2"><label for="r2">Seguridade Social</label></li>
-                <li><input type="checkbox" id="r3"><label for="r3">Substâncias</label></li>
-                <li><input type="checkbox" id="r4"><label for="r4">Moradia</label></li>
-                <li><input type="checkbox" id="r5"><label for="r5">Prevenção</label></li>
-                <li><input type="checkbox" id="r6"><label for="r6">Assistência Básica</label></li>
-                <li><input type="checkbox" id="r7"><label for="r7">Educação</label></li>
-                <li><input type="checkbox" id="r8"><label for="r8">Saúde</label></li>
-                <li><input type="checkbox" id="r9"><label for="r9">Ocupação</label></li>
-                <li><input type="checkbox" id="r10"><label for="r10">Lazer</label></li>
-            </ul>
-        </div>
-    </details>
-
-    <details class="form-group multiselect-wrapper">
-        <summary>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-shield-halved"></i> <span class="multiselect-placeholder">Vulnerabilidades agregadas</span>
-                <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
-        </summary>
-        <div class="multiselect-panel">
-            <ul>
-                <li><input type="checkbox" id="v1"><label for="v1">Rede primária</label></li>
-                <li><input type="checkbox" id="v2"><label for="v2">Seguridade Social</label></li>
-                <li><input type="checkbox" id="v3"><label for="v3">Substâncias</label></li>
-                <li><input type="checkbox" id="v4"><label for="v4">Moradia</label></li>
-                <li><input type="checkbox" id="v5"><label for="v5">Prevenção</label></li>
-                <li><input type="checkbox" id="v6"><label for="v6">Assistência Básica</label></li>
-                <li><input type="checkbox" id="v7"><label for="v7">Educação</label></li>
-                <li><input type="checkbox" id="v8"><label for="v8">Saúde</label></li>
-                <li><input type="checkbox" id="v9"><label for="v9">Ocupação</label></li>
-                <li><input type="checkbox" id="v10"><label for="v10">Lazer</label></li>
-            </ul>
-        </div>
-    </details>
-
-    <div class="form-row">
+    <form>
+        
         <div class="form-group">
-            <label for="genero">Gênero</label>
+            <label for="comunidadeId">Comunidade</label>
             <div class="select-wrapper">
-                <i class="fa-solid fa-venus-mars"></i>
-                <select id="genero" name="genero">
-                    <option value="" disabled selected>Selecione</option>
-                    <option value="feminino">Feminino</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="masculino">Não declarado</option>
-                    <option value="masculino">Transgênero</option>
+                <i class="fa-solid fa-city"></i>
+                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione a comunidade</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="dataNascimento">Data de Nascimento</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-calendar-day"></i> <input id="dataNascimento" name="dataNascimento" type="date" placeholder="dd/mm/aaaa" />
+        <div class="form-group create-field">
+            <label for="nome">Nome</label>
+            <div class="input-with-buttons">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input id="nome" name="nome" type="text" placeholder="Nome do Ator" />
+                </div>
+                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
+                <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
             </div>
         </div>
-    </div>
-
-    <div class="form-group-checkbox">
-        <input id="daEquipeCheckbox" name="daEquipe" type="checkbox" />
-        <label for="daEquipeCheckbox">Da Equipe</label>
-    </div>
-
-    <div class="form-group">
-        <label for="papelSocial1">Papel Social</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-briefcase"></i>
-            <input id="papelSocial1" name="papelSocial1" type="text" placeholder="Digite o papel social" />
+        
+        <div class="form-group">
+            <label for="tipoRelacionamento">Tipo de relacionamento</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-heart"></i> <select id="tipoRelacionamento" name="tipoRelacionamento">
+                    <option value="">Selecione um tipo</option>
+                    <option value="1">Amigo</option>
+                    <option value="2">Colega de trabalho</option>
+                    <option value="3">Conhecido</option>
+                    <option value="4">Familiar</option>
+                    <option value="5">Vizinho</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="papelSocial2">Papel Social</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-briefcase"></i>
-            <input id="papelSocial2" name="papelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
+        <details class="form-group multiselect-wrapper">
+            <summary>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-star"></i> <span class="multiselect-placeholder">Recursos agregados</span>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
+            </summary>
+            <div class="multiselect-panel">
+                <ul>
+                    <li><input type="checkbox" id="r1"><label for="r1">Rede primária</label></li>
+                    <li><input type="checkbox" id="r2"><label for="r2">Seguridade Social</label></li>
+                    <li><input type="checkbox" id="r3"><label for="r3">Substâncias</label></li>
+                    <li><input type="checkbox" id="r4"><label for="r4">Moradia</label></li>
+                    <li><input type="checkbox" id="r5"><label for="r5">Prevenção</label></li>
+                    <li><input type="checkbox" id="r6"><label for="r6">Assistência Básica</label></li>
+                    <li><input type="checkbox" id="r7"><label for="r7">Educação</label></li>
+                    <li><input type="checkbox" id="r8"><label for="r8">Saúde</label></li>
+                    <li><input type="checkbox" id="r9"><label for="r9">Ocupação</label></li>
+                    <li><input type="checkbox" id="r10"><label for="r10">Lazer</label></li>
+                </ul>
+            </div>
+        </details>
+
+        <details class="form-group multiselect-wrapper">
+            <summary>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-shield-halved"></i> <span class="multiselect-placeholder">Vulnerabilidades agregadas</span>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i> </div>
+            </summary>
+            <div class="multiselect-panel">
+                <ul>
+                    <li><input type="checkbox" id="v1"><label for="v1">Rede primária</label></li>
+                    <li><input type="checkbox" id="v2"><label for="v2">Seguridade Social</label></li>
+                    <li><input type="checkbox" id="v3"><label for="v3">Substâncias</label></li>
+                    <li><input type="checkbox" id="v4"><label for="v4">Moradia</label></li>
+                    <li><input type="checkbox" id="v5"><label for="v5">Prevenção</label></li>
+                    <li><input type="checkbox" id="v6"><label for="v6">Assistência Básica</label></li>
+                    <li><input type="checkbox" id="v7"><label for="v7">Educação</label></li>
+                    <li><input type="checkbox" id="v8"><label for="v8">Saúde</label></li>
+                    <li><input type="checkbox" id="v9"><label for="v9">Ocupação</label></li>
+                    <li><input type="checkbox" id="v10"><label for="v10">Lazer</label></li>
+                </ul>
+            </div>
+        </details>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-venus-mars"></i>
+                    <select id="genero" name="genero">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="nao-declarado">Não declarado</option>
+                        <option value="transgenero">Transgênero</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-calendar-day"></i> <input id="dataNascimento" name="dataNascimento" type="date" placeholder="dd/mm/aaaa" />
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="telefone">Telefone</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-phone"></i>
-            <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" />
+        <div class="form-group-checkbox">
+            <input id="daEquipeCheckbox" name="daEquipe" type="checkbox" />
+            <label for="daEquipeCheckbox">Da Equipe</label>
         </div>
-    </div>
 
-    <div class="form-buttons">
-        <a href="#" class="btn btn-secondary">CANCELAR</a>
-        <button type="button" class="btn btn-primary">ADICIONAR ATOR</button>
-    </div>
-</form> 
+        <div class="form-group">
+            <label for="papelSocial1">Papel Social</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+                <input id="papelSocial1" name="papelSocial1" type="text" placeholder="Digite o papel social" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="papelSocial2">Papel Social</f>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+                <input id="papelSocial2" name="papelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-phone"></i>
+                <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" />
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="button" class="btn btn-primary">ADICIONAR ATOR</button>
+        </div>
+    </form>
+</div> 
  
  
 ========================================================== 
@@ -2815,6 +3260,17 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Edit.cshtml
         </div>
         
         <form action="#" method="post">
+
+    <div class="form-group">
+            <label for="comunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
                 
     <div class="form-group">
         <label for="nome">Nome</label>
@@ -2919,10 +3375,10 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Edit.cshtml
     </div>
 
     <div class="form-buttons">
-        <button type="button" class="btn btn-delete">DELETAR</button>
-        <button type="button" class="btn btn-secondary">VOLTAR</button>
-        <button type="submit" class="btn btn-primary">EDITAR</button>
-    </div>
+    <button type="button" class="btn btn-delete">DELETAR</button>
+    <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+    <button type="submit" class="btn btn-primary">EDITAR</button>
+</div>
 </form>
     </div>
 </body>
@@ -2935,6 +3391,12 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Edit.cshtml
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Index.cshtml 
 ========================================================== 
  
+@{
+    ViewData["Title"] = "Atores";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true"; // <-- ADICIONE ESTA LINHA
+}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -2942,7 +3404,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Index.cshtml
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Ator</title>
     <link rel="stylesheet" href="~/css/pages/indexAtores.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 <div class="atores-content-area">
@@ -2954,9 +3415,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Index.cshtml
     <div class="atores-search-container">
         <form class="atores-search-bar" method="get">
             <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M21.71 20.29l-4.5-4.5a8 8 0 10-1.42 1.42l4.5 4.5a1 1 0 001.42 0 1 1 0 000-1.42zM10 16a6 6 0 116-6 6 6 0 01-6 6z" />
-            </svg>
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </form>
 
         <a asp-controller="Actor" asp-action="Create" class="atores-add-button">+</a>
@@ -3425,6 +3884,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -3443,7 +3903,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 
     @* CSS específico da sidebar - pode sobrescrever estilos globais se necessário *@
-    <link rel="stylesheet" href="~/css/sidebar/sidebar.css"/>
+    <link rel="stylesheet" href="~/css/sidebar/sidebar.css" />
 
 
     @* CSS específico para cada página - carregado por último para ter prioridade *@
@@ -3456,6 +3916,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
     @await RenderSectionAsync("Styles", required: false)
 
 </head>
+
 <body>
     <div class="body-page">
         <div class="main-content-wrapper">
@@ -3463,72 +3924,103 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
                 <h2>Seção 1 - USER</h2>
                 <ul>
                     <p>Principais</p>
-                    <li data-page="home" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
-                         <a href="/Home/HomePage">
+                    <li data-page="home"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
+                        <a href="/Home/HomePage">
                             <p><i class="fas fa-home"></i> Home</p>
-                         </a>
+                        </a>
                     </li>
-                    <li data-page="Comunidades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
-                         <a href="/Home/Comunidades"> <p><i class="fas fa-city"></i> Comunidades</p>
-                         </a>
+                    <li data-page="Comunidades"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
+                        <a href="/Home/Comunidades">
+                            <p><i class="fas fa-city"></i> Comunidades</p>
+                        </a>
                     </li>
 
-                    <li data-page="Atores" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Actor" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"> <a href="/Actor/Index">
+                    <li data-page="Atores"
+                        class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Actor" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                        <a href="/Actor/Index">
                             <p><i class="fas fa-users"></i> Atores</p>
                         </a>
                     </li>
-                    <li data-page="FichaPrimeiroContato" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
-                        <a href="/Home/FichaPrimeiroContato"> <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
+                    <li data-page="FichaPrimeiroContato"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
+                        <a href="/Home/FichaPrimeiroContato">
+                            <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
                         </a>
                     </li>
-                    <li data-page="DiariosDeCampo" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
-                         <a href="/Home/DiariosDeCampo"> <p><i class="fas fa-book"></i> Diários de Campo</p>
+                    <li data-page="DiariosDeCampo"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
+                        <a href="/Home/DiariosDeCampo">
+                            <p><i class="fas fa-book"></i> Diários de Campo</p>
                         </a>
                     </li>
-                    <li data-page="DiarioProcessoPessoal" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
-                         <a href="/Home/DiarioProcessoPessoal"> <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
+                    <li data-page="DiarioProcessoPessoal"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
+                        <a href="/Home/DiarioProcessoPessoal">
+                            <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
                         </a>
                     </li>
-                    <li data-page="Relatorios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
-                         <a href="/Home/Relatorios"> <p><i class="fas fa-chart-bar"></i> Relatórios</p>
+                    <li data-page="Relatorios"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
+                        <a href="/Home/Relatorios">
+                            <p><i class="fas fa-chart-bar"></i> Relatórios</p>
                         </a>
                     </li>
-                    <li data-page="Dashboard" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
-                         <a href="/Home/Dashboard"> <p><i class="fas fa-chart-line"></i> Dashboard</p>
+                    <li data-page="Dashboard"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <a href="/Home/Dashboard">
+                            <p><i class="fas fa-chart-line"></i> Dashboard</p>
                         </a>
                     </li>
-                    <li data-page="Atividades" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
-                         <a href="/Home/Atividades"> <p><i class="fas fa-bolt"></i> Atividades</p>
+                    <li data-page="Atividades"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
+                        <a href="/Home/Atividades">
+                            <p><i class="fas fa-bolt"></i> Atividades</p>
                         </a>
                     </li>
-                    <li data-page="Usuarios" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
-                         <a href="/Home/Usuarios"> <p><i class="fas fa-user"></i> Usuários</p>
+                    <li data-page="Usuarios"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
+                        <a href="/Home/Usuarios">
+                            <p><i class="fas fa-user"></i> Usuários</p>
                         </a>
                     </li>
-                    <li data-page="PerfisDeAcesso" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
-                         <a href="/Home/PerfisDeAcesso"> <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
+                    <li data-page="PerfisDeAcesso"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
+                        <a href="/Home/PerfisDeAcesso">
+                            <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
                         </a>
                     </li>
                 </ul>
 
                 <ul>
                     <p>Conta</p>
-                    <li data-page="Ajuda" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
-                         <a href="/Home/Ajuda"> <p><i class="fas fa-question-circle"></i> Ajuda</p>
+                    <li data-page="Ajuda"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
+                        <a href="/Home/Ajuda">
+                            <p><i class="fas fa-question-circle"></i> Ajuda</p>
                         </a>
                     </li>
-                    <li data-page="Configuracoes" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
-                         <a href="/Home/Configuracoes"> <p><i class="fas fa-cog"></i> Configurações</p>
+                    <li data-page="Configuracoes"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
+                        <a href="/Home/Configuracoes">
+                            <p><i class="fas fa-cog"></i> Configurações</p>
                         </a>
                     </li>
-                    <li data-page="Logout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
+                    <li data-page="Logout"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
                         <a href="/Account/Logout">
                             <p><i class="fas fa-sign-out-alt"></i> Logout</p>
                         </a>
                     </li>
                 </ul>
             </div>
-            <div class="section-2" id="content">
+            @{
+                // Verifica se a View pediu para desativar o scroll principal
+                string sectionClass = ViewData["DisableMainScroll"] as string == "true" ? "no-scroll" : "with-scroll";
+            }
+
+            <div class="section-2 @sectionClass" id="content">
                 @RenderBody()
             </div>
         </div>
@@ -3536,6 +4028,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
 
     <script src="~/js/sidebar.js"></script>
 </body>
+
 </html> 
  
  
@@ -3660,5 +4153,5 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.json
  
 ========================================================== 
 FIM DO RELATORIO 
-Total de arquivos processados: 68 
+Total de arquivos processados: 72 
 ========================================================== 

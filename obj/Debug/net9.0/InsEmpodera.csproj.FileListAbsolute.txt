@@ -850,3 +850,4 @@ C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\qqn68rg
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\m1f5asq9k8-bhkqi2a9q6.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\pf4y6cunxp-pld001ldhm.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\0pifp25xah-ckejqisvjv.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\7qzo0gj0un-dzr80toe9l.gz
