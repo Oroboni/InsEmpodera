@@ -1,0 +1,348 @@
+/* ==========================================================
+   CSS da página de Avaliações Pessoais
+   ========================================================== */
+
+/* --- Container da Lista (Index) --- */
+.assessment-page-container {
+    padding: 24px 32px;
+    height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.assessment-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.assessment-title h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.assessment-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center; /* Alinha a busca e o botão */
+}
+
+.assessment-controls .search-bar {
+    flex-grow: 1;
+    position: relative;
+    margin: 0; 
+    padding: 0;
+}
+
+.assessment-controls .search-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 50px 0 24px;
+    border: 1px solid #DCDAE1;
+    background-color: #fff;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+}
+.assessment-controls .search-icon-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.assessment-controls .search-icon-button .search-icon {
+    position: static;
+    transform: none;
+    color: #6a0dad;
+}
+
+.assessment-controls .btn-add-assessment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 24px;
+    height: 48px;
+    flex-shrink: 0;
+    background-color: #6A2A73;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+.assessment-controls .btn-add-assessment:hover {
+    background-color: #47144e;
+}
+
+/* --- Estados de Conteúdo (Vazio ou Lista) --- */
+.assessment-content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px;
+}
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #6b7280;
+}
+.empty-state-container img {
+    max-width: 250px;
+    margin-bottom: 24px;
+}
+.empty-state-container p {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.no-items-found {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-align: center;
+    padding-top: 40px;
+}
+.assessment-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.assessment-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20px 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.assessment-card-info .date {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2b2b2b;
+}
+.assessment-card-info .evaluator {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+.assessment-card .details-icon {
+    color: #6a0dad;
+    width: 22px;
+    height: 22px;
+}
+
+
+/* --- Formulário de Detalhes (Create/Edit) --- */
+.metric-form-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-label {
+    width: 150px; /* Largura fixa para alinhar os sliders */
+    flex-shrink: 0;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* ==========================================================
+   [NOVO] ESTILOS PARA O TOOLTIP (CAIXA DE DICA)
+   ========================================================== */
+
+.tooltip-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: help;
+    position: relative; /* Ponto de âncora para o tooltip */
+}
+
+/* A caixa de texto (invisível por padrão) */
+.tooltip-icon::before {
+    content: attr(data-tooltip); /* Puxa o texto do atributo 'data-tooltip' */
+    position: absolute;
+    bottom: 135%; /* Posição: 135% acima do ícone '?' */
+    left: 50%;
+    transform: translateX(-50%); /* Centraliza horizontalmente */
+    
+    background-color: white;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid #e0e0e0;
+    
+    font-size: 0.85rem;
+    font-weight: 400;
+    white-space: pre-line; /* Respeita as quebras de linha (importante!) */
+    text-align: left;
+    
+    width: 300px; /* Largura da caixa */
+    
+    /* Animação */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 10;
+}
+
+/* A "setinha" da caixa */
+.tooltip-icon::after {
+    content: '';
+    position: absolute;
+    bottom: 135%;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%); /* Coloca abaixo da caixa */
+    
+    border-width: 6px;
+    border-style: solid;
+    border-color: white transparent transparent transparent; /* Seta para baixo */
+    
+    /* Animação */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 11; /* Fica em cima da caixa */
+}
+
+/* Mostra o tooltip ao passar o mouse */
+.tooltip-icon:hover::before,
+.tooltip-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* --- O Slider de Métrica --- */
+.metric-slider {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #e0e0e0; /* Fundo do trilho */
+    outline: none;
+    transition: background 0.2s;
+}
+
+/* Bolinha (Thumb) */
+.metric-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #6a0dad; /* Cor roxa da bolinha */
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    margin-top: -6px; /* Centraliza a bolinha no trilho */
+}
+.metric-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #6a0dad;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* --- Cores Dinâmicas do Slider (via JavaScript) --- */
+/* O JS vai adicionar o atributo data-level */
+
+/* 1-2: Verde */
+.metric-slider[data-level="1"],
+.metric-slider[data-level="2"] {
+    background-image: linear-gradient(to right, #28a745, #28a745);
+    background-repeat: no-repeat;
+}
+
+/* 3: Amarelo */
+.metric-slider[data-level="3"] {
+    background-image: linear-gradient(to right, #ffc107, #ffc107);
+    background-repeat: no-repeat;
+}
+
+/* 4: Laranja */
+.metric-slider[data-level="4"] {
+    background-image: linear-gradient(to right, #fd7e14, #fd7e14);
+    background-repeat: no-repeat;
+}
+
+/* 5: Vermelho */
+.metric-slider[data-level="5"] {
+    background-image: linear-gradient(to right, #dc3545, #dc3545);
+    background-repeat: no-repeat;
+}
+
+/* Estiliza o "trilho" que a bolinha já passou */
+.metric-slider[data-level="1"] { background-size: 0% 100%; }
+.metric-slider[data-level="2"] { background-size: 25% 100%; }
+.metric-slider[data-level="3"] { background-size: 50% 100%; }
+.metric-slider[data-level="4"] { background-size: 75% 100%; }
+.metric-slider[data-level="5"] { background-size: 100% 100%; }
+
+
+/* --- Rodapé de Metadados (reutilizando .form-footer) --- */
+.form-footer summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 12px 16px;
+}
+.form-footer .footer-text {
+    flex-grow: 1;
+}
+
+.metadata-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 16px;
+    border-top: 1px solid var(--color-border);
+}
+
+.metadata-content .input-wrapper {
+    background-color: #f7f7f7; /* Fundo cinza nos campos */
+}
+.metadata-content input {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}

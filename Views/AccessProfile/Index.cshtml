@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Perfis de Acesso";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
+}
+
+<div class="atores-content-area"> <div class="atores-header">
+        <h2>Perfis de acesso</h2>
+    </div>
+
+    <div class="atores-search-container">
+        <form class="atores-search-bar" method="get">
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </form>
+
+        <a asp-controller="AccessProfile" asp-action="Create" class="atores-add-button">+</a>
+    </div>
+
+    <div class="atores-list-container">
+        
+        <div class="ator-card">
+            <span class="ator-name">Admin</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="1">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="ator-card">
+            <span class="ator-name">Estudante</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="2">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <span class="ator-name">Operador</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="3">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+
+    </div>
+</div>

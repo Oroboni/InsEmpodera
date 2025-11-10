@@ -17,21 +17,6 @@ namespace InsEmpodera.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
-            modelBuilder.Entity("AtorComunidadeComunidade", b =>
-                {
-                    b.Property<int>("AtoresIdAComunidade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ComunidadesIdComunidade")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AtoresIdAComunidade", "ComunidadesIdComunidade");
-
-                    b.HasIndex("ComunidadesIdComunidade");
-
-                    b.ToTable("AtorComunidadeComunidade");
-                });
-
             modelBuilder.Entity("Empodera.Models.Acoes", b =>
                 {
                     b.Property<int>("IdAcoes")
@@ -290,9 +275,6 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AtorComunidadeIdAComunidade")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("TEXT");
 
@@ -326,8 +308,6 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAtores");
-
-                    b.HasIndex("AtorComunidadeIdAComunidade");
 
                     b.ToTable("Atores");
 
@@ -758,8 +738,6 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdDCampo");
-
-                    b.HasIndex("ComunidadeId");
 
                     b.ToTable("DiariosCampo");
 
@@ -1337,6 +1315,16 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DtModificacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("IdPAcesso");
 
                     b.ToTable("PerfisAcesso");
@@ -1344,23 +1332,38 @@ namespace InsEmpodera.Migrations
                     b.HasData(
                         new
                         {
-                            IdPAcesso = 1
+                            IdPAcesso = 1,
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = ""
                         },
                         new
                         {
-                            IdPAcesso = 2
+                            IdPAcesso = 2,
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = ""
                         },
                         new
                         {
-                            IdPAcesso = 3
+                            IdPAcesso = 3,
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = ""
                         },
                         new
                         {
-                            IdPAcesso = 4
+                            IdPAcesso = 4,
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = ""
                         },
                         new
                         {
-                            IdPAcesso = 5
+                            IdPAcesso = 5,
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = ""
                         });
                 });
 
@@ -1554,8 +1557,6 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdRede");
-
-                    b.HasIndex("ComunidadeId");
 
                     b.ToTable("Redes");
 
@@ -1894,21 +1895,6 @@ namespace InsEmpodera.Migrations
                         });
                 });
 
-            modelBuilder.Entity("AtorComunidadeComunidade", b =>
-                {
-                    b.HasOne("Empodera.Models.AtorComunidade", null)
-                        .WithMany()
-                        .HasForeignKey("AtoresIdAComunidade")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Empodera.Models.Comunidade", null)
-                        .WithMany()
-                        .HasForeignKey("ComunidadesIdComunidade")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
                 {
                     b.HasOne("Empodera.Models.Atividade", null)
@@ -1924,27 +1910,11 @@ namespace InsEmpodera.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Empodera.Models.Ator", b =>
-                {
-                    b.HasOne("Empodera.Models.AtorComunidade", null)
-                        .WithMany("Atores")
-                        .HasForeignKey("AtorComunidadeIdAComunidade");
-                });
-
             modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>
                 {
                     b.HasOne("Empodera.Models.Ator", null)
                         .WithMany()
                         .HasForeignKey("AtorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
-                {
-                    b.HasOne("Empodera.Models.Comunidade", null)
-                        .WithMany("Diarios")
-                        .HasForeignKey("ComunidadeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2001,27 +1971,6 @@ namespace InsEmpodera.Migrations
                         .HasForeignKey("AtorRelacionadoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.RedeRecurso", b =>
-                {
-                    b.HasOne("Empodera.Models.Comunidade", null)
-                        .WithMany("Redes")
-                        .HasForeignKey("ComunidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
-                {
-                    b.Navigation("Atores");
-                });
-
-            modelBuilder.Entity("Empodera.Models.Comunidade", b =>
-                {
-                    b.Navigation("Diarios");
-
-                    b.Navigation("Redes");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,7 +10,5 @@ namespace Empodera.Models
         public int IdAComunidade { get; set; }
         public int ComunidadeId { get; set; }
         public int AtorId { get; set; }
-        public List<Ator>? Atores { get; set; }
-        public List<Comunidade>? Comunidades { get; set; }
     }
 }
