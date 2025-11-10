@@ -115,6 +115,12 @@
                             <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
                         </a>
                     </li>
+                    <li data-page="AvaliacoesPessoais"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
+                        <a href="/PersonalAssessment">
+                            <p><i class="fas fa-user-shield"></i> Avaliações Pessoais</p>
+                        </a>
+                    </li>
                 </ul>
 
                 <ul>
@@ -151,6 +157,7 @@
     </div>
 
     <script src="~/js/sidebar.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

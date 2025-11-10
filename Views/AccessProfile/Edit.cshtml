@@ -1,13 +1,12 @@
+@model Empodera.Models.PerfilAcesso
 @{
     ViewData["Title"] = "Detalhes do Perfil de Acesso";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <!-- 1. CSS do formulário base (atores.css) -->
     <link rel="stylesheet" href="~/css/pages/atores.css" /> 
     
-    <!-- 2. CSS específico para esta tabela/switch -->
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
 }
 
@@ -17,17 +16,14 @@
     </div>
 
     <form method="post">
-        
-        <div class="form-group">
+        <input type="hidden" asp-for="IdPAcesso" /> <div class="form-group">
             <label for="nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved"></i>
-                <!-- Exemplo de valor carregado (Admin) -->
-                <input type="text" id="nome" name="nome" value="Admin" required>
+                <input asp-for="Nome" type="text" required>
             </div>
         </div>
 
-        <!-- Tabela de permissões com a lista completa -->
         <table class="permission-table">
             <thead>
                 <tr>
@@ -40,7 +36,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Exemplo: Perfil "Admin" (tudo marcado) -->
                 <tr>
                     <td>Usuários</td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
@@ -131,7 +126,6 @@
                 </tr>
                 <tr>
                     <td>SER</td>
-                    <!-- [ERRO CORRIGIDO AQUI] - Era class_2"switch" e foi corrigido para class="switch" -->
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
@@ -141,14 +135,44 @@
             </tbody>
         </table>
 
-        <!-- Rodapé de Atualização (como no protótipo "Estudante") -->
-        <div class="form-footer">
-            <div class="footer-text" style="flex-grow: 1;">
-                <span>Atualizado em <strong>25/09/2023</strong> por <strong>Maysa Mazzon Camargo</strong></span>
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type_2"text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
             </div>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-
+        </details>
         <div class="form-buttons">
             <button type="button" class="btn btn-delete">DELETAR</button>
             <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>

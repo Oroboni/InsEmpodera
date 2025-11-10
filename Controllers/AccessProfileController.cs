@@ -24,14 +24,12 @@ public class AccessProfileController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        // Flag para o _Layout desativar o scroll principal (mesma lógica do Actor)
         ViewData["DisableMainScroll"] = "true"; 
         
-        // No futuro, você carregará os perfis do banco:
-        // var perfis = await _context.PerfisAcesso.ToListAsync();
-        // return View(perfis);
-
-        return View();
+        // Agora busca os perfis reais
+        var perfis = await _context.PerfisAcesso.OrderBy(p => p.Nome).ToListAsync();
+        
+        return View(perfis); // Envia a lista para a View
     }
 
     // GET: /AccessProfile/Create
@@ -41,7 +39,16 @@ public class AccessProfileController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View();
+
+        // [CORREÇÃO] Envia um novo Model (vazio) para a View
+        // para que @Model.DtCriacao não dê erro
+        var novoPerfil = new PerfilAcesso
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now
+        };
+        
+        return View(novoPerfil);
     }
 
     // GET: /AccessProfile/Edit/5
@@ -52,10 +59,20 @@ public class AccessProfileController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        // No futuro, você buscará o perfil e suas permissões aqui:
-        // var perfil = await _context.PerfisAcesso.FindAsync(id);
-        // if (perfil == null) return NotFound();
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        // [CORREÇÃO] Busca o perfil no banco
+        var perfil = await _context.PerfisAcesso.FindAsync(id);
+        if (perfil == null)
+        {
+            return NotFound();
+        }
         
-        return View(); // Em um caso real: return View(perfil);
+        return View(perfil); // Envia o perfil encontrado para a View
     }
+
+    // TODO: Adicionar [HttpPost] Create e Edit para salvar os dados
 }

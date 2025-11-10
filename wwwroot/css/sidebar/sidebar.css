@@ -102,7 +102,7 @@ select {
     align-items: center;
     padding: 7px 0; /* Espaçamento vertical DENTRO do <p> */
     margin: 0; /* Remove margem padrão do <p> */
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: #fff; /* Garante texto branco */
     transition: color 0.2s ease-in-out;

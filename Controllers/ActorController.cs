@@ -5,7 +5,7 @@ using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering; // <-- ADICIONADO
+using Microsoft.AspNetCore.Mvc.Rendering; 
 
 namespace InsEmpodera.Controllers;
 
@@ -27,48 +27,74 @@ public class ActorController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        // Flag para o _Layout desativar o scroll principal
         ViewData["DisableMainScroll"] = "true"; 
         
         return View();
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    // GET: /Actor/Edit/5
-    public async Task<IActionResult> Edit(int? id) // <-- AJUSTADO
-    {
-        // Aqui você buscaria o ator pelo ID, por exemplo:
-        // var ator = await _context.Atores.FindAsync(id);
-        // if (ator == null) return NotFound();
-
-        // [NOVO] Carrega as comunidades para o dropdown
-        ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
-            "IdComunidade", 
-            "Nome"
-            //, ator.ComunidadeId // Descomente e ajuste para pré-selecionar
-        );
-
-        return View(); // Em um caso real: return View(ator);
-    }
-
     // GET: /Actor/Create
-    public async Task<IActionResult> Create() // <-- AJUSTADO
+    public async Task<IActionResult> Create()
     {
-        // [NOVO] Carrega as comunidades para o dropdown
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        
+        // Carrega o dropdown de comunidades
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
             "IdComunidade", 
             "Nome"
         );
         
-        return View();
+        // [CORREÇÃO] Cria um novo Ator (vazio) com as datas
+        // para que o rodapé "Criado em" funcione.
+        var novoAtor = new Ator
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now 
+            // Você pode pré-definir outros valores aqui se quiser
+        };
+        
+        return View(novoAtor); // Passa o novo Ator (o Model) para a View
+    }
+
+    // GET: /Actor/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        // [CORREÇÃO] Busca o Ator no banco de dados
+        var ator = await _context.Atores.FindAsync(id);
+
+        if (ator == null)
+        {
+            return NotFound(); // Ator não encontrado
+        }
+
+        // Carrega o dropdown de comunidades
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+            "IdComunidade", 
+            "Nome"
+            //, ator.ComunidadeId // Descomente se 'Ator' tiver ComunidadeId
+        );
+
+        // [CORREÇÃO] Passa o Ator (o Model) que encontramos para a View
+        return View(ator);
     }
     
+    // TODO: Você precisará adicionar os métodos [HttpPost] para Create e Edit
+    // para salvar as mudanças no banco.
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

@@ -1,0 +1,107 @@
+@model Empodera.Models.AvaliacaoPessoal
+@{
+    ViewData["Title"] = "Nova Avaliação Pessoal";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> <link rel="stylesheet" href="~/css/pages/personal-assessment.css" /> }
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Avaliações Pessoais > <strong>Nova Avaliação Pessoal</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="AtorId">Ator</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtoresList" required>
+                    <option value="">Selecione um Ator</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="RedePrimaria">Rede primária 
+                <span class="tooltip-icon" data-tooltip="1. Muitas Relações diversificadas e seguras.&#10;5. Poucas relações diversificadas e seguras.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="CCrimes" min="1" max="5" value="1">
+        </div>
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
+                <span class="tooltip-icon" data-tooltip="1. Não desenvolve atividades ilegais.&#10;5. Desenvolve atividades ilegais.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Substancias">Substâncias 
+                <span class="tooltip-icon" data-tooltip="1.Não faz uso abusivo de substâncias.&#10;5. Faz uso abusivo de substâncias.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Substancias" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Moradia">Moradia 
+                <span class="tooltip-icon" data-tooltip="1. Tem garantida moradia digna.&#10;5. Não tem garantida moradia digna.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Moradia" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Prevencao">Prevenção
+                <span class="tooltip-icon" data-tooltip="-">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5" value="1">
+        </div>
+
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="AssistenciaBasica">Assistência Básica 
+                <span class="tooltip-icon" data-tooltip="1. Possui suas necessidades básicas de alimentação e documentação garantidas.&#10;5. Não possui suas necessidades básicas de alimentação e documentação garantidas.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="AssBasica" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Educacao">Educação 
+                <span class="tooltip-icon" data-tooltip="1. Sabe ler, escrever e tem oportunidades e interesse para aprender sobre diversos temas.&#10;5. Não tem oportunidades e nem interesse em aprender sobre diversos temas.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Educacao" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Saude">Saúde 
+                <span class="tooltip-icon" data-tooltip="1.Tem os cuidados a saúde assegurado e se cuida.&#10;5. Não tem os cuidados a saúde assegurados e não se cuida.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Saude" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Ocupacao">Ocupação 
+                <span class="tooltip-icon" data-tooltip="1. Reconhece suas habilidade e gera renda com elas.&#10;5. Não reconhece habilidades e não gera renda.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Ocupacao" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Lazer">Lazer 
+                <span class="tooltip-icon" data-tooltip="1. Tem momento e espaços para lazer.&#10;5. Não tem espaço de lazer.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5" value="1">
+        </div>
+        <div class="form-buttons">
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Context.Request.Query["atorId"]" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">CRIAR AVALIAÇÃO</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/personal-assessment.js"></script>
+}

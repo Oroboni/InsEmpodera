@@ -1,0 +1,136 @@
+@model Empodera.Models.AvaliacaoPessoal
+@{
+    ViewData["Title"] = "Detalhes da Avaliação Pessoal";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> <link rel="stylesheet" href="~/css/pages/personal-assessment.css" /> }
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Avaliações Pessoais > <strong>Detalhes da Avaliação Pessoal</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="AtorId">Ator</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtoresList" disabled></select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="RedePrimaria">Rede primária 
+                <span class="tooltip-icon" data-tooltip="1. Muitas Relações diversificadas e seguras.&#10;5. Poucas relações diversificadas e seguras.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="CCrimes" min="1" max="5">
+        </div>
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
+                <span class="tooltip-icon" data-tooltip="1. Acesso pleno e fácil.&#10;5. Sem acesso ou com muitas barreiras.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Substancias">Substâncias 
+                <span class="tooltip-icon" data-tooltip="1. Uso problemático ou dependência.&#10;5. Nenhum uso ou uso não problemático.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Substancias" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Moradia">Moradia 
+                <span class="tooltip-icon" data-tooltip="1. Moradia segura, estável e adequada.&#10;5. Moradia precária, instável ou inexistente.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Moradia" min="1" max="5">
+        </div>
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="AssistenciaBasica">Assistência Básica 
+                <span class="tooltip-icon" data-tooltip="1. Necessidades básicas (comida, roupa) atendidas.&#10;5. Necessidades básicas não atendidas.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="AssBasica" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Educacao">Educação 
+                <span class="tooltip-icon" data-tooltip="1. Acesso pleno à educação.&#10;5. Fora da escola ou acesso precário.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Educacao" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Saude">Saúde 
+                <span class="tooltip-icon" data-tooltip="1. Acesso regular a serviços de saúde (física e mental).&#10;5. Sem acesso ou acesso dificultado.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Saude" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Ocupacao">Ocupação 
+                <span class="tooltip-icon" data-tooltip="1. Trabalho/ocupação estável e satisfatório.&#10;5. Desempregado ou em trabalho precário.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Ocupacao" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Lazer">Lazer 
+                <span class="tooltip-icon" data-tooltip="1. Acesso regular a atividades de lazer e cultura.&#10;5. Nenhum acesso a lazer.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5">
+        </div>
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>[Nome do Avaliador]</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Avaliador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+            </div>
+        </details>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.AtorId" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">EDITAR</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/personal-assessment.js"></script>
+}

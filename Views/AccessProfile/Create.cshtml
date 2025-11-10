@@ -1,13 +1,12 @@
+@model Empodera.Models.PerfilAcesso
 @{
     ViewData["Title"] = "Criar Perfil de Acesso";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <!-- 1. CSS do formulário base (que você já tinha) -->
     <link rel="stylesheet" href="~/css/pages/atores.css" /> 
     
-    <!-- 2. NOSSO NOVO CSS para a tabela e switches -->
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
 }
 
@@ -22,11 +21,10 @@
             <label for="nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved"></i>
-                <input type="text" id="nome" name="nome" placeholder="Ex: Visitante" required>
+                <input asp-for="Nome" type="text" placeholder="Ex: Visitante" required>
             </div>
         </div>
 
-        <!-- Tabela de permissões com a lista completa -->
         <table class="permission-table">
             <thead>
                 <tr>
@@ -39,7 +37,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Todos começam desligados -->
                 <tr>
                     <td>Usuários</td>
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Listar]"><span class="slider"></span></label></td>
@@ -138,15 +135,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <!-- Rodapé de "Criado em" -->
-        <div class="form-footer">
-            <div class="footer-text" style="flex-grow: 1;">
-                <!-- Você pode popular o nome do usuário logado aqui -->
-                <span>Criado em <strong>@DateTime.Now.ToString("dd/MM/yyyy")</strong> por <strong>Usuário Logado</strong></span>
-            </div>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
 
         <div class="form-buttons">
             <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
