@@ -1,0 +1,311 @@
+@model Empodera.Models.Atividade
+@{
+    ViewData["Title"] = "Detalhes de Atividade";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+    <link rel="stylesheet" href="~/css/pages/atores.css" />
+    <style>
+        .btn-success {
+            background-color: var(--color-success) !important;
+            color: white !important;
+        }
+    </style>
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Atividades > <strong>Detalhes de atividade</strong></h1>
+    </div>
+
+    <form method="post">
+        <input type="hidden" asp-for="IdAtividade" />
+
+        <div class="form-group">
+            <label for="Nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-pencil"></i>
+                <input asp-for="Nome" type="text" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Eixos</label>
+            
+            <div class="eixos-tag-container" id="tag-container">
+                </div>
+            
+            <details class="multiselect-wrapper">
+                <summary>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-tags"></i>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </summary>
+                <div class="multiselect-panel" id="multiselect-panel">
+                    <ul>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="1" id="eixo-1" 
+                                   data-tag-class="tag-pink" data-tag-name="Rede primária">
+                            <label for="eixo-1">Rede primária</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="2" id="eixo-2" 
+                                   data-tag-class="tag-purple" data-tag-name="Segurança Social">
+                            <label for="eixo-2">Segurança Social</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="3" id="eixo-3" 
+                                   data-tag-class="tag-darkred" data-tag-name="Substâncias">
+                            <label for="eixo-3">Substâncias</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="4" id="eixo-4" 
+                                   data-tag-class="tag-gray" data-tag-name="Moradia">
+                            <label for="eixo-4">Moradia</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="5" id="eixo-5" 
+                                   data-tag-class="tag-blue" data-tag-name="Prevenção" checked> <label for="eixo-5">Prevenção</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="6" id="eixo-6" 
+                                   data-tag-class="tag-lightblue" data-tag-name="Assistência Básica">
+                            <label for="eixo-6">Assistência Básica</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="7" id="eixo-7" 
+                                   data-tag-class="tag-lightgreen" data-tag-name="Educação">
+                            <label for="eixo-7">Educação</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="8" id="eixo-8" 
+                                   data-tag-class="tag-red" data-tag-name="Saúde">
+                            <label for="eixo-8">Saúde</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="9" id="eixo-9" 
+                                   data-tag-class="tag-green" data-tag-name="Ocupação">
+                            <label for="eixo-9">Ocupação</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="eixosIds" value="10" id="eixo-10" 
+                                   data-tag-class="tag-yellow" data-tag-name="Lazer">
+                            <label for="eixo-10">Lazer</label>
+                        </li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="form-group">
+            <label for="Descricao">Descrição</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-align-left"></i>
+                <textarea asp-for="Descricao"></textarea>
+            </div>
+        </div>
+
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="Sthefany Porcari" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                         <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+            </div>
+        </details>
+        
+        <div class="form-buttons">
+            <a asp-controller="Activity" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">EDITAR</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. Seleção dos Elementos ---
+            const btnEditar = document.querySelector('.btn-primary');
+            const campoNome = document.querySelector('input[name="Nome"]');
+            const campoDescricao = document.querySelector('textarea[name="Descricao"]');
+            
+            const tagContainer = document.getElementById('tag-container');
+            const eixosWrapper = document.querySelector('.multiselect-wrapper');
+            const eixosSummary = eixosWrapper ? eixosWrapper.querySelector('summary') : null;
+            const multiselectPanel = document.getElementById('multiselect-panel');
+            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+            
+            let modoEdicao = false;
+
+            // --- 2. Funções de Tags (em tempo real) ---
+            function updateTagView() {
+                tagContainer.innerHTML = '';
+                
+                checkboxes.forEach(cb => {
+                    const listItem = cb.closest('li');
+                    
+                    if (cb.checked) {
+                        const tagName = cb.dataset.tagName;
+                        const tagClass = cb.dataset.tagClass;
+                        
+                        const tag = document.createElement('span');
+                        tag.className = `tag-item ${tagClass}`;
+                        tag.textContent = tagName;
+                        
+                        const removeBtn = document.createElement('i');
+                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
+                        removeBtn.dataset.checkboxId = cb.id;
+                        
+                        tag.appendChild(removeBtn);
+                        tagContainer.appendChild(tag);
+                        
+                        listItem.classList.add('is-selected');
+                    } else {
+                        listItem.classList.remove('is-selected');
+                    }
+                });
+            }
+
+            function handleTagListChange(e) {
+                if (e.target.type === 'checkbox') {
+                    updateTagView();
+                }
+            }
+
+            function handleTagContainerClick(e) {
+                if (e.target.classList.contains('tag-remove-btn')) {
+                    const checkboxId = e.target.dataset.checkboxId;
+                    const checkboxToUncheck = document.getElementById(checkboxId);
+                    
+                    if (checkboxToUncheck) {
+                        checkboxToUncheck.checked = false;
+                        updateTagView();
+                    }
+                }
+            }
+
+            // --- 3. Funções de Bloqueio ---
+            function bloquearCampos() {
+                if (campoNome) {
+                    campoNome.setAttribute('readonly', 'readonly');
+                    campoNome.style.backgroundColor = 'var(--color-bg-secondary)';
+                    campoNome.style.cursor = 'not-allowed';
+                }
+                if (campoDescricao) {
+                    campoDescricao.setAttribute('readonly', 'readonly');
+                    campoDescricao.style.backgroundColor = 'var(--color-bg-secondary)';
+                    campoDescricao.style.cursor = 'not-allowed';
+                }
+                
+                // Desabilita o dropdown de Eixos
+                if (eixosSummary) {
+                    eixosSummary.style.pointerEvents = 'none';
+                    eixosSummary.style.opacity = '0.7';
+                }
+                // Desabilita os cliques nos 'x' das tags
+                if (tagContainer) {
+                    tagContainer.style.pointerEvents = 'none';
+                    tagContainer.style.opacity = '0.7';
+                }
+                // Remove os event listeners de edição de tags
+                multiselectPanel.removeEventListener('change', handleTagListChange);
+                tagContainer.removeEventListener('click', handleTagContainerClick);
+            }
+            
+            function desbloquearCampos() {
+                if (campoNome) {
+                    campoNome.removeAttribute('readonly');
+                    campoNome.style.backgroundColor = 'var(--color-bg-primary)';
+                    campoNome.style.cursor = 'text';
+                    campoNome.focus();
+                }
+                if (campoDescricao) {
+                    campoDescricao.removeAttribute('readonly');
+                    campoDescricao.style.backgroundColor = 'var(--color-bg-primary)';
+                    campoDescricao.style.cursor = 'text';
+                }
+                
+                // Habilita o dropdown de Eixos
+                if (eixosSummary) {
+                    eixosSummary.style.pointerEvents = 'auto';
+                    eixosSummary.style.opacity = '1';
+                }
+                // Habilita os cliques nos 'x' das tags
+                if (tagContainer) {
+                    tagContainer.style.pointerEvents = 'auto';
+                    tagContainer.style.opacity = '1';
+                }
+                // Adiciona os event listeners de edição de tags
+                multiselectPanel.addEventListener('change', handleTagListChange);
+                tagContainer.addEventListener('click', handleTagContainerClick);
+            }
+            
+            // --- 4. Inicialização da Página ---
+            updateTagView();    // Mostra as tags selecionadas
+            bloquearCampos();   // Bloqueia tudo
+
+            // --- 5. Evento do Botão "EDITAR" ---
+            if (btnEditar) {
+                btnEditar.addEventListener('click', function(e) {
+                    if (!modoEdicao) {
+                        e.preventDefault(); // Impede o envio do formulário
+                        modoEdicao = true;
+                        desbloquearCampos();
+                        
+                        btnEditar.innerHTML = 'SALVAR';
+                        btnEditar.classList.remove('btn-primary');
+                        btnEditar.classList.add('btn-success');
+                        
+                        if (!document.querySelector('.btn-cancel')) {
+                            const btnCancelar = document.createElement('button');
+                            btnCancelar.type = 'button';
+                            btnCancelar.className = 'btn btn-secondary btn-cancel'; // (Usa o estilo do botão Voltar)
+                            btnCancelar.textContent = 'CANCELAR';
+                            btnCancelar.addEventListener('click', function() {
+                                location.reload(); // Recarrega a página
+                            });
+                            btnEditar.parentElement.insertBefore(btnCancelar, btnEditar);
+                        }
+                    } else {
+                        // Agora, no segundo clique, permite o submit
+                        return true;
+                    }
+                });
+            }
+        });
+    </script>
+}

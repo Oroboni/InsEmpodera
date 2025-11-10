@@ -1,5 +1,5 @@
 ========================================================== 
-RELATORIO DE PROJETO ASP.NET - Gerado em 09/11/2025 17:19:10,30 
+RELATORIO DE PROJETO ASP.NET - Gerado em 10/11/2025 19:01:15,53 
 ========================================================== 
 Diretorio base: C:\Users\elian\�rea de Trabalho\InsEmpodera 
 ========================================================== 
@@ -300,8 +300,10 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 +---Controllers
 |       AccessProfileController.cs
 |       AccountController.cs
+|       ActivityController.cs
 |       ActorController.cs
 |       HomeController.cs
+|       PersonalAssessmentController.cs
 |       
 +---Data
 |       ApplicationDbContext.cs
@@ -310,6 +312,10 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 +---Migrations
 |       20251015182614_Initial.cs
 |       20251015182614_Initial.Designer.cs
+|       20251110014125_AddNomeAndTimestampsToPerfilAcesso.cs
+|       20251110014125_AddNomeAndTimestampsToPerfilAcesso.Designer.cs
+|       20251110200929_AddTimestampsToAtividade.cs
+|       20251110200929_AddTimestampsToAtividade.Designer.cs
 |       ApplicationDbContextModelSnapshot.cs
 |       
 +---Models
@@ -388,7 +394,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       0hw3yfzrfx-ausgxo2sd3.gz
 |           |       0nxxz7ek8t-m9qm4tazc0.gz
 |           |       0nxxz7ek8t-o1o13a6vjx.gz
-|           |       0pifp25xah-ckejqisvjv.gz
+|           |       0pifp25xah-rddsu66yb0.gz
 |           |       1wsjos9brx-jii89g3yp0.gz
 |           |       2q6g8nex9u-8vyfqsqgz1.gz
 |           |       2q6g8nex9u-jj8uyg4cgr.gz
@@ -401,9 +407,12 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       3q38ja38qb-ltid2c489k.gz
 |           |       3q38ja38qb-vr1egmr9el.gz
 |           |       43e1g2zy80-ezwj8mq6yy.gz
+|           |       54hqayjzhc-tugac2hafz.gz
 |           |       55u9s7chsw-6pdc2jztkx.gz
 |           |       5hvxdlnj9g-83jwlth58m.gz
+|           |       5lepnod9hz-20j42nwxlt.gz
 |           |       6a8e3hzme6-x0q3zqp4vz.gz
+|           |       6yok6mv94b-y63h4p9gtl.gz
 |           |       70qbeka8kx-bqjiyaj88i.gz
 |           |       70qbeka8kx-t1cqhe9u97.gz
 |           |       71msoqnfgu-c2jlpeoesf.gz
@@ -466,6 +475,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       nn4y1scow9-zub09dkrxp.gz
 |           |       o831g4gwmf-in2qniltw3.gz
 |           |       oeabivif52-ttgo8qnofa.gz
+|           |       olfbh4llnl-wh5a95cwnp.gz
 |           |       p1sc2qzn78-y4eix5dq6r.gz
 |           |       p2nlngv9ez-5ipweew5fc.gz
 |           |       pf4y6cunxp-pld001ldhm.gz
@@ -473,7 +483,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       q7o662deot-keugtjm085.gz
 |           |       q9b86fh14t-dxx9fxp4il.gz
 |           |       q9b86fh14t-q9ht133ko3.gz
-|           |       qqn68rgd62-0ql2wvv3xz.gz
+|           |       qqn68rgd62-itrzx9wg65.gz
 |           |       rg44okjgg2-kbrnm935zg.gz
 |           |       ro3wkd67ji-493y06b0oq.gz
 |           |       ro3wkd67ji-hd3gran6i8.gz
@@ -538,6 +548,11 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |   |       index.cshtml
 |   |       Logout.cshtml
 |   |       
+|   +---Activity
+|   |       Create.cshtml
+|   |       Edit.cshtml
+|   |       Index.cshtml
+|   |       
 |   +---Actor
 |   |       Create.cshtml
 |   |       Delete.cshtml
@@ -565,6 +580,11 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |   |           Relatorios.cshtml
 |   |           Usuarios.cshtml
 |   |           
+|   +---PersonalAssessment
+|   |       Create.cshtml
+|   |       Edit.cshtml
+|   |       Index.cshtml
+|   |       
 |   \---Shared
 |           Error.cshtml
 |           _Layout.cshtml
@@ -583,6 +603,8 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
     |   |   
     |   +---pages
     |   |       access-profile-form.css
+    |   |       activity-form.css
+    |   |       activity-index.css
     |   |       ajuda.css
     |   |       atores-index.css
     |   |       atores.css
@@ -596,6 +618,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
     |   |       homepage.css
     |   |       indexAtores.css
     |   |       perfisacesso.css
+    |   |       personal-assessment.css
     |   |       relatorios.css
     |   |       usuarios.css
     |   |       
@@ -630,6 +653,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
     +---js
     |       forget.js
     |       login.js
+    |       personal-assessment.js
     |       sidebar.js
     |       site.js
     |       
@@ -722,8 +746,10 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Program.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AccountController.cs 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ActivityController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ActorController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Data\ApplicationDbContext.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Data\ClassSeed.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Models\Acoes.cs 
@@ -762,6 +788,9 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\index.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Activity\Create.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Activity\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Activity\Index.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Create.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Delete.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Edit.cshtml 
@@ -783,6 +812,9 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Home\Sidebar\Privacy.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Home\Sidebar\Relatorios.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Home\Sidebar\Usuarios.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout.cshtml 
@@ -792,7 +824,7 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.Development.json 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.json 
  
-Total de arquivos a processar: 72 
+Total de arquivos a processar: 80 
  
  
 ========================================================== 
@@ -893,14 +925,12 @@ public class AccessProfileController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        // Flag para o _Layout desativar o scroll principal (mesma lógica do Actor)
         ViewData["DisableMainScroll"] = "true"; 
         
-        // No futuro, você carregará os perfis do banco:
-        // var perfis = await _context.PerfisAcesso.ToListAsync();
-        // return View(perfis);
-
-        return View();
+        // Agora busca os perfis reais
+        var perfis = await _context.PerfisAcesso.OrderBy(p => p.Nome).ToListAsync();
+        
+        return View(perfis); // Envia a lista para a View
     }
 
     // GET: /AccessProfile/Create
@@ -910,7 +940,16 @@ public class AccessProfileController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View();
+
+        // [CORREÇÃO] Envia um novo Model (vazio) para a View
+        // para que @Model.DtCriacao não dê erro
+        var novoPerfil = new PerfilAcesso
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now
+        };
+        
+        return View(novoPerfil);
     }
 
     // GET: /AccessProfile/Edit/5
@@ -921,12 +960,22 @@ public class AccessProfileController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        // No futuro, você buscará o perfil e suas permissões aqui:
-        // var perfil = await _context.PerfisAcesso.FindAsync(id);
-        // if (perfil == null) return NotFound();
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        // [CORREÇÃO] Busca o perfil no banco
+        var perfil = await _context.PerfisAcesso.FindAsync(id);
+        if (perfil == null)
+        {
+            return NotFound();
+        }
         
-        return View(); // Em um caso real: return View(perfil);
+        return View(perfil); // Envia o perfil encontrado para a View
     }
+
+    // TODO: Adicionar [HttpPost] Create e Edit para salvar os dados
 } 
  
  
@@ -998,6 +1047,104 @@ public class AccountController : Controller
  
  
 ========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ActivityController.cs 
+========================================================== 
+ 
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using InsEmpodera.Models;
+using Empodera.Data;
+using Empodera.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace InsEmpodera.Controllers;
+
+public class ActivityController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public ActivityController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    // GET: /Activity/
+    public async Task<IActionResult> Index()
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        ViewData["DisableMainScroll"] = "true"; 
+        
+        // No futuro, você vai carregar as atividades e seus eixos
+        // var atividades = await _context.Atividades.Include(a => a.AtividadesEixo).ThenInclude(ae => ae.Eixo).ToListAsync();
+        // return View(atividades);
+
+        return View();
+    }
+
+    // GET: /Activity/Create
+    public async Task<IActionResult> Create()
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        
+        // Carrega a lista de Eixos para o dropdown
+        ViewBag.EixosList = new SelectList(
+            await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(),
+            "IdEixo",
+            "Nome"
+        );
+        
+        // Envia um model vazio para o rodapé padronizado
+        var model = new Atividade
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now
+        };
+
+        return View(model);
+    }
+
+    // GET: /Activity/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        // Busca a Atividade e seus Eixos
+        var atividade = await _context.Atividades.FindAsync(id); // (Você precisará incluir os Eixos)
+            
+        if (atividade == null)
+        {
+            return NotFound();
+        }
+
+        // Carrega a lista de Eixos para o dropdown (se necessário)
+        ViewBag.EixosList = new SelectList(
+            await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(),
+            "IdEixo",
+            "Nome"
+        );
+
+        return View(atividade);
+    }
+} 
+ 
+ 
+========================================================== 
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ActorController.cs 
 ========================================================== 
  
@@ -1008,7 +1155,7 @@ using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering; // <-- ADICIONADO
+using Microsoft.AspNetCore.Mvc.Rendering; 
 
 namespace InsEmpodera.Controllers;
 
@@ -1030,48 +1177,77 @@ public class ActorController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        // Flag para o _Layout desativar o scroll principal
         ViewData["DisableMainScroll"] = "true"; 
         
+        // Você vai querer carregar os atores aqui, por exemplo:
+        // var atores = await _context.Atores.ToListAsync();
+        // return View(atores);
+
         return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    // GET: /Actor/Edit/5
-    public async Task<IActionResult> Edit(int? id) // <-- AJUSTADO
-    {
-        // Aqui você buscaria o ator pelo ID, por exemplo:
-        // var ator = await _context.Atores.FindAsync(id);
-        // if (ator == null) return NotFound();
-
-        // [NOVO] Carrega as comunidades para o dropdown
-        ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
-            "IdComunidade", 
-            "Nome"
-            //, ator.ComunidadeId // Descomente e ajuste para pré-selecionar
-        );
-
-        return View(); // Em um caso real: return View(ator);
     }
 
     // GET: /Actor/Create
-    public async Task<IActionResult> Create() // <-- AJUSTADO
+    public async Task<IActionResult> Create()
     {
-        // [NOVO] Carrega as comunidades para o dropdown
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        
+        // Carrega o dropdown de comunidades
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
             "IdComunidade", 
             "Nome"
         );
         
-        return View();
+        // [CORREÇÃO] Cria um novo Ator (vazio) com as datas
+        // para que o rodapé "Criado em" não dê erro.
+        var novoAtor = new Ator
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now 
+        };
+        
+        return View(novoAtor); // Passa o novo Ator (o Model) para a View
+    }
+
+    // GET: /Actor/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        // [CORREÇÃO] Busca o Ator no banco de dados
+        var ator = await _context.Atores.FindAsync(id);
+
+        if (ator == null)
+        {
+            return NotFound(); // Ator não encontrado
+        }
+
+        // Carrega o dropdown de comunidades
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+            "IdComunidade", 
+            "Nome"
+            //, ator.ComunidadeId // Descomente se 'Ator' tiver ComunidadeId
+        );
+
+        // [CORREÇÃO] Passa o Ator (o Model) que encontramos para a View
+        return View(ator);
     }
     
+    // TODO: Você precisará adicionar os métodos [HttpPost] para Create e Edit
+    // para salvar as mudanças no banco.
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
@@ -1242,6 +1418,116 @@ public class HomeController : Controller
     }
 }
  
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
+========================================================== 
+ 
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using InsEmpodera.Models;
+using Empodera.Data;
+using Empodera.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace InsEmpodera.Controllers;
+
+public class PersonalAssessmentController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public PersonalAssessmentController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    // GET: /PersonalAssessment/
+    // Opcionalmente, pode receber o ID do ator
+    public async Task<IActionResult> Index(int? atorId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        // 1. Carregar a lista de todos os atores para o dropdown principal
+        ViewBag.AtoresList = new SelectList(
+            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
+            "IdAtores",
+            "Nome",
+            atorId // O ID do ator selecionado (se houver)
+        );
+
+        // 2. Guardar o ID selecionado
+        ViewBag.SelectedAtorId = atorId;
+
+        // 3. Buscar as avaliações APENAS se um ator foi selecionado
+        List<AvaliacaoPessoal> avaliacoes = new List<AvaliacaoPessoal>();
+        if (atorId.HasValue)
+        {
+            avaliacoes = await _context.AvaliacoesPessoais
+                .Where(a => a.AtorId == atorId.Value)
+                .OrderByDescending(a => a.DtCriacao) // Mostrar mais nova primeiro
+                .ToListAsync();
+        }
+
+        // Flag para o layout não ter scroll
+        ViewData["DisableMainScroll"] = "true"; 
+
+        return View(avaliacoes); // Envia a lista (vazia ou não) para a View
+    }
+
+    // GET: /PersonalAssessment/Create
+    public async Task<IActionResult> Create(int? atorId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        
+        // Carrega a lista de atores para o dropdown do formulário
+        ViewBag.AtoresList = new SelectList(
+            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
+            "IdAtores",
+            "Nome",
+            atorId // Pré-seleciona o ator vindo do Index
+        );
+
+        return View();
+    }
+
+    // GET: /PersonalAssessment/Edit/5
+    public async Task<IActionResult> Edit(int? id) // id da Avaliação
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var avaliacao = await _context.AvaliacoesPessoais.FindAsync(id);
+        if (avaliacao == null)
+        {
+            return NotFound();
+        }
+        
+        // Carrega a lista de atores para o dropdown (para mostrar o nome)
+        ViewBag.AtoresList = new SelectList(
+            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
+            "IdAtores",
+            "Nome",
+            avaliacao.AtorId // Pré-seleciona o ator da avaliação
+        );
+
+        return View(avaliacao);
+    }
+} 
  
  
 ========================================================== 
@@ -2003,8 +2289,16 @@ namespace Empodera.Models
     {
         [Key]
         public int IdAtividade { get; set; }
+
         public string Nome { get; set; } = string.Empty;
+        
         public string Descricao { get; set; } = string.Empty;
+
+        // [NOVAS PROPRIEDADES ADICIONADAS]
+        public DateTime DtCriacao { get; set; }
+        
+        public DateTime DtModificacao { get; set; }
+        public virtual ICollection<AtividadesEixo> AtividadesEixo { get; set; }
     }
 } 
  
@@ -2363,6 +2657,15 @@ namespace Empodera.Models
     {
         [Key]
         public int IdPAcesso { get; set; }
+
+        [Required(ErrorMessage = "O nome do perfil é obrigatório.")]
+        public string Nome { get; set; } = string.Empty;
+
+        public DateTime DtCriacao { get; set; }
+        
+        public DateTime DtModificacao { get; set; }
+
+        // public List<Permissao> Permissoes { get; set; } // (Descomente quando for implementar)
     }
 } 
  
@@ -2566,16 +2869,15 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
 ========================================================== 
  
+@model Empodera.Models.PerfilAcesso
 @{
     ViewData["Title"] = "Criar Perfil de Acesso";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <!-- 1. CSS do formulário base (que você já tinha) -->
     <link rel="stylesheet" href="~/css/pages/atores.css" /> 
     
-    <!-- 2. NOSSO NOVO CSS -->
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
 }
 
@@ -2590,11 +2892,10 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
             <label for="nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved"></i>
-                <input type="text" id="nome" name="nome" placeholder="Ex: Visitante" required>
+                <input asp-for="Nome" type="text" placeholder="Ex: Visitante" required>
             </div>
         </div>
 
-        <!-- [MUDANÇA] A classe da tabela agora é "permission-table" -->
         <table class="permission-table">
             <thead>
                 <tr>
@@ -2607,7 +2908,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
                 </tr>
             </thead>
             <tbody>
-                <!-- Todos começam desligados -->
                 <tr>
                     <td>Usuários</td>
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Listar]"><span class="slider"></span></label></td>
@@ -2624,9 +2924,46 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Atualizar]"><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Deletar]"><span class="slider"></span></label></td>
                 </tr>
-                
-                <!-- ... Adicione as outras linhas aqui ... -->
-
+                <tr>
+                    <td>Atividades</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Comunidades</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Vulnerabilidades</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Recursos</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Diários de Campo</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Deletar]"><span class="slider"></span></label></td>
+                </tr>
                 <tr>
                     <td>Atores</td>
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Listar]"><span class="slider"></span></label></td>
@@ -2634,6 +2971,30 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Criar]"><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Atualizar]"><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Ficha de 1º Contato</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Diários de Processo Pessoal</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Deletar]"><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Avaliações Pessoais</td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Listar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Detalhar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Criar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Atualizar]"><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Deletar]"><span class="slider"></span></label></td>
                 </tr>
                 <tr>
                     <td>SER</td>
@@ -2645,13 +3006,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
                 </tr>
             </tbody>
         </table>
-
-        <div class="form-footer">
-            <div class="footer-text" style="flex-grow: 1;">
-                <span>Criado em <strong>@DateTime.Now.ToString("dd/MM/yyyy")</strong> por <strong>Usuário Logado</strong></span>
-            </div>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
 
         <div class="form-buttons">
             <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
@@ -2665,16 +3019,15 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
 ========================================================== 
  
+@model Empodera.Models.PerfilAcesso
 @{
     ViewData["Title"] = "Detalhes do Perfil de Acesso";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <!-- 1. CSS do formulário base (que você já tinha) -->
     <link rel="stylesheet" href="~/css/pages/atores.css" /> 
     
-    <!-- 2. NOSSO NOVO CSS (substitui o perfis-acesso.css antigo) -->
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
 }
 
@@ -2684,16 +3037,14 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cs
     </div>
 
     <form method="post">
-        
-        <div class="form-group">
+        <input type="hidden" asp-for="IdPAcesso" /> <div class="form-group">
             <label for="nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved"></i>
-                <input type="text" id="nome" name="nome" value="Admin" required>
+                <input asp-for="Nome" type="text" required>
             </div>
         </div>
 
-        <!-- [MUDANÇA] A classe da tabela agora é "permission-table" -->
         <table class="permission-table">
             <thead>
                 <tr>
@@ -2706,7 +3057,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cs
                 </tr>
             </thead>
             <tbody>
-                <!-- Exemplo: Perfil "Admin" (tudo marcado) -->
                 <tr>
                     <td>Usuários</td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
@@ -2723,11 +3073,72 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cs
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                 </tr>
-                
-                <!-- ... Adicione as outras linhas aqui ... -->
-                
+                <tr>
+                    <td>Atividades</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Comunidades</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Vulnerabilidades</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Recursos</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Diários de Campo</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
                 <tr>
                     <td>Atores</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Ficha de 1º Contato</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Diários de Processo Pessoal</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Avaliações Pessoais</td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                     <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
@@ -2745,13 +3156,44 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cs
             </tbody>
         </table>
 
-        <div class="form-footer">
-            <div class="footer-text" style="flex-grow: 1;">
-                <span>Atualizado em <strong>25/09/2023</strong> por <strong>Maysa Mazzon Camargo</strong></span>
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type_2"text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
             </div>
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
-
+        </details>
         <div class="form-buttons">
             <button type="button" class="btn btn-delete">DELETAR</button>
             <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
@@ -2766,48 +3208,33 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.c
 ========================================================== 
  
 @{
-    ViewData["Title"] = "Atores";
+    ViewData["Title"] = "Perfis de Acesso";
     Layout = "_Layout";
     ViewData["DisableMainScroll"] = "true";
 }
 
-@* A tag <link> do CSS deve vir aqui, na @section Styles.
-  Isso garante que ela seja carregada dentro do <head> do _Layout.
-*@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
-    
-    @* OBS: Se você renomeou o arquivo para 'index-list.css' (como eu sugeri),
-      mude a linha acima para:
-      <link rel="stylesheet" href="~/css/pages/index-list.css" />
-    *@
 }
 
-@* As tags <html>, <head> e <body> foram REMOVIDAS daqui.
-  Elas não podem existir em uma View que usa um Layout.
-*@
-<div class="atores-content-area">
-
-    <div class="atores-header">
-        <h2>Atores</h2>
+<div class="atores-content-area"> <div class="atores-header">
+        <h2>Perfis de acesso</h2>
     </div>
 
     <div class="atores-search-container">
         <form class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
-            
-            @* Eu já troquei o ícone de SVG para FontAwesome, como você pediu antes *@
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </form>
 
-        <a asp-controller="Actor" asp-action="Create" class="atores-add-button">+</a>
+        <a asp-controller="AccessProfile" asp-action="Create" class="atores-add-button">+</a>
     </div>
 
     <div class="atores-list-container">
         
         <div class="ator-card">
-            <span class="ator-name">Jéssica Maria</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="1">
+            <span class="ator-name">Admin</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="1">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
                 </svg>
@@ -2815,8 +3242,8 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.c
         </div>
         
         <div class="ator-card">
-            <span class="ator-name">Fábio Mota</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="2">
+            <span class="ator-name">Estudante</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="2">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
                 </svg>
@@ -2824,62 +3251,8 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.c
         </div>
 
         <div class="ator-card">
-            <span class="ator-name">Aninha</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="3">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Claudete Magnus</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="4">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Bianca Fernanda</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="5">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Sthephanie Martins</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="6">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Kelly Moraes</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="7">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Edson Pereira</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="8">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Isaura Gomes</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="9">
+            <span class="ator-name">Operador</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="3">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
                 </svg>
@@ -3075,6 +3448,328 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml
  
  
 ========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Activity\Create.cshtml 
+========================================================== 
+ 
+@model Empodera.Models.Atividade
+@{
+    ViewData["Title"] = "Adicionar Atividade";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Atividades > <strong>Adicionar Atividade</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="Nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-pencil"></i>
+                <input asp-for="Nome" type="text" placeholder="Nome da atividade" required>
+            </div>
+        </div>
+
+        <details class="form-group multiselect-wrapper">
+            <summary>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-tags"></i>
+                    <span class="multiselect-placeholder">Eixos</span>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </summary>
+            <div class="multiselect-panel">
+                <ul>
+                    @if (ViewBag.EixosList != null)
+                    {
+                        foreach (var eixo in (SelectList)ViewBag.EixosList)
+                        {
+                            <li>
+                                <input type="checkbox" name="eixosIds" value="@eixo.Value" id="eixo-@eixo.Value">
+                                <label for="eixo-@eixo.Value">@eixo.Text</label>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </details>
+
+        <div class="form-group">
+            <label for="Descricao">Descrição</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-align-left" style="top: 24px;"></i> <textarea asp-for="Descricao"></textarea>
+            </div>
+        </div>
+        
+        <div class="form-buttons" style="margin-top: 40px;">
+             <button type="submit" class="btn-full-width">ADICIONAR ATIVIDADE</button>
+        </div>
+        
+    </form>
+</div> 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Activity\Edit.cshtml 
+========================================================== 
+ 
+@model Empodera.Models.Ator
+@{
+    ViewData["Title"] = "Detalhes do Ator";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css">
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Atores > <strong>Detalhes</strong></h1>
+    </div>
+    
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="IdAtores" />
+
+        <div class="form-group">
+             <label for="comunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
+                 <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+                
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <input asp-for="Nome" type="text" placeholder="Adicione o nome da comunidade aqui...">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label for="dataNascimento">Data de Nascimento</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-days"></i>
+                @* <input asp-for="DtNascimento" type="date"> *@
+                <input type="date" id="dataNascimento" name="dataNascimento">
+            </div>
+        </div>
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="input-wrapper select-wrapper">
+                    <i class="fa-solid fa-venus-mars"></i>
+                    <select asp-for="Genero">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="NaoDeclarado">Não declarado</option>
+                        <option value="Transgenero">Transgênero</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group-checkbox">
+            <input type="checkbox" id="da-equipe" name="da-equipe">
+            <label for="da-equipe">Da Equipe</label>
+        </div>
+
+        <div class="form-group">
+            <label for="papel-social">Papel Social</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-people-group"></i>
+                <input asp-for="PapelSocial1" type="text" placeholder="Adicione o papel social aqui...">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="interesses">Interesses</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-heart"></i>
+                <input asp-for="PapelSocial2" type="text" placeholder="Adicione os interesses aqui...">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-phone"></i>
+                <input asp-for="Telefone" type="tel" placeholder="Adicione o telefone aqui...">
+            </div>
+        </div>
+
+        <div class="actions-grid">
+            <button type="button" class="action-card">
+                <span class="card-title">Rede Primária</span>
+                <span class="card-subtitle">Adicionar Ator</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-plus"></i>
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Adjacência</span>
+                <span class="card-subtitle">da RPP</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Avaliações</span>
+                <span class="card-subtitle">Pessoais</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-pen"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Diário de</span>
+                <span class="card-subtitle">Processos Pessoal</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+            </button>
+        </div>
+
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+            </div>
+        </details>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR MUDANÇAS</button>
+        </div>
+    </form>
+</div> 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Activity\Index.cshtml 
+========================================================== 
+ 
+@model IEnumerable<Empodera.Models.Atividade>
+@{
+    ViewData["Title"] = "Atividades";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+}
+
+<div class="activity-page-container">
+
+    <div class="activity-controls">
+        <form class="search-bar" method="get">
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </form>
+
+        <a asp-controller="Activity" asp-action="Create" class="btn-add-activity">
+            <i class="fa-solid fa-plus"></i> ADICIONAR ATIVIDADE
+        </a>
+    </div>
+
+    <div class="activity-list-area">
+        <div class="activity-list-container">
+
+            <div class="activity-card">
+                <div class="activity-card-info">
+                    <span class="title">Acompanhamento do Projeto Semear.</span>
+                    <div class="tag-list">
+                        <span class="tag-item tag-blue">Prevenção</span>
+                        <span class="tag-item tag-green">Ocupação</span>
+                        <span class="tag-item tag-yellow">Lazer</span>
+                        <span class="tag-item tag-purple">Segurança Social</span>
+                        <span class="tag-item tag-lightgreen">Educação</span>
+                        <span class="tag-item tag-red">Saúde</span>
+                        <span class="tag-item tag-lightblue">Assistência Básica</span>
+                    </div>
+                </div>
+                <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="1">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                </a>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-card-info">
+                    <span class="title">Colhendo memórias através do desenho</span>
+                    <div class="tag-list">
+                        <span class="tag-item tag-yellow">Lazer</span>
+                        <span class="tag-item tag-lightgreen">Educação</span>
+                    </div>
+                </div>
+                <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="2">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                </a>
+            </div>
+            
+             <div class="activity-card">
+                <div class="activity-card-info">
+                    <span class="title">Distribuição de doces</span>
+                    <div class="tag-list">
+                        <span class="tag-item tag-yellow">Lazer</span>
+                    </div>
+                </div>
+                <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="3">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div> 
+ 
+ 
+========================================================== 
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Create.cshtml 
 ========================================================== 
  
@@ -3243,148 +3938,174 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Delete.cshtml
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Edit.cshtml 
 ========================================================== 
  
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Ator</title>
-    <link rel="stylesheet" href="~/css/pages/atores.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-</head>
-<body>
-<body>
-    <div class="container">
-        <div class="breadcrumb">
-            <h1>Atores > <strong>Detalhes</strong></h1>
-        </div>
-        
-        <form action="#" method="post">
+@model Empodera.Models.Ator
+@{
+    ViewData["Title"] = "Detalhes do Ator";
+    Layout = "_Layout";
+}
 
-    <div class="form-group">
-            <label for="comunidadeId">Comunidade</label>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css">
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Atores > <strong>Detalhes</strong></h1>
+    </div>
+    
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="IdAtores" />
+
+        <div class="form-group">
+             <label for="comunidadeId">Comunidade</label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-city"></i>
                 <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
                     <option value="">Selecione a comunidade</option>
                 </select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
         </div>
                 
-    <div class="form-group">
-        <label for="nome">Nome</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" id="nome" name="nome" placeholder="Adicione o nome da comunidade aqui...">
-        </div>
-    </div>
-
-    <div class="form-row">
         <div class="form-group">
-        <label for="dataNascimento">Data de Nascimento</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-calendar-days"></i>
-            <input type="date" id="dataNascimento" name="dataNascimento">
+            <label for="nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <input asp-for="Nome" type="text" placeholder="Adicione o nome da comunidade aqui...">
+            </div>
         </div>
-    </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label for="dataNascimento">Data de Nascimento</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-days"></i>
+                @* <input asp-for="DtNascimento" type="date"> *@
+                <input type="date" id="dataNascimento" name="dataNascimento">
+            </div>
+        </div>
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="input-wrapper select-wrapper">
+                    <i class="fa-solid fa-venus-mars"></i>
+                    <select asp-for="Genero">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="NaoDeclarado">Não declarado</option>
+                        <option value="Transgenero">Transgênero</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group-checkbox">
+            <input type="checkbox" id="da-equipe" name="da-equipe">
+            <label for="da-equipe">Da Equipe</label>
+        </div>
+
         <div class="form-group">
-            <label for="genero">Gênero</label>
-            <div class="input-wrapper select-wrapper">
-                <i class="fa-solid fa-venus-mars"></i>
-                <select id="genero" name="genero">
-                    <option value="" disabled selected>Selecione</option>
-                    <option value="feminino">Feminino</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="masculino">Não declarado</option>
-                    <option value="masculino">Transgênero</option>
-                </select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            <label for="papel-social">Papel Social</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-people-group"></i>
+                <input asp-for="PapelSocial1" type="text" placeholder="Adicione o papel social aqui...">
             </div>
         </div>
-    </div>
 
-    <div class="form-group-checkbox">
-        <input type="checkbox" id="da-equipe" name="da-equipe">
-        <label for="da-equipe">Da Equipe</label>
-    </div>
-
-    <div class="form-group">
-        <label for="papel-social">Papel Social</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-people-group"></i>
-            <input type="text" id="papel-social" name="papel-social" placeholder="Adicione o papel social aqui...">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="interesses">Interesses</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-heart"></i>
-            <input type="text" id="interesses" name="interesses" placeholder="Adicione os interesses aqui...">
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <label for="telefone">Telefone</label>
-        <div class="input-wrapper">
-            <i class="fa-solid fa-phone"></i>
-            <input type="tel" id="telefone" name="telefone" placeholder="Adicione o telefone aqui...">
-        </div>
-    </div>
-
-    <div class="actions-grid">
-        <button type="button" class="action-card">
-            <span class="card-title">Rede Primária</span>
-            <span class="card-subtitle">Adicionar Ator</span>
-            <div class="card-icons">
-                <i class="fa-solid fa-plus"></i>
-                <i class="fa-solid fa-eye"></i>
+        <div class="form-group">
+            <label for="interesses">Interesses</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-heart"></i>
+                <input asp-for="PapelSocial2" type="text" placeholder="Adicione os interesses aqui...">
             </div>
-        </button>
-        <button type="button" class="action-card">
-            <span class="card-title">Adjacência</span>
-            <span class="card-subtitle">da RPP</span>
-            <div class="card-icons">
-                <i class="fa-solid fa-eye"></i>
-            </div>
-        </button>
-        <button type="button" class="action-card">
-            <span class="card-title">Avaliações</span>
-            <span class="card-subtitle">Pessoais</span>
-            <div class="card-icons">
-                <i class="fa-solid fa-pen"></i>
-            </div>
-        </button>
-        <button type="button" class="action-card">
-            <span class="card-title">Diário de</span>
-            <span class="card-subtitle">Processos Pessoal</span>
-            <div class="card-icons">
-                <i class="fa-solid fa-book"></i>
-            </div>
-        </button>
-    </div>
-
-    <div class="form-footer">
-        <i class="fa-solid fa-user"></i>
-        <div class="footer-text">
-            <span>Atualizado por:</span>
-            <strong>Mike Willy Franguelli</strong>
         </div>
-        <i class="fa-solid fa-chevron-down"></i>
-    </div>
+        
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-phone"></i>
+                <input asp-for="Telefone" type="tel" placeholder="Adicione o telefone aqui...">
+            </div>
+        </div>
 
-    <div class="form-buttons">
-    <button type="button" class="btn btn-delete">DELETAR</button>
-    <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
-    <button type="submit" class="btn btn-primary">EDITAR</button>
-</div>
-</form>
-    </div>
-</body>
+        <div class="actions-grid">
+            <button type="button" class="action-card">
+                <span class="card-title">Rede Primária</span>
+                <span class="card-subtitle">Adicionar Ator</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-plus"></i>
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Adjacência</span>
+                <span class="card-subtitle">da RPP</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Avaliações</span>
+                <span class="card-subtitle">Pessoais</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-pen"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Diário de</span>
+                <span class="card-subtitle">Processos Pessoal</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+            </button>
+        </div>
 
-</body>
-</html> 
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+            </div>
+        </details>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR MUDANÇAS</button>
+        </div>
+    </form>
+</div> 
  
  
 ========================================================== 
@@ -3839,6 +4560,349 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Home\Sidebar\Usuarios
  
  
 ========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
+========================================================== 
+ 
+@model Empodera.Models.AvaliacaoPessoal
+@{
+    ViewData["Title"] = "Nova Avaliação Pessoal";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> <link rel="stylesheet" href="~/css/pages/personal-assessment.css" /> }
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Avaliações Pessoais > <strong>Nova Avaliação Pessoal</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="AtorId">Ator</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtoresList" required>
+                    <option value="">Selecione um Ator</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="RedePrimaria">Rede primária 
+                <span class="tooltip-icon" data-tooltip="1. Muitas Relações diversificadas e seguras.&#10;5. Poucas relações diversificadas e seguras.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="CCrimes" min="1" max="5" value="1">
+        </div>
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
+                <span class="tooltip-icon" data-tooltip="1. Não desenvolve atividades ilegais.&#10;5. Desenvolve atividades ilegais.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Substancias">Substâncias 
+                <span class="tooltip-icon" data-tooltip="1.Não faz uso abusivo de substâncias.&#10;5. Faz uso abusivo de substâncias.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Substancias" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Moradia">Moradia 
+                <span class="tooltip-icon" data-tooltip="1. Tem garantida moradia digna.&#10;5. Não tem garantida moradia digna.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Moradia" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Prevencao">Prevenção
+                <span class="tooltip-icon" data-tooltip="-">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5" value="1">
+        </div>
+
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="AssistenciaBasica">Assistência Básica 
+                <span class="tooltip-icon" data-tooltip="1. Possui suas necessidades básicas de alimentação e documentação garantidas.&#10;5. Não possui suas necessidades básicas de alimentação e documentação garantidas.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="AssBasica" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Educacao">Educação 
+                <span class="tooltip-icon" data-tooltip="1. Sabe ler, escrever e tem oportunidades e interesse para aprender sobre diversos temas.&#10;5. Não tem oportunidades e nem interesse em aprender sobre diversos temas.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Educacao" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Saude">Saúde 
+                <span class="tooltip-icon" data-tooltip="1.Tem os cuidados a saúde assegurado e se cuida.&#10;5. Não tem os cuidados a saúde assegurados e não se cuida.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Saude" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Ocupacao">Ocupação 
+                <span class="tooltip-icon" data-tooltip="1. Reconhece suas habilidade e gera renda com elas.&#10;5. Não reconhece habilidades e não gera renda.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Ocupacao" min="1" max="5" value="1">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Lazer">Lazer 
+                <span class="tooltip-icon" data-tooltip="1. Tem momento e espaços para lazer.&#10;5. Não tem espaço de lazer.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5" value="1">
+        </div>
+        <div class="form-buttons">
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Context.Request.Query["atorId"]" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">CRIAR AVALIAÇÃO</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/personal-assessment.js"></script>
+} 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
+========================================================== 
+ 
+@model Empodera.Models.AvaliacaoPessoal
+@{
+    ViewData["Title"] = "Detalhes da Avaliação Pessoal";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> <link rel="stylesheet" href="~/css/pages/personal-assessment.css" /> }
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Avaliações Pessoais > <strong>Detalhes da Avaliação Pessoal</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="AtorId">Ator</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtoresList" disabled></select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="RedePrimaria">Rede primária 
+                <span class="tooltip-icon" data-tooltip="1. Muitas Relações diversificadas e seguras.&#10;5. Poucas relações diversificadas e seguras.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="CCrimes" min="1" max="5">
+        </div>
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
+                <span class="tooltip-icon" data-tooltip="1. Acesso pleno e fácil.&#10;5. Sem acesso ou com muitas barreiras.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Substancias">Substâncias 
+                <span class="tooltip-icon" data-tooltip="1. Uso problemático ou dependência.&#10;5. Nenhum uso ou uso não problemático.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Substancias" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Moradia">Moradia 
+                <span class="tooltip-icon" data-tooltip="1. Moradia segura, estável e adequada.&#10;5. Moradia precária, instável ou inexistente.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Moradia" min="1" max="5">
+        </div>
+        
+        <div class="metric-form-group">
+            <label class="metric-label" for="AssistenciaBasica">Assistência Básica 
+                <span class="tooltip-icon" data-tooltip="1. Necessidades básicas (comida, roupa) atendidas.&#10;5. Necessidades básicas não atendidas.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="AssBasica" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Educacao">Educação 
+                <span class="tooltip-icon" data-tooltip="1. Acesso pleno à educação.&#10;5. Fora da escola ou acesso precário.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Educacao" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Saude">Saúde 
+                <span class="tooltip-icon" data-tooltip="1. Acesso regular a serviços de saúde (física e mental).&#10;5. Sem acesso ou acesso dificultado.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Saude" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Ocupacao">Ocupação 
+                <span class="tooltip-icon" data-tooltip="1. Trabalho/ocupação estável e satisfatório.&#10;5. Desempregado ou em trabalho precário.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Ocupacao" min="1" max="5">
+        </div>
+
+        <div class="metric-form-group">
+            <label class="metric-label" for="Lazer">Lazer 
+                <span class="tooltip-icon" data-tooltip="1. Acesso regular a atividades de lazer e cultura.&#10;5. Nenhum acesso a lazer.">?</span>
+            </label>
+            <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5">
+        </div>
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>[Nome do Avaliador]</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Avaliador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+            </div>
+        </details>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.AtorId" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">EDITAR</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/personal-assessment.js"></script>
+} 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
+========================================================== 
+ 
+@model List<Empodera.Models.AvaliacaoPessoal>
+@{
+    ViewData["Title"] = "Avaliações Pessoais";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+    int? selectedAtorId = ViewBag.SelectedAtorId;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
+}
+
+<div class="assessment-page-container">
+
+    <div class="assessment-header">
+        <div class="assessment-title">
+            <h2>Avaliações Pessoais</h2>
+        </div>
+        
+        <form asp-action="Index" method="get" id="atorSelectForm">
+            <div class="form-group">
+                <label for="atorId">Ator</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <select id="atorId" name="atorId" class="form-control" asp-items="ViewBag.AtoresList" 
+                            onchange="document.getElementById('atorSelectForm').submit();">
+                        <option value="">Selecione um Ator</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+        </form> @if (selectedAtorId.HasValue)
+        {
+            <div class="assessment-controls">
+                
+                <form class="search-bar" asp-action="Index" method="get">
+                    <input type="hidden" name="atorId" value="@selectedAtorId" />
+                    
+                    <input type="search" class="search-input" name="searchQuery" placeholder="Buscar por data ou avaliador..." />
+                    
+                    <button type="submit" class="search-icon-button">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </button>
+                </form> <a asp-action="Create" asp-route-atorId="@selectedAtorId" class="btn-add-assessment">
+                    <i class="fa-solid fa-plus"></i> ADICIONAR
+                </a>
+            </div>
+        }
+    </div> <div class="assessment-content-area">
+        @if (!selectedAtorId.HasValue)
+        {
+            <div class="empty-state-container">
+                <img src="~/img/undraw_selection.svg" alt="Selecione um ator" />
+                <p>Primeiro Selecione o Ator</p>
+            </div>
+        }
+        else if (Model == null || Model.Count == 0)
+        {
+            <div class="no-items-found">
+                Nenhum item encontrado
+            </div>
+        }
+        else
+        {
+            <div class="assessment-list-container">
+                @foreach (var item in Model)
+                {
+                    <div class="assessment-card">
+                        <div class="assessment-card-info">
+                            <div class="date">@item.DtCriacao.ToString("dd/MM/yyyy")</div>
+                            <div class="evaluator">Avaliado por [Nome do Avaliador]</div>
+                        </div>
+                        <a class="details-icon" asp-action="Edit" asp-route-id="@item.IdAvaliacao">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div> 
+ 
+ 
+========================================================== 
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml 
 ========================================================== 
  
@@ -3975,7 +5039,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
                     </li>
                     <li data-page="Atividades"
                         class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
-                        <a href="/Home/Atividades">
+                        <a href="/Activity">
                             <p><i class="fas fa-bolt"></i> Atividades</p>
                         </a>
                     </li>
@@ -3987,8 +5051,14 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
                     </li>
                     <li data-page="PerfisDeAcesso"
                         class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
-                        <a href="/Home/PerfisDeAcesso">
+                        <a href="/AccessProfile">
                             <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
+                        </a>
+                    </li>
+                    <li data-page="AvaliacoesPessoais"
+                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
+                        <a href="/PersonalAssessment">
+                            <p><i class="fas fa-user-shield"></i> Avaliações Pessoais</p>
                         </a>
                     </li>
                 </ul>
@@ -4027,6 +5097,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
     </div>
 
     <script src="~/js/sidebar.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html> 
@@ -4153,5 +5224,5 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.json
  
 ========================================================== 
 FIM DO RELATORIO 
-Total de arquivos processados: 72 
+Total de arquivos processados: 80 
 ========================================================== 

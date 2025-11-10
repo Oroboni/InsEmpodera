@@ -66,49 +66,90 @@ label {
     z-index: 1;
 }
 
+/* ==========================================================
+   [CORREÇÃO] - Estilos unificados para TODOS os campos
+   ========================================================== */
+
 input[type="text"],
 input[type="tel"],
 input[type="date"],
-input[readonly], /* Adicionado para os campos de metadados */
-select {
+input[readonly],
+select,
+textarea { /* <-- textarea está INCLUÍDO AQUI */
     width: 100%;
-    height: 48px;
-    padding: 12px 16px 12px 40px;
+    height: 48px; /* Altura padrão */
+    padding: 12px 16px 12px 40px; /* Padding padrão com ícone */
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     background-color: var(--color-bg-primary);
     transition: var(--transition-base);
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
+
+/* Ajuste para <textarea> (para ser multilinha) */
+textarea {
+    height: auto;
+    min-height: 120px;
+    padding-top: 12px;
+    resize: vertical;
+}
+
+/* [NOVO] Alinha o ícone do textarea no topo */
+.input-wrapper > textarea ~ .fa-solid {
+    top: 24px; /* 12px de padding + 12px (metade da altura) */
+    transform: translateY(-50%); /* Centraliza verticalmente no ponto */
+}
+
+
+/* Ajuste para <select multiple> (para ser uma caixa) */
+select[multiple] {
+    height: auto;
+    min-height: 150px;
+    padding: 12px; /* Remove padding de ícone */
+}
+
+/* Remove o ícone esquerdo do select multiple */
+.select-wrapper > select[multiple] ~ .fa-solid {
+    display: none;
+}
+
+/* Remove o padding esquerdo do select multiple */
+.select-wrapper > select[multiple] {
+    padding-left: 16px;
+}
+/* ==========================================================
+   Fim da Correção
+   ========================================================== */
 
 input::placeholder, select {
     color: var(--color-gray-500);
 }
 
-input:focus, select:focus {
+input:focus, 
+select:focus, 
+textarea:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
-select {
+/* Estilos de Select (Dropdown) */
+select:not([multiple]) {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     cursor: pointer;
 }
-
 .select-wrapper {
     position: relative;
     display: block;
     width: 100%;
 }
-
-.select-wrapper select {
+.select-wrapper select:not([multiple]) {
     padding-right: 40px;
 }
-
 .select-wrapper .select-arrow {
     position: absolute;
     top: 50%;
@@ -118,17 +159,17 @@ select {
     pointer-events: none;
     z-index: 1;
 }
+.select-wrapper select[multiple] + .select-arrow {
+    display: none;
+}
 
-/* ==========================================================
-   [NOVO] ESTILOS PARA O 'CREATE.CSHTML' (BOTÕES DE ÍCONE)
-   ========================================================== */
-
+/* Estilos para o 'Create.cshtml' (Botões de Ícone) */
 .input-with-buttons {
     display: flex;
     gap: var(--space-2);
 }
 .input-with-buttons .input-wrapper {
-    flex-grow: 1; /* Faz o input ocupar o espaço */
+    flex-grow: 1;
 }
 .btn-icon {
     flex-shrink: 0;
@@ -148,48 +189,49 @@ select {
 }
 
 /* ==========================================================
-   [NOVO] ESTILOS PARA O 'CREATE.CSHTML' (MULTISELECT)
+   [CORREÇÃO] ERRO DE SINTAXE REMOVIDO AQUI (era '//*')
    ========================================================== */
-
+.multiselect-wrapper {
+    position: relative;
+}
 .multiselect-wrapper summary {
-    list-style: none; /* Remove seta padrão */
+    list-style: none; 
     cursor: pointer;
 }
 .multiselect-wrapper summary::-webkit-details-marker {
-    display: none; /* Remove seta padrão (Chrome) */
+    display: none;
 }
-/* O 'select-wrapper' dentro do summary precisa ser relativo */
 .multiselect-wrapper .select-wrapper {
     position: relative;
 }
-/* O 'span' se transforma no "falso input" */
 .multiselect-wrapper .multiselect-placeholder {
     display: block;
     width: 100%;
     height: 48px;
-    padding: 12px 16px 12px 40px; /* Deixa espaço para o ícone */
+    padding: 12px 16px 12px 40px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     background-color: var(--color-bg-primary);
     color: var(--color-gray-500);
-    line-height: 24px; /* Ajusta altura do texto */
+    line-height: 24px;
 }
-/* Efeito de foco quando o <details> está aberto */
-.multiselect-wrapper[open] .multiselect-placeholder {
+.multiselect-wrapper[open] > summary .multiselect-placeholder {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px var(--color-primary-100);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
-/* O painel que abre */
 .multiselect-wrapper .multiselect-panel {
     background-color: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-primary);
     border-top: none;
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     padding: var(--space-2) 0;
-    margin-top: -10px; /* Sobe para 'debaixo' do summary */
-    position: relative;
-    z-index: 2; /* Fica em cima de outros elementos */
+    position: absolute; 
+    width: 100%;
+    margin-top: -10px;
+    z-index: 10;
 }
 .multiselect-wrapper .multiselect-panel ul {
     list-style: none;
@@ -200,17 +242,18 @@ select {
 }
 .multiselect-wrapper .multiselect-panel li {
     padding: var(--space-2) var(--space-4);
-    display: flex; /* Para alinhar o checkbox e o label */
+    display: flex;
     align-items: center;
 }
 .multiselect-wrapper .multiselect-panel li:hover {
     background-color: var(--color-bg-secondary);
 }
-/* O checkbox de verdade */
 .multiselect-wrapper .multiselect-panel input[type="checkbox"] {
     margin-right: var(--space-2);
-    /* (Estilos de checkbox customizado, se você tiver) */
 }
+/* ==========================================================
+   Fim da Correção
+   ========================================================== */
 
 
 /* Checkbox Customizado (Da Equipe) */
@@ -220,6 +263,7 @@ select {
     gap: var(--space-2);
     margin-bottom: var(--space-5);
 }
+/* ... (Estilos do checkbox) ... */
 .form-group-checkbox input[type="checkbox"] { display: none; }
 .form-group-checkbox label {
     margin: 0;
@@ -301,10 +345,7 @@ select {
 }
 
 
-/* ==========================================================
-   [ATUALIZADO] Rodapé de Metadados Padrão (Colapsível)
-   ========================================================== */
-
+/* Rodapé de Metadados Padrão (Colapsível) */
 .form-footer {
     background-color: var(--color-bg-secondary);
     border-radius: var(--radius-lg);
@@ -393,10 +434,7 @@ select {
 .btn-secondary { background-color: var(--color-primary-50); color: var(--color-primary); }
 
 
-/* ============================
-   RESPONSIVIDADE (MOBILE FIRST)
-   ============================ */
-
+/* Responsividade */
 @media (max-width: 768px) {
     .container {
         padding: 0 var(--space-3);

@@ -846,10 +846,12 @@ C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\InsEmpod.C73E93B0.
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\InsEmpodera.genruntimeconfig.cache
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\ref\InsEmpodera.dll
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\wszr71lcab-40tm5z0787.gz
-C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\qqn68rgd62-0ql2wvv3xz.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\m1f5asq9k8-bhkqi2a9q6.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\pf4y6cunxp-pld001ldhm.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\7qzo0gj0un-dzr80toe9l.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\5lepnod9hz-20j42nwxlt.gz
-C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\0pifp25xah-bx499e87hq.gz
-C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\olfbh4llnl-h9ajgm9yml.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\olfbh4llnl-wh5a95cwnp.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\qqn68rgd62-itrzx9wg65.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\54hqayjzhc-tugac2hafz.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\0pifp25xah-3pstp4mbi6.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\6yok6mv94b-404baarcd5.gz

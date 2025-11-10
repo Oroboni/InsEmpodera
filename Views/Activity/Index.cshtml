@@ -1,0 +1,74 @@
+@model IEnumerable<Empodera.Models.Atividade>
+@{
+    ViewData["Title"] = "Atividades";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+}
+
+<div class="atores-content-area">
+
+    <div class="atores-header">
+        <h2>Atividades</h2>
+    </div>
+
+    <div class="atores-search-container">
+        <form class="atores-search-bar" method="get">
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </form>
+
+        <a asp-controller="Activity" asp-action="Create" class="atores-add-button">+</a>
+    </div>
+
+    <div class="atores-list-container">
+        
+        <div class="ator-card">
+            <div class="activity-card-info">
+                <span class="ator-name">Acompanhamento do Projeto Semear.</span>
+                <div class="tag-list" style="margin-top: 8px;">
+                    <span class="tag-item tag-blue">Prevenção</span>
+                    <span class="tag-item tag-green">Ocupação</span>
+                    <span class="tag-item tag-yellow">Lazer</span>
+                    <span class="tag-item tag-purple">Segurança Social</span>
+                    <span class="tag-item tag-lightgreen">Educação</span>
+                    <span class="tag-item tag-red">Saúde</span>
+                    <span class="tag-item tag-lightblue">Assistência Básica</span>
+                </div>
+            </div>
+            <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="1">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+            </a>
+        </div>
+
+        <div class="ator-card">
+            <div class="activity-card-info">
+                <span class="ator-name">Colhendo memórias através do desenho</span>
+                <div class="tag-list" style="margin-top: 8px;">
+                    <span class="tag-item tag-yellow">Lazer</span>
+                    <span class="tag-item tag-lightgreen">Educação</span>
+                </div>
+            </div>
+            <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="2">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+            </a>
+        </div>
+        
+         <div class="ator-card">
+            <div class="activity-card-info">
+                <span class="ator-name">Distribuição de doces</span>
+                <div class="tag-list" style="margin-top: 8px;">
+                    <span class="tag-item tag-yellow">Lazer</span>
+                </div>
+            </div>
+            <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="3">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+            </a>
+        </div>
+        
+        </div>
+</div>
