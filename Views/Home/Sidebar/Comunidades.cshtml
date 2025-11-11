@@ -15,7 +15,6 @@
             padding: 16px 24px;
             width: 100%;
             max-width: 95%;
-            margin-bottom: 8px;
             /* Adjust as needed */
         }
 
@@ -197,9 +196,7 @@
 </header>
 
 <div class="comunidades-container">
-    <!-- Titulo da tela-->
     <h2>Comunidades</h2>
-    <!-- Barra de Pesquisar comunidade-->
     <div style="align-items: center; display: flex; gap: 8px; margin-bottom: 16px;">
         <form class="search-bar-container" action="/search" method="get">
             <input type="search" class="search-input" placeholder="Pesquise por comunidades..." name="q" />
@@ -211,8 +208,9 @@
             </button>
         </form>
 
-        <!-- Botão de Adicionar comunidade-->
-        <a asp-controller="Home" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova Comunidade</a>
+        <a class="icon eye-icon" asp-controller="Home" asp-action="ComunidadesCriar">
+            <button class="btn btn-primary">+ Nova Comunidade</button>
+        </a>
     </div>
     <div class="comunidades-list">
         @foreach (var comunidade in Model)
@@ -232,11 +230,11 @@
                             <path d="M8 5v14l11-7z" />
                         </svg>
                         <a class="icon eye-icon" asp-controller="Home" asp-action="ComunidadesDetalhes" asp-route-id="@comunidade.Id">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                                </svg>
-                            </a>
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>

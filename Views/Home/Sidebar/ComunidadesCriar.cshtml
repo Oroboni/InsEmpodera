@@ -356,7 +356,7 @@
     }
     */
 </style>
-<form asp-controller="Home" asp-action="ComunidadesDetalhes" method="post">
+<form asp-controller="Home" asp-action="ComunidadesCriar" method="post">
 @Html.AntiForgeryToken();
 <div class="community-detail-container">
     <!-- Cabeçalho da Seção de Detalhes da Comunidade -->
@@ -369,15 +369,13 @@
         <h1 class="community-detail-page-title">Detalhes da Comunidade</h1>
     </div>
     
-    <input type="hidden" asp-for="IdComunidade" />
-    
     <!-- Nome da Comunidade -->
     <div class="community-detail-section">
         <div class="community-detail-section-header">
             <i class="fas fa-book fa-icon"></i>
             <span class="community-detail-section-title-text">Nome</span>
         </div>
-        <input type="text" class="community-detail-input-field" asp-for="Nome" />
+        <input asp-for="Nome" type="text" class="community-detail-input-field" placeholder="Digite o nome da comunidade" required />
     </div>
     
     <!-- Mapa -->
@@ -408,7 +406,7 @@
             <i class="fas fa-map-marker-alt fa-icon"></i>
             <span class="community-detail-section-title-text">Localização</span>
         </div>
-        <input type="text" class="community-detail-input-field" asp-for="Local">
+        <input asp-for="Local" type="text" class="community-detail-input-field" placeholder="Digite a localização da comunidade" required />
     </div>
     
     <!-- Complemento/Referência -->
@@ -417,7 +415,7 @@
             <i class="fas fa-tag fa-icon"></i>
             <span class="community-detail-section-title-text">Complemento/Referência</span>
         </div>
-        <input type="text" class="community-detail-input-field" asp-for="Complemento">
+        <input asp-for="Complemento" type="text" class="community-detail-input-field" placeholder="Digite o complemento ou referência da comunidade" />
     </div>
     
     <!-- Descrição -->
@@ -426,7 +424,7 @@
             <i class="fas fa-align-left fa-icon"></i>
             <span class="community-detail-section-title-text">Descrição</span>
         </div>
-        <textarea class="community-detail-input-field" asp-for="Descricao" placeholder="Adicione uma descrição..."></textarea>
+        <textarea asp-for="Descricao" class="community-detail-input-field" placeholder="Adicione uma descrição..."></textarea>
     </div>
     
     <!-- Status -->
@@ -435,7 +433,7 @@
             <i class="fas fa-info-circle fa-icon"></i>
             <span class="community-detail-section-title-text">Status</span>
         </div>
-        <select class="community-detail-input-field" asp-for="Status" required>
+        <select asp-for="Status" class="community-detail-input-field" required>
             <option value="Em processo">Em processo</option>
             <option value="Concluído">Concluído</option>
             <option value="Pendente">Pendente</option>
@@ -449,7 +447,7 @@
             <i class="fas fa-universal-access fa-icon"></i>
             <span class="community-detail-section-title-text">Descrição de Acessibilidade</span>
         </div>
-        <textarea class="community-detail-input-field" asp-for="DescricaoAcessibilidade" placeholder="Adicione informações sobre acessibilidade..."></textarea>
+        <textarea asp-for="DescricaoAcessibilidade" class="community-detail-input-field" placeholder="Adicione informações sobre acessibilidade..."></textarea>
     </div>
     
     <!-- Métricas/Cards de Dados -->
@@ -537,40 +535,8 @@
     
     <!-- Botões de Ação -->
     <div class="community-detail-action-buttons">
-        <a class="btn btn-success" asp-action="ExportarExcel">📊 Exportar para Excel</a>
         <a href="@Url.Action("Comunidades", "Home")" class="community-detail-btn community-detail-btn-back">VOLTAR</a>
-        <button type="button" class="community-detail-btn community-detail-btn-edit">EDITAR</button>
+        <button type="submit" class="community-detail-btn community-detail-btn-edit">Criar</button>
     </div>
 </form>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const inputFields = document.querySelectorAll('.community-detail-input-field');
-        const editButton = document.querySelector('.community-detail-btn-edit');
-        let isEditMode = false;
-
-        inputFields.forEach(field => {
-            field.disabled = true;
-        });
-
-        editButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            isEditMode = !isEditMode;
-
-            if (isEditMode) {
-                editButton.textContent = 'SALVAR ALTERAÇÕES';
-                inputFields.forEach(field => {
-                    field.disabled = false;
-                });
-            } else {
-                form.submit();
-                editButton.textContent = 'EDITAR';
-                inputFields.forEach(field => {
-                    field.disabled = true;
-                });
-            }
-        });
-    });
-</script>
