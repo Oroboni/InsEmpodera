@@ -1,0 +1,99 @@
+@{
+    ViewData["Title"] = "Relatório RSC";
+    Layout = "_Layout";
+    // ViewData["DisableMainScroll"] foi REMOVIDO para Corrigir o Scroll
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> <link rel="stylesheet" href="~/css/pages/reports.css" />
+}
+
+<div class="report-page-container">
+    <div class="report-breadcrumb">
+        <h1>Relatórios > <strong>RSC</strong></h1>
+    </div>
+
+    <div class="report-content-box">
+        <div class="report-filters" style="border-bottom: none; margin-bottom: 0;">
+            <form asp-action="Rsc" method="get" id="comunidadeForm" class="form-group">
+                <label for="comunidadeId">Comunidade</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-city"></i>
+                    <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.ComunidadeList" onchange="this.form.submit()">
+                        <option value="">Selecione uma comunidade...</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </form>
+        </div>
+
+        <div class="report-body">
+            @if (Context.Request.Query["comunidadeId"].Count == 0)
+            {
+                <div class="report-empty-state">
+                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione uma comunidade" />
+                    <p>Primeiro selecione uma comunidade.</p>
+                </div>
+            }
+            else
+            {
+                <div class="report-controls">
+                    <h2>RSC com um total de 12 nós</h2>
+                    <div class="toggle-buttons">
+                        <button id="btn-numbers" class="active">#</button>
+                        <button id="btn-percent">%</button>
+                    </div>
+                </div>
+
+                <table class="matrix-table" id="table-numbers">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Parceiro</th>
+                            <th>Equipe</th>
+                            <th>RRC</th>
+                            <th>RLO</th>
+                            <th>RO</th>
+                            <th>Habitante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr> <td>RSC</td> <td>2</td> <td>4</td> <td>2</td> <td>2</td> <td></td> <td>8</td> </tr>
+                        <tr> <td>Parceiro</td> <td>2</td> <td></td> <td>2</td> <td></td> <td></td> <td>2</td> </tr>
+                        <tr> <td>Equipe</td> <td></td> <td>4</td> <td></td> <td></td> <td></td> <td></td> </tr>
+                        <tr> <td>RRC</td> <td>2</td> <td></td> <td>2</td> <td></td> <td></td> <td>2</td> </tr>
+                        <tr> <td>RLO</td> <td></td> <td></td> <td></td> <td>2</td> <td></td> <td>2</td> </tr>
+                        <tr> <td>RO</td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
+                        <tr> <td>Habitante</td> <td>2</td> <td></td> <td>2</td> <td>2</td> <td></td> <td>8</td> </tr>
+                    </tbody>
+                </table>
+                
+                <table class="matrix-table" id="table-percentages" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Parceiro</th>
+                            <th>Equipe</th>
+                            <th>RRC</th>
+                            <th>RLO</th>
+                            <th>RO</th>
+                            <th>Habitante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr> <td>RSC</td> <td>16.7%</td> <td>33.3%</td> <td>16.7%</td> <td>16.7%</td> <td></td> <td>66.7%</td> </tr>
+                        <tr> <td>Parceiro</td> <td>100.0%</td> <td></td> <td>100.0%</td> <td></td> <td></td> <td>100.0%</td> </tr>
+                        <tr> <td>Equipe</td> <td></td> <td>100.0%</td> <td></td> <td></td> <td></td> <td></td> </tr>
+                        <tr> <td>RRC</td> <td>100.0%</td> <td></td> <td>100.0%</td> <td></td> <td></td> <td>100.0%</td> </tr>
+                        <tr> <td>RLO</td> <td></td> <td></td> <td></td> <td>100.0%</td> <td></td> <td>100.0%</td> </tr>
+                        <tr> <td>RO</td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
+                        <tr> <td>Habitante</td> <td>25.0%</td> <td></td> <td>25.0%</td> <td>25.0%</td> <td></td> <td>100.0%</td> </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/reports.js"></script>
+}

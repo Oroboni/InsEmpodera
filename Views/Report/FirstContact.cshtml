@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "Relatório - Fichas de 1º Contato";
+    Layout = "_Layout";
+    // A linha DisableMainScroll foi REMOVIDA para permitir a rolagem
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/reports.css" />
+}
+
+<div class="report-page-container">
+    <div class="report-breadcrumb">
+        <h1>Relatórios > <strong>Fichas de 1º Contato</strong></h1>
+    </div>
+
+    <div class="report-content-box">
+        <div class="report-filters">
+            
+            <form asp-action="FirstContact" method="get" id="comunidadeForm">
+                <div class="form-group">
+                    <label for="comunidadeId">Comunidade</label>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-city"></i>
+                        <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.ComunidadeList" onchange="this.form.submit()">
+                            <option value="">Selecione uma comunidade...</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </form>
+            
+            <details class="filter-box" open>
+                <summary>
+                    <span>Filtros</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </summary>
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label>Gênero</label>
+                        <div class="select-wrapper"><select><option>Todos</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Estrutura familiar</label>
+                        <div class="select-wrapper"><select><option>Todas</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Condições do primeiro...</label>
+                        <div class="select-wrapper"><select><option>Todas</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Resultados</label>
+                        <div class="select-wrapper"><select><option>Todos</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Respostas</label>
+                        <div class="select-wrapper"><select><option>Todas</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora do primeiro contato</label>
+                        <div class="select-wrapper"><select><option>Todas</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Como se estabeleceu o pri...</label>
+                        <div class="select-wrapper"><select><option>Todos</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Escolaridade</label>
+                        <div class="select-wrapper"><select><option>Todas</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                    </div>
+                </div>
+                <div class="filter-date-grid" style="padding: 0 var(--space-5) var(--space-5) var(--space-5);">
+                    <div class="form-group">
+                        <label>De (data)</label>
+                        <div class="input-wrapper"><input type="date" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Até (data)</label>
+                        <div class="input-wrapper"><input type="date" /></div>
+                    </div>
+                </div>
+            </details>
+            
+            <div class="report-type-filters">
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <div class="select-wrapper"><select><option>Por categoria</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                </div>
+                <div class="form-group">
+                    <label>Campo</label>
+                    <div class="select-wrapper"><select><option>Estado</option></select><i class="fa-solid fa-chevron-down select-arrow"></i></div>
+                </div>
+            </div>
+
+        </div> <div class="report-body">
+            @if (Context.Request.Query["comunidadeId"].Count == 0 || string.IsNullOrEmpty(Context.Request.Query["comunidadeId"]))
+            {
+                <div class="report-empty-state">
+                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione uma comunidade" />
+                    <p>Primeiro selecione uma comunidade.</p>
+                </div>
+            }
+            else
+            {
+                <div class="chart-container">
+                    <canvas id="firstContactPieChart"></canvas>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/reports.js"></script>
+}
