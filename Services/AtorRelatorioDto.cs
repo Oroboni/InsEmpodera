@@ -20,6 +20,6 @@ namespace Empodera.Services
         public string Extra { get; set; } = string.Empty;
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
-        public string Comunidades { get; set; } = string.Empty; // nomes concatenados
+        public string Comunidades { get; set; } = string.Empty;
     }
 }

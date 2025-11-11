@@ -16,6 +16,6 @@ namespace Empodera.Models
         
         public DateTime DtModificacao { get; set; }
 
-        // public List<Permissao> Permissoes { get; set; } // (Descomente quando for implementar)
+        public List<Permissao> Permissoes { get; set; }
     }
 }
