@@ -230,7 +230,7 @@
             <div class="section-2 @sectionClass" id="content">
             @{
                 // Verifica se a View pediu para desativar o scroll principal
-                string sectionClass = ViewData["DisableMainScroll"] as string == "true" ? "no-scroll" : "with-scroll";
+                sectionClass = ViewData["DisableMainScroll"] as string == "true" ? "no-scroll" : "with-scroll";
             }
 
             <div class="section-2 @sectionClass" id="content">

@@ -62,7 +62,9 @@ namespace InsEmpodera.Migrations
                     IdAtividade = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    Descricao = table.Column<string>(type: "TEXT", nullable: false)
+                    Descricao = table.Column<string>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,27 +83,6 @@ namespace InsEmpodera.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AtorComunidades", x => x.IdAComunidade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Atores",
-                columns: table => new
-                {
-                    IdAtores = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    Genero = table.Column<string>(type: "TEXT", nullable: false),
-                    Idade = table.Column<int>(type: "INTEGER", nullable: false),
-                    PapelSocial1 = table.Column<string>(type: "TEXT", nullable: false),
-                    PapelSocial2 = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefone = table.Column<int>(type: "INTEGER", nullable: false),
-                    Extra = table.Column<string>(type: "TEXT", nullable: false),
-                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Atores", x => x.IdAtores);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,24 +134,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DiariosCampo",
-                columns: table => new
-                {
-                    IdDCampo = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ComunidadeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Data = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Descricao = table.Column<string>(type: "TEXT", nullable: false),
-                    Localizacao = table.Column<string>(type: "TEXT", nullable: false),
-                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DiariosCampo", x => x.IdDCampo);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Eixos",
                 columns: table => new
                 {
@@ -188,25 +151,14 @@ namespace InsEmpodera.Migrations
                 columns: table => new
                 {
                     IdPAcesso = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PerfisAcesso", x => x.IdPAcesso);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permissoes",
-                columns: table => new
-                {
-                    IdPermissoes = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PerfilAcessoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PermissaoNome = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permissoes", x => x.IdPermissoes);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,25 +173,6 @@ namespace InsEmpodera.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RedeEixos", x => x.IdRedeEixo);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Redes",
-                columns: table => new
-                {
-                    IdRede = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AtorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ComunidadeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Tipo = table.Column<string>(type: "TEXT", nullable: false),
-                    Dispositivo = table.Column<string>(type: "TEXT", nullable: false),
-                    Servicos = table.Column<string>(type: "TEXT", nullable: false),
-                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Redes", x => x.IdRede);
                 });
 
             migrationBuilder.CreateTable(
@@ -305,6 +238,158 @@ namespace InsEmpodera.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vulnerabilidades", x => x.IdVulnerabilidade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Atores",
+                columns: table => new
+                {
+                    IdAtores = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    Genero = table.Column<string>(type: "TEXT", nullable: false),
+                    Idade = table.Column<int>(type: "INTEGER", nullable: false),
+                    PapelSocial1 = table.Column<string>(type: "TEXT", nullable: false),
+                    PapelSocial2 = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefone = table.Column<int>(type: "INTEGER", nullable: false),
+                    Extra = table.Column<string>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    AtorComunidadeIdAComunidade = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Atores", x => x.IdAtores);
+                    table.ForeignKey(
+                        name: "FK_Atores_AtorComunidades_AtorComunidadeIdAComunidade",
+                        column: x => x.AtorComunidadeIdAComunidade,
+                        principalTable: "AtorComunidades",
+                        principalColumn: "IdAComunidade");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AtorComunidadeComunidade",
+                columns: table => new
+                {
+                    AtoresIdAComunidade = table.Column<int>(type: "INTEGER", nullable: false),
+                    ComunidadesIdComunidade = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AtorComunidadeComunidade", x => new { x.AtoresIdAComunidade, x.ComunidadesIdComunidade });
+                    table.ForeignKey(
+                        name: "FK_AtorComunidadeComunidade_AtorComunidades_AtoresIdAComunidade",
+                        column: x => x.AtoresIdAComunidade,
+                        principalTable: "AtorComunidades",
+                        principalColumn: "IdAComunidade",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AtorComunidadeComunidade_Comunidades_ComunidadesIdComunidade",
+                        column: x => x.ComunidadesIdComunidade,
+                        principalTable: "Comunidades",
+                        principalColumn: "IdComunidade",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DiariosCampo",
+                columns: table => new
+                {
+                    IdDCampo = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ComunidadeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Data = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Descricao = table.Column<string>(type: "TEXT", nullable: false),
+                    Localizacao = table.Column<string>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DiariosCampo", x => x.IdDCampo);
+                    table.ForeignKey(
+                        name: "FK_DiariosCampo_Comunidades_ComunidadeId",
+                        column: x => x.ComunidadeId,
+                        principalTable: "Comunidades",
+                        principalColumn: "IdComunidade",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Redes",
+                columns: table => new
+                {
+                    IdRede = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AtorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ComunidadeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Tipo = table.Column<string>(type: "TEXT", nullable: false),
+                    Dispositivo = table.Column<string>(type: "TEXT", nullable: false),
+                    Servicos = table.Column<string>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Redes", x => x.IdRede);
+                    table.ForeignKey(
+                        name: "FK_Redes_Comunidades_ComunidadeId",
+                        column: x => x.ComunidadeId,
+                        principalTable: "Comunidades",
+                        principalColumn: "IdComunidade",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AtividadeEixos",
+                columns: table => new
+                {
+                    IdAEixo = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EixoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AtividadeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AtividadeIdAtividade = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AtividadeEixos", x => x.IdAEixo);
+                    table.ForeignKey(
+                        name: "FK_AtividadeEixos_Atividades_AtividadeId",
+                        column: x => x.AtividadeId,
+                        principalTable: "Atividades",
+                        principalColumn: "IdAtividade",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AtividadeEixos_Atividades_AtividadeIdAtividade",
+                        column: x => x.AtividadeIdAtividade,
+                        principalTable: "Atividades",
+                        principalColumn: "IdAtividade");
+                    table.ForeignKey(
+                        name: "FK_AtividadeEixos_Eixos_EixoId",
+                        column: x => x.EixoId,
+                        principalTable: "Eixos",
+                        principalColumn: "IdEixo",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permissoes",
+                columns: table => new
+                {
+                    IdPermissoes = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PerfilAcessoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PermissaoNome = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissoes", x => x.IdPermissoes);
+                    table.ForeignKey(
+                        name: "FK_Permissoes_PerfisAcesso_PerfilAcessoId",
+                        column: x => x.PerfilAcessoId,
+                        principalTable: "PerfisAcesso",
+                        principalColumn: "IdPAcesso",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -395,32 +480,6 @@ namespace InsEmpodera.Migrations
                         principalTable: "Atores",
                         principalColumn: "IdAtores",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AtividadeEixos",
-                columns: table => new
-                {
-                    IdAEixo = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EixoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AtividadeId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AtividadeEixos", x => x.IdAEixo);
-                    table.ForeignKey(
-                        name: "FK_AtividadeEixos_Atividades_AtividadeId",
-                        column: x => x.AtividadeId,
-                        principalTable: "Atividades",
-                        principalColumn: "IdAtividade",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AtividadeEixos_Eixos_EixoId",
-                        column: x => x.EixoId,
-                        principalTable: "Eixos",
-                        principalColumn: "IdEixo",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -541,14 +600,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "Atividades",
-                columns: new[] { "IdAtividade", "Descricao", "Nome" },
+                columns: new[] { "IdAtividade", "Descricao", "DtCriacao", "DtModificacao", "Nome" },
                 values: new object[,]
                 {
-                    { 1, "Atividade de pintura e desenho", "Oficina de Artes" },
-                    { 2, "Instrumentos e canto", "Aula de Música" },
-                    { 3, "Futebol, vôlei, basquete", "Esporte Comunitário" },
-                    { 4, "Informática básica", "Curso de Tecnologia" },
-                    { 5, "Troca de produtos", "Feira Solidária" }
+                    { 1, "Atividade de pintura e desenho", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Oficina de Artes" },
+                    { 2, "Instrumentos e canto", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Aula de Música" },
+                    { 3, "Futebol, vôlei, basquete", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Esporte Comunitário" },
+                    { 4, "Informática básica", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Curso de Tecnologia" },
+                    { 5, "Troca de produtos", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Feira Solidária" }
                 });
 
             migrationBuilder.InsertData(
@@ -565,14 +624,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "Atores",
-                columns: new[] { "IdAtores", "DtCriacao", "DtModificacao", "Extra", "Genero", "Idade", "Nome", "PapelSocial1", "PapelSocial2", "Telefone" },
+                columns: new[] { "IdAtores", "AtorComunidadeIdAComunidade", "DtCriacao", "DtModificacao", "Extra", "Genero", "Idade", "Nome", "PapelSocial1", "PapelSocial2", "Telefone" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Masculino", 30, "Lucas Andrade", "Líder", "Professor", 119111111 },
-                    { 2, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Feminino", 28, "Fernanda Costa", "Médica", "Voluntária", 219222222 },
-                    { 3, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Masculino", 35, "Roberto Alves", "Advogado", "Consultor", 319333333 },
-                    { 4, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Feminino", 26, "Juliana Prado", "Estudante", "Estagiária", 419444444 },
-                    { 5, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Masculino", 40, "Marcelo Nunes", "Empresário", "Mentor", 519555555 }
+                    { 1, null, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Masculino", 30, "Lucas Andrade", "Líder", "Professor", 119111111 },
+                    { 2, null, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Feminino", 28, "Fernanda Costa", "Médica", "Voluntária", 219222222 },
+                    { 3, null, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Masculino", 35, "Roberto Alves", "Advogado", "Consultor", 319333333 },
+                    { 4, null, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Feminino", 26, "Juliana Prado", "Estudante", "Estagiária", 419444444 },
+                    { 5, null, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ativo", "Masculino", 40, "Marcelo Nunes", "Empresário", "Mentor", 519555555 }
                 });
 
             migrationBuilder.InsertData(
@@ -612,18 +671,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "DiariosCampo",
-                columns: new[] { "IdDCampo", "ComunidadeId", "Data", "Descricao", "DtCriacao", "DtModificacao", "Localizacao" },
-                values: new object[,]
-                {
-                    { 1, 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Reunião comunitária", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Praça central" },
-                    { 2, 2, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Atividade esportiva", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Quadra" },
-                    { 3, 3, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Feira cultural", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Centro comunitário" },
-                    { 4, 4, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ação social", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Escola local" },
-                    { 5, 5, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Encontro de líderes", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Associação" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Eixos",
                 columns: new[] { "IdEixo", "Nome" },
                 values: new object[,]
@@ -637,26 +684,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "PerfisAcesso",
-                column: "IdPAcesso",
-                values: new object[]
-                {
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                });
-
-            migrationBuilder.InsertData(
-                table: "Permissoes",
-                columns: new[] { "IdPermissoes", "PerfilAcessoId", "PermissaoNome" },
+                columns: new[] { "IdPAcesso", "DtCriacao", "DtModificacao", "Nome" },
                 values: new object[,]
                 {
-                    { 1, 1, "Ler" },
-                    { 2, 2, "Escrever" },
-                    { 3, 3, "Editar" },
-                    { 4, 4, "Excluir" },
-                    { 5, 5, "Administrador" }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
+                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
+                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
+                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
+                    { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" }
                 });
 
             migrationBuilder.InsertData(
@@ -669,18 +704,6 @@ namespace InsEmpodera.Migrations
                     { 3, 3, 3 },
                     { 4, 4, 4 },
                     { 5, 5, 5 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Redes",
-                columns: new[] { "IdRede", "AtorId", "ComunidadeId", "Dispositivo", "DtCriacao", "DtModificacao", "Servicos", "Tipo" },
-                values: new object[,]
-                {
-                    { 1, 1, 1, "PC", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Acesso remoto", "Internet" },
-                    { 2, 2, 2, "Celular", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chamadas", "Telefonia" },
-                    { 3, 3, 3, "Gerador", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suporte elétrico", "Energia" },
-                    { 4, 4, 4, "Reservatório", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Abastecimento", "Água" },
-                    { 5, 5, 5, "Clínica", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Atendimento médico", "Saúde" }
                 });
 
             migrationBuilder.InsertData(
@@ -733,14 +756,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "AtividadeEixos",
-                columns: new[] { "IdAEixo", "AtividadeId", "EixoId" },
+                columns: new[] { "IdAEixo", "AtividadeId", "AtividadeIdAtividade", "EixoId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 2, 2 },
-                    { 3, 3, 3 },
-                    { 4, 4, 4 },
-                    { 5, 5, 5 }
+                    { 1, 1, null, 1 },
+                    { 2, 2, null, 2 },
+                    { 3, 3, null, 3 },
+                    { 4, 4, null, 4 },
+                    { 5, 5, null, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -756,6 +779,18 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "DiariosCampo",
+                columns: new[] { "IdDCampo", "ComunidadeId", "Data", "Descricao", "DtCriacao", "DtModificacao", "Localizacao" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Reunião comunitária", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Praça central" },
+                    { 2, 2, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Atividade esportiva", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Quadra" },
+                    { 3, 3, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Feira cultural", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Centro comunitário" },
+                    { 4, 4, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ação social", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Escola local" },
+                    { 5, 5, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Encontro de líderes", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Associação" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "FichasPrimeiroContato",
                 columns: new[] { "IdFicha", "AEscola", "AtorId", "CPrimeiroContato", "Coment", "Data", "DtCriacao", "DtModificacao", "EParceiro", "EstaFamiliar", "EstruFamiliar", "FPeloParceirto", "FonteDados", "LContato", "LTrat", "Localizacao", "NFilhas", "NFilhos", "QReabili", "SCalc", "SComp", "SLer" },
                 values: new object[,]
@@ -765,6 +800,30 @@ namespace InsEmpodera.Migrations
                     { 3, 1, 3, "2023-3", "Boa situação", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Sim", "Sim", "Completa", "Sim", "Formulário", "Assistente social", "Nenhum", "Zona Leste", 2, 3, 0, "Sim", "Sim", "Sim" },
                     { 4, 1, 4, "2023-4", "Vulnerável", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Não", "Não", "Incompleta", "Não", "Empoderavista", "Igreja", "Hospital", "Zona Oeste", 1, 0, 2, "Não", "Não", "Não" },
                     { 5, 1, 5, "2023-5", "Estável", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Sim", "Sim", "Completa", "Não", "Censo escolar", "Escola", "Nenhum", "Centro", 2, 2, 0, "Sim", "Sim", "Sim" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Permissoes",
+                columns: new[] { "IdPermissoes", "PerfilAcessoId", "PermissaoNome" },
+                values: new object[,]
+                {
+                    { 1, 1, "Ler" },
+                    { 2, 2, "Escrever" },
+                    { 3, 3, "Editar" },
+                    { 4, 4, "Excluir" },
+                    { 5, 5, "Administrador" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Redes",
+                columns: new[] { "IdRede", "AtorId", "ComunidadeId", "Dispositivo", "DtCriacao", "DtModificacao", "Servicos", "Tipo" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, "PC", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Acesso remoto", "Internet" },
+                    { 2, 2, 2, "Celular", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chamadas", "Telefonia" },
+                    { 3, 3, 3, "Gerador", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Suporte elétrico", "Energia" },
+                    { 4, 4, 4, "Reservatório", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Abastecimento", "Água" },
+                    { 5, 5, 5, "Clínica", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Atendimento médico", "Saúde" }
                 });
 
             migrationBuilder.InsertData(
@@ -833,14 +892,34 @@ namespace InsEmpodera.Migrations
                 column: "AtividadeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AtividadeEixos_AtividadeIdAtividade",
+                table: "AtividadeEixos",
+                column: "AtividadeIdAtividade");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AtividadeEixos_EixoId",
                 table: "AtividadeEixos",
                 column: "EixoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AtorComunidadeComunidade_ComunidadesIdComunidade",
+                table: "AtorComunidadeComunidade",
+                column: "ComunidadesIdComunidade");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Atores_AtorComunidadeIdAComunidade",
+                table: "Atores",
+                column: "AtorComunidadeIdAComunidade");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AvaliacoesPessoais_AtorId",
                 table: "AvaliacoesPessoais",
                 column: "AtorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiariosCampo_ComunidadeId",
+                table: "DiariosCampo",
+                column: "ComunidadeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FichaCondicoes_FichaId",
@@ -868,6 +947,16 @@ namespace InsEmpodera.Migrations
                 column: "AtorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Permissoes_PerfilAcessoId",
+                table: "Permissoes",
+                column: "PerfilAcessoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Redes_ComunidadeId",
+                table: "Redes",
+                column: "ComunidadeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RedesPrimarias_AtorRelacionadoId",
                 table: "RedesPrimarias",
                 column: "AtorRelacionadoId");
@@ -889,13 +978,10 @@ namespace InsEmpodera.Migrations
                 name: "AtividadeEixos");
 
             migrationBuilder.DropTable(
-                name: "AtorComunidades");
+                name: "AtorComunidadeComunidade");
 
             migrationBuilder.DropTable(
                 name: "AvaliacoesPessoais");
-
-            migrationBuilder.DropTable(
-                name: "Comunidades");
 
             migrationBuilder.DropTable(
                 name: "DiarioAcoes");
@@ -917,9 +1003,6 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.DropTable(
                 name: "FichaResultados");
-
-            migrationBuilder.DropTable(
-                name: "PerfisAcesso");
 
             migrationBuilder.DropTable(
                 name: "Permissoes");
@@ -955,7 +1038,16 @@ namespace InsEmpodera.Migrations
                 name: "FichasPrimeiroContato");
 
             migrationBuilder.DropTable(
+                name: "PerfisAcesso");
+
+            migrationBuilder.DropTable(
+                name: "Comunidades");
+
+            migrationBuilder.DropTable(
                 name: "Atores");
+
+            migrationBuilder.DropTable(
+                name: "AtorComunidades");
         }
     }
 }

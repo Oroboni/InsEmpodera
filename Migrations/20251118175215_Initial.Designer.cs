@@ -11,14 +11,29 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251110014125_AddNomeAndTimestampsToPerfilAcesso")]
-    partial class AddNomeAndTimestampsToPerfilAcesso
+    [Migration("20251118175215_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+
+            modelBuilder.Entity("AtorComunidadeComunidade", b =>
+                {
+                    b.Property<int>("AtoresIdAComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ComunidadesIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AtoresIdAComunidade", "ComunidadesIdComunidade");
+
+                    b.HasIndex("ComunidadesIdComunidade");
+
+                    b.ToTable("AtorComunidadeComunidade");
+                });
 
             modelBuilder.Entity("Empodera.Models.Acoes", b =>
                 {
@@ -178,6 +193,12 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DtModificacao")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -191,30 +212,40 @@ namespace InsEmpodera.Migrations
                         {
                             IdAtividade = 1,
                             Descricao = "Atividade de pintura e desenho",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Oficina de Artes"
                         },
                         new
                         {
                             IdAtividade = 2,
                             Descricao = "Instrumentos e canto",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Aula de Música"
                         },
                         new
                         {
                             IdAtividade = 3,
                             Descricao = "Futebol, vôlei, basquete",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Esporte Comunitário"
                         },
                         new
                         {
                             IdAtividade = 4,
                             Descricao = "Informática básica",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Curso de Tecnologia"
                         },
                         new
                         {
                             IdAtividade = 5,
                             Descricao = "Troca de produtos",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Feira Solidária"
                         });
                 });
@@ -228,12 +259,17 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("AtividadeId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AtividadeIdAtividade")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("EixoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAEixo");
 
                     b.HasIndex("AtividadeId");
+
+                    b.HasIndex("AtividadeIdAtividade");
 
                     b.HasIndex("EixoId");
 
@@ -278,6 +314,9 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AtorComunidadeIdAComunidade")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("TEXT");
 
@@ -311,6 +350,8 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAtores");
+
+                    b.HasIndex("AtorComunidadeIdAComunidade");
 
                     b.ToTable("Atores");
 
@@ -741,6 +782,8 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdDCampo");
+
+                    b.HasIndex("ComunidadeId");
 
                     b.ToTable("DiariosCampo");
 
@@ -1385,6 +1428,8 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdPermissoes");
 
+                    b.HasIndex("PerfilAcessoId");
+
                     b.ToTable("Permissoes");
 
                     b.HasData(
@@ -1560,6 +1605,8 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdRede");
+
+                    b.HasIndex("ComunidadeId");
 
                     b.ToTable("Redes");
 
@@ -1898,6 +1945,21 @@ namespace InsEmpodera.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AtorComunidadeComunidade", b =>
+                {
+                    b.HasOne("Empodera.Models.AtorComunidade", null)
+                        .WithMany()
+                        .HasForeignKey("AtoresIdAComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Comunidade", null)
+                        .WithMany()
+                        .HasForeignKey("ComunidadesIdComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
                 {
                     b.HasOne("Empodera.Models.Atividade", null)
@@ -1906,6 +1968,10 @@ namespace InsEmpodera.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Empodera.Models.Atividade", null)
+                        .WithMany("AtividadesEixo")
+                        .HasForeignKey("AtividadeIdAtividade");
+
                     b.HasOne("Empodera.Models.Eixo", null)
                         .WithMany()
                         .HasForeignKey("EixoId")
@@ -1913,11 +1979,27 @@ namespace InsEmpodera.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Empodera.Models.Ator", b =>
+                {
+                    b.HasOne("Empodera.Models.AtorComunidade", null)
+                        .WithMany("Atores")
+                        .HasForeignKey("AtorComunidadeIdAComunidade");
+                });
+
             modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>
                 {
                     b.HasOne("Empodera.Models.Ator", null)
                         .WithMany()
                         .HasForeignKey("AtorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
+                {
+                    b.HasOne("Empodera.Models.Comunidade", null)
+                        .WithMany("Diarios")
+                        .HasForeignKey("ComunidadeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1967,6 +2049,15 @@ namespace InsEmpodera.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Empodera.Models.Permissao", b =>
+                {
+                    b.HasOne("Empodera.Models.PerfilAcesso", null)
+                        .WithMany("Permissoes")
+                        .HasForeignKey("PerfilAcessoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Empodera.Models.RedePrimaria", b =>
                 {
                     b.HasOne("Empodera.Models.Ator", null)
@@ -1974,6 +2065,37 @@ namespace InsEmpodera.Migrations
                         .HasForeignKey("AtorRelacionadoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Empodera.Models.RedeRecurso", b =>
+                {
+                    b.HasOne("Empodera.Models.Comunidade", null)
+                        .WithMany("Redes")
+                        .HasForeignKey("ComunidadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Empodera.Models.Atividade", b =>
+                {
+                    b.Navigation("AtividadesEixo");
+                });
+
+            modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
+                {
+                    b.Navigation("Atores");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Comunidade", b =>
+                {
+                    b.Navigation("Diarios");
+
+                    b.Navigation("Redes");
+                });
+
+            modelBuilder.Entity("Empodera.Models.PerfilAcesso", b =>
+                {
+                    b.Navigation("Permissoes");
                 });
 #pragma warning restore 612, 618
         }
