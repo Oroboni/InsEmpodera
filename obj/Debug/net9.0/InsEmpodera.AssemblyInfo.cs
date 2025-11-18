@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InsEmpodera")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3bde330c94116289d31762a2472e21cbb05db853")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+121d9bb43c30b691e05230b859c30ea3186f908c")]
 [assembly: System.Reflection.AssemblyProductAttribute("InsEmpodera")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InsEmpodera")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

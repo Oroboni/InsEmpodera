@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using InsEmpodera.Models;
-using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
 using Empodera.Models;

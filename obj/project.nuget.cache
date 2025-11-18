@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "brydTOQjhhk=",
+  "dgSpecHash": "U4Nj4jtbOko=",
   "success": true,
-  "projectFilePath": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj",
+  "projectFilePath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\melio\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
@@ -10,6 +10,7 @@
     "C:\\Users\\melio\\.nuget\\packages\\closedxml.parser\\2.0.0\\closedxml.parser.2.0.0.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\documentformat.openxml\\3.1.1\\documentformat.openxml.3.1.1.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\documentformat.openxml.framework\\3.1.1\\documentformat.openxml.framework.3.1.1.nupkg.sha512",
+    "C:\\Users\\melio\\.nuget\\packages\\excellibrary\\1.2011.7.31\\excellibrary.1.2011.7.31.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\excelnumberformat\\1.1.0\\excelnumberformat.1.1.0.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
@@ -90,5 +91,18 @@
     "C:\\Users\\melio\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.3\\microsoft.aspnetcore.app.ref.9.0.3.nupkg.sha512",
     "C:\\Users\\melio\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\9.0.3\\microsoft.netcore.app.host.win-x64.9.0.3.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "O pacote 'ExcelLibrary 1.2011.7.31' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net9.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "projectPath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
+      "libraryId": "ExcelLibrary",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

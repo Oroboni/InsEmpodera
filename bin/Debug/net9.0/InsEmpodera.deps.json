@@ -9,6 +9,7 @@
       "InsEmpodera/1.0.0": {
         "dependencies": {
           "ClosedXML": "0.105.0",
+          "ExcelLibrary": "1.2011.7.31",
           "Microsoft.EntityFrameworkCore": "9.0.10",
           "Microsoft.EntityFrameworkCore.Design": "9.0.5",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.5",
@@ -89,6 +90,14 @@
           "lib/net8.0/DocumentFormat.OpenXml.Framework.dll": {
             "assemblyVersion": "3.1.1.0",
             "fileVersion": "3.1.1.0"
+          }
+        }
+      },
+      "ExcelLibrary/1.2011.7.31": {
+        "runtime": {
+          "lib/ExcelLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -1288,6 +1297,13 @@
       "sha512": "sha512-6APEp/ElZV58S/4v8mf4Ke3ONEDORs64MqdD64Z7wWpcHANB9oovQsGIwtqjnKihulOj7T0a6IxHIHOfMqKOng==",
       "path": "documentformat.openxml.framework/3.1.1",
       "hashPath": "documentformat.openxml.framework.3.1.1.nupkg.sha512"
+    },
+    "ExcelLibrary/1.2011.7.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ogX1mzqe1Ek3Z0AdER4B4QBJoBkt90Mfe0LnyiPg/uP+iZ7rx+9fFXbsZjOlPsS0xNn8sFeesvNnfEnuthudrQ==",
+      "path": "excellibrary/1.2011.7.31",
+      "hashPath": "excellibrary.1.2011.7.31.nupkg.sha512"
     },
     "ExcelNumberFormat/1.1.0": {
       "type": "package",

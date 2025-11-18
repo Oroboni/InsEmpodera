@@ -104,6 +104,15 @@
           }
         }
       },
+      "ExcelLibrary/1.2011.7.31": {
+        "type": "package",
+        "compile": {
+          "lib/ExcelLibrary.dll": {}
+        },
+        "runtime": {
+          "lib/ExcelLibrary.dll": {}
+        }
+      },
       "ExcelNumberFormat/1.1.0": {
         "type": "package",
         "compile": {
@@ -1798,6 +1807,18 @@
         "lib/net8.0/DocumentFormat.OpenXml.Framework.xml",
         "lib/netstandard2.0/DocumentFormat.OpenXml.Framework.dll",
         "lib/netstandard2.0/DocumentFormat.OpenXml.Framework.xml"
+      ]
+    },
+    "ExcelLibrary/1.2011.7.31": {
+      "sha512": "ogX1mzqe1Ek3Z0AdER4B4QBJoBkt90Mfe0LnyiPg/uP+iZ7rx+9fFXbsZjOlPsS0xNn8sFeesvNnfEnuthudrQ==",
+      "type": "package",
+      "path": "excellibrary/1.2011.7.31",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "excellibrary.1.2011.7.31.nupkg.sha512",
+        "excellibrary.nuspec",
+        "lib/ExcelLibrary.dll"
       ]
     },
     "ExcelNumberFormat/1.1.0": {
@@ -4659,6 +4680,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "ClosedXML >= 0.105.0",
+      "ExcelLibrary >= 1.2011.7.31",
       "Microsoft.EntityFrameworkCore >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.5",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.5",
@@ -4674,11 +4696,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj",
+      "projectUniqueName": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
       "projectName": "InsEmpodera",
-      "projectPath": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\InsEmpodera.csproj",
+      "projectPath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\InsEmpodera.csproj",
       "packagesPath": "C:\\Users\\melio\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\melio\\Downloads\\InsEmpodera2\\obj\\",
+      "outputPath": "C:\\Users\\melio\\Downloads\\InsEmpodera\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4720,6 +4742,10 @@
           "ClosedXML": {
             "target": "Package",
             "version": "[0.105.0, )"
+          },
+          "ExcelLibrary": {
+            "target": "Package",
+            "version": "[1.2011.7.31, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -5219,5 +5245,17 @@
         }
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "O pacote 'ExcelLibrary 1.2011.7.31' foi restaurado usando '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' em vez da estrutura de destino do projeto 'net9.0'. Esse pacote pode não ser totalmente compatível com o seu projeto.",
+      "libraryId": "ExcelLibrary",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

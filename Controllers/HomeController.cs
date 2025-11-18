@@ -19,17 +19,29 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View("~/Views/Account/index.cshtml");
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+        return View();
     }
 
     public IActionResult HomePage()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/HomePage.cshtml");
     }
 
     [HttpGet]
     public IActionResult ComunidadesDetalhes(int id)
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         Comunidade comunidade;
 
         if (id > 0)
@@ -65,6 +77,10 @@ public class HomeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade)
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         // 1. Lógica de CRIAÇÃO (IdComunidade == 0)
         if (comunidade.IdComunidade == 0)
         {
@@ -113,6 +129,10 @@ public class HomeController : Controller
 
     public IActionResult Comunidades()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         var comunidades = _context.Comunidades
             .Select(c => new Empodera.Models.ComunidadeDto
             {
@@ -127,56 +147,100 @@ public class HomeController : Controller
 
     public IActionResult Atores()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Atores.cshtml");
     }
 
     public IActionResult FichaPrimeiroContato()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/FichaPrimeiroContato.cshtml");
     }
 
     public IActionResult DiariosDeCampo()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/DiariosDeCampo.cshtml");
     }
 
     public IActionResult DiarioProcessoPessoal()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/DiarioProcessoPessoal.cshtml");
     }
 
     public IActionResult Relatorios()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Relatorios.cshtml");
     }
 
     public IActionResult Dashboard()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Dashboard.cshtml");
     }
 
     public IActionResult Atividades()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Atividades.cshtml");
     }
 
     public IActionResult Usuarios()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Usuarios.cshtml");
     }
 
     public IActionResult PerfisDeAcesso()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/PerfisDeAcesso.cshtml");
     }
 
     public IActionResult Ajuda()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Ajuda.cshtml");
     }
 
     public IActionResult Configuracoes()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         return View("~/Views/Home/Sidebar/Configuracoes.cshtml");
     }
 
@@ -184,22 +248,5 @@ public class HomeController : Controller
     {
         // espaçozinho para talvez futura lógica de logout
         return RedirectToAction("Home");
-    }
-
-    public IActionResult InsEmpodera()
-    {
-        return View("~/Views/Account/InsEmpodera.cshtml");
-    }
-
-    [HttpPost]
-    public IActionResult InsEmpodera(string username, string password)
-    {
-        if (username == "user" && password == "123")
-        {
-            return RedirectToAction("HomePage");
-        }
-
-        ViewBag.Error = "Usuário ou senha inválidos";
-        return View("Login");
     }
 }

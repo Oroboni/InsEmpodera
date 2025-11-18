@@ -1,13 +1,12 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using InsEmpodera.Models;
 using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
 
-namespace InsEmpodera.Controllers;
+namespace Empodera.Controllers;
 
 public class ActorController : Controller
 {
@@ -26,6 +25,10 @@ public class ActorController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         
         ViewData["DisableMainScroll"] = "true"; 
         
@@ -35,6 +38,10 @@ public class ActorController : Controller
     // GET: /Actor/Create
     public async Task<IActionResult> Create()
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
@@ -62,6 +69,10 @@ public class ActorController : Controller
     // GET: /Actor/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");

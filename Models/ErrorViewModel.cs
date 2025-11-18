@@ -1,4 +1,4 @@
-namespace InsEmpodera.Models;
+namespace Empodera.Models;
 
 public class ErrorViewModel
 {
