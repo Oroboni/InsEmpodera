@@ -1,0 +1,154 @@
+@{
+    ViewData["Title"] = "Detalhes de Usuário";
+    Layout = null; // IMPORTANTE: Define Layout como null para que esta View não use o _Layout.cshtml
+}
+<head>
+    <style>
+        /* Container que cobre a tela toda */
+        body {
+            background-color: #f7f7f7; /* Cor de fundo da sua tela principal */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* O "Modal" em si */
+        .modal-dialog-content {
+            position: fixed; /* Fixa o modal */
+            top: 0;
+            right: 0;
+            width: 400px; /* Largura do modal (ajuste conforme a imagem) */
+            height: 100vh; /* Altura total da tela */
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Sombra à esquerda */
+            overflow-y: auto; /* Adiciona scroll se o conteúdo for grande */
+            z-index: 1050; 
+        }
+
+        /* Cabeçalho do Modal */
+        .modal-header {
+            background-color: #343a40; /* Cor escura do cabeçalho */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* Corpo do Modal */
+        .modal-body {
+            padding: 30px 20px;
+        }
+
+        /* Estilo para a foto de perfil circular */
+        .profile-photo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%; /* Torna a imagem circular */
+            object-fit: cover;
+            background-color: #e0e0e0; /* Placeholder cinza */
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        /* Estilo dos campos de formulário */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc; /* Linha inferior como na imagem */
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+            background-color: transparent;
+        }
+
+        /* Estilo para campos somente leitura (readonly) */
+        .form-control[readonly] {
+            background-color: #f9f9f9; 
+            cursor: default;
+        }
+
+        /* Estilo para o Select (Perfil de acesso) */
+        .form-control:not([readonly]) {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<div class="modal-dialog-content">
+    
+    <div class="modal-header">
+        <h3 class="modal-title">Detalhes de Usuário</h3>
+        <button type="button" class="close-button" onclick="window.location.href='/Users/Index'">
+            &times;
+        </button>
+    </div>
+
+    <div class="modal-body">
+        
+        <div class="profile-photo-container">
+            <img src="~/img/placeholder-profile.png" alt="Foto do Usuário" class="profile-photo" /> 
+            @* <div class="profile-icon">
+                <i class="fas fa-user-circle"></i> 
+            </div> *@
+        </div>
+        
+        <form asp-action="Edit">
+            <input type="hidden" />
+            
+            <div class="form-group">
+                <label class="control-label">Nome</label>
+                <input class="form-control" readonly />
+            </div>
+            
+            <div class="form-group">
+                <label  class="control-label">E-mail</label>
+                <input class="form-control" readonly />
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Perfil de acesso *</label>
+                <select class="form-control" disabled>
+                    <option value="Operador">Operador</option>
+                    <option value="Admin">Admin</option>
+                    </select>
+            </div>
+
+            <div class="form-actions">
+                @* <button type="submit" class="btn-save">Salvar</button> *@
+            </div>
+        </form>
+    </div>
+</div>

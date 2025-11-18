@@ -106,7 +106,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/Usuarios.cshtml");
+        return View("~/Views/Users/index.cshtml");
     }
 
     public IActionResult PerfisDeAcesso()

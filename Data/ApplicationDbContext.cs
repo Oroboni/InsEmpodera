@@ -144,7 +144,10 @@ namespace Empodera.Data
                 new Usuario { IdUsuario = 2, Nome = "Maria Souza", Senha = "123456", Foto = "maria.png", Email = "maria@email.com", Ocupacao = "Engenheira", Genero = "Feminino", DtNascimento = new DateTime(1988, 3, 22), NivelPermissao = 2, DtCriacao = new DateTime(2023, 01, 01) },
                 new Usuario { IdUsuario = 3, Nome = "Carlos Lima", Senha = "123456", Foto = "carlos.png", Email = "carlos@email.com", Ocupacao = "Estudante", Genero = "Masculino", DtNascimento = new DateTime(2000, 7, 15), NivelPermissao = 1, DtCriacao = new DateTime(2023, 01, 01) },
                 new Usuario { IdUsuario = 4, Nome = "Ana Pereira", Senha = "123456", Foto = "ana.png", Email = "ana@email.com", Ocupacao = "Médica", Genero = "Feminino", DtNascimento = new DateTime(1995, 11, 5), NivelPermissao = 3, DtCriacao = new DateTime(2023, 01, 01) },
-                new Usuario { IdUsuario = 5, Nome = "Pedro Santos", Senha = "123456", Foto = "pedro.png", Email = "pedro@email.com", Ocupacao = "Advogado", Genero = "Masculino", DtNascimento = new DateTime(1985, 1, 30), NivelPermissao = 2, DtCriacao = new DateTime(2023, 01, 01) }
+                new Usuario { IdUsuario = 5, Nome = "Pedro Santos", Senha = "123456", Foto = "pedro.png", Email = "pedro@email.com", Ocupacao = "Advogado", Genero = "Masculino", DtNascimento = new DateTime(1985, 1, 30), NivelPermissao = 2, DtCriacao = new DateTime(2023, 01, 01) },
+           
+                new Usuario { IdUsuario = 6, Nome = "Usuario Teste Operador", Senha = "teste", Foto = "placeholder-ator.png", Email = "teste.operador@exemplo.com", Ocupacao = "Estagiário", Genero = "Não Informado", DtNascimento = new DateTime(1998, 1, 1), NivelPermissao = 1, DtCriacao = new DateTime(2025, 11, 17) },
+                new Usuario { IdUsuario = 7, Nome = "Usuario Teste Admin", Senha = "teste", Foto = "placeholder-ator.png", Email = "teste.admin@exemplo.com", Ocupacao = "Coordenador", Genero = "Não Informado", DtNascimento = new DateTime(1985, 5, 5), NivelPermissao = 2, DtCriacao = new DateTime(2025, 11, 17) }
             );
 
             modelBuilder.Entity<PerfilAcesso>().HasData(
