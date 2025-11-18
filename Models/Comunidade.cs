@@ -16,5 +16,8 @@ namespace Empodera.Models
         public string DescricaoAcessibilidade { get; set; } = string.Empty;
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
+        public List<AtorComunidade>? Atores { get; set; }
+        public List<RedeRecurso>? Redes { get; set; }
+        public List<DiarioCampo>? Diarios { get; set; }
     }
 }

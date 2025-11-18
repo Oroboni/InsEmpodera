@@ -16,5 +16,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+    <PackageReference Include="ExcelLibrary" Version="1.2011.7.31" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
   </ItemGroup>
 </Project>

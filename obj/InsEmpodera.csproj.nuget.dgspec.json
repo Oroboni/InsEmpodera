@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\InsEmpodera.csproj": {}
   },
   "projects": {
@@ -12,12 +13,29 @@
         "projectPath": "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\InsEmpodera.csproj",
         "packagesPath": "C:\\Users\\elian\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\obj\\",
+=======
+    "C:\\Users\\0031432512018\\Documents\\GitHub\\InsEmpodera\\InsEmpodera.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\0031432512018\\Documents\\GitHub\\InsEmpodera\\InsEmpodera.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\0031432512018\\Documents\\GitHub\\InsEmpodera\\InsEmpodera.csproj",
+        "projectName": "InsEmpodera",
+        "projectPath": "C:\\Users\\0031432512018\\Documents\\GitHub\\InsEmpodera\\InsEmpodera.csproj",
+        "packagesPath": "C:\\Users\\0031432512018\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\0031432512018\\Documents\\GitHub\\InsEmpodera\\obj\\",
+>>>>>>> feature/new_login
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
+<<<<<<< HEAD
           "C:\\Users\\elian\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+          "C:\\Users\\0031432512018\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> feature/new_login
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +68,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "ExcelLibrary": {
+              "target": "Package",
+              "version": "[1.2011.7.31, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.10, )"
@@ -96,7 +122,11 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+>>>>>>> feature/new_login
         }
       }
     }

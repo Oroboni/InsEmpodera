@@ -13,7 +13,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InsEmpodera")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad1b28ded81d2d017fd719ddf73b53bcb3e6e48d")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e76afc7b0d1c51c813320e34e9b4ea0f4175bf83")]
+>>>>>>> feature/new_login
 [assembly: System.Reflection.AssemblyProductAttribute("InsEmpodera")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InsEmpodera")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

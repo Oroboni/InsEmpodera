@@ -29,10 +29,6 @@ public class ActorController : Controller
         
         ViewData["DisableMainScroll"] = "true"; 
         
-        // Você vai querer carregar os atores aqui, por exemplo:
-        // var atores = await _context.Atores.ToListAsync();
-        // return View(atores);
-
         return View();
     }
 
@@ -52,11 +48,12 @@ public class ActorController : Controller
         );
         
         // [CORREÇÃO] Cria um novo Ator (vazio) com as datas
-        // para que o rodapé "Criado em" não dê erro.
+        // para que o rodapé "Criado em" funcione.
         var novoAtor = new Ator
         {
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now 
+            // Você pode pré-definir outros valores aqui se quiser
         };
         
         return View(novoAtor); // Passa o novo Ator (o Model) para a View
