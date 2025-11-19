@@ -5,12 +5,31 @@
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/reports.css" />
+    
+    <style>
+        /* CSS Local para alinhar as datas lado a lado */
+        .date-row {
+            display: flex;
+            gap: 15px; /* Espaço entre os campos */
+            width: 100%; /* Garante que o grupo ocupe a largura disponível */
+        }
+        
+        /* Faz com que cada campo de data ocupe 50% do espaço */
+        .date-row .form-group {
+            flex: 1;
+            margin-bottom: 0; /* Remove margem extra se houver */
+        }
+    </style>
 }
 
 <div class="report-page-container">
     <div class="report-breadcrumb">
-        <h1>Relatórios > <strong>Ações</strong></h1>
-    </div>
+    <h1>
+        <a asp-controller="Report" asp-action="index">Relatórios</a> 
+        > 
+        <strong>Ações</strong>
+    </h1>
+</div>
 
     <div class="report-content-box">
         <div class="report-filters">
@@ -30,14 +49,19 @@
                     <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
-            <div class="form-group">
-                <label>De (data)</label>
-                <div class="input-wrapper"><input type="date" /></div>
+            
+            <!-- Agrupamento das Datas na mesma linha -->
+            <div class="date-row">
+                <div class="form-group">
+                    <label>De (data)</label>
+                    <div class="input-wrapper"><input type="date" /></div>
+                </div>
+                <div class="form-group">
+                    <label>Até (data)</label>
+                    <div class="input-wrapper"><input type="date" /></div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Até (data)</label>
-                <div class="input-wrapper"><input type="date" /></div>
-            </div>
+
         </div>
 
         <div class="report-body">

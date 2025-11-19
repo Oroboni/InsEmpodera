@@ -29,7 +29,6 @@ public class ReportController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
         ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
-        ViewBag.SelectedComunidadeId = comunidadeId;
         return View();
     }
 
@@ -38,7 +37,6 @@ public class ReportController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
         ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
-        ViewBag.SelectedComunidadeId = comunidadeId; 
         return View();
     }
 
@@ -65,7 +63,10 @@ public class ReportController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
         
+        // Carrega a lista de atores e mantem o selecionado
         ViewBag.AtorList = new SelectList(await _context.Atores.ToListAsync(), "IdAtores", "Nome", atorId);
+        
+        // Envia o ID para a View saber se deve mostrar o gráfico
         ViewBag.SelectedAtorId = atorId; 
         
         return View();

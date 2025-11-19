@@ -1,23 +1,25 @@
 @{
     ViewData["Title"] = "Relatório - Rede Primária";
     Layout = "_Layout";
-    // A linha "DisableMainScroll" FOI REMOVIDA daqui para CORRIGIR a rolagem.
+    // Rolagem ativada (linha DisableMainScroll removida)
     
-    // Pega o AtorId selecionado (enviado pelo Controller)
     int? selectedAtorId = ViewBag.SelectedAtorId;
 }
 @section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" />
     <link rel="stylesheet" href="~/css/pages/reports.css" />
 }
 
 <div class="report-page-container">
     <div class="report-breadcrumb">
-        <h1>Relatórios > <strong>Rede Primária</strong></h1>
-    </div>
-
+    <h1>
+        <a asp-controller="Report" asp-action="index">Relatórios</a> 
+        > 
+        <strong>Rede Primária</strong>
+    </h1>
+</div>
     <div class="report-content-box">
         <div class="report-filters">
-            
             <form asp-action="PrimaryNetwork" method="get" id="atorSelectForm">
                 <div class="form-group">
                     <label>Ator</label>
@@ -30,14 +32,13 @@
                     </div>
                 </div>
             </form>
-
         </div>
 
         <div class="report-body">
             @if (selectedAtorId == null)
             {
                 <div class="report-empty-state">
-                    <img src="~/img/undraw_selection.svg" alt="Selecione um ator" />
+                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione um ator" />
                     <p>Primeiro selecione um ator.</p>
                 </div>
             }
@@ -54,15 +55,19 @@
                     </div>
                     <div class="metric-card">
                         <div class="title">Centralidade</div>
-                        <div class="value" style="font-size: var(--font-size-base); color: var(--color-text-secondary); padding-top: 10px;">Nenhum item encontrado</div>
+                        <div class="value" style="font-size: 1rem; color: #666; margin-top: 10px;">
+                            Nenhum item encontrado
+                        </div>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px; align-items: center;">
-                    <div class="chart-container" style="max-width: 250px;">
+                <div style="display: flex; flex-direction: column; gap: 40px; margin-top: 20px;">
+                    
+                    <div class="chart-container" style="max-width: 400px; margin: 0 auto;">
                         <canvas id="networkDonutChart"></canvas>
                     </div>
-                    <div class="chart-container-bar">
+
+                    <div class="chart-container-bar" style="width: 100%; height: 400px;">
                         <canvas id="networkBarChart"></canvas>
                     </div>
                 </div>
