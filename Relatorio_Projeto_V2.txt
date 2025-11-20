@@ -1,5 +1,5 @@
 ========================================================== 
-RELATORIO DE PROJETO ASP.NET - Gerado em 19/11/2025 16:11:15,38 
+RELATORIO DE PROJETO ASP.NET - Gerado em 19/11/2025 21:19:43,23 
 ========================================================== 
 Diretorio base: C:\Users\elian\�rea de Trabalho\InsEmpodera 
 ========================================================== 
@@ -315,6 +315,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |       ActorController.cs
 |       HomeController.cs
 |       PersonalAssessmentController.cs
+|       PersonalProcessController.cs
 |       ReportController.cs
 |       
 +---Data
@@ -410,6 +411,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       0nxxz7ek8t-o1o13a6vjx.gz
 |           |       0pifp25xah-3pstp4mbi6.gz
 |           |       0pifp25xah-bx499e87hq.gz
+|           |       0pifp25xah-ujfp517yfd.gz
 |           |       1wsjos9brx-jii89g3yp0.gz
 |           |       2q6g8nex9u-8vyfqsqgz1.gz
 |           |       2q6g8nex9u-jj8uyg4cgr.gz
@@ -437,6 +439,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       7qzo0gj0un-dzr80toe9l.gz
 |           |       85b7sr6c25-48y08845bh.gz
 |           |       85b7sr6c25-4v8eqarkd7.gz
+|           |       87ow04ogw1-4ksh8hn4ls.gz
 |           |       8fsc547043-lzl9nlhx6b.gz
 |           |       8fsc547043-worgj0nhwm.gz
 |           |       8kgk8eqmnf-ocpmczltd6.gz
@@ -489,7 +492,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |           |       nn4y1scow9-s35ty4nyc5.gz
 |           |       nn4y1scow9-zub09dkrxp.gz
 |           |       o831g4gwmf-in2qniltw3.gz
-|           |       o9fqmhm6p9-tlb5mh2r8v.gz
+|           |       o9fqmhm6p9-utftoaep8w.gz
 |           |       oeabivif52-ttgo8qnofa.gz
 |           |       olfbh4llnl-wh5a95cwnp.gz
 |           |       p1sc2qzn78-y4eix5dq6r.gz
@@ -602,6 +605,11 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
 |   |       Edit.cshtml
 |   |       Index.cshtml
 |   |       
+|   +---PersonalProcess
+|   |       Create.cshtml
+|   |       Edit.cshtml
+|   |       Index.cshtml
+|   |       
 |   +---Report
 |   |       Actions.cshtml
 |   |       FirstContact.cshtml
@@ -644,6 +652,7 @@ C:\USERS\ELIAN\�REA DE TRABALHO\INSEMPODERA
     |   |       indexAtores.css
     |   |       perfisacesso.css
     |   |       personal-assessment.css
+    |   |       personal-process.css
     |   |       reports.css
     |   |       usuarios.css
     |   |       
@@ -776,6 +785,7 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ActorController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\PersonalProcessController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ReportController.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Data\ApplicationDbContext.cs 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Data\ClassSeed.cs 
@@ -842,6 +852,9 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalProcess\Create.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalProcess\Index.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\FirstContact.cshtml 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\Index.cshtml 
@@ -857,7 +870,7 @@ DIAGNOSTICO: ARQUIVOS ENCONTRADOS
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.Development.json 
 [INCLUIDO] C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.json 
  
-Total de arquivos a processar: 87 
+Total de arquivos a processar: 91 
  
  
 ========================================================== 
@@ -1559,6 +1572,85 @@ public class PersonalAssessmentController : Controller
         );
 
         return View(avaliacao);
+    }
+} 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\PersonalProcessController.cs 
+========================================================== 
+ 
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using InsEmpodera.Models;
+using Empodera.Data;
+using Empodera.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace InsEmpodera.Controllers;
+
+public class PersonalProcessController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public PersonalProcessController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IActionResult> Index(int? atorId)
+    {
+        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+
+        ViewData["DisableMainScroll"] = "true";
+
+        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", atorId);
+        
+        // [CORREÇÃO] Não filtramos por AtorId porque o campo não existe no banco
+        // Retornamos todos os diários ou uma lista vazia por enquanto.
+        var diarios = await _context.DiariosCampo.OrderByDescending(d => d.Data).ToListAsync();
+        
+        return View(diarios);
+    }
+
+    public async Task<IActionResult> Create()
+    {
+        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+        
+        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome");
+        ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
+
+        var model = new DiarioCampo 
+        { 
+            Data = DateTime.Now,
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now
+        };
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+
+        var diario = await _context.DiariosCampo.FindAsync(id); 
+        if (diario == null) 
+        {
+            diario = new DiarioCampo { 
+                DtCriacao = DateTime.Now, 
+                DtModificacao = DateTime.Now,
+                Data = DateTime.Now,
+                Descricao = "Exemplo de descrição carregada..."
+            };
+        }
+        
+        // [CORREÇÃO] Removemos diario.AtorId daqui
+        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome");
+        ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
+
+        return View(diario);
     }
 } 
  
@@ -5303,6 +5395,379 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalAssessment\In
  
  
 ========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalProcess\Create.cshtml 
+========================================================== 
+ 
+@model Empodera.Models.DiarioCampo
+@{
+    ViewData["Title"] = "Adicionar Diário";
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" /> 
+    <link rel="stylesheet" href="~/css/pages/personal-process.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Diário de Processo Pessoal > <strong>Adicionar Diário de Processo Pessoal</strong></h1>
+    </div>
+
+    <form method="post">
+        
+        <div class="form-group">
+            <label>Ator *</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <!-- [CORREÇÃO] Usando 'name' em vez de 'asp-for' porque AtorId não existe no Model -->
+                <select name="SelectedAtorId" class="form-control" asp-items="ViewBag.AtorList" required>
+                    <option value="">Selecione um Ator...</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Data *</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-day"></i>
+                <input asp-for="Data" type="date" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Eixos</label>
+            <details class="multiselect-wrapper">
+                <summary>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-tags"></i>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </summary>
+                <div class="multiselect-panel">
+                    <ul>
+                        @if (ViewBag.EixosList != null) {
+                            foreach (var eixo in (SelectList)ViewBag.EixosList) {
+                                <li>
+                                    <input type="checkbox" name="eixosIds" value="@eixo.Value" id="eixo-create-@eixo.Value">
+                                    <label for="eixo-create-@eixo.Value">@eixo.Text</label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="form-group">
+            <label>Descrição *</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-align-left"></i>
+                <textarea asp-for="Descricao" placeholder="Descreva o processo..." required></textarea>
+            </div>
+        </div>
+
+        <details class="accordion-wrapper">
+            <summary>
+                <span>Ações da Rede do Parceiro (0 itens)</span>
+                <div class="accordion-title-group">
+                    <div class="btn-plus-circle"><i class="fa-solid fa-plus"></i></div>
+                </div>
+            </summary>
+            <div style="padding: 16px; border-top: 1px solid #eee;">
+                <p style="font-size: 0.9rem; color: #666;">Nenhuma ação adicionada.</p>
+            </div>
+        </details>
+
+        <div class="form-group">
+            <label>Anexos</label>
+            <div class="anexos-area">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px;"></i>
+                <span>Salve para adicionar anexos</span>
+            </div>
+        </div>
+
+        <div class="form-buttons" style="margin-top: 40px;">
+             <button type="submit" class="btn-full-width">ADICIONAR DIÁRIO DE PROCESSO PESSOAL</button>
+        </div>
+        
+    </form>
+</div> 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.cshtml 
+========================================================== 
+ 
+@model Empodera.Models.DiarioCampo
+@{
+    ViewData["Title"] = "Detalhes do Diário";
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    <link rel="stylesheet" href="~/css/pages/personal-process.css" />
+    <style>
+        .btn-success { background-color: var(--color-success) !important; color: white !important; }
+    </style>
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Diário de Processo Pessoal > <strong>Detalhes de Diário de Processo Pessoal</strong></h1>
+    </div>
+
+    <form method="post">
+        <input type="hidden" asp-for="IdDCampo" />
+
+        <div class="form-group">
+            <label>Ator *</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <!-- [CORREÇÃO] 'name' em vez de 'asp-for' -->
+                <select name="SelectedAtorId" class="form-control" asp-items="ViewBag.AtorList" required>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Data *</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-day"></i>
+                <input asp-for="Data" type="date" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Eixos</label>
+            <div class="eixos-tag-container" id="tag-container"></div>
+            <details class="multiselect-wrapper">
+                <summary>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-tags"></i>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </summary>
+                <div class="multiselect-panel" id="multiselect-panel">
+                    <ul>
+                        @if (ViewBag.EixosList != null) {
+                            foreach (var eixo in (SelectList)ViewBag.EixosList) {
+                                <li>
+                                    <input type="checkbox" name="eixosIds" value="@eixo.Value" id="eixo-edit-@eixo.Value"
+                                           data-tag-name="@eixo.Text" data-tag-class="tag-purple">
+                                    <label for="eixo-edit-@eixo.Value">@eixo.Text</label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="form-group">
+            <label>Descrição *</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-align-left"></i>
+                <textarea asp-for="Descricao"></textarea>
+            </div>
+        </div>
+
+        <details class="accordion-wrapper">
+            <summary>
+                <span>Ações da Rede do Parceiro (0 itens)</span>
+                <i class="fa-solid fa-circle-plus" style="color: var(--color-primary); font-size: 1.2rem;"></i>
+            </summary>
+            <div style="padding: 16px;">
+                <p style="color: #888; font-size: 0.9rem;">Nenhuma ação vinculada.</p>
+            </div>
+        </details>
+
+        <div class="form-group">
+            <label>Anexos</label>
+            <div class="anexos-list">
+                <div class="anexo-item">
+                    <span class="anexo-name">DOCUMENTO_SCAN.PDF</span>
+                    <i class="fa-solid fa-trash-can anexo-remove"></i>
+                </div>
+                <div style="margin-top: 10px; text-align: right;">
+                    <a href="#" style="color: var(--color-primary); font-weight: 600; font-size: 0.85rem;">ADICIONAR</a>
+                </div>
+            </div>
+        </div>
+
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Criado em <strong>@Model.DtCriacao.ToString("dd/MM/yyyy")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                 <div class="form-group"><label>Criado por</label><div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" value="[Sistema]" readonly></div></div>
+                 <div class="form-group"><label>Atualizado por</label><div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" value="[Sistema]" readonly></div></div>
+            </div>
+        </details>
+        
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">EDITAR</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnEditar = document.querySelector('.btn-primary');
+            const inputs = document.querySelectorAll('input:not([type="hidden"]), select, textarea');
+            const eixosWrapper = document.querySelector('.multiselect-wrapper');
+            let modoEdicao = false;
+
+            function toggleCampos(disabled) {
+                inputs.forEach(el => {
+                    if(disabled) {
+                        el.setAttribute('readonly', 'readonly');
+                        el.style.backgroundColor = 'var(--color-bg-secondary)';
+                        if(el.tagName === 'SELECT') el.setAttribute('disabled', 'disabled');
+                    } else {
+                        el.removeAttribute('readonly');
+                        el.removeAttribute('disabled');
+                        el.style.backgroundColor = 'var(--color-bg-primary)';
+                    }
+                });
+                if(eixosWrapper) eixosWrapper.style.pointerEvents = disabled ? 'none' : 'auto';
+            }
+
+            toggleCampos(true);
+
+            if (btnEditar) {
+                btnEditar.addEventListener('click', function(e) {
+                    if (!modoEdicao) {
+                        e.preventDefault();
+                        modoEdicao = true;
+                        toggleCampos(false);
+                        btnEditar.innerHTML = 'SALVAR';
+                        btnEditar.classList.add('btn-success');
+                        
+                        const btnCancelar = document.createElement('button');
+                        btnCancelar.type = 'button';
+                        btnCancelar.className = 'btn btn-secondary btn-cancel';
+                        btnCancelar.textContent = 'CANCELAR';
+                        btnCancelar.onclick = () => location.reload();
+                        btnEditar.parentElement.insertBefore(btnCancelar, btnEditar);
+                    } else {
+                        return true;
+                    }
+                });
+            }
+        });
+    </script>
+} 
+ 
+ 
+========================================================== 
+ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\PersonalProcess\Index.cshtml 
+========================================================== 
+ 
+@model List<Empodera.Models.DiarioCampo>
+@{
+    ViewData["Title"] = "Diário de Processo Pessoal";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+    
+    int? selectedAtorId = ViewBag.SelectedAtorId;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> <!-- Para os dropdowns básicos -->
+    <link rel="stylesheet" href="~/css/pages/personal-process.css" />
+}
+
+<div class="process-content-area">
+
+    <!-- Cabeçalho Fixo -->
+    <div class="process-header">
+        <div class="report-breadcrumb" style="margin:0;">
+             <h1 style="margin:0; font-size: 2rem; color: var(--color-primary); font-weight: 700;">Diário de Processo Pessoal</h1>
+        </div>
+        
+        <div class="process-filters">
+            
+            <!-- Filtro de Ator (Agora funciona!) -->
+            <form asp-action="Index" method="get" id="atorForm">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="margin-bottom: 4px; font-size: 12px; color: var(--color-primary); font-weight: 600;">Ator</label>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <select name="atorId" class="form-control" asp-items="ViewBag.AtorList" onchange="this.form.submit()">
+                            <option value="">Selecione um Ator...</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Busca e Botão (Só aparece se tiver ator selecionado) -->
+            @if (selectedAtorId != null)
+            {
+                <div class="process-search-row">
+                    <form class="search-bar-full" asp-action="Index" method="get">
+                        <input type="hidden" name="atorId" value="@selectedAtorId" />
+                        <input type="text" name="searchQuery" placeholder="Buscar por data ou descrição..." value="@ViewBag.SearchQuery">
+                        <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                    <a asp-action="Create" asp-route-atorId="@selectedAtorId" class="btn-add-dark">
+                        <i class="fa-solid fa-plus-circle"></i> ADICIONAR
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Lista de Conteúdo -->
+    <div class="process-list">
+        @if (selectedAtorId == null)
+        {
+            <div class="empty-state-container">
+                <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Selecione+um+Ator" alt="Selecione um ator" />
+                <p>Primeiro Selecione o Ator</p>
+            </div>
+        }
+        else if (Model == null || Model.Count == 0)
+        {
+            <div class="empty-state-container">
+                <p style="font-size: 1rem;">Nenhum item encontrado</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="process-card">
+                    <div class="process-info">
+                        <h3>@item.Data.ToString("dd/MM/yyyy")</h3>
+                        <div class="process-tags">
+                            <!-- Tags fictícias para exemplo visual, você pode puxar do banco depois -->
+                            <span class="tag-pill tag-orange">Substâncias</span>
+                            <span class="tag-pill tag-olive">Moradia</span>
+                        </div>
+                    </div>
+                    <a asp-action="Edit" asp-route-id="@item.IdDCampo" class="btn-view-details">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div> 
+ 
+ 
+========================================================== 
 ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml 
 ========================================================== 
  
@@ -5313,6 +5778,21 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/reports.css" />
+    
+    <style>
+        /* CSS Local para alinhar as datas lado a lado */
+        .date-row {
+            display: flex;
+            gap: 15px; /* Espaço entre os campos */
+            width: 100%; /* Garante que o grupo ocupe a largura disponível */
+        }
+        
+        /* Faz com que cada campo de data ocupe 50% do espaço */
+        .date-row .form-group {
+            flex: 1;
+            margin-bottom: 0; /* Remove margem extra se houver */
+        }
+    </style>
 }
 
 <div class="report-page-container">
@@ -5342,14 +5822,19 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml
                     <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
-            <div class="form-group">
-                <label>De (data)</label>
-                <div class="input-wrapper"><input type="date" /></div>
+            
+            <!-- Agrupamento das Datas na mesma linha -->
+            <div class="date-row">
+                <div class="form-group">
+                    <label>De (data)</label>
+                    <div class="input-wrapper"><input type="date" /></div>
+                </div>
+                <div class="form-group">
+                    <label>Até (data)</label>
+                    <div class="input-wrapper"><input type="date" /></div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Até (data)</label>
-                <div class="input-wrapper"><input type="date" /></div>
-            </div>
+
         </div>
 
         <div class="report-body">
@@ -5389,30 +5874,35 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\FirstContact.c
 @{
     ViewData["Title"] = "Relatório - Fichas de 1º Contato";
     Layout = "_Layout";
-    // A linha DisableMainScroll foi REMOVIDA para permitir a rolagem
+    
+    // Variável auxiliar para verificar se há comunidade selecionada
+    bool temComunidade = !string.IsNullOrEmpty(Context.Request.Query["comunidadeId"]);
 }
+
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/reports.css" />
+    
 }
 
 <div class="report-page-container">
     <div class="report-breadcrumb">
-    <h1>
-        <a asp-controller="Report" asp-action="index">Relatórios</a> 
-        > 
-        <strong>Fichas de 1º Contato</strong>
-    </h1>
-</div>
+        <h1>
+            <a asp-controller="Report" asp-action="index">Relatórios</a> 
+            > 
+            <strong>Fichas de 1º Contato</strong>
+        </h1>
+    </div>
 
     <div class="report-content-box">
         <div class="report-filters">
             
-            <form asp-action="FirstContact" method="get" id="comunidadeForm">
+            <!-- Seleção Principal de Comunidade (SEMPRE VISÍVEL) -->
+            <form asp-action="FirstContact" method="get" id="comunidadeForm" style="margin-bottom: @(temComunidade ? "20px" : "0");">
                 <div class="form-group">
-                    <label for="comunidadeId">Comunidade</label>
+                    <label for="comunidadeId" style="font-weight: bold; font-size: 1rem;">Comunidade</label>
                     <div class="select-wrapper">
                         <i class="fa-solid fa-city"></i>
-                        <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.ComunidadeList" onchange="this.form.submit()">
+                        <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.ComunidadeList" onchange="this.form.submit()" style="border-color: #4f46e5; border-width: 2px;">
                             <option value="">Selecione uma comunidade...</option>
                         </select>
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
@@ -5420,205 +5910,232 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\FirstContact.c
                 </div>
             </form>
             
-            <details class="filter-box" open>
-                <summary>
-                    <span>Filtros</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </summary>
-                <div class="filter-grid">
-                    <div class="form-group">
-                        <label>Gênero</label>
-                        <div class="select-wrapper">
-                            <select name="genero" id="genero">
-                                <option value="" selected disabled>Selecione...</option>
-                                
-                                <option value="feminino">Feminino</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="nao_declarado">Não declarado</option>
-                                <option value="transgenero">Transgênero</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+            <!-- SÓ MOSTRA OS OUTROS FILTROS SE TIVER COMUNIDADE SELECIONADA -->
+            @if (temComunidade)
+            {
+                <!-- Filtros Avançados (Começa FECHADO - sem o atributo 'open') -->
+                <details class="filter-box">
+                    <summary>
+                        <span><i class="fa-solid fa-filter" style="margin-right: 8px;"></i> Filtros Avançados</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </summary>
+                    
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label>Gênero</label>
+                            <div class="select-wrapper">
+                                <select name="genero" id="genero">
+                                    <option value="" selected disabled>Todos</option>
+                                    <option value="feminino">Feminino</option>
+                                    <option value="masculino">Masculino</option>
+                                    <option value="nao_declarado">Não declarado</option>
+                                    <option value="transgenero">Transgênero</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Estrutura familiar</label>
-                        <div class="select-wrapper">
-                            <select name="estrutura_familiar" id="estrutura_familiar">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="companheiro_sem_matrimonio">Companheiro/a sem matrimônio</option>
-                                <option value="familia_nuclear">Família nuclear</option>
-                                <option value="familia_sem_matrimonio_formal">Família sem matrimônio formal</option>
-                                <option value="mora_com_filhos">Mora com filhos/as</option>
-                                <option value="mora_sozinho">Mora sozinho</option>
-                                <option value="outro">Outro</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                   <div class="form-group">
-                        <label>Condições do primeiro contato</label>
-                        <div class="select-wrapper">
-                            <select name="condicoes_primeiro_contato" id="condicoes_primeiro_contato">
-                                <option value="" selected disabled>Selecione...</option>
-                                
-                                <option value="analfabetismo">Analfabetismo</option>
-                                <option value="apoio_economico">Apoio econômico</option>
-                                <option value="capacitacao_formacao">Capacitação e formação</option>
-                                <option value="comportamental">Comportamental</option>
-                                <option value="condutas_antissociais">Condutas antissociais</option>
-                                <option value="crise_psicologica">Crise psicológica</option>
-                                <option value="deslocamento">Deslocamento</option>
-                                <option value="drogas_intravenosas">Drogas intravenosas</option>
-                                <option value="escolares">Escolares</option>
-                                <option value="estigma_identidade_sexual">Estigma por identidade sexual</option>
-                                <option value="exclusao_grave">Exclusão grave</option>
-                                <option value="gravidez_parto">Gravidez/parto</option>
-                                <option value="hiv_aids">HIV/AIDS</option>
-                                <option value="hepatite">Hepatite</option>
-                                <option value="ist">IST</option>
-                                <option value="incapacidade">Incapacidade</option>
-                                <option value="legal">Legal</option>
-                                <option value="migracao_imigracao">Migração/Imigração</option>
-                                <option value="organizacao_planejamento">Organização e planejamento</option>
-                                <option value="outras_dependencias">Outras dependências</option>
-                                <option value="pobreza_extrema">Pobreza extrema</option>
-                                <option value="problemas_saude">Problemas de saúde</option>
-                                <option value="problemas_familiares">Problemas familiares</option>
-                                <option value="problemas_sexuais">Problemas sexuais</option>
-                                <option value="psiquiatricas">Psiquiátricas</option>
-                                <option value="redes_interinstitucionais">Redes interinstitucionais</option>
-                                <option value="relacionais">Relacionais</option>
-                                <option value="sem_trabalho">Sem trabalho</option>
-                                <option value="substancias_alcool">Substâncias/álcool</option>
-                                <option value="trabalho_sexual">Trabalho sexual</option>
-                                <option value="transtorno_estresse_pos_traumatico">Transtorno estresse pós traumático</option>
-                                <option value="trafico_pessoas">Tráfico de pessoas</option>
-                                <option value="tuberculoso">Tuberculoso</option>
-                                <option value="vida_rua">Vida de rua</option>
-                                <option value="violacao_adulto">Violação de adulto</option>
-                                <option value="violacao_criancas">Violação de crianças</option>
-                                <option value="violencia_intracomunitaria">Violência intracomunitária</option>
-                                <option value="violencia_intrafamiliar">Violência intrafamiliar</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Resultados</label>
-                        <div class="select-wrapper">
-                            <select name="resultados" id="resultados">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="inclusao_atividades">Inclusão em atividades</option>
-                                <option value="inicia_programa">Inicia um programa</option>
-                                <option value="interrompeu_contato">Interrompeu contato</option>
-                                <option value="seguiu_contato">Seguiu contato</option>
-                                <option value="veio_ao_encontro">Veio ao encontro</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                   <div class="form-group">
-                        <label>Respostas</label>
-                        <div class="select-wrapper">
-                            <select name="respostas" id="respostas">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="acolhida_dia_noite">Acolhida (dia ou noite)</option>
-                                <option value="acompanhamento">Acompanhamento</option>
-                                <option value="conselho_orientacao">Conselho/Orientação</option>
-                                <option value="cuidados_medicos">Cuidados médicos</option>
-                                <option value="da_se_informacao">Dá-se uma informação</option>
-                                <option value="encaminhamento">Encaminhamento</option>
-                                <option value="escuta_imediata_manejo_crise">Escuta imediata/manejo de crise</option>
-                                <option value="higiene_roupa_limpa">Higiene/Roupa limpa</option>
-                                <option value="indicacoes_sugestoes">Indicações, sugestões</option>
-                                <option value="marca_se_encontro">Marca-se um encontro</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Hora do primeiro contato</label>
-                        <div class="select-wrapper">
-                            <select name="hora_primeiro_contato" id="hora_primeiro_contato">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="06_12">Das 06:00 às 12:00</option>
-                                <option value="12_20">Das 12:01 às 20:00</option>
-                                <option value="20_06">Das 20:01 às 05:59</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Como se estabeleceu o primeiro contato</label>
-                        <div class="select-wrapper">
-                            <select name="como_estabeleceu_contato" id="como_estabeleceu_contato">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="outras_instituicoes">Em outras instituições</option>
-                                <option value="casa_pessoa">Na casa da pessoa</option>
-                                <option value="estrutura_organizacao">Na estrutura da organização</option>
-                                <option value="na_rua">Na rua</option>
-                                <option value="outro">Outro</option>
-                                <option value="por_telefone">Por telefone</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                   <div class="form-group">
-                        <label>Escolaridade</label>
-                        <div class="select-wrapper">
-                            <select name="escolaridade" id="escolaridade">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="sabe_calcular">Sabe calcular</option>
-                                <option value="sabe_ler_escrever">Sabe ler e escrever</option>
-                                <option value="sabe_usar_computador">Sabe usar o computador</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                <div class="filter-date-grid">
-                    <div class="form-group">
-                        <label>De (data)</label>
-                        <div class="input-wrapper"><input type="date" /></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Até (data)</label>
-                        <div class="input-wrapper"><input type="date" /></div>
-                    </div>
-                </div>
-            </details>
-            
-            <div class="report-type-filters">
-                <div class="form-group">
-                    <label>Tipo</label>
-                    <div class="select-wrapper">
-                        <select name="tipo" id="tipo">
-                            <option value="por_categoria">Por categoria</option>
-                            <option value="por_tabela">Por tabela</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </div>
-               <div class="form-group">
-                    <label>Campo *</label>
-                    <div class="select-wrapper">
-                        <select name="campo" id="campo">
-                            <option value="" selected disabled>Selecione...</option>
-                            <option value="como_estabeleceu_contato">Como se estabeleceu o primeiro contato</option>
-                            <option value="emprego">Emprego</option>
-                            <option value="estado">Estado</option>
-                            <option value="estado_familiar">Estado familiar</option>
-                            <option value="estrutura_familiar">Estrutura familiar</option>
-                            <option value="genero">Gênero</option>
-                            <option value="hora_primeiro_contato">Hora do primeiro contato</option>
-                            <option value="local_tratamento">Local de tratamento</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </div>
-            </div>
 
-        </div> <div class="report-body">
-            @if (Context.Request.Query["comunidadeId"].Count == 0 || string.IsNullOrEmpty(Context.Request.Query["comunidadeId"]))
+                        <div class="form-group">
+                            <label>Estrutura familiar</label>
+                            <div class="select-wrapper">
+                                <select name="estrutura_familiar" id="estrutura_familiar">
+                                    <option value="" selected disabled>Todas</option>
+                                    <option value="companheiro_sem_matrimonio">Companheiro/a sem matrimônio</option>
+                                    <option value="familia_nuclear">Família nuclear</option>
+                                    <option value="familia_sem_matrimonio_formal">Família sem matrimônio formal</option>
+                                    <option value="mora_com_filhos">Mora com filhos/as</option>
+                                    <option value="mora_sozinho">Mora sozinho</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Condições 1º contato</label>
+                            <div class="select-wrapper">
+                                <select name="condicoes_primeiro_contato" id="condicoes_primeiro_contato">
+                                    <option value="" selected disabled>Todas</option>
+                                    <option value="analfabetismo">Analfabetismo</option>
+                                    <option value="apoio_economico">Apoio econômico</option>
+                                    <option value="capacitacao_formacao">Capacitação e formação</option>
+                                    <option value="comportamental">Comportamental</option>
+                                    <option value="condutas_antissociais">Condutas antissociais</option>
+                                    <option value="crise_psicologica">Crise psicológica</option>
+                                    <option value="deslocamento">Deslocamento</option>
+                                    <option value="drogas_intravenosas">Drogas intravenosas</option>
+                                    <option value="escolares">Escolares</option>
+                                    <option value="estigma_identidade_sexual">Estigma por identidade sexual</option>
+                                    <option value="exclusao_grave">Exclusão grave</option>
+                                    <option value="gravidez_parto">Gravidez/parto</option>
+                                    <option value="hiv_aids">HIV/AIDS</option>
+                                    <option value="hepatite">Hepatite</option>
+                                    <option value="ist">IST</option>
+                                    <option value="incapacidade">Incapacidade</option>
+                                    <option value="legal">Legal</option>
+                                    <option value="migracao_imigracao">Migração/Imigração</option>
+                                    <option value="organizacao_planejamento">Organização e planejamento</option>
+                                    <option value="outras_dependencias">Outras dependências</option>
+                                    <option value="pobreza_extrema">Pobreza extrema</option>
+                                    <option value="problemas_saude">Problemas de saúde</option>
+                                    <option value="problemas_familiares">Problemas familiares</option>
+                                    <option value="problemas_sexuais">Problemas sexuais</option>
+                                    <option value="psiquiatricas">Psiquiátricas</option>
+                                    <option value="redes_interinstitucionais">Redes interinstitucionais</option>
+                                    <option value="relacionais">Relacionais</option>
+                                    <option value="sem_trabalho">Sem trabalho</option>
+                                    <option value="substancias_alcool">Substâncias/álcool</option>
+                                    <option value="trabalho_sexual">Trabalho sexual</option>
+                                    <option value="transtorno_estresse_pos_traumatico">Transtorno estresse pós traumático</option>
+                                    <option value="trafico_pessoas">Tráfico de pessoas</option>
+                                    <option value="tuberculoso">Tuberculoso</option>
+                                    <option value="vida_rua">Vida de rua</option>
+                                    <option value="violacao_adulto">Violação de adulto</option>
+                                    <option value="violacao_criancas">Violação de crianças</option>
+                                    <option value="violencia_intracomunitaria">Violência intracomunitária</option>
+                                    <option value="violencia_intrafamiliar">Violência intrafamiliar</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Resultados</label>
+                            <div class="select-wrapper">
+                                <select name="resultados" id="resultados">
+                                    <option value="" selected disabled>Todos</option>
+                                    <option value="inclusao_atividades">Inclusão em atividades</option>
+                                    <option value="inicia_programa">Inicia um programa</option>
+                                    <option value="interrompeu_contato">Interrompeu contato</option>
+                                    <option value="seguiu_contato">Seguiu contato</option>
+                                    <option value="veio_ao_encontro">Veio ao encontro</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Respostas</label>
+                            <div class="select-wrapper">
+                                <select name="respostas" id="respostas">
+                                    <option value="" selected disabled>Todas</option>
+                                    <option value="acolhida_dia_noite">Acolhida (dia ou noite)</option>
+                                    <option value="acompanhamento">Acompanhamento</option>
+                                    <option value="conselho_orientacao">Conselho/Orientação</option>
+                                    <option value="cuidados_medicos">Cuidados médicos</option>
+                                    <option value="da_se_informacao">Dá-se uma informação</option>
+                                    <option value="encaminhamento">Encaminhamento</option>
+                                    <option value="escuta_imediata_manejo_crise">Escuta imediata/manejo de crise</option>
+                                    <option value="higiene_roupa_limpa">Higiene/Roupa limpa</option>
+                                    <option value="indicacoes_sugestoes">Indicações, sugestões</option>
+                                    <option value="marca_se_encontro">Marca-se um encontro</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Hora do 1º contato</label>
+                            <div class="select-wrapper">
+                                <select name="hora_primeiro_contato" id="hora_primeiro_contato">
+                                    <option value="" selected disabled>Qualquer horário</option>
+                                    <option value="06_12">Das 06:00 às 12:00</option>
+                                    <option value="12_20">Das 12:01 às 20:00</option>
+                                    <option value="20_06">Das 20:01 às 05:59</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Como se estabeleceu</label>
+                            <div class="select-wrapper">
+                                <select name="como_estabeleceu_contato" id="como_estabeleceu_contato">
+                                    <option value="" selected disabled>Todos</option>
+                                    <option value="outras_instituicoes">Em outras instituições</option>
+                                    <option value="casa_pessoa">Na casa da pessoa</option>
+                                    <option value="estrutura_organizacao">Na estrutura da organização</option>
+                                    <option value="na_rua">Na rua</option>
+                                    <option value="outro">Outro</option>
+                                    <option value="por_telefone">Por telefone</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Escolaridade</label>
+                            <div class="select-wrapper">
+                                <select name="escolaridade" id="escolaridade">
+                                    <option value="" selected disabled>Todas</option>
+                                    <option value="sabe_calcular">Sabe calcular</option>
+                                    <option value="sabe_ler_escrever">Sabe ler e escrever</option>
+                                    <option value="sabe_usar_computador">Sabe usar o computador</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+
+                        <!-- Campos de Data -->
+                        <div class="form-group">
+                            <label>De (data)</label>
+                            <div class="input-wrapper">
+                                <input type="date" />
+                                <i class="fa-solid fa-calendar"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Até (data)</label>
+                            <div class="input-wrapper">
+                                <input type="date" />
+                                <i class="fa-solid fa-calendar"></i>
+                            </div>
+                        </div>
+
+                        <!-- Botão de Filtrar para confirmar a ação -->
+                        <div class="form-group" style="justify-content: flex-end;">
+                             <label>&nbsp;</label> <!-- Espaço vazio para alinhar -->
+                            <button type="button" class="btn btn-primary" style="height: 42px; width: 100%;">Aplicar Filtros</button>
+                        </div>
+                    </div>
+                </details>
+                
+                <!-- Configurações de Visualização (fora do sanfona) -->
+                <div class="report-type-filters">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Tipo de Visualização</label>
+                        <div class="select-wrapper">
+                            <select name="tipo" id="tipo">
+                                <option value="por_categoria">Por categoria</option>
+                                <option value="por_tabela">Por tabela</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Campo Principal *</label>
+                        <div class="select-wrapper">
+                            <select name="campo" id="campo">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="como_estabeleceu_contato">Como se estabeleceu o primeiro contato</option>
+                                <option value="emprego">Emprego</option>
+                                <option value="estado">Estado</option>
+                                <option value="estado_familiar">Estado familiar</option>
+                                <option value="estrutura_familiar">Estrutura familiar</option>
+                                <option value="genero">Gênero</option>
+                                <option value="hora_primeiro_contato">Hora do primeiro contato</option>
+                                <option value="local_tratamento">Local de tratamento</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div> 
+        
+        <div class="report-body">
+            @if (!temComunidade)
             {
                 <div class="report-empty-state">
                     <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione uma comunidade" />
@@ -6083,7 +6600,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
                     </li>
                     <li data-page="DiarioProcessoPessoal"
                         class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
-                        <a href="/Home/DiarioProcessoPessoal">
+                        <a href="/PersonalProcess">
                             <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
                         </a>
                     </li>
@@ -6287,5 +6804,5 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\appsettings.json
  
 ========================================================== 
 FIM DO RELATORIO 
-Total de arquivos processados: 87 
+Total de arquivos processados: 91 
 ========================================================== 

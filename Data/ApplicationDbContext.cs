@@ -203,13 +203,21 @@ namespace Empodera.Data
             );
 
             // ===================== Eixo =====================
-            modelBuilder.Entity<Eixo>().HasData(
-                new Eixo { IdEixo = 1, Nome = "Educação" },
-                new Eixo { IdEixo = 2, Nome = "Saúde" },
-                new Eixo { IdEixo = 3, Nome = "Segurança" },
-                new Eixo { IdEixo = 4, Nome = "Cultura" },
-                new Eixo { IdEixo = 5, Nome = "Infraestrutura" }
-            );
+        modelBuilder.Entity<Eixo>().HasData(
+            new Eixo { IdEixo = 1, Nome = "Rede primária" },
+            new Eixo { IdEixo = 2, Nome = "Segurança Social" },
+            new Eixo { IdEixo = 3, Nome = "Substâncias" },
+            new Eixo { IdEixo = 4, Nome = "Moradia" },
+            new Eixo { IdEixo = 5, Nome = "Prevenção" },
+            new Eixo { IdEixo = 6, Nome = "Assistência Básica" },
+            new Eixo { IdEixo = 7, Nome = "Educação" },
+            new Eixo { IdEixo = 8, Nome = "Saúde" },
+            new Eixo { IdEixo = 9, Nome = "Ocupação" },
+            new Eixo { IdEixo = 10, Nome = "Lazer" },
+            new Eixo { IdEixo = 11, Nome = "Cultura" },
+            new Eixo { IdEixo = 12, Nome = "Cidadania" },
+            new Eixo { IdEixo = 13, Nome = "Meio Ambiente" }
+        );
 
             // ===================== Rede_Eixo =====================
             modelBuilder.Entity<RedeEixo>().HasData(
