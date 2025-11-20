@@ -13,10 +13,13 @@
 }
 
 <div class="container">
-    <div class="breadcrumb">
-        <h1>Diário de Processo Pessoal > <strong>Detalhes de Diário de Processo Pessoal</strong></h1>
+   <div class="breadcrumb">
+        <h1>
+            <a asp-controller="PersonalProcess" asp-action="Index">Diário de Processo Pessoal</a> 
+            > 
+            <strong>Detalhes de Diário de Processo Pessoal</strong>
+        </h1>
     </div>
-
     <form method="post">
         <input type="hidden" asp-for="IdDCampo" />
 
