@@ -758,6 +758,9 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AtorId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ComunidadeId")
                         .HasColumnType("INTEGER");
 
@@ -779,6 +782,8 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdDCampo");
+
+                    b.HasIndex("AtorId");
 
                     b.HasIndex("ComunidadeId");
 
@@ -904,27 +909,67 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdEixo = 1,
-                            Nome = "Educação"
+                            Nome = "Rede primária"
                         },
                         new
                         {
                             IdEixo = 2,
-                            Nome = "Saúde"
+                            Nome = "Segurança Social"
                         },
                         new
                         {
                             IdEixo = 3,
-                            Nome = "Segurança"
+                            Nome = "Substâncias"
                         },
                         new
                         {
                             IdEixo = 4,
-                            Nome = "Cultura"
+                            Nome = "Moradia"
                         },
                         new
                         {
                             IdEixo = 5,
-                            Nome = "Infraestrutura"
+                            Nome = "Prevenção"
+                        },
+                        new
+                        {
+                            IdEixo = 6,
+                            Nome = "Assistência Básica"
+                        },
+                        new
+                        {
+                            IdEixo = 7,
+                            Nome = "Educação"
+                        },
+                        new
+                        {
+                            IdEixo = 8,
+                            Nome = "Saúde"
+                        },
+                        new
+                        {
+                            IdEixo = 9,
+                            Nome = "Ocupação"
+                        },
+                        new
+                        {
+                            IdEixo = 10,
+                            Nome = "Lazer"
+                        },
+                        new
+                        {
+                            IdEixo = 11,
+                            Nome = "Cultura"
+                        },
+                        new
+                        {
+                            IdEixo = 12,
+                            Nome = "Cidadania"
+                        },
+                        new
+                        {
+                            IdEixo = 13,
+                            Nome = "Meio Ambiente"
                         });
                 });
 
@@ -1994,11 +2039,17 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
                 {
+                    b.HasOne("Empodera.Models.Ator", "Ator")
+                        .WithMany()
+                        .HasForeignKey("AtorId");
+
                     b.HasOne("Empodera.Models.Comunidade", null)
                         .WithMany("Diarios")
                         .HasForeignKey("ComunidadeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ator");
                 });
 
             modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>

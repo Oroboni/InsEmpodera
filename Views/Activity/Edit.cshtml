@@ -17,8 +17,12 @@
 
 <div class="container">
     <div class="breadcrumb">
-        <h1>Atividades > <strong>Detalhes de atividade</strong></h1>
-    </div>
+    <h1>
+        <a asp-controller="Activity" asp-action="Index">Atividades</a> 
+        > 
+        <strong>Detalhes de Atividade</strong>
+    </h1>
+</div>
 
     <form method="post">
         <input type="hidden" asp-for="IdAtividade" />

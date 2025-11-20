@@ -10,8 +10,12 @@
 
 <div class="container">
     <div class="breadcrumb">
-        <h1>Atores > <strong>Detalhes</strong></h1>
-    </div>
+    <h1>
+        <a asp-controller="Actor" asp-action="Index">Atores</a> 
+        > 
+        <strong>Detalhes</strong>
+    </h1>
+</div>
     
     <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="IdAtores" />
