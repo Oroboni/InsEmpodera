@@ -13,6 +13,7 @@ namespace Empodera.Models
         public string? Nome { get; set; }
 
         public ICollection<AcoesAtores> AcoesAtores { get; set; } = new List<AcoesAtores>();
+        public ICollection<DiarioAcoes> DiarioAcoes { get; set; } = new List<DiarioAcoes>();
         public Atividade? Atividade { get; set; }
 
     }

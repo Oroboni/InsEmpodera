@@ -110,10 +110,10 @@
                         <div class="assessment-card-info">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                                 <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #2b2b2b;">
-                                    @item.Data.ToString("dd/MM/yyyy")
+                                    @((item.UltimaAtualizacao?.ToString("dd/MM/yyyy")) ?? "Sem atualização")
                                 </h3>
                                 <span style="font-size: 0.8rem; color: #888; background: #f3f4f6; padding: 2px 8px; border-radius: 4px;">
-                                    Criado em @item.DtCriacao.ToString("HH:mm")
+                                    Criado em @item.DataCriacao.ToString("HH:mm")
                                 </span>
                             </div>
 
@@ -123,7 +123,7 @@
                             </p>
 
                             <div class="process-tags" style="margin-top: 12px; display: flex; gap: 8px;">
-                                @if (item.IdDCampo % 2 == 0) 
+                                @if (item.Id % 2 == 0) 
                                 {
                                     <span class="tag-pill tag-purple" style="background:#EBEBFF; color:#5B21B6; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Rede Primária</span>
                                     <span class="tag-pill tag-orange" style="background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Moradia</span>
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                         
-                        <a asp-action="Edit" asp-route-id="@item.IdDCampo" class="details-icon" title="Ver detalhes">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="details-icon" title="Ver detalhes">
                             <div style="background: #f9fafb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s;" 
                                  onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f9fafb'">
                                 <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px; color: #6a0dad;">

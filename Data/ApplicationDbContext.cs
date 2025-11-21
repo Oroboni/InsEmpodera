@@ -50,7 +50,6 @@ namespace Empodera.Data
             modelBuilder.Entity<RedeEixo>().HasKey(re => re.IdRedeEixo);
             modelBuilder.Entity<AtorComunidade>().HasKey(ac => ac.IdAComunidade);
             modelBuilder.Entity<DiarioCampo>().HasKey(dc => dc.Id);
-            modelBuilder.Entity<DiarioAcoes>().HasKey(da => da.DiarioId);
             modelBuilder.Entity<DiarioEixo>().HasKey(de => de.IdDiarioEixo);
             modelBuilder.Entity<Acoes>().HasKey(a => a.IdAcoes);
             modelBuilder.Entity<AcoesAtores>().HasKey(aa => aa.IdAAtores);
@@ -66,6 +65,21 @@ namespace Empodera.Data
             modelBuilder.Entity<FichaResult>().HasKey(fr => fr.IdCondicoes);
             modelBuilder.Entity<Atividade>().HasKey(at => at.IdAtividade);
             modelBuilder.Entity<AtividadesEixo>().HasKey(ae => ae.IdAEixo);
+
+            modelBuilder.Entity<DiarioAcoes>()
+                .HasKey(da => new { da.DiarioId, da.AcoesId });
+
+            modelBuilder.Entity<DiarioAcoes>()
+                .HasOne(da => da.Diario)
+                .WithMany(dc => dc.DiarioAcoes)
+                .HasForeignKey(da => da.DiarioId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DiarioAcoes>()
+                .HasOne(da => da.Acoes)
+                .WithMany(a => a.DiarioAcoes)
+                .HasForeignKey(da => da.AcoesId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // UsuarioPerfil -> Usuario (N:1)
             modelBuilder.Entity<RedePrimaria>()
@@ -172,7 +186,7 @@ namespace Empodera.Data
             new Comunidade { IdComunidade = 2, Nome = "Comunidade B", Local = "Rio de Janeiro", Status = "Ativa", Complemento = "Zona Norte", Descricao = "Comunidade no RJ", DescricaoAcessibilidade = "Parcial", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
             new Comunidade { IdComunidade = 3, Nome = "Comunidade C", Local = "Belo Horizonte", Status = "Inativa", Complemento = "Centro", Descricao = "Comunidade em BH", DescricaoAcessibilidade = "Baixa", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
             new Comunidade { IdComunidade = 4, Nome = "Comunidade D", Local = "Curitiba", Status = "Ativa", Complemento = "Sul", Descricao = "Comunidade no PR", DescricaoAcessibilidade = "Alta", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
-            new Comunidade { IdComunidade = 5, Nome = "Comunidade E", Local = "Salvador", Status = "Ativa", Complemento = "Norte", Descricao = "Comunidade na BA", DescricaoAcessibilidade = "Média", DtCriacao = new DateTime(2023, 01, 01), DtModificacao =new DateTime(2023, 01, 01) }
+            new Comunidade { IdComunidade = 5, Nome = "Comunidade E", Local = "Salvador", Status = "Ativa", Complemento = "Norte", Descricao = "Comunidade na BA", DescricaoAcessibilidade = "Média", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
             );
 
             // ===================== Permissoes =====================
@@ -203,21 +217,21 @@ namespace Empodera.Data
             );
 
             // ===================== Eixo =====================
-        modelBuilder.Entity<Eixo>().HasData(
-            new Eixo { IdEixo = 1, Nome = "Rede primária" },
-            new Eixo { IdEixo = 2, Nome = "Segurança Social" },
-            new Eixo { IdEixo = 3, Nome = "Substâncias" },
-            new Eixo { IdEixo = 4, Nome = "Moradia" },
-            new Eixo { IdEixo = 5, Nome = "Prevenção" },
-            new Eixo { IdEixo = 6, Nome = "Assistência Básica" },
-            new Eixo { IdEixo = 7, Nome = "Educação" },
-            new Eixo { IdEixo = 8, Nome = "Saúde" },
-            new Eixo { IdEixo = 9, Nome = "Ocupação" },
-            new Eixo { IdEixo = 10, Nome = "Lazer" },
-            new Eixo { IdEixo = 11, Nome = "Cultura" },
-            new Eixo { IdEixo = 12, Nome = "Cidadania" },
-            new Eixo { IdEixo = 13, Nome = "Meio Ambiente" }
-        );
+            modelBuilder.Entity<Eixo>().HasData(
+                new Eixo { IdEixo = 1, Nome = "Rede primária" },
+                new Eixo { IdEixo = 2, Nome = "Segurança Social" },
+                new Eixo { IdEixo = 3, Nome = "Substâncias" },
+                new Eixo { IdEixo = 4, Nome = "Moradia" },
+                new Eixo { IdEixo = 5, Nome = "Prevenção" },
+                new Eixo { IdEixo = 6, Nome = "Assistência Básica" },
+                new Eixo { IdEixo = 7, Nome = "Educação" },
+                new Eixo { IdEixo = 8, Nome = "Saúde" },
+                new Eixo { IdEixo = 9, Nome = "Ocupação" },
+                new Eixo { IdEixo = 10, Nome = "Lazer" },
+                new Eixo { IdEixo = 11, Nome = "Cultura" },
+                new Eixo { IdEixo = 12, Nome = "Cidadania" },
+                new Eixo { IdEixo = 13, Nome = "Meio Ambiente" }
+            );
 
             // ===================== Rede_Eixo =====================
             modelBuilder.Entity<RedeEixo>().HasData(
@@ -239,14 +253,14 @@ namespace Empodera.Data
 
             // ===================== Diario_Campo =====================
             modelBuilder.Entity<DiarioCampo>().HasData(
-                new DiarioCampo { Id = 1, ComunidadeId = 1, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Reunião comunitária", CEP = "Praça central", UltimaAtualizacao = new DateTime(2023, 01, 01)},
-                new DiarioCampo { Id = 2, ComunidadeId = 2, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Atividade esportiva", CEP = "Quadra", UltimaAtualizacao = new DateTime(2023, 01, 01)},
-                new DiarioCampo { Id = 3, ComunidadeId = 3, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Feira cultural", CEP = "Centro comunitário", UltimaAtualizacao = new DateTime(2023, 01, 01)},
-                new DiarioCampo { Id = 4, ComunidadeId = 4, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Ação social", CEP = "Escola local", UltimaAtualizacao = new DateTime(2023, 01, 01)},
-                new DiarioCampo { Id = 5, ComunidadeId = 5, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Encontro de líderes", CEP = "Associação", UltimaAtualizacao = new DateTime(2023, 01, 01)}
+                new DiarioCampo { Id = 1, ComunidadeId = 1, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Reunião comunitária", CEP = "Praça central", UltimaAtualizacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { Id = 2, ComunidadeId = 2, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Atividade esportiva", CEP = "Quadra", UltimaAtualizacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { Id = 3, ComunidadeId = 3, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Feira cultural", CEP = "Centro comunitário", UltimaAtualizacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { Id = 4, ComunidadeId = 4, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Ação social", CEP = "Escola local", UltimaAtualizacao = new DateTime(2023, 01, 01) },
+                new DiarioCampo { Id = 5, ComunidadeId = 5, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Encontro de líderes", CEP = "Associação", UltimaAtualizacao = new DateTime(2023, 01, 01) }
             );
-            
-                // ===================== Diario_Acoes =====================
+
+            // ===================== Diario_Acoes =====================
             modelBuilder.Entity<DiarioAcoes>().HasData(
                 new DiarioAcoes { Id = 1, AcoesId = 1, DiarioId = 1 },
                 new DiarioAcoes { Id = 2, AcoesId = 2, DiarioId = 2 },

@@ -17,5 +17,7 @@ namespace Empodera.Models
         public string Extra { get; set; } = string.Empty;
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
+
+        public ICollection<DiarioCampo> Diarios { get; set; } = new List<DiarioCampo>();
     }
 }
