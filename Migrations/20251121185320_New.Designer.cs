@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251110014125_AddNomeAndTimestampsToPerfilAcesso")]
-    partial class AddNomeAndTimestampsToPerfilAcesso
+    [Migration("20251121185320_New")]
+    partial class New
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,6 +178,12 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DtModificacao")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -191,30 +197,40 @@ namespace InsEmpodera.Migrations
                         {
                             IdAtividade = 1,
                             Descricao = "Atividade de pintura e desenho",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Oficina de Artes"
                         },
                         new
                         {
                             IdAtividade = 2,
                             Descricao = "Instrumentos e canto",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Aula de Música"
                         },
                         new
                         {
                             IdAtividade = 3,
                             Descricao = "Futebol, vôlei, basquete",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Esporte Comunitário"
                         },
                         new
                         {
                             IdAtividade = 4,
                             Descricao = "Informática básica",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Curso de Tecnologia"
                         },
                         new
                         {
                             IdAtividade = 5,
                             Descricao = "Troca de produtos",
+                            DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Feira Solidária"
                         });
                 });
@@ -228,12 +244,17 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("AtividadeId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AtividadeIdAtividade")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("EixoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAEixo");
 
                     b.HasIndex("AtividadeId");
+
+                    b.HasIndex("AtividadeIdAtividade");
 
                     b.HasIndex("EixoId");
 
@@ -720,6 +741,9 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AtorId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ComunidadeId")
                         .HasColumnType("INTEGER");
 
@@ -741,6 +765,8 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdDCampo");
+
+                    b.HasIndex("AtorId");
 
                     b.ToTable("DiariosCampo");
 
@@ -864,27 +890,67 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdEixo = 1,
-                            Nome = "Educação"
+                            Nome = "Rede primária"
                         },
                         new
                         {
                             IdEixo = 2,
-                            Nome = "Saúde"
+                            Nome = "Segurança Social"
                         },
                         new
                         {
                             IdEixo = 3,
-                            Nome = "Segurança"
+                            Nome = "Substâncias"
                         },
                         new
                         {
                             IdEixo = 4,
-                            Nome = "Cultura"
+                            Nome = "Moradia"
                         },
                         new
                         {
                             IdEixo = 5,
-                            Nome = "Infraestrutura"
+                            Nome = "Prevenção"
+                        },
+                        new
+                        {
+                            IdEixo = 6,
+                            Nome = "Assistência Básica"
+                        },
+                        new
+                        {
+                            IdEixo = 7,
+                            Nome = "Educação"
+                        },
+                        new
+                        {
+                            IdEixo = 8,
+                            Nome = "Saúde"
+                        },
+                        new
+                        {
+                            IdEixo = 9,
+                            Nome = "Ocupação"
+                        },
+                        new
+                        {
+                            IdEixo = 10,
+                            Nome = "Lazer"
+                        },
+                        new
+                        {
+                            IdEixo = 11,
+                            Nome = "Cultura"
+                        },
+                        new
+                        {
+                            IdEixo = 12,
+                            Nome = "Cidadania"
+                        },
+                        new
+                        {
+                            IdEixo = 13,
+                            Nome = "Meio Ambiente"
                         });
                 });
 
@@ -1906,6 +1972,10 @@ namespace InsEmpodera.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Empodera.Models.Atividade", null)
+                        .WithMany("AtividadesEixo")
+                        .HasForeignKey("AtividadeIdAtividade");
+
                     b.HasOne("Empodera.Models.Eixo", null)
                         .WithMany()
                         .HasForeignKey("EixoId")
@@ -1920,6 +1990,15 @@ namespace InsEmpodera.Migrations
                         .HasForeignKey("AtorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
+                {
+                    b.HasOne("Empodera.Models.Ator", "Ator")
+                        .WithMany()
+                        .HasForeignKey("AtorId");
+
+                    b.Navigation("Ator");
                 });
 
             modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
@@ -1974,6 +2053,11 @@ namespace InsEmpodera.Migrations
                         .HasForeignKey("AtorRelacionadoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Empodera.Models.Atividade", b =>
+                {
+                    b.Navigation("AtividadesEixo");
                 });
 #pragma warning restore 612, 618
         }

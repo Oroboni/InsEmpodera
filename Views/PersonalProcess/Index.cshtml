@@ -12,32 +12,6 @@
     <link rel="stylesheet" href="~/css/pages/atores.css" />
     <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
     
-    <style>
-        /* Tags dentro do card */
-        .process-tags {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-        .tag-pill {
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        /* Cores de exemplo (você pode adicionar mais no seu CSS global) */
-        .tag-orange { background-color: #ffedd5; color: #c2410c; }
-        .tag-olive { background-color: #ecfccb; color: #3f6212; }
-        
-        /* Ajuste fino para o título do card */
-        .assessment-card-info h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0;
-            color: #2b2b2b;
-        }
-    </style>
 }
 
 <div class="assessment-page-container">
@@ -135,14 +109,11 @@
                             </div>
                         </div>
                         
-                        <a asp-action="Edit" asp-route-id="@item.IdDCampo" class="details-icon" title="Ver detalhes">
-                            <div style="background: #f9fafb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s;" 
-                                 onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f9fafb'">
-                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px; color: #6a0dad;">
-                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                                </svg>
-                            </div>
-                        </a>
+                            <a asp-action="Edit" asp-route-id="@item.IdDCampo" class="details-icon" title="Ver detalhes">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                        </svg>
+                    </a>
                     </div>
                 }
             </div>

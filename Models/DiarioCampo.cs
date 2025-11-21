@@ -9,14 +9,10 @@ namespace Empodera.Models
     {
         [Key]
         public int IdDCampo { get; set; }
-
         public int ComunidadeId { get; set; }
-        
-        public int? AtorId { get; set; } // Link com o Ator
-        
+        public int? AtorId { get; set; }   
         [ForeignKey("AtorId")]
-        public virtual Ator? Ator { get; set; } // Navegação
-
+        public virtual Ator? Ator { get; set; } 
         public DateTime Data { get; set; }
         public string Descricao { get; set; } = string.Empty;
         public string Localizacao { get; set; } = string.Empty;
