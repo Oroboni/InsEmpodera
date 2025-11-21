@@ -420,15 +420,12 @@ namespace InsEmpodera.Migrations
                         column: x => x.AtorId,
                         principalTable: "Atores",
                         principalColumn: "IdAtores");
-<<<<<<<< HEAD:Migrations/20251120012134_Initial.cs
                     table.ForeignKey(
                         name: "FK_DiariosCampo_Comunidades_ComunidadeId",
                         column: x => x.ComunidadeId,
                         principalTable: "Comunidades",
                         principalColumn: "IdComunidade",
                         onDelete: ReferentialAction.Cascade);
-========
->>>>>>>> feature/tela-relatorios:Migrations/20251121185320_New.cs
                 });
 
             migrationBuilder.CreateTable(
@@ -492,41 +489,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:Migrations/20251120012134_Initial.cs
-========
-                name: "AtividadeEixos",
-                columns: table => new
-                {
-                    IdAEixo = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EixoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AtividadeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AtividadeIdAtividade = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AtividadeEixos", x => x.IdAEixo);
-                    table.ForeignKey(
-                        name: "FK_AtividadeEixos_Atividades_AtividadeId",
-                        column: x => x.AtividadeId,
-                        principalTable: "Atividades",
-                        principalColumn: "IdAtividade",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AtividadeEixos_Atividades_AtividadeIdAtividade",
-                        column: x => x.AtividadeIdAtividade,
-                        principalTable: "Atividades",
-                        principalColumn: "IdAtividade");
-                    table.ForeignKey(
-                        name: "FK_AtividadeEixos_Eixos_EixoId",
-                        column: x => x.EixoId,
-                        principalTable: "Eixos",
-                        principalColumn: "IdEixo",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
->>>>>>>> feature/tela-relatorios:Migrations/20251121185320_New.cs
                 name: "FichaCondicoes",
                 columns: table => new
                 {
@@ -715,21 +677,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-<<<<<<<< HEAD:Migrations/20251120012134_Initial.cs
-========
-                table: "DiariosCampo",
-                columns: new[] { "IdDCampo", "AtorId", "ComunidadeId", "Data", "Descricao", "DtCriacao", "DtModificacao", "Localizacao" },
-                values: new object[,]
-                {
-                    { 1, null, 1, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Reunião comunitária", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Praça central" },
-                    { 2, null, 2, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Atividade esportiva", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Quadra" },
-                    { 3, null, 3, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Feira cultural", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Centro comunitário" },
-                    { 4, null, 4, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ação social", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Escola local" },
-                    { 5, null, 5, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Encontro de líderes", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Associação" }
-                });
-
-            migrationBuilder.InsertData(
->>>>>>>> feature/tela-relatorios:Migrations/20251121185320_New.cs
                 table: "Eixos",
                 columns: new[] { "IdEixo", "Nome" },
                 values: new object[,]
@@ -752,21 +699,6 @@ namespace InsEmpodera.Migrations
             migrationBuilder.InsertData(
                 table: "PerfisAcesso",
                 columns: new[] { "IdPAcesso", "DtCriacao", "DtModificacao", "Nome" },
-<<<<<<<< HEAD:Migrations/20251120012134_Initial.cs
-========
-                values: new object[,]
-                {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
-                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
-                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
-                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
-                    { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Permissoes",
-                columns: new[] { "IdPermissoes", "PerfilAcessoId", "PermissaoNome" },
->>>>>>>> feature/tela-relatorios:Migrations/20251121185320_New.cs
                 values: new object[,]
                 {
                     { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "" },
@@ -1004,14 +936,11 @@ namespace InsEmpodera.Migrations
                 column: "AtorId");
 
             migrationBuilder.CreateIndex(
-<<<<<<<< HEAD:Migrations/20251120012134_Initial.cs
                 name: "IX_DiariosCampo_ComunidadeId",
                 table: "DiariosCampo",
                 column: "ComunidadeId");
 
             migrationBuilder.CreateIndex(
-========
->>>>>>>> feature/tela-relatorios:Migrations/20251121185320_New.cs
                 name: "IX_FichaCondicoes_FichaId",
                 table: "FichaCondicoes",
                 column: "FichaId");

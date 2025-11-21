@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Migrations/20251120012134_Initial.Designer.cs
-    [Migration("20251120012134_Initial")]
-    partial class Initial
-========
-    [Migration("20251121185320_New")]
+    [Migration("20251121221024_New")]
     partial class New
->>>>>>>> feature/tela-relatorios:Migrations/20251121185320_New.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

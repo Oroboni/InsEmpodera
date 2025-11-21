@@ -300,29 +300,10 @@ C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\InsEmpodera.genruntimeconf
 C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\ref\InsEmpodera.dll
 <<<<<<< HEAD
 =======
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\d77uhfa693-j3c8op4gg4.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\f53m7ioata-5ipweew5fc.gz
 C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\0pifp25xah-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\ig5x3lwi5b-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\d9i8z2oj7o-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\1wsjos9brx-jii89g3yp0.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\ska2x5qfp7-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\n7smzz12ri-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\cmmnjrbo8x-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\msyzmklsfk-vw7lw1lea1.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\m2jkmlbab8-5ipweew5fc.gz
 C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\lrgrl0ftv4-5ipweew5fc.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\p2nlngv9ez-5ipweew5fc.gz
 C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\qqn68rgd62-kje1ajqn4g.gz
 C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\m1f5asq9k8-bgzjdyks8s.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\eiptd37nip-s0q3167k7f.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\43e1g2zy80-ezwj8mq6yy.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\8kgk8eqmnf-ocpmczltd6.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\ij4keyqtns-nug5b2jjwp.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\wdyov8518o-advetj6r88.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\p1sc2qzn78-y4eix5dq6r.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\0c0sw3xpw7-409ch385cu.gz
-C:\Users\melio\Downloads\InsEmpodera\obj\Debug\net9.0\compressed\hnnb5ql2ay-zmi8zczz86.gz
 C:\Users\elian\OneDrive\Documents\GitHub\tapwm\InsEmpodera\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\elian\OneDrive\Documents\GitHub\tapwm\InsEmpodera\bin\Debug\net9.0\appsettings.json
 C:\Users\elian\OneDrive\Documents\GitHub\tapwm\InsEmpodera\bin\Debug\net9.0\InsEmpodera.staticwebassets.runtime.json
@@ -896,9 +877,18 @@ C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\5lepnod
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\olfbh4llnl-wh5a95cwnp.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\qqn68rgd62-itrzx9wg65.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\54hqayjzhc-tugac2hafz.gz
-C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\0pifp25xah-3pstp4mbi6.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\6yok6mv94b-dsgohp1akv.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\qidszroxuv-dhuqlvh4qj.gz
 C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\o9fqmhm6p9-utftoaep8w.gz
-C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\87ow04ogw1-s91ajd7xll.gz
 >>>>>>> feature/tela-relatorios
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\ClosedXML.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\ClosedXML.Parser.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\DocumentFormat.OpenXml.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\ExcelLibrary.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\ExcelNumberFormat.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\RBush.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\SixLabors.Fonts.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\bin\Debug\net9.0\System.IO.Packaging.dll
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\87ow04ogw1-9ml0q1ts33.gz
+C:\Users\elian\Área de Trabalho\InsEmpodera\obj\Debug\net9.0\compressed\0pifp25xah-ujfp517yfd.gz
