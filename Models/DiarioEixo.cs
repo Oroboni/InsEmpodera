@@ -10,5 +10,6 @@ namespace Empodera.Models
         public int IdDiarioEixo { get; set; }
         public int DiarioId { get; set; }
         public int EixoId { get; set; }
+        public Eixo Eixo { get; set; } 
     }
 }

@@ -10,5 +10,6 @@ namespace Empodera.Models
         public int IdAnexos { get; set; }
         public int DiarioId { get; set; }
         public string Caminho { get; set; } = string.Empty;
+        public DiarioCampo? Diario { get; set; } // navegação
     }
 }

@@ -1,0 +1,21 @@
+@model Empodera.Models.DiarioCampo
+@{
+    ViewData["Title"] = "Remover Diário";
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="DiarioCampo" asp-action="Index">Diários de Campo</a> > <strong>Remover</strong>
+        </h1>
+    </div>
+
+    <div class="confirm-box">
+        <p>Tem certeza que deseja remover o diário "<strong>@Model.Descricao</strong>"?</p>
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <a asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-danger">REMOVER</button>
+        </form>
+    </div>
+</div>

@@ -49,8 +49,8 @@ namespace Empodera.Data
             modelBuilder.Entity<Eixo>().HasKey(e => e.IdEixo);
             modelBuilder.Entity<RedeEixo>().HasKey(re => re.IdRedeEixo);
             modelBuilder.Entity<AtorComunidade>().HasKey(ac => ac.IdAComunidade);
-            modelBuilder.Entity<DiarioCampo>().HasKey(dc => dc.IdDCampo);
-            modelBuilder.Entity<DiarioAcoes>().HasKey(da => da.IdDAcoes);
+            modelBuilder.Entity<DiarioCampo>().HasKey(dc => dc.Id);
+            modelBuilder.Entity<DiarioAcoes>().HasKey(da => da.DiarioId);
             modelBuilder.Entity<DiarioEixo>().HasKey(de => de.IdDiarioEixo);
             modelBuilder.Entity<Acoes>().HasKey(a => a.IdAcoes);
             modelBuilder.Entity<AcoesAtores>().HasKey(aa => aa.IdAAtores);
@@ -239,20 +239,20 @@ namespace Empodera.Data
 
             // ===================== Diario_Campo =====================
             modelBuilder.Entity<DiarioCampo>().HasData(
-                new DiarioCampo { IdDCampo = 1, ComunidadeId = 1, Data = new DateTime(2023, 01, 01), Descricao = "Reunião comunitária", Localizacao = "Praça central", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
-                new DiarioCampo { IdDCampo = 2, ComunidadeId = 2, Data = new DateTime(2023, 01, 01), Descricao = "Atividade esportiva", Localizacao = "Quadra", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
-                new DiarioCampo { IdDCampo = 3, ComunidadeId = 3, Data = new DateTime(2023, 01, 01), Descricao = "Feira cultural", Localizacao = "Centro comunitário", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
-                new DiarioCampo { IdDCampo = 4, ComunidadeId = 4, Data = new DateTime(2023, 01, 01), Descricao = "Ação social", Localizacao = "Escola local", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) },
-                new DiarioCampo { IdDCampo = 5, ComunidadeId = 5, Data = new DateTime(2023, 01, 01), Descricao = "Encontro de líderes", Localizacao = "Associação", DtCriacao = new DateTime(2023, 01, 01), DtModificacao = new DateTime(2023, 01, 01) }
+                new DiarioCampo { Id = 1, ComunidadeId = 1, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Reunião comunitária", CEP = "Praça central", UltimaAtualizacao = new DateTime(2023, 01, 01)},
+                new DiarioCampo { Id = 2, ComunidadeId = 2, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Atividade esportiva", CEP = "Quadra", UltimaAtualizacao = new DateTime(2023, 01, 01)},
+                new DiarioCampo { Id = 3, ComunidadeId = 3, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Feira cultural", CEP = "Centro comunitário", UltimaAtualizacao = new DateTime(2023, 01, 01)},
+                new DiarioCampo { Id = 4, ComunidadeId = 4, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Ação social", CEP = "Escola local", UltimaAtualizacao = new DateTime(2023, 01, 01)},
+                new DiarioCampo { Id = 5, ComunidadeId = 5, DataCriacao = new DateTime(2023, 01, 01), Descricao = "Encontro de líderes", CEP = "Associação", UltimaAtualizacao = new DateTime(2023, 01, 01)}
             );
             
                 // ===================== Diario_Acoes =====================
             modelBuilder.Entity<DiarioAcoes>().HasData(
-                new DiarioAcoes { IdDAcoes = 1, AcoesId = 1, DiarioId = 1 },
-                new DiarioAcoes { IdDAcoes = 2, AcoesId = 2, DiarioId = 2 },
-                new DiarioAcoes { IdDAcoes = 3, AcoesId = 3, DiarioId = 3 },
-                new DiarioAcoes { IdDAcoes = 4, AcoesId = 4, DiarioId = 4 },
-                new DiarioAcoes { IdDAcoes = 5, AcoesId = 5, DiarioId = 5 }
+                new DiarioAcoes { Id = 1, AcoesId = 1, DiarioId = 1 },
+                new DiarioAcoes { Id = 2, AcoesId = 2, DiarioId = 2 },
+                new DiarioAcoes { Id = 3, AcoesId = 3, DiarioId = 3 },
+                new DiarioAcoes { Id = 4, AcoesId = 4, DiarioId = 4 },
+                new DiarioAcoes { Id = 5, AcoesId = 5, DiarioId = 5 }
             );
 
             // ===================== Diario_Eixo =====================

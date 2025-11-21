@@ -1,0 +1,75 @@
+@model Empodera.Models.DiarioCampo
+@{
+    ViewData["Title"] = "Detalhes do Diário";
+    ViewData["PageCSS"] = "diariocampoform";
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="DiarioCampo" asp-action="Index">Diários de Campo</a> > <strong>Detalhes</strong>
+        </h1>
+    </div>
+
+    <div class="detail-card">
+        <div class="header">
+            <h2>@Model.Comunidade?.Nome</h2>
+            <div class="meta">
+                <span>Criado: @Model.DataCriacao.ToString("dd/MM/yyyy")</span>
+                <span>Última modificação: @(Model.UltimaAtualizacao?.ToString("dd/MM/yyyy") ?? "—")</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h4>Eixos</h4>
+            <ul>
+                @foreach(var de in Model.Eixos ?? Enumerable.Empty<Empodera.Models.DiarioEixo>())
+                {
+                    <li>@de.Eixo?.Nome</li>
+                }
+            </ul>
+        </div>
+
+        <div class="section">
+            <h4>Ação da equipe</h4>
+            <ul>
+                @foreach(var da in Model.DiarioAcoes ?? Enumerable.Empty<Empodera.Models.DiarioAcoes>())
+                {
+                    var ac = da.Acoes;
+                   <li>@ac?.Nome — Quantidade: @ac?.Quantidade</li>
+                }
+            </ul>
+        </div>
+
+        <div class="section">
+            <h4>Descrição</h4>
+            <div class="descricao">@Html.Raw(Model.Descricao)</div>
+        </div>
+
+        <div class="section">
+            <h4>Localização</h4>
+            <div>@Model.CEP</div>
+        </div>
+
+        <div class="section">
+            <h4>Anexos</h4>
+            <div class="anexos-list">
+                @foreach(var a in Model.Anexos ?? Enumerable.Empty<Empodera.Models.AnexosDiario>())
+                {
+                    <div class="anexo-item">
+                        <a href="@a.Caminho" target="_blank">@a.Caminho.Split('/').Last()</a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <a asp-action="Index" class="btn btn-secondary">VOLTAR</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">EDITAR</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/diariocampo.js"></script>
+}

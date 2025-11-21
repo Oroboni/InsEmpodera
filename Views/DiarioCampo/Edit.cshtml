@@ -1,0 +1,87 @@
+@model Empodera.Models.DiarioCampo
+@{
+    ViewData["Title"] = "Editar Diário de Campo";
+    ViewData["PageCSS"] = "diariocampoform";
+}
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="DiarioCampo" asp-action="Index">Diários de Campo</a> > <strong>Editar</strong>
+        </h1>
+    </div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="IdDCampo" value="@Model.Id" />
+
+        <div class="form-group">
+            <label for="ComunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <select id="ComunidadeId" name="ComunidadeId" asp-items="new SelectList(ViewBag.Comunidades) "IdComunidade", "Nome", Model.ComunidadeId)" required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Data">Data</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-day"></i>
+                <input id="Data" name="Data" type="date" value="@Model.DataCriacao.ToString("yyyy-MM-dd")" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="EixosSelected">Eixos</label>
+            <details class="multiselect-wrapper">
+                <summary>
+                    <div class="select-wrapper"><i class="fa-solid fa-network-wired"></i> <span class="multiselect-placeholder">Eixos selecionados</span></div>
+                </summary>
+                <div class="multiselect-panel">
+                    <ul>
+                        @foreach(var e in (IEnumerable<dynamic>)ViewBag.Eixos)
+                        {
+                            var isChecked = Model.Eixos?.Any(de => de.EixoId == (int)e.IdEixo) ?? false;
+                            <li>
+                                <input type="checkbox" id="eixo_@e.IdEixo" name="EixosSelected" value="@e.IdEixo" @(isChecked ? "checked" : "") />
+                                <label for="eixo_@e.IdEixo">@e.Nome</label>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="form-group">
+            <label for="Descricao">Descrição</label>
+            <div class="input-wrapper">
+                <textarea id="Descricao" name="Descricao" rows="6">@Model.Descricao</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Anexos</label>
+            <div id="anexosList">
+                @foreach(var a in Model.Anexos ?? Enumerable.Empty<Empodera.Models.AnexosDiario>())
+                {
+                    <div class="anexo-item" data-id="@a.IdAnexos">
+                        <a href="@a.Caminho" target="_blank">@a.Caminho.Split('/').Last()</a>
+                        <button type="button" class="btn btn-ghost btn-remove-anexo" data-id="@a.IdAnexos">Remover</button>
+                    </div>
+                }
+            </div>
+            <input id="anexos" name="anexos" type="file" multiple />
+        </div>
+
+        <div class="form-buttons">
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR ALTERAÇÕES</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_TagsScript")
+    <script src="~/js/diariocampo.js"></script>
+    <script src="~/js/diariocampotags.js"></script>
+}

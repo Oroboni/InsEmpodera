@@ -1,0 +1,21 @@
+/* index page styles */
+.cards-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:16px; margin-top:16px; }
+.card { background:white; border-radius:8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding:12px; display:flex; flex-direction:column; }
+.card-header { display:flex; justify-content:space-between; align-items:center; }
+.card-body { margin-top:8px; flex:1; }
+.card-footer { margin-top:10px; display:flex; gap:8px; justify-content:flex-end; }
+.btn-fab { border-radius:50%; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; font-size:22px; }
+
+/* form styles (reuse classes from your Ator create) */
+.container .form-group { margin-bottom:16px; }
+.select-wrapper, .input-wrapper { display:flex; align-items:center; gap:8px; border:1px solid #e6e6e6; padding:8px; border-radius:6px; }
+.select-wrapper select, .input-wrapper input, textarea { border:0; outline:none; width:100%; background:transparent; }
+.multiselect-panel { max-height:200px; overflow:auto; padding:8px; }
+.anexos-list .anexo-item { display:flex; gap:8px; align-items:center; margin-bottom:6px; }
+.form-buttons { display:flex; gap:12px; justify-content:flex-end; margin-top:18px; }
+.mention-box { background:#fff; border:1px solid #ddd; border-radius:6px; padding:6px; min-width:220px; }
+.mention-item { padding:6px; cursor:pointer; }
+
+/* tags dropdown */
+.mention-box { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.mention-item:hover { background:#f5f5f5; }

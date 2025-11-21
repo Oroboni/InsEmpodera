@@ -1,0 +1,82 @@
+@model Empodera.Models.DiarioCampo
+@{
+    ViewData["Title"] = "Adicionar Diário de Campo";
+    ViewData["PageCSS"] = "diariocampoform";
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="DiarioCampo" asp-action="Index">Diários de Campo</a> > <strong>Adicionar</strong>
+        </h1>
+    </div>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="ComunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <select id="ComunidadeId" name="ComunidadeId"
+        asp-items="@(new SelectList(ViewBag.Comunidades, "IdComunidade", "Nome"))" required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Data">Data</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-day"></i>
+                <input id="Data" name="Data" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+        </div>
+
+       <div class="form-group">
+    <label for="ComunidadeId">Comunidade</label>
+    <div class="select-wrapper">
+        <i class="fa-solid fa-city"></i>
+        <select id="ComunidadeId" name="ComunidadeId"
+                asp-items="@(new SelectList(ViewBag.Comunidades, "IdComunidade", "Nome"))" required>
+            <option value="">Selecione a comunidade</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-arrow"></i>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="Descricao">Descrição (use @@ para mencionar)</label>
+    <div class="input-wrapper">
+        <i class="fa-solid fa-align-left"></i>
+        <textarea id="Descricao" name="Descricao" rows="6" placeholder="Descreva o registro..."></textarea>
+    </div>
+</div>
+
+        <div class="form-group">
+            <label for="Localizacao">CEP / Localização</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-map-marker-alt"></i>
+                <input id="Localizacao" name="Localizacao" type="text" placeholder="CEP" />
+                <button type="button" id="btnBuscarCep" class="btn">Buscar</button>
+            </div>
+            <div id="enderecoResult" class="endereco-result"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="anexos">Anexos (foto, pdf, vídeo)</label>
+            <input id="anexos" name="anexos" type="file" multiple />
+            <div id="anexosPreview"></div>
+        </div>
+
+        <div class="form-buttons">
+            <a asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">ADICIONAR DIÁRIO</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_TagsScript")
+    <script src="~/js/diariocampo.js"></script>
+    <script src="~/js/diariocampotags.js"></script>
+}

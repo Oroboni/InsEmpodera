@@ -1,0 +1,49 @@
+@model IEnumerable<Empodera.Models.DiarioCampo>
+@{
+    ViewData["Title"] = "Diários de Campo";
+    ViewData["PageCSS"] = "diariocampo";
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="DiarioCampo" asp-action="Index">Diários de Campo</a>
+        </h1>
+    </div>
+
+    <div class="top-actions">
+        <form method="get" asp-action="Index" class="search-form">
+            <input type="text" name="search" value="@Context.Request.Query["search"]
+ placeholder="Pesquisar por comunidade, descrição..." />
+            <button class="btn">Buscar</button>
+        </form>
+        <a asp-action="Create" class="btn btn-primary btn-fab">+</a>
+    </div>
+
+    <div class="cards-grid">
+        @foreach (var d in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3>@d.Comunidade?.Nome</h3>
+                    <span class="date">@d.DataCriacao.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="card-body">
+                    <p>@(d.Descricao?.Length > 180 ? d.Descricao.Substring(0, 180) + "..." : d.Descricao)</p>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Details" asp-route-id="@d.Id" class="link">Ver</a>
+                    <a asp-action="Edit" asp-route-id="@d.Id" class="link">Editar</a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- imagem de referência do layout (path do arquivo que você enviou) -->
+    <!-- Rendered by devops: /mnt/data/Captura de Tela 2025-11-20 às 23.17.59.png -->
+    <img src="sandbox:/mnt/data/Captura de Tela 2025-11-20 às 23.17.59.png" alt="layout-ref" style="display:none;" />
+</div>
+
+@section Scripts {
+    <script src="~/js/diariocampoindex.js"></script>
+}

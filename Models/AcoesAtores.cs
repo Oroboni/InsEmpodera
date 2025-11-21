@@ -6,9 +6,12 @@ namespace Empodera.Models
 {
     public class AcoesAtores
     {
+        
         [Key]
         public int IdAAtores { get; set; }
         public int AtorId { get; set; }
         public int AcoesId { get; set; }
+        public Acoes? Acoes { get; set; }
+        public Ator? Ator { get; set; }
     }
 }
