@@ -105,6 +105,27 @@
             /* Outros estilos existentes do ator-card... */
         }
 
+        /* Ajusta o parágrafo de e-mail */
+        .ator-card p {
+            margin: 0; /* Remove a margem padrão do parágrafo */
+            line-height: 1.2; /* Ajusta a altura da linha para o e-mail */
+            font-size: 14px; /* Opcional: E-mail ligeiramente menor */
+            color: #6c757d; /* Opcional: Cor mais suave para o e-mail */
+        }
+
+        /* Garante que o span do nome não tenha margem inferior */
+        .ator-name {
+            margin-bottom: 2px; /* Espaçamento mínimo entre nome e e-mail */
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .container-info{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
         /* Ocultar o ícone de detalhes (olho) em telas menores */
         .details-icon {
             margin-left: auto; /* Empurra o ícone para a direita */
@@ -139,26 +160,35 @@
 
     <div class="atores-list-container">
         
-    @if (Model != null)
+    @* Simulamos a lista de usuários com um loop simples *placeholder* *@
+    @for (int i = 0; i < 1; i++) 
     {
-        @foreach (var user in Model)
-        {
-            <div class="ator-card">
-                <img src="@(string.IsNullOrEmpty(user.Foto) ? "~/img/placeholder-ator.png" : $"~/img/{user.Foto}")" alt="Foto de @user.Nome" class="ator-photo-placeholder" />
-                <span class="ator-name">@user.Nome</span>
-                <p> @user.Email</p>
-                <a class="details-icon" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                    </svg>
-                </a>
+        <div class="ator-card">
+            <img src="~/img/placeholder-ator.png" alt="Foto de Usuário Fixo" class="ator-photo-placeholder" />
+            
+            <div class="container-info"> 
+                <span class="ator-name">Kemi</span>
+                <p>kemi@empodera.com</p>
             </div>
-        }
+            
+            @* O resto do card, como o ícone de detalhes, permanece o mesmo *@
+            <a class="details-icon" asp-controller="Users" asp-action="Edit" asp-route-id="999">
+                <i class="fa-solid fa-eye"></i>
+            </a>
+        </div>
     }
-    else
-    {
-        <p>Nenhum usuário encontrado.</p>
-    }
-</div>
+
+    @* Se você não quer nem simular o loop, pode deixar apenas o card: *@
+    @*
+    <div class="ator-card">
+        <img src="~/img/placeholder-profile.png" alt="Foto de Usuário Fixo" class="ator-photo-placeholder" />
+        <span class="ator-name">Usuário Fixo (Placeholder)</span>
+        <p>placeholder.email@teste.com</p>
+        <a class="details-icon" asp-controller="Users" asp-action="Edit" asp-route-id="999"></a>
+    </div>
+    *@
+
+    </div>
 
 </body>
+</html>

@@ -21,20 +21,18 @@ public class UsersController : Controller
     }
 
     public async Task<IActionResult> Index()
+{
+    if (HttpContext.Session.GetString("Email") == null)
     {
-        if (HttpContext.Session.GetString("Email") == null)
-        {
-            return RedirectToAction("Index", "Account");
-        }
-        
-        ViewData["DisableMainScroll"] = "true"; 
-        
-        // CORREÇÃO: Busca todos os objetos 'Usuario' na DbSet 'Usuarios'
-        var usuarios = await _context.Usuarios.ToListAsync(); 
-        
-        // CORREÇÃO: Passa a lista de usuários para a View
-        return View(usuarios); 
+        return RedirectToAction("Index", "Account");
     }
+    
+    ViewData["DisableMainScroll"] = "true"; 
+    
+    // NENHUM OBJETO USUARIO É CRIADO OU PASSADO.
+    // Apenas retornamos a View. A View Index agora deve ter dados fixos.
+    return View(); 
+}
 
     // GET: /Actor/Create
     public async Task<IActionResult> Create()
@@ -70,23 +68,9 @@ public class UsersController : Controller
             return RedirectToAction("Index", "Account");
         }
 
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        // Buscando o USUÁRIO (Usuario) no banco de dados.
-        // **Ajuste o nome 'Usuarios' se sua DbSet no ApplicationDbContext for diferente.**
-        // Aqui assumimos que o ID é o IdUsuario
-        var user = await _context.Usuarios.FindAsync(id); 
-
-        if (user == null)
-        {
-            return NotFound(); // Usuário não encontrado
-        }
-        
-        // Passa o objeto Usuario encontrado para a View.
-        return View(user); 
+        // Não buscamos nada no contexto ou usamos o ID.
+        // Apenas retornamos a View. A View Edit agora deve ter dados fixos.
+        return View(); 
     }
     
     // TODO: Você precisará adicionar os métodos [HttpPost] para Create e Edit

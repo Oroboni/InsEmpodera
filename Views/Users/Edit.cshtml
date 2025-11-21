@@ -16,13 +16,14 @@
         .modal-dialog-content {
             position: fixed; /* Fixa o modal */
             top: 0;
-            right: 0;
-            width: 400px; /* Largura do modal (ajuste conforme a imagem) */
-            height: 100vh; /* Altura total da tela */
-            background-color: white;
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Sombra à esquerda */
+            left: 0;         /* <-- MUDAR: Garante que comece do canto superior esquerdo */
+            right: 0;        /* <-- MUDAR: Estica a largura total (ou use width: 100%) */
+            width: 100%;     /* <-- MUDAR: Garante a largura total */
+            height: 100vh;   /* Altura total da tela */
+            background-color: white; /* Cor de fundo */
+            box-shadow: none; /* <-- Opcional: Remova a sombra de painel lateral */
             overflow-y: auto; /* Adiciona scroll se o conteúdo for grande */
-            z-index: 1050; 
+            z-index: 1050;
         }
 
         /* Cabeçalho do Modal */
@@ -33,6 +34,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: #7A3288;
         }
 
         .modal-title {
@@ -52,6 +54,8 @@
         /* Corpo do Modal */
         .modal-body {
             padding: 30px 20px;
+            justify-self: center;
+            width: 80%;
         }
 
         /* Estilo para a foto de perfil circular */
@@ -61,8 +65,8 @@
         }
 
         .profile-photo {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%; /* Torna a imagem circular */
             object-fit: cover;
             background-color: #e0e0e0; /* Placeholder cinza */
@@ -90,6 +94,13 @@
             border-bottom: 1px solid #ccc; /* Linha inferior como na imagem */
             font-size: 16px;
             outline: none;
+
+            /* === PROPRIEDADES CHAVE PARA O RISCO AO REDOR === */
+            border: 1px solid #ccc; /* Borda cinza clara de 1px em todos os 4 lados */
+            border-radius: 4px; /* Opcional: Adiciona cantos levemente arredondados */
+            background-color: white; /* Garante que o fundo seja branco */
+            /* ============================================== */
+
             transition: border-color 0.3s;
             background-color: transparent;
         }
@@ -110,7 +121,7 @@
 <div class="modal-dialog-content">
     
     <div class="modal-header">
-        <h3 class="modal-title">Detalhes de Usuário</h3>
+        <h3 class="modal-title">Detalhes de Usuário (Placeholder)</h3>
         <button type="button" class="close-button" onclick="window.location.href='/Users/Index'">
             &times;
         </button>
@@ -120,30 +131,37 @@
         
         <div class="profile-photo-container">
             <img src="~/img/placeholder-profile.png" alt="Foto do Usuário" class="profile-photo" /> 
-            @* <div class="profile-icon">
-                <i class="fas fa-user-circle"></i> 
-            </div> *@
         </div>
         
         <form asp-action="Edit">
-            <input type="hidden" />
+            <input type="hidden" value="999" /> @* ID Fixo, sem asp-for *@
             
             <div class="form-group">
                 <label class="control-label">Nome</label>
-                <input class="form-control" readonly />
+                <input class="form-control" readonly value="Usuário Fixo de Teste" />
             </div>
             
             <div class="form-group">
                 <label  class="control-label">E-mail</label>
-                <input class="form-control" readonly />
+                <input class="form-control" readonly value="placeholder.teste@empodera.com" />
             </div>
             
+             <div class="form-group">
+                <label class="control-label">Ocupação</label>
+                <input class="form-control" readonly value="Analista de Placeholder" />
+            </div>
+            
+             <div class="form-group">
+                <label class="control-label">Dt. Criação</label>
+                <input class="form-control" readonly value="15/05/2025" />
+            </div>
+           
             <div class="form-group">
                 <label class="control-label">Perfil de acesso *</label>
                 <select class="form-control" disabled>
                     <option value="Operador">Operador</option>
-                    <option value="Admin">Admin</option>
-                    </select>
+                    <option value="Admin" selected>Admin (Fixo)</option>
+                </select>
             </div>
 
             <div class="form-actions">
