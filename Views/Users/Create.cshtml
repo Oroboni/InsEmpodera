@@ -27,35 +27,34 @@
             
             <div class="form-group">
                 <label class="control-label">Nome</label>
-                <input class="form-control" readonly value="Usuário Fixo de Teste" />
+                <input class="form-control" placeholder="Marquinhos" />
             </div>
             
             <div class="form-group">
                 <label  class="control-label">E-mail</label>
-                <input class="form-control" readonly value="placeholder.teste@empodera.com" />
+                <input class="form-control" placeholder="placeholder.teste@empodera.com" />
             </div>
             
              <div class="form-group">
                 <label class="control-label">Ocupação</label>
-                <input class="form-control" readonly value="Analista de Placeholder" />
+                <input class="form-control" placeholder="Analista de Placeholder"/>
             </div>
             
              <div class="form-group">
                 <label class="control-label">Dt. Criação</label>
-                <input class="form-control" readonly value="15/05/2025" />
+                <input class="form-control" type="date" />
             </div>
            
             <div class="form-group">
                 <label class="control-label">Perfil de acesso *</label>
-                <select class="form-control" disabled>
+                <select class="form-control">
                     <option value="Operador">Operador</option>
                     <option value="Admin" selected>Admin (Fixo)</option>
                 </select>
             </div>
 
             <div class="form-actions">
-                <button class="btn-save" asp-action="Create">Editar</button>
-                <button class="btn-cancel" onclick="window.location.href='/Users/Index'">Deletar</button>
+                <button class="btn-save" type="submit" onclick="window.location.href='/Users/Index.cshtml'">Salvar</button>
             </div>
         </form>
     </div>

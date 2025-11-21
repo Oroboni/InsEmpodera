@@ -1059,7 +1059,6 @@ C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\m2jkmlbab8-5ipweew5fc.gz
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\olfbh4llnl-wh5a95cwnp.gz
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\lrgrl0ftv4-5ipweew5fc.gz
-C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\p2nlngv9ez-5ipweew5fc.gz
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\qqn68rgd62-itrzx9wg65.gz
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\m1f5asq9k8-bhkqi2a9q6.gz
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\eiptd37nip-s0q3167k7f.gz
@@ -1149,3 +1148,5 @@ C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\InsEmpodera.pdb
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\InsEmpodera.genruntimeconfig.cache
 C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\ref\InsEmpodera.dll
+C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\p2nlngv9ez-hoxn3v5w78.gz
+C:\Users\luisf\OneDrive\Documentos\FATEC\Projeto Integrador\Usoarios\InsEmpodera\obj\Debug\net9.0\compressed\i4fuaw8bo4-spb66mtbg8.gz

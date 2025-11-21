@@ -1,0 +1,115 @@
+/* Container para o switch e o texto */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; /* Adiciona algum espaço entre a barra de busca e o toggle */
+    /* Você pode precisar ajustar o layout do .atores-search-container para acomodar */
+}
+
+.toggle-label {
+    font-size: 16px;
+    color: #444;
+    margin-left: 10px; /* Espaço entre o switch e o texto */
+    cursor: pointer;
+}
+
+/* Oculta o checkbox nativo */
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* O elemento slider (o fundo cinza/verde) */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px; /* Largura do switch */
+    height: 24px; /* Altura do switch */
+    flex-shrink: 0; /* Impede que ele encolha */
+}
+
+/* O 'slider' em si (a pista e o círculo) */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; /* Cor cinza para DESLIGADO (Inativos não incluídos) */
+    transition: 0.4s;
+}
+
+/* O círculo (o "thumb") */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; /* Altura do círculo */
+    width: 18px; /* Largura do círculo */
+    left: 3px; /* Posição inicial */
+    bottom: 3px;
+    background-color: white; /* Cor do círculo */
+    transition: 0.4s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Quando o checkbox é checado (LIGADO) */
+.toggle-switch input:checked + .slider {
+    background-color: #757575; /* Cor para LIGADO (Inativos incluídos) - Cinza escuro para simular sua imagem */
+}
+
+/* Movimenta o círculo para a direita quando LIGADO */
+.toggle-switch input:checked + .slider:before {
+    transform: translateX(24px); /* (Largura do switch - Largura do círculo - 2*left/right) -> 48px - 18px - 2*3px = 24px */
+}
+
+/* Arredonda o slider e o thumb */
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+.ator-photo-placeholder {
+    width: 40px; /* Ajuste o tamanho conforme sua necessidade */
+    height: 40px;
+    border-radius: 50%; /* Torna a imagem circular */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    margin-right: 15px; /* Espaçamento entre a foto e o nome */
+}
+.ator-card {
+    display: flex; /* Habilita o flexbox */
+    align-items: center; /* Alinha verticalmente os itens ao centro */
+    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+    /* Outros estilos existentes do ator-card... */
+}
+
+/* Ajusta o parágrafo de e-mail */
+.ator-card p {
+    margin: 0; /* Remove a margem padrão do parágrafo */
+    line-height: 1.2; /* Ajusta a altura da linha para o e-mail */
+    font-size: 14px; /* Opcional: E-mail ligeiramente menor */
+    color: #6c757d; /* Opcional: Cor mais suave para o e-mail */
+}
+
+/* Garante que o span do nome não tenha margem inferior */
+.ator-name {
+    margin-bottom: 2px; /* Espaçamento mínimo entre nome e e-mail */
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.container-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Ocultar o ícone de detalhes (olho) em telas menores */
+.details-icon {
+    margin-left: auto; /* Empurra o ícone para a direita */
+}
