@@ -1,45 +1,41 @@
 @model Empodera.Models.DiarioCampo
-@{
-    ViewData["Title"] = "Adicionar Diário";
-    Layout = "_Layout";
-}
+@{ ViewData["Title"] = "Novo Diário"; Layout = "_Layout"; }
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
     <link rel="stylesheet" href="~/css/pages/personal-process.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 }
 
 <div class="container">
     <div class="breadcrumb">
-        <h1>Diário de Processo Pessoal > <strong>Adicionar Diário</strong></h1>
+        <h1><a asp-controller="PersonalProcess" asp-action="Index">Diário de Processo</a> > <strong>Novo Registro</strong></h1>
     </div>
 
-    <form method="post">
+    <form method="post" id="createForm">
         
         <div class="form-group">
-            <label>Ator <span style="color:red">*</span></label>
+            <label>Ator Principal</label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <select name="SelectedAtorId" class="form-control" asp-items="ViewBag.AtorList" required>
-                    <option value="">Selecione um Ator...</option>
+                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtorList" required>
+                    <option value="">Selecione...</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
         </div>
 
         <div class="form-group">
-            <label>Data <span style="color:red">*</span></label>
+            <label>Data</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-calendar-day"></i>
-                <input asp-for="Data" type="date" required>
+                <input asp-for="Data" type="date" class="form-control" required />
             </div>
         </div>
 
         <div class="form-group">
-            <label>Eixos</label>
+            <label>Eixos do Diário</label>
             
-            <div class="eixos-tag-container" id="tag-container">
-                </div>
-
+            <div class="eixos-tag-container" id="main-tag-container"></div>
+            
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
@@ -48,14 +44,19 @@
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
+                <div class="multiselect-panel" id="main-multiselect-panel">
                     <ul>
-                        @if (ViewBag.EixosList != null) {
-                             foreach (var eixo in (SelectList)ViewBag.EixosList) {
+                        @if (ViewBag.EixosData != null)
+                        {
+                            string[] colors = { "tag-pink", "tag-purple", "tag-blue", "tag-green", "tag-yellow", "tag-red" };
+                            int i = 0;
+                            foreach (var eixo in (List<Empodera.Models.Eixo>)ViewBag.EixosData)
+                            {
+                                var colorClass = colors[i % colors.Length]; i++;
                                 <li>
-                                    <input type="checkbox" name="eixosIds" value="@eixo.Value" id="eixo-@eixo.Value"
-                                           data-tag-name="@eixo.Text" data-tag-class="tag-purple">
-                                    <label for="eixo-@eixo.Value">@eixo.Text</label>
+                                    <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="main-eixo-@eixo.IdEixo" 
+                                           data-tag-class="@colorClass" data-tag-name="@eixo.Nome">
+                                    <label for="main-eixo-@eixo.IdEixo">@eixo.Nome</label>
                                 </li>
                             }
                         }
@@ -64,99 +65,286 @@
             </details>
         </div>
 
+        <div class="actions-section">
+            <div class="actions-header">
+                <h4>Ações Realizadas</h4>
+                <button type="button" class="btn-add-action" id="btnOpenModal">
+                    <i class="fa-solid fa-plus"></i> Adicionar Ação
+                </button>
+            </div>
+            
+            <div id="emptyState" style="text-align:center; padding:20px; color:#999; font-style:italic;">
+                Nenhuma ação registrada.
+            </div>
+
+            <table class="actions-table" id="actionsTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Ação</th>
+                        <th>Eixos</th>
+                        <th>Ator</th>
+                        <th style="width:50px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="actionsBody"></tbody>
+            </table>
+        </div>
+
         <div class="form-group">
-            <label>Descrição <span style="color:red">*</span></label>
+            <label>Descrição Detalhada</label>
             <div class="input-wrapper">
-                <i class="fa-solid fa-align-left" style="top: 15px; transform: none;"></i>
-                <textarea asp-for="Descricao" placeholder="Descreva o processo detalhadamente..." required></textarea>
+                <i class="fa-solid fa-align-left"></i>
+                <textarea asp-for="Descricao" id="mainDesc" class="form-control" required 
+                          placeholder="O texto será gerado aqui automaticamente ao salvar..."></textarea>
             </div>
+            <small style="color:#64748b; margin-top:5px; display:block;">
+                <i class="fa-solid fa-info-circle"></i> As ações acima serão incluídas neste texto.
+            </small>
         </div>
 
-        <details class="accordion-wrapper">
-            <summary>
-                <span>Ações da Rede do Parceiro (0 itens)</span>
-                <div class="btn-plus-circle"><i class="fa-solid fa-plus" style="color: #6a0dad;"></i></div>
-            </summary>
-            <div style="padding: 20px; text-align: center; border-top: 1px solid #eee;">
-                <p style="color: #666;">Nenhuma ação vinculada.</p>
-            </div>
-        </details>
-
-        <div class="form-group">
-            <label>Anexos</label>
-            <div class="anexos-area">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <span>Salve para adicionar anexos</span>
-            </div>
+        <div class="form-buttons">
+            <a asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR</button>
         </div>
-
-        <div class="form-buttons" style="margin-top: 40px;">
-             <button type="submit" class="btn-full-width">ADICIONAR DIÁRIO</button>
-        </div>
-        
     </form>
+</div>
+
+<div class="modal-overlay" id="actionModal">
+    <div class="custom-modal">
+        <div class="modal-header">
+            <h3>Nova Ação</h3>
+            <button type="button" class="close-modal-btn" id="btnCloseModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="form-group">
+                <label>Nome da Ação</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-pencil"></i>
+                    <input type="text" id="modalNome" class="form-control" placeholder="Ex: Roda de conversa">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Eixos da Ação</label>
+                
+                <div class="eixos-tag-container" id="modal-tag-container"></div>
+                
+                <details class="multiselect-wrapper">
+                    <summary>
+                        <div class="select-wrapper">
+                            <i class="fa-solid fa-tags"></i>
+                            <span class="multiselect-placeholder">Selecione os eixos</span>
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+                        </div>
+                    </summary>
+                    <div class="multiselect-panel" id="modal-multiselect-panel">
+                        <ul>
+                            @if (ViewBag.EixosData != null)
+                            {
+                                string[] colors = { "tag-pink", "tag-purple", "tag-blue", "tag-green", "tag-yellow", "tag-red" };
+                                int i = 0;
+                                foreach (var eixo in (List<Empodera.Models.Eixo>)ViewBag.EixosData)
+                                {
+                                    var colorClass = colors[i % colors.Length]; i++;
+                                    <li>
+                                        <input type="checkbox" value="@eixo.IdEixo" id="modal-eixo-@eixo.IdEixo" 
+                                               data-tag-class="@colorClass" data-tag-name="@eixo.Nome">
+                                        <label for="modal-eixo-@eixo.IdEixo">@eixo.Nome</label>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Ator Envolvido</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="modalAtor" class="form-control" placeholder="Digite o nome ou importe..." style="padding-right:90px !important;">
+                    
+                    <div class="input-group-icons">
+                        <button type="button" class="icon-btn" title="Novo Ator" onclick="document.getElementById('modalAtor').value = ''; document.getElementById('modalAtor').focus();">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button type="button" class="icon-btn" title="Importar Ator" onclick="alert('Abrir lista de importação aqui')">
+                            <i class="fa-solid fa-file-import"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelModal" style="width:auto;">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="btnConfirmAction" style="width:auto;">Adicionar</button>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Lógica copiada e adaptada de Activity/Create
-            const tagContainer = document.getElementById('tag-container');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+            
+            /* FUNÇÃO GENÉRICA PARA GERENCIAR OS MULTISELECTS 
+               (Configura o Principal e o do Modal separadamente)
+            */
+            function setupMultiselect(containerId, panelId) {
+                const tagContainer = document.getElementById(containerId);
+                const multiselectPanel = document.getElementById(panelId);
+                const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+                const listItems = multiselectPanel.querySelectorAll('li');
 
-            function updateTagView() {
-                tagContainer.innerHTML = '';
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-                    if (cb.checked) {
-                        // Cria a Tag visual
-                        const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass; // ex: tag-purple
-                        
-                        const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
-                        tag.textContent = tagName;
-                        
-                        // Botão de remover (X)
-                        const removeBtn = document.createElement('i');
-                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.style.marginLeft = '8px';
-                        removeBtn.dataset.checkboxId = cb.id;
-                        
-                        tag.appendChild(removeBtn);
-                        tagContainer.appendChild(tag);
-                        
-                        // Esconde da lista
-                        listItem.classList.add('is-selected');
-                    } else {
-                        // Mostra na lista
-                        listItem.classList.remove('is-selected');
-                    }
+                // Atualiza visualização das tags
+                function updateView() {
+                    tagContainer.innerHTML = '';
+                    checkboxes.forEach(cb => {
+                        const listItem = cb.closest('li');
+                        if (cb.checked) {
+                            const tag = document.createElement('span');
+                            tag.className = `tag-item ${cb.dataset.tagClass}`;
+                            tag.innerHTML = `${cb.dataset.tagName} <i class="fa-solid fa-xmark tag-remove-btn" style="margin-left:5px;"></i>`;
+                            
+                            // Remover ao clicar
+                            tag.onclick = (e) => {
+                                e.stopPropagation();
+                                cb.checked = false;
+                                updateView();
+                            };
+                            
+                            tagContainer.appendChild(tag);
+                            listItem.classList.add('is-selected');
+                        } else {
+                            listItem.classList.remove('is-selected');
+                        }
+                    });
+                }
+
+                // Evento de clique na lista (LI)
+                listItems.forEach(li => {
+                    li.addEventListener('click', (e) => {
+                        if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'LABEL') {
+                            e.stopPropagation();
+                            const cb = li.querySelector('input[type="checkbox"]');
+                            cb.checked = !cb.checked;
+                            updateView();
+                        }
+                    });
+                });
+
+                // Evento de change no checkbox
+                multiselectPanel.addEventListener('change', (e) => {
+                    if(e.target.type === 'checkbox') updateView();
+                });
+
+                // Inicializa (caso tenha algo marcado)
+                updateView();
+
+                // Retorna função de reset para usar depois
+                return function resetSelection() {
+                    checkboxes.forEach(cb => cb.checked = false);
+                    updateView();
+                };
+            }
+
+            // --- CONFIGURA OS DOIS SELETORES ---
+            // 1. Principal (Tela de fundo)
+            setupMultiselect('main-tag-container', 'main-multiselect-panel');
+            
+            // 2. Modal (Popup) - Guardamos a função de reset para limpar ao abrir/fechar
+            const resetModalEixos = setupMultiselect('modal-tag-container', 'modal-multiselect-panel');
+
+
+            /* --- LÓGICA DO MODAL --- */
+            let actionsList = [];
+            const modal = document.getElementById('actionModal');
+            
+            const openModal = () => { 
+                modal.classList.add('active'); 
+                document.getElementById('modalNome').value = ''; 
+                document.getElementById('modalAtor').value = '';
+                
+                // Limpa os eixos do modal para começar do zero
+                resetModalEixos();
+                
+                document.getElementById('modalNome').focus();
+            };
+            
+            const closeModal = () => modal.classList.remove('active');
+
+            document.getElementById('btnOpenModal').onclick = openModal;
+            document.getElementById('btnCloseModal').onclick = closeModal;
+            document.getElementById('btnCancelModal').onclick = closeModal;
+
+            // --- CONFIRMAR AÇÃO (ADICIONAR NA TABELA) ---
+            document.getElementById('btnConfirmAction').onclick = (e) => {
+                e.preventDefault(); 
+
+                const nome = document.getElementById('modalNome').value.trim();
+                const ator = document.getElementById('modalAtor').value;
+                
+                // Pega os eixos selecionados NO MODAL
+                const modalPanel = document.getElementById('modal-multiselect-panel');
+                const checkedBoxes = modalPanel.querySelectorAll('input[type="checkbox"]:checked');
+                let eixosNomes = [];
+                checkedBoxes.forEach(cb => eixosNomes.push(cb.dataset.tagName));
+                const eixosString = eixosNomes.length > 0 ? eixosNomes.join(', ') : '-';
+
+                if(!nome) { alert('Preencha o nome da ação'); return; }
+
+                actionsList.push({ 
+                    id: Date.now(), 
+                    nome: nome, 
+                    eixo: eixosString, 
+                    ator: ator || '-' 
+                });
+
+                renderTable();
+                closeModal();
+            };
+
+            window.removeAction = (id) => {
+                actionsList = actionsList.filter(x => x.id !== id);
+                renderTable();
+            };
+
+            function renderTable() {
+                const tbody = document.getElementById('actionsBody');
+                tbody.innerHTML = '';
+                
+                const hasItems = actionsList.length > 0;
+                document.getElementById('actionsTable').style.display = hasItems ? 'table' : 'none';
+                document.getElementById('emptyState').style.display = hasItems ? 'none' : 'block';
+
+                actionsList.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${item.nome}</strong></td>
+                        <td><span class="tag-item tag-gray" style="cursor:default">${item.eixo}</span></td>
+                        <td>${item.ator}</td>
+                        <td style="text-align:center;">
+                            <button type="button" class="btn-remove-action" onclick="removeAction(${item.id})">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
                 });
             }
 
-            // Evento ao marcar checkbox na lista
-            multiselectPanel.addEventListener('change', function(e) {
-                if (e.target.type === 'checkbox') {
-                    updateTagView();
+            // --- AO SALVAR O FORMULÁRIO ---
+            document.getElementById('createForm').addEventListener('submit', () => {
+                if(actionsList.length > 0) {
+                    const mainDesc = document.getElementById('mainDesc');
+                    let finalText = mainDesc.value + "\n\n--- AÇÕES REGISTRADAS ---\n";
+                    actionsList.forEach(a => {
+                        finalText += `• AÇÃO: ${a.nome} | EIXOS: ${a.eixo} | ATOR: ${a.ator}\n`;
+                    });
+                    mainDesc.value = finalText;
                 }
             });
-
-            // Evento ao clicar no X da tag
-            tagContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const checkboxId = e.target.dataset.checkboxId;
-                    const checkboxToUncheck = document.getElementById(checkboxId);
-                    if (checkboxToUncheck) {
-                        checkboxToUncheck.checked = false;
-                        updateTagView();
-                    }
-                }
-            });
-
-            // Inicializa
-            updateTagView();
         });
     </script>
 }
