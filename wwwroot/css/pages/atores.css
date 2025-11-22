@@ -66,7 +66,6 @@ label {
     z-index: 1;
 }
 
-<<<<<<< HEAD
 /* ==========================================================
    [CORREÇÃO] - Estilos unificados para TODOS os campos
    ========================================================== */
@@ -80,23 +79,12 @@ textarea { /* <-- textarea está INCLUÍDO AQUI */
     width: 100%;
     height: 48px; /* Altura padrão */
     padding: 12px 16px 12px 40px; /* Padding padrão com ícone */
-=======
-input[type="text"],
-input[type="tel"],
-input[type="date"],
-input[readonly], /* Adicionado para os campos de metadados */
-select {
-    width: 100%;
-    height: 48px;
-    padding: 12px 16px 12px 40px;
->>>>>>> feature/new_login
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     background-color: var(--color-bg-primary);
     transition: var(--transition-base);
     box-sizing: border-box;
-<<<<<<< HEAD
     font-family: 'Poppins', sans-serif;
 }
 
@@ -135,57 +123,33 @@ select[multiple] {
    Fim da Correção
    ========================================================== */
 
-=======
-}
-
->>>>>>> feature/new_login
 input::placeholder, select {
     color: var(--color-gray-500);
 }
 
-<<<<<<< HEAD
 input:focus, 
 select:focus, 
 textarea:focus {
-=======
-input:focus, select:focus {
->>>>>>> feature/new_login
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
-<<<<<<< HEAD
 /* Estilos de Select (Dropdown) */
 select:not([multiple]) {
-=======
-select {
->>>>>>> feature/new_login
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     cursor: pointer;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> feature/new_login
 .select-wrapper {
     position: relative;
     display: block;
     width: 100%;
 }
-<<<<<<< HEAD
 .select-wrapper select:not([multiple]) {
     padding-right: 40px;
 }
-=======
-
-.select-wrapper select {
-    padding-right: 40px;
-}
-
->>>>>>> feature/new_login
 .select-wrapper .select-arrow {
     position: absolute;
     top: 50%;
@@ -195,29 +159,17 @@ select {
     pointer-events: none;
     z-index: 1;
 }
-<<<<<<< HEAD
 .select-wrapper select[multiple] + .select-arrow {
     display: none;
 }
 
 /* Estilos para o 'Create.cshtml' (Botões de Ícone) */
-=======
-
-/* ==========================================================
-   [NOVO] ESTILOS PARA O 'CREATE.CSHTML' (BOTÕES DE ÍCONE)
-   ========================================================== */
-
->>>>>>> feature/new_login
 .input-with-buttons {
     display: flex;
     gap: var(--space-2);
 }
 .input-with-buttons .input-wrapper {
-<<<<<<< HEAD
     flex-grow: 1;
-=======
-    flex-grow: 1; /* Faz o input ocupar o espaço */
->>>>>>> feature/new_login
 }
 .btn-icon {
     flex-shrink: 0;
@@ -237,7 +189,6 @@ select {
 }
 
 /* ==========================================================
-<<<<<<< HEAD
    [CORREÇÃO] ERRO DE SINTAXE REMOVIDO AQUI (era '//*')
    ========================================================== */
 .multiselect-wrapper {
@@ -253,38 +204,16 @@ select {
 .multiselect-wrapper .select-wrapper {
     position: relative;
 }
-=======
-   [NOVO] ESTILOS PARA O 'CREATE.CSHTML' (MULTISELECT)
-   ========================================================== */
-
-.multiselect-wrapper summary {
-    list-style: none; /* Remove seta padrão */
-    cursor: pointer;
-}
-.multiselect-wrapper summary::-webkit-details-marker {
-    display: none; /* Remove seta padrão (Chrome) */
-}
-/* O 'select-wrapper' dentro do summary precisa ser relativo */
-.multiselect-wrapper .select-wrapper {
-    position: relative;
-}
-/* O 'span' se transforma no "falso input" */
->>>>>>> feature/new_login
 .multiselect-wrapper .multiselect-placeholder {
     display: block;
     width: 100%;
     height: 48px;
-<<<<<<< HEAD
     padding: 12px 16px 12px 40px;
-=======
-    padding: 12px 16px 12px 40px; /* Deixa espaço para o ícone */
->>>>>>> feature/new_login
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     background-color: var(--color-bg-primary);
     color: var(--color-gray-500);
-<<<<<<< HEAD
     line-height: 24px;
 }
 .multiselect-wrapper[open] > summary .multiselect-placeholder {
@@ -303,25 +232,6 @@ select {
     width: 100%;
     margin-top: -10px;
     z-index: 10;
-=======
-    line-height: 24px; /* Ajusta altura do texto */
-}
-/* Efeito de foco quando o <details> está aberto */
-.multiselect-wrapper[open] .multiselect-placeholder {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px var(--color-primary-100);
-}
-/* O painel que abre */
-.multiselect-wrapper .multiselect-panel {
-    background-color: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-top: none;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    padding: var(--space-2) 0;
-    margin-top: -10px; /* Sobe para 'debaixo' do summary */
-    position: relative;
-    z-index: 2; /* Fica em cima de outros elementos */
->>>>>>> feature/new_login
 }
 .multiselect-wrapper .multiselect-panel ul {
     list-style: none;
@@ -332,30 +242,18 @@ select {
 }
 .multiselect-wrapper .multiselect-panel li {
     padding: var(--space-2) var(--space-4);
-<<<<<<< HEAD
     display: flex;
-=======
-    display: flex; /* Para alinhar o checkbox e o label */
->>>>>>> feature/new_login
     align-items: center;
 }
 .multiselect-wrapper .multiselect-panel li:hover {
     background-color: var(--color-bg-secondary);
 }
-<<<<<<< HEAD
 .multiselect-wrapper .multiselect-panel input[type="checkbox"] {
     margin-right: var(--space-2);
 }
 /* ==========================================================
    Fim da Correção
    ========================================================== */
-=======
-/* O checkbox de verdade */
-.multiselect-wrapper .multiselect-panel input[type="checkbox"] {
-    margin-right: var(--space-2);
-    /* (Estilos de checkbox customizado, se você tiver) */
-}
->>>>>>> feature/new_login
 
 
 /* Checkbox Customizado (Da Equipe) */
@@ -365,10 +263,7 @@ select {
     gap: var(--space-2);
     margin-bottom: var(--space-5);
 }
-<<<<<<< HEAD
 /* ... (Estilos do checkbox) ... */
-=======
->>>>>>> feature/new_login
 .form-group-checkbox input[type="checkbox"] { display: none; }
 .form-group-checkbox label {
     margin: 0;
@@ -450,14 +345,7 @@ select {
 }
 
 
-<<<<<<< HEAD
 /* Rodapé de Metadados Padrão (Colapsível) */
-=======
-/* ==========================================================
-   [ATUALIZADO] Rodapé de Metadados Padrão (Colapsível)
-   ========================================================== */
-
->>>>>>> feature/new_login
 .form-footer {
     background-color: var(--color-bg-secondary);
     border-radius: var(--radius-lg);
@@ -546,14 +434,7 @@ select {
 .btn-secondary { background-color: var(--color-primary-50); color: var(--color-primary); }
 
 
-<<<<<<< HEAD
 /* Responsividade */
-=======
-/* ============================
-   RESPONSIVIDADE (MOBILE FIRST)
-   ============================ */
-
->>>>>>> feature/new_login
 @media (max-width: 768px) {
     .container {
         padding: 0 var(--space-3);
