@@ -1,4 +1,4 @@
-@model IEnumerable<Empodera.Models.Atividade>
+@model IEnumerable<Empodera.Models.Atividades>
 @{
     ViewData["Title"] = "Atividades";
     Layout = "_Layout";
@@ -26,49 +26,36 @@
     </div>
 
     <div class="atores-list-container">
-        
-        <div class="ator-card">
-            <div class="activity-card-info">
-                <span class="ator-name">Acompanhamento do Projeto Semear.</span>
-                <div class="tag-list" style="margin-top: 8px;">
-                    <span class="tag-item tag-blue">Prevenção</span>
-                    <span class="tag-item tag-green">Ocupação</span>
-                    <span class="tag-item tag-yellow">Lazer</span>
-                    <span class="tag-item tag-purple">Segurança Social</span>
-                    <span class="tag-item tag-lightgreen">Educação</span>
-                    <span class="tag-item tag-red">Saúde</span>
-                    <span class="tag-item tag-lightblue">Assistência Básica</span>
-                </div>
-            </div>
-            <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="1">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
-            </a>
-        </div>
 
-        <div class="ator-card">
-            <div class="activity-card-info">
-                <span class="ator-name">Colhendo memórias através do desenho</span>
-                <div class="tag-list" style="margin-top: 8px;">
-                    <span class="tag-item tag-yellow">Lazer</span>
-                    <span class="tag-item tag-lightgreen">Educação</span>
+        @foreach (var atividade in Model)
+        {
+            <div class="ator-card">
+                <div class="activity-card-info">
+                    <span class="ator-name">@atividade.Nome</span>
+                    <div class="tag-list" style="margin-top: 8px;">
+                        @foreach (var eixo in atividade.AtividadesEixos)
+                        {
+                            var eixoNome = eixo.Eixo.Nome;
+                            var tagClass = eixoNome.ToLower() switch
+                            {
+                                "prevenção" => "tag-blue",
+                                "ocupação" => "tag-green",
+                                "lazer" => "tag-yellow",
+                                "segurança social" => "tag-purple",
+                                "educação" => "tag-lightgreen",
+                                "saúde" => "tag-red",
+                                "assistência básica" => "tag-lightblue",
+                                _ => "tag-default"
+                            };
+                            <span class="tag-item @tagClass">@eixoNome</span>
+                        }
+                    </div>
                 </div>
+                <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="@atividade.IdAtividade">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                </a>
             </div>
-            <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="2">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
-            </a>
-        </div>
-        
-         <div class="ator-card">
-            <div class="activity-card-info">
-                <span class="ator-name">Distribuição de doces</span>
-                <div class="tag-list" style="margin-top: 8px;">
-                    <span class="tag-item tag-yellow">Lazer</span>
-                </div>
-            </div>
-            <a class="details-icon" asp-controller="Activity" asp-action="Edit" asp-route-id="3">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
-            </a>
-        </div>
+        }
         
         </div>
 </div>

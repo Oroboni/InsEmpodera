@@ -6,9 +6,11 @@ namespace Empodera.Models
 {
     public class AtividadesEixo
     {
-        [Key]
-        public int IdAEixo { get; set; }
-        public int EixoId { get; set; }
-        public int AtividadeId { get; set; }
+        public int IdAEixo { get; set; }       
+        public int FkIdEixo { get; set; }     
+        public int FkIdAtividade { get; set; }   
+
+        public Eixo Eixo { get; set; } = null!;
+        public Atividades Atividades { get; set; } = null!;
     }
 }

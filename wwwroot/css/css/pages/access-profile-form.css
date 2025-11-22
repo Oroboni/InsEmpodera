@@ -1,0 +1,108 @@
+/* CSS Específico para as páginas Create/Edit de AccessProfile
+   Este arquivo foca na tabela de permissões e no switch.
+*/
+
+/* Tabela de Permissões */
+.permission-table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre células */
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.permission-table th,
+.permission-table td {
+    padding: var(--space-4) var(--space-3); /* Mais padding vertical, menos horizontal */
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle; /* Centraliza verticalmente o texto e o switch */
+}
+
+.permission-table th {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    text-align: center; /* Cabeçalhos das ações (Listar, Criar...) centralizados */
+}
+
+/* A primeira coluna (Nome da Permissão) */
+.permission-table th:first-child,
+.permission-table td:first-child {
+    text-align: left; /* Alinha o nome da permissão à esquerda */
+    padding-left: var(--space-2);
+}
+
+.permission-table td:first-child {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+}
+
+/* Todas as colunas de switch */
+.permission-table td:not(:first-child) {
+    text-align: center; /* Centraliza os switches */
+}
+
+/* Remove a borda da última linha da tabela */
+.permission-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Estilo do Toggle Switch (Interruptor) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;  /* Largura do trilho */
+    height: 24px; /* Altura do trilho */
+    vertical-align: middle; /* Ajuda a alinhar com o texto da linha se houver */
+}
+
+/* Esconde o checkbox original */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* O trilho (slider) */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-gray-300); /* Cor do switch desligado */
+    transition: .4s;
+    border-radius: 24px; /* Totalmente arredondado */
+}
+
+/* A bolinha (knob) */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; /* Diâmetro da bolinha */
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Estilo :checked (Ligado) */
+input:checked + .slider {
+    background-color: var(--color-primary); /* Cor roxa quando ligado */
+}
+
+/* Efeito de foco para acessibilidade */
+input:focus + .slider {
+    box-shadow: 0 0 0 3px var(--color-primary-100); /* Glow roxo claro */
+}
+
+/* Animação da bolinha */
+input:checked + .slider:before {
+    transform: translateX(20px); /* Distância que a bolinha se move */
+}

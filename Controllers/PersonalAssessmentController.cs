@@ -41,7 +41,7 @@ public class PersonalAssessmentController : Controller
         if (atorId.HasValue)
         {
             avaliacoes = await _context.AvaliacoesPessoais
-                .Where(a => a.AtorId == atorId.Value)
+                .Where(a => a.FkIdUsuario == atorId.Value)
                 .OrderByDescending(a => a.DtCriacao) // Mostrar mais nova primeiro
                 .ToListAsync();
         }
@@ -95,7 +95,7 @@ public class PersonalAssessmentController : Controller
             await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
             "IdAtores",
             "Nome",
-            avaliacao.AtorId // Pré-seleciona o ator da avaliação
+            avaliacao.FkIdUsuario // Pré-seleciona o ator da avaliação
         );
 
         return View(avaliacao);

@@ -17,34 +17,29 @@ namespace InsEmpodera.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
 
-            modelBuilder.Entity("AtorComunidadeComunidade", b =>
-                {
-                    b.Property<int>("AtoresIdAComunidade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ComunidadesIdComunidade")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AtoresIdAComunidade", "ComunidadesIdComunidade");
-
-                    b.HasIndex("ComunidadesIdComunidade");
-
-                    b.ToTable("AtorComunidadeComunidade");
-                });
-
             modelBuilder.Entity("Empodera.Models.Acoes", b =>
                 {
                     b.Property<int>("IdAcoes")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AtividadeId")
+                    b.Property<int>("FkIdAtividade")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Provedor")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAcoes");
+
+                    b.HasIndex("FkIdAtividade");
 
                     b.ToTable("Acoes");
 
@@ -52,32 +47,42 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAcoes = 1,
-                            AtividadeId = 1,
+                            FkIdAtividade = 1,
+                            Nome = "Ação 1",
+                            Provedor = "Fornecedor A",
                             Quantidade = 10
                         },
                         new
                         {
                             IdAcoes = 2,
-                            AtividadeId = 2,
-                            Quantidade = 15
+                            FkIdAtividade = 2,
+                            Nome = "Ação 2",
+                            Provedor = "Fornecedor B",
+                            Quantidade = 5
                         },
                         new
                         {
                             IdAcoes = 3,
-                            AtividadeId = 3,
-                            Quantidade = 20
+                            FkIdAtividade = 3,
+                            Nome = "Ação 3",
+                            Provedor = "Fornecedor C",
+                            Quantidade = 8
                         },
                         new
                         {
                             IdAcoes = 4,
-                            AtividadeId = 4,
+                            FkIdAtividade = 4,
+                            Nome = "Ação 4",
+                            Provedor = "Fornecedor D",
                             Quantidade = 12
                         },
                         new
                         {
                             IdAcoes = 5,
-                            AtividadeId = 5,
-                            Quantidade = 25
+                            FkIdAtividade = 5,
+                            Nome = "Ação 5",
+                            Provedor = "Fornecedor E",
+                            Quantidade = 7
                         });
                 });
 
@@ -87,13 +92,17 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AcoesId")
+                    b.Property<int>("FKidAtores")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AtorId")
+                    b.Property<int>("FkIdAcoes")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAAtores");
+
+                    b.HasIndex("FKidAtores");
+
+                    b.HasIndex("FkIdAcoes");
 
                     b.ToTable("AcoesAtores");
 
@@ -101,32 +110,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAAtores = 1,
-                            AcoesId = 1,
-                            AtorId = 1
+                            FKidAtores = 1,
+                            FkIdAcoes = 1
                         },
                         new
                         {
                             IdAAtores = 2,
-                            AcoesId = 2,
-                            AtorId = 2
+                            FKidAtores = 4,
+                            FkIdAcoes = 2
                         },
                         new
                         {
                             IdAAtores = 3,
-                            AcoesId = 3,
-                            AtorId = 3
+                            FKidAtores = 7,
+                            FkIdAcoes = 3
                         },
                         new
                         {
                             IdAAtores = 4,
-                            AcoesId = 4,
-                            AtorId = 4
+                            FKidAtores = 10,
+                            FkIdAcoes = 4
                         },
                         new
                         {
                             IdAAtores = 5,
-                            AcoesId = 5,
-                            AtorId = 5
+                            FKidAtores = 13,
+                            FkIdAcoes = 5
                         });
                 });
 
@@ -140,10 +149,12 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DiarioId")
+                    b.Property<int>("FkIdDiario")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAnexos");
+
+                    b.HasIndex("FkIdDiario");
 
                     b.ToTable("AnexosDiario");
 
@@ -151,36 +162,36 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAnexos = 1,
-                            Caminho = "foto1.png",
-                            DiarioId = 1
+                            Caminho = "anexo1.jpg",
+                            FkIdDiario = 1
                         },
                         new
                         {
                             IdAnexos = 2,
-                            Caminho = "foto2.png",
-                            DiarioId = 2
+                            Caminho = "anexo2.jpg",
+                            FkIdDiario = 2
                         },
                         new
                         {
                             IdAnexos = 3,
-                            Caminho = "documento1.pdf",
-                            DiarioId = 3
+                            Caminho = "anexo3.jpg",
+                            FkIdDiario = 3
                         },
                         new
                         {
                             IdAnexos = 4,
-                            Caminho = "audio1.mp3",
-                            DiarioId = 4
+                            Caminho = "anexo4.jpg",
+                            FkIdDiario = 4
                         },
                         new
                         {
                             IdAnexos = 5,
-                            Caminho = "video1.mp4",
-                            DiarioId = 5
+                            Caminho = "anexo5.jpg",
+                            FkIdDiario = 5
                         });
                 });
 
-            modelBuilder.Entity("Empodera.Models.Atividade", b =>
+            modelBuilder.Entity("Empodera.Models.Atividades", b =>
                 {
                     b.Property<int>("IdAtividade")
                         .ValueGeneratedOnAdd()
@@ -196,11 +207,25 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FkIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Foto")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdAtividade");
+
+                    b.HasIndex("FkIdComunidade");
+
+                    b.HasIndex("FkIdUsuario");
 
                     b.ToTable("Atividades");
 
@@ -208,42 +233,57 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtividade = 1,
-                            Descricao = "Atividade de pintura e desenho",
+                            Descricao = "Descricao 1",
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = "Oficina de Artes"
+                            FkIdComunidade = 1,
+                            FkIdUsuario = 1,
+                            Foto = "a1.jpg",
+                            Nome = "Ativ 1"
                         },
                         new
                         {
                             IdAtividade = 2,
-                            Descricao = "Instrumentos e canto",
+                            Descricao = "Descricao 2",
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = "Aula de Música"
+                            FkIdComunidade = 2,
+                            FkIdUsuario = 2,
+                            Foto = "a2.jpg",
+                            Nome = "Ativ 2"
                         },
                         new
                         {
                             IdAtividade = 3,
-                            Descricao = "Futebol, vôlei, basquete",
+                            Descricao = "Descricao 3",
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = "Esporte Comunitário"
+                            FkIdComunidade = 3,
+                            FkIdUsuario = 3,
+                            Foto = "a3.jpg",
+                            Nome = "Ativ 3"
                         },
                         new
                         {
                             IdAtividade = 4,
-                            Descricao = "Informática básica",
+                            Descricao = "Descricao 4",
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = "Curso de Tecnologia"
+                            FkIdComunidade = 4,
+                            FkIdUsuario = 4,
+                            Foto = "a4.jpg",
+                            Nome = "Ativ 4"
                         },
                         new
                         {
                             IdAtividade = 5,
-                            Descricao = "Troca de produtos",
+                            Descricao = "Descricao 5",
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = "Feira Solidária"
+                            FkIdComunidade = 5,
+                            FkIdUsuario = 5,
+                            Foto = "a5.jpg",
+                            Nome = "Ativ 5"
                         });
                 });
 
@@ -253,65 +293,170 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AtividadeId")
+                    b.Property<int>("FkIdAtividade")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AtividadeIdAtividade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EixoId")
+                    b.Property<int>("FkIdEixo")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdAEixo");
 
-                    b.HasIndex("AtividadeId");
+                    b.HasIndex("FkIdAtividade");
 
-                    b.HasIndex("AtividadeIdAtividade");
+                    b.HasIndex("FkIdEixo");
 
-                    b.HasIndex("EixoId");
-
-                    b.ToTable("AtividadeEixos");
+                    b.ToTable("AtividadesEixo");
 
                     b.HasData(
                         new
                         {
                             IdAEixo = 1,
-                            AtividadeId = 1,
-                            EixoId = 1
+                            FkIdAtividade = 1,
+                            FkIdEixo = 1
                         },
                         new
                         {
                             IdAEixo = 2,
-                            AtividadeId = 2,
-                            EixoId = 2
+                            FkIdAtividade = 2,
+                            FkIdEixo = 2
                         },
                         new
                         {
                             IdAEixo = 3,
-                            AtividadeId = 3,
-                            EixoId = 3
+                            FkIdAtividade = 3,
+                            FkIdEixo = 3
                         },
                         new
                         {
                             IdAEixo = 4,
-                            AtividadeId = 4,
-                            EixoId = 4
+                            FkIdAtividade = 4,
+                            FkIdEixo = 4
                         },
                         new
                         {
                             IdAEixo = 5,
-                            AtividadeId = 5,
-                            EixoId = 5
+                            FkIdAtividade = 5,
+                            FkIdEixo = 5
                         });
                 });
 
-            modelBuilder.Entity("Empodera.Models.Ator", b =>
+            modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
                 {
-                    b.Property<int>("IdAtores")
+                    b.Property<int>("IdAtorComunidade")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AtorComunidadeIdAComunidade")
+                    b.Property<int>("FKidAtores")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("IdAtorComunidade");
+
+                    b.HasIndex("FKidAtores");
+
+                    b.HasIndex("FkIdComunidade");
+
+                    b.ToTable("AtorComunidades");
+
+                    b.HasData(
+                        new
+                        {
+                            IdAtorComunidade = 1,
+                            FKidAtores = 1,
+                            FkIdComunidade = 1
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 2,
+                            FKidAtores = 2,
+                            FkIdComunidade = 1
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 3,
+                            FKidAtores = 3,
+                            FkIdComunidade = 1
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 4,
+                            FKidAtores = 4,
+                            FkIdComunidade = 2
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 5,
+                            FKidAtores = 5,
+                            FkIdComunidade = 2
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 6,
+                            FKidAtores = 6,
+                            FkIdComunidade = 2
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 7,
+                            FKidAtores = 7,
+                            FkIdComunidade = 3
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 8,
+                            FKidAtores = 8,
+                            FkIdComunidade = 3
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 9,
+                            FKidAtores = 9,
+                            FkIdComunidade = 3
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 10,
+                            FKidAtores = 10,
+                            FkIdComunidade = 4
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 11,
+                            FKidAtores = 11,
+                            FkIdComunidade = 4
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 12,
+                            FKidAtores = 12,
+                            FkIdComunidade = 4
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 13,
+                            FKidAtores = 13,
+                            FkIdComunidade = 5
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 14,
+                            FKidAtores = 14,
+                            FkIdComunidade = 5
+                        },
+                        new
+                        {
+                            IdAtorComunidade = 15,
+                            FKidAtores = 15,
+                            FkIdComunidade = 5
+                        });
+                });
+
+            modelBuilder.Entity("Empodera.Models.Atores", b =>
+                {
+                    b.Property<int>("IdAtores")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DtCriacao")
@@ -320,16 +465,23 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("DtNascimento")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Extra")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Genero")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Idade")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("MotivoStatus")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -343,12 +495,17 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Telefone")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdAtores");
 
-                    b.HasIndex("AtorComunidadeIdAComunidade");
+                    b.HasIndex("FkIdUsuario");
 
                     b.ToTable("Atores");
 
@@ -356,116 +513,242 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 1,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "Ativo",
-                            Genero = "Masculino",
-                            Idade = 30,
-                            Nome = "Lucas Andrade",
-                            PapelSocial1 = "Líder",
-                            PapelSocial2 = "Professor",
-                            Telefone = 119111111
+                            DtCriacao = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 1,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 1",
+                            PapelSocial1 = "Lider",
+                            PapelSocial2 = "Voluntario",
+                            Status = "Ativo",
+                            Telefone = "11900000001"
                         },
                         new
                         {
                             IdAtores = 2,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "Ativo",
-                            Genero = "Feminino",
-                            Idade = 28,
-                            Nome = "Fernanda Costa",
-                            PapelSocial1 = "Médica",
-                            PapelSocial2 = "Voluntária",
-                            Telefone = 219222222
+                            DtCriacao = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1992, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 1,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 2",
+                            PapelSocial1 = "Beneficiario",
+                            PapelSocial2 = "Membro",
+                            Status = "Ativo",
+                            Telefone = "11900000002"
                         },
                         new
                         {
                             IdAtores = 3,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "Ativo",
-                            Genero = "Masculino",
-                            Idade = 35,
-                            Nome = "Roberto Alves",
-                            PapelSocial1 = "Advogado",
-                            PapelSocial2 = "Consultor",
-                            Telefone = 319333333
+                            DtCriacao = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1985, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 2,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 3",
+                            PapelSocial1 = "Parceiro",
+                            PapelSocial2 = "Voluntario",
+                            Status = "Ativo",
+                            Telefone = "11900000003"
                         },
                         new
                         {
                             IdAtores = 4,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "Ativo",
-                            Genero = "Feminino",
-                            Idade = 26,
-                            Nome = "Juliana Prado",
-                            PapelSocial1 = "Estudante",
-                            PapelSocial2 = "Estagiária",
-                            Telefone = 419444444
+                            DtCriacao = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1991, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 2,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 4",
+                            PapelSocial1 = "Lider",
+                            PapelSocial2 = "Coordenador",
+                            Status = "Ativo",
+                            Telefone = "11900000004"
                         },
                         new
                         {
                             IdAtores = 5,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "Ativo",
-                            Genero = "Masculino",
-                            Idade = 40,
-                            Nome = "Marcelo Nunes",
-                            PapelSocial1 = "Empresário",
-                            PapelSocial2 = "Mentor",
-                            Telefone = 519555555
-                        });
-                });
-
-            modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
-                {
-                    b.Property<int>("IdAComunidade")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AtorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ComunidadeId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("IdAComunidade");
-
-                    b.ToTable("AtorComunidades");
-
-                    b.HasData(
-                        new
-                        {
-                            IdAComunidade = 1,
-                            AtorId = 1,
-                            ComunidadeId = 1
+                            DtCriacao = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 3,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 5",
+                            PapelSocial1 = "Beneficiario",
+                            PapelSocial2 = "Voluntario",
+                            Status = "Ativo",
+                            Telefone = "11900000005"
                         },
                         new
                         {
-                            IdAComunidade = 2,
-                            AtorId = 2,
-                            ComunidadeId = 2
+                            IdAtores = 6,
+                            DtCriacao = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1993, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 3,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 6",
+                            PapelSocial1 = "Parceiro",
+                            PapelSocial2 = "Membro",
+                            Status = "Ativo",
+                            Telefone = "11900000006"
                         },
                         new
                         {
-                            IdAComunidade = 3,
-                            AtorId = 3,
-                            ComunidadeId = 3
+                            IdAtores = 7,
+                            DtCriacao = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1994, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 4,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 7",
+                            PapelSocial1 = "Lider",
+                            PapelSocial2 = "Voluntario",
+                            Status = "Ativo",
+                            Telefone = "11900000007"
                         },
                         new
                         {
-                            IdAComunidade = 4,
-                            AtorId = 4,
-                            ComunidadeId = 4
+                            IdAtores = 8,
+                            DtCriacao = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1995, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 4,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 8",
+                            PapelSocial1 = "Beneficiario",
+                            PapelSocial2 = "Membro",
+                            Status = "Ativo",
+                            Telefone = "11900000008"
                         },
                         new
                         {
-                            IdAComunidade = 5,
-                            AtorId = 5,
-                            ComunidadeId = 5
+                            IdAtores = 9,
+                            DtCriacao = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 5,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 9",
+                            PapelSocial1 = "Parceiro",
+                            PapelSocial2 = "Voluntario",
+                            Status = "Ativo",
+                            Telefone = "11900000009"
+                        },
+                        new
+                        {
+                            IdAtores = 10,
+                            DtCriacao = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1987, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 5,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 10",
+                            PapelSocial1 = "Lider",
+                            PapelSocial2 = "Coordenador",
+                            Status = "Ativo",
+                            Telefone = "11900000010"
+                        },
+                        new
+                        {
+                            IdAtores = 11,
+                            DtCriacao = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1986, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 1,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 11",
+                            PapelSocial1 = "Beneficiario",
+                            PapelSocial2 = "Membro",
+                            Status = "Ativo",
+                            Telefone = "11900000011"
+                        },
+                        new
+                        {
+                            IdAtores = 12,
+                            DtCriacao = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 2,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 12",
+                            PapelSocial1 = "Parceiro",
+                            PapelSocial2 = "Voluntario",
+                            Status = "Ativo",
+                            Telefone = "11900000012"
+                        },
+                        new
+                        {
+                            IdAtores = 13,
+                            DtCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1997, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 3,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 13",
+                            PapelSocial1 = "Membro",
+                            PapelSocial2 = "",
+                            Status = "Ativo",
+                            Telefone = "11900000013"
+                        },
+                        new
+                        {
+                            IdAtores = 14,
+                            DtCriacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1998, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 4,
+                            Genero = "F",
+                            MotivoStatus = "",
+                            Nome = "Ator 14",
+                            PapelSocial1 = "Membro",
+                            PapelSocial2 = "",
+                            Status = "Ativo",
+                            Telefone = "11900000014"
+                        },
+                        new
+                        {
+                            IdAtores = 15,
+                            DtCriacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Extra = "",
+                            FkIdUsuario = 5,
+                            Genero = "M",
+                            MotivoStatus = "",
+                            Nome = "Ator 15",
+                            PapelSocial1 = "Membro",
+                            PapelSocial2 = "",
+                            Status = "Ativo",
+                            Telefone = "11900000015"
                         });
                 });
 
@@ -476,9 +759,6 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AssBasica")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AtorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CCrimes")
@@ -493,6 +773,12 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("Educacao")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("FKidAtores")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Lazer")
                         .HasColumnType("INTEGER");
 
@@ -502,7 +788,7 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("Ocupacao")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Prevenção")
+                    b.Property<int>("Prevencao")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Saude")
@@ -513,7 +799,9 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdAvaliacao");
 
-                    b.HasIndex("AtorId");
+                    b.HasIndex("FKidAtores");
+
+                    b.HasIndex("FkIdUsuario");
 
                     b.ToTable("AvaliacoesPessoais");
 
@@ -521,81 +809,86 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAvaliacao = 1,
-                            AssBasica = 2,
-                            AtorId = 1,
+                            AssBasica = 4,
                             CCrimes = 1,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Educacao = 3,
+                            FKidAtores = 1,
+                            FkIdUsuario = 1,
                             Lazer = 2,
-                            Moradia = 1,
+                            Moradia = 2,
                             Ocupacao = 1,
-                            Prevenção = 1,
+                            Prevencao = 3,
                             Saude = 2,
                             Substancias = 0
                         },
                         new
                         {
                             IdAvaliacao = 2,
-                            AssBasica = 2,
-                            AtorId = 2,
+                            AssBasica = 3,
                             CCrimes = 0,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Educacao = 4,
-                            Lazer = 3,
-                            Moradia = 2,
+                            FKidAtores = 5,
+                            FkIdUsuario = 2,
+                            Lazer = 1,
+                            Moradia = 3,
                             Ocupacao = 2,
-                            Prevenção = 1,
+                            Prevencao = 2,
                             Saude = 3,
                             Substancias = 1
                         },
                         new
                         {
                             IdAvaliacao = 3,
-                            AssBasica = 3,
-                            AtorId = 3,
+                            AssBasica = 2,
                             CCrimes = 2,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Educacao = 2,
-                            Lazer = 1,
-                            Moradia = 3,
-                            Ocupacao = 3,
-                            Prevenção = 2,
-                            Saude = 2,
+                            FKidAtores = 9,
+                            FkIdUsuario = 3,
+                            Lazer = 2,
+                            Moradia = 2,
+                            Ocupacao = 1,
+                            Prevencao = 3,
+                            Saude = 3,
                             Substancias = 1
                         },
                         new
                         {
                             IdAvaliacao = 4,
                             AssBasica = 4,
-                            AtorId = 4,
                             CCrimes = 0,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Educacao = 4,
-                            Lazer = 4,
-                            Moradia = 1,
-                            Ocupacao = 2,
-                            Prevenção = 2,
-                            Saude = 3,
+                            FKidAtores = 12,
+                            FkIdUsuario = 4,
+                            Lazer = 3,
+                            Moradia = 4,
+                            Ocupacao = 3,
+                            Prevencao = 4,
+                            Saude = 4,
                             Substancias = 0
                         },
                         new
                         {
                             IdAvaliacao = 5,
-                            AssBasica = 2,
-                            AtorId = 5,
-                            CCrimes = 1,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Educacao = 3,
-                            Lazer = 2,
-                            Moradia = 2,
-                            Ocupacao = 3,
-                            Prevenção = 3,
-                            Saude = 2,
+                            AssBasica = 1,
+                            CCrimes = 3,
+                            DtCriacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Educacao = 1,
+                            FKidAtores = 15,
+                            FkIdUsuario = 5,
+                            Lazer = 1,
+                            Moradia = 1,
+                            Ocupacao = 1,
+                            Prevencao = 2,
+                            Saude = 1,
                             Substancias = 2
                         });
                 });
@@ -624,6 +917,9 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Local")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -638,68 +934,233 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdComunidade");
 
+                    b.HasIndex("FkIdUsuario");
+
                     b.ToTable("Comunidades");
 
                     b.HasData(
                         new
                         {
                             IdComunidade = 1,
-                            Complemento = "Zona Leste",
-                            Descricao = "Comunidade em SP",
-                            DescricaoAcessibilidade = "Acessível",
+                            Complemento = "",
+                            Descricao = "Comunidade piloto",
+                            DescricaoAcessibilidade = "Rampa",
                             DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Local = "São Paulo",
-                            Nome = "Comunidade A",
+                            DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdUsuario = 1,
+                            Local = "Bairro A",
+                            Nome = "Comunidade Alpha",
                             Status = "Ativa"
                         },
                         new
                         {
                             IdComunidade = 2,
-                            Complemento = "Zona Norte",
-                            Descricao = "Comunidade no RJ",
-                            DescricaoAcessibilidade = "Parcial",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Local = "Rio de Janeiro",
-                            Nome = "Comunidade B",
+                            Complemento = "Sala 2",
+                            Descricao = "Comunidade secundária",
+                            DescricaoAcessibilidade = "Elevador",
+                            DtCriacao = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdUsuario = 2,
+                            Local = "Bairro B",
+                            Nome = "Comunidade Beta",
                             Status = "Ativa"
                         },
                         new
                         {
                             IdComunidade = 3,
-                            Complemento = "Centro",
-                            Descricao = "Comunidade em BH",
-                            DescricaoAcessibilidade = "Baixa",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Local = "Belo Horizonte",
-                            Nome = "Comunidade C",
+                            Complemento = "",
+                            Descricao = "Comunidade remota",
+                            DescricaoAcessibilidade = "Rampas",
+                            DtCriacao = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdUsuario = 3,
+                            Local = "Bairro C",
+                            Nome = "Comunidade Gamma",
                             Status = "Inativa"
                         },
                         new
                         {
                             IdComunidade = 4,
-                            Complemento = "Sul",
-                            Descricao = "Comunidade no PR",
-                            DescricaoAcessibilidade = "Alta",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Local = "Curitiba",
-                            Nome = "Comunidade D",
+                            Complemento = "Anexo",
+                            Descricao = "Comunidade urbana",
+                            DescricaoAcessibilidade = "Acesso",
+                            DtCriacao = new DateTime(2023, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdUsuario = 4,
+                            Local = "Bairro D",
+                            Nome = "Comunidade Delta",
                             Status = "Ativa"
                         },
                         new
                         {
                             IdComunidade = 5,
-                            Complemento = "Norte",
-                            Descricao = "Comunidade na BA",
-                            DescricaoAcessibilidade = "Média",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Local = "Salvador",
-                            Nome = "Comunidade E",
+                            Complemento = "",
+                            Descricao = "Comunidade rural",
+                            DescricaoAcessibilidade = "Sem acesso especial",
+                            DtCriacao = new DateTime(2023, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdUsuario = 5,
+                            Local = "Bairro E",
+                            Nome = "Comunidade Epsilon",
                             Status = "Ativa"
+                        });
+                });
+
+            modelBuilder.Entity("Empodera.Models.DAAtores", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FKidAtores")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdDDacoes")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FKidAtores");
+
+                    b.HasIndex("FkIdDDacoes");
+
+                    b.ToTable("DAAtores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FKidAtores = 1,
+                            FkIdDDacoes = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FKidAtores = 4,
+                            FkIdDDacoes = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FKidAtores = 7,
+                            FkIdDDacoes = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FKidAtores = 10,
+                            FkIdDDacoes = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FKidAtores = 13,
+                            FkIdDDacoes = 5
+                        });
+                });
+
+            modelBuilder.Entity("Empodera.Models.DetalhesDAcoes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdDDacoes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FkIdDDacoes");
+
+                    b.ToTable("DetalhesDAcoes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FkIdDDacoes = 1,
+                            Nome = "Detalhe A"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FkIdDDacoes = 2,
+                            Nome = "Detalhe B"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FkIdDDacoes = 3,
+                            Nome = "Detalhe C"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FkIdDDacoes = 4,
+                            Nome = "Detalhe D"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FkIdDDacoes = 5,
+                            Nome = "Detalhe E"
+                        });
+                });
+
+            modelBuilder.Entity("Empodera.Models.DetalhesEixos", b =>
+                {
+                    b.Property<int>("IdDiarioEixo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdDetalhes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdEixo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("IdDiarioEixo");
+
+                    b.HasIndex("FkIdDetalhes");
+
+                    b.HasIndex("FkIdEixo");
+
+                    b.ToTable("DetalhesEixos");
+
+                    b.HasData(
+                        new
+                        {
+                            IdDiarioEixo = 1,
+                            FkIdDetalhes = 1,
+                            FkIdEixo = 1
+                        },
+                        new
+                        {
+                            IdDiarioEixo = 2,
+                            FkIdDetalhes = 2,
+                            FkIdEixo = 2
+                        },
+                        new
+                        {
+                            IdDiarioEixo = 3,
+                            FkIdDetalhes = 3,
+                            FkIdEixo = 3
+                        },
+                        new
+                        {
+                            IdDiarioEixo = 4,
+                            FkIdDetalhes = 4,
+                            FkIdEixo = 4
+                        },
+                        new
+                        {
+                            IdDiarioEixo = 5,
+                            FkIdDetalhes = 5,
+                            FkIdEixo = 5
                         });
                 });
 
@@ -709,13 +1170,17 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AcoesId")
+                    b.Property<int>("FkIdAcoes")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DiarioId")
+                    b.Property<int>("FkIdDiario")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdDAcoes");
+
+                    b.HasIndex("FkIdAcoes");
+
+                    b.HasIndex("FkIdDiario");
 
                     b.ToTable("DiarioAcoes");
 
@@ -723,32 +1188,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdDAcoes = 1,
-                            AcoesId = 1,
-                            DiarioId = 1
+                            FkIdAcoes = 1,
+                            FkIdDiario = 1
                         },
                         new
                         {
                             IdDAcoes = 2,
-                            AcoesId = 2,
-                            DiarioId = 2
+                            FkIdAcoes = 2,
+                            FkIdDiario = 2
                         },
                         new
                         {
                             IdDAcoes = 3,
-                            AcoesId = 3,
-                            DiarioId = 3
+                            FkIdAcoes = 3,
+                            FkIdDiario = 3
                         },
                         new
                         {
                             IdDAcoes = 4,
-                            AcoesId = 4,
-                            DiarioId = 4
+                            FkIdAcoes = 4,
+                            FkIdDiario = 4
                         },
                         new
                         {
                             IdDAcoes = 5,
-                            AcoesId = 5,
-                            DiarioId = 5
+                            FkIdAcoes = 5,
+                            FkIdDiario = 5
                         });
                 });
 
@@ -756,12 +1221,6 @@ namespace InsEmpodera.Migrations
                 {
                     b.Property<int>("IdDCampo")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AtorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ComunidadeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Data")
@@ -777,15 +1236,25 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FkIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Foto")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Localizacao")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdDCampo");
 
-                    b.HasIndex("AtorId");
+                    b.HasIndex("FkIdComunidade");
 
-                    b.HasIndex("ComunidadeId");
+                    b.HasIndex("FkIdUsuario");
 
                     b.ToTable("DiariosCampo");
 
@@ -793,52 +1262,131 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdDCampo = 1,
-                            ComunidadeId = 1,
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descricao = "Reunião comunitária",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Localizacao = "Praça central"
+                            Data = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Descricao = "Visita inicial",
+                            DtCriacao = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdComunidade = 1,
+                            FkIdUsuario = 1,
+                            Foto = "d1.jpg",
+                            Localizacao = "Ponto A"
                         },
                         new
                         {
                             IdDCampo = 2,
-                            ComunidadeId = 2,
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descricao = "Atividade esportiva",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Localizacao = "Quadra"
+                            Data = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Descricao = "Reunião",
+                            DtCriacao = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdComunidade = 2,
+                            FkIdUsuario = 2,
+                            Foto = "d2.jpg",
+                            Localizacao = "Ponto B"
                         },
                         new
                         {
                             IdDCampo = 3,
-                            ComunidadeId = 3,
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descricao = "Feira cultural",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Localizacao = "Centro comunitário"
+                            Data = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Descricao = "Diagnóstico",
+                            DtCriacao = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdComunidade = 3,
+                            FkIdUsuario = 3,
+                            Foto = "d3.jpg",
+                            Localizacao = "Ponto C"
                         },
                         new
                         {
                             IdDCampo = 4,
-                            ComunidadeId = 4,
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descricao = "Ação social",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Localizacao = "Escola local"
+                            Data = new DateTime(2025, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Descricao = "Intervenção",
+                            DtCriacao = new DateTime(2025, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdComunidade = 4,
+                            FkIdUsuario = 4,
+                            Foto = "d4.jpg",
+                            Localizacao = "Ponto D"
                         },
                         new
                         {
                             IdDCampo = 5,
-                            ComunidadeId = 5,
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descricao = "Encontro de líderes",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Localizacao = "Associação"
+                            Data = new DateTime(2025, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Descricao = "Acompanhamento",
+                            DtCriacao = new DateTime(2025, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FkIdComunidade = 5,
+                            FkIdUsuario = 5,
+                            Foto = "d5.jpg",
+                            Localizacao = "Ponto E"
+                        });
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioDAcoes", b =>
+                {
+                    b.Property<int>("IdDAcoes")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdDiario")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PeovedorEx")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("IdDAcoes");
+
+                    b.HasIndex("FkIdDiario");
+
+                    b.ToTable("DiarioDAcoes");
+
+                    b.HasData(
+                        new
+                        {
+                            IdDAcoes = 1,
+                            FkIdDiario = 1,
+                            Nome = "Coleta",
+                            PeovedorEx = "Local",
+                            Quantidade = 10
+                        },
+                        new
+                        {
+                            IdDAcoes = 2,
+                            FkIdDiario = 2,
+                            Nome = "Distribuicao",
+                            PeovedorEx = "Externo",
+                            Quantidade = 5
+                        },
+                        new
+                        {
+                            IdDAcoes = 3,
+                            FkIdDiario = 3,
+                            Nome = "Treinamento",
+                            PeovedorEx = "Equipe",
+                            Quantidade = 8
+                        },
+                        new
+                        {
+                            IdDAcoes = 4,
+                            FkIdDiario = 4,
+                            Nome = "Levantamento",
+                            PeovedorEx = "Parceiro",
+                            Quantidade = 12
+                        },
+                        new
+                        {
+                            IdDAcoes = 5,
+                            FkIdDiario = 5,
+                            Nome = "Monitoramento",
+                            PeovedorEx = "Equipe",
+                            Quantidade = 7
                         });
                 });
 
@@ -848,13 +1396,17 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DiarioId")
+                    b.Property<int>("FkIdDiario")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EixoId")
+                    b.Property<int>("FkIdEixo")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdDiarioEixo");
+
+                    b.HasIndex("FkIdDiario");
+
+                    b.HasIndex("FkIdEixo");
 
                     b.ToTable("DiarioEixos");
 
@@ -862,32 +1414,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdDiarioEixo = 1,
-                            DiarioId = 1,
-                            EixoId = 1
+                            FkIdDiario = 1,
+                            FkIdEixo = 1
                         },
                         new
                         {
                             IdDiarioEixo = 2,
-                            DiarioId = 2,
-                            EixoId = 2
+                            FkIdDiario = 2,
+                            FkIdEixo = 2
                         },
                         new
                         {
                             IdDiarioEixo = 3,
-                            DiarioId = 3,
-                            EixoId = 3
+                            FkIdDiario = 3,
+                            FkIdEixo = 3
                         },
                         new
                         {
                             IdDiarioEixo = 4,
-                            DiarioId = 4,
-                            EixoId = 4
+                            FkIdDiario = 4,
+                            FkIdEixo = 4
                         },
                         new
                         {
                             IdDiarioEixo = 5,
-                            DiarioId = 5,
-                            EixoId = 5
+                            FkIdDiario = 5,
+                            FkIdEixo = 5
                         });
                 });
 
@@ -909,67 +1461,37 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdEixo = 1,
-                            Nome = "Rede primária"
+                            Nome = "prevenção"
                         },
                         new
                         {
                             IdEixo = 2,
-                            Nome = "Segurança Social"
+                            Nome = "ocupação"
                         },
                         new
                         {
                             IdEixo = 3,
-                            Nome = "Substâncias"
+                            Nome = "lazer"
                         },
                         new
                         {
                             IdEixo = 4,
-                            Nome = "Moradia"
+                            Nome = "segurança social"
                         },
                         new
                         {
                             IdEixo = 5,
-                            Nome = "Prevenção"
+                            Nome = "educação"
                         },
                         new
                         {
                             IdEixo = 6,
-                            Nome = "Assistência Básica"
+                            Nome = "saúde"
                         },
                         new
                         {
                             IdEixo = 7,
-                            Nome = "Educação"
-                        },
-                        new
-                        {
-                            IdEixo = 8,
-                            Nome = "Saúde"
-                        },
-                        new
-                        {
-                            IdEixo = 9,
-                            Nome = "Ocupação"
-                        },
-                        new
-                        {
-                            IdEixo = 10,
-                            Nome = "Lazer"
-                        },
-                        new
-                        {
-                            IdEixo = 11,
-                            Nome = "Cultura"
-                        },
-                        new
-                        {
-                            IdEixo = 12,
-                            Nome = "Cidadania"
-                        },
-                        new
-                        {
-                            IdEixo = 13,
-                            Nome = "Meio Ambiente"
+                            Nome = "assistência básica"
                         });
                 });
 
@@ -983,12 +1505,12 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FichaId")
+                    b.Property<int>("FkIdFicha")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdCondicoes");
 
-                    b.HasIndex("FichaId");
+                    b.HasIndex("FkIdFicha");
 
                     b.ToTable("FichaCondicoes");
 
@@ -996,32 +1518,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdCondicoes = 1,
-                            Cond = "Boa saúde",
-                            FichaId = 1
+                            Cond = "Cond A",
+                            FkIdFicha = 1
                         },
                         new
                         {
                             IdCondicoes = 2,
-                            Cond = "Necessita assistência",
-                            FichaId = 2
+                            Cond = "Cond B",
+                            FkIdFicha = 2
                         },
                         new
                         {
                             IdCondicoes = 3,
-                            Cond = "Situação estável",
-                            FichaId = 3
+                            Cond = "Cond C",
+                            FkIdFicha = 3
                         },
                         new
                         {
                             IdCondicoes = 4,
-                            Cond = "Risco social",
-                            FichaId = 4
+                            Cond = "Cond D",
+                            FkIdFicha = 4
                         },
                         new
                         {
                             IdCondicoes = 5,
-                            Cond = "Bem-estar adequado",
-                            FichaId = 5
+                            Cond = "Cond E",
+                            FkIdFicha = 5
                         });
                 });
 
@@ -1031,7 +1553,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FichaId")
+                    b.Property<int>("FkIdFicha")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Pet")
@@ -1040,7 +1562,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdPeticoes");
 
-                    b.HasIndex("FichaId");
+                    b.HasIndex("FkIdFicha");
 
                     b.ToTable("FichaPeticoes");
 
@@ -1048,32 +1570,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdPeticoes = 1,
-                            FichaId = 1,
-                            Pet = "Solicitação de escola"
+                            FkIdFicha = 1,
+                            Pet = "Pet A"
                         },
                         new
                         {
                             IdPeticoes = 2,
-                            FichaId = 2,
-                            Pet = "Auxílio financeiro"
+                            FkIdFicha = 2,
+                            Pet = "Pet B"
                         },
                         new
                         {
                             IdPeticoes = 3,
-                            FichaId = 3,
-                            Pet = "Atendimento médico"
+                            FkIdFicha = 3,
+                            Pet = "Pet C"
                         },
                         new
                         {
                             IdPeticoes = 4,
-                            FichaId = 4,
-                            Pet = "Programa social"
+                            FkIdFicha = 4,
+                            Pet = "Pet D"
                         },
                         new
                         {
                             IdPeticoes = 5,
-                            FichaId = 5,
-                            Pet = "Cursos de capacitação"
+                            FkIdFicha = 5,
+                            Pet = "Pet E"
                         });
                 });
 
@@ -1083,10 +1605,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AEscola")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AtorId")
+                    b.Property<int>("AEscolar")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CPrimeiroContato")
@@ -1098,6 +1617,9 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Data")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DtContato")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DtCriacao")
@@ -1118,9 +1640,15 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FKidAtores")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("FPeloParceirto")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FonteDados")
                         .IsRequired()
@@ -1138,10 +1666,10 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("NFilhas")
+                    b.Property<int>("NFIlhos")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("NFilhos")
+                    b.Property<int>("NFilhas")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("QReabili")
@@ -1161,7 +1689,9 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdFicha");
 
-                    b.HasIndex("AtorId");
+                    b.HasIndex("FKidAtores");
+
+                    b.HasIndex("FkIdUsuario");
 
                     b.ToTable("FichasPrimeiroContato");
 
@@ -1169,73 +1699,79 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdFicha = 1,
-                            AEscola = 1,
-                            AtorId = 1,
-                            CPrimeiroContato = "2023-1",
-                            Coment = "Boa integração",
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Sim",
+                            AEscolar = 10,
+                            CPrimeiroContato = "Contato A",
+                            Coment = "Info A",
+                            Data = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtContato = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EParceiro = "Nao",
                             EstaFamiliar = "Sim",
-                            EstruFamiliar = "Completa",
-                            FPeloParceirto = "Não",
-                            FonteDados = "Censo",
-                            LContato = "Vizinho",
+                            EstruFamiliar = "Nuclear",
+                            FKidAtores = 1,
+                            FPeloParceirto = "Nao",
+                            FkIdUsuario = 1,
+                            FonteDados = "Entrevista",
+                            LContato = "Nome A",
                             LTrat = "Nenhum",
-                            Localizacao = "Zona Norte",
-                            NFilhas = 1,
-                            NFilhos = 2,
+                            Localizacao = "Local A",
+                            NFIlhos = 1,
+                            NFilhas = 0,
                             QReabili = 0,
                             SCalc = "Sim",
-                            SComp = "Não",
+                            SComp = "Sim",
                             SLer = "Sim"
                         },
                         new
                         {
                             IdFicha = 2,
-                            AEscola = 0,
-                            AtorId = 2,
-                            CPrimeiroContato = "2023-2",
-                            Coment = "Necessita apoio",
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Não",
-                            EstaFamiliar = "Não",
-                            EstruFamiliar = "Parcial",
-                            FPeloParceirto = "Não",
-                            FonteDados = "Empoderavista",
-                            LContato = "ONG",
-                            LTrat = "Clínica",
-                            Localizacao = "Zona Sul",
-                            NFilhas = 0,
-                            NFilhos = 1,
+                            AEscolar = 8,
+                            CPrimeiroContato = "Contato B",
+                            Coment = "Info B",
+                            Data = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtContato = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EParceiro = "Sim",
+                            EstaFamiliar = "Nao",
+                            EstruFamiliar = "Extendida",
+                            FKidAtores = 5,
+                            FPeloParceirto = "Sim",
+                            FkIdUsuario = 2,
+                            FonteDados = "Formulario",
+                            LContato = "Nome B",
+                            LTrat = "Sim",
+                            Localizacao = "Local B",
+                            NFIlhos = 2,
+                            NFilhas = 1,
                             QReabili = 1,
-                            SCalc = "Não",
-                            SComp = "Não",
-                            SLer = "Sim"
+                            SCalc = "Sim",
+                            SComp = "Nao",
+                            SLer = "Nao"
                         },
                         new
                         {
                             IdFicha = 3,
-                            AEscola = 1,
-                            AtorId = 3,
-                            CPrimeiroContato = "2023-3",
-                            Coment = "Boa situação",
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Sim",
+                            AEscolar = 12,
+                            CPrimeiroContato = "Contato C",
+                            Coment = "Info C",
+                            Data = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtContato = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EParceiro = "Nao",
                             EstaFamiliar = "Sim",
-                            EstruFamiliar = "Completa",
-                            FPeloParceirto = "Sim",
-                            FonteDados = "Formulário",
-                            LContato = "Assistente social",
-                            LTrat = "Nenhum",
-                            Localizacao = "Zona Leste",
-                            NFilhas = 2,
-                            NFilhos = 3,
+                            EstruFamiliar = "Nuclear",
+                            FKidAtores = 9,
+                            FPeloParceirto = "Nao",
+                            FkIdUsuario = 3,
+                            FonteDados = "Observacao",
+                            LContato = "Nome C",
+                            LTrat = "Nao",
+                            Localizacao = "Local C",
+                            NFIlhos = 0,
+                            NFilhas = 0,
                             QReabili = 0,
                             SCalc = "Sim",
                             SComp = "Sim",
@@ -1244,50 +1780,54 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdFicha = 4,
-                            AEscola = 1,
-                            AtorId = 4,
-                            CPrimeiroContato = "2023-4",
-                            Coment = "Vulnerável",
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Não",
-                            EstaFamiliar = "Não",
-                            EstruFamiliar = "Incompleta",
-                            FPeloParceirto = "Não",
-                            FonteDados = "Empoderavista",
-                            LContato = "Igreja",
-                            LTrat = "Hospital",
-                            Localizacao = "Zona Oeste",
-                            NFilhas = 1,
-                            NFilhos = 0,
+                            AEscolar = 6,
+                            CPrimeiroContato = "Contato D",
+                            Coment = "Info D",
+                            Data = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtContato = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EParceiro = "Sim",
+                            EstaFamiliar = "Nao",
+                            EstruFamiliar = "Extendida",
+                            FKidAtores = 12,
+                            FPeloParceirto = "Sim",
+                            FkIdUsuario = 4,
+                            FonteDados = "Sistema",
+                            LContato = "Nome D",
+                            LTrat = "Sim",
+                            Localizacao = "Local D",
+                            NFIlhos = 3,
+                            NFilhas = 2,
                             QReabili = 2,
-                            SCalc = "Não",
-                            SComp = "Não",
-                            SLer = "Não"
+                            SCalc = "Nao",
+                            SComp = "Nao",
+                            SLer = "Nao"
                         },
                         new
                         {
                             IdFicha = 5,
-                            AEscola = 1,
-                            AtorId = 5,
-                            CPrimeiroContato = "2023-5",
-                            Coment = "Estável",
-                            Data = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Sim",
+                            AEscolar = 9,
+                            CPrimeiroContato = "Contato E",
+                            Coment = "Info E",
+                            Data = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtContato = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EParceiro = "Nao",
                             EstaFamiliar = "Sim",
-                            EstruFamiliar = "Completa",
-                            FPeloParceirto = "Não",
-                            FonteDados = "Censo escolar",
-                            LContato = "Escola",
-                            LTrat = "Nenhum",
-                            Localizacao = "Centro",
-                            NFilhas = 2,
-                            NFilhos = 2,
+                            EstruFamiliar = "Nuclear",
+                            FKidAtores = 15,
+                            FPeloParceirto = "Nao",
+                            FkIdUsuario = 5,
+                            FonteDados = "Formulario",
+                            LContato = "Nome E",
+                            LTrat = "Nao",
+                            Localizacao = "Local E",
+                            NFIlhos = 0,
+                            NFilhas = 1,
                             QReabili = 0,
-                            SCalc = "Sim",
+                            SCalc = "Nao",
                             SComp = "Sim",
                             SLer = "Sim"
                         });
@@ -1299,7 +1839,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FichaId")
+                    b.Property<int>("FkIdFicha")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Resp")
@@ -1308,7 +1848,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdCondicoes");
 
-                    b.HasIndex("FichaId");
+                    b.HasIndex("FkIdFicha");
 
                     b.ToTable("FichaRespostas");
 
@@ -1316,32 +1856,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdCondicoes = 1,
-                            FichaId = 1,
-                            Resp = "Atendido"
+                            FkIdFicha = 1,
+                            Resp = "Resp A"
                         },
                         new
                         {
                             IdCondicoes = 2,
-                            FichaId = 2,
-                            Resp = "Pendente"
+                            FkIdFicha = 2,
+                            Resp = "Resp B"
                         },
                         new
                         {
                             IdCondicoes = 3,
-                            FichaId = 3,
-                            Resp = "Atendido"
+                            FkIdFicha = 3,
+                            Resp = "Resp C"
                         },
                         new
                         {
                             IdCondicoes = 4,
-                            FichaId = 4,
-                            Resp = "Em análise"
+                            FkIdFicha = 4,
+                            Resp = "Resp D"
                         },
                         new
                         {
                             IdCondicoes = 5,
-                            FichaId = 5,
-                            Resp = "Negado"
+                            FkIdFicha = 5,
+                            Resp = "Resp E"
                         });
                 });
 
@@ -1351,7 +1891,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FichaId")
+                    b.Property<int>("FkIdFicha")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Result")
@@ -1360,7 +1900,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdCondicoes");
 
-                    b.HasIndex("FichaId");
+                    b.HasIndex("FkIdFicha");
 
                     b.ToTable("FichaResultados");
 
@@ -1368,38 +1908,148 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdCondicoes = 1,
-                            FichaId = 1,
-                            Result = "Positivo"
+                            FkIdFicha = 1,
+                            Result = "Result A"
                         },
                         new
                         {
                             IdCondicoes = 2,
-                            FichaId = 2,
-                            Result = "Negativo"
+                            FkIdFicha = 2,
+                            Result = "Result B"
                         },
                         new
                         {
                             IdCondicoes = 3,
-                            FichaId = 3,
-                            Result = "Positivo"
+                            FkIdFicha = 3,
+                            Result = "Result C"
                         },
                         new
                         {
                             IdCondicoes = 4,
-                            FichaId = 4,
-                            Result = "Neutro"
+                            FkIdFicha = 4,
+                            Result = "Result D"
                         },
                         new
                         {
                             IdCondicoes = 5,
-                            FichaId = 5,
-                            Result = "Positivo"
+                            FkIdFicha = 5,
+                            Result = "Result E"
                         });
                 });
 
-            modelBuilder.Entity("Empodera.Models.PerfilAcesso", b =>
+            modelBuilder.Entity("Empodera.Models.FonteInf", b =>
                 {
-                    b.Property<int>("IdPAcesso")
+                    b.Property<int>("IdFonte")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AtoresIdAtores")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Extra")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FkIdFicha")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Genero")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Idade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PapelSocial1")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PapelSocial2")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("IdFonte");
+
+                    b.HasIndex("AtoresIdAtores");
+
+                    b.HasIndex("FkIdFicha");
+
+                    b.ToTable("FontesInfo");
+
+                    b.HasData(
+                        new
+                        {
+                            IdFonte = 1,
+                            Extra = "",
+                            FkIdFicha = 1,
+                            Genero = "M",
+                            Idade = 40,
+                            Nome = "Fonte A",
+                            PapelSocial1 = "Parente",
+                            PapelSocial2 = "",
+                            Telefone = "11911111111"
+                        },
+                        new
+                        {
+                            IdFonte = 2,
+                            Extra = "",
+                            FkIdFicha = 2,
+                            Genero = "F",
+                            Idade = 35,
+                            Nome = "Fonte B",
+                            PapelSocial1 = "Vizin",
+                            PapelSocial2 = "",
+                            Telefone = "11922222222"
+                        },
+                        new
+                        {
+                            IdFonte = 3,
+                            Extra = "",
+                            FkIdFicha = 3,
+                            Genero = "M",
+                            Idade = 50,
+                            Nome = "Fonte C",
+                            PapelSocial1 = "Agente",
+                            PapelSocial2 = "",
+                            Telefone = "11933333333"
+                        },
+                        new
+                        {
+                            IdFonte = 4,
+                            Extra = "",
+                            FkIdFicha = 4,
+                            Genero = "F",
+                            Idade = 28,
+                            Nome = "Fonte D",
+                            PapelSocial1 = "Amigo",
+                            PapelSocial2 = "",
+                            Telefone = "11944444444"
+                        },
+                        new
+                        {
+                            IdFonte = 5,
+                            Extra = "",
+                            FkIdFicha = 5,
+                            Genero = "M",
+                            Idade = 60,
+                            Nome = "Fonte E",
+                            PapelSocial1 = "Lider",
+                            PapelSocial2 = "",
+                            Telefone = "11955555555"
+                        });
+                });
+
+            modelBuilder.Entity("Empodera.Models.Perfil", b =>
+                {
+                    b.Property<int>("IdPerfil")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -1409,68 +2059,98 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("IdPAcesso");
+                    b.HasKey("IdPerfil");
 
-                    b.ToTable("PerfisAcesso");
+                    b.HasIndex("FkIdUsuario");
+
+                    b.ToTable("Perfis");
 
                     b.HasData(
                         new
                         {
-                            IdPAcesso = 1,
+                            IdPerfil = 1,
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = ""
+                            FkIdUsuario = 1,
+                            Nome = "Admin"
                         },
                         new
                         {
-                            IdPAcesso = 2,
+                            IdPerfil = 2,
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = ""
+                            FkIdUsuario = 2,
+                            Nome = "Editor"
                         },
                         new
                         {
-                            IdPAcesso = 3,
+                            IdPerfil = 3,
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = ""
+                            FkIdUsuario = 3,
+                            Nome = "Colaborador"
                         },
                         new
                         {
-                            IdPAcesso = 4,
+                            IdPerfil = 4,
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = ""
+                            FkIdUsuario = 4,
+                            Nome = "Visualizador"
                         },
                         new
                         {
-                            IdPAcesso = 5,
+                            IdPerfil = 5,
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Nome = ""
+                            FkIdUsuario = 5,
+                            Nome = "Supervisor"
                         });
                 });
 
-            modelBuilder.Entity("Empodera.Models.Permissao", b =>
+            modelBuilder.Entity("Empodera.Models.Permissoes", b =>
                 {
                     b.Property<int>("IdPermissoes")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PerfilAcessoId")
+                    b.Property<int>("FkIdPerfil")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PermissaoNome")
+                    b.Property<string>("Permissao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PodeAtualizar")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PodeCriar")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PodeDeletar")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PodeDetalhar")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PodeListar")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("IdPermissoes");
 
-                    b.HasIndex("PerfilAcessoId");
+                    b.HasIndex("FkIdPerfil");
 
                     b.ToTable("Permissoes");
 
@@ -1478,32 +2158,57 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdPermissoes = 1,
-                            PerfilAcessoId = 1,
-                            PermissaoNome = "Ler"
+                            FkIdPerfil = 1,
+                            Permissao = "Todas",
+                            PodeAtualizar = "S",
+                            PodeCriar = "S",
+                            PodeDeletar = "S",
+                            PodeDetalhar = "S",
+                            PodeListar = "S"
                         },
                         new
                         {
                             IdPermissoes = 2,
-                            PerfilAcessoId = 2,
-                            PermissaoNome = "Escrever"
+                            FkIdPerfil = 2,
+                            Permissao = "Conteudo",
+                            PodeAtualizar = "S",
+                            PodeCriar = "S",
+                            PodeDeletar = "N",
+                            PodeDetalhar = "S",
+                            PodeListar = "S"
                         },
                         new
                         {
                             IdPermissoes = 3,
-                            PerfilAcessoId = 3,
-                            PermissaoNome = "Editar"
+                            FkIdPerfil = 3,
+                            Permissao = "Campo",
+                            PodeAtualizar = "N",
+                            PodeCriar = "N",
+                            PodeDeletar = "N",
+                            PodeDetalhar = "S",
+                            PodeListar = "S"
                         },
                         new
                         {
                             IdPermissoes = 4,
-                            PerfilAcessoId = 4,
-                            PermissaoNome = "Excluir"
+                            FkIdPerfil = 4,
+                            Permissao = "Leitura",
+                            PodeAtualizar = "N",
+                            PodeCriar = "N",
+                            PodeDeletar = "N",
+                            PodeDetalhar = "S",
+                            PodeListar = "S"
                         },
                         new
                         {
                             IdPermissoes = 5,
-                            PerfilAcessoId = 5,
-                            PermissaoNome = "Administrador"
+                            FkIdPerfil = 5,
+                            Permissao = "Gerencia",
+                            PodeAtualizar = "S",
+                            PodeCriar = "S",
+                            PodeDeletar = "N",
+                            PodeDetalhar = "S",
+                            PodeListar = "S"
                         });
                 });
 
@@ -1513,13 +2218,17 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EixoId")
+                    b.Property<int>("FkIdEixo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RedeId")
+                    b.Property<int>("FkIdRede")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdRedeEixo");
+
+                    b.HasIndex("FkIdEixo");
+
+                    b.HasIndex("FkIdRede");
 
                     b.ToTable("RedeEixos");
 
@@ -1527,32 +2236,32 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdRedeEixo = 1,
-                            EixoId = 1,
-                            RedeId = 1
+                            FkIdEixo = 1,
+                            FkIdRede = 1
                         },
                         new
                         {
                             IdRedeEixo = 2,
-                            EixoId = 2,
-                            RedeId = 2
+                            FkIdEixo = 2,
+                            FkIdRede = 2
                         },
                         new
                         {
                             IdRedeEixo = 3,
-                            EixoId = 3,
-                            RedeId = 3
+                            FkIdEixo = 3,
+                            FkIdRede = 3
                         },
                         new
                         {
                             IdRedeEixo = 4,
-                            EixoId = 4,
-                            RedeId = 4
+                            FkIdEixo = 4,
+                            FkIdRede = 4
                         },
                         new
                         {
                             IdRedeEixo = 5,
-                            EixoId = 5,
-                            RedeId = 5
+                            FkIdEixo = 5,
+                            FkIdRede = 5
                         });
                 });
 
@@ -1562,10 +2271,10 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AtorPrincipalId")
+                    b.Property<int>("FkIdAtorPrincipal")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AtorRelacionadoId")
+                    b.Property<int>("FkIdAtorRelacionados")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TipoRelacao")
@@ -1574,7 +2283,9 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdRedePrimaria");
 
-                    b.HasIndex("AtorRelacionadoId");
+                    b.HasIndex("FkIdAtorPrincipal");
+
+                    b.HasIndex("FkIdAtorRelacionados");
 
                     b.ToTable("RedesPrimarias");
 
@@ -1582,50 +2293,44 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdRedePrimaria = 1,
-                            AtorPrincipalId = 1,
-                            AtorRelacionadoId = 2,
-                            TipoRelacao = "Amizade"
-                        },
-                        new
-                        {
-                            IdRedePrimaria = 2,
-                            AtorPrincipalId = 2,
-                            AtorRelacionadoId = 3,
+                            FkIdAtorPrincipal = 1,
+                            FkIdAtorRelacionados = 2,
                             TipoRelacao = "Parceria"
                         },
                         new
                         {
+                            IdRedePrimaria = 2,
+                            FkIdAtorPrincipal = 4,
+                            FkIdAtorRelacionados = 5,
+                            TipoRelacao = "Suporte"
+                        },
+                        new
+                        {
                             IdRedePrimaria = 3,
-                            AtorPrincipalId = 3,
-                            AtorRelacionadoId = 4,
-                            TipoRelacao = "Trabalho"
+                            FkIdAtorPrincipal = 7,
+                            FkIdAtorRelacionados = 8,
+                            TipoRelacao = "Rede"
                         },
                         new
                         {
                             IdRedePrimaria = 4,
-                            AtorPrincipalId = 4,
-                            AtorRelacionadoId = 5,
-                            TipoRelacao = "Estudo"
+                            FkIdAtorPrincipal = 10,
+                            FkIdAtorRelacionados = 11,
+                            TipoRelacao = "Par"
                         },
                         new
                         {
                             IdRedePrimaria = 5,
-                            AtorPrincipalId = 5,
-                            AtorRelacionadoId = 1,
-                            TipoRelacao = "Mentoria"
+                            FkIdAtorPrincipal = 13,
+                            FkIdAtorRelacionados = 14,
+                            TipoRelacao = "Ligacao"
                         });
                 });
 
-            modelBuilder.Entity("Empodera.Models.RedeRecurso", b =>
+            modelBuilder.Entity("Empodera.Models.RedeRecursos", b =>
                 {
                     b.Property<int>("IdRede")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AtorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ComunidadeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Dispositivo")
@@ -1638,6 +2343,15 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FKidAtores")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Servicos")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -1648,65 +2362,74 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdRede");
 
-                    b.HasIndex("ComunidadeId");
+                    b.HasIndex("FKidAtores");
 
-                    b.ToTable("Redes");
+                    b.HasIndex("FkIdComunidade");
+
+                    b.HasIndex("FkIdUsuario");
+
+                    b.ToTable("RedeRecursos");
 
                     b.HasData(
                         new
                         {
                             IdRede = 1,
-                            AtorId = 1,
-                            ComunidadeId = 1,
-                            Dispositivo = "PC",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Servicos = "Acesso remoto",
-                            Tipo = "Internet"
+                            Dispositivo = "Router",
+                            DtCriacao = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FKidAtores = 1,
+                            FkIdComunidade = 1,
+                            FkIdUsuario = 1,
+                            Servicos = "Internet",
+                            Tipo = "Wifi"
                         },
                         new
                         {
                             IdRede = 2,
-                            AtorId = 2,
-                            ComunidadeId = 2,
-                            Dispositivo = "Celular",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Servicos = "Chamadas",
-                            Tipo = "Telefonia"
+                            Dispositivo = "Switch",
+                            DtCriacao = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FKidAtores = 5,
+                            FkIdComunidade = 2,
+                            FkIdUsuario = 2,
+                            Servicos = "Conexão",
+                            Tipo = "Ponto"
                         },
                         new
                         {
                             IdRede = 3,
-                            AtorId = 3,
-                            ComunidadeId = 3,
-                            Dispositivo = "Gerador",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Servicos = "Suporte elétrico",
-                            Tipo = "Energia"
+                            Dispositivo = "OLT",
+                            DtCriacao = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FKidAtores = 9,
+                            FkIdComunidade = 3,
+                            FkIdUsuario = 3,
+                            Servicos = "Backbone",
+                            Tipo = "Fibra"
                         },
                         new
                         {
                             IdRede = 4,
-                            AtorId = 4,
-                            ComunidadeId = 4,
-                            Dispositivo = "Reservatório",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Servicos = "Abastecimento",
-                            Tipo = "Água"
+                            Dispositivo = "Modem",
+                            DtCriacao = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FKidAtores = 12,
+                            FkIdComunidade = 4,
+                            FkIdUsuario = 4,
+                            Servicos = "Dados",
+                            Tipo = "4G"
                         },
                         new
                         {
                             IdRede = 5,
-                            AtorId = 5,
-                            ComunidadeId = 5,
-                            Dispositivo = "Clínica",
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Servicos = "Atendimento médico",
-                            Tipo = "Saúde"
+                            Dispositivo = "Dish",
+                            DtCriacao = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FKidAtores = 15,
+                            FkIdComunidade = 5,
+                            FkIdUsuario = 5,
+                            Servicos = "Satélite",
+                            Tipo = "Sat"
                         });
                 });
 
@@ -1715,6 +2438,9 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("IdUsuario")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DtAtualizacao")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("TEXT");
@@ -1757,116 +2483,72 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdUsuario = 1,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtNascimento = new DateTime(1990, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtAtualizacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "joao@email.com",
-                            Foto = "joao.png",
-                            Genero = "Masculino",
+                            Foto = "foto1.jpg",
+                            Genero = "M",
                             NivelPermissao = 1,
-                            Nome = "João Silva",
-                            Ocupacao = "Professor",
+                            Nome = "joao",
+                            Ocupacao = "Coordenador",
                             Senha = "123456"
                         },
                         new
                         {
                             IdUsuario = 2,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtNascimento = new DateTime(1988, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "maria@email.com",
-                            Foto = "maria.png",
-                            Genero = "Feminino",
+                            DtAtualizacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "u2@example.com",
+                            Foto = "foto2.jpg",
+                            Genero = "F",
                             NivelPermissao = 2,
-                            Nome = "Maria Souza",
-                            Ocupacao = "Engenheira",
-                            Senha = "123456"
+                            Nome = "Usuario Dois",
+                            Ocupacao = "Pesquisador",
+                            Senha = "senha2"
                         },
                         new
                         {
                             IdUsuario = 3,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtNascimento = new DateTime(2000, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "carlos@email.com",
-                            Foto = "carlos.png",
-                            Genero = "Masculino",
+                            DtAtualizacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1995, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "u3@example.com",
+                            Foto = "foto3.jpg",
+                            Genero = "M",
                             NivelPermissao = 1,
-                            Nome = "Carlos Lima",
-                            Ocupacao = "Estudante",
-                            Senha = "123456"
+                            Nome = "Usuario Tres",
+                            Ocupacao = "Voluntario",
+                            Senha = "senha3"
                         },
                         new
                         {
                             IdUsuario = 4,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtNascimento = new DateTime(1995, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "ana@email.com",
-                            Foto = "ana.png",
-                            Genero = "Feminino",
-                            NivelPermissao = 3,
-                            Nome = "Ana Pereira",
-                            Ocupacao = "Médica",
-                            Senha = "123456"
+                            DtAtualizacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1992, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "u4@example.com",
+                            Foto = "foto4.jpg",
+                            Genero = "F",
+                            NivelPermissao = 2,
+                            Nome = "Usuario Quatro",
+                            Ocupacao = "Analista",
+                            Senha = "senha4"
                         },
                         new
                         {
                             IdUsuario = 5,
-                            DtCriacao = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtNascimento = new DateTime(1985, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "pedro@email.com",
-                            Foto = "pedro.png",
-                            Genero = "Masculino",
-                            NivelPermissao = 2,
-                            Nome = "Pedro Santos",
-                            Ocupacao = "Advogado",
-                            Senha = "123456"
-                        });
-                });
-
-            modelBuilder.Entity("Empodera.Models.UsuarioPerfil", b =>
-                {
-                    b.Property<int>("IdPUsuario")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PerfilAcessoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("IdPUsuario");
-
-                    b.ToTable("UsuarioPerfis");
-
-                    b.HasData(
-                        new
-                        {
-                            IdPUsuario = 1,
-                            PerfilAcessoId = 1,
-                            UsuarioId = 1
-                        },
-                        new
-                        {
-                            IdPUsuario = 2,
-                            PerfilAcessoId = 2,
-                            UsuarioId = 2
-                        },
-                        new
-                        {
-                            IdPUsuario = 3,
-                            PerfilAcessoId = 3,
-                            UsuarioId = 3
-                        },
-                        new
-                        {
-                            IdPUsuario = 4,
-                            PerfilAcessoId = 4,
-                            UsuarioId = 4
-                        },
-                        new
-                        {
-                            IdPUsuario = 5,
-                            PerfilAcessoId = 5,
-                            UsuarioId = 5
+                            DtAtualizacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtNascimento = new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "u5@example.com",
+                            Foto = "foto5.jpg",
+                            Genero = "M",
+                            NivelPermissao = 3,
+                            Nome = "Usuario Cinco",
+                            Ocupacao = "Gerente",
+                            Senha = "senha5"
                         });
                 });
 
@@ -1876,7 +2558,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ComunidadeId")
+                    b.Property<int>("FkIdComunidade")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Localizacao")
@@ -1893,48 +2575,50 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdVulnerabilidade");
 
+                    b.HasIndex("FkIdComunidade");
+
                     b.ToTable("Vulnerabilidades");
 
                     b.HasData(
                         new
                         {
                             IdVulnerabilidade = 1,
-                            ComunidadeId = 1,
-                            Localizacao = "Zona Norte",
-                            Nome = "Falta de saneamento",
-                            Servicos = "Nenhum"
+                            FkIdComunidade = 1,
+                            Localizacao = "Local 1",
+                            Nome = "Vuln 1",
+                            Servicos = "Energia"
                         },
                         new
                         {
                             IdVulnerabilidade = 2,
-                            ComunidadeId = 2,
-                            Localizacao = "Zona Leste",
-                            Nome = "Violência urbana",
-                            Servicos = "Polícia comunitária"
+                            FkIdComunidade = 2,
+                            Localizacao = "Local 2",
+                            Nome = "Vuln 2",
+                            Servicos = "Agua"
                         },
                         new
                         {
                             IdVulnerabilidade = 3,
-                            ComunidadeId = 3,
-                            Localizacao = "Centro",
-                            Nome = "Desemprego",
-                            Servicos = "Cursos profissionalizantes"
+                            FkIdComunidade = 3,
+                            Localizacao = "Local 3",
+                            Nome = "Vuln 3",
+                            Servicos = "Saude"
                         },
                         new
                         {
                             IdVulnerabilidade = 4,
-                            ComunidadeId = 4,
-                            Localizacao = "Zona Oeste",
-                            Nome = "Drogas",
-                            Servicos = "Clínica de reabilitação"
+                            FkIdComunidade = 4,
+                            Localizacao = "Local 4",
+                            Nome = "Vuln 4",
+                            Servicos = "Transporte"
                         },
                         new
                         {
                             IdVulnerabilidade = 5,
-                            ComunidadeId = 5,
-                            Localizacao = "Zona Sul",
-                            Nome = "Falta de escolas",
-                            Servicos = "Projetos de ensino"
+                            FkIdComunidade = 5,
+                            Localizacao = "Local 5",
+                            Nome = "Vuln 5",
+                            Servicos = "Comunicacao"
                         });
                 });
 
@@ -1944,206 +2628,629 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EixoId")
+                    b.Property<int>("FkIdEixo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("VulnerabilidadeId")
+                    b.Property<int>("FkIdVulnerabilidade")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("IdVEixo");
 
-                    b.ToTable("VulnerabilidadeEixos");
+                    b.HasIndex("FkIdEixo");
+
+                    b.HasIndex("FkIdVulnerabilidade");
+
+                    b.ToTable("VulnerabilidadesEixo");
 
                     b.HasData(
                         new
                         {
                             IdVEixo = 1,
-                            EixoId = 1,
-                            VulnerabilidadeId = 1
+                            FkIdEixo = 1,
+                            FkIdVulnerabilidade = 1
                         },
                         new
                         {
                             IdVEixo = 2,
-                            EixoId = 2,
-                            VulnerabilidadeId = 2
+                            FkIdEixo = 2,
+                            FkIdVulnerabilidade = 2
                         },
                         new
                         {
                             IdVEixo = 3,
-                            EixoId = 3,
-                            VulnerabilidadeId = 3
+                            FkIdEixo = 3,
+                            FkIdVulnerabilidade = 3
                         },
                         new
                         {
                             IdVEixo = 4,
-                            EixoId = 4,
-                            VulnerabilidadeId = 4
+                            FkIdEixo = 4,
+                            FkIdVulnerabilidade = 4
                         },
                         new
                         {
                             IdVEixo = 5,
-                            EixoId = 5,
-                            VulnerabilidadeId = 5
+                            FkIdEixo = 5,
+                            FkIdVulnerabilidade = 5
                         });
                 });
 
-            modelBuilder.Entity("AtorComunidadeComunidade", b =>
+            modelBuilder.Entity("Empodera.Models.Acoes", b =>
                 {
-                    b.HasOne("Empodera.Models.AtorComunidade", null)
-                        .WithMany()
-                        .HasForeignKey("AtoresIdAComunidade")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Empodera.Models.Atividades", "Atividades")
+                        .WithMany("Acoes")
+                        .HasForeignKey("FkIdAtividade")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("Empodera.Models.Comunidade", null)
-                        .WithMany()
-                        .HasForeignKey("ComunidadesIdComunidade")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Atividades");
                 });
 
-            modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
+            modelBuilder.Entity("Empodera.Models.AcoesAtores", b =>
                 {
-                    b.HasOne("Empodera.Models.Atividade", null)
-                        .WithMany()
-                        .HasForeignKey("AtividadeId")
+                    b.HasOne("Empodera.Models.Atores", "Ator")
+                        .WithMany("AcoesAtores")
+                        .HasForeignKey("FKidAtores")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Empodera.Models.Atividade", null)
-                        .WithMany("AtividadesEixo")
-                        .HasForeignKey("AtividadeIdAtividade");
-
-                    b.HasOne("Empodera.Models.Eixo", null)
-                        .WithMany()
-                        .HasForeignKey("EixoId")
+                    b.HasOne("Empodera.Models.Acoes", "Acoes")
+                        .WithMany("AcoesAtores")
+                        .HasForeignKey("FkIdAcoes")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Empodera.Models.Ator", b =>
-                {
-                    b.HasOne("Empodera.Models.AtorComunidade", null)
-                        .WithMany("Atores")
-                        .HasForeignKey("AtorComunidadeIdAComunidade");
-                });
-
-            modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>
-                {
-                    b.HasOne("Empodera.Models.Ator", null)
-                        .WithMany()
-                        .HasForeignKey("AtorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
-                {
-                    b.HasOne("Empodera.Models.Ator", "Ator")
-                        .WithMany()
-                        .HasForeignKey("AtorId");
-
-                    b.HasOne("Empodera.Models.Comunidade", null)
-                        .WithMany("Diarios")
-                        .HasForeignKey("ComunidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Acoes");
 
                     b.Navigation("Ator");
                 });
 
-            modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
+            modelBuilder.Entity("Empodera.Models.AnexosDiario", b =>
                 {
-                    b.HasOne("Empodera.Models.FichaPrimeiroContato", null)
-                        .WithMany()
-                        .HasForeignKey("FichaId")
+                    b.HasOne("Empodera.Models.DiarioCampo", "Diario")
+                        .WithMany("Anexos")
+                        .HasForeignKey("FkIdDiario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Diario");
                 });
 
-            modelBuilder.Entity("Empodera.Models.FichaPeticoes", b =>
+            modelBuilder.Entity("Empodera.Models.Atividades", b =>
                 {
-                    b.HasOne("Empodera.Models.FichaPrimeiroContato", null)
-                        .WithMany()
-                        .HasForeignKey("FichaId")
+                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
+                        .WithMany("Atividades")
+                        .HasForeignKey("FkIdComunidade")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("Atividades")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Comunidade");
+
+                    b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Empodera.Models.FichaPrimeiroContato", b =>
+            modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
                 {
-                    b.HasOne("Empodera.Models.Ator", null)
-                        .WithMany()
-                        .HasForeignKey("AtorId")
+                    b.HasOne("Empodera.Models.Atividades", "Atividades")
+                        .WithMany("AtividadesEixos")
+                        .HasForeignKey("FkIdAtividade")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Empodera.Models.FichaResp", b =>
-                {
-                    b.HasOne("Empodera.Models.FichaPrimeiroContato", null)
-                        .WithMany()
-                        .HasForeignKey("FichaId")
+                    b.HasOne("Empodera.Models.Eixo", "Eixo")
+                        .WithMany("AtividadesEixo")
+                        .HasForeignKey("FkIdEixo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Empodera.Models.FichaResult", b =>
-                {
-                    b.HasOne("Empodera.Models.FichaPrimeiroContato", null)
-                        .WithMany()
-                        .HasForeignKey("FichaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    b.Navigation("Atividades");
 
-            modelBuilder.Entity("Empodera.Models.Permissao", b =>
-                {
-                    b.HasOne("Empodera.Models.PerfilAcesso", null)
-                        .WithMany("Permissoes")
-                        .HasForeignKey("PerfilAcessoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.RedePrimaria", b =>
-                {
-                    b.HasOne("Empodera.Models.Ator", null)
-                        .WithMany()
-                        .HasForeignKey("AtorRelacionadoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.RedeRecurso", b =>
-                {
-                    b.HasOne("Empodera.Models.Comunidade", null)
-                        .WithMany("Redes")
-                        .HasForeignKey("ComunidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Empodera.Models.Atividade", b =>
-                {
-                    b.Navigation("AtividadesEixo");
+                    b.Navigation("Eixo");
                 });
 
             modelBuilder.Entity("Empodera.Models.AtorComunidade", b =>
                 {
-                    b.Navigation("Atores");
+                    b.HasOne("Empodera.Models.Atores", "Ator")
+                        .WithMany("Comunidades")
+                        .HasForeignKey("FKidAtores")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
+                        .WithMany("AtorComunidades")
+                        .HasForeignKey("FkIdComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ator");
+
+                    b.Navigation("Comunidade");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Atores", b =>
+                {
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("Atores")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", "Ator")
+                        .WithMany("Avaliacoes")
+                        .HasForeignKey("FKidAtores")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("Avaliacoes")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Ator");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Empodera.Models.Comunidade", b =>
                 {
-                    b.Navigation("Diarios");
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("Comunidades")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DAAtores", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", "Ator")
+                        .WithMany("DAAtores")
+                        .HasForeignKey("FKidAtores")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.DiarioDAcoes", "DiarioDAcoes")
+                        .WithMany("DAtores")
+                        .HasForeignKey("FkIdDDacoes")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ator");
+
+                    b.Navigation("DiarioDAcoes");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DetalhesDAcoes", b =>
+                {
+                    b.HasOne("Empodera.Models.DiarioDAcoes", "DiarioDAcoes")
+                        .WithMany("Detalhes")
+                        .HasForeignKey("FkIdDDacoes")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DiarioDAcoes");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DetalhesEixos", b =>
+                {
+                    b.HasOne("Empodera.Models.DetalhesDAcoes", "Detalhes")
+                        .WithMany("DetalhesEixos")
+                        .HasForeignKey("FkIdDetalhes")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Eixo", "Eixo")
+                        .WithMany("DetalhesEixos")
+                        .HasForeignKey("FkIdEixo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Detalhes");
+
+                    b.Navigation("Eixo");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioAcoes", b =>
+                {
+                    b.HasOne("Empodera.Models.Acoes", "Acoes")
+                        .WithMany("DiarioAcoes")
+                        .HasForeignKey("FkIdAcoes")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.DiarioCampo", "Diario")
+                        .WithMany("DiarioAcoes")
+                        .HasForeignKey("FkIdDiario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Acoes");
+
+                    b.Navigation("Diario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
+                {
+                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
+                        .WithMany("DiarioCampos")
+                        .HasForeignKey("FkIdComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("DiarioCampos")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Comunidade");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioDAcoes", b =>
+                {
+                    b.HasOne("Empodera.Models.DiarioCampo", "Diario")
+                        .WithMany("DiarioDAcoes")
+                        .HasForeignKey("FkIdDiario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioEixo", b =>
+                {
+                    b.HasOne("Empodera.Models.DiarioCampo", "Diario")
+                        .WithMany("DiarioEixos")
+                        .HasForeignKey("FkIdDiario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Eixo", "Eixo")
+                        .WithMany("DiarioEixos")
+                        .HasForeignKey("FkIdEixo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diario");
+
+                    b.Navigation("Eixo");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
+                {
+                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
+                        .WithMany("Condicoes")
+                        .HasForeignKey("FkIdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ficha");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FichaPeticoes", b =>
+                {
+                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
+                        .WithMany("Peticoes")
+                        .HasForeignKey("FkIdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ficha");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FichaPrimeiroContato", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", "Ator")
+                        .WithMany("FichasPrimeiroContato")
+                        .HasForeignKey("FKidAtores")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("FichasPrimeiroContato")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Ator");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FichaResp", b =>
+                {
+                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
+                        .WithMany("Respostas")
+                        .HasForeignKey("FkIdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ficha");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FichaResult", b =>
+                {
+                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
+                        .WithMany("Resultados")
+                        .HasForeignKey("FkIdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ficha");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FonteInf", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", null)
+                        .WithMany("FonteInfos")
+                        .HasForeignKey("AtoresIdAtores");
+
+                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
+                        .WithMany("Fontes")
+                        .HasForeignKey("FkIdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ficha");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Perfil", b =>
+                {
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("Perfis")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Permissoes", b =>
+                {
+                    b.HasOne("Empodera.Models.Perfil", "Perfil")
+                        .WithMany("Permissoes")
+                        .HasForeignKey("FkIdPerfil")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Perfil");
+                });
+
+            modelBuilder.Entity("Empodera.Models.RedeEixo", b =>
+                {
+                    b.HasOne("Empodera.Models.Eixo", "Eixo")
+                        .WithMany("RedeEixos")
+                        .HasForeignKey("FkIdEixo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.RedeRecursos", "RedeRecursos")
+                        .WithMany("RedeEixos")
+                        .HasForeignKey("FkIdRede")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Eixo");
+
+                    b.Navigation("RedeRecursos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.RedePrimaria", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", "AtorPrincipal")
+                        .WithMany()
+                        .HasForeignKey("FkIdAtorPrincipal")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Atores", "AtorRelacionado")
+                        .WithMany()
+                        .HasForeignKey("FkIdAtorRelacionados")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AtorPrincipal");
+
+                    b.Navigation("AtorRelacionado");
+                });
+
+            modelBuilder.Entity("Empodera.Models.RedeRecursos", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", "Ator")
+                        .WithMany("Redes")
+                        .HasForeignKey("FKidAtores")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
+                        .WithMany("RedeRecursos")
+                        .HasForeignKey("FkIdComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                        .WithMany("RedeRecursos")
+                        .HasForeignKey("FkIdUsuario")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Ator");
+
+                    b.Navigation("Comunidade");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Vulnerabilidade", b =>
+                {
+                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
+                        .WithMany("Vulnerabilidades")
+                        .HasForeignKey("FkIdComunidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comunidade");
+                });
+
+            modelBuilder.Entity("Empodera.Models.VulnerabilidadesEixo", b =>
+                {
+                    b.HasOne("Empodera.Models.Eixo", "Eixo")
+                        .WithMany("VulnerabilidadesEixos")
+                        .HasForeignKey("FkIdEixo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.Vulnerabilidade", "Vulnerabilidade")
+                        .WithMany("VulnerabilidadesEixos")
+                        .HasForeignKey("FkIdVulnerabilidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Eixo");
+
+                    b.Navigation("Vulnerabilidade");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Acoes", b =>
+                {
+                    b.Navigation("AcoesAtores");
+
+                    b.Navigation("DiarioAcoes");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Atividades", b =>
+                {
+                    b.Navigation("Acoes");
+
+                    b.Navigation("AtividadesEixos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Atores", b =>
+                {
+                    b.Navigation("AcoesAtores");
+
+                    b.Navigation("Avaliacoes");
+
+                    b.Navigation("Comunidades");
+
+                    b.Navigation("DAAtores");
+
+                    b.Navigation("FichasPrimeiroContato");
+
+                    b.Navigation("FonteInfos");
 
                     b.Navigation("Redes");
                 });
 
-            modelBuilder.Entity("Empodera.Models.PerfilAcesso", b =>
+            modelBuilder.Entity("Empodera.Models.Comunidade", b =>
+                {
+                    b.Navigation("Atividades");
+
+                    b.Navigation("AtorComunidades");
+
+                    b.Navigation("DiarioCampos");
+
+                    b.Navigation("RedeRecursos");
+
+                    b.Navigation("Vulnerabilidades");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DetalhesDAcoes", b =>
+                {
+                    b.Navigation("DetalhesEixos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioCampo", b =>
+                {
+                    b.Navigation("Anexos");
+
+                    b.Navigation("DiarioAcoes");
+
+                    b.Navigation("DiarioDAcoes");
+
+                    b.Navigation("DiarioEixos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.DiarioDAcoes", b =>
+                {
+                    b.Navigation("DAtores");
+
+                    b.Navigation("Detalhes");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Eixo", b =>
+                {
+                    b.Navigation("AtividadesEixo");
+
+                    b.Navigation("DetalhesEixos");
+
+                    b.Navigation("DiarioEixos");
+
+                    b.Navigation("RedeEixos");
+
+                    b.Navigation("VulnerabilidadesEixos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.FichaPrimeiroContato", b =>
+                {
+                    b.Navigation("Condicoes");
+
+                    b.Navigation("Fontes");
+
+                    b.Navigation("Peticoes");
+
+                    b.Navigation("Respostas");
+
+                    b.Navigation("Resultados");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Perfil", b =>
                 {
                     b.Navigation("Permissoes");
+                });
+
+            modelBuilder.Entity("Empodera.Models.RedeRecursos", b =>
+                {
+                    b.Navigation("RedeEixos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Usuario", b =>
+                {
+                    b.Navigation("Atividades");
+
+                    b.Navigation("Atores");
+
+                    b.Navigation("Avaliacoes");
+
+                    b.Navigation("Comunidades");
+
+                    b.Navigation("DiarioCampos");
+
+                    b.Navigation("FichasPrimeiroContato");
+
+                    b.Navigation("Perfis");
+
+                    b.Navigation("RedeRecursos");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Vulnerabilidade", b =>
+                {
+                    b.Navigation("VulnerabilidadesEixos");
                 });
 #pragma warning restore 612, 618
         }

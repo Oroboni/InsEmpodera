@@ -42,7 +42,7 @@ public class PersonalProcessController : Controller
         if (atorId.HasValue)
         {
             // Filtra onde AtorId é igual ao selecionado
-            query = query.Where(d => d.AtorId == atorId.Value);
+            query = query.Where(d => d.FkIdUsuario == atorId.Value);
         }
         else 
         {
@@ -63,7 +63,7 @@ public class PersonalProcessController : Controller
     }
 
     // GET: /PersonalProcess/Create
-    public async Task<IActionResult> Create(int? atorId)
+    public async Task<IActionResult> Create(int atorId)
     {
         if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
         
@@ -85,7 +85,7 @@ public class PersonalProcessController : Controller
             Data = DateTime.Now,
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now,
-            AtorId = atorId // Já preenche se vier do Index
+            FkIdUsuario = atorId 
         };
 
         return View(model);
@@ -103,9 +103,9 @@ public class PersonalProcessController : Controller
         diario.DtModificacao = DateTime.Now;
 
         // Validação básica
-        if (diario.AtorId == null || diario.AtorId == 0)
+        if (diario.FkIdUsuario == null || diario.FkIdUsuario == 0)
         {
-            ModelState.AddModelError("AtorId", "O Ator é obrigatório.");
+            ModelState.AddModelError("FkIdUsuario", "O Ator é obrigatório.");
         }
 
         if (ModelState.IsValid)
@@ -116,11 +116,11 @@ public class PersonalProcessController : Controller
             // Aqui você salvaria os eixosIds na tabela de ligação (DiarioEixo) se necessário
             // ... lógica de salvar eixos ...
 
-            return RedirectToAction(nameof(Index), new { atorId = diario.AtorId });
+            return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
         }
         
         // Se falhar, recarrega as listas
-        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.AtorId);
+        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
         ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
         
         return View(diario);
@@ -140,7 +140,7 @@ public class PersonalProcessController : Controller
             await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), 
             "IdAtores", 
             "Nome", 
-            diario.AtorId // Seleciona o ator salvo
+            diario.FkIdUsuario // Seleciona o ator salvo
         );
         
         ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
@@ -164,7 +164,7 @@ public class PersonalProcessController : Controller
             // 1. Vincula o ID do Ator vindo do select (HTML) ao objeto Diario
             if (SelectedAtorId > 0)
             {
-                diario.AtorId = SelectedAtorId;
+                diario.FkIdUsuario = SelectedAtorId;
             }
             else
             {
@@ -188,8 +188,8 @@ public class PersonalProcessController : Controller
                 {
                     var vinculo = new DiarioEixo
                     {
-                        DiarioId = diario.IdDCampo, // ID gerado acima
-                        EixoId = eixoId
+                        FkIdDiario = diario.IdDCampo, // ID gerado acima
+                        FkIdEixo = eixoId
                     };
                     _context.Add(vinculo);
                 }
@@ -198,7 +198,7 @@ public class PersonalProcessController : Controller
             }
 
             // 5. Redireciona para o Index (filtrando pelo ator que acabamos de criar)
-            return RedirectToAction(nameof(Index), new { atorId = diario.AtorId });
+            return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
         }
         catch (Exception)
         {
@@ -225,7 +225,7 @@ public class PersonalProcessController : Controller
                  if(diarioExistente == null) return NotFound();
 
                  // Atualiza os campos
-                 diarioExistente.AtorId = diario.AtorId;
+                 diarioExistente.FkIdUsuario = diario.FkIdUsuario;
                  diarioExistente.Data = diario.Data;
                  diarioExistente.Descricao = diario.Descricao;
                  diarioExistente.DtModificacao = DateTime.Now;
@@ -238,10 +238,10 @@ public class PersonalProcessController : Controller
                  if (!_context.DiariosCampo.Any(e => e.IdDCampo == id)) return NotFound();
                  else throw;
              }
-             return RedirectToAction(nameof(Index), new { atorId = diario.AtorId });
+             return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
          }
          
-         ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.AtorId);
+         ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
          ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
          
          return View(diario);

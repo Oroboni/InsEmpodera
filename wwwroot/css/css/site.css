@@ -1,0 +1,21 @@
+/* Estilos globais podem ser adicionados aqui */
+/* Exemplo de estilo global */
+body {
+    font-family:var(--font-family-primary);
+    background-color: #eee;
+    color:var(--color-primary);
+}
+
+/* Adicione este código ao final do seu site.css */
+
+/* Por padrão, section-2 tem scroll e ocupa 100% da altura */
+.section-2.with-scroll {
+    overflow-y: auto;
+    height: 100vh;
+}
+
+/* Quando a classe no-scroll é aplicada, removemos o scroll */
+.section-2.no-scroll {
+    overflow-y: hidden;
+    height: 100vh; 
+}

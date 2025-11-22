@@ -26,11 +26,8 @@ public class ActivityController : Controller
 
         ViewData["DisableMainScroll"] = "true"; 
         
-        // No futuro, você vai carregar as atividades e seus eixos
-        // var atividades = await _context.Atividades.Include(a => a.AtividadesEixo).ThenInclude(ae => ae.Eixo).ToListAsync();
-        // return View(atividades);
-
-        return View();
+        var atividades = await _context.Atividades.Include(a => a.AtividadesEixos).ThenInclude(ae => ae.Eixo).ToListAsync();
+        return View(atividades);
     }
 
     // GET: /Activity/Create
@@ -49,7 +46,7 @@ public class ActivityController : Controller
         );
         
         // Envia um model vazio para o rodapé padronizado
-        var model = new Atividade
+        var model = new Atividades
         {
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now
@@ -72,7 +69,7 @@ public class ActivityController : Controller
         }
 
         // Busca a Atividade e seus Eixos
-        var atividade = await _context.Atividades.FindAsync(id); // (Você precisará incluir os Eixos)
+        var atividade = await _context.Atividades.FindAsync(id);
             
         if (atividade == null)
         {

@@ -6,11 +6,13 @@ namespace Empodera.Models
 {
     public class Vulnerabilidade
     {
-        [Key]
-        public int IdVulnerabilidade { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Localizacao { get; set; } = string.Empty;
-        public string Servicos { get; set; } = string.Empty;
-        public int ComunidadeId { get; set; }
+        public int IdVulnerabilidade { get; set; } 
+        public string Nome { get; set; } = null!;
+        public string Localizacao { get; set; } = null!;
+        public string Servicos { get; set; } = null!;
+        public int FkIdComunidade { get; set; } 
+        
+        public Comunidade Comunidade { get; set; } = null!;
+        public List<VulnerabilidadesEixo> VulnerabilidadesEixos { get; set; } = new();
     }
 }

@@ -45,7 +45,7 @@
     <div class="body-page">
         <div class="main-content-wrapper">
             <div class="section-1">
-                <h2>Seção 1 - USER</h2>
+                <h2>Seção 1 - </h2>
                 <ul>
                     <p>Principais</p>
                     <li data-page="home"
@@ -55,8 +55,8 @@
                         </a>
                     </li>
                     <li data-page="Comunidades"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Comunidades" ? "active" : "")">
-                        <a href="/Home/Comunidades">
+                        class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Comunidade" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                        <a href="/Comunidade/Index">
                             <p><i class="fas fa-city"></i> Comunidades</p>
                         </a>
                     </li>

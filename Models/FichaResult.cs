@@ -6,9 +6,10 @@ namespace Empodera.Models
 {
     public class FichaResult
     {
-        [Key]
-        public int IdCondicoes { get; set; }
-        public int FichaId { get; set; }
-        public string Result { get; set; } = string.Empty;
+        public int IdCondicoes { get; set; }     
+        public int FkIdFicha { get; set; }       
+        public string Result { get; set; } = null!;
+
+        public FichaPrimeiroContato Ficha { get; set; } = null!;
     }
 }

@@ -22,7 +22,7 @@
             <label for="AtorId">Ator</label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtoresList" required>
+                <select asp-for="FkIdUsuario" class="form-control" asp-items="ViewBag.AtoresList" required>
                     <option value="">Selecione um Ator</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
@@ -40,7 +40,7 @@
             <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
                 <span class="tooltip-icon" data-tooltip="1. Não desenvolve atividades ilegais.&#10;5. Desenvolve atividades ilegais.">?</span>
             </label>
-            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5" value="1">
+            <input type="range" class="metric-slider" asp-for="Prevencao" min="1" max="5" value="1">
         </div>
 
         <div class="metric-form-group">
@@ -61,7 +61,7 @@
             <label class="metric-label" for="Prevencao">Prevenção
                 <span class="tooltip-icon" data-tooltip="-">?</span>
             </label>
-            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5" value="1">
+            <input type="range" class="metric-slider" asp-for="Prevencao" min="1" max="5" value="1">
         </div>
 
         

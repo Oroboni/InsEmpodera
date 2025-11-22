@@ -1,0 +1,143 @@
+/* Container da Página */
+.activity-page-container {
+    padding: 24px 32px;
+    height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background-color: var(--color-bg-primary); /* Fundo branco */
+}
+
+/* Título */
+.activity-title h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Controles (Busca e Botão) */
+.activity-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center; /* Alinha verticalmente */
+}
+
+.activity-controls .search-bar {
+    flex-grow: 1;
+    position: relative;
+}
+
+.activity-controls .search-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 50px 0 24px;
+    border: 1px solid var(--color-border);
+    background-color: #fff;
+    border-radius: 8px; /* Borda quadrada */
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.activity-controls .search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-gray-500);
+}
+
+.activity-controls .btn-add-activity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 24px;
+    height: 48px;
+    flex-shrink: 0;
+    background-color: #344054; /* Cinza escuro */
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+.activity-controls .btn-add-activity:hover {
+    background-color: #4a5568;
+}
+
+/* Área da Lista (com scroll) */
+.activity-list-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #f7f7f7; /* Fundo cinza */
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.activity-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Card da Atividade */
+.activity-card {
+    display: flex;
+    align-items: flex-start; /* Alinha no topo */
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20px 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.activity-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.activity-card-info .title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2b2b2b;
+}
+
+.activity-card .details-icon {
+    color: #6a0dad; /* Roxo */
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+/* Lista de Tags (Eixos) */
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-item {
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Paleta de Cores das Tags (baseada no protótipo) */
+.tag-blue { background-color: #E0F2FE; color: #026AA2; } /* Prevenção */
+.tag-green { background-color: #D1FAE5; color: #065F46; } /* Ocupação */
+.tag-yellow { background-color: #FEF3C7; color: #92400E; } /* Lazer */
+.tag-purple { background-color: #EBEBFF; color: #5B21B6; } /* Segurança Social */
+.tag-lightgreen { background-color: #DCFCE7; color: #166534; } /* Educação */
+.tag-red { background-color: #FEE2E2; color: #991B1B; } /* Saúde */
+.tag-lightblue { background-color: #DBEAFE; color: #1E40AF; } /* Assistência Básica */
+.tag-pink { background-color: #FCE7F3; color: #9D174D; } /* Rede primária */
+.tag-darkred { background-color: #FFE4E6; color: #A92128; } /* Substâncias */
