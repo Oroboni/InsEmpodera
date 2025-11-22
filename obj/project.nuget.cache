@@ -2,7 +2,7 @@
   "version": 2,
   "dgSpecHash": "Q3684T4ormk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\elian\\Área de Trabalho\\InsEmpodera\\InsEmpodera.csproj",
+  "projectFilePath": "C:\\Users\\luisf\\OneDrive\\Documentos\\FATEC\\Projeto Integrador\\Usoarios\\InsEmpodera\\InsEmpodera.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\elian\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\elian\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
