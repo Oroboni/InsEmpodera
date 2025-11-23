@@ -34,7 +34,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/HomePage.cshtml");
+        return View("~/Views/Home/Index.cshtml");
     }
 
     public IActionResult Atores()
@@ -43,7 +43,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/Atores.cshtml");
+        return View("~/Views/Actor/Index.cshtml");
     }
 
     public IActionResult FichaPrimeiroContato()
@@ -52,7 +52,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/FichaPrimeiroContato.cshtml");
+        return View("~/Views/FichaPrimeiroContato/Index.cshtml");
     }
 
     public IActionResult DiariosDeCampo()
@@ -70,7 +70,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/DiarioProcessoPessoal.cshtml");
+        return View("~/Views/DiarioProcessoPessoal/Index.cshtml");
     }
 
     public IActionResult Relatorios()
@@ -79,7 +79,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/Relatorios.cshtml");
+        return View("~/Views/Report/Index.cshtml");
     }
 
     public IActionResult Dashboard()
@@ -88,7 +88,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/Dashboard.cshtml");
+        return View("~/Views/Dashboard/Index.cshtml");
     }
 
     public IActionResult Atividades()
@@ -97,7 +97,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/Atividades.cshtml");
+        return View("~/Views/Activity/index.cshtml");
     }
 
     public IActionResult Usuarios()
@@ -115,7 +115,7 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        return View("~/Views/Home/Sidebar/PerfisDeAcesso.cshtml");
+        return View("~/Views/AccessProfile/Index.cshtml");
     }
 
     public IActionResult Ajuda()
