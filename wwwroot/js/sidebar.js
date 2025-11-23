@@ -1,118 +1,140 @@
-// Mapeamento das páginas para as actions do controller
 const pageRoutes = {
-    home: '/Home/HomePage',
-    Comunidades: '/Home/Comunidades',
-    Atores: '/Home/Atores',
-    FichaPrimeiroContato: '/Home/FichaPrimeiroContato',
-    DiariosDeCampo: '/Home/DiariosDeCampo',
-    DiarioProcessoPessoal: '/Home/DiarioProcessoPessoal',
-    Relatorios: '/Home/Relatorios',
-    Dashboard: '/Home/Dashboard',
-    Atividades: '/Home/Atividades',
-    Usuarios: '/Home/Usuarios',
-    PerfisDeAcesso: '/Home/PerfisDeAcesso',
-    Ajuda: '/Home/Ajuda',
-    Configuracoes: '/Home/Configuracoes',
-    Logout: '/Home/Logout'
+    'home': '/Home/Index',
+    'comunidades': '/Comunidades/Index',
+    'atores': '/Atores/Index',
+    'fichaprimeirocontato': '/FichaPrimeiroContato/Index',
+    'diariosdecampo': '/DiariosDeCampo/Index',
+    'diarioprocessopessoal': '/DiarioProcessoPessoal/Index',
+    'relatorios': '/Relatorios/Index',
+    'dashboard': '/Dashboard/Index',
+    'atividades': '/Atividades/Index',
+    'usuarios': '/Usuarios/Index',
+    'perfisdeacesso': '/PerfisDeAcesso/Index',
+    'ajuda': '/Ajuda/Index',
+    'configuracoes': '/Configuracoes/Index',
+    'logout': '/Account/Logout'
 };
 
 const content = document.getElementById("content");
 
-function loadPage(page, push = true) {
-    // Logout é um caso especial - redireciona para a action real
-    if (page === 'Logout') {
-        window.location.href = '/Home/Logout';
+
+function loadPage(pageKey, push = true) {
+    const page = pageKey.toLowerCase();
+
+    if (page === 'logout') {
+        window.location.href = pageRoutes[page];
         return;
     }
 
     if (pageRoutes[page]) {
-        // Faz uma requisição AJAX para buscar apenas o conteúdo da view
         fetch(pageRoutes[page], {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
-        .then(response => response.text())
-        .then(html => {
-            // Extrai apenas o conteúdo do body (sem layout)
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const bodyContent = doc.querySelector('#content') || doc.body;
-            content.innerHTML = bodyContent.innerHTML;
-
-            // Atualiza classes ativas
-            updateActiveMenuItem(page);
-
-            if (push) {
-                // Para home, usamos a URL raiz
-                const url = page === 'home' ? '/' : '/' + page.toLowerCase();
-                history.pushState({ page }, "", url);
-            }
+        .then(res => {
+            if (!res.ok) throw new Error('Erro na resposta do servidor');
+            return res.text();
         })
-        .catch(error => {
-            console.error('Erro ao carregar página:', error);
-            content.innerHTML = "<h2>404</h2><p>Página não encontrada.</p>";
-        });
+        .then(html => processAndRender(html, page, push))
+        .catch(err => console.error('Erro ao carregar:', err));
     } else {
-        content.innerHTML = "<h2>404</h2><p>Página não encontrada.</p>";
+        console.warn("Rota não mapeada para AJAX:", page);
     }
 }
 
-function updateActiveMenuItem(page) {
-    // Remove classe ativa de todos os itens
+function processAndRender(html, pageKey, push) {
+    document.querySelectorAll('link[data-page-specific]').forEach(link => link.remove());
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    const overrideCss = tempDiv.querySelector('[data-page-css]');
+    const cssFileName = overrideCss ? overrideCss.getAttribute('data-page-css') : pageKey;
+
+    const render = () => {
+        content.innerHTML = html;
+        executePageScripts(html);
+        updateActiveMenuItem(pageKey);
+        if (push) updateHistory(pageKey);
+    };
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `/css/pages/${cssFileName}.css`;
+    link.setAttribute('data-page-specific', 'true');
+
+    link.onload = render;
+    link.onerror = () => {
+        render();
+    };
+
+    document.head.appendChild(link);
+}
+
+function executePageScripts(html) {
+    const scripts = html.match(/<script>([\s\S]*?)<\/script>/g);
+    if (scripts) {
+        scripts.forEach(scriptTag => {
+            const content = scriptTag.replace(/<script>|<\/script>/g, '');
+            const script = document.createElement('script');
+            script.textContent = content;
+            document.body.appendChild(script);
+        });
+    }
+}
+
+function updateHistory(page) {
+    const url = page === 'home' ? '/' : '/' + page;
+    history.pushState({ page }, "", url);
+}
+
+function updateActiveMenuItem(pageKey) {
+    const page = pageKey.toLowerCase();
     document.querySelectorAll(".section-1 li").forEach(item => {
         item.classList.remove("active");
+        // Compara ignorando maiúsculas/minúsculas
+        const itemPage = item.getAttribute("data-page")?.toLowerCase();
+        if (itemPage === page) item.classList.add("active");
     });
-    
-    // Adiciona classe ativa ao item atual
-    const activeItem = document.querySelector(`[data-page="${page}"]`);
-    if (activeItem) {
-        activeItem.classList.add("active");
-    }
 }
 
-// Eventos de clique na sidebar
 document.querySelectorAll(".section-1 li").forEach(item => {
-    item.addEventListener("click", () => {
+    item.addEventListener("click", (e) => {
+        e.preventDefault();
         const page = item.getAttribute("data-page");
-        loadPage(page);
+        if(page) loadPage(page);
     });
 });
 
-// Lida com botão Voltar/Avançar do navegador
 window.addEventListener("popstate", (event) => {
     const page = event.state?.page || "home";
     loadPage(page, false);
 });
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPath = window.location.pathname.replace("/", "").toLowerCase() || "";
+document.addEventListener('DOMContentLoaded', function () {
+    let currentPath = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+    if (currentPath === '' || currentPath === 'homepage') currentPath = 'home';
 
-    // Mapear URL para nome da página
-    const urlToPageMap = {
-        '': 'home',
-        'home': 'home',
-        'homepage': 'home',
-        'comunidades': 'Comunidades',
-        'atores': 'Atores',
-        'fichaprimeirocontato': 'FichaPrimeiroContato',
-        'diariosdeampo': 'DiariosDeCampo',
-        'diarioprocessopessoal': 'DiarioProcessoPessoal',
-        'relatorios': 'Relatorios',
-        'dashboard': 'Dashboard',
-        'atividades': 'Atividades',
-        'usuarios': 'Usuarios',
-        'perfisdeacesso': 'PerfisDeAcesso',
-        'ajuda': 'Ajuda',
-        'configuracoes': 'Configuracoes'
-    };
+    let isAjaxPage = false;
+    let mappedKey = null;
 
-    const currentPage = urlToPageMap[currentPath] || 'home';
-    
-    // Se não há estado no history, adiciona o estado atual
-    if (!history.state) {
-        const url = currentPage === 'home' ? '/' : '/' + currentPath;
-        history.replaceState({ page: currentPage }, "", url);
+    if (pageRoutes[currentPath]) {
+        isAjaxPage = true;
+        mappedKey = currentPath;
+    } 
+    else if (currentPath === 'home') {
+        isAjaxPage = true;
+        mappedKey = 'home';
+    }
+
+    if (isAjaxPage) {
+        if (!history.state) {
+            const url = mappedKey === 'home' ? '/' : '/' + mappedKey;
+            history.replaceState({ page: mappedKey }, "", url);
+        }
+        updateActiveMenuItem(mappedKey);
+    } else {
+        // É uma página externa ao fluxo AJAX (ex: Create, Edit, Login).
+        // não faz nada. O navegador mostra o HTML que o servidor enviou.
+        console.log("Página standalone detectada (Create/Edit). JS de navegação pausado.");
     }
 });

@@ -1,164 +1,161 @@
-﻿﻿@* @functions {
-    string IsActive(string actionName)
-    {
-        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-        return string.Equals(currentAction, actionName, StringComparison.OrdinalIgnoreCase) ? "active" : "";
-    }
-} *@
-
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Instituto Empodera</title>
-
-
+    <title>Laços - Instituto Empodera</title>
     <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
 
-    @* CSS Variables - carregadas primeiro *@
+    <!-- CSS Base -->
     <link rel="stylesheet" href="~/css/_variaveis.css" />
-
-    @* CSS Global - carregado após variáveis *@
     <link rel="stylesheet" href="~/css/site.css" />
-
-    @* Font Awesome *@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
-
-    @* CSS específico da sidebar - pode sobrescrever estilos globais se necessário *@
     <link rel="stylesheet" href="~/css/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+    <!-- CSS do global do Mapa (LEAFLET) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <style>
+        .default-map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            z-index: 1;
+        }
+    </style>
 
-    @* CSS específico para cada página - carregado por último para ter prioridade *@
-    @if (ViewData["PageCSS"] != null)
-    {
-        <link rel="stylesheet" href="~/css/pages/@(ViewData["PageCSS"]).css" />
+    @{
+        var cssName = ViewData["PageCSS"] as string;
+        if (string.IsNullOrEmpty(cssName))
+        {
+            cssName = ViewContext.RouteData.Values["controller"]?.ToString().ToLower();
+        }
     }
 
-    @* Seção para estilos adicionais específicos da página *@
-    @await RenderSectionAsync("Styles", required: false)
+    @if (!string.IsNullOrEmpty(cssName))
+    {
+        <link rel="stylesheet" href="~/css/pages/@(cssName).css" asp-append-version="true" />
+    }
 
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
     <div class="body-page">
         <div class="main-content-wrapper">
             <div class="section-1">
-                <h2>Seção 1 - </h2>
+                @if (true)
+                {
+                    var userName = Context.Session.GetString("Nome") ?? "Usuário";
+                    <h2>Olá @userName</h2>
+                }
                 <ul>
                     <p>Principais</p>
-                    <li data-page="home"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "HomePage" ? "active" : "")">
-                        <a href="/Home/HomePage">
+                    <!-- Seu menu continua igual... -->
+                    <li data-page="home" class="@IsActive("Home")">
+                        <a asp-controller="Home" asp-action="Index">
                             <p><i class="fas fa-home"></i> Home</p>
                         </a>
                     </li>
-                    <li data-page="Comunidades"
-                        class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Comunidade" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                        <a href="/Comunidade/Index">
+                    <li data-page="comunidades" class="@IsActive("Comunidades")">
+                        <a asp-controller="Comunidades" asp-action="Index">
                             <p><i class="fas fa-city"></i> Comunidades</p>
                         </a>
                     </li>
-
-                    <li data-page="Atores"
-                        class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Actor" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
-                        <a href="/Actor/Index">
+                    <li data-page="atores" class="@IsActive("Atores")">
+                        <a asp-controller="Atores" asp-action="Index">
                             <p><i class="fas fa-users"></i> Atores</p>
                         </a>
                     </li>
-                    <li data-page="FichaPrimeiroContato"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "FichaPrimeiroContato" ? "active" : "")">
-                        <a href="/Home/FichaPrimeiroContato">
-                            <p><i class="fas fa-clipboard-list"></i> Ficha Primeiro Contato</p>
+                    <li data-page="fichaprimeirocontato" class="@IsActive("FichaPrimeiroContato")">
+                        <a asp-controller="FichaPrimeiroContato" asp-action="Index">
+                            <p><i class="fas fa-clipboard-list"></i> Ficha 1º Contato</p>
                         </a>
                     </li>
-                    <li data-page="DiariosDeCampo"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiariosDeCampo" ? "active" : "")">
-                        <a href="/Home/DiariosDeCampo">
+                    <li data-page="diariosdecampo" class="@IsActive("DiariosDeCampo")">
+                        <a asp-controller="DiariosDeCampo" asp-action="Index">
                             <p><i class="fas fa-book"></i> Diários de Campo</p>
                         </a>
                     </li>
-                    <li data-page="DiarioProcessoPessoal"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "DiarioProcessoPessoal" ? "active" : "")">
-                        <a href="/PersonalProcess">
-                            <p><i class="fas fa-book-open"></i> Diário Processo Pessoal</p>
+                    <li data-page="diarioprocessopessoal" class="@IsActive("DiarioProcessoPessoal")">
+                        <a asp-controller="DiarioProcessoPessoal" asp-action="Index">
+                            <p><i class="fas fa-book-open"></i> Diário Pessoal</p>
                         </a>
                     </li>
-                    <li data-page="Relatorios"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Relatorios" ? "active" : "")">
-                        <a href="/Report">
+                    <li data-page="relatorios" class="@IsActive("Relatorios")">
+                        <a asp-controller="Relatorios" asp-action="Index">
                             <p><i class="fas fa-chart-bar"></i> Relatórios</p>
                         </a>
                     </li>
-                    <li data-page="Dashboard"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
-                        <a href="/Home/Dashboard">
+                    <li data-page="dashboard" class="@IsActive("Dashboard")">
+                        <a asp-controller="Dashboard" asp-action="Index">
                             <p><i class="fas fa-chart-line"></i> Dashboard</p>
                         </a>
                     </li>
-                    <li data-page="Atividades"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Atividades" ? "active" : "")">
-                        <a href="/Activity">
+                    <li data-page="atividades" class="@IsActive("Atividades")">
+                        <a asp-controller="Atividades" asp-action="Index">
                             <p><i class="fas fa-bolt"></i> Atividades</p>
                         </a>
                     </li>
-                    <li data-page="Usuarios"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Usuarios" ? "active" : "")">
-                        <a href="/Home/Usuarios">
+                    <li data-page="usuarios" class="@IsActive("Usuarios")">
+                        <a asp-controller="Usuarios" asp-action="Index">
                             <p><i class="fas fa-user"></i> Usuários</p>
                         </a>
                     </li>
-                    <li data-page="PerfisDeAcesso"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
-                        <a href="/AccessProfile">
+                    <li data-page="perfisdeacesso" class="@IsActive("PerfisDeAcesso")">
+                        <a asp-controller="PerfisDeAcesso" asp-action="Index">
                             <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
-                        </a>
-                    </li>
-                    <li data-page="AvaliacoesPessoais"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "PerfisDeAcesso" ? "active" : "")">
-                        <a href="/PersonalAssessment">
-                            <p><i class="fas fa-user-shield"></i> Avaliações Pessoais</p>
                         </a>
                     </li>
                 </ul>
 
                 <ul>
                     <p>Conta</p>
-                    <li data-page="Ajuda"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Ajuda" ? "active" : "")">
-                        <a href="/Home/Ajuda">
+                    <li data-page="ajuda" class="@IsActive("Ajuda")">
+                        <a asp-controller="Ajuda" asp-action="Index">
                             <p><i class="fas fa-question-circle"></i> Ajuda</p>
                         </a>
                     </li>
-                    <li data-page="Configuracoes"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Configuracoes" ? "active" : "")">
-                        <a href="/Home/Configuracoes">
+                    <li data-page="configuracoes" class="@IsActive("Configuracoes")">
+                        <a asp-controller="Configuracoes" asp-action="Index">
                             <p><i class="fas fa-cog"></i> Configurações</p>
                         </a>
                     </li>
-                    <li data-page="Logout"
-                        class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Logout" ? "active" : "")">
-                        <a href="/Account/Logout">
+                    <li data-page="logout">
+                        <a asp-controller="Account" asp-action="Logout">
                             <p><i class="fas fa-sign-out-alt"></i> Logout</p>
                         </a>
                     </li>
                 </ul>
             </div>
-            @{
-                // Verifica se a View pediu para desativar o scroll principal
-                string sectionClass = ViewData["DisableMainScroll"] as string == "true" ? "no-scroll" : "with-scroll";
-            }
 
-            <div class="section-2 @sectionClass" id="content">
+            <div class="section-2" id="content">
                 @RenderBody()
             </div>
         </div>
     </div>
 
     <script src="~/js/sidebar.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Scripts do mapa. devem vir antes da chamada do app-maps.js -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- Agora sim carregamos o seu script customizado -->
+    <script src="~/js/app-maps.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 
 </html>
+
+@functions {
+    public string IsActive(string controllerName)
+    {
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        return string.Equals(currentController, controllerName, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+}

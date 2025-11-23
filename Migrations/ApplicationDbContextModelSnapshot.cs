@@ -210,22 +210,21 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("FkIdComunidade")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FkIdUsuario")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Foto")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UsuarioIdUsuario")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("IdAtividade");
 
                     b.HasIndex("FkIdComunidade");
 
-                    b.HasIndex("FkIdUsuario");
+                    b.HasIndex("UsuarioIdUsuario");
 
                     b.ToTable("Atividades");
 
@@ -237,7 +236,6 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 1,
-                            FkIdUsuario = 1,
                             Foto = "a1.jpg",
                             Nome = "Ativ 1"
                         },
@@ -248,7 +246,6 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 2,
-                            FkIdUsuario = 2,
                             Foto = "a2.jpg",
                             Nome = "Ativ 2"
                         },
@@ -259,7 +256,6 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 3,
-                            FkIdUsuario = 3,
                             Foto = "a3.jpg",
                             Nome = "Ativ 3"
                         },
@@ -270,7 +266,6 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 4,
-                            FkIdUsuario = 4,
                             Foto = "a4.jpg",
                             Nome = "Ativ 4"
                         },
@@ -281,7 +276,6 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 5,
-                            FkIdUsuario = 5,
                             Foto = "a5.jpg",
                             Nome = "Ativ 5"
                         });
@@ -459,6 +453,10 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Ativo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("TEXT");
 
@@ -513,6 +511,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 1,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -529,6 +528,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 2,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1992, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -545,6 +545,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 3,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1985, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -561,6 +562,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 4,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1991, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -577,6 +579,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 5,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -593,6 +596,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 6,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1993, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -609,6 +613,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 7,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1994, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -625,6 +630,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 8,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1995, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -641,6 +647,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 9,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -657,6 +664,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 10,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1987, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -673,6 +681,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 11,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1986, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -689,6 +698,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 12,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -705,6 +715,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 13,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1997, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -721,6 +732,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 14,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1998, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -737,6 +749,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdAtores = 15,
+                            Ativo = "S",
                             DtCriacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -899,6 +912,10 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Ativo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Complemento")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -942,6 +959,7 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdComunidade = 1,
+                            Ativo = "S",
                             Complemento = "",
                             Descricao = "Comunidade piloto",
                             DescricaoAcessibilidade = "Rampa",
@@ -950,11 +968,12 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 1,
                             Local = "Bairro A",
                             Nome = "Comunidade Alpha",
-                            Status = "Ativa"
+                            Status = "Em Processo"
                         },
                         new
                         {
                             IdComunidade = 2,
+                            Ativo = "S",
                             Complemento = "Sala 2",
                             Descricao = "Comunidade secundária",
                             DescricaoAcessibilidade = "Elevador",
@@ -963,11 +982,12 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 2,
                             Local = "Bairro B",
                             Nome = "Comunidade Beta",
-                            Status = "Ativa"
+                            Status = "Em diagnóstico"
                         },
                         new
                         {
                             IdComunidade = 3,
+                            Ativo = "S",
                             Complemento = "",
                             Descricao = "Comunidade remota",
                             DescricaoAcessibilidade = "Rampas",
@@ -976,11 +996,12 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 3,
                             Local = "Bairro C",
                             Nome = "Comunidade Gamma",
-                            Status = "Inativa"
+                            Status = "Em diagnóstico"
                         },
                         new
                         {
                             IdComunidade = 4,
+                            Ativo = "S",
                             Complemento = "Anexo",
                             Descricao = "Comunidade urbana",
                             DescricaoAcessibilidade = "Acesso",
@@ -989,11 +1010,12 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 4,
                             Local = "Bairro D",
                             Nome = "Comunidade Delta",
-                            Status = "Ativa"
+                            Status = "Em diagnóstico"
                         },
                         new
                         {
                             IdComunidade = 5,
+                            Ativo = "S",
                             Complemento = "",
                             Descricao = "Comunidade rural",
                             DescricaoAcessibilidade = "Sem acesso especial",
@@ -1002,7 +1024,7 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 5,
                             Local = "Bairro E",
                             Nome = "Comunidade Epsilon",
-                            Status = "Ativa"
+                            Status = "Em diagnóstico"
                         });
                 });
 
@@ -1608,7 +1630,7 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("AEscolar")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CPrimeiroContato")
+                    b.Property<string>("CEstabeleceu")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -1616,7 +1638,7 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Data")
+                    b.Property<string>("Complemento")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DtContato")
@@ -1628,7 +1650,11 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EParceiro")
+                    b.Property<string>("Emprego")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -1643,15 +1669,18 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("FKidAtores")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FPeloParceirto")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("FkIdUsuario")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FonteDados")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FornecidoParceiro")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("HoraContato")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LContato")
@@ -1662,15 +1691,15 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Localizacao")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("NFIlhos")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("NFilhas")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("NovoParceiro")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("QReabili")
                         .HasColumnType("INTEGER");
@@ -1687,6 +1716,9 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Telefone")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("IdFicha");
 
                     b.HasIndex("FKidAtores");
@@ -1699,25 +1731,27 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdFicha = 1,
-                            AEscolar = 10,
-                            CPrimeiroContato = "Contato A",
-                            Coment = "Info A",
-                            Data = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtContato = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Nao",
-                            EstaFamiliar = "Sim",
-                            EstruFamiliar = "Nuclear",
+                            AEscolar = 12,
+                            CEstabeleceu = "Sim",
+                            Coment = "Pessoa comunicativa, busca oportunidade.",
+                            Complemento = "Apto 101",
+                            DtContato = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Emprego = "Auxiliar Administrativo",
+                            Endereco = "Rua das Flores, 123",
+                            EstaFamiliar = "Casado",
+                            EstruFamiliar = "Família nuclear",
                             FKidAtores = 1,
-                            FPeloParceirto = "Nao",
                             FkIdUsuario = 1,
-                            FonteDados = "Entrevista",
-                            LContato = "Nome A",
+                            FonteDados = "Cadastro local",
+                            FornecidoParceiro = "Não",
+                            HoraContato = new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            LContato = "Presencial",
                             LTrat = "Nenhum",
-                            Localizacao = "Local A",
-                            NFIlhos = 1,
-                            NFilhas = 0,
+                            NFIlhos = 2,
+                            NFilhas = 1,
+                            NovoParceiro = "Não",
                             QReabili = 0,
                             SCalc = "Sim",
                             SComp = "Sim",
@@ -1726,108 +1760,116 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdFicha = 2,
-                            AEscolar = 8,
-                            CPrimeiroContato = "Contato B",
-                            Coment = "Info B",
-                            Data = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtContato = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Sim",
-                            EstaFamiliar = "Nao",
-                            EstruFamiliar = "Extendida",
-                            FKidAtores = 5,
-                            FPeloParceirto = "Sim",
-                            FkIdUsuario = 2,
-                            FonteDados = "Formulario",
-                            LContato = "Nome B",
-                            LTrat = "Sim",
-                            Localizacao = "Local B",
-                            NFIlhos = 2,
-                            NFilhas = 1,
-                            QReabili = 1,
-                            SCalc = "Sim",
-                            SComp = "Nao",
-                            SLer = "Nao"
-                        },
-                        new
-                        {
-                            IdFicha = 3,
-                            AEscolar = 12,
-                            CPrimeiroContato = "Contato C",
-                            Coment = "Info C",
-                            Data = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtContato = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2025, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Nao",
-                            EstaFamiliar = "Sim",
-                            EstruFamiliar = "Nuclear",
-                            FKidAtores = 9,
-                            FPeloParceirto = "Nao",
-                            FkIdUsuario = 3,
-                            FonteDados = "Observacao",
-                            LContato = "Nome C",
-                            LTrat = "Nao",
-                            Localizacao = "Local C",
+                            AEscolar = 16,
+                            CEstabeleceu = "Não",
+                            Coment = "Precisa de acompanhamento psicológico.",
+                            Complemento = "Casa",
+                            DtContato = new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Emprego = "Professor",
+                            Endereco = "Av. Brasil, 457",
+                            EstaFamiliar = "Solteiro",
+                            EstruFamiliar = "Mora sozinho",
+                            FKidAtores = 2,
+                            FkIdUsuario = 1,
+                            FonteDados = "Registro comunitário",
+                            FornecidoParceiro = "Sim",
+                            HoraContato = new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified),
+                            LContato = "Telefone",
+                            LTrat = "Fisioterapia",
                             NFIlhos = 0,
                             NFilhas = 0,
-                            QReabili = 0,
+                            NovoParceiro = "Sim",
+                            QReabili = 1,
                             SCalc = "Sim",
                             SComp = "Sim",
                             SLer = "Sim"
                         },
                         new
                         {
-                            IdFicha = 4,
-                            AEscolar = 6,
-                            CPrimeiroContato = "Contato D",
-                            Coment = "Info D",
-                            Data = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtContato = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2025, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Sim",
-                            EstaFamiliar = "Nao",
-                            EstruFamiliar = "Extendida",
-                            FKidAtores = 12,
-                            FPeloParceirto = "Sim",
-                            FkIdUsuario = 4,
-                            FonteDados = "Sistema",
-                            LContato = "Nome D",
-                            LTrat = "Sim",
-                            Localizacao = "Local D",
-                            NFIlhos = 3,
+                            IdFicha = 3,
+                            AEscolar = 8,
+                            CEstabeleceu = "Sim",
+                            Coment = "Demonstra interesse em programas sociais.",
+                            Complemento = "Bloco B",
+                            DtContato = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Emprego = "Autônomo",
+                            Endereco = "Rua São João, 998",
+                            EstaFamiliar = "Casado",
+                            EstruFamiliar = "Família extensa",
+                            FKidAtores = 3,
+                            FkIdUsuario = 2,
+                            FonteDados = "Auto-relato",
+                            FornecidoParceiro = "Não",
+                            HoraContato = new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified),
+                            LContato = "WhatsApp",
+                            LTrat = "Nenhum",
+                            NFIlhos = 1,
                             NFilhas = 2,
-                            QReabili = 2,
-                            SCalc = "Nao",
-                            SComp = "Nao",
-                            SLer = "Nao"
+                            NovoParceiro = "Não",
+                            QReabili = 0,
+                            SCalc = "Não",
+                            SComp = "Sim",
+                            SLer = "Sim"
+                        },
+                        new
+                        {
+                            IdFicha = 4,
+                            AEscolar = 10,
+                            CEstabeleceu = "Não",
+                            Coment = "Procura recolocação no mercado.",
+                            Complemento = "",
+                            DtContato = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Emprego = "Desempregado",
+                            Endereco = "Travessa do Sol, 55",
+                            EstaFamiliar = "Separado",
+                            EstruFamiliar = "Família monoparental",
+                            FKidAtores = 4,
+                            FkIdUsuario = 3,
+                            FonteDados = "Centro comunitário",
+                            FornecidoParceiro = "Não",
+                            HoraContato = new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            LContato = "Presencial",
+                            LTrat = "Nenhum",
+                            NFIlhos = 3,
+                            NFilhas = 0,
+                            NovoParceiro = "Não",
+                            QReabili = 0,
+                            SCalc = "Sim",
+                            SComp = "Não",
+                            SLer = "Sim"
                         },
                         new
                         {
                             IdFicha = 5,
-                            AEscolar = 9,
-                            CPrimeiroContato = "Contato E",
-                            Coment = "Info E",
-                            Data = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtContato = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtCriacao = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DtModificacao = new DateTime(2025, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EParceiro = "Nao",
-                            EstaFamiliar = "Sim",
-                            EstruFamiliar = "Nuclear",
-                            FKidAtores = 15,
-                            FPeloParceirto = "Nao",
-                            FkIdUsuario = 5,
-                            FonteDados = "Formulario",
-                            LContato = "Nome E",
-                            LTrat = "Nao",
-                            Localizacao = "Local E",
-                            NFIlhos = 0,
+                            AEscolar = 14,
+                            CEstabeleceu = "Sim",
+                            Coment = "Interessado em projetos educacionais.",
+                            Complemento = "Sala 5",
+                            DtContato = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Emprego = "Comerciante",
+                            Endereco = "Praça Central, 321",
+                            EstaFamiliar = "Viúvo",
+                            EstruFamiliar = "Família nuclear",
+                            FKidAtores = 5,
+                            FkIdUsuario = 2,
+                            FonteDados = "Instituição parceira",
+                            FornecidoParceiro = "Sim",
+                            HoraContato = new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            LContato = "E-mail",
+                            LTrat = "Nenhum",
+                            NFIlhos = 1,
                             NFilhas = 1,
+                            NovoParceiro = "Não",
                             QReabili = 0,
-                            SCalc = "Nao",
+                            SCalc = "Sim",
                             SComp = "Sim",
                             SLer = "Sim"
                         });
@@ -1943,7 +1985,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AtoresIdAtores")
+                    b.Property<int?>("AtorIdAtores")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Extra")
@@ -1951,6 +1993,9 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("FkIdFicha")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Fk_Id_Ator")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Genero")
@@ -1978,7 +2023,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdFonte");
 
-                    b.HasIndex("AtoresIdAtores");
+                    b.HasIndex("AtorIdAtores");
 
                     b.HasIndex("FkIdFicha");
 
@@ -1990,6 +2035,7 @@ namespace InsEmpodera.Migrations
                             IdFonte = 1,
                             Extra = "",
                             FkIdFicha = 1,
+                            Fk_Id_Ator = 1,
                             Genero = "M",
                             Idade = 40,
                             Nome = "Fonte A",
@@ -2002,6 +2048,7 @@ namespace InsEmpodera.Migrations
                             IdFonte = 2,
                             Extra = "",
                             FkIdFicha = 2,
+                            Fk_Id_Ator = 2,
                             Genero = "F",
                             Idade = 35,
                             Nome = "Fonte B",
@@ -2014,6 +2061,7 @@ namespace InsEmpodera.Migrations
                             IdFonte = 3,
                             Extra = "",
                             FkIdFicha = 3,
+                            Fk_Id_Ator = 3,
                             Genero = "M",
                             Idade = 50,
                             Nome = "Fonte C",
@@ -2026,6 +2074,7 @@ namespace InsEmpodera.Migrations
                             IdFonte = 4,
                             Extra = "",
                             FkIdFicha = 4,
+                            Fk_Id_Ator = 4,
                             Genero = "F",
                             Idade = 28,
                             Nome = "Fonte D",
@@ -2038,6 +2087,7 @@ namespace InsEmpodera.Migrations
                             IdFonte = 5,
                             Extra = "",
                             FkIdFicha = 5,
+                            Fk_Id_Ator = 5,
                             Genero = "M",
                             Idade = 60,
                             Nome = "Fonte E",
@@ -2680,7 +2730,7 @@ namespace InsEmpodera.Migrations
                     b.HasOne("Empodera.Models.Atividades", "Atividades")
                         .WithMany("Acoes")
                         .HasForeignKey("FkIdAtividade")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Atividades");
@@ -2724,15 +2774,11 @@ namespace InsEmpodera.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                    b.HasOne("Empodera.Models.Usuario", null)
                         .WithMany("Atividades")
-                        .HasForeignKey("FkIdUsuario")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .HasForeignKey("UsuarioIdUsuario");
 
                     b.Navigation("Comunidade");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
@@ -2795,7 +2841,7 @@ namespace InsEmpodera.Migrations
                     b.HasOne("Empodera.Models.Usuario", "Usuario")
                         .WithMany("Avaliacoes")
                         .HasForeignKey("FkIdUsuario")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Ator");
@@ -2996,15 +3042,17 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.FonteInf", b =>
                 {
-                    b.HasOne("Empodera.Models.Atores", null)
+                    b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("FonteInfos")
-                        .HasForeignKey("AtoresIdAtores");
+                        .HasForeignKey("AtorIdAtores");
 
                     b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
                         .WithMany("Fontes")
                         .HasForeignKey("FkIdFicha")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ator");
 
                     b.Navigation("Ficha");
                 });

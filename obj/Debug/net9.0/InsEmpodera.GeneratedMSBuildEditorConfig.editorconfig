@@ -90,12 +90,28 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tdW5pZGFkZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[C:/Users/melio/Downloads/InsEmpodera/Views/Comunidade/Processo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tdW5pZGFkZVxQcm9jZXNzby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+[C:/Users/melio/Downloads/InsEmpodera/Views/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/DiarioProcessoPessoal/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGlhcmlvUHJvY2Vzc29QZXNzb2FsXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/FichaPrimeiroContato/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmljaGFQcmltZWlyb0NvbnRhdG9cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/FichaPrimeiroContato/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmljaGFQcmltZWlyb0NvbnRhdG9cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melio/Downloads/InsEmpodera/Views/Home/Privacy.cshtml]
@@ -212,6 +228,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/melio/Downloads/InsEmpodera/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/melio/Downloads/InsEmpodera/Views/Usuarios/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/melio/Downloads/InsEmpodera/Views/_ViewImports.cshtml]

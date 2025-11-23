@@ -15,7 +15,9 @@ namespace Empodera.Models
         public string PapelSocial2 { get; set; } = null!;
         public string Telefone { get; set; } = null!; 
         public string Extra { get; set; } = null!;
+        public int Fk_Id_Ator { get; set; }
 
         public FichaPrimeiroContato Ficha { get; set; } = null!;
+        public Atores? Ator { get; set; } = null!;
     }
 }

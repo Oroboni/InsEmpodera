@@ -8,8 +8,13 @@ namespace Empodera.Models
     {
         public int IdFicha { get; set; }       
         public int FKidAtores{ get; set; }       
-        public string Localizacao { get; set; } = null!;
-        public DateTime Data { get; set; }
+        public string Endereco { get; set; } = null!;
+        public string? Complemento { get; set; } = null!; 
+        public string Emprego { get; set; } = null!;
+        public string CEstabeleceu { get; set; } = null!;
+        public string NovoParceiro { get; set; } = null!;
+        public string FornecidoParceiro { get; set; } = null!;
+        public string? Telefone { get; set; } = null!;
         public string LContato { get; set; } = null!;
         public string FonteDados { get; set; } = null!;
         public string EstaFamiliar { get; set; } = null!;
@@ -23,13 +28,11 @@ namespace Empodera.Models
         public int QReabili { get; set; }
         public string LTrat { get; set; } = null!;
         public string Coment { get; set; } = null!;
-        public string CPrimeiroContato { get; set; } = null!;
-        public string EParceiro { get; set; } = null!;
-        public string FPeloParceirto { get; set; } = null!;
-        public DateTime DtContato { get; set; } 
+        public DateTime DtContato { get; set; }
+        public DateTime HoraContato { get; set; } 
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
-        public int FkIdUsuario { get; set; }     
+        public int FkIdUsuario { get; set; }
 
         public Atores Ator { get; set; } = null!;
         public Usuario Usuario { get; set; } = null!;

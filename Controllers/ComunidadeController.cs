@@ -30,8 +30,10 @@ public class ComunidadeController : Controller
             {
                 Id = c.IdComunidade,
                 Nome = c.Nome,
-                Status = c.Status
+                Status = c.Status,
+                Ativo = c.Ativo
             })
+            .Where(c => c.Ativo != "N")
             .ToList();
 
         return View(comunidades);
@@ -60,15 +62,14 @@ public class ComunidadeController : Controller
         }
         else
         {
-            // Modo Criação: Retorna um novo objeto vazio (IdComunidade = 0)
             comunidade = new Comunidade();
-            // Garante que o ID é 0 (padrão para int, mas é bom ser explícito)
             comunidade.IdComunidade = 0; 
         }
 
-        ViewBag.qAtores = _context.AtorComunidades
-            .Where(a => a.IdAtorComunidade == id)
-            .ToList();
+        var qAtores = _context.AtorComunidades.Count(a => a.FkIdComunidade == id);
+
+        ViewBag.qAtores = qAtores;
+
 
         return View(comunidade);
     }
@@ -137,27 +138,48 @@ public class ComunidadeController : Controller
         if (id == null)
             return NotFound();
 
-        var comunidade = await _context.Comunidades.FindAsync(id);
+       var comunidade = await _context.Comunidades
+            .Include(c => c.AtorComunidades)
+            .ThenInclude(ac => ac.Ator)
+            .FirstOrDefaultAsync(c => c.IdComunidade == id);
+
         if (comunidade == null)
             return RedirectToAction("Index", "Comunidade");
 
-        var relacoes = await _context.AtorComunidades
-            .Where(ac => ac.IdAtorComunidade == id)
-            .ToListAsync();
-        var atoresIds = relacoes.Select(r => r.IdAtorComunidade).ToList();
+        if (comunidade.AtorComunidades != null && comunidade.AtorComunidades.Any())
+        {
+            comunidade.AtorComunidades.ForEach(ac => ac.Ator.Ativo = "N");
+        }
 
-        _context.AtorComunidades.RemoveRange(relacoes);
+        comunidade.Ativo = "N";
+        _context.Comunidades.Update(comunidade);
         await _context.SaveChangesAsync();
 
-        var atores = await _context.Atores
-            .Where(a => atoresIds.Contains(a.IdAtores))
-            .ToListAsync();
+        return RedirectToAction("Index", "Comunidade");
+    }
 
-        _context.Atores.RemoveRange(atores);
-        await _context.SaveChangesAsync();
 
-        _context.Comunidades.Remove(comunidade);
-        await _context.SaveChangesAsync();
+    public async Task<IActionResult> Processo(int id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        var comunidadebd = await _context.Comunidades
+            .FirstOrDefaultAsync(c => c.IdComunidade == id);
+
+        if (comunidadebd == null)
+        {
+            return NotFound();
+        }
+
+        if (comunidadebd.Status == "Em diagnóstico")
+        {
+            comunidadebd.Status = "Em Processo";
+            _context.Comunidades.Update(comunidadebd);
+            await _context.SaveChangesAsync();
+        }
 
         return RedirectToAction("Index", "Comunidade");
     }

@@ -26,7 +26,7 @@ public class ActorController : Controller
             return RedirectToAction("Index", "Account");
         }
         
-        var Atores = _context.Atores.ToList();
+        var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
         return View(Atores);
     }
 
@@ -171,10 +171,8 @@ public class ActorController : Controller
         var ator = await _context.Atores.FindAsync(id);
         if (ator != null)
         {
-            var relacoes = _context.AtorComunidades.Where(ac => ac.IdAtorComunidade == id);
-            _context.AtorComunidades.RemoveRange(relacoes);
-            await _context.SaveChangesAsync();
-            _context.Atores.Remove(ator);
+            ator.Ativo = "N";
+            _context.Atores.Update(ator);
             await _context.SaveChangesAsync();
         }
         return RedirectToAction("Index", "Actor");

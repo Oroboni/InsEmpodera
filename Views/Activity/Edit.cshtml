@@ -1,46 +1,37 @@
 @model Empodera.Models.Atividades
 @{
-    ViewData["Title"] = "Detalhes de Atividade";
+    ViewData["Title"] = "Adicionar Atividade";
     Layout = "_Layout";
+    var eixos = ViewBag.EixosList as List<Empodera.Models.Eixo>;
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/activity-form.css" />
-    <link rel="stylesheet" href="~/css/pages/atores.css" />
-    <style>
-        .btn-success {
-            background-color: var(--color-success) !important;
-            color: white !important;
-        }
-    </style>
 }
 
 <div class="container">
     <div class="breadcrumb">
-    <h1>
-        <a asp-controller="Activity" asp-action="Index">Atividades</a> 
-        > 
-        <strong>Detalhes de Atividade</strong>
-    </h1>
-</div>
-
-    <form method="post">
-        <input type="hidden" asp-for="IdAtividade" />
-
+        <h1>
+            <a asp-controller="Activity" asp-action="Index">Atividades</a>
+            <strong>Adicionar Atividade</strong>
+        </h1>
+    </div>
+    <form method="post" asp-controller="Activity" asp-action="Edit">
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <label for="Nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-pencil"></i>
-                <input asp-for="Nome" type="text" required>
+                <input asp-for="Nome" type="text" value="@Model.Nome" required>
             </div>
         </div>
 
         <div class="form-group">
             <label>Eixos</label>
-            
+
             <div class="eixos-tag-container" id="tag-container">
-                </div>
-            
+            </div>
+
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
@@ -51,65 +42,26 @@
                 </summary>
                 <div class="multiselect-panel" id="multiselect-panel">
                     <ul>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="1" id="eixo-1" 
-                                   data-tag-class="tag-pink" data-tag-name="Rede primária">
-                            <label for="eixo-1">Rede primária</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="2" id="eixo-2" 
-                                   data-tag-class="tag-purple" data-tag-name="Segurança Social">
-                            <label for="eixo-2">Segurança Social</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="3" id="eixo-3" 
-                                   data-tag-class="tag-darkred" data-tag-name="Substâncias">
-                            <label for="eixo-3">Substâncias</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="4" id="eixo-4" 
-                                   data-tag-class="tag-gray" data-tag-name="Moradia">
-                            <label for="eixo-4">Moradia</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="5" id="eixo-5" 
-                                   data-tag-class="tag-blue" data-tag-name="Prevenção" checked> <label for="eixo-5">Prevenção</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="6" id="eixo-6" 
-                                   data-tag-class="tag-lightblue" data-tag-name="Assistência Básica">
-                            <label for="eixo-6">Assistência Básica</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="7" id="eixo-7" 
-                                   data-tag-class="tag-lightgreen" data-tag-name="Educação">
-                            <label for="eixo-7">Educação</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="8" id="eixo-8" 
-                                   data-tag-class="tag-red" data-tag-name="Saúde">
-                            <label for="eixo-8">Saúde</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="9" id="eixo-9" 
-                                   data-tag-class="tag-green" data-tag-name="Ocupação">
-                            <label for="eixo-9">Ocupação</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" name="eixosIds" value="10" id="eixo-10" 
-                                   data-tag-class="tag-yellow" data-tag-name="Lazer">
-                            <label for="eixo-10">Lazer</label>
-                        </li>
+                        @if (eixos != null)
+                        {
+                            @foreach (var eixo in eixos)
+                            {
+                                <li>
+                                    <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                                        data-tag-class="tag-pink" data-tag-name="@eixo.Nome" @(Model.AtividadesEixos.Any(ae => ae.FkIdEixo == eixo.IdEixo) ? "checked" : "")>
+                                    <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
             </details>
         </div>
-
         <div class="form-group">
             <label for="Descricao">Descrição</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Descricao"></textarea>
+                <textarea asp-for="Descricao">@Model.Descricao</textarea>
             </div>
         </div>
 
@@ -151,165 +103,82 @@
                 </div>
             </div>
         </details>
-        
-        <div class="form-buttons">
-            <a asp-controller="Activity" asp-action="Index" class="btn btn-secondary">VOLTAR</a>
-            <button type="submit" class="btn btn-primary">EDITAR</button>
+
+        <div class="form-buttons" style="margin-top: 40px;">
+            <button type="submit" class="btn-full-width">EDITAR ATIVIDADE</button>
         </div>
+
     </form>
 </div>
 
 @section Scripts {
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. Seleção dos Elementos ---
-            const btnEditar = document.querySelector('.btn-primary');
-            const campoNome = document.querySelector('input[name="Nome"]');
-            const campoDescricao = document.querySelector('textarea[name="Descricao"]');
-            
+        document.addEventListener('DOMContentLoaded', function () {
             const tagContainer = document.getElementById('tag-container');
-            const eixosWrapper = document.querySelector('.multiselect-wrapper');
-            const eixosSummary = eixosWrapper ? eixosWrapper.querySelector('summary') : null;
             const multiselectPanel = document.getElementById('multiselect-panel');
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-            
-            let modoEdicao = false;
 
-            // --- 2. Funções de Tags (em tempo real) ---
+            // Todos os checkboxes de eixos
+            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+
+            // --- 1. Função Principal: Atualiza a UI (Tags e Lista) ---
             function updateTagView() {
+                // Limpa o container de tags
                 tagContainer.innerHTML = '';
-                
+
                 checkboxes.forEach(cb => {
                     const listItem = cb.closest('li');
-                    
+
                     if (cb.checked) {
+                        // Se está marcado: cria a tag
                         const tagName = cb.dataset.tagName;
                         const tagClass = cb.dataset.tagClass;
-                        
+
                         const tag = document.createElement('span');
                         tag.className = `tag-item ${tagClass}`;
                         tag.textContent = tagName;
-                        
+
+                        // Cria o botão 'x' de remover
                         const removeBtn = document.createElement('i');
                         removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.dataset.checkboxId = cb.id;
-                        
+                        removeBtn.dataset.checkboxId = cb.id; // Liga o 'x' ao seu checkbox
+
                         tag.appendChild(removeBtn);
                         tagContainer.appendChild(tag);
-                        
+
+                        // Esconde o item da lista dropdown
                         listItem.classList.add('is-selected');
                     } else {
+                        // Se não está marcado: mostra na lista
                         listItem.classList.remove('is-selected');
                     }
                 });
             }
 
-            function handleTagListChange(e) {
+            // --- 2. Evento: Clicar no Checkbox (na lista) ---
+            multiselectPanel.addEventListener('change', function (e) {
                 if (e.target.type === 'checkbox') {
                     updateTagView();
                 }
-            }
+            });
 
-            function handleTagContainerClick(e) {
+            // --- 3. Evento: Clicar no 'X' da Tag (no container) ---
+            tagContainer.addEventListener('click', function (e) {
+                // Se clicou no 'x' (classe 'tag-remove-btn')
                 if (e.target.classList.contains('tag-remove-btn')) {
                     const checkboxId = e.target.dataset.checkboxId;
                     const checkboxToUncheck = document.getElementById(checkboxId);
-                    
+
                     if (checkboxToUncheck) {
                         checkboxToUncheck.checked = false;
+                        // Atualiza a UI
                         updateTagView();
                     }
                 }
-            }
+            });
 
-            // --- 3. Funções de Bloqueio ---
-            function bloquearCampos() {
-                if (campoNome) {
-                    campoNome.setAttribute('readonly', 'readonly');
-                    campoNome.style.backgroundColor = 'var(--color-bg-secondary)';
-                    campoNome.style.cursor = 'not-allowed';
-                }
-                if (campoDescricao) {
-                    campoDescricao.setAttribute('readonly', 'readonly');
-                    campoDescricao.style.backgroundColor = 'var(--color-bg-secondary)';
-                    campoDescricao.style.cursor = 'not-allowed';
-                }
-                
-                // Desabilita o dropdown de Eixos
-                if (eixosSummary) {
-                    eixosSummary.style.pointerEvents = 'none';
-                    eixosSummary.style.opacity = '0.7';
-                }
-                // Desabilita os cliques nos 'x' das tags
-                if (tagContainer) {
-                    tagContainer.style.pointerEvents = 'none';
-                    tagContainer.style.opacity = '0.7';
-                }
-                // Remove os event listeners de edição de tags
-                multiselectPanel.removeEventListener('change', handleTagListChange);
-                tagContainer.removeEventListener('click', handleTagContainerClick);
-            }
-            
-            function desbloquearCampos() {
-                if (campoNome) {
-                    campoNome.removeAttribute('readonly');
-                    campoNome.style.backgroundColor = 'var(--color-bg-primary)';
-                    campoNome.style.cursor = 'text';
-                    campoNome.focus();
-                }
-                if (campoDescricao) {
-                    campoDescricao.removeAttribute('readonly');
-                    campoDescricao.style.backgroundColor = 'var(--color-bg-primary)';
-                    campoDescricao.style.cursor = 'text';
-                }
-                
-                // Habilita o dropdown de Eixos
-                if (eixosSummary) {
-                    eixosSummary.style.pointerEvents = 'auto';
-                    eixosSummary.style.opacity = '1';
-                }
-                // Habilita os cliques nos 'x' das tags
-                if (tagContainer) {
-                    tagContainer.style.pointerEvents = 'auto';
-                    tagContainer.style.opacity = '1';
-                }
-                // Adiciona os event listeners de edição de tags
-                multiselectPanel.addEventListener('change', handleTagListChange);
-                tagContainer.addEventListener('click', handleTagContainerClick);
-            }
-            
-            // --- 4. Inicialização da Página ---
-            updateTagView();    // Mostra as tags selecionadas
-            bloquearCampos();   // Bloqueia tudo
-
-            // --- 5. Evento do Botão "EDITAR" ---
-            if (btnEditar) {
-                btnEditar.addEventListener('click', function(e) {
-                    if (!modoEdicao) {
-                        e.preventDefault(); // Impede o envio do formulário
-                        modoEdicao = true;
-                        desbloquearCampos();
-                        
-                        btnEditar.innerHTML = 'SALVAR';
-                        btnEditar.classList.remove('btn-primary');
-                        btnEditar.classList.add('btn-success');
-                        
-                        if (!document.querySelector('.btn-cancel')) {
-                            const btnCancelar = document.createElement('button');
-                            btnCancelar.type = 'button';
-                            btnCancelar.className = 'btn btn-secondary btn-cancel'; // (Usa o estilo do botão Voltar)
-                            btnCancelar.textContent = 'CANCELAR';
-                            btnCancelar.addEventListener('click', function() {
-                                location.reload(); // Recarrega a página
-                            });
-                            btnEditar.parentElement.insertBefore(btnCancelar, btnEditar);
-                        }
-                    } else {
-                        // Agora, no segundo clique, permite o submit
-                        return true;
-                    }
-                });
-            }
+            // --- 4. Inicialização ---
+            // Mostra as tags que já vieram selecionadas (se houver alguma 'checked')
+            updateTagView();
         });
     </script>
 }

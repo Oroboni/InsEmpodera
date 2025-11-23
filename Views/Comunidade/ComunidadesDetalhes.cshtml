@@ -470,7 +470,7 @@
   
     <div class="community-detail-metrics-container @(Model.IdComunidade == 0 ? "hidden-on-create" : "")">
     <div class="community-detail-metric-card">
-      <div class="community-detail-metric-value">@(ViewBag.qAtores?.Count ?? 0)</div>
+      <div class="community-detail-metric-value">@ViewBag.qAtores</div>
       <div class="community-detail-metric-label">Atores vinculados</div>
       <div class="community-detail-metric-actions">
         <div class="community-detail-metric-action">

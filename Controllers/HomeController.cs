@@ -23,6 +23,8 @@ public class HomeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
+        ViewBag.Comunidade = _context.Comunidades.ToList();
+        ViewBag.Atores = _context.Atores.ToList();
         return View();
     }
 

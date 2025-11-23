@@ -18,7 +18,8 @@ namespace Empodera.Models
         public DateTime DtModificacao { get; set; }
         public string Status { get; set; } = null!;
         public string MotivoStatus { get; set; } = null!;
-        public int FkIdUsuario { get; set; }    // FK_Id_Usuario
+        public int FkIdUsuario { get; set; }    
+        public string Ativo { get; set; } = null!;
 
         public Usuario Usuario { get; set; } = null!;
         public List<RedeRecursos> Redes { get; set; } = new();
