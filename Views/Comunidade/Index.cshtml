@@ -212,7 +212,8 @@
         </form>
 
         <!-- Botão de Adicionar comunidade-->
-        <a asp-controller="Home" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova Comunidade</a>
+        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova
+            Comunidade</a>
     </div>
     <div class="comunidades-list">
         @foreach (var comunidade in Model)
@@ -228,18 +229,47 @@
                         </div>
                     </div>
                     <div class="card-icons">
-                        <svg class="icon play-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z" />
-                        </svg>
-                        <a class="icon eye-icon" asp-controller="Home" asp-action="ComunidadesDetalhes" asp-route-id="@comunidade.Id">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                        @if (comunidade.Status == "Em Processo")
+                        {
+                            <svg class="icon play-icon" viewBox="0 0 24 24" fill="currentColor" style="color: gray !important;">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        }
+                        else
+                        {
+                            <a asp-controller="Comunidade" asp-action="Processo" asp-route-id="@comunidade.Id">
+                                <svg class="icon play-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8 5v14l11-7z" />
                                 </svg>
                             </a>
+                        }
+
+                        <a class="icon eye-icon" asp-controller="Comunidade" asp-action="ComunidadesDetalhes"
+                            asp-route-id="@comunidade.Id">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const cards = document.querySelectorAll(".card-container");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+
+            cards.forEach(card => {
+                const title = card.querySelector(".card-title").textContent.toLowerCase();
+                card.style.display = title.includes(query) ? "block" : "none";
+            });
+        });
+    });
+</script>

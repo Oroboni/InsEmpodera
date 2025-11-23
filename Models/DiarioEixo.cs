@@ -6,9 +6,11 @@ namespace Empodera.Models
 {
     public class DiarioEixo
     {
-        [Key]
-        public int IdDiarioEixo { get; set; }
-        public int DiarioId { get; set; }
-        public int EixoId { get; set; }
+        public int IdDiarioEixo { get; set; }  
+        public int FkIdDiario { get; set; }     
+        public int FkIdEixo { get; set; }       
+
+        public DiarioCampo Diario { get; set; } = null!;
+        public Eixo Eixo { get; set; } = null!;
     }
 }

@@ -25,10 +25,9 @@ public class AccessProfileController : Controller
         
         ViewData["DisableMainScroll"] = "true"; 
         
-        // Agora busca os perfis reais
-        var perfis = await _context.PerfisAcesso.OrderBy(p => p.Nome).ToListAsync();
+        var perfis = await _context.Perfis.OrderBy(p => p.Nome).ToListAsync();
         
-        return View(perfis); // Envia a lista para a View
+        return View(perfis);
     }
 
     // GET: /AccessProfile/Create
@@ -41,7 +40,7 @@ public class AccessProfileController : Controller
 
         // [CORREÇÃO] Envia um novo Model (vazio) para a View
         // para que @Model.DtCriacao não dê erro
-        var novoPerfil = new PerfilAcesso
+        var novoPerfil = new Perfil
         {
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now
@@ -63,15 +62,13 @@ public class AccessProfileController : Controller
             return NotFound();
         }
 
-        // [CORREÇÃO] Busca o perfil no banco
-        var perfil = await _context.PerfisAcesso.FindAsync(id);
+        var perfil = await _context.Perfis.FindAsync(id);
         if (perfil == null)
         {
             return NotFound();
         }
         
-        return View(perfil); // Envia o perfil encontrado para a View
+        return View(perfil);
     }
 
-    // TODO: Adicionar [HttpPost] Create e Edit para salvar os dados
 }

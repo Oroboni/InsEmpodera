@@ -1,3 +1,4 @@
+@model Empodera.Models.Atores
 @{
     ViewData["Title"] = "Adicionar Novo Ator";
     ViewData["PageCSS"] = "create-form"; 
@@ -14,13 +15,13 @@
 </div>
 </div>
 
-    <form>
+    <form asp-controller="Actor" asp-action="Create" method="post">
         
         <div class="form-group">
             <label for="comunidadeId">Comunidade</label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-city"></i>
-                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required>
                     <option value="">Selecione a comunidade</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
@@ -32,7 +33,7 @@
             <div class="input-with-buttons">
                 <div class="input-wrapper">
                     <i class="fa-solid fa-user"></i>
-                    <input id="nome" name="nome" type="text" placeholder="Nome do Ator" />
+                    <input id="Nome" name="Nome" asp-for="Nome" type="text" placeholder="Nome do Ator" required />
                 </div>
                 <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
                 <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
@@ -102,7 +103,7 @@
                 <label for="genero">Gênero</label>
                 <div class="select-wrapper">
                     <i class="fa-solid fa-venus-mars"></i>
-                    <select id="genero" name="genero">
+                    <select id="Genero" asp-for="Genero" name="Genero" required>
                         <option value="" disabled selected>Selecione</option>
                         <option value="feminino">Feminino</option>
                         <option value="masculino">Masculino</option>
@@ -116,7 +117,8 @@
             <div class="form-group">
                 <label for="dataNascimento">Data de Nascimento</label>
                 <div class="input-wrapper">
-                    <i class="fa-solid fa-calendar-day"></i> <input id="dataNascimento" name="dataNascimento" type="date" placeholder="dd/mm/aaaa" />
+                    <i class="fa-solid fa-calendar-day"></i> 
+                    <input asp-for="DtNascimento" type="date" class="form-control" required />
                 </div>
             </div>
         </div>
@@ -130,7 +132,7 @@
             <label for="papelSocial1">Papel Social</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-briefcase"></i>
-                <input id="papelSocial1" name="papelSocial1" type="text" placeholder="Digite o papel social" />
+                <input id="papelSocial1" name="papelSocial1" asp-for="PapelSocial1" type="text" placeholder="Digite o papel social" />
             </div>
         </div>
 
@@ -138,7 +140,7 @@
             <label for="papelSocial2">Papel Social</f>
             <div class="input-wrapper">
                 <i class="fa-solid fa-briefcase"></i>
-                <input id="papelSocial2" name="papelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
+                <input id="papelSocial2" name="papelSocial2" asp-for="PapelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
             </div>
         </div>
 
@@ -146,13 +148,13 @@
             <label for="telefone">Telefone</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-phone"></i>
-                <input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" />
+                <input id="Telefone" asp-for="Telefone" name="Telefone" type="tel" required />
             </div>
         </div>
 
         <div class="form-buttons">
             <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
-            <button type="button" class="btn btn-primary">ADICIONAR ATOR</button>
+            <button type="submit" class="btn btn-primary">ADICIONAR ATOR</button>
         </div>
     </form>
 </div>

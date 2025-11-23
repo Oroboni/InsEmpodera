@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using InsEmpodera.Models;
 using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
@@ -51,7 +50,7 @@ public class UsersController : Controller
         
         // [CORREÇÃO] Cria um novo Ator (vazio) com as datas
         // para que o rodapé "Criado em" não dê erro.
-        var novoAtor = new Ator
+        var novoAtor = new Atores
         {
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now 

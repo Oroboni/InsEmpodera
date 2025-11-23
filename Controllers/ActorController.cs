@@ -19,60 +19,145 @@ public class ActorController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
         }
-        if (HttpContext.Session.GetString("Email") == null)
-        {
-            return RedirectToAction("Index", "Account");
-        }
         
-        ViewData["DisableMainScroll"] = "true"; 
-        
-        return View();
+        var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
+        return View(Atores);
     }
 
     // GET: /Actor/Create
+    [HttpGet]
     public async Task<IActionResult> Create()
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
         }
-        if (HttpContext.Session.GetString("Email") == null)
-        {
-            return RedirectToAction("Index", "Account");
-        }
         
-        // Carrega o dropdown de comunidades
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
             "IdComunidade", 
             "Nome"
         );
         
-        // [CORREÇÃO] Cria um novo Ator (vazio) com as datas
-        // para que o rodapé "Criado em" funcione.
-        var novoAtor = new Ator
+        var novoAtor = new Atores
         {
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now 
-            // Você pode pré-definir outros valores aqui se quiser
         };
         
-        return View(novoAtor); // Passa o novo Ator (o Model) para a View
+        return View(novoAtor);
     }
 
-    // GET: /Actor/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    [HttpPost]
+    public async Task<IActionResult> Create(Atores ator, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
         }
+
+        if (ModelState.IsValid)
+        {
+            ator.DtCriacao = DateTime.Now;
+            ator.DtModificacao = DateTime.Now;
+
+            _context.Atores.Add(ator);
+            await _context.SaveChangesAsync();
+
+            var relacao = new AtorComunidade
+            {
+                FkIdComunidade = ComunidadeId,
+                FKidAtores = ator.IdAtores
+            };
+
+            _context.AtorComunidades.Add(relacao);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Actor");
+        }
+
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
+            "IdComunidade",
+            "Nome"
+        );
+
+        return View(ator);
+    }
+
+
+    // GET: /Actor/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == null)
+            return NotFound();
+
+        var ator = await _context.Atores.FindAsync(id);
+        if (ator == null)
+            return NotFound();
+
+        var atorCom = await _context.AtorComunidades
+            .FirstOrDefaultAsync(ac => ac.IdAtorComunidade == id);
+
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
+            "IdComunidade",
+            "Nome",
+            atorCom?.IdAtorComunidade
+        );
+
+        return View(ator);
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, int ComunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var ator = await _context.Atores.FindAsync(id);
+        if (ator == null)
+            return NotFound();
+
+        var atorCom = await _context.AtorComunidades
+            .FirstOrDefaultAsync(ac => ac.IdAtorComunidade == id);
+
+        if (atorCom == null)
+        {
+            atorCom = new AtorComunidade
+            {
+                FKidAtores = id,
+                FkIdComunidade = ComunidadeId
+            };
+            _context.AtorComunidades.Add(atorCom);
+        }
+        else
+        {
+            atorCom.FkIdComunidade = ComunidadeId;
+            _context.AtorComunidades.Update(atorCom);
+        }
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index");
+    }
+
+
+    // GET: /Actor/Delete/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int? id)
+    {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
@@ -82,27 +167,17 @@ public class ActorController : Controller
         {
             return NotFound();
         }
-
-        // [CORREÇÃO] Busca o Ator no banco de dados
+        
         var ator = await _context.Atores.FindAsync(id);
-
-        if (ator == null)
+        if (ator != null)
         {
-            return NotFound(); // Ator não encontrado
+            ator.Ativo = "N";
+            _context.Atores.Update(ator);
+            await _context.SaveChangesAsync();
         }
-
-        // Carrega o dropdown de comunidades
-        ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
-            "IdComunidade", 
-            "Nome"
-            //, ator.ComunidadeId // Descomente se 'Ator' tiver ComunidadeId
-        );
-
-        // [CORREÇÃO] Passa o Ator (o Model) que encontramos para a View
-        return View(ator);
+        return RedirectToAction("Index", "Actor");
     }
-    
+
     // TODO: Você precisará adicionar os métodos [HttpPost] para Create e Edit
     // para salvar as mudanças no banco.
 

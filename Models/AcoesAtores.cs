@@ -4,11 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Empodera.Models
 {
-    public class AcoesAtores
+     public class AcoesAtores
     {
-        [Key]
-        public int IdAAtores { get; set; }
-        public int AtorId { get; set; }
-        public int AcoesId { get; set; }
+        public int IdAAtores { get; set; }      
+        public int FKidAtores { get; set; }     
+        public int FkIdAcoes { get; set; }     
+
+        public Atores Ator { get; set; } = null!;
+        public Acoes Acoes { get; set; } = null!;
     }
 }

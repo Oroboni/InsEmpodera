@@ -24,110 +24,217 @@ namespace InsEmpodera.Controllers
             ViewBag.SelectedAtorId = atorId; // Importante para manter o estado
             ViewBag.SearchQuery = searchQuery;
 
-            // Se não selecionou ator, retorna lista vazia (ou view de "selecione")
-            if (!atorId.HasValue) return View(new List<DiarioCampo>());
+        // 2. Prepara a consulta
+        var query = _context.DiariosCampo.AsQueryable();
 
-            var query = _context.DiariosCampo.Include(d => d.Ator).AsQueryable();
+        // 3. Filtra por Ator (Agora usando o campo novo AtorId)
+        if (atorId.HasValue)
+        {
+            // Filtra onde AtorId é igual ao selecionado
+            query = query.Where(d => d.FkIdUsuario == atorId.Value);
+        }
+        else 
+        {
+            // Se não selecionou ator, retorna lista vazia (Estado inicial)
+            return View(new List<DiarioCampo>());
+        }
 
-            if (atorId.HasValue) query = query.Where(d => d.AtorId == atorId);
-            if (!string.IsNullOrEmpty(searchQuery)) query = query.Where(d => d.Descricao.Contains(searchQuery));
+        // 4. Busca por texto (opcional)
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            query = query.Where(d => d.Descricao.Contains(searchQuery));
+        }
 
             var result = await query.OrderByDescending(d => d.Data).ToListAsync();
 
-            // --- SIMULAÇÃO DE DADOS (Se não houver registros, mostra exemplos) ---
-            if (result.Count == 0)
-            {
-                result.Add(new DiarioCampo { 
-                    IdDCampo = 0, // ID 0 indica exemplo
-                    AtorId = atorId,
-                    Data = DateTime.Now, 
-                    Descricao = "EXEMPLO 1: Realizada visita domiciliar. O ator relatou melhorias na convivência familiar. \n• AÇÃO: Roda de conversa | EIXO: Convivência | ATOR: Maria\n• AÇÃO: Encaminhamento | EIXO: Saúde | ATOR: João", 
-                    DtCriacao = DateTime.Now 
-                });
-                result.Add(new DiarioCampo { 
-                    IdDCampo = 0, 
-                    AtorId = atorId,
-                    Data = DateTime.Now.AddDays(-2), 
-                    Descricao = "EXEMPLO 2: Participação na oficina de artesanato. Demonstrou grande interesse e habilidade manual.", 
-                    DtCriacao = DateTime.Now.AddDays(-2) 
-                });
-                result.Add(new DiarioCampo { 
-                    IdDCampo = 0, 
-                    AtorId = atorId,
-                    Data = DateTime.Now.AddDays(-5), 
-                    Descricao = "EXEMPLO 3: Atendimento individual para atualização de cadastro. \n• AÇÃO: Atualização Cadastral | EIXO: Assistência | ATOR: Ana", 
-                    DtCriacao = DateTime.Now.AddDays(-5) 
-                });
-            }
-            // ---------------------------------------------------------------------
+        return View(result);
+    }
 
-            return View(result);
-        }
-
-        // ... (Métodos Create e Edit continuam iguais aos que mandei anteriormente) ...
+    // GET: /PersonalProcess/Create
+    public async Task<IActionResult> Create(int atorId)
+    {
+        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
         
-        public async Task<IActionResult> Create()
+        ViewBag.AtorList = new SelectList(
+            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), 
+            "IdAtores", 
+            "Nome", 
+            atorId
+        );
+        
+        ViewBag.EixosList = new SelectList(
+            await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), 
+            "IdEixo", 
+            "Nome"
+        );
+
+        var model = new DiarioCampo 
+        { 
+            Data = DateTime.Now,
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now,
+            FkIdUsuario = atorId 
+        };
+
+        return View(model);
+    }
+
+    // POST: /PersonalProcess/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(DiarioCampo diario, int[] eixosIds)
+    {
+        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+
+        // Força datas de sistema
+        diario.DtCriacao = DateTime.Now;
+        diario.DtModificacao = DateTime.Now;
+
+        // Validação básica
+        if (diario.FkIdUsuario == null || diario.FkIdUsuario == 0)
         {
-            ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome");
-            ViewBag.EixosData = await _context.Eixos.ToListAsync();
-            return View();
+            ModelState.AddModelError("FkIdUsuario", "O Ator é obrigatório.");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DiarioCampo diario)
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            _context.Add(diario);
+            await _context.SaveChangesAsync();
+            
+            // Aqui você salvaria os eixosIds na tabela de ligação (DiarioEixo) se necessário
+            // ... lógica de salvar eixos ...
+
+            return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
+        }
+        
+        // Se falhar, recarrega as listas
+        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
+        ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
+        
+        return View(diario);
+    }
+
+    // GET: /PersonalProcess/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+
+        if (id == null) return NotFound();
+
+        var diario = await _context.DiariosCampo.FindAsync(id);
+        if (diario == null) return NotFound();
+        
+        ViewBag.AtorList = new SelectList(
+            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), 
+            "IdAtores", 
+            "Nome", 
+            diario.FkIdUsuario // Seleciona o ator salvo
+        );
+        
+        ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
+
+        return View(diario);
+    }
+    // =================================================================
+    // ADICIONE ESTE BLOCO PARA SALVAR OS DADOS
+    // =================================================================
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(DiarioCampo diario, int SelectedAtorId, int[] eixosIds)
+    {
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
+
+        try 
+        {
+            // 1. Vincula o ID do Ator vindo do select (HTML) ao objeto Diario
+            if (SelectedAtorId > 0)
             {
-                diario.DtCriacao = DateTime.Now;
-                diario.DtModificacao = DateTime.Now;
-                _context.Add(diario);
-                await _context.SaveChangesAsync();
-                // Redireciona mantendo o filtro do ator
-                return RedirectToAction(nameof(Index), new { atorId = diario.AtorId });
+                diario.FkIdUsuario = SelectedAtorId;
             }
-            ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.AtorId);
-            ViewBag.EixosData = await _context.Eixos.ToListAsync();
-            return View(diario);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || id == 0) return NotFound(); // Impede editar os exemplos (ID 0)
-            var diario = await _context.DiariosCampo.FindAsync(id);
-            if (diario == null) return NotFound();
-
-            ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.AtorId);
-            ViewBag.EixosData = await _context.Eixos.ToListAsync();
-            return View(diario);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DiarioCampo diario)
-        {
-            if (id != diario.IdDCampo) return NotFound();
-            if (ModelState.IsValid)
+            else
             {
-                try {
-                    var dbDiario = await _context.DiariosCampo.FindAsync(id);
-                    if(dbDiario != null) {
-                        dbDiario.AtorId = diario.AtorId;
-                        dbDiario.Data = diario.Data;
-                        dbDiario.Descricao = diario.Descricao;
-                        dbDiario.DtModificacao = DateTime.Now;
-                        _context.Update(dbDiario);
-                        await _context.SaveChangesAsync();
-                    }
-                } catch (DbUpdateConcurrencyException) {
-                    if (!_context.DiariosCampo.Any(e => e.IdDCampo == id)) return NotFound();
-                    else throw;
+                // Se não selecionou ator, força erro para não salvar órfão
+                ModelState.AddModelError("AtorId", "Selecione um ator.");
+                throw new Exception("Ator obrigatório");
+            }
+
+            // 2. Preenche as datas automáticas
+            diario.DtCriacao = DateTime.Now;
+            diario.DtModificacao = DateTime.Now;
+
+            // 3. Salva o Diário no Banco (Isso gera o ID do diário)
+            _context.Add(diario);
+            await _context.SaveChangesAsync();
+
+            // 4. Salva os Eixos selecionados (Tags) na tabela de ligação
+            if (eixosIds != null && eixosIds.Length > 0)
+            {
+                foreach (var eixoId in eixosIds)
+                {
+                    var vinculo = new DiarioEixo
+                    {
+                        FkIdDiario = diario.IdDCampo, // ID gerado acima
+                        FkIdEixo = eixoId
+                    };
+                    _context.Add(vinculo);
                 }
-                return RedirectToAction(nameof(Index), new { atorId = diario.AtorId });
+                // Salva os vínculos dos eixos
+                await _context.SaveChangesAsync();
             }
-            ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.AtorId);
+
+            // 5. Redireciona para o Index (filtrando pelo ator que acabamos de criar)
+            return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
+        }
+        catch (Exception)
+        {
+            if (SelectedAtorId == 0) return NotFound(); // Impede editar os exemplos (ID 0)
+            var diarios = await _context.DiariosCampo.FindAsync(SelectedAtorId);
+            if (diarios == null) return NotFound();
+
+            ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
             ViewBag.EixosData = await _context.Eixos.ToListAsync();
             return View(diario);
         }
     }
+    
+    // POST: /PersonalProcess/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, DiarioCampo diario)
+    {
+         if (id != diario.IdDCampo) return NotFound();
+
+         if (ModelState.IsValid)
+         {
+             try
+             {
+                 var diarioExistente = await _context.DiariosCampo.FindAsync(id);
+                 if(diarioExistente == null) return NotFound();
+
+                 // Atualiza os campos
+                 diarioExistente.FkIdUsuario = diario.FkIdUsuario;
+                 diarioExistente.Data = diario.Data;
+                 diarioExistente.Descricao = diario.Descricao;
+                 diarioExistente.DtModificacao = DateTime.Now;
+
+                 _context.Update(diarioExistente);
+                 await _context.SaveChangesAsync();
+             }
+             catch (DbUpdateConcurrencyException)
+             {
+                 if (!_context.DiariosCampo.Any(e => e.IdDCampo == id)) return NotFound();
+                 else throw;
+             }
+             return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
+         }
+         
+         ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
+         ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
+         
+         return View(diario);
+    }
+}
 }

@@ -30,88 +30,34 @@
 
     <div class="atores-list-container">
         
-        <div class="ator-card">
-            <span class="ator-name">Jéssica Maria</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="1">
+        @foreach (var ator in Model)
+        {
+            <div class="ator-card">
+            <span class="ator-name">@ator.Nome</span>
+            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="@ator.IdAtores">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
                 </svg>
             </a>
         </div>
         
-        <div class="ator-card">
-            <span class="ator-name">Fábio Mota</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="2">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Aninha</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="3">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Claudete Magnus</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="4">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Bianca Fernanda</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="5">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Sthephanie Martins</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="6">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Kelly Moraes</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="7">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Edson Pereira</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="8">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="ator-card">
-            <span class="ator-name">Isaura Gomes</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="9">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
-            </a>
-        </div>
+        }
 
     </div>
 </div>
 
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const cards = document.querySelectorAll(".ator-card");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                card.style.display = name.includes(query) ? "flex" : "none";
+            });
+        });
+    });
+</script>

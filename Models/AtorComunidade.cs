@@ -6,11 +6,11 @@ namespace Empodera.Models
 {
     public class AtorComunidade
     {
-        [Key]
-        public int IdAComunidade { get; set; }
-        public int ComunidadeId { get; set; }
-        public int AtorId { get; set; }
-        public List<Ator>? Atores { get; set; }
-        public List<Comunidade>? Comunidades { get; set; }
+        public int IdAtorComunidade { get; set; }   
+        public int FkIdComunidade { get; set; }     
+        public int FKidAtores{ get; set; }           
+
+        public Comunidade Comunidade { get; set; } = null!;
+        public Atores Ator { get; set; } = null!;
     }
 }

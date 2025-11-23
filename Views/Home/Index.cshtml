@@ -7,6 +7,8 @@
     //mas só escrevemos "homepage".
 
     Layout = "_Layout"; // usa o Layout padrão (aquele do qual contém a sidebar)
+    var comunidade = ViewBag.Comunidade as List<Empodera.Models.Comunidade>;
+    var ator = ViewBag.Atores as List<Empodera.Models.Atores>;
 }
 
 
@@ -21,12 +23,12 @@
 
 <div class="cards-container">
     <div class="card">
-        <h2>44</h2>
+        <h2>@(comunidade?.Count ?? 0)</h2>
         <p>Comunidades</p>
         <button>Visualizar</button>
     </div>
     <div class="card">
-        <h2>684</h2>
+        <h2>@(ator?.Count ?? 0)</h2>
         <p>Atores</p>
         <button>Visualizar</button>
     </div>

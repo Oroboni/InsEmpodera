@@ -1,4 +1,4 @@
-@model Empodera.Models.PerfilAcesso
+@model Empodera.Models.Perfil
 @{
     ViewData["Title"] = "Detalhes do Perfil de Acesso";
     Layout = "_Layout";
@@ -16,7 +16,7 @@
     </div>
 
     <form method="post">
-        <input type="hidden" asp-for="IdPAcesso" /> <div class="form-group">
+        <input type="hidden" asp-for="IdPerfil" /> <div class="form-group">
             <label for="nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved"></i>

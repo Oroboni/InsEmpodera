@@ -22,7 +22,7 @@
             <label for="AtorId">Ator</label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <select asp-for="AtorId" class="form-control" asp-items="ViewBag.AtoresList" disabled></select>
+                <select asp-for="FkIdUsuario" class="form-control" asp-items="ViewBag.AtoresList" disabled></select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
                 <span class="tooltip-icon" data-tooltip="1. Acesso pleno e fácil.&#10;5. Sem acesso ou com muitas barreiras.">?</span>
             </label>
-            <input type="range" class="metric-slider" asp-for="Prevenção" min="1" max="5">
+            <input type="range" class="metric-slider" asp-for="Prevencao" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
@@ -129,7 +129,7 @@
         </details>
         <div class="form-buttons">
             <button type="button" class="btn btn-delete">DELETAR</button>
-            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.AtorId" class="btn btn-secondary">VOLTAR</a>
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.IdAvaliacao" class="btn btn-secondary">VOLTAR</a>
             <button type="submit" class="btn btn-primary">EDITAR</button>
         </div>
     </form>

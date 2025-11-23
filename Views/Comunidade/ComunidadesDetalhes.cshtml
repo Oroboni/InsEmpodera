@@ -362,7 +362,7 @@
         */
     </style>
 }
-<form asp-controller="Home" asp-action="ComunidadesDetalhes" method="post">
+<form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post">
 @Html.AntiForgeryToken()
 <div class="community-detail-container">
   <div class="community-detail-header">
@@ -470,7 +470,7 @@
   
     <div class="community-detail-metrics-container @(Model.IdComunidade == 0 ? "hidden-on-create" : "")">
     <div class="community-detail-metric-card">
-      <div class="community-detail-metric-value">23</div>
+      <div class="community-detail-metric-value">@ViewBag.qAtores</div>
       <div class="community-detail-metric-label">Atores vinculados</div>
       <div class="community-detail-metric-actions">
         <div class="community-detail-metric-action">
@@ -555,11 +555,15 @@
   }
   
     <div class="community-detail-action-buttons">
-    <a href="@Url.Action("Comunidades", "Home")" class="community-detail-btn community-detail-btn-back">VOLTAR</a>
+    <a href="@Url.Action("Index", "Comunidade")" class="community-detail-btn community-detail-btn-back">VOLTAR</a>
         <button type="button" class="community-detail-btn community-detail-btn-save">SALVAR</button>
   </div>
 </div>
 </form>
+<form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.IdComunidade">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-delete">DELETAR</button>
+    </form>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
