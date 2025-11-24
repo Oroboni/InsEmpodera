@@ -27,6 +27,47 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Perfis",
+                columns: table => new
+                {
+                    IdPerfil = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Perfis", x => x.IdPerfil);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permissoes",
+                columns: table => new
+                {
+                    IdPermissoes = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdPerfil = table.Column<int>(type: "INTEGER", nullable: false),
+                    Permissao = table.Column<string>(type: "TEXT", nullable: false),
+                    PodeListar = table.Column<string>(type: "TEXT", nullable: false),
+                    PodeDetalhar = table.Column<string>(type: "TEXT", nullable: false),
+                    PodeCriar = table.Column<string>(type: "TEXT", nullable: false),
+                    PodeAtualizar = table.Column<string>(type: "TEXT", nullable: false),
+                    PodeDeletar = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissoes", x => x.IdPermissoes);
+                    table.ForeignKey(
+                        name: "FK_Permissoes_Perfis_FkIdPerfil",
+                        column: x => x.FkIdPerfil,
+                        principalTable: "Perfis",
+                        principalColumn: "IdPerfil",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -34,18 +75,25 @@ namespace InsEmpodera.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
                     Senha = table.Column<string>(type: "TEXT", nullable: false),
-                    Foto = table.Column<string>(type: "TEXT", nullable: false),
+                    Foto = table.Column<string>(type: "TEXT", nullable: true),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Ocupacao = table.Column<string>(type: "TEXT", nullable: false),
-                    Genero = table.Column<string>(type: "TEXT", nullable: false),
+                    Genero = table.Column<string>(type: "TEXT", nullable: true),
                     DtNascimento = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    NivelPermissao = table.Column<int>(type: "INTEGER", nullable: false),
                     DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtAtualizacao = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    DtAtualizacao = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Ativo = table.Column<string>(type: "TEXT", nullable: false),
+                    FkIdPerfil = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.IdUsuario);
+                    table.ForeignKey(
+                        name: "FK_Usuarios_Perfis_FkIdPerfil",
+                        column: x => x.FkIdPerfil,
+                        principalTable: "Perfis",
+                        principalColumn: "IdPerfil",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,28 +156,6 @@ namespace InsEmpodera.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "IdUsuario",
                         onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Perfis",
-                columns: table => new
-                {
-                    IdPerfil = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Perfis", x => x.IdPerfil);
-                    table.ForeignKey(
-                        name: "FK_Perfis_Usuarios_FkIdUsuario",
-                        column: x => x.FkIdUsuario,
-                        principalTable: "Usuarios",
-                        principalColumn: "IdUsuario",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -393,31 +419,6 @@ namespace InsEmpodera.Migrations
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
                         principalColumn: "IdComunidade",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permissoes",
-                columns: table => new
-                {
-                    IdPermissoes = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdPerfil = table.Column<int>(type: "INTEGER", nullable: false),
-                    Permissao = table.Column<string>(type: "TEXT", nullable: false),
-                    PodeListar = table.Column<string>(type: "TEXT", nullable: false),
-                    PodeDetalhar = table.Column<string>(type: "TEXT", nullable: false),
-                    PodeCriar = table.Column<string>(type: "TEXT", nullable: false),
-                    PodeAtualizar = table.Column<string>(type: "TEXT", nullable: false),
-                    PodeDeletar = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permissoes", x => x.IdPermissoes);
-                    table.ForeignKey(
-                        name: "FK_Permissoes_Perfis_FkIdPerfil",
-                        column: x => x.FkIdPerfil,
-                        principalTable: "Perfis",
-                        principalColumn: "IdPerfil",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -875,15 +876,15 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Usuarios",
-                columns: new[] { "IdUsuario", "DtAtualizacao", "DtCriacao", "DtNascimento", "Email", "Foto", "Genero", "NivelPermissao", "Nome", "Ocupacao", "Senha" },
+                table: "Perfis",
+                columns: new[] { "IdPerfil", "DtCriacao", "DtModificacao", "FkIdUsuario", "Nome" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "joao@email.com", "foto1.jpg", "M", 1, "joao", "Coordenador", "123456" },
-                    { 2, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "u2@example.com", "foto2.jpg", "F", 2, "Usuario Dois", "Pesquisador", "senha2" },
-                    { 3, new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1995, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "u3@example.com", "foto3.jpg", "M", 1, "Usuario Tres", "Voluntario", "senha3" },
-                    { 4, new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1992, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "u4@example.com", "foto4.jpg", "F", 2, "Usuario Quatro", "Analista", "senha4" },
-                    { 5, new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "u5@example.com", "foto5.jpg", "M", 3, "Usuario Cinco", "Gerente", "senha5" }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Admin" },
+                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Editor" },
+                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "Colaborador" },
+                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Visualizador" },
+                    { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, "Supervisor" }
                 });
 
             migrationBuilder.InsertData(
@@ -918,6 +919,78 @@ namespace InsEmpodera.Migrations
                     { 13, 13, 5 },
                     { 14, 14, 5 },
                     { 15, 15, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Permissoes",
+                columns: new[] { "IdPermissoes", "FkIdPerfil", "Permissao", "PodeAtualizar", "PodeCriar", "PodeDeletar", "PodeDetalhar", "PodeListar" },
+                values: new object[,]
+                {
+                    { 1, 1, "Todas", "S", "S", "S", "S", "S" },
+                    { 2, 2, "Conteudo", "S", "S", "N", "S", "S" },
+                    { 3, 3, "Campo", "N", "N", "N", "S", "S" },
+                    { 4, 4, "Leitura", "N", "N", "N", "S", "S" },
+                    { 5, 5, "Gerencia", "S", "S", "N", "S", "S" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RedesPrimarias",
+                columns: new[] { "IdRedePrimaria", "FkIdAtorPrincipal", "FkIdAtorRelacionados", "TipoRelacao" },
+                values: new object[,]
+                {
+                    { 1, 1, 2, "Parceria" },
+                    { 2, 4, 5, "Suporte" },
+                    { 3, 7, 8, "Rede" },
+                    { 4, 10, 11, "Par" },
+                    { 5, 13, 14, "Ligacao" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Usuarios",
+                columns: new[] { "IdUsuario", "Ativo", "DtAtualizacao", "DtCriacao", "DtNascimento", "Email", "FkIdPerfil", "Foto", "Genero", "Nome", "Ocupacao", "Senha" },
+                values: new object[,]
+                {
+                    { 1, "S", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "joao@email.com", 1, "foto1.jpg", "M", "joao", "Coordenador", "123456" },
+                    { 2, "S", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "u2@example.com", 2, "foto2.jpg", "F", "Usuario Dois", "Pesquisador", "senha2" },
+                    { 3, "S", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1995, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "u3@example.com", 3, "foto3.jpg", "M", "Usuario Tres", "Voluntario", "senha3" },
+                    { 4, "S", new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1992, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "u4@example.com", 4, "foto4.jpg", "F", "Usuario Quatro", "Analista", "senha4" },
+                    { 5, "S", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "u5@example.com", 5, "foto5.jpg", "M", "Usuario Cinco", "Gerente", "senha5" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Vulnerabilidades",
+                columns: new[] { "IdVulnerabilidade", "FkIdComunidade", "Localizacao", "Nome", "Servicos" },
+                values: new object[,]
+                {
+                    { 1, 1, "Local 1", "Vuln 1", "Energia" },
+                    { 2, 2, "Local 2", "Vuln 2", "Agua" },
+                    { 3, 3, "Local 3", "Vuln 3", "Saude" },
+                    { 4, 4, "Local 4", "Vuln 4", "Transporte" },
+                    { 5, 5, "Local 5", "Vuln 5", "Comunicacao" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Acoes",
+                columns: new[] { "IdAcoes", "FkIdAtividade", "Nome", "Provedor", "Quantidade" },
+                values: new object[,]
+                {
+                    { 1, 1, "Ação 1", "Fornecedor A", 10 },
+                    { 2, 2, "Ação 2", "Fornecedor B", 5 },
+                    { 3, 3, "Ação 3", "Fornecedor C", 8 },
+                    { 4, 4, "Ação 4", "Fornecedor D", 12 },
+                    { 5, 5, "Ação 5", "Fornecedor E", 7 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AtividadesEixo",
+                columns: new[] { "IdAEixo", "FkIdAtividade", "FkIdEixo" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 2, 2 },
+                    { 3, 3, 3 },
+                    { 4, 4, 4 },
+                    { 5, 5, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -957,18 +1030,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Perfis",
-                columns: new[] { "IdPerfil", "DtCriacao", "DtModificacao", "FkIdUsuario", "Nome" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Admin" },
-                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Editor" },
-                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "Colaborador" },
-                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Visualizador" },
-                    { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, "Supervisor" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "RedeRecursos",
                 columns: new[] { "IdRede", "Dispositivo", "DtCriacao", "DtModificacao", "FKidAtores", "FkIdComunidade", "FkIdUsuario", "Servicos", "Tipo" },
                 values: new object[,]
@@ -981,39 +1042,27 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "RedesPrimarias",
-                columns: new[] { "IdRedePrimaria", "FkIdAtorPrincipal", "FkIdAtorRelacionados", "TipoRelacao" },
+                table: "VulnerabilidadesEixo",
+                columns: new[] { "IdVEixo", "FkIdEixo", "FkIdVulnerabilidade" },
                 values: new object[,]
                 {
-                    { 1, 1, 2, "Parceria" },
-                    { 2, 4, 5, "Suporte" },
-                    { 3, 7, 8, "Rede" },
-                    { 4, 10, 11, "Par" },
-                    { 5, 13, 14, "Ligacao" }
+                    { 1, 1, 1 },
+                    { 2, 2, 2 },
+                    { 3, 3, 3 },
+                    { 4, 4, 4 },
+                    { 5, 5, 5 }
                 });
 
             migrationBuilder.InsertData(
-                table: "Vulnerabilidades",
-                columns: new[] { "IdVulnerabilidade", "FkIdComunidade", "Localizacao", "Nome", "Servicos" },
+                table: "AcoesAtores",
+                columns: new[] { "IdAAtores", "FKidAtores", "FkIdAcoes" },
                 values: new object[,]
                 {
-                    { 1, 1, "Local 1", "Vuln 1", "Energia" },
-                    { 2, 2, "Local 2", "Vuln 2", "Agua" },
-                    { 3, 3, "Local 3", "Vuln 3", "Saude" },
-                    { 4, 4, "Local 4", "Vuln 4", "Transporte" },
-                    { 5, 5, "Local 5", "Vuln 5", "Comunicacao" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Acoes",
-                columns: new[] { "IdAcoes", "FkIdAtividade", "Nome", "Provedor", "Quantidade" },
-                values: new object[,]
-                {
-                    { 1, 1, "Ação 1", "Fornecedor A", 10 },
-                    { 2, 2, "Ação 2", "Fornecedor B", 5 },
-                    { 3, 3, "Ação 3", "Fornecedor C", 8 },
-                    { 4, 4, "Ação 4", "Fornecedor D", 12 },
-                    { 5, 5, "Ação 5", "Fornecedor E", 7 }
+                    { 1, 1, 1 },
+                    { 2, 4, 2 },
+                    { 3, 7, 3 },
+                    { 4, 10, 4 },
+                    { 5, 13, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -1029,8 +1078,8 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AtividadesEixo",
-                columns: new[] { "IdAEixo", "FkIdAtividade", "FkIdEixo" },
+                table: "DiarioAcoes",
+                columns: new[] { "IdDAcoes", "FkIdAcoes", "FkIdDiario" },
                 values: new object[,]
                 {
                     { 1, 1, 1 },
@@ -1125,18 +1174,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Permissoes",
-                columns: new[] { "IdPermissoes", "FkIdPerfil", "Permissao", "PodeAtualizar", "PodeCriar", "PodeDeletar", "PodeDetalhar", "PodeListar" },
-                values: new object[,]
-                {
-                    { 1, 1, "Todas", "S", "S", "S", "S", "S" },
-                    { 2, 2, "Conteudo", "S", "S", "N", "S", "S" },
-                    { 3, 3, "Campo", "N", "N", "N", "S", "S" },
-                    { 4, 4, "Leitura", "N", "N", "N", "S", "S" },
-                    { 5, 5, "Gerencia", "S", "S", "N", "S", "S" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "RedeEixos",
                 columns: new[] { "IdRedeEixo", "FkIdEixo", "FkIdRede" },
                 values: new object[,]
@@ -1146,30 +1183,6 @@ namespace InsEmpodera.Migrations
                     { 3, 3, 3 },
                     { 4, 4, 4 },
                     { 5, 5, 5 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "VulnerabilidadesEixo",
-                columns: new[] { "IdVEixo", "FkIdEixo", "FkIdVulnerabilidade" },
-                values: new object[,]
-                {
-                    { 1, 1, 1 },
-                    { 2, 2, 2 },
-                    { 3, 3, 3 },
-                    { 4, 4, 4 },
-                    { 5, 5, 5 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AcoesAtores",
-                columns: new[] { "IdAAtores", "FKidAtores", "FkIdAcoes" },
-                values: new object[,]
-                {
-                    { 1, 1, 1 },
-                    { 2, 4, 2 },
-                    { 3, 7, 3 },
-                    { 4, 10, 4 },
-                    { 5, 13, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -1194,18 +1207,6 @@ namespace InsEmpodera.Migrations
                     { 3, 3, "Detalhe C" },
                     { 4, 4, "Detalhe D" },
                     { 5, 5, "Detalhe E" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "DiarioAcoes",
-                columns: new[] { "IdDAcoes", "FkIdAcoes", "FkIdDiario" },
-                values: new object[,]
-                {
-                    { 1, 1, 1 },
-                    { 2, 2, 2 },
-                    { 3, 3, 3 },
-                    { 4, 4, 4 },
-                    { 5, 5, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -1391,11 +1392,6 @@ namespace InsEmpodera.Migrations
                 column: "FkIdFicha");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Perfis_FkIdUsuario",
-                table: "Perfis",
-                column: "FkIdUsuario");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Permissoes_FkIdPerfil",
                 table: "Permissoes",
                 column: "FkIdPerfil");
@@ -1434,6 +1430,11 @@ namespace InsEmpodera.Migrations
                 name: "IX_RedesPrimarias_FkIdAtorRelacionados",
                 table: "RedesPrimarias",
                 column: "FkIdAtorRelacionados");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_FkIdPerfil",
+                table: "Usuarios",
+                column: "FkIdPerfil");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vulnerabilidades_FkIdComunidade",
@@ -1518,9 +1519,6 @@ namespace InsEmpodera.Migrations
                 name: "FichasPrimeiroContato");
 
             migrationBuilder.DropTable(
-                name: "Perfis");
-
-            migrationBuilder.DropTable(
                 name: "RedeRecursos");
 
             migrationBuilder.DropTable(
@@ -1546,6 +1544,9 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
+
+            migrationBuilder.DropTable(
+                name: "Perfis");
         }
     }
 }

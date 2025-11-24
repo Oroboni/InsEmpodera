@@ -2139,8 +2139,6 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdPerfil");
 
-                    b.HasIndex("FkIdUsuario");
-
                     b.ToTable("Perfis");
 
                     b.HasData(
@@ -2510,7 +2508,11 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DtAtualizacao")
+                    b.Property<string>("Ativo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DtAtualizacao")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DtCriacao")
@@ -2523,16 +2525,14 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FkIdPerfil")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Foto")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Genero")
-                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("NivelPermissao")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -2548,19 +2548,22 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdUsuario");
 
+                    b.HasIndex("FkIdPerfil");
+
                     b.ToTable("Usuarios");
 
                     b.HasData(
                         new
                         {
                             IdUsuario = 1,
+                            Ativo = "S",
                             DtAtualizacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtCriacao = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "joao@email.com",
+                            FkIdPerfil = 1,
                             Foto = "foto1.jpg",
                             Genero = "M",
-                            NivelPermissao = 1,
                             Nome = "joao",
                             Ocupacao = "Coordenador",
                             Senha = "123456"
@@ -2568,13 +2571,14 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdUsuario = 2,
+                            Ativo = "S",
                             DtAtualizacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtCriacao = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u2@example.com",
+                            FkIdPerfil = 2,
                             Foto = "foto2.jpg",
                             Genero = "F",
-                            NivelPermissao = 2,
                             Nome = "Usuario Dois",
                             Ocupacao = "Pesquisador",
                             Senha = "senha2"
@@ -2582,13 +2586,14 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdUsuario = 3,
+                            Ativo = "S",
                             DtAtualizacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtCriacao = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1995, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u3@example.com",
+                            FkIdPerfil = 3,
                             Foto = "foto3.jpg",
                             Genero = "M",
-                            NivelPermissao = 1,
                             Nome = "Usuario Tres",
                             Ocupacao = "Voluntario",
                             Senha = "senha3"
@@ -2596,13 +2601,14 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdUsuario = 4,
+                            Ativo = "S",
                             DtAtualizacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtCriacao = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1992, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u4@example.com",
+                            FkIdPerfil = 4,
                             Foto = "foto4.jpg",
                             Genero = "F",
-                            NivelPermissao = 2,
                             Nome = "Usuario Quatro",
                             Ocupacao = "Analista",
                             Senha = "senha4"
@@ -2610,13 +2616,14 @@ namespace InsEmpodera.Migrations
                         new
                         {
                             IdUsuario = 5,
+                            Ativo = "S",
                             DtAtualizacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtCriacao = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u5@example.com",
+                            FkIdPerfil = 5,
                             Foto = "foto5.jpg",
                             Genero = "M",
-                            NivelPermissao = 3,
                             Nome = "Usuario Cinco",
                             Ocupacao = "Gerente",
                             Senha = "senha5"
@@ -3079,17 +3086,6 @@ namespace InsEmpodera.Migrations
                     b.Navigation("Ficha");
                 });
 
-            modelBuilder.Entity("Empodera.Models.Perfil", b =>
-                {
-                    b.HasOne("Empodera.Models.Usuario", "Usuario")
-                        .WithMany("Perfis")
-                        .HasForeignKey("FkIdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("Empodera.Models.Permissoes", b =>
                 {
                     b.HasOne("Empodera.Models.Perfil", "Perfil")
@@ -3164,6 +3160,17 @@ namespace InsEmpodera.Migrations
                     b.Navigation("Comunidade");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empodera.Models.Usuario", b =>
+                {
+                    b.HasOne("Empodera.Models.Perfil", "Perfil")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("FkIdPerfil")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Perfil");
                 });
 
             modelBuilder.Entity("Empodera.Models.Vulnerabilidade", b =>
@@ -3292,6 +3299,8 @@ namespace InsEmpodera.Migrations
             modelBuilder.Entity("Empodera.Models.Perfil", b =>
                 {
                     b.Navigation("Permissoes");
+
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("Empodera.Models.RedeRecursos", b =>
@@ -3312,8 +3321,6 @@ namespace InsEmpodera.Migrations
                     b.Navigation("DiarioCampos");
 
                     b.Navigation("FichasPrimeiroContato");
-
-                    b.Navigation("Perfis");
 
                     b.Navigation("RedeRecursos");
                 });

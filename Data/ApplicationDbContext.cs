@@ -74,11 +74,12 @@ namespace Empodera.Data
             modelBuilder.Entity<AtividadesEixo>().HasKey(ae => ae.IdAEixo);
 
             // Perfil -> Usuario (many Perfis belong to one Usuario)
-            modelBuilder.Entity<Perfil>()
-                .HasOne(p => p.Usuario)
-                .WithMany(u => u.Perfis)
-                .HasForeignKey(p => p.FkIdUsuario)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Usuario>()
+                .HasOne(u => u.Perfil)
+                .WithMany(p => p.Usuarios)
+                .HasForeignKey(u => u.FkIdPerfil)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // Permissoes -> Perfil (many Permissoes belong to one Perfil)
             modelBuilder.Entity<Permissoes>()
@@ -371,11 +372,11 @@ namespace Empodera.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { IdUsuario = 1, Nome = "joao", Senha = "123456", Foto = "foto1.jpg", Email = "joao@email.com", Ocupacao = "Coordenador", Genero = "M", DtNascimento = new DateTime(1990,1,1), NivelPermissao = 1, DtCriacao = new DateTime(2024,1,1), DtAtualizacao = new DateTime(2025,1,1) },
-                new Usuario { IdUsuario = 2, Nome = "Usuario Dois", Senha = "senha2", Foto = "foto2.jpg", Email = "u2@example.com", Ocupacao = "Pesquisador", Genero = "F", DtNascimento = new DateTime(1985,2,2), NivelPermissao = 2, DtCriacao = new DateTime(2024,2,1), DtAtualizacao = new DateTime(2025,2,1) },
-                new Usuario { IdUsuario = 3, Nome = "Usuario Tres", Senha = "senha3", Foto = "foto3.jpg", Email = "u3@example.com", Ocupacao = "Voluntario", Genero = "M", DtNascimento = new DateTime(1995,3,3), NivelPermissao = 1, DtCriacao = new DateTime(2024,3,1), DtAtualizacao = new DateTime(2025,3,1) },
-                new Usuario { IdUsuario = 4, Nome = "Usuario Quatro", Senha = "senha4", Foto = "foto4.jpg", Email = "u4@example.com", Ocupacao = "Analista", Genero = "F", DtNascimento = new DateTime(1992,4,4), NivelPermissao = 2, DtCriacao = new DateTime(2024,4,1), DtAtualizacao = new DateTime(2025,4,1) },
-                new Usuario { IdUsuario = 5, Nome = "Usuario Cinco", Senha = "senha5", Foto = "foto5.jpg", Email = "u5@example.com", Ocupacao = "Gerente", Genero = "M", DtNascimento = new DateTime(1988,5,5), NivelPermissao = 3, DtCriacao = new DateTime(2024,5,1), DtAtualizacao = new DateTime(2025,5,1) }
+                new Usuario { IdUsuario = 1, Nome = "joao", Senha = "123456", Foto = "foto1.jpg", Email = "joao@email.com", Ocupacao = "Coordenador", Genero = "M", DtNascimento = new DateTime(1990,1,1), DtCriacao = new DateTime(2024,1,1), DtAtualizacao = new DateTime(2025,1,1), FkIdPerfil = 1 },
+                new Usuario { IdUsuario = 2, Nome = "Usuario Dois", Senha = "senha2", Foto = "foto2.jpg", Email = "u2@example.com", Ocupacao = "Pesquisador", Genero = "F", DtNascimento = new DateTime(1985,2,2), DtCriacao = new DateTime(2024,2,1), DtAtualizacao = new DateTime(2025,2,1), FkIdPerfil = 2 },
+                new Usuario { IdUsuario = 3, Nome = "Usuario Tres", Senha = "senha3", Foto = "foto3.jpg", Email = "u3@example.com", Ocupacao = "Voluntario", Genero = "M", DtNascimento = new DateTime(1995,3,3), DtCriacao = new DateTime(2024,3,1), DtAtualizacao = new DateTime(2025,3,1), FkIdPerfil = 3 },
+                new Usuario { IdUsuario = 4, Nome = "Usuario Quatro", Senha = "senha4", Foto = "foto4.jpg", Email = "u4@example.com", Ocupacao = "Analista", Genero = "F", DtNascimento = new DateTime(1992,4,4), DtCriacao = new DateTime(2024,4,1), DtAtualizacao = new DateTime(2025,4,1), FkIdPerfil = 4 },
+                new Usuario { IdUsuario = 5, Nome = "Usuario Cinco", Senha = "senha5", Foto = "foto5.jpg", Email = "u5@example.com", Ocupacao = "Gerente", Genero = "M", DtNascimento = new DateTime(1988,5,5), DtCriacao = new DateTime(2024,5,1), DtAtualizacao = new DateTime(2025,5,1), FkIdPerfil = 5 }
             );
 
             // Perfis

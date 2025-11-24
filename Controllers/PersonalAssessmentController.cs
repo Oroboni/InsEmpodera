@@ -75,7 +75,7 @@ public class PersonalAssessmentController : Controller
     [HttpPost]
     public async Task<IActionResult> create(AvaliacaoPessoal avaliacao)
     {
-        if (HttpContext.Session.GetString("Email") == null)
+        if (HttpContext.Session.GetString("ID") == null)
         {
             return RedirectToAction("Index", "Account");
         }

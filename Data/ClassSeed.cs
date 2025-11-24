@@ -9,16 +9,19 @@ namespace Empodera.Data
         public int Id_Usuario { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;
-        public string Foto { get; set; } = string.Empty;
+        public string? Foto { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Ocupacao { get; set; } = string.Empty;
-        public string Genero { get; set; } = string.Empty;
+        public string? Genero { get; set; } = string.Empty;
         public DateTime Dt_Nascimento { get; set; }
         public int Nivel_Permissao { get; set; }
         public DateTime Dt_Criacao { get; set; }
-        public DateTime Dt_Atualizacao { get; set; }
-
-        public List<PerfilSeed>? Perfis { get; set; }
+        public DateTime? Dt_Atualizacao { get; set; }
+        public string Ativo { get; set; } = "S";
+        
+        public int FkIdPerfil { get; set; }
+        
+        public Perfil Perfil { get; set; } = null!;
         public List<ComunidadeSeed>? Comunidades { get; set; }
         public List<AtoresSeed>? Atores { get; set; }
         public List<RedeRecursosSeed>? Redes { get; set; }
@@ -31,9 +34,9 @@ namespace Empodera.Data
     public class PerfilSeed
     {
         public int Id_Perfil { get; set; }
-        public int FK_Id_Usuario { get; set; }
         public string Nome { get; set; } = string.Empty;
 
+        public List<UsuarioSeed> Usuarios { get; set; } = new();
         public List<PermissoesSeed>? Permissoes { get; set; }
     }
 
