@@ -1,7 +1,7 @@
 @{
     ViewData["Title"] = "Atores";
     Layout = "_Layout";
-    ViewData["DisableMainScroll"] = "true"; // <-- ADICIONE ESTA LINHA
+    ViewData["DisableMainScroll"] = "true"; 
 }
 
 <!DOCTYPE html>
@@ -25,7 +25,7 @@
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </form>
 
-        <a asp-controller="Actor" asp-action="Create" class="atores-add-button">+</a>
+        <a asp-controller="Atores" asp-action="Create" class="atores-add-button">+</a>
     </div>
 
     <div class="atores-list-container">
@@ -34,7 +34,7 @@
         {
             <div class="ator-card">
             <span class="ator-name">@ator.Nome</span>
-            <a class="details-icon" asp-controller="Actor" asp-action="Edit" asp-route-id="@ator.IdAtores">
+            <a class="details-icon" asp-controller="Atores" asp-action="Edit" asp-route-id="@ator.IdAtores">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
                 </svg>

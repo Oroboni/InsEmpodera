@@ -211,9 +211,7 @@
             </button>
         </form>
 
-        <!-- Botão de Adicionar comunidade-->
-        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova
-            Comunidade</a>
+        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova Comunidade</a>
     </div>
     <div class="comunidades-list">
         @foreach (var comunidade in Model)
@@ -222,7 +220,6 @@
                 <div class="card-content">
                     <div class="card-text">
                         <div class="card-title">@comunidade.Nome</div>
-                        <!-- tag da comunidade-->
                         <div class="card-status">
                             <span class="status-dot"></span>
                             @comunidade.Status

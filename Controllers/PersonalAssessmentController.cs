@@ -4,8 +4,7 @@ using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace InsEmpodera.Controllers;
+using SQLitePCL;
 
 public class PersonalAssessmentController : Controller
 {
@@ -25,12 +24,11 @@ public class PersonalAssessmentController : Controller
             return RedirectToAction("Index", "Account");
         }
 
-        // 1. Carregar a lista de todos os atores para o dropdown principal
         ViewBag.AtoresList = new SelectList(
-            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
+            await _context.Atores.OrderBy(a => a.IdAtores).ToListAsync(),
             "IdAtores",
             "Nome",
-            atorId // O ID do ator selecionado (se houver)
+            atorId
         );
 
         // 2. Guardar o ID selecionado
@@ -40,9 +38,10 @@ public class PersonalAssessmentController : Controller
         List<AvaliacaoPessoal> avaliacoes = new List<AvaliacaoPessoal>();
         if (atorId.HasValue)
         {
-            avaliacoes = await _context.AvaliacoesPessoais
+            avaliacoes = await _context.AvaliacaoPessoal
+                .Include(b => b.Usuario)
                 .Where(a => a.FkIdUsuario == atorId.Value)
-                .OrderByDescending(a => a.DtCriacao) // Mostrar mais nova primeiro
+                .OrderByDescending(a => a.DtCriacao)
                 .ToListAsync();
         }
 
@@ -59,20 +58,38 @@ public class PersonalAssessmentController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
+
+        ViewBag.AtorId = atorId;
         
         // Carrega a lista de atores para o dropdown do formulário
         ViewBag.AtoresList = new SelectList(
             await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
             "IdAtores",
             "Nome",
-            atorId // Pré-seleciona o ator vindo do Index
+            atorId
         );
 
         return View();
     }
 
+    [HttpPost]
+    public async Task<IActionResult> create(AvaliacaoPessoal avaliacao)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        avaliacao.DtCriacao = DateTime.Now;
+        avaliacao.DtModificacao = DateTime.Now;
+        avaliacao.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
+        _context.AvaliacaoPessoal.Add(avaliacao);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacao.FKidAtores});
+    }
+
     // GET: /PersonalAssessment/Edit/5
-    public async Task<IActionResult> Edit(int? id) // id da Avaliação
+    public async Task<IActionResult> Edit(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -84,7 +101,7 @@ public class PersonalAssessmentController : Controller
             return NotFound();
         }
 
-        var avaliacao = await _context.AvaliacoesPessoais.FindAsync(id);
+        var avaliacao = await _context.AvaliacaoPessoal.Include(a => a.Usuario).FirstOrDefaultAsync(a => a.IdAvaliacao == id);
         if (avaliacao == null)
         {
             return NotFound();
@@ -98,6 +115,41 @@ public class PersonalAssessmentController : Controller
             avaliacao.FkIdUsuario // Pré-seleciona o ator da avaliação
         );
 
+        ViewBag.atorId = id;
+
         return View(avaliacao);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> edit(AvaliacaoPessoal avaliacao, int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var avaliacaobd = await _context.AvaliacaoPessoal.FirstOrDefaultAsync(a => a.IdAvaliacao == id);
+        if (avaliacaobd == null)
+        {
+            return NotFound();
+        } 
+        avaliacaobd.AssBasica = avaliacao.AssBasica;
+        avaliacaobd.CCrimes = avaliacao.CCrimes;
+        avaliacaobd.DtModificacao = DateTime.Now;
+        avaliacaobd.Lazer = avaliacao.Lazer;
+        avaliacaobd.Moradia = avaliacao.Moradia;
+        avaliacaobd.Ocupacao = avaliacao.Ocupacao;
+        avaliacaobd.Prevencao = avaliacao.Prevencao;
+        avaliacaobd.Saude = avaliacao.Saude;
+        avaliacaobd.Substancias = avaliacao.Substancias;
+
+        _context.AvaliacaoPessoal.Update(avaliacaobd);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacaobd.FkIdUsuario});
     }
 }

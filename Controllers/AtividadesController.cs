@@ -1,14 +1,17 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Empodera.Data;
 using Empodera.Models;
+using SQLitePCL;
+using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering; 
 
-namespace InsEmpodera.Controllers;
+namespace Empodera.Controllers;
 
-public class ActivityController : Controller
+public class AtividadesController : Controller
 {
     private readonly ApplicationDbContext _context;
-    public ActivityController(ApplicationDbContext context) => _context = context;
+    public AtividadesController(ApplicationDbContext context) => _context = context;
 
     public async Task<IActionResult> Index()
     {
@@ -30,6 +33,12 @@ public class ActivityController : Controller
 
         ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
 
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+            "IdComunidade", 
+            "Nome"
+        );
+
         var model = new Atividades
         {
             DtCriacao = DateTime.Now,
@@ -41,14 +50,15 @@ public class ActivityController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Atividades atividade, List<int> EixosSelecionados)
+    public async Task<IActionResult> Create(Atividades atividade, List<int> EixosSelecionados, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         atividade.DtCriacao = DateTime.Now;
         atividade.DtModificacao = DateTime.Now;
-        atividade.FkIdComunidade = 1;
+        atividade.FkIdComunidade = ComunidadeId;
+        atividade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
 
         _context.Atividades.Add(atividade);
         await _context.SaveChangesAsync();
@@ -81,16 +91,25 @@ public class ActivityController : Controller
             .ThenInclude(ae => ae.Eixo)
             .FirstOrDefaultAsync(a => a.IdAtividade == id);
 
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
+            "IdComunidade",
+            "Nome",
+            atividade?.FkIdComunidade
+        );
+
         if (atividade == null) return NotFound();
 
         ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuario).FirstOrDefault();
+        ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuarioM).FirstOrDefault();
 
         return View(atividade);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Atividades atividade, List<int> EixosSelecionados)
+    public async Task<IActionResult> Edit(int id, Atividades atividade, List<int> EixosSelecionados, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -105,7 +124,9 @@ public class ActivityController : Controller
 
         existingAtividade.Nome = atividade.Nome;
         existingAtividade.Descricao = atividade.Descricao;
+        existingAtividade.FkIdComunidade = ComunidadeId;
         existingAtividade.DtModificacao = DateTime.Now;
+        existingAtividade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
 
         var existingEixoIds = existingAtividade.AtividadesEixos.Select(ae => ae.FkIdEixo).ToList();
 

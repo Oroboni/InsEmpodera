@@ -1,22 +1,23 @@
+@using Microsoft.AspNetCore.Components.Forms
 @model Empodera.Models.Atores
 @{
     ViewData["Title"] = "Adicionar Novo Ator";
-    ViewData["PageCSS"] = "create-form"; 
+    ViewData["PageCSS"] = "create-form";
 }
 
 <div class="container">
     <div class="container">
-    <div class="breadcrumb">
-    <h1>
-        <a asp-controller="Actor" asp-action="Index">Atores</a> 
-        > 
-        <strong>Adicionar novo Ator</strong>
-    </h1>
-</div>
-</div>
+        <div class="breadcrumb">
+            <h1>
+                <a asp-controller="Comunidade" asp-action="Index">Atores</a>
+                >
+                <strong>Adicionar novo Ator</strong>
+            </h1>
+        </div>
+    </div>
 
-    <form asp-controller="Comunidade" asp-action="Create" method="post">
-        
+    <form asp-controller="Comunidade" asp-action="Create_Atores" method="post">
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <label for="comunidadeId">Comunidade</label>
             <div class="select-wrapper">
@@ -33,8 +34,10 @@
                     <i class="fa-solid fa-user"></i>
                     <input id="Nome" name="Nome" asp-for="Nome" type="text" placeholder="Nome do Ator" required />
                 </div>
-                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
-                <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i
+                        class="fa-solid fa-plus"></i></button>
+                <button type="button" class="btn-icon" title="Importar (da lista?)"><i
+                        class="fa-solid fa-arrow-right-to-bracket"></i></button>
             </div>
         </div>
 
@@ -54,11 +57,33 @@
                 </div>
             </div>
 
+            <div class="form-group"></div>
+            <div class="form-group-checkbox">
+                <input asp-for="DaEquipe" id="daEquipeCheckbox" type="checkbox" />
+                <label for="daEquipeCheckbox">Da Equipe</label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input asp-for="Rope" id="ropeCheckbox" type="checkbox" />
+                <label for="ropeCheckbox">Rede Operativa</label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input asp-for="Lopiniao" id="liderOpiniaoCheckbox" type="checkbox" />
+                <label for="liderOpiniaoCheckbox">Líder de Opinião</label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input asp-for="Mcomunidade" id="moraNaComunidadeCheckbox" type="checkbox" />
+                <label for="moraNaComunidadeCheckbox">Mora na comunidade</label>
+            </div>
+
             <div class="form-group">
                 <label for="dataNascimento">Data de Nascimento</label>
                 <div class="input-wrapper">
-                    <i class="fa-solid fa-calendar-day"></i> 
-                    <input asp-for="DtNascimento" type="date" class="form-control" value='@(Model != null && Model.DtNascimento != default(System.DateTime) && Model.DtNascimento != System.DateTime.MinValue ? Model.DtNascimento.ToString("yyyy-MM-dd") : String.Empty)' />
+                    <i class="fa-solid fa-calendar-day"></i>
+                    <input asp-for="DtNascimento" type="date" class="form-control"
+                        value='@(Model != null && Model.DtNascimento != default(System.DateTime) && Model.DtNascimento != System.DateTime.MinValue ? Model.DtNascimento.ToString("yyyy-MM-dd") : String.Empty)' />
                 </div>
             </div>
         </div>
@@ -67,16 +92,18 @@
             <label for="papelSocial1">Papel Social</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-briefcase"></i>
-                <input id="papelSocial1" name="papelSocial1" asp-for="PapelSocial1" type="text" placeholder="Digite o papel social" />
+                <input id="papelSocial1" name="papelSocial1" asp-for="PapelSocial1" type="text"
+                    placeholder="Digite o papel social" />
             </div>
         </div>
 
         <div class="form-group">
             <label for="papelSocial2">Papel Social</f>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-briefcase"></i>
-                <input id="papelSocial2" name="papelSocial2" asp-for="PapelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
-            </div>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <input id="papelSocial2" name="papelSocial2" asp-for="PapelSocial2" type="text"
+                        placeholder="Digite outro papel social (opcional)" />
+                </div>
         </div>
 
         <div class="form-group">
@@ -88,7 +115,7 @@
         </div>
 
         <div class="form-buttons">
-            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@ViewBag.ComunidadeId" class="btn btn-secondary">CANCELAR</a>
             <button type="submit" class="btn btn-primary">ADICIONAR ATOR</button>
         </div>
     </form>

@@ -5,7 +5,7 @@ using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace InsEmpodera.Controllers;
+namespace Empodera.Controllers;
 
 public class ReportController : Controller
 {

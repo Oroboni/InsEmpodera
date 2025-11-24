@@ -5,7 +5,7 @@ using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace InsEmpodera.Controllers;
+namespace Empodera.Controllers;
 
 public class AccountController : Controller
 {

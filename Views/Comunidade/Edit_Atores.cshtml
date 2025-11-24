@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <form asp-controller="Comunidade" asp-action="Edit" method="post">
+    <form asp-controller="Comunidade" asp-action="Edit_Atores" method="post">
         @Html.AntiForgeryToken()
         <input asp-for="IdAtores" type="hidden" />
         <input type="hidden" name="id" value="@Model.IdAtores" />
@@ -60,6 +60,27 @@
                     <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
+            
+            <div class="form-group"></div>
+            <div class="form-group-checkbox">
+                <input asp-for="DaEquipe" id="daEquipeCheckbox" type="checkbox" />
+                <label for="daEquipeCheckbox">Da Equipe</label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input asp-for="Rope" id="ropeCheckbox" type="checkbox" />
+                <label for="ropeCheckbox">Rede Operativa</label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input asp-for="Lopiniao" id="liderOpiniaoCheckbox" type="checkbox" />
+                <label for="liderOpiniaoCheckbox">Líder de Opinião</label>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input asp-for="Mcomunidade" id="moraNaComunidadeCheckbox" type="checkbox" />
+                <label for="moraNaComunidadeCheckbox">Mora na comunidade</label>
+            </div>
 
             <div class="form-group">
                 <label for="dataNascimento">Data de Nascimento</label>
@@ -96,12 +117,51 @@
             </div>
         </div>
 
+        <details class="form-footer" open>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@ViewBag.UsuarioOriginal.Nome" readonly>
+                    </div>
+                </div>
+                @if(ViewBag.UsuarioNovo != null)
+                {
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                         <input type="text" value="@ViewBag.UsuarioNovo.Nome" readonly>
+                    </div>
+                </div>
+                }
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                @if(ViewBag.UsuarioNovo != null)
+                {
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                }
+            </div>
+        </details>
+
         <div class="form-buttons">
-            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@ViewBag.ComunidadeId" class="btn btn-secondary">CANCELAR</a>
             <button type="submit" class="btn btn-primary">ATUALIZAR ATOR</button>
         </div>
     </form>
-    <form asp-controller="Comunidade" asp-action="Delete_Usuario" method="post" asp-route-id="@Model.IdAtores">
+    <form asp-controller="Comunidade" asp-action="Delete_Atores" method="post" asp-route-id="@Model.IdAtores">
         @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-delete">DELETAR</button>
     </form>

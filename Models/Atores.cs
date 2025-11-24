@@ -13,10 +13,16 @@ namespace Empodera.Models
         public string? PapelSocial1 { get; set; }
         public string? PapelSocial2 { get; set; }
         public string? Telefone { get; set; }
-        public string? Extra { get; set; } = null!;
+        public bool DaEquipe { get; set; } = false;
+        public bool Rope { get; set; } = false;
+        public bool Lopiniao { get; set; } = false;
+        public bool Mcomunidade { get; set; } = false;
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
         public string Ativo { get; set; } = "S";
+        public int FkIdUsuario { get; set; }
+        public int? FkIdUsuarioM { get; set; }
+        public Usuario Usuario { get; set; } = null!;
         public List<RedeRecursos> Redes { get; set; } = new();
         public List<AtorComunidade> Comunidades { get; set; } = new();
         public List<DAAtores> DAAtores { get; set; } = new();

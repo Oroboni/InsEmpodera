@@ -13,6 +13,9 @@ namespace Empodera.Models
         public int FkIdComunidade { get; set; } 
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
+        public int FkIdUsuario { get; set; }
+        public int? FkIdUsuarioM { get; set; }
+        public Usuario Usuario { get; set; } = null!;
         public Comunidade Comunidade { get; set; } = null!;
         public List<AtividadesEixo> AtividadesEixos { get; set; } = new();
         public List<Acoes> Acoes { get; set; } = new();

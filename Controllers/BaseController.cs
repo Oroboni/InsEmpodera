@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace InsEmpodera.Controllers
+namespace Empodera.Controllers
 {
     public abstract class BaseController : Controller
     {

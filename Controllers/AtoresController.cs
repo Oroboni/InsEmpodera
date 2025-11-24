@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Empodera.Controllers;
 
-public class ActorController : Controller
+public class AtoresController : Controller
 {
-    private readonly ILogger<ActorController> _logger;
+    private readonly ILogger<AtoresController> _logger;
     private readonly ApplicationDbContext _context;
 
-    public ActorController(ILogger<ActorController> logger, ApplicationDbContext context)
+    public AtoresController(ILogger<AtoresController> logger, ApplicationDbContext context)
     {
         _logger = logger;
         _context = context;
@@ -40,7 +40,7 @@ public class ActorController : Controller
         }
         
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+            await _context.Comunidades.ToListAsync(), 
             "IdComunidade", 
             "Nome"
         );
@@ -55,6 +55,7 @@ public class ActorController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Atores ator, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
@@ -62,33 +63,23 @@ public class ActorController : Controller
             return RedirectToAction("Index", "Account");
         }
 
-        if (ModelState.IsValid)
+        ator.DtCriacao = DateTime.Now;
+        ator.DtModificacao = DateTime.Now;
+        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
+
+        _context.Atores.Add(ator);
+        await _context.SaveChangesAsync();
+
+        var relacao = new AtorComunidade
         {
-            ator.DtCriacao = DateTime.Now;
-            ator.DtModificacao = DateTime.Now;
+            FkIdComunidade = ComunidadeId,
+            FKidAtores = ator.IdAtores
+        };
 
-            _context.Atores.Add(ator);
-            await _context.SaveChangesAsync();
+        _context.AtorComunidades.Add(relacao);
+        await _context.SaveChangesAsync();
 
-            var relacao = new AtorComunidade
-            {
-                FkIdComunidade = ComunidadeId,
-                FKidAtores = ator.IdAtores
-            };
-
-            _context.AtorComunidades.Add(relacao);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Actor");
-        }
-
-        ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
-            "IdComunidade",
-            "Nome"
-        );
-
-        return View(ator);
+        return RedirectToAction("Index", "Atores");
     }
 
 
@@ -105,8 +96,12 @@ public class ActorController : Controller
         if (ator == null)
             return NotFound();
 
+        ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuario).FirstOrDefault();
+        ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuarioM).FirstOrDefault();
+
         var atorCom = await _context.AtorComunidades
-            .FirstOrDefaultAsync(ac => ac.IdAtorComunidade == id);
+            .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
+
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
@@ -120,7 +115,7 @@ public class ActorController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> Edit(int id, int ComunidadeId)
+    public async Task<IActionResult> Edit(Atores atores,int id, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -143,8 +138,24 @@ public class ActorController : Controller
         }
         else
         {
-            atorCom.FkIdComunidade = ComunidadeId;
-            _context.AtorComunidades.Update(atorCom);
+            var atorDb = await _context.Atores.FindAsync(atores.IdAtores);
+            if (atorDb == null)
+                return NotFound();
+
+            atorDb.Nome = ator.Nome;
+            atorDb.Genero = ator.Genero;
+            atorDb.DtNascimento = ator.DtNascimento;
+            atorDb.PapelSocial1 = ator.PapelSocial1;
+            atorDb.PapelSocial2 = ator.PapelSocial2;
+            atorDb.Telefone = ator.Telefone;
+            atorDb.DaEquipe = ator.DaEquipe;
+            atorDb.Lopiniao = ator.Lopiniao;
+            atorDb.Mcomunidade = ator.Mcomunidade;
+            atorDb.Rope = ator.Rope;
+            atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
+            atorDb.DtModificacao = DateTime.Now;
+
+            await _context.SaveChangesAsync();
         }
 
         await _context.SaveChangesAsync();
@@ -175,7 +186,7 @@ public class ActorController : Controller
             _context.Atores.Update(ator);
             await _context.SaveChangesAsync();
         }
-        return RedirectToAction("Index", "Actor");
+        return RedirectToAction("Index", "Atores");
     }
 
     // TODO: Você precisará adicionar os métodos [HttpPost] para Create e Edit

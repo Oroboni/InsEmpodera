@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace InsEmpodera.Controllers
+namespace Empodera.Controllers
 {
     public class FichaPrimeiroContatoController : Controller
     {
@@ -26,6 +26,12 @@ namespace InsEmpodera.Controllers
                 .AsQueryable();
 
             var lista = await fichas.ToListAsync();
+
+            ViewBag.Comunidades = new SelectList(
+                await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+                "IdComunidade", 
+                "Nome"
+            );
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 return PartialView(lista);

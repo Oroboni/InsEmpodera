@@ -46,7 +46,7 @@
     <div class="body-page">
         <div class="main-content-wrapper">
             <div class="section-1">
-                <h2>Seção 1 - USER</h2>
+                <h2>Olá @(ViewContext.HttpContext?.Session?.GetString("Nome"))</h2>
                 <ul>
                     <p>Principais</p>
                     <!-- Seu menu continua igual... -->
@@ -75,13 +75,13 @@
                             <p><i class="fas fa-book"></i> Diários de Campo</p>
                         </a>
                     </li>
-                    <li data-page="diarioprocessopessoal" class="@IsActive("DiarioProcessoPessoal")">
-                        <a asp-controller="DiarioProcessoPessoal" asp-action="Index">
+                    <li data-page="PersonalAssessment" class="@IsActive("PersonalAssessment")">
+                        <a asp-controller="PersonalAssessment" asp-action="Index">
                             <p><i class="fas fa-book-open"></i> Diário Pessoal</p>
                         </a>
                     </li>
-                    <li data-page="relatorios" class="@IsActive("Relatorios")">
-                        <a asp-controller="Relatorios" asp-action="Index">
+                    <li data-page="Report" class="@IsActive("Report")">
+                        <a asp-controller="Report" asp-action="Index">
                             <p><i class="fas fa-chart-bar"></i> Relatórios</p>
                         </a>
                     </li>
@@ -95,13 +95,13 @@
                             <p><i class="fas fa-bolt"></i> Atividades</p>
                         </a>
                     </li>
-                    <li data-page="usuarios" class="@IsActive("Usuarios")">
+                    <li data-page="Usuarios" class="@IsActive("Usuarios")">
                         <a asp-controller="Usuarios" asp-action="Index">
                             <p><i class="fas fa-user"></i> Usuários</p>
                         </a>
                     </li>
-                    <li data-page="perfisdeacesso" class="@IsActive("PerfisDeAcesso")">
-                        <a asp-controller="PerfisDeAcesso" asp-action="Index">
+                    <li data-page="AccessProfile" class="@IsActive("AccessProfile")">
+                        <a asp-controller="AccessProfile" asp-action="Index">
                             <p><i class="fas fa-user-shield"></i> Perfis de Acesso</p>
                         </a>
                     </li>

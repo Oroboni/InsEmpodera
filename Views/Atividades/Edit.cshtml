@@ -12,13 +12,23 @@
 <div class="container">
     <div class="breadcrumb">
         <h1>
-            <a asp-controller="Activity" asp-action="Index">Atividades</a>
+            <a asp-controller="Atividades" asp-action="Index">Atividades</a>
             <strong>Adicionar Atividade</strong>
         </h1>
     </div>
-    <form method="post" asp-controller="Activity" asp-action="Edit">
+    <form method="post" asp-controller="Atividades" asp-action="Edit">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdAtividade" />
+        <div class="form-group">
+            <label>Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+
+                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required></select>
+
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
         <div class="form-group">
             <label for="Nome">Nome</label>
             <div class="input-wrapper">
@@ -67,27 +77,24 @@
         </div>
 
         <details class="form-footer" open>
-            <summary>
-                <div class="footer-text">
-                    <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
-                </div>
-                <i class="fa-solid fa-chevron-down"></i>
-            </summary>
             <div class="metadata-content">
                 <div class="form-group">
                     <label>Criado por</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" value="Sthefany Porcari" readonly>
+                        <input type="text" value="@ViewBag.UsuarioOriginal.Nome" readonly>
                     </div>
                 </div>
+                @if(ViewBag.UsuarioNovo != null)
+                {
                 <div class="form-group">
                     <label>Atualizado por</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-user"></i>
-                         <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                         <input type="text" value="@ViewBag.UsuarioNovo.Nome" readonly>
                     </div>
                 </div>
+                }
                 <div class="form-group">
                     <label>Data de criação</label>
                     <div class="input-wrapper">
@@ -95,6 +102,8 @@
                         <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
                     </div>
                 </div>
+                @if(ViewBag.UsuarioNovo != null)
+                {
                 <div class="form-group">
                     <label>Última atualização</label>
                     <div class="input-wrapper">
@@ -102,6 +111,7 @@
                         <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
                     </div>
                 </div>
+                }
             </div>
         </details>
 

@@ -29,7 +29,7 @@ namespace Empodera.Data
         public DbSet<Vulnerabilidade> Vulnerabilidades { get; set; } = null!;
         public DbSet<VulnerabilidadesEixo> VulnerabilidadesEixo { get; set; } = null!;
         public DbSet<RedePrimaria> RedesPrimarias { get; set; } = null!;
-        public DbSet<AvaliacaoPessoal> AvaliacoesPessoais { get; set; } = null!;
+        public DbSet<AvaliacaoPessoal> AvaliacaoPessoal { get; set; } = null!;
         public DbSet<FichaPrimeiroContato> FichasPrimeiroContato { get; set; } = null!;
         public DbSet<FonteInf> FontesInfo { get; set; } = null!;
         public DbSet<FichaCondicoes> FichaCondicoes { get; set; } = null!;
@@ -92,6 +92,24 @@ namespace Empodera.Data
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Comunidades)
                 .HasForeignKey(c => c.FkIdUsuario)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Comunidade>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Comunidades)
+                .HasForeignKey(c => c.FkIdUsuarioM)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Atores>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Atores)
+                .HasForeignKey(c => c.FkIdUsuario)
+                .OnDelete(DeleteBehavior.SetNull);
+
+           modelBuilder.Entity<Atores>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Atores)
+                .HasForeignKey(c => c.FkIdUsuarioM)
                 .OnDelete(DeleteBehavior.SetNull);
 
             // RedeRecursos -> Atores and Comunidade and Usuario
@@ -326,6 +344,18 @@ namespace Empodera.Data
                 .HasForeignKey(at => at.FkIdComunidade)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Atividades>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Atividades)
+                .HasForeignKey(c => c.FkIdUsuario)
+                .OnDelete(DeleteBehavior.SetNull);
+
+           modelBuilder.Entity<Atividades>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Atividades)
+                .HasForeignKey(c => c.FkIdUsuarioM)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<AtividadesEixo>()
                 .HasOne(ae => ae.Atividades)
                 .WithMany(at => at.AtividadesEixos)
@@ -377,24 +407,24 @@ namespace Empodera.Data
 
             // Atores
             modelBuilder.Entity<Atores>().HasData(
-                new Atores { IdAtores = 1, Nome = "Ator 1", Genero = "M", DtNascimento = new DateTime(1990,1,1), PapelSocial1 = "Lider", PapelSocial2 = "Voluntario", Telefone = "11900000001", Extra = "", DtCriacao = new DateTime(2024,1,1), DtModificacao = new DateTime(2025,1,1), Ativo="S" },
-                new Atores { IdAtores = 2, Nome = "Ator 2", Genero = "F", DtNascimento = new DateTime(1992,2,2), PapelSocial1 = "Beneficiario", PapelSocial2 = "Membro", Telefone = "11900000002", Extra = "", DtCriacao = new DateTime(2024,2,1), DtModificacao = new DateTime(2025,2,1), Ativo="S" },
-                new Atores { IdAtores = 3, Nome = "Ator 3", Genero = "M", DtNascimento = new DateTime(1985,3,3), PapelSocial1 = "Parceiro", PapelSocial2 = "Voluntario", Telefone = "11900000003", Extra = "", DtCriacao = new DateTime(2024,3,1), DtModificacao = new DateTime(2025,3,1), Ativo="S" },
+                new Atores { IdAtores = 1, Nome = "Ator 1", Genero = "M", DtNascimento = new DateTime(1990,1,1), PapelSocial1 = "Lider", PapelSocial2 = "Voluntario", Telefone = "11900000001", DtCriacao = new DateTime(2024,1,1), DtModificacao = new DateTime(2025,1,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 2, Nome = "Ator 2", Genero = "F", DtNascimento = new DateTime(1992,2,2), PapelSocial1 = "Beneficiario", PapelSocial2 = "Membro", Telefone = "11900000002", DtCriacao = new DateTime(2024,2,1), DtModificacao = new DateTime(2025,2,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 3, Nome = "Ator 3", Genero = "M", DtNascimento = new DateTime(1985,3,3), PapelSocial1 = "Parceiro", PapelSocial2 = "Voluntario", Telefone = "11900000003", DtCriacao = new DateTime(2024,3,1), DtModificacao = new DateTime(2025,3,1), Ativo="S", FkIdUsuario = 1 },
 
-                new Atores { IdAtores = 4, Nome = "Ator 4", Genero = "F", DtNascimento = new DateTime(1991,4,4), PapelSocial1 = "Lider", PapelSocial2 = "Coordenador", Telefone = "11900000004", Extra = "", DtCriacao = new DateTime(2024,4,1), DtModificacao = new DateTime(2025,4,1), Ativo="S" },
-                new Atores { IdAtores = 5, Nome = "Ator 5", Genero = "M", DtNascimento = new DateTime(1988,5,5), PapelSocial1 = "Beneficiario", PapelSocial2 = "Voluntario", Telefone = "11900000005", Extra = "", DtCriacao = new DateTime(2024,5,1), DtModificacao = new DateTime(2025,5,1), Ativo="S" },
-                new Atores { IdAtores = 6, Nome = "Ator 6", Genero = "F", DtNascimento = new DateTime(1993,6,6), PapelSocial1 = "Parceiro", PapelSocial2 = "Membro", Telefone = "11900000006", Extra = "", DtCriacao = new DateTime(2024,6,1), DtModificacao = new DateTime(2025,6,1), Ativo="S" },
+                new Atores { IdAtores = 4, Nome = "Ator 4", Genero = "F", DtNascimento = new DateTime(1991,4,4), PapelSocial1 = "Lider", PapelSocial2 = "Coordenador", Telefone = "11900000004", DtCriacao = new DateTime(2024,4,1), DtModificacao = new DateTime(2025,4,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 5, Nome = "Ator 5", Genero = "M", DtNascimento = new DateTime(1988,5,5), PapelSocial1 = "Beneficiario", PapelSocial2 = "Voluntario", Telefone = "11900000005", DtCriacao = new DateTime(2024,5,1), DtModificacao = new DateTime(2025,5,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 6, Nome = "Ator 6", Genero = "F", DtNascimento = new DateTime(1993,6,6), PapelSocial1 = "Parceiro", PapelSocial2 = "Membro", Telefone = "11900000006", DtCriacao = new DateTime(2024,6,1), DtModificacao = new DateTime(2025,6,1), Ativo="S", FkIdUsuario = 1 },
 
-                new Atores { IdAtores = 7, Nome = "Ator 7", Genero = "M", DtNascimento = new DateTime(1994,7,7), PapelSocial1 = "Lider", PapelSocial2 = "Voluntario", Telefone = "11900000007", Extra = "", DtCriacao = new DateTime(2024,7,1), DtModificacao = new DateTime(2025,7,1), Ativo="S" },
-                new Atores { IdAtores = 8, Nome = "Ator 8", Genero = "F", DtNascimento = new DateTime(1995,8,8), PapelSocial1 = "Beneficiario", PapelSocial2 = "Membro", Telefone = "11900000008", Extra = "", DtCriacao = new DateTime(2024,8,1), DtModificacao = new DateTime(2025,8,1), Ativo="S" },
-                new Atores { IdAtores = 9, Nome = "Ator 9", Genero = "M", DtNascimento = new DateTime(1996,9,9), PapelSocial1 = "Parceiro", PapelSocial2 = "Voluntario", Telefone = "11900000009", Extra = "", DtCriacao = new DateTime(2024,9,1), DtModificacao = new DateTime(2025,9,1), Ativo="S" },
+                new Atores { IdAtores = 7, Nome = "Ator 7", Genero = "M", DtNascimento = new DateTime(1994,7,7), PapelSocial1 = "Lider", PapelSocial2 = "Voluntario", Telefone = "11900000007", DtCriacao = new DateTime(2024,7,1), DtModificacao = new DateTime(2025,7,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 8, Nome = "Ator 8", Genero = "F", DtNascimento = new DateTime(1995,8,8), PapelSocial1 = "Beneficiario", PapelSocial2 = "Membro", Telefone = "11900000008", DtCriacao = new DateTime(2024,8,1), DtModificacao = new DateTime(2025,8,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 9, Nome = "Ator 9", Genero = "M", DtNascimento = new DateTime(1996,9,9), PapelSocial1 = "Parceiro", PapelSocial2 = "Voluntario", Telefone = "11900000009", DtCriacao = new DateTime(2024,9,1), DtModificacao = new DateTime(2025,9,1), Ativo="S", FkIdUsuario = 1 },
 
-                new Atores { IdAtores = 10, Nome = "Ator 10", Genero = "F", DtNascimento = new DateTime(1987,10,10), PapelSocial1 = "Lider", PapelSocial2 = "Coordenador", Telefone = "11900000010", Extra = "", DtCriacao = new DateTime(2024,10,1), DtModificacao = new DateTime(2025,10,1), Ativo="S" },
-                new Atores { IdAtores = 11, Nome = "Ator 11", Genero = "M", DtNascimento = new DateTime(1986,11,11), PapelSocial1 = "Beneficiario", PapelSocial2 = "Membro", Telefone = "11900000011", Extra = "", DtCriacao = new DateTime(2024,11,1), DtModificacao = new DateTime(2025,11,1), Ativo="S" },
-                new Atores { IdAtores = 12, Nome = "Ator 12", Genero = "F", DtNascimento = new DateTime(1989,12,12), PapelSocial1 = "Parceiro", PapelSocial2 = "Voluntario", Telefone = "11900000012", Extra = "", DtCriacao = new DateTime(2024,12,1), DtModificacao = new DateTime(2025,12,1), Ativo="S" },
-                new Atores { IdAtores = 13, Nome = "Ator 13", Genero = "M", DtNascimento = new DateTime(1997,1,13), PapelSocial1 = "Membro", PapelSocial2 = "", Telefone = "11900000013", Extra = "", DtCriacao = new DateTime(2025,1,1), DtModificacao = new DateTime(2025,1,1), Ativo="S" },
-                new Atores { IdAtores = 14, Nome = "Ator 14", Genero = "F", DtNascimento = new DateTime(1998,2,14), PapelSocial1 = "Membro", PapelSocial2 = "", Telefone = "11900000014", Extra = "", DtCriacao = new DateTime(2025,2,1), DtModificacao = new DateTime(2025,2,1), Ativo="S" },
-                new Atores { IdAtores = 15, Nome = "Ator 15", Genero = "M", DtNascimento = new DateTime(1979,3,15), PapelSocial1 = "Membro", PapelSocial2 = "", Telefone = "11900000015", Extra = "", DtCriacao = new DateTime(2025,3,1), DtModificacao = new DateTime(2025,3,1), Ativo="S" }
+                new Atores { IdAtores = 10, Nome = "Ator 10", Genero = "F", DtNascimento = new DateTime(1987,10,10), PapelSocial1 = "Lider", PapelSocial2 = "Coordenador", Telefone = "11900000010", DtCriacao = new DateTime(2024,10,1), DtModificacao = new DateTime(2025,10,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 11, Nome = "Ator 11", Genero = "M", DtNascimento = new DateTime(1986,11,11), PapelSocial1 = "Beneficiario", PapelSocial2 = "Membro", Telefone = "11900000011", DtCriacao = new DateTime(2024,11,1), DtModificacao = new DateTime(2025,11,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 12, Nome = "Ator 12", Genero = "F", DtNascimento = new DateTime(1989,12,12), PapelSocial1 = "Parceiro", PapelSocial2 = "Voluntario", Telefone = "11900000012", DtCriacao = new DateTime(2024,12,1), DtModificacao = new DateTime(2025,12,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 13, Nome = "Ator 13", Genero = "M", DtNascimento = new DateTime(1997,1,13), PapelSocial1 = "Membro", PapelSocial2 = "", Telefone = "11900000013", DtCriacao = new DateTime(2025,1,1), DtModificacao = new DateTime(2025,1,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 14, Nome = "Ator 14", Genero = "F", DtNascimento = new DateTime(1998,2,14), PapelSocial1 = "Membro", PapelSocial2 = "", Telefone = "11900000014", DtCriacao = new DateTime(2025,2,1), DtModificacao = new DateTime(2025,2,1), Ativo="S", FkIdUsuario = 1 },
+                new Atores { IdAtores = 15, Nome = "Ator 15", Genero = "M", DtNascimento = new DateTime(1979,3,15), PapelSocial1 = "Membro", PapelSocial2 = "", Telefone = "11900000015", DtCriacao = new DateTime(2025,3,1), DtModificacao = new DateTime(2025,3,1), Ativo="S", FkIdUsuario = 1 }
             );
             modelBuilder.Entity<AtorComunidade>().HasData(
                 new AtorComunidade { IdAtorComunidade = 1, FkIdComunidade = 1, FKidAtores = 1 },
@@ -579,7 +609,7 @@ namespace Empodera.Data
                 new FichaPrimeiroContato { IdFicha = 2, FKidAtores = 2, Endereco = "Av. Brasil, 457", Complemento = "Casa", Emprego = "Professor", CEstabeleceu = "Não", NovoParceiro = "Sim", FornecidoParceiro = "Sim", LContato = "Telefone", FonteDados = "Registro comunitário", EstaFamiliar = "Solteiro", EstruFamiliar = "Mora sozinho", NFIlhos = 0, NFilhas = 0, AEscolar = 16, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 1, LTrat = "Fisioterapia", Coment = "Precisa de acompanhamento psicológico.", DtContato = new DateTime(2025, 1, 5), HoraContato = new DateTime(2025, 1, 5, 9, 45, 0), DtCriacao = new DateTime(2025, 1, 5), DtModificacao = new DateTime(2025, 1, 5), FkIdUsuario = 1 },
                 new FichaPrimeiroContato { IdFicha = 3, FKidAtores = 3, Endereco = "Rua São João, 998", Complemento = "Bloco B", Emprego = "Autônomo", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "WhatsApp", FonteDados = "Auto-relato", EstaFamiliar = "Casado", EstruFamiliar = "Família extensa", NFIlhos = 1, NFilhas = 2, AEscolar = 8, SLer = "Sim", SCalc = "Não", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Demonstra interesse em programas sociais.", DtContato = new DateTime(2025, 1, 3), HoraContato = new DateTime(2025, 1, 3, 11, 15, 0), DtCriacao = new DateTime(2025, 1, 3), DtModificacao = new DateTime(2025, 1, 3), FkIdUsuario = 2 },
                 new FichaPrimeiroContato { IdFicha = 4, FKidAtores = 4, Endereco = "Travessa do Sol, 55", Complemento = "", Emprego = "Desempregado", CEstabeleceu = "Não", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "Presencial", FonteDados = "Centro comunitário", EstaFamiliar = "Separado", EstruFamiliar = "Família monoparental", NFIlhos = 3, NFilhas = 0, AEscolar = 10, SLer = "Sim", SCalc = "Sim", SComp = "Não", QReabili = 0, LTrat = "Nenhum", Coment = "Procura recolocação no mercado.", DtContato = new DateTime(2025, 1, 2), HoraContato = new DateTime(2025, 1, 2, 15, 0, 0), DtCriacao = new DateTime(2025, 1, 2), DtModificacao = new DateTime(2025, 1, 2), FkIdUsuario = 3 },
-                new FichaPrimeiroContato { IdFicha = 5, FKidAtores = 5, Endereco = "Praça Central, 321", Complemento = "Sala 5", Emprego = "Comerciante", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Sim", LContato = "E-mail", FonteDados = "Instituição parceira", EstaFamiliar = "Viúvo", EstruFamiliar = "Família nuclear", NFIlhos = 1, NFilhas = 1, AEscolar = 14, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Interessado em projetos educacionais.", DtContato = new DateTime(2025, 1, 1), HoraContato = new DateTime(2025, 1, 1, 10, 0, 0), DtCriacao = new DateTime(2025, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 2 }
+                new FichaPrimeiroContato { IdFicha = 5, FKidAtores = 5, Endereco = "Praça Central, 321", Complemento = "Sala 5", Emprego = "Comerciante", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Sim", LContato = "E-mail", FonteDados = "Instituição parceira", EstaFamiliar = "Viúvo", EstruFamiliar = "Família nuclear", NFIlhos = 1, NFilhas = 1, AEscolar = 14, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Interessado em projetos educacionais.", DtContato = new DateTime(2025, 1, 1), HoraContato = new DateTime(2025, 1, 1, 10, 0, 0), DtCriacao = new DateTime(2025, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 }
             );
 
             // FonteInf
@@ -629,11 +659,11 @@ namespace Empodera.Data
 
             // Atividades
             modelBuilder.Entity<Atividades>().HasData(
-                new Atividades { IdAtividade = 1, Nome = "Ativ 1", Descricao = "Descricao 1", Foto = "a1.jpg", FkIdComunidade = 1 },
-                new Atividades { IdAtividade = 2, Nome = "Ativ 2", Descricao = "Descricao 2", Foto = "a2.jpg", FkIdComunidade = 2 },
-                new Atividades { IdAtividade = 3, Nome = "Ativ 3", Descricao = "Descricao 3", Foto = "a3.jpg", FkIdComunidade = 3 },
-                new Atividades { IdAtividade = 4, Nome = "Ativ 4", Descricao = "Descricao 4", Foto = "a4.jpg", FkIdComunidade = 4 },
-                new Atividades { IdAtividade = 5, Nome = "Ativ 5", Descricao = "Descricao 5", Foto = "a5.jpg", FkIdComunidade = 5 }
+                new Atividades { IdAtividade = 1, Nome = "Ativ 1", Descricao = "Descricao 1", Foto = "a1.jpg", FkIdComunidade = 1, FkIdUsuario = 1 },
+                new Atividades { IdAtividade = 2, Nome = "Ativ 2", Descricao = "Descricao 2", Foto = "a2.jpg", FkIdComunidade = 2, FkIdUsuario = 1 },
+                new Atividades { IdAtividade = 3, Nome = "Ativ 3", Descricao = "Descricao 3", Foto = "a3.jpg", FkIdComunidade = 3, FkIdUsuario = 1 },
+                new Atividades { IdAtividade = 4, Nome = "Ativ 4", Descricao = "Descricao 4", Foto = "a4.jpg", FkIdComunidade = 4, FkIdUsuario = 1 },
+                new Atividades { IdAtividade = 5, Nome = "Ativ 5", Descricao = "Descricao 5", Foto = "a5.jpg", FkIdComunidade = 5, FkIdUsuario = 1 }
             );
 
             // AtividadesEixo

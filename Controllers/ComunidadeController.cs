@@ -52,6 +52,9 @@ public class ComunidadeController : Controller
         {
             // Modo Edição: Busca a comunidade existente
             comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+
+            ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
+            ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();
             
             // Se não encontrar, retorna um modelo vazio para o modo de criação/ou erro, 
             // dependendo da sua regra de negócio. Para simplificar, trataremos como novo.
@@ -70,13 +73,15 @@ public class ComunidadeController : Controller
 
         ViewBag.qAtores = qAtores;
 
+        var qAtividades = _context.Atividades.Count(a => a.FkIdComunidade == id);
+        ViewBag.qAtividades = qAtividades;
 
         return View(comunidade);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade)
+    public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, int id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -87,11 +92,12 @@ public class ComunidadeController : Controller
         {
             comunidade.DtCriacao = DateTime.Now;
             comunidade.DtModificacao = DateTime.Now;
+            comunidade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
             
             _context.Comunidades.Add(comunidade);
             _context.SaveChanges();
             
-            return RedirectToAction("Index");
+            return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
         }
         
         // 2. Lógica de EDIÇÃO (IdComunidade > 0)
@@ -105,11 +111,13 @@ public class ComunidadeController : Controller
             existingComunidade.Descricao = comunidade.Descricao;
             existingComunidade.DescricaoAcessibilidade = comunidade.DescricaoAcessibilidade;
             existingComunidade.DtModificacao = DateTime.Now;
+            existingComunidade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
 
             _context.SaveChanges();
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
+
         // A
             //     var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);
             //     if (existingComunidade != null)
@@ -203,12 +211,14 @@ public class ComunidadeController : Controller
             ViewBag.ComunidadeNome = comunidade.Nome;
         }
 
+        ViewBag.ComunidadeId = id;
+
         return View(AtorComunidades);
     }
 
     // GET: /Actor/Create
     [HttpGet]
-    public async Task<IActionResult> Create(int id)
+    public async Task<IActionResult> Create_Atores(int id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -226,12 +236,15 @@ public class ComunidadeController : Controller
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now 
         };
+
+        ViewBag.ComunidadeId = id;
         
         return View(novoAtor);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Atores ator, int ComunidadeId)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create_Atores(Atores ator, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -240,6 +253,7 @@ public class ComunidadeController : Controller
 
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
+        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
 
         _context.Atores.Add(ator);
         await _context.SaveChangesAsync();
@@ -258,7 +272,7 @@ public class ComunidadeController : Controller
 
     // GET: /Actor/Edit/5
     [HttpGet]
-    public async Task<IActionResult> Edit(int id, int comunidadeId)
+    public async Task<IActionResult> Edit_Atores(int id, int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -271,11 +285,16 @@ public class ComunidadeController : Controller
             return NotFound();
         }
 
+        ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuario).FirstOrDefault();
+        ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuarioM).FirstOrDefault();
+
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.Where(c => c.IdComunidade == comunidadeId).ToListAsync(),
             "IdComunidade",
             "Nome"
         );
+
+        ViewBag.ComunidadeId = comunidadeId;
 
         return View(ator);
     }
@@ -283,7 +302,7 @@ public class ComunidadeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Atores ator, int ComunidadeId)
+    public async Task<IActionResult> Edit_Atores(Atores ator, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -299,6 +318,11 @@ public class ComunidadeController : Controller
         atorDb.PapelSocial1 = ator.PapelSocial1;
         atorDb.PapelSocial2 = ator.PapelSocial2;
         atorDb.Telefone = ator.Telefone;
+        atorDb.DaEquipe = ator.DaEquipe;
+        atorDb.Lopiniao = ator.Lopiniao;
+        atorDb.Mcomunidade = ator.Mcomunidade;
+        atorDb.Rope = ator.Rope;
+        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
         atorDb.DtModificacao = DateTime.Now;
 
         await _context.SaveChangesAsync();
@@ -310,7 +334,7 @@ public class ComunidadeController : Controller
     // GET: /Actor/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete_Usuario(int? id)
+    public async Task<IActionResult> Delete_Atores(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -333,6 +357,145 @@ public class ComunidadeController : Controller
             .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
             
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = atorCom?.FkIdComunidade });
+    }
+
+    public async Task<IActionResult> AtividadesVinculadas(int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var atividades = await _context.Atividades
+            .Include(a => a.AtividadesEixos)
+            .ThenInclude(ae => ae.Eixo)
+            .Where(a => a.FkIdComunidade == comunidadeId)
+            .ToListAsync();
+
+        ViewBag.ComunidadeId = comunidadeId;
+
+        return View(atividades);
+    }
+
+    public async Task<IActionResult> Create_Atividades(int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+
+        ViewBag.comunidadeId = comunidadeId;
+
+        var model = new Atividades
+        {
+            DtCriacao = DateTime.Now,
+            DtModificacao = DateTime.Now
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create_Atividades(Atividades atividade, List<int> EixosSelecionados, int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        Console.WriteLine("é o " + comunidadeId);
+        atividade.DtCriacao = DateTime.Now;
+        atividade.DtModificacao = DateTime.Now;
+        atividade.FkIdComunidade = comunidadeId;
+        atividade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
+
+        _context.Atividades.Add(atividade);
+        await _context.SaveChangesAsync();
+
+        if (EixosSelecionados != null && EixosSelecionados.Count > 0)
+        {
+            foreach (var eixoId in EixosSelecionados)
+            {
+                _context.AtividadesEixo.Add(new AtividadesEixo
+                {
+                    FkIdAtividade = atividade.IdAtividade,
+                    FkIdEixo = eixoId
+                });
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("AtividadesVinculadas", new { comunidadeId });
+    }
+
+    public async Task<IActionResult> Edit_Atividades(int? id, int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == null) return NotFound();
+
+        var atividade = await _context.Atividades
+            .Include(a => a.AtividadesEixos)
+            .ThenInclude(ae => ae.Eixo)
+            .FirstOrDefaultAsync(a => a.IdAtividade == id && a.FkIdComunidade == comunidadeId);
+
+        if (atividade == null) return NotFound();
+
+        ViewBag.comunidadeId = comunidadeId;
+        ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuario).FirstOrDefault();
+        ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuarioM).FirstOrDefault();
+
+        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+
+        return View(atividade);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit_Atividades(int id, Atividades atividade, List<int> EixosSelecionados, int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id != atividade.IdAtividade) return NotFound();
+
+        var existingAtividade = await _context.Atividades
+            .Include(a => a.AtividadesEixos)
+            .FirstOrDefaultAsync(a => a.IdAtividade == id && a.FkIdComunidade == comunidadeId);
+
+        if (existingAtividade == null) return NotFound();
+
+        existingAtividade.Nome = atividade.Nome;
+        existingAtividade.Descricao = atividade.Descricao;
+        existingAtividade.DtModificacao = DateTime.Now;
+        existingAtividade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
+
+        var existingEixoIds = existingAtividade.AtividadesEixos.Select(ae => ae.FkIdEixo).ToList();
+
+        var eixosToAdd = EixosSelecionados.Except(existingEixoIds).ToList();
+        var eixosToRemove = existingEixoIds.Except(EixosSelecionados).ToList();
+
+        foreach (var eixoId in eixosToAdd)
+        {
+            _context.AtividadesEixo.Add(new AtividadesEixo
+            {
+                FkIdAtividade = existingAtividade.IdAtividade,
+                FkIdEixo = eixoId
+            });
+        }
+
+        foreach (var eixoId in eixosToRemove)
+        {
+            var atividadeEixo = await _context.AtividadesEixo
+                .FirstOrDefaultAsync(ae => ae.FkIdAtividade == existingAtividade.IdAtividade && ae.FkIdEixo == eixoId);
+            if (atividadeEixo != null)
+            {
+                _context.AtividadesEixo.Remove(atividadeEixo);
+            }
+        }
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("AtividadesVinculadas", new { comunidadeId });
+
     }
 
 

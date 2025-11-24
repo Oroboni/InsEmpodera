@@ -53,16 +53,18 @@ namespace Empodera.Data
     {
         public int Id_Comunidade { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string Local { get; set; } = string.Empty;
+        public string? Local { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
-        public string Complemento { get; set; } = string.Empty;
-        public string Descricao { get; set; } = string.Empty;
-        public string Descricao_Acessibilidade { get; set; } = string.Empty;
+        public string? Complemento { get; set; } = string.Empty;
+        public string? Descricao { get; set; } = string.Empty;
+        public string? Descricao_Acessibilidade { get; set; } = string.Empty;
         public DateTime Dt_Criacao { get; set; }
         public DateTime Dt_Modificacao { get; set; }
         public int FK_Id_Usuario { get; set; }
+        public int? FK_Id_UsuarioM { get; set; }
         public string Ativo { get; set; } = "S";
 
+        public List<UsuarioSeed>? Usuarios {get; set;}
         public List<AtoresComunidadeSeed>? AtoresComunidade { get; set; }
         public List<RedeRecursosSeed>? Redes { get; set; }
         public List<DiarioCampoSeed>? Diarios { get; set; }
@@ -79,11 +81,17 @@ namespace Empodera.Data
         public string? Papel_Social1 { get; set; }
         public string? Papel_Social2 { get; set; }
         public int? Telefone { get; set; }
-        public string? Extra { get; set; } = string.Empty;
+        public bool DaEquipe { get; set; } = false;
+        public bool Rope { get; set; } = false;
+        public bool Lopiniao { get; set; } = false;
+        public bool Mcomunidade { get; set; } = false;
         public DateTime Dt_Criacao { get; set; }
         public DateTime Dt_Modificacao { get; set; }
         public string Ativo { get; set; } = "S";
+        public int FkIdUsuario { get; set; }
+        public int? FkIdUsuarioM { get; set; }
 
+        public List<UsuarioSeed>? Usuarios {get; set;}
         public List<RedeRecursosSeed>? Redes { get; set; }
         public List<AtoresComunidadeSeed>? Comunidades { get; set; }
         public List<AcoesAtoresSeed>? Acoes { get; set; }
@@ -345,6 +353,10 @@ namespace Empodera.Data
         public string Descricao { get; set; } = string.Empty;
         public string? Foto { get; set; } = string.Empty;
         public int FK_Id_Comunidade { get; set; }
+        public int FkIdUsuario { get; set; }
+        public int? FkIdUsuarioM { get; set; }
+
+        public List<UsuarioSeed>? Usuarios {get; set;}
 
         public List<AtividadeEixoSeed>? Eixos { get; set; }
         public List<AcoesSeed>? Acoes { get; set; }

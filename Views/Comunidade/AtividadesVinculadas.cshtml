@@ -1,0 +1,82 @@
+@model IEnumerable<Empodera.Models.Atividades>
+@{
+    ViewData["Title"] = "Atividades";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+}
+
+<div class="atores-content-area">
+
+    <div class="atores-header">
+        <h1>
+            <span><a asp-controller="Comunidade" asp-action="Index">Comunidades</a></span>
+            <i class="fas fa-chevron-right fa-icon"></i>
+            <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="@ViewBag.ComunidadeId">Detalhes da Comunidade</a>
+            <i class="fas fa-chevron-right fa-icon"></i>
+            <strong>Atividades</strong>
+        </h1>
+    </div>
+
+    <div class="atores-search-container">
+        <form class="atores-search-bar" method="get">
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </form>
+
+        <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
+    </div>
+
+    <div class="atores-list-container">
+
+        @foreach (var atividade in Model)
+        {
+            <div class="ator-card">
+                <div class="activity-card-info">
+                    <span class="ator-name">@atividade.Nome</span>
+                    <div class="tag-list" style="margin-top: 8px;">
+                        @foreach (var eixo in atividade.AtividadesEixos)
+                        {
+                            var eixoNome = eixo.Eixo.Nome;
+                            var tagClass = eixoNome.ToLower() switch
+                            {
+                                "prevenção" => "tag-blue",
+                                "ocupação" => "tag-green",
+                                "lazer" => "tag-yellow",
+                                "segurança social" => "tag-purple",
+                                "educação" => "tag-lightgreen",
+                                "saúde" => "tag-red",
+                                "assistência básica" => "tag-lightblue",
+                                _ => "tag-default"
+                            };
+                            <span class="tag-item @tagClass">@eixoNome</span>
+                        }
+                    </div>
+                </div>
+                <a class="details-icon" asp-controller="Comunidade" asp-action="Edit_Atividades" asp-route-id="@atividade.IdAtividade" asp-route-comunidadeId="@ViewBag.ComunidadeId">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                </a>
+            </div>
+        }
+        
+        </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const cards = document.querySelectorAll(".ator-card");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                card.style.display = name.includes(query) ? "flex" : "none";
+            });
+        });
+    });
+</script>

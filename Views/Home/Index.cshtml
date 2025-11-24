@@ -1,18 +1,11 @@
 ﻿@{
     ViewData["Title"] = "HomePage";
     ViewData["PageCSS"] = "homepage"; 
-    // aqui inserimos nome do arquivo css a ser carregado sem o .css
-    //exemplo: o arquivo Views/Home/Sidebar/HomePage.cshtml
-    //carregaria o CSS em wwwroot/css/pages/homepage.css
-    //mas só escrevemos "homepage".
-
-    Layout = "_Layout"; // usa o Layout padrão (aquele do qual contém a sidebar)
+    Layout = "_Layout"; 
     var comunidade = ViewBag.Comunidade as List<Empodera.Models.Comunidade>;
     var ator = ViewBag.Atores as List<Empodera.Models.Atores>;
 }
 
-
-    @* a página de fato vem abaixo! *@
 <div class="header">
     <img id="logo-empodera" src="~/images/logo-empodera.svg" alt="Logo Empodera">
     <div class="text-box">
@@ -25,28 +18,16 @@
     <div class="card">
         <h2>@(comunidade?.Count ?? 0)</h2>
         <p>Comunidades</p>
-        <button>Visualizar</button>
+        <a asp-controller="Comunidade" asp-action="Index">Visualizar</a>
     </div>
     <div class="card">
         <h2>@(ator?.Count ?? 0)</h2>
         <p>Atores</p>
-        <button>Visualizar</button>
+        <a asp-controller="Atores" asp-action="Index">Visualizar</a>
     </div>
     <div class="card">
-        <h2>684</h2>
-        <p>Atores</p>
-        <button>Visualizar</button>
-    </div>
-    <div class="card">
-        <h2>684</h2>
-        <p>Atores</p>
-        <button>Visualizar</button>
-    </div>
-    
-    <div class="card">
-        <h2>77</h2>
+        <h2>@(ViewBag.Usuarios?.Count ?? 0)</h2>
         <p>Usuários</p>
-        <button>Visualizar</button>
+        <a asp-controller="usuarios" asp-action="Index">Visualizar</a>
     </div>
-    
 </div>

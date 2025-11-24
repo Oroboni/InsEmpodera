@@ -10,19 +10,19 @@
 <div class="container">
    <div class="breadcrumb">
     <h1>
-        <a asp-controller="PersonalAssessment" asp-action="Index">Avaliações Pessoais</a> 
+        <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@ViewBag.AtorId">Avaliações Pessoais</a> 
         > 
         <strong>Nova Avaliação Pessoal</strong>
     </h1>
 </div>
 
-    <form method="post">
+    <form method="post" action="create">
         
         <div class="form-group">
             <label for="AtorId">Ator</label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <select asp-for="FkIdUsuario" class="form-control" asp-items="ViewBag.AtoresList" required>
+                <select asp-for="FKidAtores" class="form-control" asp-items="ViewBag.AtoresList" required>
                     <option value="">Selecione um Ator</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>

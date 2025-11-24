@@ -1,0 +1,186 @@
+@model Empodera.Models.Atividades
+@{
+    ViewData["Title"] = "Adicionar Atividade";
+    Layout = "_Layout";
+    var eixos = ViewBag.EixosList as List<Empodera.Models.Eixo>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@ViewBag.ComunidadeId">Atividades</a>
+            <strong>Adicionar Atividade</strong>
+        </h1>
+    </div>
+    <form method="post" asp-controller="Comunidade" asp-action="Edit_Atividades">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="IdAtividade" />
+        <input type="hidden" name="comunidadeId" value="@ViewBag.ComunidadeId" />
+        <div class="form-group">
+            <label for="Nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-pencil"></i>
+                <input asp-for="Nome" type="text" value="@Model.Nome" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Eixos</label>
+
+            <div class="eixos-tag-container" id="tag-container">
+            </div>
+
+            <details class="multiselect-wrapper">
+                <summary>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-tags"></i>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </summary>
+                <div class="multiselect-panel" id="multiselect-panel">
+                    <ul>
+                        @if (eixos != null)
+                        {
+                            @foreach (var eixo in eixos)
+                            {
+                                <li>
+                                    <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                                        data-tag-class="tag-pink" data-tag-name="@eixo.Nome" @(Model.AtividadesEixos.Any(ae => ae.FkIdEixo == eixo.IdEixo) ? "checked" : "")>
+                                    <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </details>
+        </div>
+        <div class="form-group">
+            <label for="Descricao">Descrição</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-align-left"></i>
+                <textarea asp-for="Descricao">@Model.Descricao</textarea>
+            </div>
+        </div>
+
+        <details class="form-footer" open>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@ViewBag.UsuarioOriginal.Nome" readonly>
+                    </div>
+                </div>
+                @if(ViewBag.UsuarioNovo != null)
+                {
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                         <input type="text" value="@ViewBag.UsuarioNovo.Nome" readonly>
+                    </div>
+                </div>
+                }
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                @if(ViewBag.UsuarioNovo != null)
+                {
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                }
+            </div>
+        </details>
+
+        <div class="form-buttons" style="margin-top: 40px;">
+            <button type="submit" class="btn-full-width">EDITAR ATIVIDADE</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tagContainer = document.getElementById('tag-container');
+            const multiselectPanel = document.getElementById('multiselect-panel');
+
+            // Todos os checkboxes de eixos
+            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+
+            // --- 1. Função Principal: Atualiza a UI (Tags e Lista) ---
+            function updateTagView() {
+                // Limpa o container de tags
+                tagContainer.innerHTML = '';
+
+                checkboxes.forEach(cb => {
+                    const listItem = cb.closest('li');
+
+                    if (cb.checked) {
+                        // Se está marcado: cria a tag
+                        const tagName = cb.dataset.tagName;
+                        const tagClass = cb.dataset.tagClass;
+
+                        const tag = document.createElement('span');
+                        tag.className = `tag-item ${tagClass}`;
+                        tag.textContent = tagName;
+
+                        // Cria o botão 'x' de remover
+                        const removeBtn = document.createElement('i');
+                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
+                        removeBtn.dataset.checkboxId = cb.id; // Liga o 'x' ao seu checkbox
+
+                        tag.appendChild(removeBtn);
+                        tagContainer.appendChild(tag);
+
+                        // Esconde o item da lista dropdown
+                        listItem.classList.add('is-selected');
+                    } else {
+                        // Se não está marcado: mostra na lista
+                        listItem.classList.remove('is-selected');
+                    }
+                });
+            }
+
+            // --- 2. Evento: Clicar no Checkbox (na lista) ---
+            multiselectPanel.addEventListener('change', function (e) {
+                if (e.target.type === 'checkbox') {
+                    updateTagView();
+                }
+            });
+
+            // --- 3. Evento: Clicar no 'X' da Tag (no container) ---
+            tagContainer.addEventListener('click', function (e) {
+                // Se clicou no 'x' (classe 'tag-remove-btn')
+                if (e.target.classList.contains('tag-remove-btn')) {
+                    const checkboxId = e.target.dataset.checkboxId;
+                    const checkboxToUncheck = document.getElementById(checkboxId);
+
+                    if (checkboxToUncheck) {
+                        checkboxToUncheck.checked = false;
+                        // Atualiza a UI
+                        updateTagView();
+                    }
+                }
+            });
+
+            // --- 4. Inicialização ---
+            // Mostra as tags que já vieram selecionadas (se houver alguma 'checked')
+            updateTagView();
+        });
+    </script>
+}

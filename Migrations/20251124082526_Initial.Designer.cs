@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251124000952_Initial")]
+    [Migration("20251124082526_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -213,6 +213,12 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("FkIdComunidade")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("FkIdUsuarioM")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Foto")
                         .HasColumnType("TEXT");
 
@@ -220,14 +226,11 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UsuarioIdUsuario")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("IdAtividade");
 
                     b.HasIndex("FkIdComunidade");
 
-                    b.HasIndex("UsuarioIdUsuario");
+                    b.HasIndex("FkIdUsuarioM");
 
                     b.ToTable("Atividades");
 
@@ -239,6 +242,7 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 1,
+                            FkIdUsuario = 1,
                             Foto = "a1.jpg",
                             Nome = "Ativ 1"
                         },
@@ -249,6 +253,7 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 2,
+                            FkIdUsuario = 1,
                             Foto = "a2.jpg",
                             Nome = "Ativ 2"
                         },
@@ -259,6 +264,7 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 3,
+                            FkIdUsuario = 1,
                             Foto = "a3.jpg",
                             Nome = "Ativ 3"
                         },
@@ -269,6 +275,7 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 4,
+                            FkIdUsuario = 1,
                             Foto = "a4.jpg",
                             Nome = "Ativ 4"
                         },
@@ -279,6 +286,7 @@ namespace InsEmpodera.Migrations
                             DtCriacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdComunidade = 5,
+                            FkIdUsuario = 1,
                             Foto = "a5.jpg",
                             Nome = "Ativ 5"
                         });
@@ -460,6 +468,9 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("DaEquipe")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("TEXT");
 
@@ -469,11 +480,20 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtNascimento")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Extra")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("FkIdUsuario")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("FkIdUsuarioM")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Genero")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Lopiniao")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Mcomunidade")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -485,15 +505,15 @@ namespace InsEmpodera.Migrations
                     b.Property<string>("PapelSocial2")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Rope")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Telefone")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UsuarioIdUsuario")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("IdAtores");
 
-                    b.HasIndex("UsuarioIdUsuario");
+                    b.HasIndex("FkIdUsuarioM");
 
                     b.ToTable("Atores");
 
@@ -502,210 +522,270 @@ namespace InsEmpodera.Migrations
                         {
                             IdAtores = 1,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 1",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Voluntario",
+                            Rope = false,
                             Telefone = "11900000001"
                         },
                         new
                         {
                             IdAtores = 2,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1992, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 2",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
+                            Rope = false,
                             Telefone = "11900000002"
                         },
                         new
                         {
                             IdAtores = 3,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1985, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 3",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
+                            Rope = false,
                             Telefone = "11900000003"
                         },
                         new
                         {
                             IdAtores = 4,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1991, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 4",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Coordenador",
+                            Rope = false,
                             Telefone = "11900000004"
                         },
                         new
                         {
                             IdAtores = 5,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 5",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Voluntario",
+                            Rope = false,
                             Telefone = "11900000005"
                         },
                         new
                         {
                             IdAtores = 6,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1993, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 6",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Membro",
+                            Rope = false,
                             Telefone = "11900000006"
                         },
                         new
                         {
                             IdAtores = 7,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1994, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 7",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Voluntario",
+                            Rope = false,
                             Telefone = "11900000007"
                         },
                         new
                         {
                             IdAtores = 8,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1995, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 8",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
+                            Rope = false,
                             Telefone = "11900000008"
                         },
                         new
                         {
                             IdAtores = 9,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 9",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
+                            Rope = false,
                             Telefone = "11900000009"
                         },
                         new
                         {
                             IdAtores = 10,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1987, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 10",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Coordenador",
+                            Rope = false,
                             Telefone = "11900000010"
                         },
                         new
                         {
                             IdAtores = 11,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1986, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 11",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
+                            Rope = false,
                             Telefone = "11900000011"
                         },
                         new
                         {
                             IdAtores = 12,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 12",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
+                            Rope = false,
                             Telefone = "11900000012"
                         },
                         new
                         {
                             IdAtores = 13,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1997, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 13",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
+                            Rope = false,
                             Telefone = "11900000013"
                         },
                         new
                         {
                             IdAtores = 14,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1998, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "F",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 14",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
+                            Rope = false,
                             Telefone = "11900000014"
                         },
                         new
                         {
                             IdAtores = 15,
                             Ativo = "S",
+                            DaEquipe = false,
                             DtCriacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Extra = "",
+                            FkIdUsuario = 1,
                             Genero = "M",
+                            Lopiniao = false,
+                            Mcomunidade = false,
                             Nome = "Ator 15",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
+                            Rope = false,
                             Telefone = "11900000015"
                         });
                 });
@@ -761,7 +841,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasIndex("FkIdUsuario");
 
-                    b.ToTable("AvaliacoesPessoais");
+                    b.ToTable("AvaliacaoPessoal");
 
                     b.HasData(
                         new
@@ -862,15 +942,12 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Complemento")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DescricaoAcessibilidade")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DtCriacao")
@@ -882,8 +959,10 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("FkIdUsuario")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("FkIdUsuarioM")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Local")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
@@ -896,7 +975,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdComunidade");
 
-                    b.HasIndex("FkIdUsuario");
+                    b.HasIndex("FkIdUsuarioM");
 
                     b.ToTable("Comunidades");
 
@@ -1804,7 +1883,7 @@ namespace InsEmpodera.Migrations
                             EstaFamiliar = "Viúvo",
                             EstruFamiliar = "Família nuclear",
                             FKidAtores = 5,
-                            FkIdUsuario = 2,
+                            FkIdUsuario = 1,
                             FonteDados = "Instituição parceira",
                             FornecidoParceiro = "Sim",
                             HoraContato = new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2719,11 +2798,14 @@ namespace InsEmpodera.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Empodera.Models.Usuario", null)
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
                         .WithMany("Atividades")
-                        .HasForeignKey("UsuarioIdUsuario");
+                        .HasForeignKey("FkIdUsuarioM")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Comunidade");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Empodera.Models.AtividadesEixo", b =>
@@ -2766,9 +2848,12 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.Atores", b =>
                 {
-                    b.HasOne("Empodera.Models.Usuario", null)
+                    b.HasOne("Empodera.Models.Usuario", "Usuario")
                         .WithMany("Atores")
-                        .HasForeignKey("UsuarioIdUsuario");
+                        .HasForeignKey("FkIdUsuarioM")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>
@@ -2794,9 +2879,8 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Usuario", "Usuario")
                         .WithMany("Comunidades")
-                        .HasForeignKey("FkIdUsuario")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .HasForeignKey("FkIdUsuarioM")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Usuario");
                 });
