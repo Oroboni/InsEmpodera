@@ -474,7 +474,9 @@
       <div class="community-detail-metric-label">Atores vinculados</div>
       <div class="community-detail-metric-actions">
         <div class="community-detail-metric-action">
-          <i class="fas fa-eye fa-icon"></i>
+          <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade">
+            <i class="fas fa-eye fa-icon"></i>
+          </a>
         </div>
         <div class="community-detail-metric-action">
           <i class="fas fa-camera fa-icon"></i>

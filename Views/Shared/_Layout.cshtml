@@ -46,11 +46,7 @@
     <div class="body-page">
         <div class="main-content-wrapper">
             <div class="section-1">
-                @if (true)
-                {
-                    var userName = Context.Session.GetString("Nome") ?? "Usuário";
-                    <h2>Olá @userName</h2>
-                }
+                <h2>Seção 1 - USER</h2>
                 <ul>
                     <p>Principais</p>
                     <!-- Seu menu continua igual... -->
@@ -59,8 +55,8 @@
                             <p><i class="fas fa-home"></i> Home</p>
                         </a>
                     </li>
-                    <li data-page="comunidades" class="@IsActive("Comunidades")">
-                        <a asp-controller="Comunidades" asp-action="Index">
+                    <li data-page="comunidade" class="@IsActive("Comunidade")">
+                        <a asp-controller="Comunidade" asp-action="Index">
                             <p><i class="fas fa-city"></i> Comunidades</p>
                         </a>
                     </li>

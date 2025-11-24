@@ -74,18 +74,15 @@ namespace Empodera.Data
     {
         public int Id_Atores { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string Genero { get; set; } = string.Empty;
-        public DateTime Dt_Nascimento { get; set; }
-        public string Papel_Social1 { get; set; } = string.Empty;
-        public string Papel_Social2 { get; set; } = string.Empty;
-        public int Telefone { get; set; }
-        public string Extra { get; set; } = string.Empty;
+        public string? Genero { get; set; }
+        public DateTime? Dt_Nascimento { get; set; }
+        public string? Papel_Social1 { get; set; }
+        public string? Papel_Social2 { get; set; }
+        public int? Telefone { get; set; }
+        public string? Extra { get; set; } = string.Empty;
         public DateTime Dt_Criacao { get; set; }
         public DateTime Dt_Modificacao { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public string Motivo_Status { get; set; } = string.Empty;
-        public int FK_Id_Usuario { get; set; }
-        public string Ativo { get; set; } = string.Empty;
+        public string Ativo { get; set; } = "S";
 
         public List<RedeRecursosSeed>? Redes { get; set; }
         public List<AtoresComunidadeSeed>? Comunidades { get; set; }

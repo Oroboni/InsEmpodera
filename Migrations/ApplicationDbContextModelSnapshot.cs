@@ -467,18 +467,9 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Extra")
-                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("FkIdUsuario")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Genero")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("MotivoStatus")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
@@ -486,24 +477,20 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PapelSocial1")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PapelSocial2")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("UsuarioIdUsuario")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("IdAtores");
 
-                    b.HasIndex("FkIdUsuario");
+                    b.HasIndex("UsuarioIdUsuario");
 
                     b.ToTable("Atores");
 
@@ -516,13 +503,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 1,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 1",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Voluntario",
-                            Status = "Ativo",
                             Telefone = "11900000001"
                         },
                         new
@@ -533,13 +517,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1992, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 1,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 2",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
-                            Status = "Ativo",
                             Telefone = "11900000002"
                         },
                         new
@@ -550,13 +531,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1985, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 2,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 3",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
-                            Status = "Ativo",
                             Telefone = "11900000003"
                         },
                         new
@@ -567,13 +545,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1991, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 2,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 4",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Coordenador",
-                            Status = "Ativo",
                             Telefone = "11900000004"
                         },
                         new
@@ -584,13 +559,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 3,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 5",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Voluntario",
-                            Status = "Ativo",
                             Telefone = "11900000005"
                         },
                         new
@@ -601,13 +573,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1993, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 3,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 6",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Membro",
-                            Status = "Ativo",
                             Telefone = "11900000006"
                         },
                         new
@@ -618,13 +587,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1994, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 4,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 7",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Voluntario",
-                            Status = "Ativo",
                             Telefone = "11900000007"
                         },
                         new
@@ -635,13 +601,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1995, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 4,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 8",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
-                            Status = "Ativo",
                             Telefone = "11900000008"
                         },
                         new
@@ -652,13 +615,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 5,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 9",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
-                            Status = "Ativo",
                             Telefone = "11900000009"
                         },
                         new
@@ -669,13 +629,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1987, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 5,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 10",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Coordenador",
-                            Status = "Ativo",
                             Telefone = "11900000010"
                         },
                         new
@@ -686,13 +643,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1986, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 1,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 11",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
-                            Status = "Ativo",
                             Telefone = "11900000011"
                         },
                         new
@@ -703,13 +657,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 2,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 12",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
-                            Status = "Ativo",
                             Telefone = "11900000012"
                         },
                         new
@@ -720,13 +671,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1997, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 3,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 13",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
-                            Status = "Ativo",
                             Telefone = "11900000013"
                         },
                         new
@@ -737,13 +685,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1998, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 4,
                             Genero = "F",
-                            MotivoStatus = "",
                             Nome = "Ator 14",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
-                            Status = "Ativo",
                             Telefone = "11900000014"
                         },
                         new
@@ -754,13 +699,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Extra = "",
-                            FkIdUsuario = 5,
                             Genero = "M",
-                            MotivoStatus = "",
                             Nome = "Ator 15",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
-                            Status = "Ativo",
                             Telefone = "11900000015"
                         });
                 });
@@ -2821,13 +2763,9 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.Atores", b =>
                 {
-                    b.HasOne("Empodera.Models.Usuario", "Usuario")
+                    b.HasOne("Empodera.Models.Usuario", null)
                         .WithMany("Atores")
-                        .HasForeignKey("FkIdUsuario")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
+                        .HasForeignKey("UsuarioIdUsuario");
                 });
 
             modelBuilder.Entity("Empodera.Models.AvaliacaoPessoal", b =>

@@ -1,0 +1,95 @@
+@model Empodera.Models.Atores
+@{
+    ViewData["Title"] = "Adicionar Novo Ator";
+    ViewData["PageCSS"] = "create-form"; 
+}
+
+<div class="container">
+    <div class="container">
+    <div class="breadcrumb">
+    <h1>
+        <a asp-controller="Actor" asp-action="Index">Atores</a> 
+        > 
+        <strong>Adicionar novo Ator</strong>
+    </h1>
+</div>
+</div>
+
+    <form asp-controller="Comunidade" asp-action="Create" method="post">
+        
+        <div class="form-group">
+            <label for="comunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required></select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="form-group create-field">
+            <label for="nome">Nome</label>
+            <div class="input-with-buttons">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input id="Nome" name="Nome" asp-for="Nome" type="text" placeholder="Nome do Ator" required />
+                </div>
+                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i class="fa-solid fa-plus"></i></button>
+                <button type="button" class="btn-icon" title="Importar (da lista?)"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-venus-mars"></i>
+                    <select id="Genero" asp-for="Genero" name="Genero">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="nao-declarado">Não declarado</option>
+                        <option value="transgenero">Transgênero</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-calendar-day"></i> 
+                    <input asp-for="DtNascimento" type="date" class="form-control" value='@(Model != null && Model.DtNascimento != default(System.DateTime) && Model.DtNascimento != System.DateTime.MinValue ? Model.DtNascimento.ToString("yyyy-MM-dd") : String.Empty)' />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="papelSocial1">Papel Social</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+                <input id="papelSocial1" name="papelSocial1" asp-for="PapelSocial1" type="text" placeholder="Digite o papel social" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="papelSocial2">Papel Social</f>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-briefcase"></i>
+                <input id="papelSocial2" name="papelSocial2" asp-for="PapelSocial2" type="text" placeholder="Digite outro papel social (opcional)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-phone"></i>
+                <input id="Telefone" asp-for="Telefone" name="Telefone" type="tel" />
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">ADICIONAR ATOR</button>
+        </div>
+    </form>
+</div>

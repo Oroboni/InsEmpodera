@@ -55,28 +55,25 @@ namespace InsEmpodera.Migrations
                     IdAtores = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    Genero = table.Column<string>(type: "TEXT", nullable: false),
+                    Genero = table.Column<string>(type: "TEXT", nullable: true),
                     DtNascimento = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PapelSocial1 = table.Column<string>(type: "TEXT", nullable: false),
-                    PapelSocial2 = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefone = table.Column<string>(type: "TEXT", nullable: false),
-                    Extra = table.Column<string>(type: "TEXT", nullable: false),
+                    PapelSocial1 = table.Column<string>(type: "TEXT", nullable: true),
+                    PapelSocial2 = table.Column<string>(type: "TEXT", nullable: true),
+                    Telefone = table.Column<string>(type: "TEXT", nullable: true),
+                    Extra = table.Column<string>(type: "TEXT", nullable: true),
                     DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: false),
-                    MotivoStatus = table.Column<string>(type: "TEXT", nullable: false),
-                    FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false),
-                    Ativo = table.Column<string>(type: "TEXT", nullable: false)
+                    Ativo = table.Column<string>(type: "TEXT", nullable: false),
+                    UsuarioIdUsuario = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Atores", x => x.IdAtores);
                     table.ForeignKey(
-                        name: "FK_Atores_Usuarios_FkIdUsuario",
-                        column: x => x.FkIdUsuario,
+                        name: "FK_Atores_Usuarios_UsuarioIdUsuario",
+                        column: x => x.UsuarioIdUsuario,
                         principalTable: "Usuarios",
-                        principalColumn: "IdUsuario",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "IdUsuario");
                 });
 
             migrationBuilder.CreateTable(
@@ -822,6 +819,28 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Atores",
+                columns: new[] { "IdAtores", "Ativo", "DtCriacao", "DtModificacao", "DtNascimento", "Extra", "Genero", "Nome", "PapelSocial1", "PapelSocial2", "Telefone", "UsuarioIdUsuario" },
+                values: new object[,]
+                {
+                    { 1, "S", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 1", "Lider", "Voluntario", "11900000001", null },
+                    { 2, "S", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1992, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 2", "Beneficiario", "Membro", "11900000002", null },
+                    { 3, "S", new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1985, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 3", "Parceiro", "Voluntario", "11900000003", null },
+                    { 4, "S", new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1991, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 4", "Lider", "Coordenador", "11900000004", null },
+                    { 5, "S", new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 5", "Beneficiario", "Voluntario", "11900000005", null },
+                    { 6, "S", new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1993, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 6", "Parceiro", "Membro", "11900000006", null },
+                    { 7, "S", new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1994, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 7", "Lider", "Voluntario", "11900000007", null },
+                    { 8, "S", new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1995, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 8", "Beneficiario", "Membro", "11900000008", null },
+                    { 9, "S", new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 9", "Parceiro", "Voluntario", "11900000009", null },
+                    { 10, "S", new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1987, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 10", "Lider", "Coordenador", "11900000010", null },
+                    { 11, "S", new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1986, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 11", "Beneficiario", "Membro", "11900000011", null },
+                    { 12, "S", new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 12", "Parceiro", "Voluntario", "11900000012", null },
+                    { 13, "S", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1997, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 13", "Membro", "", "11900000013", null },
+                    { 14, "S", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1998, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "F", "Ator 14", "Membro", "", "11900000014", null },
+                    { 15, "S", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "M", "Ator 15", "Membro", "", "11900000015", null }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Eixos",
                 columns: new[] { "IdEixo", "Nome" },
                 values: new object[,]
@@ -848,25 +867,15 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Atores",
-                columns: new[] { "IdAtores", "Ativo", "DtCriacao", "DtModificacao", "DtNascimento", "Extra", "FkIdUsuario", "Genero", "MotivoStatus", "Nome", "PapelSocial1", "PapelSocial2", "Status", "Telefone" },
+                table: "AvaliacoesPessoais",
+                columns: new[] { "IdAvaliacao", "AssBasica", "CCrimes", "DtCriacao", "DtModificacao", "Educacao", "FKidAtores", "FkIdUsuario", "Lazer", "Moradia", "Ocupacao", "Prevencao", "Saude", "Substancias" },
                 values: new object[,]
                 {
-                    { 1, "S", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 1, "M", "", "Ator 1", "Lider", "Voluntario", "Ativo", "11900000001" },
-                    { 2, "S", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1992, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 1, "F", "", "Ator 2", "Beneficiario", "Membro", "Ativo", "11900000002" },
-                    { 3, "S", new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1985, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 2, "M", "", "Ator 3", "Parceiro", "Voluntario", "Ativo", "11900000003" },
-                    { 4, "S", new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1991, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 2, "F", "", "Ator 4", "Lider", "Coordenador", "Ativo", "11900000004" },
-                    { 5, "S", new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 3, "M", "", "Ator 5", "Beneficiario", "Voluntario", "Ativo", "11900000005" },
-                    { 6, "S", new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1993, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 3, "F", "", "Ator 6", "Parceiro", "Membro", "Ativo", "11900000006" },
-                    { 7, "S", new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1994, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 4, "M", "", "Ator 7", "Lider", "Voluntario", "Ativo", "11900000007" },
-                    { 8, "S", new DateTime(2024, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1995, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 4, "F", "", "Ator 8", "Beneficiario", "Membro", "Ativo", "11900000008" },
-                    { 9, "S", new DateTime(2024, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 5, "M", "", "Ator 9", "Parceiro", "Voluntario", "Ativo", "11900000009" },
-                    { 10, "S", new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1987, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 5, "F", "", "Ator 10", "Lider", "Coordenador", "Ativo", "11900000010" },
-                    { 11, "S", new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1986, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 1, "M", "", "Ator 11", "Beneficiario", "Membro", "Ativo", "11900000011" },
-                    { 12, "S", new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1989, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 2, "F", "", "Ator 12", "Parceiro", "Voluntario", "Ativo", "11900000012" },
-                    { 13, "S", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1997, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 3, "M", "", "Ator 13", "Membro", "", "Ativo", "11900000013" },
-                    { 14, "S", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1998, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 4, "F", "", "Ator 14", "Membro", "", "Ativo", "11900000014" },
-                    { 15, "S", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 5, "M", "", "Ator 15", "Membro", "", "Ativo", "11900000015" }
+                    { 1, 4, 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 1, 1, 2, 2, 1, 3, 2, 0 },
+                    { 2, 3, 0, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 5, 2, 1, 3, 2, 2, 3, 1 },
+                    { 3, 2, 2, new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 9, 3, 2, 2, 1, 3, 3, 1 },
+                    { 4, 4, 0, new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 12, 4, 3, 4, 3, 4, 4, 0 },
+                    { 5, 1, 3, new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 15, 5, 1, 1, 1, 2, 1, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -882,6 +891,18 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "FichasPrimeiroContato",
+                columns: new[] { "IdFicha", "AEscolar", "CEstabeleceu", "Coment", "Complemento", "DtContato", "DtCriacao", "DtModificacao", "Emprego", "Endereco", "EstaFamiliar", "EstruFamiliar", "FKidAtores", "FkIdUsuario", "FonteDados", "FornecidoParceiro", "HoraContato", "LContato", "LTrat", "NFIlhos", "NFilhas", "NovoParceiro", "QReabili", "SCalc", "SComp", "SLer", "Telefone" },
+                values: new object[,]
+                {
+                    { 1, 12, "Sim", "Pessoa comunicativa, busca oportunidade.", "Apto 101", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auxiliar Administrativo", "Rua das Flores, 123", "Casado", "Família nuclear", 1, 1, "Cadastro local", "Não", new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 2, 1, "Não", 0, "Sim", "Sim", "Sim", null },
+                    { 2, 16, "Não", "Precisa de acompanhamento psicológico.", "Casa", new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Professor", "Av. Brasil, 457", "Solteiro", "Mora sozinho", 2, 1, "Registro comunitário", "Sim", new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified), "Telefone", "Fisioterapia", 0, 0, "Sim", 1, "Sim", "Sim", "Sim", null },
+                    { 3, 8, "Sim", "Demonstra interesse em programas sociais.", "Bloco B", new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Autônomo", "Rua São João, 998", "Casado", "Família extensa", 3, 2, "Auto-relato", "Não", new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified), "WhatsApp", "Nenhum", 1, 2, "Não", 0, "Não", "Sim", "Sim", null },
+                    { 4, 10, "Não", "Procura recolocação no mercado.", "", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Desempregado", "Travessa do Sol, 55", "Separado", "Família monoparental", 4, 3, "Centro comunitário", "Não", new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 3, 0, "Não", 0, "Sim", "Não", "Sim", null },
+                    { 5, 14, "Sim", "Interessado em projetos educacionais.", "Sala 5", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comerciante", "Praça Central, 321", "Viúvo", "Família nuclear", 5, 2, "Instituição parceira", "Sim", new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), "E-mail", "Nenhum", 1, 1, "Não", 0, "Sim", "Sim", "Sim", null }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Perfis",
                 columns: new[] { "IdPerfil", "DtCriacao", "DtModificacao", "FkIdUsuario", "Nome" },
                 values: new object[,]
@@ -891,6 +912,18 @@ namespace InsEmpodera.Migrations
                     { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "Colaborador" },
                     { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Visualizador" },
                     { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, "Supervisor" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RedesPrimarias",
+                columns: new[] { "IdRedePrimaria", "FkIdAtorPrincipal", "FkIdAtorRelacionados", "TipoRelacao" },
+                values: new object[,]
+                {
+                    { 1, 1, 2, "Parceria" },
+                    { 2, 4, 5, "Suporte" },
+                    { 3, 7, 8, "Rede" },
+                    { 4, 10, 11, "Par" },
+                    { 5, 13, 14, "Ligacao" }
                 });
 
             migrationBuilder.InsertData(
@@ -928,18 +961,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AvaliacoesPessoais",
-                columns: new[] { "IdAvaliacao", "AssBasica", "CCrimes", "DtCriacao", "DtModificacao", "Educacao", "FKidAtores", "FkIdUsuario", "Lazer", "Moradia", "Ocupacao", "Prevencao", "Saude", "Substancias" },
-                values: new object[,]
-                {
-                    { 1, 4, 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 1, 1, 2, 2, 1, 3, 2, 0 },
-                    { 2, 3, 0, new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 5, 2, 1, 3, 2, 2, 3, 1 },
-                    { 3, 2, 2, new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 9, 3, 2, 2, 1, 3, 3, 1 },
-                    { 4, 4, 0, new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 12, 4, 3, 4, 3, 4, 4, 0 },
-                    { 5, 1, 3, new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 15, 5, 1, 1, 1, 2, 1, 2 }
-                });
-
-            migrationBuilder.InsertData(
                 table: "DiariosCampo",
                 columns: new[] { "IdDCampo", "Data", "Descricao", "DtCriacao", "DtModificacao", "FkIdComunidade", "FkIdUsuario", "Foto", "Localizacao" },
                 values: new object[,]
@@ -952,15 +973,63 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "FichasPrimeiroContato",
-                columns: new[] { "IdFicha", "AEscolar", "CEstabeleceu", "Coment", "Complemento", "DtContato", "DtCriacao", "DtModificacao", "Emprego", "Endereco", "EstaFamiliar", "EstruFamiliar", "FKidAtores", "FkIdUsuario", "FonteDados", "FornecidoParceiro", "HoraContato", "LContato", "LTrat", "NFIlhos", "NFilhas", "NovoParceiro", "QReabili", "SCalc", "SComp", "SLer", "Telefone" },
+                table: "FichaCondicoes",
+                columns: new[] { "IdCondicoes", "Cond", "FkIdFicha" },
                 values: new object[,]
                 {
-                    { 1, 12, "Sim", "Pessoa comunicativa, busca oportunidade.", "Apto 101", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auxiliar Administrativo", "Rua das Flores, 123", "Casado", "Família nuclear", 1, 1, "Cadastro local", "Não", new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 2, 1, "Não", 0, "Sim", "Sim", "Sim", null },
-                    { 2, 16, "Não", "Precisa de acompanhamento psicológico.", "Casa", new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Professor", "Av. Brasil, 457", "Solteiro", "Mora sozinho", 2, 1, "Registro comunitário", "Sim", new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified), "Telefone", "Fisioterapia", 0, 0, "Sim", 1, "Sim", "Sim", "Sim", null },
-                    { 3, 8, "Sim", "Demonstra interesse em programas sociais.", "Bloco B", new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Autônomo", "Rua São João, 998", "Casado", "Família extensa", 3, 2, "Auto-relato", "Não", new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified), "WhatsApp", "Nenhum", 1, 2, "Não", 0, "Não", "Sim", "Sim", null },
-                    { 4, 10, "Não", "Procura recolocação no mercado.", "", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Desempregado", "Travessa do Sol, 55", "Separado", "Família monoparental", 4, 3, "Centro comunitário", "Não", new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 3, 0, "Não", 0, "Sim", "Não", "Sim", null },
-                    { 5, 14, "Sim", "Interessado em projetos educacionais.", "Sala 5", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comerciante", "Praça Central, 321", "Viúvo", "Família nuclear", 5, 2, "Instituição parceira", "Sim", new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), "E-mail", "Nenhum", 1, 1, "Não", 0, "Sim", "Sim", "Sim", null }
+                    { 1, "Cond A", 1 },
+                    { 2, "Cond B", 2 },
+                    { 3, "Cond C", 3 },
+                    { 4, "Cond D", 4 },
+                    { 5, "Cond E", 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FichaPeticoes",
+                columns: new[] { "IdPeticoes", "FkIdFicha", "Pet" },
+                values: new object[,]
+                {
+                    { 1, 1, "Pet A" },
+                    { 2, 2, "Pet B" },
+                    { 3, 3, "Pet C" },
+                    { 4, 4, "Pet D" },
+                    { 5, 5, "Pet E" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FichaRespostas",
+                columns: new[] { "IdCondicoes", "FkIdFicha", "Resp" },
+                values: new object[,]
+                {
+                    { 1, 1, "Resp A" },
+                    { 2, 2, "Resp B" },
+                    { 3, 3, "Resp C" },
+                    { 4, 4, "Resp D" },
+                    { 5, 5, "Resp E" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FichaResultados",
+                columns: new[] { "IdCondicoes", "FkIdFicha", "Result" },
+                values: new object[,]
+                {
+                    { 1, 1, "Result A" },
+                    { 2, 2, "Result B" },
+                    { 3, 3, "Result C" },
+                    { 4, 4, "Result D" },
+                    { 5, 5, "Result E" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FontesInfo",
+                columns: new[] { "IdFonte", "AtorIdAtores", "Extra", "FkIdFicha", "Fk_Id_Ator", "Genero", "Idade", "Nome", "PapelSocial1", "PapelSocial2", "Telefone" },
+                values: new object[,]
+                {
+                    { 1, null, "", 1, 1, "M", 40, "Fonte A", "Parente", "", "11911111111" },
+                    { 2, null, "", 2, 2, "F", 35, "Fonte B", "Vizin", "", "11922222222" },
+                    { 3, null, "", 3, 3, "M", 50, "Fonte C", "Agente", "", "11933333333" },
+                    { 4, null, "", 4, 4, "F", 28, "Fonte D", "Amigo", "", "11944444444" },
+                    { 5, null, "", 5, 5, "M", 60, "Fonte E", "Lider", "", "11955555555" }
                 });
 
             migrationBuilder.InsertData(
@@ -985,18 +1054,6 @@ namespace InsEmpodera.Migrations
                     { 3, "OLT", new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 9, 3, 3, "Backbone", "Fibra" },
                     { 4, "Modem", new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 12, 4, 4, "Dados", "4G" },
                     { 5, "Dish", new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, 5, 5, "Satélite", "Sat" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "RedesPrimarias",
-                columns: new[] { "IdRedePrimaria", "FkIdAtorPrincipal", "FkIdAtorRelacionados", "TipoRelacao" },
-                values: new object[,]
-                {
-                    { 1, 1, 2, "Parceria" },
-                    { 2, 4, 5, "Suporte" },
-                    { 3, 7, 8, "Rede" },
-                    { 4, 10, 11, "Par" },
-                    { 5, 13, 14, "Ligacao" }
                 });
 
             migrationBuilder.InsertData(
@@ -1069,66 +1126,6 @@ namespace InsEmpodera.Migrations
                     { 3, 3, 3 },
                     { 4, 4, 4 },
                     { 5, 5, 5 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FichaCondicoes",
-                columns: new[] { "IdCondicoes", "Cond", "FkIdFicha" },
-                values: new object[,]
-                {
-                    { 1, "Cond A", 1 },
-                    { 2, "Cond B", 2 },
-                    { 3, "Cond C", 3 },
-                    { 4, "Cond D", 4 },
-                    { 5, "Cond E", 5 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FichaPeticoes",
-                columns: new[] { "IdPeticoes", "FkIdFicha", "Pet" },
-                values: new object[,]
-                {
-                    { 1, 1, "Pet A" },
-                    { 2, 2, "Pet B" },
-                    { 3, 3, "Pet C" },
-                    { 4, 4, "Pet D" },
-                    { 5, 5, "Pet E" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FichaRespostas",
-                columns: new[] { "IdCondicoes", "FkIdFicha", "Resp" },
-                values: new object[,]
-                {
-                    { 1, 1, "Resp A" },
-                    { 2, 2, "Resp B" },
-                    { 3, 3, "Resp C" },
-                    { 4, 4, "Resp D" },
-                    { 5, 5, "Resp E" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FichaResultados",
-                columns: new[] { "IdCondicoes", "FkIdFicha", "Result" },
-                values: new object[,]
-                {
-                    { 1, 1, "Result A" },
-                    { 2, 2, "Result B" },
-                    { 3, 3, "Result C" },
-                    { 4, 4, "Result D" },
-                    { 5, 5, "Result E" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FontesInfo",
-                columns: new[] { "IdFonte", "AtorIdAtores", "Extra", "FkIdFicha", "Fk_Id_Ator", "Genero", "Idade", "Nome", "PapelSocial1", "PapelSocial2", "Telefone" },
-                values: new object[,]
-                {
-                    { 1, null, "", 1, 1, "M", 40, "Fonte A", "Parente", "", "11911111111" },
-                    { 2, null, "", 2, 2, "F", 35, "Fonte B", "Vizin", "", "11922222222" },
-                    { 3, null, "", 3, 3, "M", 50, "Fonte C", "Agente", "", "11933333333" },
-                    { 4, null, "", 4, 4, "F", 28, "Fonte D", "Amigo", "", "11944444444" },
-                    { 5, null, "", 5, 5, "M", 60, "Fonte E", "Lider", "", "11955555555" }
                 });
 
             migrationBuilder.InsertData(
@@ -1266,9 +1263,9 @@ namespace InsEmpodera.Migrations
                 column: "FkIdComunidade");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Atores_FkIdUsuario",
+                name: "IX_Atores_UsuarioIdUsuario",
                 table: "Atores",
-                column: "FkIdUsuario");
+                column: "UsuarioIdUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AvaliacoesPessoais_FKidAtores",

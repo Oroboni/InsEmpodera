@@ -103,7 +103,7 @@ public class PersonalProcessController : Controller
         diario.DtModificacao = DateTime.Now;
 
         // Validação básica
-        if (diario.FkIdUsuario == null || diario.FkIdUsuario == 0)
+        if (diario.FkIdUsuario == 0)
         {
             ModelState.AddModelError("FkIdUsuario", "O Ator é obrigatório.");
         }
