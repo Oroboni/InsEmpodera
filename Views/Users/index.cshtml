@@ -81,3 +81,17 @@
         filterAtores();
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const cards = document.querySelectorAll(".ator-card");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                card.style.display = name.includes(query) ? "flex" : "none";
+            });
+        });
+    });
+</script>
