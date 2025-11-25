@@ -25,7 +25,7 @@ public class PersonalAssessmentController : Controller
         }
 
         ViewBag.AtoresList = new SelectList(
-            await _context.Atores.OrderBy(a => a.IdAtores).ToListAsync(),
+            await _context.Atores.Where(a => a.Ativo == "S").OrderBy(a => a.IdAtores).ToListAsync(),
             "IdAtores",
             "Nome",
             atorId

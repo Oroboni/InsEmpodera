@@ -51,7 +51,7 @@ public class ComunidadeController : Controller
         if (id > 0)
         {
             // Modo Edição: Busca a comunidade existente
-            comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+            comunidade = _context.Comunidades.Where(a => a.Ativo == "S").FirstOrDefault(c => c.IdComunidade == id);
 
             ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
             ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();

@@ -28,7 +28,7 @@ namespace Empodera.Controllers
             var lista = await fichas.ToListAsync();
 
             ViewBag.Comunidades = new SelectList(
-                await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
+                await _context.Comunidades.Where(a => a.Ativo == "S").OrderBy(c => c.Nome).ToListAsync(), 
                 "IdComunidade", 
                 "Nome"
             );

@@ -478,12 +478,10 @@
       <select class="community-detail-input-field" asp-for="Status" required>
         @{
           // Define o status padrão para "Em processo" se for uma nova comunidade
-          var currentStatus = Model.IdComunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
+          var currentStatus = Model.IdComunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em processo";
         }
+        <option value="Em diagnóstico" selected="@(currentStatus == "Em diagnóstico")">Em diagnóstico</option>
         <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
-        <option value="Concluído" selected="@(currentStatus == "Concluído")">Concluído</option>
-        <option value="Pendente" selected="@(currentStatus == "Pendente")">Pendente</option>
-        <option value="Cancelado" selected="@(currentStatus == "Cancelado")">Cancelado</option>
       </select>
     </div>
 
