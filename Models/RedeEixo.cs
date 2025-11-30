@@ -6,9 +6,9 @@ namespace Empodera.Models
 {
     public class RedeEixo
     {
-        public int IdRedeEixo { get; set; }    // Id_Rede_Eixo
-        public int FkIdRede { get; set; }      // Fk_Id_Rede
-        public int FkIdEixo { get; set; }      // Fk_Id_Eixo
+        public int IdRedeEixo { get; set; }  
+        public int FkIdRede { get; set; }    
+        public int FkIdEixo { get; set; }    
 
         public RedeRecursos RedeRecursos { get; set; } = null!;
         public Eixo Eixo { get; set; } = null!;

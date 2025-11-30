@@ -105,11 +105,13 @@ namespace Empodera.Data
     public class RedeRecursosSeed
     {
         public int Id_Rede { get; set; }
-        public int Fk_Id_Ator { get; set; }
+        public int? Fk_Id_Ator { get; set; }
         public int Fk_Id_Comunidade { get; set; }
         public string Tipo { get; set; } = string.Empty;
-        public string Dispositivo { get; set; } = string.Empty;
-        public string Servicos { get; set; } = string.Empty;
+        public string? Nome { get; set; }
+        public string? Dispositivo { get; set; }
+        public string? Localizacao { get; set; }
+        public string? Servicos { get; set; }
         public DateTime Dt_Criacao { get; set; }
         public DateTime Dt_Modificacao { get; set; }
         public int FK_Id_Usuario { get; set; }

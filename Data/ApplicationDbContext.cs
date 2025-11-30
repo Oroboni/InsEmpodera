@@ -451,11 +451,11 @@ namespace Empodera.Data
 
             // RedeRecursos
             modelBuilder.Entity<RedeRecursos>().HasData(
-                new RedeRecursos { IdRede = 1, FKidAtores = 1, FkIdComunidade = 1, Tipo = "Wifi", Dispositivo = "Router", Servicos = "Internet", DtCriacao = new DateTime(2024,1,1), DtModificacao = new DateTime(2025,1,1), FkIdUsuario = 1 },
-                new RedeRecursos { IdRede = 2, FKidAtores = 5, FkIdComunidade = 2, Tipo = "Ponto", Dispositivo = "Switch", Servicos = "Conexão", DtCriacao = new DateTime(2024,2,1), DtModificacao = new DateTime(2025,2,1), FkIdUsuario = 2 },
-                new RedeRecursos { IdRede = 3, FKidAtores = 9, FkIdComunidade = 3, Tipo = "Fibra", Dispositivo = "OLT", Servicos = "Backbone", DtCriacao = new DateTime(2024,3,1), DtModificacao = new DateTime(2025,3,1), FkIdUsuario = 3 },
-                new RedeRecursos { IdRede = 4, FKidAtores = 12, FkIdComunidade = 4, Tipo = "4G", Dispositivo = "Modem", Servicos = "Dados", DtCriacao = new DateTime(2024,4,1), DtModificacao = new DateTime(2025,4,1), FkIdUsuario = 4 },
-                new RedeRecursos { IdRede = 5, FKidAtores = 15, FkIdComunidade = 5, Tipo = "Sat", Dispositivo = "Dish", Servicos = "Satélite", DtCriacao = new DateTime(2024,5,1), DtModificacao = new DateTime(2025,5,1), FkIdUsuario = 5 }
+                new RedeRecursos { IdRede = 1, FKidAtores = 1, FkIdComunidade = 1, Tipo = "Recurso Strutural", Dispositivo = "Router", Servicos = "Internet", DtCriacao = new DateTime(2024,1,1), DtModificacao = new DateTime(2025,1,1), FkIdUsuario = 1 },
+                new RedeRecursos { IdRede = 2, FKidAtores = 5, FkIdComunidade = 2, Tipo = "Recurso Relacional", Dispositivo = "Switch", Servicos = "Conexão", DtCriacao = new DateTime(2024,2,1), DtModificacao = new DateTime(2025,2,1), FkIdUsuario = 2 },
+                new RedeRecursos { IdRede = 3, FKidAtores = 9, FkIdComunidade = 3, Tipo = "Recurso Relacional", Dispositivo = "OLT", Servicos = "Backbone", DtCriacao = new DateTime(2024,3,1), DtModificacao = new DateTime(2025,3,1), FkIdUsuario = 3 },
+                new RedeRecursos { IdRede = 4, FKidAtores = 12, FkIdComunidade = 4, Tipo = "Recurso Relacional", Dispositivo = "Modem", Servicos = "Dados", DtCriacao = new DateTime(2024,4,1), DtModificacao = new DateTime(2025,4,1), FkIdUsuario = 4 },
+                new RedeRecursos { IdRede = 5, FKidAtores = 15, FkIdComunidade = 5, Tipo = "Recurso Relacional", Dispositivo = "Dish", Servicos = "Satélite", DtCriacao = new DateTime(2024,5,1), DtModificacao = new DateTime(2025,5,1), FkIdUsuario = 5 }
             );
 
             // Eixos

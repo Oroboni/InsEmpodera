@@ -368,11 +368,13 @@ namespace InsEmpodera.Migrations
                 {
                     IdRede = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FKidAtores = table.Column<int>(type: "INTEGER", nullable: false),
+                    FKidAtores = table.Column<int>(type: "INTEGER", nullable: true),
                     FkIdComunidade = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nome = table.Column<string>(type: "TEXT", nullable: true),
                     Tipo = table.Column<string>(type: "TEXT", nullable: false),
-                    Dispositivo = table.Column<string>(type: "TEXT", nullable: false),
-                    Servicos = table.Column<string>(type: "TEXT", nullable: false),
+                    Dispositivo = table.Column<string>(type: "TEXT", nullable: true),
+                    Localizacao = table.Column<string>(type: "TEXT", nullable: true),
+                    Servicos = table.Column<string>(type: "TEXT", nullable: true),
                     DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false)
@@ -1031,14 +1033,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "RedeRecursos",
-                columns: new[] { "IdRede", "Dispositivo", "DtCriacao", "DtModificacao", "FKidAtores", "FkIdComunidade", "FkIdUsuario", "Servicos", "Tipo" },
+                columns: new[] { "IdRede", "Dispositivo", "DtCriacao", "DtModificacao", "FKidAtores", "FkIdComunidade", "FkIdUsuario", "Localizacao", "Nome", "Servicos", "Tipo" },
                 values: new object[,]
                 {
-                    { 1, "Router", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1, 1, "Internet", "Wifi" },
-                    { 2, "Switch", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 2, 2, "Conexão", "Ponto" },
-                    { 3, "OLT", new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 9, 3, 3, "Backbone", "Fibra" },
-                    { 4, "Modem", new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 12, 4, 4, "Dados", "4G" },
-                    { 5, "Dish", new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, 5, 5, "Satélite", "Sat" }
+                    { 1, "Router", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1, 1, null, null, "Internet", "Recurso Strutural" },
+                    { 2, "Switch", new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 2, 2, null, null, "Conexão", "Recurso Relacional" },
+                    { 3, "OLT", new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 9, 3, 3, null, null, "Backbone", "Recurso Relacional" },
+                    { 4, "Modem", new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 12, 4, 4, null, null, "Dados", "Recurso Relacional" },
+                    { 5, "Dish", new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, 5, 5, null, null, "Satélite", "Recurso Relacional" }
                 });
 
             migrationBuilder.InsertData(

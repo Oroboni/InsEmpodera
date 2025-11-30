@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251124184643_Initial")]
+    [Migration("20251125184440_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -2406,7 +2406,6 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Dispositivo")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DtCriacao")
@@ -2415,7 +2414,7 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FKidAtores")
+                    b.Property<int?>("FKidAtores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FkIdComunidade")
@@ -2424,8 +2423,13 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("FkIdUsuario")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Localizacao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Servicos")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Tipo")
@@ -2453,7 +2457,7 @@ namespace InsEmpodera.Migrations
                             FkIdComunidade = 1,
                             FkIdUsuario = 1,
                             Servicos = "Internet",
-                            Tipo = "Wifi"
+                            Tipo = "Recurso Strutural"
                         },
                         new
                         {
@@ -2465,7 +2469,7 @@ namespace InsEmpodera.Migrations
                             FkIdComunidade = 2,
                             FkIdUsuario = 2,
                             Servicos = "Conexão",
-                            Tipo = "Ponto"
+                            Tipo = "Recurso Relacional"
                         },
                         new
                         {
@@ -2477,7 +2481,7 @@ namespace InsEmpodera.Migrations
                             FkIdComunidade = 3,
                             FkIdUsuario = 3,
                             Servicos = "Backbone",
-                            Tipo = "Fibra"
+                            Tipo = "Recurso Relacional"
                         },
                         new
                         {
@@ -2489,7 +2493,7 @@ namespace InsEmpodera.Migrations
                             FkIdComunidade = 4,
                             FkIdUsuario = 4,
                             Servicos = "Dados",
-                            Tipo = "4G"
+                            Tipo = "Recurso Relacional"
                         },
                         new
                         {
@@ -2501,7 +2505,7 @@ namespace InsEmpodera.Migrations
                             FkIdComunidade = 5,
                             FkIdUsuario = 5,
                             Servicos = "Satélite",
-                            Tipo = "Sat"
+                            Tipo = "Recurso Relacional"
                         });
                 });
 
@@ -3143,8 +3147,7 @@ namespace InsEmpodera.Migrations
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("Redes")
                         .HasForeignKey("FKidAtores")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Empodera.Models.Comunidade", "Comunidade")
                         .WithMany("RedeRecursos")
