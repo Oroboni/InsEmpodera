@@ -1,0 +1,569 @@
+input,
+button,
+textarea,
+select {
+    font-family: poppins;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+/* Cabeçalho de Navegação */
+.breadcrumb h1 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-8);
+}
+
+.breadcrumb strong {
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Estilos do Formulário */
+form {
+    background-color: var(--color-bg-primary);
+    padding: var(--space-8);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-md);
+}
+
+.form-group {
+    margin-bottom: var(--space-5);
+    position: relative;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+}
+
+label {
+    display: block;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-2);
+    font-size: var(--font-size-sm);
+}
+
+.input-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+/* Ícones à esquerda dos inputs */
+.input-wrapper>.fa-solid:not(.select-arrow),
+.select-wrapper>.fa-solid:not(.select-arrow) {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--color-primary);
+    pointer-events: none;
+    z-index: 1;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+select {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px 12px 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    background-color: var(--color-bg-primary);
+    transition: var(--transition-base);
+    box-sizing: border-box;
+}
+
+input::placeholder,
+select {
+    color: var(--color-gray-500);
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.select-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.select-wrapper select {
+    padding-right: 40px;
+}
+
+.select-wrapper .select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    color: var(--color-gray-500);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Checkbox Customizado */
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.form-group-checkbox label {
+    margin: 0;
+    position: relative;
+    padding-left: var(--space-8);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+}
+
+.form-group-checkbox label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-base);
+}
+
+.form-group-checkbox input:checked+label::after {
+    content: '✓';
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+}
+
+/* Grid de Ações */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-8) 0;
+}
+
+/* ... (Estilos do action-card, pulados para economizar espaço, mantenha os seus) ... */
+.action-card {
+    background-color: var(--color-primary);
+    /* ... etc ... */
+}
+
+
+/* ... (Estilos do form-footer, pulados, mantenha os seus) ... */
+/* Botões de Ação Final */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: var(--space-3) var(--space-6);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+.btn-delete {
+    background-color: var(--color-error);
+    color: var(--color-white);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-secondary {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary);
+}
+
+/* --- 10. MULTI-SELECT DROPDOWN (DAS FOTOS) --- */
+summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+.multiselect-wrapper .select-wrapper {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px 12px 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    background-color: var(--color-bg-primary);
+    transition: var(--transition-base);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+.multiselect-placeholder {
+    color: var(--color-gray-500);
+}
+
+details[open]>summary .select-wrapper {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.multiselect-panel {
+    position: absolute;
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    z-index: 10;
+    margin-top: var(--space-1);
+    max-height: 250px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: var(--space-2);
+}
+
+.multiselect-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.multiselect-panel li {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-base);
+    display: flex;
+    align-items: center;
+}
+
+.multiselect-panel li:hover {
+    background-color: var(--color-primary-50);
+}
+
+.multiselect-panel input[type="checkbox"] {
+    margin-right: var(--space-3);
+    width: 16px;
+    height: 16px;
+}
+
+.multiselect-panel label {
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+/* ====================================================== --- 11. (NOVO) TOGGLE CRIAR/IMPORTAR --- ====================================================== */
+/* O container dos botões "Criar Novo" / "Importar" */
+.toggle-switch {
+    display: flex;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Esconde os botões de radio de verdade */
+.toggle-switch input[type="radio"] {
+    display: none;
+}
+
+/* Estilo dos "falsos botões" (os labels) */
+.toggle-switch label {
+    flex: 1;
+    /* Divide o espaço igualmente */
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+    /* Reseta a margem do label */
+    cursor: pointer;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    transition: var(--transition-base);
+}
+
+/* Estilo do botão ATIVO (quando o radio está checado) */
+.toggle-switch input[type="radio"]:checked+label {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: var(--font-weight-semibold);
+    box-shadow: var(--shadow-sm);
+}
+
+/* A MÁGICA: Lógica de Show/Hide Por padrão, o radio "create" está checado. */
+/* 1. Por padrão (Create checado), esconde o Import */
+#radio-create:checked~.import-field {
+    display: none;
+}
+
+/* (O create-field fica visível por padrão) */
+.import-field {
+    display: none;
+    /* Escondido por padrão */
+}
+
+/* 2. Quando Importar for checado, esconde o Criar e mostra o Importar */
+#radio-import:checked~.import-field {
+    display: block;
+}
+
+#radio-import:checked~.create-field {
+    display: none;
+}
+
+/* ====================================================== --- 12. (NOVO) INPUT COM BOTÕES LATERAIS --- --- (Para os botões + e Seta da foto) --- ====================================================== */
+.input-with-buttons {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* Faz o input/select ocupar todo o espaço menos os botões */
+.input-with-buttons .input-wrapper,
+.input-with-buttons .select-wrapper {
+    flex-grow: 1;
+}
+
+/* Estilo dos botões laterais */
+.input-with-buttons .btn-icon {
+    flex-shrink: 0;
+    /* Impede que o botão encolha */
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.input-with-buttons .btn-icon:hover {
+    background-color: var(--color-border);
+    color: var(--color-primary);
+}
+
+
+/* ============================ RESPONSIVIDADE (MOBILE FIRST) ============================ */
+/* Tablets e dispositivos médios (até 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--space-3);
+    }
+
+    body {
+        padding: var(--space-3);
+    }
+
+    .breadcrumb h1 {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--space-6);
+    }
+
+    form {
+        padding: var(--space-6);
+        border-radius: var(--radius-xl);
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    /* Actions Grid - 2 colunas em tablets */
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+    }
+
+    .action-card {
+        min-height: 130px;
+    }
+
+    /* Form Footer */
+    .form-footer {
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+
+    .form-footer .fa-chevron-down {
+        order: -1;
+        margin-left: auto;
+    }
+
+    .footer-text {
+        flex-basis: 100%;
+    }
+
+    /* Botões */
+    .form-buttons {
+        flex-direction: column-reverse;
+        gap: var(--space-3);
+    }
+
+    .form-buttons .btn {
+        width: 100%;
+    }
+}
+
+/* Smartphones (até 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-2);
+    }
+
+    body {
+        padding: var(--space-2);
+    }
+
+    form {
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
+    }
+
+    .breadcrumb h1 {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-4);
+    }
+
+    /* Reduz espaçamento entre campos */
+    .form-group {
+        margin-bottom: var(--space-4);
+    }
+
+    .form-row {
+        gap: var(--space-3);
+    }
+
+    /* Actions Grid - 1 coluna em mobile pequeno */
+    .actions-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+        margin: var(--space-6) 0;
+    }
+
+    .action-card {
+        padding: var(--space-4);
+        min-height: 120px;
+    }
+
+    .action-card .card-title {
+        font-size: var(--font-size-base);
+    }
+
+    .action-card .card-subtitle {
+        font-size: var(--font-size-xs);
+    }
+
+    .card-icons {
+        margin-top: var(--space-3);
+    }
+
+    .card-icons i {
+        width: var(--space-7);
+        height: var(--space-7);
+    }
+
+    /* Form Footer empilhado */
+    .form-footer {
+        padding: var(--space-3);
+        gap: var(--space-2);
+    }
+
+    .form-footer .fa-user {
+        font-size: var(--font-size-lg);
+    }
+
+    .footer-text span {
+        font-size: 10px;
+    }
+
+    .footer-text strong {
+        font-size: var(--font-size-xs);
+    }
+
+    /* Inputs menores */
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    /* <-- E AQUI */
+    select,
+    /* Aplicando ao trigger do multiselect também */
+    .multiselect-wrapper .select-wrapper {
+        height: 44px;
+        font-size: var(--font-size-xs);
+    }
+
+    label {
+        font-size: var(--font-size-xs);
+        margin-bottom: var(--space-1);
+    }
+}
+
+/* Dispositivos muito pequenos (até 360px) */
+@media (max-width: 360px) {
+    form {
+        padding: var(--space-3);
+    }
+
+    .action-card {
+        min-height: 100px;
+        padding: var(--space-3);
+    }
+
+    .btn {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--font-size-xs);
+    }
+}

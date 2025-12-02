@@ -1,0 +1,460 @@
+/* ==========================================================
+   CSS DEDICADO PARA FORMULÁRIO DE ATIVIDADE
+   (Não depende mais de 'atores.css')
+   ========================================================== */
+
+/* --- Layout Base --- */
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+.breadcrumb h1 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-8);
+    color: var(--color-primary);
+    /* Roxo */
+}
+
+.breadcrumb strong {
+    font-weight: var(--font-weight-semibold);
+}
+
+form {
+    background-color: var(--color-bg-primary);
+    padding: var(--space-8);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-md);
+}
+
+.form-group {
+    margin-bottom: var(--space-5);
+}
+
+label {
+    display: block;
+    font-weight: var(--font-weight-semibold) !important;
+    margin-bottom: var(--space-2) !important;
+    font-size: var(--font-size-sm) !important;
+    color: var(--color-primary) !important;
+}
+
+/* --- Wrapper do Input (para ícones) --- */
+.input-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+/* --- Ícones Padrão (para Nome, Descrição) --- */
+.input-wrapper>.fa-solid {
+    position: absolute;
+    top: 24px;
+    /* Alinhado ao topo */
+    left: 16px;
+    transform: translateY(-50%);
+    color: var(--color-primary);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Alinhamento especial para inputs de linha única */
+.input-wrapper>input[type="text"]~.fa-solid {
+    top: 50%;
+}
+
+/* --- Campos de Formulário Padrão (Nome, Descrição) --- */
+input[type="text"],
+textarea {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px 12px 50px;
+    /* Padding para o ícone */
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    background-color: var(--color-bg-primary);
+    transition: var(--transition-base);
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+textarea {
+    height: auto;
+    min-height: 140px;
+    padding-top: 12px;
+    resize: vertical;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+input[type="text"]::placeholder {
+    color: var(--color-gray-500);
+}
+
+/* ==========================================================
+   [CORREÇÃO TOTAL] Estilo do Dropdown "Eixos"
+   ========================================================== */
+
+.multiselect-wrapper {
+    position: relative;
+    /* Contêiner para o painel flutuante */
+}
+
+.multiselect-wrapper summary {
+    list-style: none;
+    cursor: pointer;
+    /* Impede que o texto "Eixos" seja selecionado ao clicar */
+    user-select: none;
+}
+
+.multiselect-wrapper summary::-webkit-details-marker {
+    display: none;
+}
+
+/* O 'select-wrapper' é o campo clicável */
+.multiselect-wrapper .select-wrapper {
+    position: relative;
+    display: flex;
+    /* Alinha ícone, texto e seta */
+    align-items: center;
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    /* Padding lateral */
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-lg) !important;
+    background-color: var(--color-bg-primary) !important;
+    transition: all 0.2s ease !important;
+    box-sizing: border-box !important;
+}
+
+.multiselect-wrapper .select-wrapper .fa-solid {
+    color: var(--color-primary);
+    margin-right: 12px;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.multiselect-wrapper .select-wrapper .multiselect-placeholder {
+    flex-grow: 1;
+    /* Ocupa o espaço */
+    font-size: var(--font-size-sm) !important;
+    color: var(--color-gray-500) !important;
+    /* Remove estilos de "bloco" herdados */
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 25px !important;
+    border: none !important;
+    box-shadow: none !important;
+    line-height: normal !important;
+    background-color: transparent !important;
+}
+
+.multiselect-wrapper .select-wrapper .select-arrow {
+    color: var(--color-gray-500);
+    margin-left: auto;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    /* Remove estilos de 'select-wrapper' */
+    position: static !important;
+    transform: none !important;
+}
+
+/* Estado hover */
+.multiselect-wrapper summary:hover .select-wrapper {
+    border-color: var(--color-primary) !important;
+}
+
+/* Estado aberto */
+.multiselect-wrapper[open]>summary .select-wrapper {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.multiselect-wrapper[open]>summary .select-arrow {
+    transform: rotate(180deg) !important;
+}
+
+/* O Painel de Opções (que flutua) */
+.multiselect-wrapper .multiselect-panel {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 100 !important;
+    background-color: var(--color-bg-primary) !important;
+    border: 1px solid var(--color-primary) !important;
+    border-top: none !important;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+    padding: 8px 0 !important;
+    margin-top: -1px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    overflow: hidden;
+}
+
+.multiselect-wrapper .multiselect-panel ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: 280px !important;
+    overflow-y: auto !important;
+}
+
+.multiselect-wrapper .multiselect-panel li {
+    padding: 10px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.multiselect-wrapper .multiselect-panel li:hover {
+    background-color: var(--color-bg-secondary) !important;
+}
+
+.multiselect-wrapper .multiselect-panel input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 12px 0 0 !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: var(--color-primary);
+}
+
+.multiselect-wrapper .multiselect-panel label {
+    cursor: pointer !important;
+    font-weight: var(--font-weight-semibold) !important;
+    font-size: var(--font-size-sm) !important;
+    color: var(--color-primary) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex: 1;
+}
+
+/* ==========================================================
+   FIM DO MULTISELECT
+   ========================================================== */
+
+/* --- Botão 'ADICIONAR ATIVIDADE' (Full Width) --- */
+.btn-full-width {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    padding: var(--space-3) var(--space-6);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+
+    /* [CORREÇÃO] Usando as cores do seu sistema */
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    text-transform: uppercase;
+}
+
+.btn-full-width:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* --- Tags (Tela Edit) --- */
+.eixos-tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-secondary);
+    min-height: 48px;
+    align-items: center;
+}
+
+.tag-item {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Cores das tags */
+.tag-blue {
+    background-color: #E0F2FE;
+    color: #026AA2;
+}
+
+.tag-green {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.tag-yellow {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.tag-purple {
+    background-color: #EBEBFF;
+    color: #5B21B6;
+}
+
+.tag-lightgreen {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+.tag-red {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+.tag-lightblue {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+}
+
+.tag-pink {
+    background-color: #FCE7F3;
+    color: #9D174D;
+}
+
+.tag-darkred {
+    background-color: #FFE4E6;
+    color: #A92128;
+}
+
+/* --- Rodapé Metadata --- */
+.form-footer {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-8);
+    border: 1px solid var(--color-border);
+}
+
+.form-footer summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: var(--space-3) var(--space-4);
+    list-style: none;
+    user-select: none;
+}
+
+.form-footer summary::-webkit-details-marker {
+    display: none;
+}
+
+.form-footer .footer-text {
+    flex-grow: 1;
+    font-size: var(--font-size-sm);
+}
+
+.form-footer .footer-text span {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.form-footer .footer-text strong {
+    font-size: var(--font-size-sm);
+    display: inline;
+    color: var(--color-text-primary);
+}
+
+.form-footer summary .fa-chevron-down {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
+}
+
+.form-footer[open]>summary .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.metadata-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border-top: 1px solid var(--color-border);
+}
+
+.metadata-content .form-group {
+    margin-bottom: 0;
+}
+
+.metadata-content label {
+    font-size: var(--font-size-xs);
+}
+
+.metadata-content input[readonly] {
+    background-color: var(--color-bg-primary) !important;
+    border-color: var(--color-border) !important;
+    box-shadow: none !important;
+    cursor: default;
+    color: var(--color-text-secondary);
+}
+
+.metadata-content .input-wrapper>.fa-solid {
+    color: var(--color-text-secondary);
+}
+
+/* --- Botões --- */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: var(--space-3) var(--space-6);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background-color: var(--color-error);
+    color: var(--color-white);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-secondary {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary);
+}

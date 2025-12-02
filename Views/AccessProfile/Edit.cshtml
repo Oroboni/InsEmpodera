@@ -1,0 +1,184 @@
+@model Empodera.Models.Perfil
+@{
+    ViewData["Title"] = "Detalhes do Perfil de Acesso";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    
+    <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
+    
+    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Perfis de acesso > <strong>Detalhes do perfil de acesso</strong></h1>
+    </div>
+
+    <form method="post">
+        <input type="hidden" asp-for="IdPerfil" /> <div class="form-group">
+            <label for="nome">Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved"></i>
+                <input asp-for="Nome" type="text" required>
+            </div>
+        </div>
+
+        <table class="permission-table">
+            <thead>
+                <tr>
+                    <th>Permissão</th>
+                    <th>Listar</th>
+                    <th>Detalhar</th>
+                    <th>Criar</th>
+                    <th>Atualizar</th>
+                    <th>Deletar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Usuários</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Perfis de Acesso</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Atividades</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Comunidades</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Vulnerabilidades</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Recursos</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Diários de Campo</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Atores</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Ficha de 1º Contato</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Diários de Processo Pessoal</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>Avaliações Pessoais</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+                <tr>
+                    <td>SER</td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <details class="form-footer" open>
+            <summary>
+                <div class="footer-text">
+                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                </div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </summary>
+            <div class="metadata-content">
+                <div class="form-group">
+                    <label>Criado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="[Nome do Criador]" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Atualizado por</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" value="@Context.Session.GetString("Nome")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Data de criação</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Última atualização</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <input type_2"text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    </div>
+                </div>
+            </div>
+        </details>
+        <div class="form-buttons">
+            <button type="button" class="btn btn-delete">DELETAR</button>
+            <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR MUDANÇAS</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,97 @@
+@model IEnumerable<Empodera.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuários";
+    Layout = "_Layout";
+    ViewData["PageCSS"] = "usuarios";
+    ViewData["DisableMainScroll"] = "true"; // <-- ADICIONE ESTA LINHA
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Ator</title>
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css">
+    <link rel="stylesheet" href="~/css/pages/usuarios.css">
+</head>
+
+<body>
+    <div class="atores-content-area">
+
+        <div class="atores-header">
+            <h2>Usuários</h2>
+        </div>
+
+        <div class="atores-search-container">
+            <form class="atores-search-bar" method="get">
+                <input type="search" class="search-input" placeholder="Pesquise por usuários..." name="q" />
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </form>
+
+            <a asp-controller="Users" asp-action="Create" class="atores-add-button">+</a>
+        </div>
+
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="toggleInativos" name="incluirInativos" />
+                <span class="slider round"></span>
+            </label>
+            <label for="toggleInativos" class="toggle-label">Incluir Inativos</label>
+        </div>
+
+        <div class="atores-list-container">
+            @foreach (var user in Model)
+            {
+                <div class="ator-card" id="@user.Ativo">
+                    @* <img src="~/img/placeholder-ator.png" alt="Foto de Usuário Fixo" class="ator-photo-placeholder" /> *@
+
+                    <div class="container-info">
+                        <span class="ator-name">@user.Nome</span>
+                        <p>@user.Email</p>
+                    </div>
+
+                    <a class="details-icon" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    onload = filterAtores();
+    function filterAtores() {
+        var incluirInativos = document.getElementById('toggleInativos').checked;
+        var atores = document.querySelectorAll('.ator-card');
+
+        atores.forEach(function (ator) {
+            if (ator.id === 'N' && !incluirInativos) {
+                ator.style.display = 'none';
+            } else {
+                ator.style.display = 'block';
+            }
+        });
+    }
+    document.getElementById('toggleInativos').addEventListener('change', function () {
+        filterAtores();
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const cards = document.querySelectorAll(".ator-card");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                card.style.display = name.includes(query) ? "flex" : "none";
+            });
+        });
+    });
+</script>

@@ -1,0 +1,414 @@
+@model Empodera.Models.FichaPrimeiroContato
+
+@{
+    ViewData["Title"] = "Nova Ficha de 1º Contato";
+    Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
+}
+
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-controller="FichaPrimeiroContato" asp-action="Index" class="text-primary">Ficha Primeiro Contato</a>
+            <span class="separator">></span>
+            <strong class="text-muted">Nova Ficha</strong>
+        </h2>
+    </div>
+
+    <div class="stepper-container">
+        <div class="step active" id="header-step-1">1</div>
+        <div class="line" id="line-1"></div>
+        <div class="step" id="header-step-2">2</div>
+        <div class="line" id="line-2"></div>
+        <div class="step" id="header-step-3">3</div>
+    </div>
+
+    <form asp-action="Create" class="main-form" id="wizardForm">
+        <div class="step-content active" id="step-1">
+
+            <div class="section-label">Parceiro</div>
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-person"></i></div>
+                <div class="input-content">
+                    <label asp-for="FKidAtores">Ator</label>
+                    <select asp-for="FKidAtores" asp-items="ViewBag.Atores" class="clean-input" required>
+                        <option value="">Selecione o nome do ator</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-label">Localização</div>
+            <div id="mapa-principal" class="default-map-container"></div>
+
+            <div class="input-card full-width">
+                <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
+                <div class="input-content">
+                    <label asp-for="Endereco">Endereço</label>
+                    <input asp-for="Endereco" id="input-endereco" class="clean-input" readonly
+                        placeholder="Use a lupa no mapa acima para buscar..." />
+                </div>
+            </div>
+
+            <div class="input-card full-width">
+                <div class="icon-box purple"><i class="fa-solid fa-diamond-turn-right"></i></div>
+                <div class="input-content">
+                    <label asp-for="LContato">Complemento / Referência</label>
+                    <input asp-for="LContato" class="clean-input" placeholder="Ex: Sede da associação, Escola..." />
+                </div>
+            </div>
+
+            <div class="grid-row">
+                <div class="input-card">
+                    <div class="input-content">
+                        <label asp-for="Telefone">Número de Telefone</label>
+                        <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input" maxlength="15"
+                            placeholder="(DDD) 99999-9999" />
+                    </div>
+                </div>
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="Emprego" class="clean-select">Emprego</label>
+                        <select asp-for="Emprego" class="clean-input">
+                            <option value="Empreendedor">Empreendedor</option>
+                            <option value="Estudante">Estudante</option>
+                            <option value="NuncaTrabalhou">Nunca Trabalhou</option>
+                            <option value="Outro">Outro</option>
+                            <option value="TrabalhoFormal">Trabalho Formal</option>
+                            <option value="TrabalhoInformal">Trabalho Informal</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="purple-divider"></div>
+            <div class="section-label">Primeiro Contato</div>
+
+            <div class="grid-row three-columns">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="DtContato">Data do 1º Contato</label>
+                        <input asp-for="DtContato" type="date" class="clean-input" />
+                    </div>
+                </div>
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label>Hora do 1º Contato</label>
+                        <input type="time" class="clean-input" name="HoraContato" />
+                    </div>
+                </div>
+
+                <div class="input-card span-two">
+                    <div class="input-content no-icon">
+                        <label asp-for="CEstabeleceu">Como se estabeleceu?</label>
+                        <select asp-for="CEstabeleceu" class="clean-input">
+                            <option value="OutrasInstituicoes">Em outras instituições</option>
+                            <option value="CasaDaPessoa">Na casa da pessoa</option>
+                            <option value="EstruturaOrganizacao">Na estrutura da organização</option>
+                            <option value="NaRua">Na rua</option>
+                            <option value="Outro">Outro</option>
+                            <option value="PorTelefone">Por telefone</option>
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="footer-questions grid-row">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="NovoParceiro">É um parceiro?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" asp-for="NovoParceiro" value="Sim" />
+                                <span class="radio-label">Sim</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" asp-for="NovoParceiro" value="Não" />
+                                <span class="radio-label">Não</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="FornecidoParceiro">Dados fornecidos pelo parceiro?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" asp-for="FornecidoParceiro" value="Sim" />
+                                <span class="radio-label">Sim</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" asp-for="FornecidoParceiro" value="Não" />
+                                <span class="radio-label">Não</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================= -->
+        <!-- PASSO 2: Estado familiar até Local de tratamento -->
+        <!-- ================================================= -->
+        <div class="step-content" id="step-2">
+            <div class="section-label">Dados Familiares e Pessoais</div>
+
+            <div class="grid-row">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="EstaFamiliar">Estado Familiar</label>
+                        <input asp-for="EstaFamiliar" class="clean-input" placeholder="Ex: Solteiro, Casado..." />
+                    </div>
+                </div>
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="EstruFamiliar">Estrutura Familiar</label>
+                        <input asp-for="EstruFamiliar" class="clean-input" placeholder="Ex: Nuclear, Monoparental..." />
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-row">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="NFIlhos">Número de Filhos</label>
+                        <input asp-for="NFIlhos" type="number" min="0" class="clean-input" />
+                    </div>
+                </div>
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="NFilhas">Número de Filhas</label>
+                        <input asp-for="NFilhas" type="number" min="0" class="clean-input" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="purple-divider"></div>
+            <div class="section-label">Educação e Habilidades</div>
+
+            <div class="grid-row">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="AEscolar">Anos de Escolaridade</label>
+                        <input asp-for="AEscolar" type="number" min="0" class="clean-input" />
+                    </div>
+                </div>
+
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="SLer">Sabe Ler?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" asp-for="SLer" value="Sim" />
+                                <span class="radio-label">Sim</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" asp-for="SLer" value="Não" />
+                                <span class="radio-label">Não</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-row">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="SCalc">Sabe Calcular?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" asp-for="SCalc" value="Sim" />
+                                <span class="radio-label">Sim</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" asp-for="SCalc" value="Não" />
+                                <span class="radio-label">Não</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="SComp">Sabe usar Computador?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" asp-for="SComp" value="Sim" />
+                                <span class="radio-label">Sim</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" asp-for="SComp" value="Não" />
+                                <span class="radio-label">Não</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="purple-divider"></div>
+            <div class="section-label">Saúde e Tratamento</div>
+
+            <div class="grid-row">
+                <div class="input-card">
+                    <div class="input-content no-icon">
+                        <label asp-for="QReabili">Qtd. Reabilitações</label>
+                        <input asp-for="QReabili" type="number" min="0" class="clean-input" />
+                    </div>
+                </div>
+                <div class="input-card full-width">
+                    <div class="input-content no-icon">
+                        <label asp-for="LTrat">Local de Tratamento</label>
+                        <input asp-for="LTrat" class="clean-input"
+                            placeholder="Local atual de tratamento (se houver)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ================================================= -->
+        <!-- PASSO 3: Condições, Petições, Respostas e Resultados -->
+        <!-- ================================================= -->
+        <div class="step-content" id="step-3">
+
+            @{
+                // LISTAS DE DADOS (Poderiam vir do Banco de Dados/ViewBag futuramente)
+                var listaCondicoes = new List<string> {
+                        "Substâncias/álcool", "Condutas antissociais", "Psiquiátricas", "Comportamental", "Relacionais",
+                        "Violência intrafamiliar", "Violação de adulto", "Trabalho sexual", "Legal", "Gravidez/parto",
+                        "Problemas de saúde", "Pobreza extrema", "Vida de rua", "Apoio econômico", "Escolares",
+                        "Exclusão grave", "Violência intracomunitária", "Redes interinstitucionais", "Crise psicológica",
+                        "Capacitação e formação", "Organização e planejamento", "HIV/AIDS", "IST", "Tráfico de pessoas",
+                        "Sem trabalho", "Tuberculoso", "Problemas familiares", "Transtorno estresse pós traumático",
+                        "Analfabetismo", "Problemas sexuais", "Violação de crianças", "Outras dependências",
+                        "Drogas intravenosas", "Hepatite", "Deslocamento", "Migração/Imigração",
+                        "Estigma por identidade sexual", "Incapacidade"
+                        };
+
+                var listaPeticoes = new List<string> {
+                        "Apoio econômico", "Atenção ao parto", "Encaminhamento", "Encontro/Conversa", "Conselho/Orientação",
+                        "Serviços legais", "Fianças/Empréstimo", "Formação/Capacitação", "Creche", "Internação",
+                        "Informação", "Integração comunitária", "Organização e planejamento", "Internação forçada",
+                        "Recuperação escolar", "Serviço social", "Terapia", "Visita familiar", "Exames/Cuidados médicos",
+                        "Alimentação", "Serviços de higiene/Roupa limpa", "Ocupação/trabalho", "Medicamentos", "Burocrático"
+                        };
+
+                var listaRespostas = new List<string> {
+                        "Marca-se um encontro", "Dá-se uma informação", "Conselho/Orientação", "Encaminhamento",
+                        "Escuta imediata/manejo de crise", "Indicações, sugestões", "Acompanhamento",
+                        "Cuidados médicos", "Higiene/Roupa limpa", "Acolhida (dia ou noite)"
+                        };
+
+                var listaResultados = new List<string> {
+                        "Veio ao encontro", "Seguiu contato", "Interrompeu contato",
+                        "Inicia um programa", "Inclusão em atividades"
+                        };
+            }
+
+            <!-- 1. CONDIÇÕES -->
+            <div class="section-label">Condições do Primeiro Contato</div>
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <small class="text-muted">Selecione todas as condições que se aplicam:</small>
+                    <div class="checkbox-group dense-grid">
+                        @foreach (var item in listaCondicoes)
+                        {
+                            <label class="checkbox-option">
+                                <!-- 'name' deve ser um array para o Controller receber List<string> -->
+                                <input type="checkbox" name="SelectedCondicoes" value="@item" />
+                                <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PETIÇÕES -->
+            <div class="section-label">Petições</div>
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <small class="text-muted">Selecione as petições solicitadas:</small>
+                    <div class="checkbox-group dense-grid">
+                        @foreach (var item in listaPeticoes)
+                        {
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="SelectedPeticoes" value="@item" />
+                                <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. RESPOSTAS -->
+            <div class="section-label">Respostas</div>
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <small class="text-muted">Respostas fornecidas:</small>
+                    <div class="checkbox-group dense-grid">
+                        @foreach (var item in listaRespostas)
+                        {
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="SelectedRespostas" value="@item" />
+                                <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. RESULTADOS -->
+            <div class="section-label">Resultados</div>
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <small class="text-muted">Resultados obtidos:</small>
+                    <div class="checkbox-group dense-grid">
+                        @foreach (var item in listaResultados)
+                        {
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="SelectedResultados" value="@item" />
+                                <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. COMENTÁRIOS FINAIS -->
+            <div class="purple-divider"></div>
+            <div class="input-card full-width" style="margin-top: 20px;">
+                <div class="input-content no-icon">
+                    <label asp-for="Coment">Comentários / Observações Finais</label>
+                    <textarea asp-for="Coment" class="clean-input" rows="4"
+                        placeholder="Insira observações relevantes aqui..."></textarea>
+                </div>
+            </div>
+        </div>
+        <!-- ================================================= -->
+        <!-- BOTÕES DE NAVEGAÇÃO -->
+        <!-- ================================================= -->
+        <div class="buttons-container">
+            <!-- Botão Voltar (Cinza) -->
+            <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)"
+                style="display: none;">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </button>
+
+            <!-- Botão Próximo (Roxo - Primary) -->
+            <button type="button" id="btn-next" class="wizard-btn btn-next" onclick="changeStep(1)">
+                Próximo <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <!-- Botão Salvar (Verde - Success) -->
+            <button type="submit" id="btn-save" class="wizard-btn btn-save-final" style="display: none;">
+                <i class="fa-solid fa-check"></i> Salvar Ficha
+            </button>
+        </div>
+
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+}

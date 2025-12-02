@@ -1,0 +1,75 @@
+@model IEnumerable<Empodera.Models.Perfil>
+@{
+    ViewData["Title"] = "Perfis de Acesso";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
+    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+}
+
+<div class="atores-content-area"> <div class="atores-header">
+        <h2>Perfis de acesso</h2>
+    </div>
+
+
+    <div class="bottom-filters">
+            <div class="search-container">
+                <div class="search-input-group">
+                    <div class="search-wrapper">
+                        <div asp-action="Index" method="get">
+                          
+                        
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" />  
+                        <button type="submit" class="btn-search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                            
+                        </div>
+                    </div>
+                </div>
+                <a class="btn-add" asp-controller="AccessProfile" asp-action="Create" title="Adicionar Nova Ficha">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+    </div>
+
+
+
+
+
+
+    <div class="atores-list-container">
+
+        @foreach (var perfil in Model)
+        {
+        <div class="ator-card">
+            <span class="ator-name">@perfil.Nome</span>
+            <a class="details-icon" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="@perfil.IdPerfil">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                </svg>
+            </a>
+        </div>
+        }
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const cards = document.querySelectorAll(".ator-card");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                card.style.display = name.includes(query) ? "flex" : "none";
+            });
+        });
+    });
+</script>

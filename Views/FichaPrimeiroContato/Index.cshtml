@@ -1,0 +1,72 @@
+@model IEnumerable<Empodera.Models.FichaPrimeiroContato>
+@{
+    ViewData["Title"] = "Ficha de Primeiro Contato";
+    ViewData["PageCSS"] = "fichaprimeirocontato";
+    Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
+}
+
+<div class="forms-container">
+    <h2 class="page-title">Ficha de Primeiro Contato</h2>
+
+    <div class="filter-bar">
+        <div class="main-select-wrapper">
+            <select class="main-select" asp-items="ViewBag.Comunidades">
+            </select>
+        </div>
+
+        <div class="bottom-filters">
+            <div class="search-container">
+                <div class="search-input-group">
+                    <div class="search-wrapper">
+                        <form asp-action="Index" method="get">
+                            <input type="text" name="search" value="@ViewData["CurrentFilter"]" placeholder="Procure por comunidades" />
+                            <button type="submit" class="btn-search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="select-wrapper secondary-select-wrapper">
+                        <select class="secondary-select">
+                            <option>Selecione um estado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <a class="btn-add" asp-action="Create" title="Adicionar Nova Ficha">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="forms-list">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var form in Model)
+            {
+                <div class="form-item">
+                    <div class="form-info">
+                        <p class="name">@form.Ator.Nome</p>
+                        <p class="date">@form.DtContato.ToString("dd/MM/yyyy")</p>
+                    </div>
+                    <div class="actions">
+                        <a asp-action="Edit" asp-route-id="@form.IdFicha" class="btn-action" title="Edit">
+                            <i class="fa fa-pencil-alt"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@form.IdFicha" class="btn-action" title="Delete">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@form.IdFicha" class="btn-action" title="Details">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="no-records">Nenhuma ficha encontrada.</p>
+        }
+    </div>
+</div>

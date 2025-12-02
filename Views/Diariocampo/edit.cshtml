@@ -1,0 +1,227 @@
+@model Empodera.Models.DiarioCampo
+
+@{
+    ViewData["Title"] = "Editar Diário de Campo";
+    ViewData["PageCSS"] = "diariocampoform";
+}
+
+<h2 class="page-title">Editar Diário de Campo</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="formulario">
+
+        <!-- Comunidade -->
+        <div class="form-group">
+            <label for="ComunidadeId">Comunidade</label>
+            <div class="select-wrapper">
+                <select id="ComunidadeId" name="ComunidadeId" required>
+                    <option value="">Selecione uma comunidade</option>
+                    <option value="1">Comunidade Exemplo A</option>
+                    <option value="2">Comunidade Exemplo B</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Data -->
+        <div class="form-group">
+            <label for="DataDiario">Data</label>
+            <input type="date" id="DataDiario" name="DataDiario" class="input" required />
+        </div>
+
+        <!-- Eixos múltiplos -->
+        <div class="form-group">
+            <label for="EixosMulti">Selecione múltiplos eixos</label>
+            <select id="EixosMulti" name="EixosSelecionados" multiple class="multi-click-select" size="5">
+                <option value="1">Eixo 1</option>
+                <option value="2">Eixo 2</option>
+                <option value="3">Eixo 3</option>
+                <option value="4">Eixo 4</option>
+                <option value="5">Eixo 5</option>
+                <option value="6">Eixo 6</option>
+                <option value="7">Eixo 7</option>
+                <option value="8">Eixo 8</option>
+            </select>
+        </div>
+
+
+        <!-- =============================== -->
+        <!-- MODAL: ADICIONAR AÇÃO DA EQUIPE -->
+        <!-- =============================== -->
+        <div id="modalAtividade" class="modal hidden">
+            <div class="modal-content">
+                <h3>Adicionar Ação da Equipe</h3>
+
+                <label>Selecione a atividade</label>
+                <select id="atividadeLista" class="input">
+                    <option value="Escuta ativa">Escuta ativa</option>
+                    <option value="Dia das crianças">Dia das crianças</option>
+                    <option value="Acompanhamento do Projeto Semear">Acompanhamento do Projeto Semear</option>
+                </select>
+
+                <label>Atores</label>
+                <select id="modalAtorAtividade" class="input" multiple size="4">
+                    <option value="Educador">Educador</option>
+                    <option value="Coordenador">Coordenador</option>
+                    <option value="Apoio">Apoio</option>
+                </select>
+
+                <label>Quantidade</label>
+                <input type="number" id="modalQtdAtividade" class="input modal-quantidade" min="1" />
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-primary" onclick="confirmarAtividade()">Adicionar</button>
+                    <button type="button" class="btn-secondary" onclick="fecharModal('modalAtividade')">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações da Equipe -->
+        <div class="form-group">
+            <label>Ações da Equipe</label>
+            <div id="atividadesContainer" class="itens-lista"></div>
+
+            <button type="button" class="btn-secondary" onclick="addAtividade()">
+                + Adicionar Ação da Equipe
+            </button>
+        </div>
+
+
+        <!-- =============================== -->
+        <!-- MODAL: AÇÃO INSTITUCIONAL -->
+        <!-- =============================== -->
+        <div id="modalInstitucional" class="modal hidden">
+            <div class="modal-content">
+                <h3>Adicionar Ação Institucional</h3>
+
+                <label>Nome</label>
+                <input type="text" id="instNome" class="input modal-nome"/>
+
+                <label>Eixos</label>
+                <select id="instEixo" class="input" multiple size="4">
+                    <option value="1">Eixo 1</option>
+                    <option value="2">Eixo 2</option>
+                    <option value="3">Eixo 3</option>
+                </select>
+
+                <label>Provedor Externo</label>
+                <input type="text" id="instProvedor" class="input modal-provedor" />
+
+                <label>Atores</label>
+                <select id="instAtores" class="input" multiple size="4">
+                    <option value="Educador">Educador</option>
+                    <option value="Coordenador">Coordenador</option>
+                    <option value="Apoio">Apoio</option>
+                </select>
+
+                <label>Quantidade</label>
+                <input type="number" id="instQtd" class="input modal-quantidade" min="1" />
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-primary" onclick="confirmarInstitucional()">Adicionar</button>
+                    <button type="button" class="btn-secondary" onclick="fecharModal('modalInstitucional')">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista Institucional -->
+        <div class="form-group">
+            <label>Ações Institucionais</label>
+            <div id="acoesInstitucionaisContainer" class="itens-lista"></div>
+
+            <button type="button" class="btn-secondary" onclick="abrirModal('modalInstitucional')">
+                + Adicionar Ação Institucional
+            </button>
+        </div>
+
+
+        <!-- Localização -->
+        <div class="form-group localizacao-wrapper">
+            <label style="font-weight: 600; font-size: 16px;">Localização</label>
+
+            <div class="localizacao-group">
+                <div class="col">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" class="input" onblur="buscarCEP()" maxlength="9" />
+                </div>
+
+                <div class="col">
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" class="input" />
+                </div>
+
+                <div class="col local-rua">
+                    <label for="rua">Rua</label>
+                    <input type="text" id="rua" class="input" readonly />
+                </div>
+
+                <div class="col">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" class="input" readonly />
+                </div>
+
+                <div class="col">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" class="input" readonly />
+                </div>
+
+                <div class="col local-estado">
+                    <label for="estado">Estado</label>
+                    <input type="text" id="estado" class="input" readonly />
+                </div>
+
+                <div class="col local-complemento">
+                    <label for="complemento">Complemento</label>
+                    <input type="text" id="complemento" class="input" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa -->
+        <div class="form-group mapa-wrapper">
+            <div id="mapaContainer">
+                <iframe
+                    id="mapaFrame"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=Brasil&output=embed">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Anexos -->
+        <div class="form-group full-width">
+            <label>Anexos</label>
+            <input type="file" name="Anexos" id="Anexos" class="input" multiple />
+        </div>
+
+        <!-- Descrição -->
+        <div class="form-group full-width">
+            <label for="Descricao">Descrição</label>
+            <textarea id="Descricao" name="Descricao" class="input mention-area" rows="4"
+                placeholder="Digite @@ para mencionar atividade, ator ou comunidade"></textarea>
+            <div id="mentionBox" class="mention-box"></div>
+        </div>
+
+        <!-- Botões -->
+        <div class="buttons">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <a asp-action="Index" class="btn-secondary">Cancelar</a>
+        </div>
+
+    </div>
+</form>
+
+<script>
+    const EIXOS = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Eixos));
+    const ATIVIDADES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Atividades));
+    const ATORES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Atores));
+    const ACOES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Acoes));
+</script>
+
+@section Scripts {
+    <script src="~/js/diariocampo.js"></script>
+}
