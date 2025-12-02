@@ -1,0 +1,151 @@
+@model List<Empodera.Models.DiarioCampo>
+@{
+    ViewData["Title"] = "Diário de Processo Pessoal";
+    Layout = "_Layout";
+    ViewData["DisableMainScroll"] = "true"; // Importante para o layout fixo
+    
+    // Recupera o ID do ator selecionado que veio do Controller
+    int? selectedAtorId = ViewBag.SelectedAtorId;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" />
+    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
+    
+    <style>
+        /* Tags dentro do card */
+        .process-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .tag-pill {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        /* Cores de exemplo (você pode adicionar mais no seu CSS global) */
+        .tag-orange { background-color: #ffedd5; color: #c2410c; }
+        .tag-olive { background-color: #ecfccb; color: #3f6212; }
+        
+        /* Ajuste fino para o título do card */
+        .assessment-card-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: #2b2b2b;
+        }
+    </style>
+}
+
+<div class="assessment-page-container">
+
+    <div class="assessment-header">
+        <div class="assessment-title">
+            <h2>Diário de Processo Pessoal</h2>
+        </div>
+        
+        <form asp-action="Index" method="get" id="atorSelectForm">
+            <div class="form-group">
+                <label for="atorId">Ator</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <select id="atorId" name="atorId" class="form-control" asp-items="ViewBag.AtorList" 
+                            onchange="document.getElementById('atorSelectForm').submit();">
+                        <option value="">Selecione um Ator</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+        </form>
+
+        @if (selectedAtorId.HasValue)
+        {
+            <div class="assessment-controls">
+                
+                <form class="search-bar" asp-action="Index" method="get">
+                    <input type="hidden" name="atorId" value="@selectedAtorId" />
+                    
+                    <input type="search" class="search-input" name="searchQuery" 
+                           placeholder="Buscar por data ou descrição..." 
+                           value="@ViewBag.SearchQuery" />
+                    
+                    <button type="submit" class="search-icon-button">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </button>
+                </form>
+                
+                <a asp-action="Create" asp-route-atorId="@selectedAtorId" class="btn-add-assessment">
+                    <i class="fa-solid fa-plus"></i> ADICIONAR
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="assessment-content-area">
+        
+        @if (!selectedAtorId.HasValue)
+        {
+            <div class="empty-state-container">
+                <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Selecione+um+Ator" alt="Selecione um ator" style="max-width: 250px; margin-bottom: 20px;" />
+                <p>Primeiro Selecione o Ator</p>
+            </div>
+        }
+        
+        else if (Model == null || Model.Count == 0)
+        {
+            <div class="no-items-found">
+                Nenhum item encontrado para este ator.
+            </div>
+        }
+        
+        else
+        {
+            <div class="assessment-list-container">
+                @foreach (var item in Model)
+                {
+                    <div class="assessment-card">
+                        <div class="assessment-card-info">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #2b2b2b;">
+                                    @item.Data.ToString("dd/MM/yyyy")
+                                </h3>
+                                <span style="font-size: 0.8rem; color: #888; background: #f3f4f6; padding: 2px 8px; border-radius: 4px;">
+                                    Criado em @item.DtCriacao.ToString("HH:mm")
+                                </span>
+                            </div>
+
+                            <p style="margin: 0; color: #666; font-size: 0.95rem; line-height: 1.4; max-width: 600px; 
+                                      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                @(string.IsNullOrEmpty(item.Descricao) ? "Sem descrição informada." : item.Descricao)
+                            </p>
+
+                            <div class="process-tags" style="margin-top: 12px; display: flex; gap: 8px;">
+                                @if (item.IdDCampo % 2 == 0) 
+                                {
+                                    <span class="tag-pill tag-purple" style="background:#EBEBFF; color:#5B21B6; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Rede Primária</span>
+                                    <span class="tag-pill tag-orange" style="background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Moradia</span>
+                                }
+                                else
+                                {
+                                    <span class="tag-pill tag-green" style="background:#D1FAE5; color:#065F46; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Saúde</span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <a asp-action="Edit" asp-route-id="@item.IdDCampo" class="details-icon" title="Ver detalhes">
+                            <div style="background: #f9fafb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s;" 
+                                 onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f9fafb'">
+                                <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px; color: #6a0dad;">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                                </svg>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,123 @@
+.input-wrapper, .select-wrapper {
+    position: relative;
+    width: 100%;
+    display: block; /* Garante que o wrapper ocupe a linha */
+}
+
+/* CORREÇÃO AQUI: Adicionado box-sizing para a data não vazar */
+.form-control, 
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px 12px 45px !important; /* 45px à esquerda para o ícone */
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 0.95rem;
+    color: #333;
+    outline: none;
+    appearance: none; 
+    -webkit-appearance: none;
+    
+    /* A MAGIA ACONTECE AQUI: */
+    box-sizing: border-box; /* Impede que o padding aumente a largura total */
+    max-width: 100%; /* Garante que nunca passe do pai */
+}
+
+/* O restante do arquivo continua igual... */
+.input-wrapper > i, 
+.select-wrapper > i.fa-user,
+.select-wrapper > i.fa-tags {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6a0dad; 
+    font-size: 1.1rem;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+}
+
+/* --- Área de Tags (Igual Atividades) --- */
+.eixos-tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    min-height: 48px;
+    margin-bottom: 8px;
+}
+
+.tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Ícone de fechar a tag */
+.tag-remove-btn {
+    cursor: pointer;
+    font-size: 0.9em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.tag-remove-btn:hover {
+    opacity: 1;
+}
+
+/* Cores das Tags (baseado no activity-index.css) */
+.tag-purple { background-color: #EBEBFF; color: #5B21B6; }
+
+/* Esconde item selecionado da lista dropdown */
+.is-selected {
+    display: none !important;
+}
+
+/* --- Acordeão e Anexos --- */
+.accordion-wrapper {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.accordion-wrapper summary {
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    list-style: none;
+}
+.anexos-area {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #64748b;
+}

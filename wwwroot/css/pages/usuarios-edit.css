@@ -1,0 +1,144 @@
+/* Container que cobre a tela toda */
+body {
+    background-color: #f7f7f7; /* Cor de fundo da sua tela principal */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* O "Modal" em si */
+.modal-dialog-content {
+    position: fixed; /* Fixa o modal */
+    top: 0;
+    left: 0;         /* <-- MUDAR: Garante que comece do canto superior esquerdo */
+    right: 0;        /* <-- MUDAR: Estica a largura total (ou use width: 100%) */
+    width: 100%;     /* <-- MUDAR: Garante a largura total */
+    height: 100vh;   /* Altura total da tela */
+    background-color: white; /* Cor de fundo */
+    box-shadow: none; /* <-- Opcional: Remova a sombra de painel lateral */
+    overflow-y: auto; /* Adiciona scroll se o conteúdo for grande */
+    z-index: 1050;
+}
+
+/* Cabeçalho do Modal */
+.modal-header {
+    background-color: #343a40; /* Cor escura do cabeçalho */
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #7A3288;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Corpo do Modal */
+.modal-body {
+    padding: 30px 20px;
+    justify-self: center;
+    width: 80%;
+}
+
+/* Estilo para a foto de perfil circular */
+.profile-photo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Torna a imagem circular */
+    object-fit: cover;
+    background-color: #e0e0e0; /* Placeholder cinza */
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+/* Estilo dos campos de formulário */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.control-label {
+    display: block;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc; /* Linha inferior como na imagem */
+    font-size: 16px;
+    outline: none;
+
+    /* === PROPRIEDADES CHAVE PARA O RISCO AO REDOR === */
+    border: 1px solid #ccc; /* Borda cinza clara de 1px em todos os 4 lados */
+    border-radius: 4px; /* Opcional: Adiciona cantos levemente arredondados */
+    background-color: white; /* Garante que o fundo seja branco */
+    /* ============================================== */
+
+    transition: border-color 0.3s;
+    background-color: transparent;
+}
+
+/* Estilo para campos somente leitura (readonly) */
+.form-control[readonly] {
+    background-color: #f9f9f9; 
+    cursor: default;
+}
+
+/* Estilo para o Select (Perfil de acesso) */
+.form-control:not([readonly]) {
+    cursor: pointer;
+}
+
+/* BOTÔES */
+
+.btn-save {
+    background-color: #7A3288;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-save:hover {
+    background-color: #5a2460;
+}
+
+.btn-cancel {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: rgb(148, 3, 3);
+}
+
