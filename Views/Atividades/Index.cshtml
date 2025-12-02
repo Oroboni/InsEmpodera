@@ -8,6 +8,8 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
 }
 
 <div class="atores-content-area">
@@ -16,13 +18,24 @@
         <h2>Atividades</h2>
     </div>
 
-    <div class="atores-search-container">
-        <form class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        </form>
-
-        <a asp-controller="Atividades" asp-action="Create" class="atores-add-button">+</a>
+    
+   <div class="bottom-filters">
+            <div class="search-container">
+                <div class="search-input-group">
+                    <div class="search-wrapper">
+                        <div asp-action="Index" method="get">
+                          
+                            <input type="search" class="search-input" name="search" value="@(ViewData["CurrentFilter"])" placeholder="Procure por atividades" />
+                        <button type="submit" class="btn-search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn-add" asp-controller="Atividades" asp-action="Create" title="Adicionar Nova Ficha">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
     </div>
 
     <div class="atores-list-container">

@@ -286,5 +286,35 @@
 
 /* === UTILITÁRIOS === */
 body.sidebar-open {
-    overflow: hidden;
+overflow: hidden;
+}
+.default-map-container {
+    height: 400px;
+    width: 100%;
+    border-radius: 12px;
+    border: 2px solid #eee;
+    z-index: 1;
+}
+
+.mobile-header {
+    display: none; /* Desktop default */
+}
+
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .btn-toggle {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--color-primary-600, #4a148c);
+        cursor: pointer;
+    }
 }

@@ -1,0 +1,45 @@
+@model IEnumerable<Empodera.Models.DiarioCampo>
+
+@{
+    ViewData["Title"] = "Diários de Campo";
+}
+
+<h1>Diários de Campo</h1>
+
+<form method="get" asp-action="Index">
+    <input type="text" name="search" placeholder="Buscar por comunidade, descrição ou local" />
+    <button type="submit">Buscar</button>
+</form>
+
+<p>
+    <a asp-action="Create">Novo Diário</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Comunidade</th>
+            <th>Descrição</th>
+            <th>Localização</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Data</td>
+        <td>@item.Comunidade?.Nome</td>
+        <td>@item.Descricao</td>
+        <td>@item.Localizacao</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.IdDCampo">Editar</a> |
+            <a asp-action="Details" asp-route-id="@item.IdDCampo">Detalhes</a> |
+            <a asp-action="Delete" asp-route-id="@item.IdDCampo">Excluir</a>
+
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

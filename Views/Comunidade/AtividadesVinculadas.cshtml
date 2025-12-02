@@ -23,10 +23,10 @@
     </div>
 
     <div class="atores-search-container">
-        <form class="atores-search-bar" method="get">
+        <div class="atores-search-bar" method="get">
             <input type="search" class="search-input" placeholder="Buscar..." name="q" />
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        </form>
+        </div>
 
         <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
     </div>

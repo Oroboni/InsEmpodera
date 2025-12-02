@@ -8,6 +8,8 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/atores.css" /> 
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+    <link rel="stylesheet" href="~/css/pages/create-form.css" />
     <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
 }
 
@@ -37,7 +39,6 @@
                 <form class="search-bar" asp-action="Index" method="get">
                     <input type="hidden" name="atorId" value="@selectedAtorId" />
                     
-                    <input type="search" class="search-input" name="searchQuery" placeholder="Buscar por data ou avaliador..." />
                     
                     <button type="submit" class="search-icon-button">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -46,6 +47,27 @@
                     <i class="fa-solid fa-plus"></i> ADICIONAR
                 </a>
             </div>
+
+            <div class="bottom-filters">
+            <div class="search-container">
+                <div class="search-input-group">
+                    <div class="search-wrapper">
+                        <div asp-action="Index" method="get">
+                          
+                            
+                    <input type="search" class="search-input" name="searchQuery" placeholder="Buscar por data ou avaliador..." />
+                     <button type="submit" class="btn-search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                            
+                        </div>
+                    </div>
+                </div>
+                <a class="btn-add" asp-controller="Atividades" asp-action="Create" title="Adicionar Nova Ficha">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+    </div>
         }
     </div> <div class="assessment-content-area">
         @if (!selectedAtorId.HasValue)

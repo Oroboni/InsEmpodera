@@ -1,0 +1,143 @@
+@model Empodera.Models.RedeRecursos
+@{
+    ViewData["Title"] = "Novo Recurso";
+    Layout = "_Layout";
+    var eixos = ViewBag.EixosList as List<Empodera.Models.Eixo>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>
+            <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@ViewBag.ComunidadeId">Recursos</a>
+            <strong>Adicionar Recurso</strong>
+        </h1>
+    </div>
+
+    <form method="post" asp-action="Create_Recursos">
+        @Html.AntiForgeryToken()
+        
+        <input type="hidden" name="comunidadeId" value="@ViewBag.ComunidadeId" />
+
+        <div class="form-group">
+            <label>Comunidade</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-city"></i>
+                <input type="text" value="@ViewBag.NomeComunidade" readonly style="background-color: #f0f0f0;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Tipo">Tipo de Recurso</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-pencil"></i>
+                <input asp-for="Tipo" type="text" required placeholder="Ex: Internet, Espaço Físico, Equipamento...">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Dispositivo">Dispositivo / Detalhe</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-laptop"></i>
+                <input asp-for="Dispositivo" type="text" placeholder="Ex: Roteador TP-Link, Sala 02...">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ator Responsável</label>
+            <div class="select-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <select asp-for="FKidAtores" asp-items="ViewBag.Atores" required>
+                    <option value="">Selecione quem gerencia este recurso...</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Eixos Relacionados</label>
+            <div class="eixos-tag-container" id="tag-container"></div>
+            
+            <details class="multiselect-wrapper">
+                <summary>
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-tags"></i>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div>
+                </summary>
+                <div class="multiselect-panel" id="multiselect-panel">
+                    <ul>
+                        @if (eixos != null)
+                        {
+                            foreach (var eixo in eixos)
+                            {
+                                <li>
+                                    <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                                        data-tag-class="tag-pink" data-tag-name="@eixo.Nome">
+                                    <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="form-group">
+            <label for="Servicos">Serviços Oferecidos</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-align-left"></i>
+                <textarea asp-for="Servicos" rows="3" placeholder="Descreva os serviços ou a utilidade deste recurso..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-buttons" style="margin-top: 40px;">
+            <button type="submit" class="btn-full-width">CRIAR RECURSO</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Script simples para gerenciar as tags visuais dos eixos
+        document.addEventListener('DOMContentLoaded', function () {
+            const tagContainer = document.getElementById('tag-container');
+            const multiselectPanel = document.getElementById('multiselect-panel');
+
+            function updateTagView() {
+                tagContainer.innerHTML = '';
+                const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+                
+                checkboxes.forEach(cb => {
+                    const listItem = cb.closest('li');
+                    if (cb.checked) {
+                        const tag = document.createElement('span');
+                        tag.className = `tag-item ${cb.dataset.tagClass || 'tag-default'}`;
+                        tag.innerHTML = `${cb.dataset.tagName} <i class="fa-solid fa-xmark tag-remove-btn" data-id="${cb.id}"></i>`;
+                        tagContainer.appendChild(tag);
+                        listItem.classList.add('is-selected');
+                    } else {
+                        listItem.classList.remove('is-selected');
+                    }
+                });
+            }
+
+            multiselectPanel.addEventListener('change', updateTagView);
+
+            tagContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tag-remove-btn')) {
+                    const id = e.target.dataset.id;
+                    const cb = document.getElementById(id);
+                    if (cb) {
+                        cb.checked = false;
+                        updateTagView();
+                    }
+                }
+            });
+        });
+    </script>
+}

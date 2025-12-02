@@ -5,7 +5,9 @@ body {
     background-color: #eee;
     color:var(--color-primary);
 }
-
+a{
+    text-decoration: none !important;
+}
 /* Adicione este código ao final do seu site.css */
 
 /* Por padrão, section-2 tem scroll e ocupa 100% da altura */

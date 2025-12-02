@@ -4,6 +4,11 @@
     ViewData["PageCSS"] = "create-form";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+}
+
 <div class="container">
     <div class="container">
         <div class="breadcrumb">
@@ -98,7 +103,8 @@
             <label for="telefone">Telefone</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-phone"></i>
-                <input asp-for="Telefone" type="tel" value="@Model.Telefone" />
+                <input id="inputTelefone" asp-for="Telefone" name="Telefone" type="tel" maxlength="15"
+                        placeholder="(DDD) 99999-9999" />
             </div>
         </div>
 
@@ -151,3 +157,5 @@
         <button type="submit" class="btn btn-delete">DELETAR</button>
     </form>
 </div>
+
+<script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>s

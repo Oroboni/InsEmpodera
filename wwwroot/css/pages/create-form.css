@@ -180,16 +180,6 @@ select {
     /* ... etc ... */
 }
 
-/* Rodapé */
-.form-footer {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    background-color: var(--color-bg-secondary);
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-8);
-}
 
 /* ... (Estilos do form-footer, pulados, mantenha os seus) ... */
 /* Botões de Ação Final */

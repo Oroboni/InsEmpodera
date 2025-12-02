@@ -280,7 +280,7 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
   padding: var(--space-3) var(--space-6);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   transition: var(--transition-base);
   border: none;
   cursor: pointer;

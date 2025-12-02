@@ -16,16 +16,7 @@
     <!-- CSS do global do Mapa (LEAFLET) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <style>
-        .default-map-container {
-            height: 400px;
-            width: 100%;
-            border-radius: 12px;
-            border: 2px solid #eee;
-            z-index: 1;
-        }
-    </style>
-
+    
     @{
         var cssName = ViewData["PageCSS"] as string;
         if (string.IsNullOrEmpty(cssName))
@@ -44,12 +35,17 @@
 
 <body>
     <div class="body-page">
+        
+        <!-- 1. BACKDROP (Fundo escuro para mobile) -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <div class="main-content-wrapper">
-            <div class="section-1">
+            
+            <!-- 2. SIDEBAR (Adicionado ID sidebar) -->
+            <div class="section-1" id="sidebar">
                 <h2>Olá @(ViewContext.HttpContext?.Session?.GetString("Nome"))</h2>
                 <ul>
                     <p>Principais</p>
-                    <!-- Seu menu continua igual... -->
                     <li data-page="home" class="@IsActive("Home")">
                         <a asp-controller="Home" asp-action="Index">
                             <p><i class="fas fa-home"></i> Home</p>
@@ -70,8 +66,8 @@
                             <p><i class="fas fa-clipboard-list"></i> Ficha 1º Contato</p>
                         </a>
                     </li>
-                    <li data-page="diariosdecampo" class="@IsActive("DiariosDeCampo")">
-                        <a asp-controller="DiariosDeCampo" asp-action="Index">
+                    <li data-page="Diariocampo" class="@IsActive("Diariocampo")">
+                        <a asp-controller="Diariocampo" asp-action="Index">
                             <p><i class="fas fa-book"></i> Diários de Campo</p>
                         </a>
                     </li>
@@ -83,11 +79,6 @@
                     <li data-page="Report" class="@IsActive("Report")">
                         <a asp-controller="Report" asp-action="Index">
                             <p><i class="fas fa-chart-bar"></i> Relatórios</p>
-                        </a>
-                    </li>
-                    <li data-page="dashboard" class="@IsActive("Dashboard")">
-                        <a asp-controller="Dashboard" asp-action="Index">
-                            <p><i class="fas fa-chart-line"></i> Dashboard</p>
                         </a>
                     </li>
                     <li data-page="atividades" class="@IsActive("Atividades")">
@@ -128,24 +119,65 @@
             </div>
 
             <div class="section-2" id="content">
+                
+                <!-- 3. HEADER MOBILE (Botão Hamburguer) -->
+                <!-- Este bloco só aparece em telas < 768px via CSS -->
+                <div class="mobile-header">
+                    <button id="sidebarToggle" class="btn-toggle" type="button" aria-label="Abrir Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <span style="font-weight: bold; font-size: 1.2rem; color: var(--color-primary-600);">Menu</span>
+                </div>
+
                 @RenderBody()
             </div>
         </div>
     </div>
 
-    <script src="~/js/sidebar.js"></script>
-
-    <!-- Scripts do mapa. devem vir antes da chamada do app-maps.js -->
+    <!-- Scripts do mapa -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-    <!-- Agora sim carregamos o seu script customizado -->
     <script src="~/js/app-maps.js"></script>
+
+
+    <!-- 4. LÓGICA DO MENU MOBILE -->
+    <!-- Colocamos aqui para garantir que carregue em todas as páginas -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Seletores atualizados para usar IDs quando possível
+            const sidebar = document.getElementById("sidebar") || document.querySelector(".section-1");
+            const backdrop = document.getElementById("sidebarBackdrop");
+            const toggleBtn = document.getElementById("sidebarToggle");
+
+            // Função para abrir/fechar
+            function toggleSidebar() {
+                if(sidebar) sidebar.classList.toggle("open");
+                if(backdrop) backdrop.classList.toggle("show");
+                document.body.classList.toggle("sidebar-open");
+            }
+
+            // Evento no botão de hambúrguer
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+            }
+
+            // Fechar ao clicar no fundo escuro (Backdrop)
+            if (backdrop) {
+                backdrop.addEventListener("click", function() {
+                    if(sidebar) sidebar.classList.remove("open");
+                    backdrop.classList.remove("show");
+                    document.body.classList.remove("sidebar-open");
+                });
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
-
 </html>
 
 @functions {

@@ -9,7 +9,7 @@
     <div class="container">
         <div class="breadcrumb">
             <h1>
-                <a asp-controller="Comunidade" asp-action="Index">Atores</a>
+                <a asp-controller="Atores" asp-action="Index">Atores</a>
                 >
                 <strong>Adicionar novo Ator</strong>
             </h1>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group create-field">
-            <label for="nome">Nome</label>
+            <label for="nome">Nome*</label>
             <div class="input-with-buttons">
                 <div class="input-wrapper">
                     <i class="fa-solid fa-user"></i>
@@ -110,8 +110,10 @@
             <label for="telefone">Telefone</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-phone"></i>
-                <input id="Telefone" asp-for="Telefone" name="Telefone" type="tel" />
+                <input id="inputTelefone" asp-for="Telefone" name="Telefone" type="tel" maxlength="15"
+                        placeholder="(DDD) 99999-9999" />
             </div>
+            
         </div>
 
         <div class="form-buttons">
@@ -120,3 +122,5 @@
         </div>
     </form>
 </div>
+
+<script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>

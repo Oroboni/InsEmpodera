@@ -26,10 +26,10 @@
     </div>
 
     <div class="atores-search-container">
-        <form class="atores-search-bar" method="get">
+        <div class="atores-search-bar" method="get">
             <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        </form>
+        </div>
 
         <a asp-controller="Comunidade" asp-action="Create_Atores" asp-route-id="@ViewData["id"]" class="atores-add-button">+</a>
     </div>

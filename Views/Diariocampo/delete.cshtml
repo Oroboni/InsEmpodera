@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Excluir Diário de Campo";
+
+    // ===== DADOS FAKE PARA ENQUANTO NÃO TEM BANCO =====
+    var diario = new {
+        Id = Model, // O ID vem pela rota
+        Comunidade = "Comunidade Exemplo",
+        Eixos = new List<string> { "Cidadania", "Educação" },
+        AcoesInstitucionais = 2,
+        AcoesEquipe = 4,
+        Localizacao = "Rua Exemplo, 123 — São Paulo/SP",
+        Anexos = 3
+    };
+}
+
+<h2 class="page-title">Excluir Diário de Campo</h2>
+
+<div class="delete-container">
+    <p>Confirme a exclusão do diário abaixo:</p>
+
+    <div class="delete-info">
+        <p><strong>Comunidade:</strong> @diario.Comunidade</p>
+        <p><strong>Eixos:</strong> @string.Join(", ", diario.Eixos)</p>
+        <p><strong>Ações Institucionais:</strong> @diario.AcoesInstitucionais</p>
+        <p><strong>Ações da Equipe:</strong> @diario.AcoesEquipe</p>
+        <p><strong>Localização:</strong> @diario.Localizacao</p>
+        <p><strong>Anexos:</strong> @diario.Anexos</p>
+    </div>
+
+    <div class="delete-buttons">
+        <a asp-action="Index" class="btn-cancelar">Cancelar</a>
+        <button id="btnConfirmarExcluir" class="btn-excluir">Excluir</button>
+    </div>
+</div>
+
+<!-- POPUP -->
+<div id="popupExcluir" class="popup-overlay" style="display:none;">
+    <div class="popup-content">
+        <h3>Tem certeza que deseja excluir?</h3>
+
+        <p><strong>Comunidade:</strong> <span id="pComunidade"></span></p>
+        <p><strong>Eixos:</strong> <span id="pEixos"></span></p>
+        <p><strong>Ações Institucionais:</strong> <span id="pAcoesInst"></span></p>
+        <p><strong>Ações da Equipe:</strong> <span id="pAcoesEquipe"></span></p>
+        <p><strong>Localização:</strong> <span id="pLocalizacao"></span></p>
+        <p><strong>Anexos:</strong> <span id="pAnexos"></span></p>
+
+        <div class="popup-buttons">
+            <button class="btn-cancelar" onclick="fecharPopup()">Cancelar</button>
+            <button class="btn-excluir" onclick="confirmarExclusao()">Excluir</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/diarioCampo.js"></script>
+    <script>
+        // envia os dados fake para o JS
+        carregarPopup({
+            comunidade: "@diario.Comunidade",
+            eixos: "@string.Join(", ", diario.Eixos)",
+            inst: "@diario.AcoesInstitucionais",
+            equipe: "@diario.AcoesEquipe",
+            local: "@diario.Localizacao",
+            anexos: "@diario.Anexos"
+        });
+    </script>
+}

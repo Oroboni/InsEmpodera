@@ -51,7 +51,7 @@ public class ComunidadeController : Controller
         if (id > 0)
         {
             // Modo Edição: Busca a comunidade existente
-            comunidade = _context.Comunidades.Where(a => a.Ativo == "S").FirstOrDefault(c => c.IdComunidade == id);
+            comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
 
             ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
             ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();
@@ -75,6 +75,9 @@ public class ComunidadeController : Controller
 
         var qAtividades = _context.Atividades.Count(a => a.FkIdComunidade == id);
         ViewBag.qAtividades = qAtividades;
+
+        var qRecursos = _context.RedeRecursos.Count(a => a.FkIdComunidade == id);
+        ViewBag.qRecursos = qRecursos;
 
         return View(comunidade);
     }
@@ -216,6 +219,150 @@ public class ComunidadeController : Controller
         return View(AtorComunidades);
     }
 
+    //Recursos
+    public async Task<IActionResult> ComunidadeRecursos(int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        // CORREÇÃO AQUI: Mudamos de _context.Atividades para _context.RedeRecursos
+        var recursos = await _context.RedeRecursos
+            .Include(r => r.Ator)
+            .Include(r => r.Comunidade)       // Inclui o nome do Ator
+            .Include(r => r.RedeEixos)  // Inclui os eixos
+                .ThenInclude(re => re.Eixo)
+            .Where(r => r.FkIdComunidade == comunidadeId)
+            .ToListAsync();
+
+        ViewBag.ComunidadeId = comunidadeId;
+
+        // Agora enviamos a lista de 'recursos', que é o que a View espera
+        return View(recursos);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ComunidadeDetalhesRecursos(int id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == 0) return NotFound();
+
+        // 1. Busca na tabela RedeRecursos em vez de Atividades
+        var recurso = await _context.RedeRecursos
+            .Include(r => r.RedeEixos).ThenInclude(re => re.Eixo)
+            .Include(r => r.Ator) // Inclui o Ator dono do recurso
+            .FirstOrDefaultAsync(r => r.IdRede == id);
+
+        if (recurso == null) return NotFound();
+
+        // 2. Carrega listas para os Dropdowns (Atores e Comunidades)
+        ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "IdComunidade", "Nome", recurso.FkIdComunidade);
+        
+        // Atores da comunidade para vincular o recurso
+        var atores = await _context.AtorComunidades
+            .Where(ac => ac.FkIdComunidade == recurso.FkIdComunidade)
+            .Select(ac => ac.Ator)
+            .OrderBy(a => a.Nome)
+            .ToListAsync();
+        ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome", recurso.FKidAtores);
+
+        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        
+        // Informações de auditoria
+       ViewBag.UsuarioOriginal = _context.Usuarios.FirstOrDefault(z => z.IdUsuario == recurso.FkIdUsuario);
+        return View(recurso);
+    }
+
+    public async Task<IActionResult> Create_Recursos(int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
+
+        ViewBag.ComunidadeId = comunidadeId;
+        
+        // Busca o nome da comunidade apenas para exibir na tela (opcional, mas bom para UX)
+        var comunidade = await _context.Comunidades.FindAsync(comunidadeId);
+        ViewBag.NomeComunidade = comunidade?.Nome;
+
+        // Carrega Atores daquela comunidade para o Dropdown
+        var atores = await _context.AtorComunidades
+            .Where(ac => ac.FkIdComunidade == comunidadeId && ac.Ator.Ativo == "S")
+            .Select(ac => ac.Ator)
+            .OrderBy(a => a.Nome)
+            .ToListAsync();
+        
+        ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome");
+        
+        // Carrega lista de Eixos
+        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+
+        return View();
+    }
+
+    // POST: Recebe os dados e salva
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create_Recursos(RedeRecursos recurso, List<int> EixosSelecionados, int comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
+
+        // Preenche dados automáticos
+        recurso.FkIdComunidade = comunidadeId;
+        recurso.DtCriacao = DateTime.Now;
+        recurso.DtModificacao = DateTime.Now;
+        recurso.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID")); // Ajuste conforme seu session
+
+        _context.RedeRecursos.Add(recurso);
+        await _context.SaveChangesAsync();
+
+        // Salva os Eixos
+        if (EixosSelecionados != null)
+        {
+            foreach (var eixoId in EixosSelecionados)
+            {
+                _context.RedeEixos.Add(new RedeEixo { FkIdRede = recurso.IdRede, FkIdEixo = eixoId });
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("ComunidadeRecursos", new { comunidadeId });
+    }
+
+    // Adicione também o POST para Salvar as edições dessa tela
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit_Recursos(int id, RedeRecursos recurso, List<int> EixosSelecionados)
+    {
+        if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
+
+        var recursoDb = await _context.RedeRecursos
+            .Include(r => r.RedeEixos)
+            .FirstOrDefaultAsync(r => r.IdRede == id);
+
+        if (recursoDb == null) return NotFound();
+
+        // Atualiza campos
+        recursoDb.Tipo = recurso.Tipo;
+        recursoDb.Dispositivo = recurso.Dispositivo;
+        recursoDb.Servicos = recurso.Servicos;
+        recursoDb.FKidAtores = recurso.FKidAtores;
+        recursoDb.DtModificacao = DateTime.Now;
+        
+        // Atualiza Eixos
+        // (Lógica simplificada: remove todos e adiciona os selecionados)
+        _context.RedeEixos.RemoveRange(recursoDb.RedeEixos);
+        if (EixosSelecionados != null)
+        {
+            foreach (var eixoId in EixosSelecionados)
+            {
+                _context.RedeEixos.Add(new RedeEixo { FkIdRede = id, FkIdEixo = eixoId });
+            }
+        }
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("ComunidadeRecursos", new { comunidadeId = recursoDb.FkIdComunidade });
+    }
+
     // GET: /Actor/Create
     [HttpGet]
     public async Task<IActionResult> Create_Atores(int id)
@@ -298,6 +445,7 @@ public class ComunidadeController : Controller
 
         return View(ator);
     }
+
 
 
     [HttpPost]
