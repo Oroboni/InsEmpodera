@@ -1,3 +1,77 @@
+
+.btn-action.gray {
+    background: var(--color-gray-500) !important;
+    color: var(--color-gray-100) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+/* ===== MODAL STYLES ===== */
+.custom-modal {
+    position: fixed; /* Fixa na tela */
+    z-index: 1000; /* Fica acima de tudo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro transparente */
+    
+    /* Centralizar o conteúdo usando Flexbox */
+    display: none; /* Controlado pelo JS */
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px; /* Largura máxima */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Botões do Modal */
+.modal-content h3 {
+    margin-bottom: 10px;
+    color: var(--color-primary);
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.modal-content .btn-confirm {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.modal-content .btn-cancel {
+    background-color: #ccc;
+    color: #333;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-content .btn-confirm:hover {
+    background-color: var(--color-primary-dark);
+}
+
 /* ===== VARIABLES & RESETS ===== */
 a {
     text-decoration: none;

@@ -1,7 +1,7 @@
 @model Empodera.Models.FichaPrimeiroContato
 
 @{
-    ViewData["Title"] = "Nova Ficha de 1º Contato";
+    ViewData["Title"] = "Editar Ficha de 1º Contato";
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
 }
 
@@ -10,7 +10,7 @@
         <h2>
             <a asp-controller="FichaPrimeiroContato" asp-action="Index" class="text-primary">Ficha Primeiro Contato</a>
             <span class="separator">></span>
-            <strong class="text-muted">Nova Ficha</strong>
+            <strong class="text-muted">Editar Ficha @Model.IdFicha</strong>
         </h2>
     </div>
 
@@ -22,22 +22,25 @@
         <div class="step" id="header-step-3">3</div>
     </div>
 
-    <form asp-action="Create" class="main-form" id="wizardForm">
+    <form asp-action="Edit" class="main-form" id="wizardForm">
+        
+        <input type="hidden" asp-for="IdFicha" />
+
         <div class="step-content active" id="step-1">
 
             <div class="section-label">Parceiro</div>
             <div class="input-card full-width">
                 <div class="icon-box"><i class="fa-solid fa-person"></i></div>
                 <div class="input-content">
-                    <label asp-for="FKidAtores">Ator <span class="text-danger">*</span></label>
+                    <label asp-for="FKidAtores">Ator</label>
                     <select asp-for="FKidAtores" asp-items="ViewBag.Atores" class="clean-input" required>
                         <option value="">Selecione o nome do ator</option>
                     </select>
-                    <span asp-validation-for="FKidAtores" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="section-label">Localização</div>
+            <!-- Nota: O JS precisará carregar o ponto no mapa baseado no endereço salvo, se aplicável -->
             <div id="mapa-principal" class="default-map-container"></div>
 
             <div class="input-card full-width">
@@ -77,6 +80,7 @@
                             <option value="TrabalhoInformal">Trabalho Informal</option>
                         </select>
                     </div>
+                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
                 </div>
             </div>
 
@@ -93,7 +97,8 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label>Hora do 1º Contato</label>
-                        <input type="time" class="clean-input" name="HoraContato" />
+                        <!-- Se a hora for salva separada ou extraída da data, ajuste o value aqui -->
+                        <input type="time" class="clean-input" name="HoraContato" value="@Model.DtContato.ToString("HH:mm")" />
                     </div>
                 </div>
 
@@ -109,7 +114,7 @@
                             <option value="PorTelefone">Por telefone</option>
                         </select>
                     </div>
-                    
+                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
                 </div>
             </div>
 
@@ -265,13 +270,14 @@
                 </div>
             </div>
         </div>
+
         <!-- ================================================= -->
         <!-- PASSO 3: Condições, Petições, Respostas e Resultados -->
         <!-- ================================================= -->
         <div class="step-content" id="step-3">
 
             @{
-                // LISTAS DE DADOS (Poderiam vir do Banco de Dados/ViewBag futuramente)
+                // Define as listas de opções
                 var listaCondicoes = new List<string> {
                         "Substâncias/álcool", "Condutas antissociais", "Psiquiátricas", "Comportamental", "Relacionais",
                         "Violência intrafamiliar", "Violação de adulto", "Trabalho sexual", "Legal", "Gravidez/parto",
@@ -282,7 +288,7 @@
                         "Analfabetismo", "Problemas sexuais", "Violação de crianças", "Outras dependências",
                         "Drogas intravenosas", "Hepatite", "Deslocamento", "Migração/Imigração",
                         "Estigma por identidade sexual", "Incapacidade"
-                        };
+                };
 
                 var listaPeticoes = new List<string> {
                         "Apoio econômico", "Atenção ao parto", "Encaminhamento", "Encontro/Conversa", "Conselho/Orientação",
@@ -290,18 +296,24 @@
                         "Informação", "Integração comunitária", "Organização e planejamento", "Internação forçada",
                         "Recuperação escolar", "Serviço social", "Terapia", "Visita familiar", "Exames/Cuidados médicos",
                         "Alimentação", "Serviços de higiene/Roupa limpa", "Ocupação/trabalho", "Medicamentos", "Burocrático"
-                        };
+                };
 
                 var listaRespostas = new List<string> {
                         "Marca-se um encontro", "Dá-se uma informação", "Conselho/Orientação", "Encaminhamento",
                         "Escuta imediata/manejo de crise", "Indicações, sugestões", "Acompanhamento",
                         "Cuidados médicos", "Higiene/Roupa limpa", "Acolhida (dia ou noite)"
-                        };
+                };
 
                 var listaResultados = new List<string> {
                         "Veio ao encontro", "Seguiu contato", "Interrompeu contato",
                         "Inicia um programa", "Inclusão em atividades"
-                        };
+                };
+
+                // RECUPERA O QUE JÁ ESTAVA SALVO (vindo do Controller)
+                var savedCondicoes = ViewBag.SelectedCondicoes as List<string> ?? new List<string>();
+                var savedPeticoes = ViewBag.SelectedPeticoes as List<string> ?? new List<string>();
+                var savedRespostas = ViewBag.SelectedRespostas as List<string> ?? new List<string>();
+                var savedResultados = ViewBag.SelectedResultados as List<string> ?? new List<string>();
             }
 
             <!-- 1. CONDIÇÕES -->
@@ -312,9 +324,10 @@
                     <div class="checkbox-group dense-grid">
                         @foreach (var item in listaCondicoes)
                         {
+                            <!-- MUDANÇA 3: Verifica se está na lista salva -->
+                            var isChecked = savedCondicoes.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <!-- 'name' deve ser um array para o Controller receber List<string> -->
-                                <input type="checkbox" name="SelectedCondicoes" value="@item" />
+                                <input type="checkbox" name="SelectedCondicoes" value="@item" checked="@isChecked" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -330,8 +343,9 @@
                     <div class="checkbox-group dense-grid">
                         @foreach (var item in listaPeticoes)
                         {
+                            var isChecked = savedPeticoes.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedPeticoes" value="@item" />
+                                <input type="checkbox" name="SelectedPeticoes" value="@item" checked="@isChecked" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -347,8 +361,9 @@
                     <div class="checkbox-group dense-grid">
                         @foreach (var item in listaRespostas)
                         {
+                            var isChecked = savedRespostas.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedRespostas" value="@item" />
+                                <input type="checkbox" name="SelectedRespostas" value="@item" checked="@isChecked" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -364,8 +379,9 @@
                     <div class="checkbox-group dense-grid">
                         @foreach (var item in listaResultados)
                         {
+                            var isChecked = savedResultados.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedResultados" value="@item" />
+                                <input type="checkbox" name="SelectedResultados" value="@item" checked="@isChecked" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -383,33 +399,31 @@
                 </div>
             </div>
         </div>
+
         <!-- ================================================= -->
         <!-- BOTÕES DE NAVEGAÇÃO -->
         <!-- ================================================= -->
         <div class="buttons-container">
-            <!-- Botão Voltar (Cinza) -->
-            <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)"
-                style="display: none;">
+            <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)" style="display: none;">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </button>
 
-            <!-- Botão Próximo (Roxo - Primary) -->
             <button type="button" id="btn-next" class="wizard-btn btn-next" onclick="changeStep(1)">
                 Próximo <i class="fa-solid fa-arrow-right"></i>
             </button>
 
-            <!-- Botão Salvar (Verde - Success) -->
             <button type="submit" id="btn-save" class="wizard-btn btn-save-final" style="display: none;">
-                <i class="fa-solid fa-check"></i> Salvar Ficha
+                <i class="fa-solid fa-check"></i> Atualizar Ficha
             </button>
         </div>
 
     </form>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
+    
     <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
 }

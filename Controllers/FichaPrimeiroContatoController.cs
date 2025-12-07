@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Empodera.Data;
 using Empodera.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 namespace Empodera.Controllers
 {
@@ -19,19 +16,36 @@ namespace Empodera.Controllers
         }
 
         // GET: FichaPrimeiroContato
-        public async Task<IActionResult> Index(string searchTerm)
+        // No método Index do Controller
+        public async Task<IActionResult> Index(string search, string status)
         {
             var fichas = _context.FichasPrimeiroContato
                 .Include(f => f.Ator)
                 .AsQueryable();
 
+            // Filtro por status
+            if (!string.IsNullOrEmpty(status))
+            {
+                var statusEnum = Enum.Parse<StatusFicha>(status);
+                fichas = fichas.Where(f => f.Status == statusEnum);
+            }
+
+            // Filtro por busca
+            if (!string.IsNullOrEmpty(search))
+            {
+                fichas = fichas.Where(f => f.Ator.Nome.Contains(search) ||
+                                           f.Endereco.Contains(search));
+            }
+
             var lista = await fichas.ToListAsync();
 
             ViewBag.Comunidades = new SelectList(
-                await _context.Comunidades.Where(a => a.Ativo == "S").OrderBy(c => c.Nome).ToListAsync(), 
-                "IdComunidade", 
+                await _context.Comunidades.Where(a => a.Ativo == "S").OrderBy(c => c.Nome).ToListAsync(),
+                "IdComunidade",
                 "Nome"
             );
+
+            ViewData["CurrentFilter"] = search;
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 return PartialView(lista);
@@ -44,6 +58,41 @@ namespace Empodera.Controllers
         {
             ViewBag.Atores = new SelectList(_context.Atores, "IdAtores", "Nome");
             return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Concluir(int id)
+        {
+            var ficha = await _context.FichasPrimeiroContato.FindAsync(id);
+            if (ficha == null)
+            {
+                return NotFound();
+            }
+
+            ficha.Status = StatusFicha.Concluida;
+            ficha.DtModificacao = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Abandonar(int id)
+        {
+            var ficha = await _context.FichasPrimeiroContato.FindAsync(id);
+            if (ficha == null)
+            {
+                return NotFound();
+            }
+
+            ficha.Status = StatusFicha.Abandonada;
+            ficha.DtModificacao = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: FichaPrimeiroContato/Create

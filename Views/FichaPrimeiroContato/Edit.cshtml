@@ -1,8 +1,22 @@
 @model Empodera.Models.FichaPrimeiroContato
+@using Empodera.Models
 
 @{
     ViewData["Title"] = "Editar Ficha de 1º Contato";
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
+}
+
+@if (Model.Status != StatusFicha.EmProgresso)
+{
+    <div class="alert alert-warning">
+        Esta ficha está @Model.Status e não pode mais ser editada.
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("input, select, textarea").forEach(el => el.disabled = true);
+        });
+    </script>
 }
 
 <div class="modern-container">
@@ -23,7 +37,7 @@
     </div>
 
     <form asp-action="Edit" class="main-form" id="wizardForm">
-        
+
         <input type="hidden" asp-for="IdFicha" />
 
         <div class="step-content active" id="step-1">
@@ -98,7 +112,8 @@
                     <div class="input-content no-icon">
                         <label>Hora do 1º Contato</label>
                         <!-- Se a hora for salva separada ou extraída da data, ajuste o value aqui -->
-                        <input type="time" class="clean-input" name="HoraContato" value="@Model.DtContato.ToString("HH:mm")" />
+                        <input type="time" class="clean-input" name="HoraContato"
+                            value="@Model.DtContato.ToString("HH:mm")" />
                     </div>
                 </div>
 
@@ -288,7 +303,7 @@
                         "Analfabetismo", "Problemas sexuais", "Violação de crianças", "Outras dependências",
                         "Drogas intravenosas", "Hepatite", "Deslocamento", "Migração/Imigração",
                         "Estigma por identidade sexual", "Incapacidade"
-                };
+                        };
 
                 var listaPeticoes = new List<string> {
                         "Apoio econômico", "Atenção ao parto", "Encaminhamento", "Encontro/Conversa", "Conselho/Orientação",
@@ -296,18 +311,18 @@
                         "Informação", "Integração comunitária", "Organização e planejamento", "Internação forçada",
                         "Recuperação escolar", "Serviço social", "Terapia", "Visita familiar", "Exames/Cuidados médicos",
                         "Alimentação", "Serviços de higiene/Roupa limpa", "Ocupação/trabalho", "Medicamentos", "Burocrático"
-                };
+                        };
 
                 var listaRespostas = new List<string> {
                         "Marca-se um encontro", "Dá-se uma informação", "Conselho/Orientação", "Encaminhamento",
                         "Escuta imediata/manejo de crise", "Indicações, sugestões", "Acompanhamento",
                         "Cuidados médicos", "Higiene/Roupa limpa", "Acolhida (dia ou noite)"
-                };
+                        };
 
                 var listaResultados = new List<string> {
                         "Veio ao encontro", "Seguiu contato", "Interrompeu contato",
                         "Inicia um programa", "Inclusão em atividades"
-                };
+                        };
 
                 // RECUPERA O QUE JÁ ESTAVA SALVO (vindo do Controller)
                 var savedCondicoes = ViewBag.SelectedCondicoes as List<string> ?? new List<string>();
@@ -404,7 +419,8 @@
         <!-- BOTÕES DE NAVEGAÇÃO -->
         <!-- ================================================= -->
         <div class="buttons-container">
-            <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)" style="display: none;">
+            <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)"
+                style="display: none;">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </button>
 
@@ -424,6 +440,6 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    
+
     <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
 }
