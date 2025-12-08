@@ -7,19 +7,23 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+    <link rel="stylesheet" href="~/css/pages/atores.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
 }
 
 <div class="container">
     <div class="breadcrumb">
         <h1>
-            <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@ViewBag.ComunidadeId">Recursos</a>
+            <a asp-controller="Comunidade" asp-action="ComunidadeRecursos"
+                asp-route-comunidadeId="@ViewBag.ComunidadeId">Recursos</a>
+            <i class="fa fa-chevron-right breadcrumb-separator"></i>
             <strong>Adicionar Recurso</strong>
         </h1>
     </div>
 
     <form method="post" asp-action="Create_Recursos">
         @Html.AntiForgeryToken()
-        
+
         <input type="hidden" name="comunidadeId" value="@ViewBag.ComunidadeId" />
 
         <div class="form-group">
@@ -60,7 +64,7 @@
         <div class="form-group">
             <label>Eixos Relacionados</label>
             <div class="eixos-tag-container" id="tag-container"></div>
-            
+
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
@@ -91,12 +95,13 @@
             <label for="Servicos">Serviços Oferecidos</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Servicos" rows="3" placeholder="Descreva os serviços ou a utilidade deste recurso..."></textarea>
+                <textarea asp-for="Servicos" rows="3"
+                    placeholder="Descreva os serviços ou a utilidade deste recurso..."></textarea>
             </div>
         </div>
 
         <div class="form-buttons" style="margin-top: 40px;">
-            <button type="submit" class="btn-full-width">CRIAR RECURSO</button>
+            <button type="submit" class="btn-full-width">Criar recurso</button>
         </div>
     </form>
 </div>
@@ -111,7 +116,7 @@
             function updateTagView() {
                 tagContainer.innerHTML = '';
                 const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-                
+
                 checkboxes.forEach(cb => {
                     const listItem = cb.closest('li');
                     if (cb.checked) {
@@ -128,7 +133,7 @@
 
             multiselectPanel.addEventListener('change', updateTagView);
 
-            tagContainer.addEventListener('click', function(e) {
+            tagContainer.addEventListener('click', function (e) {
                 if (e.target.classList.contains('tag-remove-btn')) {
                     const id = e.target.dataset.id;
                     const cb = document.getElementById(id);

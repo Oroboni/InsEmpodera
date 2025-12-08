@@ -1,63 +1,67 @@
+@model IEnumerable<Empodera.Models.Atores>
 @{
-    ViewData["Title"] = "Atores";
+    ViewData["Title"] = "Lista de Atores";
     Layout = "_Layout";
-    ViewData["DisableMainScroll"] = "true"; 
 }
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Ator</title>
-    <link rel="stylesheet" href="~/css/pages/indexAtores.css">
-</head>
-<body>
-<div class="atores-content-area">
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
+}
 
-    <div class="atores-header">
-        <h2>Atores</h2>
-    </div>
+<div class="forms-container">
+    
+    <h2 class="page-title">Atores</h2>
 
-    <div class="atores-search-container">
-        <div class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        </div>
+    <div class="filter-bar">
+        <div class="search-container">
+            <div class="search-input-group">
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" placeholder="Buscar por nome do ator...">
+                    <button class="btn-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
 
-        <a asp-controller="Atores" asp-action="Create" class="atores-add-button">+</a>
-    </div>
-
-    <div class="atores-list-container">
-        
-        @foreach (var ator in Model)
-        {
-            <div class="ator-card">
-            <span class="ator-name">@ator.Nome</span>
-            <a class="details-icon" asp-controller="Atores" asp-action="Edit" asp-route-id="@ator.IdAtores">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                </svg>
+            <a asp-controller="Atores" asp-action="Create" class="btn-add" title="Adicionar Novo Ator">
+                <i class="fa-solid fa-plus"></i>
             </a>
         </div>
-        
-        }
+    </div>
 
+    <div class="forms-list">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var ator in Model)
+            {
+                <div class="form-item" data-nome="@ator.Nome?.ToLower()">
+                    <div class="form-info">
+                        <p class="name">@ator.Nome</p>
+                        <div class="form-status">
+                            @if (!string.IsNullOrEmpty(ator.PapelSocial1))
+                            {
+                                <p class="date">Papel: @ator.PapelSocial1</p>
+                            }
+                            @if (!string.IsNullOrEmpty(ator.Genero))
+                            {
+                                <span class="tag-item">@ator.Genero</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <a asp-controller="Atores" asp-action="Edit" asp-route-id="@ator.IdAtores" class="btn-action"
+                            title="Ver detalhes">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-records">
+                Nenhum ator cadastrado ainda.
+            </div>
+        }
     </div>
 </div>
-
-</body>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.querySelector(".search-input");
-        const cards = document.querySelectorAll(".ator-card");
-
-        searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
-            cards.forEach(card => {
-                const name = card.querySelector(".ator-name").textContent.toLowerCase();
-                card.style.display = name.includes(query) ? "flex" : "none";
-            });
-        });
-    });
-</script>

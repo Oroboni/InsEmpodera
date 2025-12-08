@@ -252,7 +252,7 @@
 
 /* === 3. CLASSES UTILITÁRIAS USANDO VARIÁVEIS === */
 /* Cores de texto */
-.text-primary { color: var(--color-primary-500); }
+.text-primary { color: var(--color-primary); }
 .text-secondary { color: var(--color-secondary); }
 .text-success { color: var(--color-success); }
 .text-warning { color: var(--color-warning); }
