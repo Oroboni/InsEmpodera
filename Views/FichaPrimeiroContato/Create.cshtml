@@ -170,7 +170,7 @@
                     <div class="input-content no-icon">
                         <label asp-for="EstaFamiliar">Estado Familiar</label>
                         <select asp-for="EstaFamiliar" class="clean-input">
-                        
+
                             <option value="">Selecione uma opção</option>
                             <option value="Casada">Casado/a</option>
                             <option value="Comcubinato">Comcubinato</option>
@@ -186,7 +186,7 @@
                     <div class="input-content no-icon">
                         <label asp-for="EstruFamiliar">Estrutura Familiar</label>
                         <select asp-for="EstruFamiliar" class="clean-input">
-                        
+
                             <option value="">Selecione uma opção</option>
                             <option value="SemMatrimonio">Companheiro/a sem matrimônio</option>
                             <option value="FamiliaNuclear">Família nuclear</option>
@@ -209,7 +209,7 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="NFilhas">Número de Filhas</label>
-                        <input asp-for="NFilhas" type="number" min="0" class="clean-input" placeholder="Ex: 2"/>
+                        <input asp-for="NFilhas" type="number" min="0" class="clean-input" placeholder="Ex: 2" />
                     </div>
                 </div>
             </div>
@@ -413,22 +413,17 @@
                 </div>
             </div>
         </div>
-        <!-- ================================================= -->
-        <!-- BOTÕES DE NAVEGAÇÃO -->
-        <!-- ================================================= -->
+        
         <div class="buttons-container">
-            <!-- Botão Voltar (Cinza) -->
             <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)"
                 style="display: none;">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </button>
 
-            <!-- Botão Próximo (Roxo - Primary) -->
             <button type="button" id="btn-next" class="wizard-btn btn-next" onclick="changeStep(1)">
                 Próximo <i class="fa-solid fa-arrow-right"></i>
             </button>
 
-            <!-- Botão Salvar (Verde - Success) -->
             <button type="submit" id="btn-save" class="wizard-btn btn-save-final" style="display: none;">
                 <i class="fa-solid fa-check"></i> Salvar Ficha
             </button>

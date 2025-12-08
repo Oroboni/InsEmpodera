@@ -1,161 +1,258 @@
 @model Empodera.Models.Atores
 @{
-    ViewData["Title"] = "Editar Ator";
-    ViewData["PageCSS"] = "create-form";
+    ViewData["Title"] = "Detalhes do Ator";
+    Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/create-form.css" />
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
 }
 
-<div class="container">
-    <div class="container">
-        <div class="breadcrumb">
-            <h1>
-                <a asp-controller="Atores" asp-action="Index">Atores</a>
-                >
-                <strong>Editar Ator</strong>
-            </h1>
-        </div>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-controller="Atores" asp-action="Index" class="text-primary">Atores</a>
+            <span class="separator">></span>
+            <strong class="text-muted">Detalhes</strong>
+        </h2>
     </div>
 
-    <form asp-controller="Atores" asp-action="Edit" method="post">
-        @Html.AntiForgeryToken()
-        <input asp-for="IdAtores" type="hidden" />
-        <input type="hidden" name="id" value="@Model.IdAtores" />
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="IdAtores" />
 
-        <div class="form-group">
-            <label>Comunidade</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-city"></i>
+        <div class="section-label">Informações Básicas</div>
 
-                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required></select>
-
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-city"></i></div>
+            <div class="input-content">
+                <label for="comunidadeId">Comunidade <span class="text-danger">*</span></label>
+                <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" class="clean-input"
+                    required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
             </div>
         </div>
 
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+            <div class="input-content">
+                <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
+                <input asp-for="Nome" type="text" class="clean-input" placeholder="Nome do ator" required>
+            </div>
+        </div>
 
-        <div class="form-group create-field">
-            <label for="nome">Nome</label>
-            <div class="input-with-buttons">
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <input asp-for="Nome" type="text" placeholder="Nome do Ator" />
+        <div class="purple-divider"></div>
+        <div class="section-label">Dados Pessoais</div>
+
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="input-content">
+                    <label for="dataNascimento">Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento" class="clean-input">
                 </div>
-                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i
-                        class="fa-solid fa-plus"></i></button>
-                <button type="button" class="btn-icon" title="Importar (da lista?)"><i
-                        class="fa-solid fa-arrow-right-to-bracket"></i></button>
             </div>
-        </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="genero">Gênero</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-venus-mars"></i>
-                    <select id="Genero" asp-for="Genero" class="form-select">
-                        <option value="feminino">Feminino</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="nao-declarado">Não declarado</option>
-                        <option value="transgenero">Transgênero</option>
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-venus-mars"></i></div>
+                <div class="input-content">
+                    <label asp-for="Genero">Gênero</label>
+                    <select asp-for="Genero" class="clean-input">
+                        <option value="">Selecione</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="NaoDeclarado">Não declarado</option>
+                        <option value="Transgenero">Transgênero</option>
                     </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="dataNascimento">Data de Nascimento</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-calendar-day"></i>
-                    <input asp-for="DtNascimento" type="date" placeholder="dd/mm/aaaa" />
-
                 </div>
             </div>
         </div>
 
-        <div class="form-group-checkbox">
-            <input id="daEquipeCheckbox" name="daEquipe" type="checkbox" />
-            <label for="daEquipeCheckbox">Da Equipe</label>
-        </div>
-
-        <div class="form-group">
-            <label for="papelSocial1">Papel Social</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-briefcase"></i>
-                <input id="papelSocial1" name="papelSocial1" asp-for="PapelSocial1" value="@Model.PapelSocial1"
-                    type="text" placeholder="Digite o papel social" />
+        <div class="input-card full-width">
+            <div class="input-content">
+                <label for="da-equipe">
+                    <input type="checkbox" id="da-equipe" name="da-equipe"
+                        style="width: auto; height: auto; margin-right: 8px;">
+                    Da Equipe
+                </label>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="papelSocial2">Papel Social</f>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-briefcase"></i>
-                    <input id="papelSocial2" name="papelSocial2" asp-for="PapelSocial2" value="@Model.PapelSocial2"
-                        type="text" placeholder="Digite outro papel social (opcional)" />
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-people-group"></i></div>
+                <div class="input-content">
+                    <label asp-for="PapelSocial1">Papel Social</label>
+                    <input asp-for="PapelSocial1" type="text" class="clean-input" placeholder="Papel social principal">
                 </div>
-        </div>
+            </div>
 
-        <div class="form-group">
-            <label for="telefone">Telefone</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-phone"></i>
-                <input id="inputTelefone" asp-for="Telefone" name="Telefone" type="tel" maxlength="15"
-                        placeholder="(DDD) 99999-9999" />
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
+                <div class="input-content">
+                    <label asp-for="PapelSocial2">Interesses</label>
+                    <input asp-for="PapelSocial2" type="text" class="clean-input" placeholder="Interesses do ator">
+                </div>
             </div>
         </div>
 
-        <details class="form-footer" open>
-            <div class="metadata-content">
-                <div class="form-group">
-                    <label>Criado por</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" value="@ViewBag.UsuarioOriginal.Nome" readonly>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
+            <div class="input-content">
+                <label asp-for="Telefone">Telefone</label>
+                <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input"
+                    placeholder="(00) 00000-0000">
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Ações Relacionadas</div>
+
+        <div class="actions-grid">
+            <button type="button" class="action-card">
+                <span class="card-title">Rede Primária</span>
+                <span class="card-subtitle">Adicionar Ator</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-plus"></i>
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Adjacência</span>
+                <span class="card-subtitle">da RPP</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Avaliações</span>
+                <span class="card-subtitle">Pessoais</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-pen"></i>
+                </div>
+            </button>
+            <button type="button" class="action-card">
+                <span class="card-title">Diário de</span>
+                <span class="card-subtitle">Processos Pessoal</span>
+                <div class="card-icons">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+            </button>
+        </div>
+
+        <div class="purple-divider"></div>
+
+        <details class="input-card full-width" style="border: 1px solid var(--color-border); padding: var(--space-4);"
+            open>
+            <summary style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <div class="input-content" style="margin: 0;">
+                    <small class="text-muted">Última atualização em</small>
+                    <span style="color: var(--color-primary-800); font-weight: var(--font-weight-bold);">
+                        @Model.DtModificacao.ToString("dd/MM/yyyy")
+                    </span>
+                    <small class="text-muted">por</small>
+                    <span style="color: var(--color-primary-800); font-weight: var(--font-weight-bold);">
+                        @Context.Session.GetString("Nome")
+                    </span>
+                </div>
+                <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+            </summary>
+
+            <div
+                style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
+                <div class="grid-row">
+                    <div class="input-card">
+                        <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+                        <div class="input-content">
+                            <label>Criado por</label>
+                            <input type="text" value="[Nome do Criador]" readonly class="clean-input">
+                        </div>
+                    </div>
+                    <div class="input-card">
+                        <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+                        <div class="input-content">
+                            <label>Atualizado por</label>
+                            <input type="text" value="@Context.Session.GetString("Nome")" readonly class="clean-input">
+                        </div>
                     </div>
                 </div>
-                @if(ViewBag.UsuarioNovo != null)
-                {
-                <div class="form-group">
-                    <label>Atualizado por</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                         <input type="text" value="@ViewBag.UsuarioNovo.Nome" readonly>
+                <div class="grid-row">
+                    <div class="input-card">
+                        <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="input-content">
+                            <label>Data de criação</label>
+                            <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly
+                                class="clean-input">
+                        </div>
+                    </div>
+                    <div class="input-card">
+                        <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="input-content">
+                            <label>Última atualização</label>
+                            <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly
+                                class="clean-input">
+                        </div>
                     </div>
                 </div>
-                }
-                <div class="form-group">
-                    <label>Data de criação</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
-                    </div>
-                </div>
-                @if(ViewBag.UsuarioNovo != null)
-                {
-                <div class="form-group">
-                    <label>Última atualização</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
-                    </div>
-                </div>
-                }
             </div>
         </details>
 
-        <div class="form-buttons">
-            <a asp-controller="Atores" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
-            <button type="submit" class="btn btn-primary">ATUALIZAR ATOR</button>
+        <div class="form-actions">
+
         </div>
-    </form>
-    <form asp-controller="Atores" asp-action="Delete" method="post" asp-route-id="@Model.IdAtores">
-        @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-delete">DELETAR</button>
+        <div class="buttons-container">
+            <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <button type="button" class="btn btn-delete" onclick="confirmarDelecao()">
+                <i class="fa-solid fa-trash"></i> DELETAR
+            </button>
+
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-check"></i> Salvar mudanças
+            </button>
+        </div>
     </form>
 </div>
 
-<script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>s
+<!-- Modal de Confirmação -->
+<div id="deleteModal" class="custom-modal">
+    <div class="modal-content">
+        <h3>Confirmar Exclusão</h3>
+        <p>Tem certeza que deseja deletar este ator?</p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <button class="btn btn-secondary btn-cancel" onclick="fecharModal()">Cancelar</button>
+            <button class="btn btn-delete btn-confirm" onclick="deletarAtor()">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function confirmarDelecao() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        function deletarAtor() {
+            // Implementar lógica de deleção
+            window.location.href = '@Url.Action("Delete", "Atores", new { id = Model.IdAtores })';
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function (event) {
+            const modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                fecharModal();
+            }
+        }
+    </script>
+}
