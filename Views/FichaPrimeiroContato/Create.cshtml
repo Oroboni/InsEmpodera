@@ -46,6 +46,7 @@
                     <label asp-for="Endereco">Endereço</label>
                     <input asp-for="Endereco" id="input-endereco" class="clean-input" readonly
                         placeholder="Use a lupa no mapa acima para buscar..." />
+
                 </div>
             </div>
 
@@ -69,6 +70,7 @@
                     <div class="input-content no-icon">
                         <label asp-for="Emprego" class="clean-select">Emprego</label>
                         <select asp-for="Emprego" class="clean-input">
+                            <option value="">Selecione uma opção</option>
                             <option value="Empreendedor">Empreendedor</option>
                             <option value="Estudante">Estudante</option>
                             <option value="NuncaTrabalhou">Nunca Trabalhou</option>
@@ -86,21 +88,26 @@
             <div class="grid-row three-columns">
                 <div class="input-card">
                     <div class="input-content no-icon">
-                        <label asp-for="DtContato">Data do 1º Contato</label>
-                        <input asp-for="DtContato" type="date" class="clean-input" />
+                        <label asp-for="DtContato">Data do 1º Contato <span class="text-danger">*</span></label>
+                        <input asp-for="DtContato" type="date" class="clean-input" required />
+
+                        <span asp-validation-for="DtContato" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="input-card">
                     <div class="input-content no-icon">
-                        <label>Hora do 1º Contato</label>
-                        <input type="time" class="clean-input" name="HoraContato" />
+                        <label asp-for="HoraContato">Hora do 1º Contato <span class="text-danger">*</span></label>
+                        <input asp-for="HoraContato" type="time" class="clean-input" required />
+
+                        <span asp-validation-for="HoraContato" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="input-card span-two">
                     <div class="input-content no-icon">
-                        <label asp-for="CEstabeleceu">Como se estabeleceu?</label>
-                        <select asp-for="CEstabeleceu" class="clean-input">
+                        <label asp-for="CEstabeleceu">Como se estabeleceu? <span class="text-danger">*</span></label>
+                        <select asp-for="CEstabeleceu" class="clean-input" required>
+                            <option value="">Selecione uma opção</option>
                             <option value="OutrasInstituicoes">Em outras instituições</option>
                             <option value="CasaDaPessoa">Na casa da pessoa</option>
                             <option value="EstruturaOrganizacao">Na estrutura da organização</option>
@@ -108,38 +115,42 @@
                             <option value="Outro">Outro</option>
                             <option value="PorTelefone">Por telefone</option>
                         </select>
+                        <span asp-validation-for="CEstabeleceu" class="text-danger"></span>
                     </div>
-                    
+
                 </div>
             </div>
 
             <div class="footer-questions grid-row">
                 <div class="input-card">
                     <div class="input-content no-icon">
-                        <label asp-for="NovoParceiro">É um parceiro?</label>
+                        <label asp-for="NovoParceiro">É um parceiro? <span class="text-danger">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="NovoParceiro" value="Sim" />
+                                <input type="radio" asp-for="NovoParceiro" value="Sim" required />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="NovoParceiro" value="Não" />
+                                <input type="radio" asp-for="NovoParceiro" value="Não" required />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>
+
+                        <span asp-validation-for="NovoParceiro" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="input-card">
                     <div class="input-content no-icon">
-                        <label asp-for="FornecidoParceiro">Dados fornecidos pelo parceiro?</label>
+                        <label asp-for="FornecidoParceiro">Dados fornecidos pelo parceiro? <span
+                                class="text-danger">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="FornecidoParceiro" value="Sim" />
+                                <input type="radio" asp-for="FornecidoParceiro" value="Sim" required />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="FornecidoParceiro" value="Não" />
+                                <input type="radio" asp-for="FornecidoParceiro" value="Não" required />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>
@@ -158,13 +169,32 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="EstaFamiliar">Estado Familiar</label>
-                        <input asp-for="EstaFamiliar" class="clean-input" placeholder="Ex: Solteiro, Casado..." />
+                        <select asp-for="EstaFamiliar" class="clean-input">
+                        
+                            <option value="">Selecione uma opção</option>
+                            <option value="Casada">Casado/a</option>
+                            <option value="Comcubinato">Comcubinato</option>
+                            <option value="Divorciada">Divorciado/a</option>
+                            <option value="Separada">Separado/a</option>
+                            <option value="Solteira">Solteiro/a</option>
+                            <option value="Viuva">Viúvo/a</option>
+                            <option value="Outro">Na rua</option>
+                        </select>
                     </div>
                 </div>
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="EstruFamiliar">Estrutura Familiar</label>
-                        <input asp-for="EstruFamiliar" class="clean-input" placeholder="Ex: Nuclear, Monoparental..." />
+                        <select asp-for="EstruFamiliar" class="clean-input">
+                        
+                            <option value="">Selecione uma opção</option>
+                            <option value="SemMatrimonio">Companheiro/a sem matrimônio</option>
+                            <option value="FamiliaNuclear">Família nuclear</option>
+                            <option value="SemMatrimonioF">Família sem matrimônio formal</option>
+                            <option value="MoraCFilhos">Mora com os filhos/as</option>
+                            <option value="MoraSozinho">Mora sozinho</option>
+                            <option value="Outro">Outro</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -173,13 +203,13 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="NFIlhos">Número de Filhos</label>
-                        <input asp-for="NFIlhos" type="number" min="0" class="clean-input" />
+                        <input asp-for="NFIlhos" type="number" min="0" class="clean-input" placeholder="Ex: 2" />
                     </div>
                 </div>
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="NFilhas">Número de Filhas</label>
-                        <input asp-for="NFilhas" type="number" min="0" class="clean-input" />
+                        <input asp-for="NFilhas" type="number" min="0" class="clean-input" placeholder="Ex: 2"/>
                     </div>
                 </div>
             </div>
@@ -191,7 +221,7 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="AEscolar">Anos de Escolaridade</label>
-                        <input asp-for="AEscolar" type="number" min="0" class="clean-input" />
+                        <input asp-for="AEscolar" type="number" min="0" class="clean-input" placeholder="Ex: 12" />
                     </div>
                 </div>
 
@@ -253,7 +283,7 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="QReabili">Qtd. Reabilitações</label>
-                        <input asp-for="QReabili" type="number" min="0" class="clean-input" />
+                        <input asp-for="QReabili" type="number" min="0" class="clean-input" placeholder="Ex: 2" />
                     </div>
                 </div>
                 <div class="input-card full-width">
