@@ -82,10 +82,11 @@
     margin-right: 15px; /* Espaçamento entre a foto e o nome */
 }
 .ator-card {
-    display: flex; /* Habilita o flexbox */
-    align-items: center; /* Alinha verticalmente os itens ao centro */
-    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
-    /* Outros estilos existentes do ator-card... */
+    display: flex; 
+    align-items: center; /* Mantém o ícone centralizado verticalmente com o bloco Nome/Email */
+    /* MUDANÇA: Use space-between para empurrar o segundo item (o ícone) para a direita */
+    justify-content: space-between;
+    
 }
 
 /* Ajusta o parágrafo de e-mail */
@@ -97,10 +98,12 @@
 }
 
 /* Garante que o span do nome não tenha margem inferior */
-.ator-name {
-    margin-bottom: 2px; /* Espaçamento mínimo entre nome e e-mail */
+.ator-name2 {
+    margin-bottom: 2px;
     font-weight: bold;
     font-size: 16px;
+    font-family: var(--font-family-primary);
+    color: #7A3188;
 }
 
 .container-info{
@@ -109,7 +112,118 @@
     justify-content: center;
 }
 
-/* Ocultar o ícone de detalhes (olho) em telas menores */
-.details-icon {
-    margin-left: auto; /* Empurra o ícone para a direita */
+/* Button Eyes*/
+
+.btn-eye {
+    background-color: #7A3188;
+    color: var(--color-white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: var(--space-3);
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-eye:hover {
+    background-color: var(--color-primary-600);
+    transform: scale(1.05);
+}
+
+/* Contêiner para a barra de busca e o botão "+" */
+
+.usuarios-search-container {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+    /* Espaço entre a busca e o botão */
+
+}
+
+
+
+/* Barra de busca */
+
+.usuarios-search-bar {
+
+    flex-grow: 1;
+    /* Faz a barra ocupar o máximo de espaço */
+
+    position: relative;
+
+}
+
+
+
+.usuarios-search-bar input {
+
+    width: 100%;
+    background: #fff;
+    border-width: 0 0 4px 0;
+    border-color: var(--color-primary);
+    border-radius: 24px;
+    padding: 1.25rem 1rem;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    padding-right: 2.5rem;
+    box-sizing: border-box;
+
+}
+
+
+
+.usuarios-search-bar input::placeholder {
+
+    color: #9D9C9F;
+    /* Cor do placeholder "Pesquise por usuarios..." */
+
+    font-weight: 400;
+
+    font-style: italic;
+
+}
+
+
+
+.usuarios-search-bar input:focus {
+
+    outline: none;
+
+    border-color: #6a0dad;
+    /* Roxo principal ao focar */
+
+    box-shadow: 0 0 0 2px rgba(106, 29, 173, 0.2);
+
+}
+
+
+
+/* Ícone de lupa dentro da barra de busca */
+
+.usuarios-search-bar .search-icon {
+
+    position: absolute;
+
+    right: 20px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #6a0dad;
+    /* Roxo principal */
+
+    width: 20px;
+
+    height: 20px;
+
 }

@@ -25,8 +25,8 @@
             <h2>Usuários</h2>
         </div>
 
-        <div class="atores-search-container">
-            <form class="atores-search-bar" method="get">
+        <div class="usuarios-search-container">
+            <form class="usuarios-search-bar" method="get">
                 <input type="search" class="search-input" placeholder="Pesquise por usuários..." name="q" />
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
             </form>
@@ -46,14 +46,13 @@
             @foreach (var user in Model)
             {
                 <div class="ator-card" id="@user.Ativo">
-                    @* <img src="~/img/placeholder-ator.png" alt="Foto de Usuário Fixo" class="ator-photo-placeholder" /> *@
-
+    
                     <div class="container-info">
-                        <span class="ator-name">@user.Nome</span>
+                        <span class="ator-name2">@user.Nome</span>
                         <p>@user.Email</p>
                     </div>
 
-                    <a class="details-icon" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario">
+                    <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario">
                         <i class="fa-solid fa-eye"></i>
                     </a>
                 </div>
@@ -73,7 +72,7 @@
             if (ator.id === 'N' && !incluirInativos) {
                 ator.style.display = 'none';
             } else {
-                ator.style.display = 'block';
+                ator.style.display = 'flex'; // <--- CORREÇÃO: Deve ser 'flex' para manter o layout!
             }
         });
     }
