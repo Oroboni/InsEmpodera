@@ -131,6 +131,8 @@
     white-space: nowrap;
 }
 
+
+
 /* Paleta de Cores das Tags (baseada no protótipo) */
 .tag-blue { background-color: #E0F2FE; color: #026AA2; } /* Prevenção */
 .tag-green { background-color: #D1FAE5; color: #065F46; } /* Ocupação */
