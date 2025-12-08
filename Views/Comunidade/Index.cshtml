@@ -7,7 +7,6 @@
 
 <header>
     <style>
-        /* Basic styling for the container */
         .card-container {
             background-color: #fff;
             border-radius: 12px;
@@ -16,7 +15,6 @@
             width: 100%;
             max-width: 95%;
             margin-bottom: 8px;
-            /* Adjust as needed */
         }
 
         /* Flexbox for aligning content */
@@ -211,7 +209,8 @@
             </button>
         </form>
 
-        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova Comunidade</a>
+        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova
+            Comunidade</a>
     </div>
     <div class="comunidades-list">
         @foreach (var comunidade in Model)

@@ -7,242 +7,217 @@
 
 @section Styles {
   <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+  <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
 }
-<form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post">
+
+<form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post" class="main-form">
   @Html.AntiForgeryToken()
   <input type="hidden" name="id" value="@(Model.IdComunidade)" />
-  <div class="community-detail-container">
-    <div class="community-detail-header">
-      <div class="community-detail-breadcrumb">
-        <span><a asp-controller="Comunidade" asp-action="Index">Comunidades</a></span>
-        <span class="icon-wrapper">
-          <i class="fas fa-chevron-right fa-icon"></i>
-        </span>
-        <span id="breadcrumb-title">@(Model.IdComunidade > 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</span>
-      </div>
-      <h1 class="community-detail-page-title" id="page-title">@(Model.IdComunidade > 0 ? "Detalhes da Comunidade" :
-                "Criar Nova Comunidade")</h1>
+
+  <div class="modern-container">
+    <div class="header-section">
+      <h2>
+        <a asp-controller="Comunidade" asp-action="Index" class="text-primary">Comunidades</a>
+        <span class="separator">></span>
+        <strong class="text-muted">@(Model.IdComunidade > 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
+      </h2>
     </div>
 
     <input type="hidden" asp-for="IdComunidade" />
 
-    <div class="community-detail-section">
-      <div class="community-detail-section-header">
-        <span class="icon-wrapper">
-          <i class="fas fa-book fa-icon"></i>
-        </span>
-        <span class="community-detail-section-title-text">Nome</span>
+    <!-- Nome -->
+    <div class="input-card full-width">
+      <div class="icon-box"><i class="fa-solid fa-book"></i></div>
+      <div class="input-content">
+        <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
+        <input type="text" asp-for="Nome" class="clean-input"
+          value="@(Model.IdComunidade > 0 ? Model.Nome : string.Empty)" required
+          placeholder="Digite o nome da comunidade" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
       </div>
-      <input type="text" class="community-detail-input-field" asp-for="Nome"
-        value="@(Model.IdComunidade > 0 ? Model.Nome : string.Empty)" required />
     </div>
 
-    <div class="community-detail-section">
-      <div class="community-detail-section-header">
-        <span class="icon-wrapper">
-          <i class="fas fa-map-marker-alt fa-icon"></i>
-        </span>
-        <span class="community-detail-section-title-text">Mapa</span>
-      </div>
-      
-      <div id="mapa-principal" class="default-map-container"></div>
+    <!-- Mapa e Localização -->
+    <div class="section-label">Localização</div>
+    <div id="mapa-principal" class="default-map-container"></div>
 
-      <!-- O input é ReadOnly para forçar uso do mapa -->
-      <div class="input-card full-width">
-          <div class="input-content">
-            <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i> <label class="community-detail-section-title-text">Endereço</label></div>
-            <input asp-for="Local" class="community-detail-input-field" id="input-endereco" value="@(Model.IdComunidade > 0 ? Model.Local : string.Empty)"
-              readonly placeholder="Use a lupa no mapa acima para buscar..." />
-          </div>
-        </div>
+    <div class="input-card full-width">
+      <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
+      <div class="input-content">
+        <label asp-for="Local">Endereço <span class="text-danger">*</span></label>
+        <input asp-for="Local" class="clean-input" id="input-endereco"
+          value="@(Model.IdComunidade > 0 ? Model.Local : string.Empty)" readonly
+          placeholder="Use a lupa no mapa acima para buscar..." required />
+        <span asp-validation-for="Local" class="text-danger"></span>
+      </div>
     </div>
 
-    <div class="community-detail-section">
-      <div class="community-detail-section-header">
-        <span class="icon-wrapper">
-          <i class="fas fa-tag fa-icon"></i>
-        </span>
-        <span class="community-detail-section-title-text">Complemento/Referência</span>
+    <!-- Complemento -->
+    <div class="input-card full-width">
+      <div class="icon-box purple"><i class="fa-solid fa-diamond-turn-right"></i></div>
+      <div class="input-content">
+        <label asp-for="Complemento">Complemento/Referência</label>
+        <input asp-for="Complemento" class="clean-input"
+          value="@(Model.IdComunidade > 0 ? Model.Complemento : string.Empty)"
+          placeholder="Ex: Ponto de referência, detalhes adicionais..." />
       </div>
-      <input type="text" class="community-detail-input-field" asp-for="Complemento"
-        value="@(Model.IdComunidade > 0 ? Model.Complemento : string.Empty)">
     </div>
 
-    <div class="community-detail-section">
-      <div class="community-detail-section-header">
-        <span class="icon-wrapper">
-          <i class="fas fa-align-left fa-icon"></i>
-        </span>
-        <span class="community-detail-section-title-text">Descrição</span>
+    <!-- Descrição -->
+    <div class="input-card full-width">
+      <div class="icon-box"><i class="fa-solid fa-align-left"></i></div>
+      <div class="input-content">
+        <label asp-for="Descricao">Descrição</label>
+        <textarea asp-for="Descricao" class="clean-input" rows="4"
+          placeholder="Adicione uma descrição sobre a comunidade...">@(Model.IdComunidade > 0 ? Model.Descricao : string.Empty)</textarea>
       </div>
-      <textarea class="community-detail-input-field" asp-for="Descricao"
-        placeholder="Adicione uma descrição...">@(Model.IdComunidade > 0 ? Model.Descricao : string.Empty)</textarea>
     </div>
 
-    <div class="community-detail-section">
-      <div class="community-detail-section-header">
-        <span class="icon-wrapper">
-          <i class="fas fa-info-circle fa-icon"></i>
-        </span>
-        <span class="community-detail-section-title-text">Status</span>
-      </div>
-      <select class="community-detail-input-field" asp-for="Status" required>
+    <!-- Status -->
+    <div class="input-card">
+      <div class="input-content no-icon">
+        <label asp-for="Status">Status <span class="text-danger">*</span></label>
         @{
-          // Define o status padrão para "Em processo" se for uma nova comunidade
           var currentStatus = Model.IdComunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
         }
-        <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
-        <option value="Concluído" selected="@(currentStatus == "Concluído")">Concluído</option>
-        <option value="Pendente" selected="@(currentStatus == "Pendente")">Pendente</option>
-        <option value="Cancelado" selected="@(currentStatus == "Cancelado")">Cancelado</option>
-      </select>
-    </div>
-
-    <div class="community-detail-section">
-      <div class="community-detail-section-header">
-        <i class="fas fa-universal-access fa-icon"></i>
-        <span class="community-detail-section-title-text">Descrição de Acessibilidade</span>
+        <select asp-for="Status" class="clean-input" required>
+          <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
+          <option value="Concluído" selected="@(currentStatus == "Concluído")">Concluído</option>
+          <option value="Pendente" selected="@(currentStatus == "Pendente")">Pendente</option>
+          <option value="Cancelado" selected="@(currentStatus == "Cancelado")">Cancelado</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
       </div>
-      <textarea class="community-detail-input-field" asp-for="DescricaoAcessibilidade"
-        placeholder="Adicione informações sobre acessibilidade...">@(Model.IdComunidade > 0 ? Model.DescricaoAcessibilidade : string.Empty)</textarea>
     </div>
 
+    <!-- Descrição de Acessibilidade -->
+    <div class="input-card full-width">
+      <div class="icon-box"><i class="fa-solid fa-universal-access"></i></div>
+      <div class="input-content">
+        <label asp-for="DescricaoAcessibilidade">Descrição de Acessibilidade</label>
+        <textarea asp-for="DescricaoAcessibilidade" class="clean-input" rows="4"
+          placeholder="Adicione informações sobre acessibilidade...">@(Model.IdComunidade > 0 ? Model.DescricaoAcessibilidade : string.Empty)</textarea>
+      </div>
+    </div>
 
-    @if(Model.IdComunidade > 0){
-      <div class="community-detail-metrics-container @(Model.IdComunidade == 0 ? "hidden-on-create" : "")">
-        
-        <div class="community-detail-metric-card">
-          <div class="community-detail-metric-value">@ViewBag.qAtores</div>
-          <div class="community-detail-metric-label">Atores vinculados</div>
-          <div class="community-detail-metric-actions">
-            <div class="community-detail-metric-action">
-              <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade">
-                <i class="fas fa-eye fa-icon"></i>
-              </a>
-            </div>
-            <div class="community-detail-metric-action">
-              <i class="fas fa-camera fa-icon"></i>
-            </div>
+    <!-- Métricas (apenas para edição) -->
+    @if (Model.IdComunidade > 0)
+    {
+      <div class="purple-divider"></div>
+      <div class="section-label">Estatísticas da Comunidade</div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">@ViewBag.qAtores</div>
+          <div class="metric-label">Atores vinculados</div>
+          <div class="metric-actions">
+            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade"
+              class="metric-action-btn" title="Visualizar">
+              <i class="fas fa-eye"></i>
+            </a>
+            <button type="button" class="metric-action-btn" title="Capturar">
+              <i class="fas fa-camera"></i>
+            </button>
           </div>
         </div>
 
-        <div class="community-detail-metric-card">
-          <div class="community-detail-metric-value">@ViewBag.qAtividades</div>
-          <div class="community-detail-metric-label">Atividades</div>
-          <div class="community-detail-metric-actions">
-            <div class="community-detail-metric-action">
-              <a asp-controller="Comunidade" asp-action="AtividadesVinculadas"
-                asp-route-comunidadeId="@Model.IdComunidade">
-                <i class="fas fa-eye fa-icon"></i>
-              </a>
-            </div>
-            <div class="community-detail-metric-action">
-              <i class="fas fa-camera fa-icon"></i>
-            </div>
+        <div class="metric-card">
+          <div class="metric-value">@ViewBag.qAtividades</div>
+          <div class="metric-label">Atividades</div>
+          <div class="metric-actions">
+            <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.IdComunidade"
+              class="metric-action-btn" title="Visualizar">
+              <i class="fas fa-eye"></i>
+            </a>
+            <button type="button" class="metric-action-btn" title="Capturar">
+              <i class="fas fa-camera"></i>
+            </button>
           </div>
         </div>
 
-        <div class="community-detail-metric-card">
-          <div class="community-detail-metric-value">03</div>
-          <div class="community-detail-metric-label">Diários de Campo</div>
-          <div class="community-detail-metric-actions">
-            <div class="community-detail-metric-action">
-              <i class="fas fa-eye fa-icon"></i>
-            </div>
-            <div class="community-detail-metric-action">
-              <i class="fas fa-camera fa-icon"></i>
-            </div>
+        <div class="metric-card">
+          <div class="metric-value">@ViewBag.qRecursos</div>
+          <div class="metric-label">Recursos</div>
+          <div class="metric-actions">
+            <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.IdComunidade"
+              class="metric-action-btn" title="Visualizar">
+              <i class="fas fa-eye"></i>
+            </a>
+            <button type="button" class="metric-action-btn" title="Capturar">
+              <i class="fas fa-camera"></i>
+            </button>
           </div>
         </div>
-
-        <div class="community-detail-metric-card">
-          <div class="community-detail-metric-value">@ViewBag.qRecursos</div>
-          <div class="community-detail-metric-label">Recursos</div>
-          <div class="community-detail-metric-actions">
-            <div class="community-detail-metric-action">
-              <a asp-controller="Comunidade" asp-action="ComunidadeRecursos"
-                asp-route-comunidadeId="@Model.IdComunidade">
-                <i class="fas fa-eye fa-icon"></i>
-              </a>
-            </div>
-            <div class="community-detail-metric-action">
-              <i class="fas fa-camera fa-icon"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="community-detail-metric-card">
-          <div class="community-detail-metric-value">02</div>
-          <div class="community-detail-metric-label">Vulnerabilidades</div>
-          <div class="community-detail-metric-actions">
-            <div class="community-detail-metric-action">
-              <i class="fas fa-eye fa-icon"></i>
-            </div>
-            <div class="community-detail-metric-action">
-              <i class="fas fa-camera fa-icon"></i>
-            </div>
-          </div>
-        </div>
-        
       </div>
     }
-    @if (Model.DtModificacao > DateTime.MinValue)
+
+    <!-- Informações de Criação e Atualização -->
+    @if (Model.IdComunidade > 0)
     {
-      @if (ViewBag.UsuarioNovo != null)
+      <div class="purple-divider"></div>
+      <div class="section-label">Informações do Sistema</div>
+
+      @if (Model.DtCriacao > DateTime.MinValue && ViewBag.UsuarioOriginal != null)
       {
-        <div class="community-detail-section @(Model.IdComunidade == 0 ? "hidden-on-create" : "")">
-          <div class="community-detail-section-header">
-            <i class="fas fa-user-edit fa-icon"></i>
-            <span class="community-detail-section-title-text">Atualizado por</span>
+        <div class="input-card full-width">
+          <div class="icon-box"><i class="fa-solid fa-calendar-plus"></i></div>
+          <div class="input-content">
+            <label>Criado em</label>
+            <div class="user-info-display">
+              <i class="fa-solid fa-user"></i>
+              <span class="user-name">@ViewBag.UsuarioOriginal.Nome</span>
+              <span class="user-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
           </div>
-          <div class="community-detail-updated-by-field">
-            <div class="community-detail-user-info">
-              <i class="fas fa-user fa-icon"></i>
-              <span class="community-detail-user-name">@ViewBag.UsuarioNovo.Nome</span>
-              <span class="community-detail-user-date">(@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm"))</span>
+        </div>
+      }
+
+      @if (Model.DtModificacao > DateTime.MinValue && ViewBag.UsuarioNovo != null)
+      {
+        <div class="input-card full-width">
+          <div class="icon-box"><i class="fa-solid fa-user-edit"></i></div>
+          <div class="input-content">
+            <label>Atualizado por</label>
+            <div class="user-info-display">
+              <i class="fa-solid fa-user"></i>
+              <span class="user-name">@ViewBag.UsuarioNovo.Nome</span>
+              <span class="user-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
             </div>
           </div>
         </div>
       }
     }
 
-    @if (Model.DtCriacao > DateTime.MinValue)
-    {
-      @if (ViewBag.UsuarioOriginal != null)
-      {
-      <div class="community-detail-section @(Model.IdComunidade == 0 ? "hidden-on-create" : "")">
-        <div class="community-detail-section-header">
-          <i class="fas fa-calendar fa-icon"></i>
-          <span class="community-detail-section-title-text">Criado em</span>
-        </div>
-        <div class="community-detail-updated-by-field">
-          <div class="community-detail-user-info">
-            <span class="community-detail-user-name">@ViewBag.UsuarioOriginal.Nome</span>
-            <span class="community-detail-user-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
-          </div>
-        </div>
-      </div>
-      }
-    }
+    <!-- Botões de Ação -->
+    <div class="buttons-container">
+      <a href="@Url.Action("Index", "Comunidade")" class="wizard-btn btn-prev">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+      </a>
 
-    <div class="community-detail-action-buttons">
-      <div>
-        <a href="@Url.Action("Index", "Comunidade")" class="community-detail-btn community-detail-btn-back">VOLTAR</a>
-        <button type="button" class="community-detail-btn community-detail-btn-save">SALVAR</button>
-      </div>
+      <div class="action-buttons-group">
+        <button type="button" class="wizard-btn" id="edit-save-btn">
+          @if (Model.IdComunidade == 0)
+          {
+            <text><i class="fa-solid fa-plus"></i> Criar Comunidade</text>
+          }
+          else
+          {
+            <text><i class="fa-solid fa-edit"></i> Editar</text>
+          }
+        </button>
 
-      @if (Model.IdComunidade > 0)
-      { <div>
-          <button type="button" class="community-detail-btn btn-delete-trigger" id="openDeleteModalBtn">
-              <i class="fas fa-trash-alt"></i> DELETAR COMUNIDADE
+        @if (Model.IdComunidade > 0)
+        {
+          <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+            <i class="fa-solid fa-trash"></i> Deletar
           </button>
-        </div>
-      }
+        }
+      </div>
     </div>
   </div>
 </form>
 
-
+<!-- Modal de Confirmação de Exclusão -->
 <div class="modal-overlay" id="deleteConfirmationModal">
   <div class="modal-content">
     <div class="modal-icon">
@@ -250,7 +225,7 @@
     </div>
     <h3 class="modal-title">Confirmar Exclusão</h3>
     <p class="modal-text">
-      Você tem certeza que deseja deletar a comunidade <strong>@Model.Nome</strong>? 
+      Você tem certeza que deseja deletar a comunidade <strong>@Model.Nome</strong>?
       <br>Essa ação não pode ser desfeita.
     </p>
 
@@ -267,109 +242,209 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form');
-    const inputFields = document.querySelectorAll('.community-detail-input-field');
-    const saveButton = document.querySelector('.community-detail-btn-save');
+    const form = document.querySelector('.main-form');
+    const inputFields = form.querySelectorAll('.clean-input, select.clean-input, textarea.clean-input');
+    const editSaveBtn = document.getElementById('edit-save-btn');
 
+    // Inicializar mapa
     if (typeof initMapSelector === 'function') {
-        initMapSelector('mapa-principal', 'input-endereco');
+      initMapSelector('mapa-principal', 'input-endereco');
     } else {
-        console.error("ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js");
+      console.error("ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js");
     }
 
-    // 1. Define o modo da página com base no Id do Modelo
+    // Configurar modo da página
     const isCreateMode = @(Model.IdComunidade == 0 ? "true" : "false");
-    // No modo de criação, já começamos habilitados para que o usuário possa digitar
     let isEditMode = isCreateMode;
+    let isSubmitting = false;
 
-    // 2. Função para configurar o estado da página (habilita campos e define texto do botão)
+    // Configurar estado dos campos
     function setPageState() {
       if (isCreateMode) {
-        // Modo Criação: Sempre habilitado e o botão é "CRIAR COMUNIDADE"
-        inputFields.forEach(field => {
-          field.disabled = false;
-        });
-        saveButton.textContent = 'CRIAR COMUNIDADE';
-        saveButton.setAttribute('type', 'submit'); // Garante que submete o form
+        // Modo criação: sempre editável
+        inputFields.forEach(field => field.disabled = false);
+        editSaveBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Criar Comunidade';
+        editSaveBtn.setAttribute('type', 'submit');
+        editSaveBtn.classList.add('btn-next');
+        editSaveBtn.classList.remove('btn-prev');
       } else {
-        // Modo Edição/Detalhes
         if (isEditMode) {
-          // Modo de Edição Ativo
-          saveButton.textContent = 'SALVAR ALTERAÇÕES';
-          saveButton.setAttribute('type', 'submit');
-          inputFields.forEach(field => {
-            field.disabled = false;
-          });
+          // Modo edição ativo
+          inputFields.forEach(field => field.disabled = false);
+          editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+          editSaveBtn.setAttribute('type', 'submit');
+          editSaveBtn.classList.add('btn-save-final');
+          editSaveBtn.classList.remove('btn-next');
         } else {
-          // Modo de Visualização (padrão)
-          saveButton.textContent = 'EDITAR';
-          saveButton.setAttribute('type', 'button'); // Botão apenas alterna o modo
-          inputFields.forEach(field => {
-            field.disabled = true;
-          });
+          // Modo visualização
+          inputFields.forEach(field => field.disabled = true);
+          editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+          editSaveBtn.setAttribute('type', 'button');
+          editSaveBtn.classList.add('btn-next');
+          editSaveBtn.classList.remove('btn-save-final');
         }
       }
     }
 
-    // 3. Inicializa o estado da página
+    // Inicializar estado
     setPageState();
 
-    // 4. Listener de clique no botão "EDITAR" / "SALVAR ALTERAÇÕES" / "CRIAR COMUNIDADE"
-    saveButton.addEventListener('click', function (event) {
-      // Verifica se o botão é do tipo "submit" (CRIAR ou SALVAR)
-      if (saveButton.getAttribute('type') === 'submit') {
-
-        // Se a validação HTML5 falhar (campo Nome ou Local vazio), o navegador BLOQUEIA o envio.
-        // Se a validação passar, o formulário será enviado automaticamente pelo navegador
-        // porque o botão é type="submit".
-
-        // Não é necessário chamar form.submit() aqui.
-
+    // Handler do botão editar/salvar
+    editSaveBtn.addEventListener('click', function (e) {
+      if (editSaveBtn.getAttribute('type') === 'submit') {
+        // Se for submit, o navegador faz a validação HTML5 automática
+        if (!isSubmitting && form.checkValidity()) {
+          isSubmitting = true;
+          editSaveBtn.disabled = true;
+          editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+          form.submit();
+        }
       } else {
-        // Se o botão é type="button" (no modo EDITAR/Visualização)
-        // Ação: Alternar para o modo de Edição.
-        event.preventDefault();
+        // Alternar para modo edição
+        e.preventDefault();
         isEditMode = true;
         setPageState();
+        // Focar no primeiro campo editável
+        const firstInput = form.querySelector('input:not([disabled]), textarea:not([disabled]), select:not([disabled])');
+        if (firstInput) firstInput.focus();
       }
     });
 
-    // --- Lógica do Modal de Exclusão ---
+    // Lógica do modal de exclusão
     const deleteModal = document.getElementById('deleteConfirmationModal');
     const openDeleteBtn = document.getElementById('openDeleteModalBtn');
     const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmationText = document.getElementById('confirmationText');
+    const confirmationError = document.getElementById('confirmationError');
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteBtn = deleteForm?.querySelector('.btn-modal-delete');
+    const communityName = document.querySelector('.community-name');
 
-    // Função para abrir o modal
-    if (openDeleteBtn) { // Verifica se o botão existe (não existe no modo criar)
-        openDeleteBtn.addEventListener('click', function(e) {
-            e.preventDefault(); // Previne comportamento padrão
-            deleteModal.style.display = 'flex';
-            // Pequeno delay para permitir a transição CSS de opacidade
-            setTimeout(() => {
-                deleteModal.classList.add('active');
-            }, 10);
-        });
-    }
+    // Variáveis de controle
+    const REQUIRED_TEXT = "EXCLUIR";
+    let isDeleteProcessing = false;
 
-    // Função para fechar o modal
-    if (cancelDeleteBtn) {
-        cancelDeleteBtn.addEventListener('click', function() {
-            deleteModal.classList.remove('active');
-            // Espera a animação terminar para esconder o display
-            setTimeout(() => {
-                deleteModal.style.display = 'none';
-            }, 300);
-        });
-    }
+    function validateConfirmation() {
+      const input = confirmationText.value.trim();
+      const isValid = input === REQUIRED_TEXT;
 
-    // Fechar se clicar fora da caixinha do modal (no fundo escuro)
-    window.addEventListener('click', function(e) {
-        if (e.target === deleteModal) {
-            deleteModal.classList.remove('active');
-            setTimeout(() => {
-                deleteModal.style.display = 'none';
-            }, 300);
+      if (confirmationText && deleteBtn) {
+        confirmationText.classList.toggle('valid', isValid);
+        confirmationText.classList.toggle('invalid', input && !isValid);
+        deleteBtn.disabled = !isValid || isDeleteProcessing;
+
+        if (input && !isValid) {
+          confirmationError.textContent = `Digite exatamente "${REQUIRED_TEXT}" para confirmar`;
+        } else {
+          confirmationError.textContent = '';
         }
+      }
+
+      return isValid;
+    }
+
+    if (openDeleteBtn) {
+      openDeleteBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Resetar o modal
+        if (confirmationText) confirmationText.value = '';
+        if (confirmationError) confirmationError.textContent = '';
+        if (deleteBtn) deleteBtn.disabled = true;
+
+        deleteModal.style.display = 'flex';
+        setTimeout(() => {
+          deleteModal.classList.add('active');
+          if (confirmationText) confirmationText.focus();
+        }, 10);
+      });
+    }
+
+    if (cancelDeleteBtn) {
+      cancelDeleteBtn.addEventListener('click', function () {
+        closeDeleteModal();
+      });
+    }
+
+    if (confirmationText) {
+      confirmationText.addEventListener('input', validateConfirmation);
+      confirmationText.addEventListener('keyup', function (e) {
+        if (e.key === 'Enter' && validateConfirmation()) {
+          deleteForm.submit();
+        }
+      });
+    }
+
+    if (deleteForm) {
+      deleteForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!validateConfirmation() || isDeleteProcessing) {
+          return;
+        }
+
+        // Confirmar novamente para maior segurança
+        const finalConfirmation = confirm(`Tem certeza absoluta que deseja excluir a comunidade "${communityName?.textContent}"? Esta ação é irreversível.`);
+
+        if (!finalConfirmation) {
+          return;
+        }
+
+        // Desabilitar botão e mostrar loading
+        isDeleteProcessing = true;
+        if (deleteBtn) {
+          deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Excluindo...';
+          deleteBtn.disabled = true;
+        }
+
+        // Adicionar atraso para feedback visual
+        setTimeout(() => {
+          // Enviar o formulário
+          this.submit();
+        }, 800);
+      });
+    }
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', function (e) {
+      if (e.target === deleteModal) {
+        closeDeleteModal();
+      }
+    });
+
+    // Fechar modal com ESC
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && deleteModal.classList.contains('active')) {
+        closeDeleteModal();
+      }
+    });
+
+    function closeDeleteModal() {
+      deleteModal.classList.remove('active');
+      setTimeout(() => {
+        deleteModal.style.display = 'none';
+        isDeleteProcessing = false;
+      }, 300);
+    }
+
+
+    window.addEventListener('click', function (e) {
+      if (e.target === deleteModal) {
+        deleteModal.classList.remove('active');
+        setTimeout(() => deleteModal.style.display = 'none', 300);
+      }
+    });
+
+    // Validação em tempo real para campos obrigatórios
+    const requiredFields = form.querySelectorAll('[required]');
+    requiredFields.forEach(field => {
+      field.addEventListener('blur', function () {
+        if (!this.value.trim()) {
+          this.classList.add('invalid');
+        } else {
+          this.classList.remove('invalid');
+        }
+      });
     });
   });
 </script>
