@@ -1,5 +1,4 @@
-/* Estilos globais podem ser adicionados aqui */
-/* Exemplo de estilo global */
+
 body {
     font-family:var(--font-family-primary);
     background-color: #eee;
@@ -8,16 +7,73 @@ body {
 a{
     text-decoration: none !important;
 }
-/* Adicione este código ao final do seu site.css */
 
-/* Por padrão, section-2 tem scroll e ocupa 100% da altura */
 .section-2.with-scroll {
     overflow-y: auto;
     height: 100vh;
 }
 
-/* Quando a classe no-scroll é aplicada, removemos o scroll */
 .section-2.no-scroll {
     overflow-y: hidden;
     height: 100vh; 
+}
+
+
+/* Cores das tags */
+.tag-blue {
+    background-color: #E0F2FE;
+    color: #026AA2;
+}
+
+.tag-green {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.tag-yellow {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.tag-purple {
+    background-color: #EBEBFF;
+    color: #5B21B6;
+}
+
+.tag-lightgreen {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+.tag-red {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+.tag-lightblue {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+}
+
+.tag-pink {
+    background-color: #FCE7F3;
+    color: #9D174D;
+}
+
+.tag-darkred {
+    background-color: #FFE4E6;
+    color: #A92128;
+}
+
+.tag-item {
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }

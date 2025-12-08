@@ -295,51 +295,6 @@ input[type="text"]::placeholder {
     white-space: nowrap;
 }
 
-/* Cores das tags */
-.tag-blue {
-    background-color: #E0F2FE;
-    color: #026AA2;
-}
-
-.tag-green {
-    background-color: #D1FAE5;
-    color: #065F46;
-}
-
-.tag-yellow {
-    background-color: #FEF3C7;
-    color: #92400E;
-}
-
-.tag-purple {
-    background-color: #EBEBFF;
-    color: #5B21B6;
-}
-
-.tag-lightgreen {
-    background-color: #DCFCE7;
-    color: #166534;
-}
-
-.tag-red {
-    background-color: #FEE2E2;
-    color: #991B1B;
-}
-
-.tag-lightblue {
-    background-color: #DBEAFE;
-    color: #1E40AF;
-}
-
-.tag-pink {
-    background-color: #FCE7F3;
-    color: #9D174D;
-}
-
-.tag-darkred {
-    background-color: #FFE4E6;
-    color: #A92128;
-}
 
 /* --- Rodapé Metadata --- */
 .form-footer {

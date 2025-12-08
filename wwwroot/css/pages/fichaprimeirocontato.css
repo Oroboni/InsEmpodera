@@ -1,3 +1,71 @@
+.btn-action.gray {
+    background: var(--color-gray-500) !important;
+    color: var(--color-gray-100) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+/* ===== MODAL STYLES ===== */
+.custom-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botões do Modal */
+.modal-content h3 {
+    margin-bottom: 10px;
+    color: var(--color-primary);
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.modal-content .btn-confirm {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.modal-content .btn-cancel {
+    cursor: pointer;
+}
+
+.modal-content .btn-confirm:hover {
+    background-color: var(--color-primary-dark);
+}
+
 /* ===== VARIABLES & RESETS ===== */
 a {
     text-decoration: none;
@@ -126,8 +194,14 @@ a {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* =======================================================
@@ -368,12 +442,37 @@ a {
     transform: translateY(-2px);
     box-shadow: var(--shadow-xl);
 }
-
 /* ===== FORM ELEMENTS ===== */
 .forms-list {
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
+}
+
+.form-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Layout responsivo para form-status */
+@media (max-width: 768px) {
+    .form-status {
+        display: grid;
+        grid-template-areas:
+            "date"
+            "tag";
+        gap: 2px;
+    }
+
+    .form-status .date {
+        grid-area: date;
+    }
+
+    .form-status .tag-item {
+        grid-area: tag;
+        align-self: flex-start;
+    }
 }
 
 .form-item {
@@ -580,7 +679,10 @@ a {
 
 .dense-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsivo */
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(220px, 1fr)
+    ); /* Responsivo */
     gap: 12px;
     margin-top: 15px;
     max-height: 300px;
@@ -691,15 +793,10 @@ a {
         margin-bottom: var(--space-8);
     }
 }
-/* =======================================================
-   CORREÇÃO DE RESPONSIVIDADE (MOBILE)
-   Adicione isso ao final do seu CSS
-   ======================================================= */
 
 @media (max-width: 768px) {
-    
     /* 1. Faz os cards da grid ficarem um embaixo do outro */
-    .grid-row, 
+    .grid-row,
     .footer-questions {
         flex-direction: column;
         gap: 1rem; /* Espaço entre os cards empilhados */
@@ -726,10 +823,10 @@ a {
     }
 
     .radio-option .radio-label {
-        display: block;       /* Ocupa o bloco todo */
-        width: 100%;          /* Largura total */
-        text-align: center;   /* Texto centralizado */
-        padding: 12px 0;      /* Aumenta a área de toque para o dedo */
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 12px 0;
         box-sizing: border-box;
     }
 }

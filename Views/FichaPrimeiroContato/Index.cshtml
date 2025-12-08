@@ -1,4 +1,5 @@
 @model IEnumerable<Empodera.Models.FichaPrimeiroContato>
+@using Empodera.Models
 @{
     ViewData["Title"] = "Ficha de Primeiro Contato";
     ViewData["PageCSS"] = "fichaprimeirocontato";
@@ -9,55 +10,120 @@
     <h2 class="page-title">Ficha de Primeiro Contato</h2>
 
     <div class="filter-bar">
-        <div class="main-select-wrapper">
-            <select class="main-select" asp-items="ViewBag.Comunidades">
-            </select>
-        </div>
+        <form asp-action="Index" method="get" id="filterForm">
+            <div class="main-select-wrapper">
+                <select class="main-select" name="comunidade" id="comunidadeFilter" onchange="submitFilter()">
+                    <option value="">Todas as Comunidades</option>
+                    @foreach (var item in ViewBag.Comunidades)
+                    {
+                        var isSelected = item.Value == ViewData["CurrentComunidade"]?.ToString();
+                        <option value="@item.Value" selected="@isSelected">@item.Text</option>
+                    }
+                </select>
+            </div>
 
-        <div class="bottom-filters">
-            <div class="search-container">
-                <div class="search-input-group">
-                    <div class="search-wrapper">
-                        <form asp-action="Index" method="get">
-                            <input type="text" name="search" value="@ViewData["CurrentFilter"]" placeholder="Procure por comunidades" />
+            <div class="bottom-filters">
+                <div class="search-container">
+                    <div class="search-input-group">
+                        <div class="search-wrapper">
+                            <!-- Mudamos o type para "search" e adicionamos classe para busca em tempo real -->
+                            <input type="search" class="search-input" name="search" value="@ViewData["CurrentFilter"]"
+                                placeholder="Procure pelo nome do ator" id="searchInput" />
                             <button type="submit" class="btn-search">
                                 <i class="fa fa-search"></i>
                             </button>
-                        </form>
+                        </div>
+
+                        <div class="select-wrapper secondary-select-wrapper">
+                            <select class="secondary-select" name="status" id="statusFilter" onchange="submitFilter()">
+                                <option value="">Todos os Status</option>
+                                <option value="EmProgresso"
+                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "EmProgresso")">
+                                    Em progresso
+                                </option>
+                                <option value="Concluida"
+                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Concluida")">
+                                    Concluídas
+                                </option>
+                                <option value="Abandonada"
+                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Abandonada")">
+                                    Abandonadas
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="select-wrapper secondary-select-wrapper">
-                        <select class="secondary-select">
-                            <option>Selecione um estado</option>
-                        </select>
-                    </div>
+                    <a class="btn-add" asp-action="Create" title="Adicionar Nova Ficha">
+                        <i class="fa fa-plus"></i>
+                    </a>
                 </div>
-
-                <a class="btn-add" asp-action="Create" title="Adicionar Nova Ficha">
-                    <i class="fa fa-plus"></i>
-                </a>
             </div>
-        </div>
+        </form>
     </div>
 
-    <div class="forms-list">
+    <div class="forms-list" id="fichasContainer">
         @if (Model != null && Model.Any())
         {
             @foreach (var form in Model)
             {
-                <div class="form-item">
+                bool isFinalized = form.Status != StatusFicha.EmProgresso;
+                var nomeAtor = form.Ator?.Nome?.ToLower() ?? "";
+                <div class="form-item" data-search="@nomeAtor">
                     <div class="form-info">
-                        <p class="name">@form.Ator.Nome</p>
-                        <p class="date">@form.DtContato.ToString("dd/MM/yyyy")</p>
+                        <p class="name">@form.Ator?.Nome</p>
+
+                        <!-- Exibir comunidades associadas -->
+                        @if (form.FichaComunidades != null && form.FichaComunidades.Any())
+                        {
+                            <p class="community">
+                                @{
+                                    var comunidades = form.FichaComunidades.Take(2).ToList();
+                                    for (int i = 0; i < comunidades.Count; i++)
+                                    {
+                                        <span class="community-tag">@comunidades[i].Comunidade.Nome</span>
+                                        @if (i < comunidades.Count - 1)
+                                        {
+                                            <span>, </span>
+                                        }
+                                    }
+                                    @if (form.FichaComunidades.Count > 2)
+                                    {
+                                        <span>...</span>
+                                    }
+                                }
+                            </p>
+                        }
+
+                        <div class="form-status">
+                            <p class="date">@form.DtContato.ToString("dd/MM/yyyy")</p>
+
+                            @if (form.Status == StatusFicha.Concluida)
+                            {
+                                <span class="tag-item tag-green">Concluída</span>
+                            }
+                            else if (form.Status == StatusFicha.Abandonada)
+                            {
+                                <span class="tag-item tag-red">Abandonada</span>
+                            }
+                            else if (form.Status == StatusFicha.EmProgresso)
+                            {
+                                <span class="tag-item tag-yellow">Em Progresso</span>
+                            }
+                        </div>
                     </div>
+
                     <div class="actions">
-                        <a asp-action="Edit" asp-route-id="@form.IdFicha" class="btn-action" title="Edit">
-                            <i class="fa fa-pencil-alt"></i>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@form.IdFicha" class="btn-action" title="Delete">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                        <a asp-action="Details" asp-route-id="@form.IdFicha" class="btn-action" title="Details">
+                        <button type="button" class="btn-action btn-concluir @(isFinalized ? "gray" : "")"
+                            data-id="@form.IdFicha" title="Concluir" @(isFinalized ? "disabled" : "")>
+                            <i class="fa fa-check"></i>
+                        </button>
+
+                        <button type="button" class="btn-action btn-abandonar @(isFinalized ? "gray" : "")"
+                            data-id="@form.IdFicha" title="Abandonar" @(isFinalized ? "disabled" : "")>
+                            <i class="fa fa-times"></i>
+                        </button>
+
+                        <a asp-action="Edit" asp-route-id="@form.IdFicha" class="btn-action" title="Detalhes">
                             <i class="fa fa-eye"></i>
                         </a>
                     </div>
@@ -69,4 +135,31 @@
             <p class="no-records">Nenhuma ficha encontrada.</p>
         }
     </div>
+
+    <!-- Modais (mantenha como está) -->
+    <div id="modalConcluir" class="custom-modal">
+        <div class="modal-content">
+            <h3>Completar ficha</h3>
+            <p>Você realmente deseja completar essa ficha?</p>
+            <form id="formConcluir" method="post">
+                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
+                <button type="submit" class="wizard-btn btn-next btn-confirm">Sim</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalAbandonar" class="custom-modal">
+        <div class="modal-content">
+            <h3>Abandonar ficha</h3>
+            <p>Você realmente deseja abandonar esta ficha?</p>
+            <form id="formAbandonar" method="post">
+                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
+                <button type="submit" class="wizard-btn btn-next btn-confirm">Sim</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/fichaprimeirocontato.js"></script>
+}

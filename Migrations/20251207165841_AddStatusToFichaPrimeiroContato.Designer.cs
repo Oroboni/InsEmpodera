@@ -3,6 +3,7 @@ using System;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251207165841_AddStatusToFichaPrimeiroContato")]
+    partial class AddStatusToFichaPrimeiroContato
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
@@ -1538,27 +1541,6 @@ namespace InsEmpodera.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Empodera.Models.Ficha1oContatoComunidade", b =>
-                {
-                    b.Property<int>("IdFichaComunidade")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FkIdComunidade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("IdFicha")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("IdFichaComunidade");
-
-                    b.HasIndex("FkIdComunidade");
-
-                    b.HasIndex("IdFicha");
-
-                    b.ToTable("Ficha1oContatoComunidades");
-                });
-
             modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
                 {
                     b.Property<int>("IdCondicoes")
@@ -1693,15 +1675,19 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Emprego")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Endereco")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EstaFamiliar")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EstruFamiliar")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("FKidAtores")
@@ -1711,6 +1697,7 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FonteDados")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FornecidoParceiro")
@@ -1721,6 +1708,7 @@ namespace InsEmpodera.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LContato")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LTrat")
@@ -3033,25 +3021,6 @@ namespace InsEmpodera.Migrations
                     b.Navigation("Eixo");
                 });
 
-            modelBuilder.Entity("Empodera.Models.Ficha1oContatoComunidade", b =>
-                {
-                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
-                        .WithMany()
-                        .HasForeignKey("FkIdComunidade")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "FichaPrimeiroContato")
-                        .WithMany("FichaComunidades")
-                        .HasForeignKey("IdFicha")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comunidade");
-
-                    b.Navigation("FichaPrimeiroContato");
-                });
-
             modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
                 {
                     b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
@@ -3331,8 +3300,6 @@ namespace InsEmpodera.Migrations
             modelBuilder.Entity("Empodera.Models.FichaPrimeiroContato", b =>
                 {
                     b.Navigation("Condicoes");
-
-                    b.Navigation("FichaComunidades");
 
                     b.Navigation("Fontes");
 
