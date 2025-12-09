@@ -229,13 +229,17 @@
       <br>Essa ação não pode ser desfeita.
     </p>
 
-    <div class="modal-actions">
-      <button type="button" class="btn-modal-cancel" id="cancelDeleteBtn">Cancelar</button>
+    <div class="button-container">
 
-      <form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.IdComunidade">
-        @Html.AntiForgeryToken()
-        <button type="submit" class="btn-modal-confirm">Sim, Deletar</button>
-      </form>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">Cancelar</button>
+
+        <form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.IdComunidade">
+          @Html.AntiForgeryToken()
+          <button type="submit" class="btn-modal-confirm wizard-btn btn-next">Sim, Deletar</button>
+        </form>
+
+      </div>
     </div>
   </div>
 </div>

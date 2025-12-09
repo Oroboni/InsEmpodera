@@ -232,19 +232,21 @@
             </div>
         </div>
 
-            <div class="buttons-container">
-                <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
-                    <i class="fa-solid fa-arrow-left"></i> Cancelar
-                </a>
-                <button type="submit" class="wizard-btn btn-next">
-                    <i class="fa-solid fa-check"></i> Adicionar Ator
-                </button>
-            </div>
+        <div class="buttons-container">
+            <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Cancelar
+            </a>
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-check"></i> Adicionar Ator
+            </button>
+        </div>
     </form>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
     }
 }
