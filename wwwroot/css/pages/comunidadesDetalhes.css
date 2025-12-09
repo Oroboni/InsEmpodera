@@ -23,7 +23,7 @@
 .metric-value {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #6f42c1;
+  color: var(--color-primary-900);
   margin-bottom: 0.5rem;
 }
 
@@ -40,17 +40,17 @@
 }
 
 .metric-action-btn {
-  background: #f8f9fa;
+  background-color: var(--color-primary-dark);
   border: 1px solid #dee2e6;
   border-radius: 4px;
-  padding: 0.5rem;
-  color: #6f42c1;
+  padding: 0.5rem 0.8rem;
   cursor: pointer;
   transition: all 0.2s;
+  color: var(--color-white);
 }
 
 .metric-action-btn:hover {
-  background: #6f42c1;
+  background-color: var(--color-secondary);
   color: white;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .user-info-display i {
-  color: #6f42c1;
+  color: var(--color-primary-900);
 }
 
 .user-name {
