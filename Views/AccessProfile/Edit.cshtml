@@ -5,10 +5,10 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
-    
+
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/atores.css" />
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
-    
     <link rel="stylesheet" href="~/css/pages/create-form.css" />
 }
 
@@ -18,7 +18,8 @@
     </div>
 
     <form method="post">
-        <input type="hidden" asp-for="IdPerfil" /> <div class="form-group">
+        <input type="hidden" asp-for="IdPerfil" />
+        <div class="form-group">
             <label for="nome">Nome</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-shield-halved"></i>
@@ -140,7 +141,8 @@
         <details class="form-footer" open>
             <summary>
                 <div class="footer-text">
-                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>@Context.Session.GetString("Nome")</strong></span>
+                    <span>Última atualização em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por
+                        <strong>@Context.Session.GetString("Nome")</strong></span>
                 </div>
                 <i class="fa-solid fa-chevron-down"></i>
             </summary>
@@ -175,10 +177,11 @@
                 </div>
             </div>
         </details>
-        <div class="form-buttons">
-            <button type="button" class="btn btn-delete">DELETAR</button>
-            <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
-            <button type="submit" class="btn btn-primary">SALVAR MUDANÇAS</button>
+        <div class="buttons-container">
+
+            <a asp-controller="AccessProfile" asp-action="Index" class="wizard-btn btn-prev"><i class="fa-solid fa-arrow-left"></i>Voltar</a>
+            <button type="button" class="wizard-btn btn-delete"><i class="fa-solid fa-trash"></i>Deletar</button>
+            <button type="submit" class="wizard-btn btn-next">Salvar mudanças</button>
         </div>
     </form>
 </div>

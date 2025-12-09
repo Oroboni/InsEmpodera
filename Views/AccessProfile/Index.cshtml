@@ -24,7 +24,7 @@
                     <div asp-action="Index" method="get">
 
 
-                        <input type="search" class="search-input" placeholder="Buscar..." name="q" />
+                        <input type="search" class="search-input" placeholder="Procure por perfis de acesso" name="q" />
                         <button type="submit" class="btn-search">
                             <i class="fa fa-search"></i>
                         </button>
@@ -71,14 +71,20 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.querySelector(".search-input");
-        const cards = document.querySelectorAll(".ator-card");
+        const formItems = document.querySelectorAll(".form-item");
 
-        searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
-            cards.forEach(card => {
-                const name = card.querySelector(".ator-name").textContent.toLowerCase();
-                card.style.display = name.includes(query) ? "flex" : "none";
+        if (searchInput && formItems.length > 0) {
+            searchInput.addEventListener("input", function () {
+                const query = this.value.toLowerCase().trim();
+
+                formItems.forEach(item => {
+                    const nameElement = item.querySelector(".name");
+                    if (nameElement) {
+                        const name = nameElement.textContent.toLowerCase();
+                        item.style.display = name.includes(query) ? "flex" : "none";
+                    }
+                });
             });
-        });
+        }
     });
 </script>

@@ -43,7 +43,7 @@
             
             <!-- 2. SIDEBAR (Adicionado ID sidebar) -->
             <div class="section-1" id="sidebar">
-                <h2>Olá @(ViewContext.HttpContext?.Session?.GetString("Nome"))</h2>
+                <h2>Olá, @(ViewContext.HttpContext?.Session?.GetString("Nome"))</h2>
                 <ul>
                     <p>Principais</p>
                     <li data-page="home" class="@IsActive("Home")">
