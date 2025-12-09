@@ -61,8 +61,7 @@
 
 /* Movimenta o círculo para a direita quando LIGADO */
 .toggle-switch input:checked + .slider:before {
-    transform: translateX(
-        24px
+    transform: translateX(24px
     ); /* (Largura do switch - Largura do círculo - 2*left/right) -> 48px - 18px - 2*3px = 24px */
 }
 
