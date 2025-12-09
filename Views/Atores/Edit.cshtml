@@ -6,6 +6,131 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
+    <style> 
+        /* ------------------------------------------- */
+        /* ESTILOS DE COMPONENTE: MODAL DE CONFIRMAÇÃO */
+        /* ------------------------------------------- */
+
+        /* 1. OVERLAY (O Fundo Escuro que Oculta o Modal) */
+        .modal-overlay {
+            /* Esconde por padrão. O JS muda para 'flex' */
+            display: none; 
+            
+            /* Configuração de tela cheia e sobreposição */
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+            /* Fundo semi-transparente */
+            background-color: rgba(0, 0, 0, 0.6); 
+            
+            /* Centralização usando flexbox */
+            justify-content: center;
+            align-items: center;
+            
+            /* Garante que fique acima de todos os elementos */
+            z-index: 9999; 
+
+            /* Transição suave para opacidade/display */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        /* O JavaScript adiciona a classe 'active' para exibir */
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            display: flex;
+        }
+
+        /* 2. MODAL CONTENT (A Caixa Branca) */
+        .modal-content {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        /* Pequeno efeito de entrada quando o modal está ativo */
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        /* 3. ÍCONE DE ALERTA */
+        .modal-icon {
+            color: #ff9800; /* Laranja/Amarelo de Alerta, comum em modais de exclusão */
+            margin-bottom: 20px;
+        }
+
+        .modal-icon i {
+            font-size: 48px;
+        }
+
+        /* 4. TÍTULO E TEXTO */
+        .modal-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .modal-text strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+
+        /* 5. BOTÕES DE AÇÃO */
+        .modal-actions {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        .btn-modal-cancel, .btn-modal-confirm {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            flex: 1; /* Para que ocupem o mesmo espaço */
+        }
+
+        .btn-modal-cancel {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .btn-modal-cancel:hover {
+            background-color: #bbb;
+        }
+
+        .btn-modal-confirm {
+            /* Cor de exclusão (vermelho) */
+            background-color: #dc3545; 
+            color: white;
+        }
+
+        .btn-modal-confirm:hover {
+            background-color: #c82333;
+        }
+    </style>
 }
 
 <div class="modern-container">
@@ -204,60 +329,78 @@
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </a>
 
-            <form asp-controller="Atores" asp-action="Delete" method="post" asp-route-id="@Model.IdAtores">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-delete">DELETAR²</button>
-            </form>
-            @* 
-            <button type="submit" class="wizard-btn btn-next">
-                <i class="fa-solid fa-check"></i> Salvar mudanças
-            </button> *@
+           <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn"><i class="fa-solid fa-trash"></i> Deletar</button>
+
             <div class="form-buttons">
-                <button type="submit" class="btn btn-primary wizard-btn btn-next"><i class="fa-solid fa-check"></i>
-                    Atualizar Ator</button>
+                <button type="submit" class="wizard-btn btn-primary">Atualizar ator</button>
             </div>
-        </div>
     </form>
+    
+    
 </div>
 
-<!-- Modal de Confirmação -->
-<div id="deleteModal" class="custom-modal">
+<div class="modal-overlay" id="deleteConfirmationModal">
     <div class="modal-content">
-        <h3>Confirmar Exclusão</h3>
-        <p>Tem certeza que deseja deletar este ator?</p>
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-            <button class="btn btn-secondary btn-cancel" onclick="fecharModal()">Cancelar</button>
-            <button class="btn btn-delete btn-confirm" onclick="deletarAtor()">Confirmar</button>
+        <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="modal-title">Confirmar Exclusão</h3>
+        <p class="modal-text">
+            Você tem certeza que deseja deletar o Ator <strong>@Model.Nome</strong>?
+            <br>Essa ação não pode ser desfeita.
+        </p>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" id="cancelDeleteBtn">Cancelar</button>
+
+            <form asp-controller="Atores" asp-action="Delete" method="post" asp-route-id="@Model.IdAtores">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-modal-confirm">Sim, Deletar</button>
+            </form>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        function confirmarDelecao() {
-            document.getElementById('deleteModal').style.display = 'flex';
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- Lógica do Modal de Exclusão ---
+        const deleteModal = document.getElementById('deleteConfirmationModal');
+        const openDeleteBtn = document.getElementById('openDeleteModalBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+        // 1. Função para abrir o modal
+        if (openDeleteBtn) { 
+            openDeleteBtn.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                deleteModal.style.display = 'flex'; // Torna visível para centralizar
+                // Pequeno delay para permitir a transição CSS de opacidade
+                setTimeout(() => {
+                    deleteModal.classList.add('active'); 
+                }, 10);
+            });
         }
 
-        function fecharModal() {
-            document.getElementById('deleteModal').style.display = 'none';
+        // 2. Função para fechar o modal (botão Cancelar)
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteModal.classList.remove('active');
+                // Espera a animação terminar para esconder o display
+                setTimeout(() => {
+                    deleteModal.style.display = 'none'; // Oculta totalmente
+                }, 300);
+            });
         }
 
-        function deletarAtor() {
-            // Implementar lógica de deleção
-            window.location.href = '@Url.Action("Delete", "Atores", new { id = Model.IdAtores })';
-        }
-
-        // Fechar modal ao clicar fora
-        window.onclick = function (event) {
-            const modal = document.getElementById('deleteModal');
-            if (event.target == modal) {
-                fecharModal();
+        // 3. Fechar se clicar fora da caixinha (overlay)
+        window.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.classList.remove('active');
+                setTimeout(() => {
+                    deleteModal.style.display = 'none';
+                }, 300);
             }
-        }
-    </script>
-}
+        });
+    });
+</script>
+
+<script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>

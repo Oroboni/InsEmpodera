@@ -1,254 +1,74 @@
 @model List<Empodera.Models.ComunidadeDto>
 @{
     ViewData["Title"] = "Comunidades";
-    ViewData["PageCSS"] = "homepage";
     Layout = "_Layout";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+}
+<div class="forms-container">
 
-<header>
-    <style>
-        .card-container {
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 16px 24px;
-            width: 100%;
-            max-width: 95%;
-            margin-bottom: 8px;
-        }
+    <h2 class="page-title">Comunidades</h2>
 
-        /* Flexbox for aligning content */
-        .card-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    <div class="filter-bar">
+        <div class="search-container">
+            <div class="search-input-group">
+                <div class="search-wrapper" method="get">
+                    <input type="text" name="q" id="searchInput" value="@(ViewData["CurrentFilter"])"
+                        placeholder="Pesquise por comunidades" class="search-input" />
+                    <button class="btn-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
 
-        /* Styling for the text content */
-        .card-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            /* Or 20px */
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        /* Styling for the status */
-        .card-status {
-            background-color: #fcf8e3;
-            color: #c09853;
-            font-size: 0.875rem;
-            /* Or 14px */
-            font-weight: 500;
-            padding: 4px 8px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            width: fit-content;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #c09853;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        /* Styling for the icons */
-        .card-icons {
-            display: flex;
-            gap: 16px;
-        }
-
-        .icon {
-            width: 24px;
-            height: 24px;
-            color: #6a0dad;
-            /* A purple color */
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .icon:hover {
-            transform: scale(1.1);
-        }
-
-        /* Basic styling for the form container */
-        .search-bar-container {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            max-width: 80%;
-            /* Adjust as needed */
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 50px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            padding: 8px 16px;
-            position: relative;
-        }
-
-        /* Style the bottom purple border and shadow on hover/focus */
-        .search-bar-container:focus-within,
-        .search-bar-container:hover {
-            border-color: #6a0dad;
-            box-shadow: 0 4px 6px rgba(106, 13, 173, 0.2);
-        }
-
-        .search-bar-container::after {
-            content: "";
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            height: 4px;
-            background: linear-gradient(90deg,
-                    #6a0dad 0%,
-                    #a855f7 50%,
-                    rgba(255, 255, 255, 0) 100%);
-            border-radius: 2px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .search-bar-container:focus-within::after {
-            opacity: 1;
-        }
-
-        /* Style the input field */
-        .search-input {
-            border: none;
-            background: none;
-            flex-grow: 1;
-            padding: 8px 12px;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        /* Remove default focus outline from the input */
-        .search-input:focus {
-            outline: none;
-        }
-
-        /* Style the placeholder text */
-        .search-input::placeholder {
-            color: #aaa;
-            font-style: italic;
-        }
-
-        /* Style the search button */
-        .search-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            color: #6a0dad;
-            transition: color 0.2s ease;
-        }
-
-        /* Style the SVG icon */
-        .search-button svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-
-        /* Make the list container scrollable */
-        .communities-list-container {
-            flex-grow: 1;
-            /* This is crucial! It makes the container fill the available vertical space */
-            overflow-y: auto;
-            /* This is the key property for vertical scrolling */
-            padding-right: 15px;
-            /* Add some padding for the scrollbar */
-            padding-bottom: 24px;
-        }
-
-        /* Optional: Style the scrollbar to match your design */
-        .communities-list-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .communities-list-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        .communities-list-container::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-        }
-
-        .communities-list-container::-webkit-scrollbar-thumb:hover {
-            background: #aaa;
-        }
-    </style>
-</header>
-
-<div class="comunidades-container">
-    <!-- Titulo da tela-->
-    <h2>Comunidades</h2>
-    <!-- Barra de Pesquisar comunidade-->
-    <div style="align-items: center; display: flex; gap: 8px; margin-bottom: 16px;">
-        <form class="search-bar-container" action="/search" method="get">
-            <input type="search" class="search-input" placeholder="Pesquise por comunidades..." name="q" />
-            <button type="submit" class="search-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path
-                        d="M21.71 20.29l-4.5-4.5a8 8 0 10-1.42 1.42l4.5 4.5a1 1 0 001.42 0 1 1 0 000-1.42zM10 16a6 6 0 116-6 6 6 0 01-6 6z" />
-                </svg>
-            </button>
-        </form>
-
-        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn btn-primary">+ Nova
-            Comunidade</a>
+            <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="0" class="btn-add"
+                title="Adicionar Nova Comunidade">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
     </div>
-    <div class="comunidades-list">
-        @foreach (var comunidade in Model)
+
+    <div class="forms-list">
+        @if (Model != null && Model.Any())
         {
-            <div class="card-container">
-                <div class="card-content">
-                    <div class="card-text">
-                        <div class="card-title">@comunidade.Nome</div>
-                        <div class="card-status">
-                            <span class="status-dot"></span>
-                            @comunidade.Status
+            @foreach (var comunidade in Model)
+            {
+                <div class="form-item" data-nome="@comunidade.Nome?.ToLower()">
+                    <div class="form-info">
+                        <p class="name">@comunidade.Nome</p>
+                        <div class="form-status">
+                            <p class="date">@comunidade.Status</p>
                         </div>
                     </div>
-                    <div class="card-icons">
+                    <div class="actions">
                         @if (comunidade.Status == "Em Processo")
                         {
-                            <svg class="icon play-icon" viewBox="0 0 24 24" fill="currentColor" style="color: gray !important;">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
+                            <div class="btn-action" title="Comunidade em Processo"
+                                style="background-color: var(--color-gray-500) !important;">
+                                <i class="fa-solid fa-play" fill="currentColor"></i>
+                            </div>
                         }
                         else
                         {
-                            <a asp-controller="Comunidade" asp-action="Processo" asp-route-id="@comunidade.Id">
-                                <svg class="icon play-icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M8 5v14l11-7z" />
-                                </svg>
+                            <a asp-controller="Comunidade" asp-action="Processo" asp-route-id="@comunidade.Id" class="btn-action"
+                                title="Iniciar Processo">
+                                <i class="fa-solid fa-play" fill="currentColor"></i>
                             </a>
                         }
 
-                        <a class="icon eye-icon" asp-controller="Comunidade" asp-action="ComunidadesDetalhes"
-                            asp-route-id="@comunidade.Id">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                            </svg>
+                        <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="@comunidade.Id"
+                            class="btn-action" title="Ver detalhes">
+                            <i class="fa-solid fa-eye"></i>
                         </a>
                     </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="no-records">
+                Nenhuma comunidade cadastrada ainda.
             </div>
         }
     </div>
@@ -256,16 +76,18 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.querySelector(".search-input");
-        const cards = document.querySelectorAll(".card-container");
+        const searchInput = document.getElementById("searchInput");
+        const formItems = document.querySelectorAll(".form-item");
 
         searchInput.addEventListener("input", function () {
             const query = this.value.toLowerCase().trim();
 
-            cards.forEach(card => {
-                const title = card.querySelector(".card-title").textContent.toLowerCase();
-                card.style.display = title.includes(query) ? "block" : "none";
-            });
+            if (formItems.length > 0) {
+                formItems.forEach(item => {
+                    const name = item.querySelector(".name").textContent.toLowerCase();
+                    item.style.display = name.includes(query) ? "flex" : "none";
+                });
+            }
         });
     });
 </script>

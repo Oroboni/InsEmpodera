@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    
+
 
     <div class="forms-list">
         @if (Model != null && Model.Any())
@@ -73,23 +73,23 @@
         const searchInput = document.querySelector("#searchInput");
         const formItems = document.querySelectorAll(".form-item");
         const noRecords = document.querySelector(".no-records");
-        
+
         searchInput.addEventListener("input", function () {
             const query = this.value.toLowerCase().trim();
             let hasVisibleItems = false;
-            
+
             if (formItems.length > 0) {
                 formItems.forEach(item => {
                     const name = item.querySelector(".name").textContent.toLowerCase();
                     const isVisible = name.includes(query);
                     item.style.display = isVisible ? "flex" : "none";
-                    
+
                     if (isVisible) {
                         hasVisibleItems = true;
                     }
                 });
             }
-            
+
             // Mostra mensagem se não encontrar resultados
             if (noRecords) {
                 if (!hasVisibleItems && query !== "") {
@@ -103,7 +103,7 @@
                 }
             }
         });
-        
+
         // Limpar busca com a tecla ESC
         searchInput.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
