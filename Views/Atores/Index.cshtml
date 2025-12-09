@@ -9,14 +9,15 @@
 }
 
 <div class="forms-container">
-    
+
     <h2 class="page-title">Atores</h2>
 
     <div class="filter-bar">
         <div class="search-container">
             <div class="search-input-group">
-                <div class="search-wrapper">
-                    <input type="text" id="searchInput" placeholder="Buscar por nome do ator...">
+                <div class="search-wrapper" asp-action="Index" method="get">
+                    <input type="text" name="search" id="searchInput" value="@(ViewData["CurrentFilter"])"
+                        placeholder="Procure pelo nome do ator" class="search-input" />
                     <button class="btn-search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -28,6 +29,8 @@
             </a>
         </div>
     </div>
+
+    
 
     <div class="forms-list">
         @if (Model != null && Model.Any())
@@ -65,3 +68,48 @@
         }
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector("#searchInput");
+        const formItems = document.querySelectorAll(".form-item");
+        const noRecords = document.querySelector(".no-records");
+        
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            let hasVisibleItems = false;
+            
+            if (formItems.length > 0) {
+                formItems.forEach(item => {
+                    const name = item.querySelector(".name").textContent.toLowerCase();
+                    const isVisible = name.includes(query);
+                    item.style.display = isVisible ? "flex" : "none";
+                    
+                    if (isVisible) {
+                        hasVisibleItems = true;
+                    }
+                });
+            }
+            
+            // Mostra mensagem se não encontrar resultados
+            if (noRecords) {
+                if (!hasVisibleItems && query !== "") {
+                    noRecords.style.display = "block";
+                    noRecords.innerHTML = `<p>Nenhum ator encontrado para: "${query}"</p>`;
+                } else if (!hasVisibleItems) {
+                    noRecords.style.display = "block";
+                    noRecords.innerHTML = "<p>Nenhum ator cadastrado ainda.</p>";
+                } else {
+                    noRecords.style.display = "none";
+                }
+            }
+        });
+        
+        // Limpar busca com a tecla ESC
+        searchInput.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                this.value = "";
+                this.dispatchEvent(new Event("input"));
+            }
+        });
+    });
+</script>
