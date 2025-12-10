@@ -6,7 +6,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
-    <style> 
+    <style>
         /* ------------------------------------------- */
         /* ESTILOS DE COMPONENTE: MODAL DE CONFIRMAÇÃO */
         /* ------------------------------------------- */
@@ -14,24 +14,24 @@
         /* 1. OVERLAY (O Fundo Escuro que Oculta o Modal) */
         .modal-overlay {
             /* Esconde por padrão. O JS muda para 'flex' */
-            display: none; 
-            
+            display: none;
+
             /* Configuração de tela cheia e sobreposição */
-            position: fixed; 
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            
+
             /* Fundo semi-transparente */
-            background-color: rgba(0, 0, 0, 0.6); 
-            
+            background-color: rgba(0, 0, 0, 0.6);
+
             /* Centralização usando flexbox */
             justify-content: center;
             align-items: center;
-            
+
             /* Garante que fique acima de todos os elementos */
-            z-index: 9999; 
+            z-index: 9999;
 
             /* Transição suave para opacidade/display */
             opacity: 0;
@@ -66,7 +66,8 @@
 
         /* 3. ÍCONE DE ALERTA */
         .modal-icon {
-            color: #ff9800; /* Laranja/Amarelo de Alerta, comum em modais de exclusão */
+            color: #ff9800;
+            /* Laranja/Amarelo de Alerta, comum em modais de exclusão */
             margin-bottom: 20px;
         }
 
@@ -101,7 +102,8 @@
             gap: 15px;
         }
 
-        .btn-modal-cancel, .btn-modal-confirm {
+        .btn-modal-cancel,
+        .btn-modal-confirm {
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
@@ -109,7 +111,8 @@
             font-weight: bold;
             text-transform: uppercase;
             transition: background-color 0.2s ease, transform 0.1s ease;
-            flex: 1; /* Para que ocupem o mesmo espaço */
+            flex: 1;
+            /* Para que ocupem o mesmo espaço */
         }
 
         .btn-modal-cancel {
@@ -123,7 +126,7 @@
 
         .btn-modal-confirm {
             /* Cor de exclusão (vermelho) */
-            background-color: #dc3545; 
+            background-color: #dc3545;
             color: white;
         }
 
@@ -150,7 +153,7 @@
         <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-city"></i></div>
             <div class="input-content">
-                <label for="comunidadeId">Comunidade <span class="text-danger">*</span></label>
+                <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
                 <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required>
                     <option value="">Selecione a comunidade</option>
                 </select>
@@ -172,8 +175,8 @@
             <div class="input-card">
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
                 <div class="input-content">
-                    <label for="dataNascimento">Data de Nascimento</label>
-                    <input type="date" id="dataNascimento" name="dataNascimento" class="clean-input">
+                    <label for="DtNascimento">Data de Nascimento</label>
+                    <input asp-for="DtNascimento" type="date" class="clean-input">
                 </div>
             </div>
 
@@ -195,7 +198,7 @@
         <div class="input-card full-width">
             <div class="input-content">
                 <label for="da-equipe">
-                    <input type="checkbox" id="da-equipe" name="da-equipe"
+                    <input type="checkbox" id="da-equipe" name="da-equipe" asp-for="DaEquipe"
                         style="width: auto; height: auto; margin-right: 8px;">
                     Da Equipe
                 </label>
@@ -268,19 +271,7 @@
 
         <details class="input-card full-width" style="border: 1px solid var(--color-border); padding: var(--space-4);"
             open>
-            <summary style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                <div class="input-content" style="margin: 0;">
-                    <small class="text-muted">Última atualização em</small>
-                    <span style="color: var(--color-primary-800); font-weight: var(--font-weight-bold);">
-                        @Model.DtModificacao.ToString("dd/MM/yyyy")
-                    </span>
-                    <small class="text-muted">por</small>
-                    <span style="color: var(--color-primary-800); font-weight: var(--font-weight-bold);">
-                        @Context.Session.GetString("Nome")
-                    </span>
-                </div>
-                <i class="fa-solid fa-chevron-down dropdown-icon"></i>
-            </summary>
+
 
             <div
                 style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
@@ -289,7 +280,7 @@
                         <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
                         <div class="input-content">
                             <label>Criado por</label>
-                            <input type="text" value="[Nome do Criador]" readonly class="clean-input">
+                            <input type="text" value="@ViewBag.UsuarioOriginal?.Nome" readonly class="clean-input">
                         </div>
                     </div>
                     <div class="input-card">
@@ -329,14 +320,15 @@
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </a>
 
-           <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn"><i class="fa-solid fa-trash"></i> Deletar</button>
+            <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn"><i
+                    class="fa-solid fa-trash"></i> Deletar</button>
 
             <div class="form-buttons">
                 <button type="submit" class="wizard-btn btn-primary">Atualizar ator</button>
             </div>
     </form>
-    
-    
+
+
 </div>
 
 <div class="modal-overlay" id="deleteConfirmationModal">
@@ -369,20 +361,20 @@
         const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
         // 1. Função para abrir o modal
-        if (openDeleteBtn) { 
-            openDeleteBtn.addEventListener('click', function(e) {
-                e.preventDefault(); 
+        if (openDeleteBtn) {
+            openDeleteBtn.addEventListener('click', function (e) {
+                e.preventDefault();
                 deleteModal.style.display = 'flex'; // Torna visível para centralizar
                 // Pequeno delay para permitir a transição CSS de opacidade
                 setTimeout(() => {
-                    deleteModal.classList.add('active'); 
+                    deleteModal.classList.add('active');
                 }, 10);
             });
         }
 
         // 2. Função para fechar o modal (botão Cancelar)
         if (cancelDeleteBtn) {
-            cancelDeleteBtn.addEventListener('click', function() {
+            cancelDeleteBtn.addEventListener('click', function () {
                 deleteModal.classList.remove('active');
                 // Espera a animação terminar para esconder o display
                 setTimeout(() => {
@@ -392,7 +384,7 @@
         }
 
         // 3. Fechar se clicar fora da caixinha (overlay)
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             if (e.target === deleteModal) {
                 deleteModal.classList.remove('active');
                 setTimeout(() => {
@@ -403,4 +395,10 @@
     });
 </script>
 
-<script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    }
+}

@@ -86,7 +86,7 @@ a {
 }
 
 .forms-container {
-    padding: 2rem;
+    padding: 24px 32px;
     background-color: #eee;
     font-family: var(--font-family-primary);
     color: var(--color-primary);
@@ -97,7 +97,6 @@ a {
     color: var(--color-primary);
     font-weight: bolder;
     font-size: 2rem;
-    margin-bottom: 1.5rem;
 }
 
 .header-section h2 {

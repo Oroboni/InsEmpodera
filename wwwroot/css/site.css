@@ -5,7 +5,8 @@ body {
     color:var(--color-primary);
 }
 a{
-    text-decoration: none !important;
+    text-decoration: none;
+    color: var(--color-primary-800);
 }
 
 .section-2.with-scroll {
