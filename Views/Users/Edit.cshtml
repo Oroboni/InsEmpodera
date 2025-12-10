@@ -1,75 +1,190 @@
 @model Empodera.Models.Usuario
 @{
-    ViewData["Title"] = "Detalhes de Usuário";
-    ViewData["PageCSS"] = "usuarios-edit"; 
-    Layout = null; // IMPORTANTE: Define Layout como null para que esta View não use o _Layout.cshtml
+    ViewData["Title"] = "Editar Usuário";
+    ViewData["PageCSS"] = "usuarios-edit";
 }
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/pages/usuarios-edit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
-<div class="modal-dialog-content">
-    
-    <div class="modal-header">
-        <h3 class="modal-title">Editar Usuario</h3>
-        <button type="button" class="close-button" onclick="window.location.href='/Users/Index'">
-            &times;
-        </button>
-    </div>
-
-    <div class="modal-body">        
-        <form asp-action="Edit" method="post">
-
-            <div class="form-group">
-                <label class="control-label">Nome</label>
-                <input class="form-control" asp-for="Nome" value="@Model.Nome" />
-            </div>
-            
-            <div class="form-group">
-                <label  class="control-label">E-mail</label>
-                <input class="form-control" asp-for="Email" value="@Model.Email" />
-            </div>
-
-            <div class="form-group">
-                <label  class="control-label">Senha</label>
-                <input class="form-control" asp-for="Senha" value="@Model.Senha" />
-            </div>
-
-            <div class="form-group">
-                <label for="genero">Gênero</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-venus-mars"></i>
-                    <select class="form-control" id="Genero" asp-for="Genero" name="Genero">
-                        <option value="feminino">Feminino</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="nao-declarado">Não declarado</option>
-                        <option value="transgenero">Transgênero</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+<body>
+    <div class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <h1 class="modal-title">
+                        <i class="fas fa-user-edit"></i>
+                        Editar Usuário
+                    </h1>
+                    <p class="modal-subtitle">Atualize as informações do usuário abaixo</p>
                 </div>
-            </div>
-            
-             <div class="form-group">
-                <label class="control-label">Ocupação</label>
-                <input class="form-control" asp-for="Ocupacao" value="@Model.Ocupacao" />
-            </div>
-           
-            <div class="form-group">
-                <label class="control-label">Perfil de acesso *</label>
-                <select class="form-control" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" required></select>
+                <button type="button" class="btn-close" onclick="window.location.href='/Users/Index'">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Ativo</label>
-                <select class="form-control" asp-for="Ativo">
-                    <option value="S">Sim</option>
-                    <option value="N">Não</option>
-                </select>
-            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" method="post" class="form-edit-usuario">
+                    <div class="form-grid">
+                        <!-- Coluna 1 -->
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label for="Nome" class="form-label">
+                                    <i class="fas fa-user"></i>
+                                    Nome completo
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" id="Nome" asp-for="Nome" class="form-control" 
+                                           placeholder="Digite o nome completo" required>
+                                </div>
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
 
-            <div class="form-actions">
-                <button class="btn-save" type="submit" onclick="window.location.href='/Users/Index.cshtml'">Salvar</button>
+                            <div class="form-group">
+                                <label for="Email" class="form-label">
+                                    <i class="fas fa-envelope"></i>
+                                    E-mail
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" id="Email" asp-for="Email" class="form-control" 
+                                           placeholder="exemplo@email.com" required>
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Senha" class="form-label">
+                                    <i class="fas fa-lock"></i>
+                                    Senha
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input type="password" id="Senha" asp-for="Senha" class="form-control" 
+                                           placeholder="Digite a nova senha">
+                                    <button type="button" class="btn-toggle-password" onclick="togglePassword('Senha')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="Senha" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2 -->
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label for="Genero" class="form-label">
+                                    <i class="fas fa-venus-mars"></i>
+                                    Gênero
+                                </label>
+                                <div class="select-with-icon">
+                                    <i class="fas fa-venus-mars select-icon"></i>
+                                    <select id="Genero" asp-for="Genero" class="form-control" required>
+                                        <option value="">Selecione um gênero</option>
+                                        <option value="feminino">Feminino</option>
+                                        <option value="masculino">Masculino</option>
+                                        <option value="nao-declarado">Não declarado</option>
+                                        <option value="transgenero">Transgênero</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down select-arrow"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Ocupacao" class="form-label">
+                                    <i class="fas fa-briefcase"></i>
+                                    Ocupação
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-briefcase input-icon"></i>
+                                    <input type="text" id="Ocupacao" asp-for="Ocupacao" class="form-control" 
+                                           placeholder="Ex: Analista, Gerente, etc.">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="FkIdPerfil" class="form-label">
+                                    <i class="fas fa-id-card"></i>
+                                    Perfil de acesso *
+                                </label>
+                                <div class="select-with-icon">
+                                    <i class="fas fa-id-card select-icon"></i>
+                                    <select id="FkIdPerfil" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" 
+                                            class="form-control" required>
+                                        <option value="">Selecione um perfil</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down select-arrow"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Ativo" class="form-label">
+                                    <i class="fas fa-check-circle"></i>
+                                    Status
+                                </label>
+                                <div class="status-toggle">
+                                    <label class="switch">
+                                        <input type="checkbox" id="Ativo" asp-for="Ativo" 
+                                               value="S" checked="@(Model?.Ativo == "S")">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <span class="status-label" id="statusText">@(Model?.Ativo == "S" ? "Ativo" : "Inativo")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/Users/Index'">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Alterações
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const toggleBtn = field.nextElementSibling?.querySelector('i');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                toggleBtn?.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                field.type = 'password';
+                toggleBtn?.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        document.getElementById('Ativo')?.addEventListener('change', function() {
+            const statusText = document.getElementById('statusText');
+            if (statusText) {
+                statusText.textContent = this.checked ? 'Ativo' : 'Inativo';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const generoSelect = document.getElementById('Genero');
+            const generoValue = '@(Model?.Genero ?? "")';
+            if (generoSelect && generoValue) {
+                generoSelect.value = generoValue;
+            }
+        });
+    </script>
+</body>
+</html>
