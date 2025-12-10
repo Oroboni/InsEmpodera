@@ -41,13 +41,10 @@ namespace Empodera.Models
 
         public StatusFicha Status { get; set; } = StatusFicha.EmProgresso;
 
-        [Required(ErrorMessage = "Campo obrigatório.")]
         public string SLer { get; set; } = null!;
         
-        [Required(ErrorMessage = "Campo obrigatório.")]
         public string SCalc { get; set; } = null!;
         
-        [Required(ErrorMessage = "Campo obrigatório.")]
         public string SComp { get; set; } = null!;
         
         public int QReabili { get; set; }

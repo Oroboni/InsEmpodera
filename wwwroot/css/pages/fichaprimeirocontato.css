@@ -1,3 +1,9 @@
+input,
+button,
+textarea,
+select {
+    font-family: poppins;
+}
 .btn-action.gray {
     background: var(--color-gray-500) !important;
     color: var(--color-gray-100) !important;
@@ -211,8 +217,8 @@ a {
 
 .buttons-container {
     display: flex;
-    flex-direction: column;     /* Empilhado no mobile */
-    gap: var(--space-4);        /* Espaço entre botões */
+    flex-direction: column; /* Empilhado no mobile */
+    gap: var(--space-4); /* Espaço entre botões */
     margin-top: var(--space-8);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-gray-300);
@@ -222,7 +228,6 @@ a {
     width: 100%;
     min-width: unset;
 }
-
 
 /* CLASSE BASE PARA TODOS OS BOTÕES (Voltar, Próximo, Salvar) */
 .wizard-btn {
@@ -280,7 +285,7 @@ a {
 
     .buttons-container .wizard-btn {
         width: auto;
-        flex: 1;                        /* Mantém equilíbrio visual */
+        flex: 1; /* Mantém equilíbrio visual */
         min-width: 140px;
     }
 }
@@ -587,6 +592,49 @@ a {
 .clean-input::placeholder {
     color: var(--color-gray-500);
     font-weight: var(--font-weight-medium);
+}
+/* Estilo para input-card quando contém campos desabilitados */
+.input-card:has(.clean-input:disabled),
+.input-card:has(select.clean-input:disabled),
+.input-card:has(textarea.clean-input:disabled),
+.input-card:has(input[type="radio"]:disabled),
+.input-card:has(input[type="checkbox"]:disabled) {
+    background-color: #f5f5f5;
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+/* Opcional: escurecer a borda do card quando desabilitado */
+.input-card:has(.clean-input:disabled) {
+    border-color: #e0e0e0;
+}
+
+/* Manter o texto dos campos com cor adequada */
+.input-card .clean-input:disabled,
+.input-card select.clean-input:disabled,
+.input-card textarea.clean-input:disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: transparent; /* Deixa o background do card fazer o trabalho */
+}
+
+/* Para radio buttons e checkboxes desabilitados */
+input[type="radio"]:disabled,
+input[type="checkbox"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input[type="radio"]:disabled + .radio-label,
+input[type="checkbox"]:disabled + .radio-label {
+    color: #6c757d;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Opcional: reduzir opacidade do ícone quando o card tem campo desabilitado */
+.input-card:has(.clean-input:disabled) .icon-box {
+    opacity: 0.6;
 }
 
 /* ===== RADIO BUTTONS ===== */

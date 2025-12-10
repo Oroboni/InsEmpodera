@@ -15,7 +15,7 @@
             <div class="search-input-group">
                 <div class="search-wrapper" method="get">
                     <input type="text" name="q" id="searchInput" value="@(ViewData["CurrentFilter"])"
-                        placeholder="Pesquise por comunidades" class="search-input" />
+                        placeholder="Buscar por comunidades..." class="search-input" />
                     <button class="btn-search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -34,6 +34,7 @@
         {
             @foreach (var comunidade in Model)
             {
+                
                 <div class="form-item" data-nome="@comunidade.Nome?.ToLower()">
                     <div class="form-info">
                         <p class="name">@comunidade.Nome</p>
@@ -45,7 +46,7 @@
                         @if (comunidade.Status == "Em Processo")
                         {
                             <div class="btn-action" title="Comunidade em Processo"
-                                style="background-color: var(--color-gray-500) !important;">
+                                style="background-color: var(--color-gray-500); cursor: not-allowed !important;">
                                 <i class="fa-solid fa-play" fill="currentColor"></i>
                             </div>
                         }

@@ -8,10 +8,6 @@
 
 @if (Model.Status != StatusFicha.EmProgresso)
 {
-    <div class="alert alert-warning">
-        Esta ficha está @Model.Status e não pode mais ser editada.
-    </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("input, select, textarea").forEach(el => el.disabled = true);

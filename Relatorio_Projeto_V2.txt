@@ -4619,7 +4619,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Index.cshtml
 
     <div class="atores-search-container">
         <form class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
+            <input type="search" class="search-input" placeholder="Busque por atores..." name="q" />
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </form>
 
@@ -9602,7 +9602,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\AccessProfile\Index
 
     <div class="atores-search-container">
         <form class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
+            <input type="search" class="search-input" placeholder="Busque por atores..." name="q" />
             
             @* Eu já troquei o ícone de SVG para FontAwesome, como você pediu antes *@
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -10222,7 +10222,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Actor\Index.cshtml
 
     <div class="atores-search-container">
         <form class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Pesquise por atores..." name="q" />
+            <input type="search" class="search-input" placeholder="Busque por atores..." name="q" />
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </form>
 

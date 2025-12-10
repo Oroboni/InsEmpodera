@@ -39,5 +39,11 @@ if (dataContatoInput) {
 }
 
 if (typeof initMapSelector === "function") {
-    initMapSelector("mapa-principal", "input-endereco");
+
+     // Inicializar mapa
+    if (typeof initMapSelector === 'function') {
+      initMapSelector('mapa-principal', 'input-endereco');
+    } else {
+      console.error("ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js");
+    }
 }
