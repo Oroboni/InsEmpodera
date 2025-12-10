@@ -47,16 +47,11 @@
                 <div class="search-container">
                     <div class="search-input-group">
                         <div class="search-wrapper">
-                            <div asp-action="Index" method="get">
-
-
-                                <input type="search" class="search-input" name="searchQuery"
-                                    placeholder="Buscar por data ou avaliador..." />
-                                <button type="submit" class="btn-search">
-                                    <i class="fa fa-search"></i>
-                                </button>
-
-                            </div>
+                            <input type="search" class="search-input" id="searchAssessment"
+                                placeholder="Buscar por data ou avaliador..." aria-label="Buscar avaliações" />
+                            <button type="button" class="btn-search" id="searchAssessmentBtn">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
                     </div>
                     <a class="btn-add" asp-action="Create" asp-route-atorId="@selectedAtorId" title="Adicionar Nova Ficha">
@@ -85,7 +80,8 @@
             <div class="assessment-list-container">
                 @foreach (var item in Model)
                 {
-                    <div class="assessment-card">
+                    <div class="assessment-card" data-date="@item.DtCriacao.ToString("ddMMyyyy")"
+                        data-evaluator="@item.Usuario.Nome?.ToLower()">
                         <div class="assessment-card-info">
                             <div class="date">@item.DtCriacao.ToString("dd/MM/yyyy")</div>
                             <div class="evaluator">Avaliado por @item.Usuario.Nome</div>
@@ -102,3 +98,30 @@
         }
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector('.search-input');
+        const assessmentCards = document.querySelectorAll('.assessment-card');
+
+        if (!searchInput || assessmentCards.length === 0) return;
+
+        searchInput.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+
+            assessmentCards.forEach(card => {
+                // Buscar por data
+                const dateElement = card.querySelector('.date');
+                const dateText = dateElement ? dateElement.textContent.toLowerCase() : '';
+
+                // Buscar por avaliador
+                const evaluatorElement = card.querySelector('.evaluator');
+                const evaluatorText = evaluatorElement ? evaluatorElement.textContent.toLowerCase() : '';
+
+                // Mostrar se encontrar em qualquer campo
+                const shouldShow = dateText.includes(query) || evaluatorText.includes(query);
+                card.style.display = shouldShow ? 'flex' : 'none';
+            });
+        });
+    });
+</script>
