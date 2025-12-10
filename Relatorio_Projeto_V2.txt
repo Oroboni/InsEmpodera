@@ -3573,7 +3573,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\index.cshtm
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/styles.css">
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -4787,7 +4787,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Home\Login.cshtml
     <meta charset="utf-8" />
     <title>Login - Empodera</title>
     <link rel="stylesheet" href="~/css/login.css" />
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
 </head>
 <body>
     <div class="login-container">
@@ -6138,7 +6138,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\FirstContact
             @if (!temComunidade)
             {
                 <div class="report-empty-state">
-                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione uma comunidade" />
+                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione uma comunidade" />
                     <p>Primeiro selecione uma comunidade.</p>
                 </div>
             }
@@ -6266,7 +6266,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\PersonalAsse
             @if (selectedAtorId == null)
             {
                 <div class="report-empty-state">
-                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione um ator" />
+                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione um ator" />
                     <p>Primeiro selecione um ator.</p>
                 </div>
             }
@@ -6329,7 +6329,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\PrimaryNetwo
             @if (selectedAtorId == null)
             {
                 <div class="report-empty-state">
-                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione um ator" />
+                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione um ator" />
                     <p>Primeiro selecione um ator.</p>
                 </div>
             }
@@ -6412,7 +6412,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Report\Rsc.cshtml
             @if (Context.Request.Query["comunidadeId"].Count == 0)
             {
                 <div class="report-empty-state">
-                    <img src="https://placehold.co/300x200/f0f0f0/6b7280?text=Ilustra%C3%A7%C3%A3o" alt="Selecione uma comunidade" />
+                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione uma comunidade" />
                     <p>Primeiro selecione uma comunidade.</p>
                 </div>
             }
@@ -6534,7 +6534,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.csht
     <title>@ViewData["Title"] - Instituto Empodera</title>
 
 
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
 
     @* CSS Variables - carregadas primeiro *@
     <link rel="stylesheet" href="~/css/_variaveis.css" />
@@ -6693,7 +6693,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
     <link rel="stylesheet" href="~/css/login.css" />
 </head>
 <body class="login-body">
@@ -9803,7 +9803,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\index.cshtm
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/styles.css">
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -10390,7 +10390,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Home\Login.cshtml
     <meta charset="utf-8" />
     <title>Login - Empodera</title>
     <link rel="stylesheet" href="~/css/login.css" />
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
 </head>
 <body>
     <div class="login-container">
@@ -10699,7 +10699,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_Layout.csht
     <title>@ViewData["Title"] - Instituto Empodera</title>
 
 
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
 
     @* CSS Variables - carregadas primeiro *@
     <link rel="stylesheet" href="~/css/_variaveis.css" />
@@ -10850,7 +10850,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="icon" href="~/icons/Logo-empodera.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
     <link rel="stylesheet" href="~/css/login.css" />
 </head>
 <body class="login-body">

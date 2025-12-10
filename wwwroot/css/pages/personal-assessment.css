@@ -96,7 +96,7 @@
     overflow-y: auto;
     background-color: #f7f7f7;
     border-radius: 8px;
-    padding: 16px;
+    padding: 0.5rem 0;
 }
 .empty-state-container {
     display: flex;
