@@ -1,158 +1,189 @@
 @model Empodera.Models.Atividades
 @{
-    ViewData["Title"] = "Adicionar Atividade";
+    ViewData["Title"] = "Atividade - Criar";
+    ViewData["PageCSS"] = "activity-form";
     Layout = "_Layout";
     var eixos = ViewBag.EixosList as List<Empodera.Models.Eixo>;
 }
 
 @section Styles {
-    
-    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/activity-form.css" />
 }
 
-<div class="container">
-    <div class="breadcrumb">
-        <h1>
-            <a asp-controller="Atividades" asp-action="Index">Atividades</a>
-            >
-            <strong>Adicionar Atividade</strong>
-        </h1>
-    </div>
-    <form method="post" asp-controller="Atividades" asp-action="Create">
-        @Html.AntiForgeryToken()
+<form asp-controller="Atividades" asp-action="Create" method="post" class="main-form">
+    @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            <label for="comunidadeId">Comunidade</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-city"></i>
-                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required></select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+    <div class="modern-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="Atividades" asp-action="Index" class="text-primary">Atividades</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Nova Atividade</strong>
+            </h2>
+        </div>
+
+        <!-- Comunidade -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-city"></i></div>
+            <div class="input-content">
+                <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
+                <select id="ComunidadeId" name="ComunidadeId" class="clean-input" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione uma comunidade</option>
+                </select>
+                <span asp-validation-for="FkIdComunidade" class="text-danger"></span>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="Nome">Nome</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-pencil"></i>
-                <input asp-for="Nome" type="text" placeholder="Nome da atividade" required>
+        <!-- Nome da Atividade -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-pencil"></i></div>
+            <div class="input-content">
+                <label asp-for="Nome">Nome da Atividade <span class="text-danger">*</span></label>
+                <input type="text" asp-for="Nome" class="clean-input" required
+                       placeholder="Digite o nome da atividade" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
         </div>
 
-        <div class="form-group">
-            <label>Eixos</label>
+        <!-- Eixos -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-tags"></i></div>
+            <div class="input-content">
+                <label>Eixos <span class="text-danger">*</span></label>
+                
+                <!-- Container de Tags Selecionadas -->
+                <div class="eixos-tag-container" id="tag-container"></div>
 
-            <div class="eixos-tag-container" id="tag-container">
-            </div>
-
-            <details class="multiselect-wrapper">
-                <summary>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-tags"></i>
-                        <span class="multiselect-placeholder">Selecione os eixos</span>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
-                    <ul>
-                        @if (eixos != null)
-                        {
-                            @foreach (var eixo in eixos)
+                <!-- Dropdown de Seleção -->
+                <details class="multiselect-wrapper">
+                    <summary>
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-placeholder">Selecione os eixos</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </summary>
+                    <div class="multiselect-panel" id="multiselect-panel">
+                        <ul>
+                            @if (eixos != null)
                             {
-                                <li>
-                                    <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
-                                        data-tag-class="tag-pink" data-tag-name="@eixo.Nome">
-                                    <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
-                                </li>
+                                @foreach (var eixo in eixos)
+                                {
+                                    <li>
+                                        <input type="checkbox" 
+                                               name="EixosSelecionados" 
+                                               value="@eixo.IdEixo" 
+                                               id="eixo-@eixo.IdEixo"
+                                               data-tag-name="@eixo.Nome">
+                                        <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                                    </li>
+                                }
                             }
-                        }
-                    </ul>
-                </div>
-            </details>
-        </div>
-        <div class="form-group">
-            <label for="Descricao">Descrição</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Descricao" asp-for="Descricao"></textarea>
+                        </ul>
+                    </div>
+                </details>
             </div>
         </div>
 
-        <div class="form-buttons" style="margin-top: 40px;">
-            <button type="submit" class="btn-full-width">ADICIONAR ATIVIDADE</button>
+        <!-- Descrição -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-align-left"></i></div>
+            <div class="input-content">
+                <label asp-for="Descricao">Descrição</label>
+                <textarea asp-for="Descricao" class="clean-input" rows="4"
+                          placeholder="Descreva a atividade..."></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
         </div>
 
-    </form>
-</div>
+        <!-- Botões de Ação -->
+        <div class="buttons-container">
+            <a asp-controller="Atividades" asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <div class="action-buttons-group">
+                <button type="submit" class="wizard-btn btn-next" id="create-activity-btn">
+                    <i class="fa-solid fa-plus"></i> Criar Atividade
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.main-form');
+            const createBtn = document.getElementById('create-activity-btn');
             const tagContainer = document.getElementById('tag-container');
             const multiselectPanel = document.getElementById('multiselect-panel');
-
-            // Todos os checkboxes de eixos
             const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+            let isSubmitting = false;
 
-            // --- 1. Função Principal: Atualiza a UI (Tags e Lista) ---
+            // Função para atualizar as tags
             function updateTagView() {
-                // Limpa o container de tags
                 tagContainer.innerHTML = '';
 
                 checkboxes.forEach(cb => {
                     const listItem = cb.closest('li');
 
                     if (cb.checked) {
-                        // Se está marcado: cria a tag
                         const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass;
-
                         const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
+                        tag.className = 'tag-item tag-purple';
                         tag.textContent = tagName;
 
-                        // Cria o botão 'x' de remover
                         const removeBtn = document.createElement('i');
                         removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.dataset.checkboxId = cb.id; // Liga o 'x' ao seu checkbox
+                        removeBtn.dataset.checkboxId = cb.id;
 
                         tag.appendChild(removeBtn);
                         tagContainer.appendChild(tag);
 
-                        // Esconde o item da lista dropdown
                         listItem.classList.add('is-selected');
                     } else {
-                        // Se não está marcado: mostra na lista
                         listItem.classList.remove('is-selected');
                     }
                 });
             }
 
-            // --- 2. Evento: Clicar no Checkbox (na lista) ---
+            // Evento de mudança nos checkboxes
             multiselectPanel.addEventListener('change', function (e) {
                 if (e.target.type === 'checkbox') {
                     updateTagView();
                 }
             });
 
-            // --- 3. Evento: Clicar no 'X' da Tag (no container) ---
+            // Evento de clique no X das tags
             tagContainer.addEventListener('click', function (e) {
-                // Se clicou no 'x' (classe 'tag-remove-btn')
                 if (e.target.classList.contains('tag-remove-btn')) {
                     const checkboxId = e.target.dataset.checkboxId;
                     const checkboxToUncheck = document.getElementById(checkboxId);
 
                     if (checkboxToUncheck) {
                         checkboxToUncheck.checked = false;
-                        // Atualiza a UI
                         updateTagView();
                     }
                 }
             });
 
-            // --- 4. Inicialização ---
-            // Mostra as tags que já vieram selecionadas (se houver alguma 'checked')
+            // Inicialização
             updateTagView();
+
+            // Handler do botão criar
+            form.addEventListener('submit', function (e) {
+                if (!isSubmitting && form.checkValidity()) {
+                    isSubmitting = true;
+                    createBtn.disabled = true;
+                    createBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
+                } else if (!form.checkValidity()) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 }

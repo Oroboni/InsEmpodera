@@ -1,146 +1,165 @@
 @model Empodera.Models.Perfil
+
 @{
-    ViewData["Title"] = "Criar Perfil de Acesso";
+    ViewData["Title"] = "Perfil de Acesso - Criar";
+    ViewData["PageCSS"] = "access-profile-form";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
-    
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
-    
-    <link rel="stylesheet" href="~/css/pages/create-form.css" />
 }
 
-<div class="container">
-    <div class="breadcrumb">
-        <h1>Perfis de acesso > <strong>Novo perfil de acesso</strong></h1>
-    </div>
+<form asp-controller="AccessProfile" asp-action="Create" method="post" class="main-form">
+    @Html.AntiForgeryToken()
 
-    <form method="post">
-        
-        <div class="form-group">
-            <label for="nome">Nome</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-shield-halved"></i>
-                <input asp-for="Nome" type="text" placeholder="Ex: Visitante" required>
+    <div class="modern-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="AccessProfile" asp-action="Index" class="text-primary">Perfis de Acesso</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Novo Perfil</strong>
+            </h2>
+        </div>
+
+        <!-- Nome do Perfil -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="input-content">
+                <label asp-for="Nome">Nome do Perfil <span class="text-danger">*</span></label>
+                <input type="text" asp-for="Nome" class="clean-input" required
+                       placeholder="Digite o nome do perfil de acesso" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
         </div>
 
-        <table class="permission-table">
-            <thead>
-                <tr>
-                    <th>Permissão</th>
-                    <th>Listar</th>
-                    <th>Detalhar</th>
-                    <th>Criar</th>
-                    <th>Atualizar</th>
-                    <th>Deletar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Usuários</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Usuarios][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Perfis de Acesso</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Perfis][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Atividades</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atividades][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Comunidades</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Comunidades][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Vulnerabilidades</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Vulnerabilidades][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Recursos</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Recursos][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Diários de Campo</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiariosCampo][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Atores</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Atores][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Ficha de 1º Contato</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[FichaContato][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Diários de Processo Pessoal</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[DiarioPessoal][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>Avaliações Pessoais</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[Avaliacoes][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-                <tr>
-                    <td>SER</td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Listar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Detalhar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Criar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Atualizar]"><span class="slider"></span></label></td>
-                    <td><label class="switch"><input type="checkbox" name="Permissoes[SER][Deletar]"><span class="slider"></span></label></td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Tabela de Permissões -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Permissões de Acesso</div>
 
-        <div class="form-buttons">
-            <a asp-controller="AccessProfile" asp-action="Index" class="btn btn-secondary">CANCELAR</a>
-            <button type="submit" class="btn btn-primary">CRIAR PERFIL</button>
+        <div class="permissions-table-container">
+            <table class="permissions-table">
+                <thead>
+                    <tr>
+                        <th class="permission-name">Módulo</th>
+                        <th class="permission-action">
+                            <i class="fas fa-list"></i>
+                            <span>Listar</span>
+                        </th>
+                        <th class="permission-action">
+                            <i class="fas fa-eye"></i>
+                            <span>Detalhar</span>
+                        </th>
+                        <th class="permission-action">
+                            <i class="fas fa-plus"></i>
+                            <span>Criar</span>
+                        </th>
+                        <th class="permission-action">
+                            <i class="fas fa-edit"></i>
+                            <span>Atualizar</span>
+                        </th>
+                        <th class="permission-action">
+                            <i class="fas fa-trash"></i>
+                            <span>Deletar</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var modulos = new[] {
+                            new { Nome = "Usuários", Icone = "fa-users", Key = "Usuarios" },
+                            new { Nome = "Perfis de Acesso", Icone = "fa-user-shield", Key = "Perfis" },
+                            new { Nome = "Atividades", Icone = "fa-tasks", Key = "Atividades" },
+                            new { Nome = "Comunidades", Icone = "fa-home", Key = "Comunidades" },
+                            new { Nome = "Vulnerabilidades", Icone = "fa-exclamation-triangle", Key = "Vulnerabilidades" },
+                            new { Nome = "Recursos", Icone = "fa-box", Key = "Recursos" },
+                            new { Nome = "Diários de Campo", Icone = "fa-book", Key = "DiariosCampo" },
+                            new { Nome = "Atores", Icone = "fa-user-friends", Key = "Atores" },
+                            new { Nome = "Ficha de 1º Contato", Icone = "fa-file-alt", Key = "FichaContato" },
+                            new { Nome = "Diários de Processo Pessoal", Icone = "fa-journal-whills", Key = "DiarioPessoal" },
+                            new { Nome = "Avaliações Pessoais", Icone = "fa-star", Key = "Avaliacoes" },
+                            new { Nome = "SER", Icone = "fa-chart-line", Key = "SER" }
+                        };
+
+                        var acoes = new[] { "Listar", "Detalhar", "Criar", "Atualizar", "Deletar" };
+
+                        foreach (var modulo in modulos)
+                        {
+                            <tr>
+                                <td class="module-name">
+                                    <i class="fas @modulo.Icone"></i>
+                                    <span>@modulo.Nome</span>
+                                </td>
+                                @foreach (var acao in acoes)
+                                {
+                                    <td>
+                                        <label class="permission-switch">
+                                            <input type="checkbox" name="Permissoes[@modulo.Key][@acao]">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
-    </form>
-</div>
+
+        <!-- Ações Rápidas -->
+        <div class="quick-actions">
+            <button type="button" class="wizard-btn btn-next" onclick="toggleAllPermissions(true)">
+                <i class="fas fa-check-double"></i> Marcar Todas
+            </button>
+            <button type="button" class="wizard-btn btn-prev" onclick="toggleAllPermissions(false)">
+                <i class="fas fa-times"></i> Desmarcar Todas
+            </button>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="buttons-container">
+            <a asp-controller="AccessProfile" asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <div class="action-buttons-group">
+                <button type="submit" class="wizard-btn btn-next" id="create-btn">
+                    <i class="fa-solid fa-plus"></i> Criar Perfil
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.main-form');
+            const createBtn = document.getElementById('create-btn');
+            let isSubmitting = false;
+
+            // Handler do botão criar
+            form.addEventListener('submit', function (e) {
+                if (!isSubmitting && form.checkValidity()) {
+                    isSubmitting = true;
+                    createBtn.disabled = true;
+                    createBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
+                } else if (!form.checkValidity()) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Função para marcar/desmarcar todas as permissões
+        function toggleAllPermissions(checked) {
+            const checkboxes = document.querySelectorAll('.permissions-table input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = checked;
+            });
+        }
+    </script>
+}

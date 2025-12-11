@@ -1,196 +1,341 @@
 @model Empodera.Models.Atividades
 @{
-    ViewData["Title"] = "Adicionar Atividade";
+    ViewData["Title"] = "Atividade - Editar";
+    ViewData["PageCSS"] = "activity-form";
     Layout = "_Layout";
     var eixos = ViewBag.EixosList as List<Empodera.Models.Eixo>;
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/activity-form.css" />
-    <link rel="stylesheet" href="~/css/pages/create-form.css" />
 }
 
-<div class="container">
-    <div class="breadcrumb">
-        <h1>
-            <a asp-controller="Atividades" asp-action="Index">Atividades</a>
-            <strong>Adicionar Atividade</strong>
-        </h1>
-    </div>
-    <form method="post" asp-controller="Atividades" asp-action="Edit">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="IdAtividade" />
-        <div class="form-group">
-            <label>Comunidade</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-city"></i>
+<form asp-controller="Atividades" asp-action="Edit" method="post" class="main-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IdAtividade" />
 
-                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required></select>
-
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
-            </div>
+    <div class="modern-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="Atividades" asp-action="Index" class="text-primary">Atividades</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Detalhes da Atividade</strong>
+            </h2>
         </div>
-        <div class="form-group">
-            <label for="Nome">Nome</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-pencil"></i>
-                <input asp-for="Nome" type="text" value="@Model.Nome" required>
+
+        <!-- Comunidade -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-city"></i></div>
+            <div class="input-content">
+                <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
+                <select id="ComunidadeId" name="ComunidadeId" class="clean-input" asp-items="ViewBag.Comunidades" required>
+                    <option value="">Selecione uma comunidade</option>
+                </select>
+                <span asp-validation-for="FkIdComunidade" class="text-danger"></span>
             </div>
         </div>
 
-        <div class="form-group">
-            <label>Eixos</label>
-
-            <div class="eixos-tag-container" id="tag-container">
+        <!-- Nome da Atividade -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-pencil"></i></div>
+            <div class="input-content">
+                <label asp-for="Nome">Nome da Atividade <span class="text-danger">*</span></label>
+                <input type="text" asp-for="Nome" class="clean-input" required
+                       placeholder="Digite o nome da atividade" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
+        </div>
 
-            <details class="multiselect-wrapper">
-                <summary>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-tags"></i>
-                        <span class="multiselect-placeholder">Selecione os eixos</span>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
-                    <ul>
-                        @if (eixos != null)
-                        {
-                            @foreach (var eixo in eixos)
+        <!-- Eixos -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-tags"></i></div>
+            <div class="input-content">
+                <label>Eixos <span class="text-danger">*</span></label>
+                
+                <!-- Container de Tags Selecionadas -->
+                <div class="eixos-tag-container" id="tag-container"></div>
+
+                <!-- Dropdown de Seleção -->
+                <details class="multiselect-wrapper">
+                    <summary>
+                        <div class="multiselect-trigger">
+                            <span class="multiselect-placeholder">Selecione os eixos</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </summary>
+                    <div class="multiselect-panel" id="multiselect-panel">
+                        <ul>
+                            @if (eixos != null)
                             {
-                                <li>
-                                    <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
-                                        data-tag-class="tag-pink" data-tag-name="@eixo.Nome" @(Model.AtividadesEixos.Any(ae => ae.FkIdEixo == eixo.IdEixo) ? "checked" : "")>
-                                    <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
-                                </li>
+                                @foreach (var eixo in eixos)
+                                {
+                                    <li>
+                                        <input type="checkbox" 
+                                               name="EixosSelecionados" 
+                                               value="@eixo.IdEixo" 
+                                               id="eixo-@eixo.IdEixo"
+                                               data-tag-name="@eixo.Nome"
+                                               @(Model.AtividadesEixos.Any(ae => ae.FkIdEixo == eixo.IdEixo) ? "checked" : "")>
+                                        <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                                    </li>
+                                }
                             }
-                        }
-                    </ul>
-                </div>
-            </details>
-        </div>
-        <div class="form-group">
-            <label for="Descricao">Descrição</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Descricao">@Model.Descricao</textarea>
+                        </ul>
+                    </div>
+                </details>
             </div>
         </div>
 
-        <details class="form-footer" open>
-            <div class="metadata-content">
-                <div class="form-group">
+        <!-- Descrição -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-align-left"></i></div>
+            <div class="input-content">
+                <label asp-for="Descricao">Descrição</label>
+                <textarea asp-for="Descricao" class="clean-input" rows="4"
+                          placeholder="Descreva a atividade..."></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Informações do Sistema -->
+        @if (Model.IdAtividade > 0)
+        {
+            <div class="purple-divider"></div>
+            <div class="section-label">Informações do Sistema</div>
+
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-user-edit"></i></div>
+                <div class="input-content">
                     <label>Criado por</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" value="@ViewBag.UsuarioOriginal.Nome" readonly>
+                    <div class="system-info-display">
+                        <span class="info-user">
+                            <i class="fa-solid fa-user"></i>
+                            @ViewBag.UsuarioOriginal?.Nome
+                        </span>
                     </div>
                 </div>
-                @if(ViewBag.UsuarioNovo != null)
+            </div>
+
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-calendar-plus"></i></div>
+                <div class="input-content">
+                    <label>Data de Criação</label>
+                    <div class="system-info-display">
+                        <span class="info-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                </div>
+            </div>
+
+            @if (ViewBag.UsuarioNovo != null)
+            {
+                <div class="input-card full-width">
+                    <div class="icon-box"><i class="fa-solid fa-calendar-day"></i></div>
+                    <div class="input-content">
+                        <label>Última Atualização</label>
+                        <div class="system-info-display">
+                            <span class="info-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                            <span class="info-user">
+                                <i class="fa-solid fa-user"></i>
+                                @ViewBag.UsuarioNovo.Nome
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        <!-- Botões de Ação -->
+        <div class="buttons-container">
+            <a asp-controller="Atividades" asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <div class="action-buttons-group">
+                <button type="button" class="wizard-btn" id="edit-save-btn">
+                    <i class="fa-solid fa-edit"></i> Editar
+                </button>
+
+                @if (Model.IdAtividade > 0)
                 {
-                <div class="form-group">
-                    <label>Atualizado por</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                         <input type="text" value="@ViewBag.UsuarioNovo.Nome" readonly>
-                    </div>
-                </div>
-                }
-                <div class="form-group">
-                    <label>Data de criação</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
-                    </div>
-                </div>
-                @if(ViewBag.UsuarioNovo != null)
-                {
-                <div class="form-group">
-                    <label>Última atualização</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
-                    </div>
-                </div>
+                    <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                        <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
                 }
             </div>
-        </details>
-
-        <div class="form-buttons" style="margin-top: 40px;">
-            <button type="submit" class="btn-full-width">EDITAR ATIVIDADE</button>
         </div>
+    </div>
+</form>
 
-    </form>
-</div>
+<!-- Modal de Confirmação de Exclusão -->
+@if (Model.IdAtividade > 0)
+{
+    <div class="modal-overlay" id="deleteConfirmationModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="modal-title">Confirmar Exclusão</h3>
+            <p class="modal-text">
+                Você tem certeza que deseja deletar a atividade <strong>@Model.Nome</strong>?
+                <br><br>
+                Essa ação não pode ser desfeita.
+            </p>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">
+                    Cancelar
+                </button>
+
+                <form asp-controller="Atividades" asp-action="Delete" method="post" asp-route-id="@Model.IdAtividade">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-modal-confirm wizard-btn btn-delete">
+                        Sim, Deletar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.main-form');
+            const inputFields = form.querySelectorAll('.clean-input, textarea');
+            const editSaveBtn = document.getElementById('edit-save-btn');
             const tagContainer = document.getElementById('tag-container');
             const multiselectPanel = document.getElementById('multiselect-panel');
-
-            // Todos os checkboxes de eixos
             const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
+            
+            let isEditMode = false;
+            let isSubmitting = false;
 
-            // --- 1. Função Principal: Atualiza a UI (Tags e Lista) ---
+            // Configurar estado dos campos
+            function setPageState() {
+                if (isEditMode) {
+                    inputFields.forEach(field => field.disabled = false);
+                    checkboxes.forEach(cb => cb.disabled = false);
+                    editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+                    editSaveBtn.setAttribute('type', 'submit');
+                    editSaveBtn.classList.add('btn-save-final');
+                    editSaveBtn.classList.remove('btn-next');
+                } else {
+                    inputFields.forEach(field => field.disabled = true);
+                    checkboxes.forEach(cb => cb.disabled = true);
+                    editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+                    editSaveBtn.setAttribute('type', 'button');
+                    editSaveBtn.classList.add('btn-next');
+                    editSaveBtn.classList.remove('btn-save-final');
+                }
+            }
+
+            setPageState();
+
+            // Função para atualizar as tags
             function updateTagView() {
-                // Limpa o container de tags
                 tagContainer.innerHTML = '';
 
                 checkboxes.forEach(cb => {
                     const listItem = cb.closest('li');
 
                     if (cb.checked) {
-                        // Se está marcado: cria a tag
                         const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass;
-
                         const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
+                        tag.className = 'tag-item tag-purple';
                         tag.textContent = tagName;
 
-                        // Cria o botão 'x' de remover
                         const removeBtn = document.createElement('i');
                         removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.dataset.checkboxId = cb.id; // Liga o 'x' ao seu checkbox
+                        removeBtn.dataset.checkboxId = cb.id;
 
                         tag.appendChild(removeBtn);
                         tagContainer.appendChild(tag);
 
-                        // Esconde o item da lista dropdown
                         listItem.classList.add('is-selected');
                     } else {
-                        // Se não está marcado: mostra na lista
                         listItem.classList.remove('is-selected');
                     }
                 });
             }
 
-            // --- 2. Evento: Clicar no Checkbox (na lista) ---
+            // Evento de mudança nos checkboxes
             multiselectPanel.addEventListener('change', function (e) {
                 if (e.target.type === 'checkbox') {
                     updateTagView();
                 }
             });
 
-            // --- 3. Evento: Clicar no 'X' da Tag (no container) ---
+            // Evento de clique no X das tags
             tagContainer.addEventListener('click', function (e) {
-                // Se clicou no 'x' (classe 'tag-remove-btn')
                 if (e.target.classList.contains('tag-remove-btn')) {
                     const checkboxId = e.target.dataset.checkboxId;
                     const checkboxToUncheck = document.getElementById(checkboxId);
 
-                    if (checkboxToUncheck) {
+                    if (checkboxToUncheck && !checkboxToUncheck.disabled) {
                         checkboxToUncheck.checked = false;
-                        // Atualiza a UI
                         updateTagView();
                     }
                 }
             });
 
-            // --- 4. Inicialização ---
-            // Mostra as tags que já vieram selecionadas (se houver alguma 'checked')
+            // Inicialização
             updateTagView();
+
+            // Handler do botão editar/salvar
+            editSaveBtn.addEventListener('click', function (e) {
+                if (editSaveBtn.getAttribute('type') === 'submit') {
+                    if (!isSubmitting && form.checkValidity()) {
+                        isSubmitting = true;
+                        editSaveBtn.disabled = true;
+                        editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+                        form.submit();
+                    }
+                } else {
+                    e.preventDefault();
+                    isEditMode = true;
+                    setPageState();
+                }
+            });
+
+            // Lógica do modal de exclusão
+            const deleteModal = document.getElementById('deleteConfirmationModal');
+            const openDeleteBtn = document.getElementById('openDeleteModalBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+            if (openDeleteBtn) {
+                openDeleteBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    deleteModal.style.display = 'flex';
+                    setTimeout(() => deleteModal.classList.add('active'), 10);
+                });
+            }
+
+            if (cancelDeleteBtn) {
+                cancelDeleteBtn.addEventListener('click', function () {
+                    closeDeleteModal();
+                });
+            }
+
+            window.addEventListener('click', function (e) {
+                if (e.target === deleteModal) {
+                    closeDeleteModal();
+                }
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && deleteModal && deleteModal.classList.contains('active')) {
+                    closeDeleteModal();
+                }
+            });
+
+            function closeDeleteModal() {
+                deleteModal.classList.remove('active');
+                setTimeout(() => deleteModal.style.display = 'none', 300);
+            }
         });
     </script>
 }

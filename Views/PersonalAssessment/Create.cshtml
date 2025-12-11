@@ -1,38 +1,45 @@
 @model Empodera.Models.AvaliacaoPessoal
 @{
-    ViewData["Title"] = "Nova Avaliação Pessoal";
+    ViewData["Title"] = "Avaliação Pessoal - Criar";
+    ViewData["PageCSS"] = "personal-assessment-form";
     Layout = "_Layout";
 }
 
-
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
-    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
 }
 
-<div class="container">
-   <div class="breadcrumb">
-    <h1>
-        <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@ViewBag.AtorId">Avaliações Pessoais</a> 
-        > 
-        <strong>Nova Avaliação Pessoal</strong>
-    </h1>
-</div>
+<form asp-controller="PersonalAssessment" asp-action="Create" method="post" class="main-form">
+    @Html.AntiForgeryToken()
 
-    <form method="post" action="create">
-        
-        <div class="form-group">
-            <label for="AtorId">Ator</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <select asp-for="FKidAtores" class="form-control" asp-items="ViewBag.AtoresList" required>
+    <div class="modern-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@ViewBag.AtorId" class="text-primary">Avaliações Pessoais</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Nova Avaliação Pessoal</strong>
+            </h2>
+        </div>
+
+        <!-- Seleção de Ator -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-user"></i></div>
+            <div class="input-content">
+                <label asp-for="FKidAtores">Ator <span class="text-danger">*</span></label>
+                <select asp-for="FKidAtores" class="clean-input" asp-items="ViewBag.AtoresList" required>
                     <option value="">Selecione um Ator</option>
                 </select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                <span asp-validation-for="FKidAtores" class="text-danger"></span>
             </div>
         </div>
+
+        <!-- Métricas de Avaliação -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Dimensões de Avaliação</div>
 
         <div class="metric-form-group">
             <label class="metric-label" for="RedePrimaria">Rede primária 
@@ -69,7 +76,6 @@
             <input type="range" class="metric-slider" asp-for="Prevencao" min="1" max="5" value="1">
         </div>
 
-        
         <div class="metric-form-group">
             <label class="metric-label" for="AssistenciaBasica">Assistência Básica 
                 <span class="tooltip-icon" data-tooltip="1. Possui suas necessidades básicas de alimentação e documentação garantidas.&#10;5. Não possui suas necessidades básicas de alimentação e documentação garantidas.">?</span>
@@ -104,13 +110,40 @@
             </label>
             <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5" value="1">
         </div>
-        <div class="form-buttons">
-            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Context.Request.Query["atorId"]" class="btn btn-secondary">CANCELAR</a>
-            <button type="submit" class="btn btn-primary">CRIAR AVALIAÇÃO</button>
+
+        <!-- Botões de Ação -->
+        <div class="buttons-container">
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Context.Request.Query["atorId"]" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <div class="action-buttons-group">
+                <button type="submit" class="wizard-btn btn-next" id="create-assessment-btn">
+                    <i class="fa-solid fa-plus"></i> Criar Avaliação
+                </button>
+            </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 
 @section Scripts {
     <script src="~/js/personal-assessment.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.main-form');
+            const createBtn = document.getElementById('create-assessment-btn');
+            let isSubmitting = false;
+
+            // Handler do botão criar
+            form.addEventListener('submit', function (e) {
+                if (!isSubmitting && form.checkValidity()) {
+                    isSubmitting = true;
+                    createBtn.disabled = true;
+                    createBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
+                } else if (!form.checkValidity()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 }

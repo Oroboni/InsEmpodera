@@ -1,15 +1,16 @@
 @model Empodera.Models.Usuario
 @{
     ViewData["Title"] = "Criar Usuário";
-    ViewData["PageCSS"] = "usuarios-create"; 
+    ViewData["PageCSS"] = "usuarios-create";
 }
+
 <head>
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
-    <link rel="stylesheet" href="~/css/pages/usuarios-create.css">
+    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css">
 </head>
 
 <div class="modern-container">
-    
+
     <!-- Cabeçalho -->
     <div class="header-section">
         <h2 class="page-title">Criar Novo Usuário</h2>
@@ -28,13 +29,8 @@
                 <i class="fa-solid fa-signature"></i>
             </div>
             <div class="input-content">
-                <label for="Nome">Nome Completo</label>
-                <input 
-                    type="text" 
-                    class="clean-input" 
-                    asp-for="Nome" 
-                    placeholder="Digite o nome completo"
-                    required />
+                <label for="Nome">Nome Completo *</label>
+                <input type="text" class="clean-input" asp-for="Nome" placeholder="Digite o nome completo" required />
             </div>
         </div>
 
@@ -45,12 +41,7 @@
                 </div>
                 <div class="input-content">
                     <label for="Email">E-mail</label>
-                    <input 
-                        type="email" 
-                        class="clean-input" 
-                        asp-for="Email" 
-                        placeholder="exemplo@email.com"
-                        required />
+                    <input type="email" class="clean-input" asp-for="Email" placeholder="exemplo@email.com" required />
                 </div>
             </div>
 
@@ -60,11 +51,7 @@
                 </div>
                 <div class="input-content">
                     <label for="Senha">Senha</label>
-                    <input 
-                        type="password" 
-                        class="clean-input" 
-                        asp-for="Senha" 
-                        placeholder="Mínimo 6 caracteres"
+                    <input type="password" class="clean-input" asp-for="Senha" placeholder="Mínimo 6 caracteres"
                         required />
                 </div>
             </div>
@@ -77,11 +64,7 @@
                 </div>
                 <div class="input-content">
                     <label for="Genero">Gênero</label>
-                    <select 
-                        class="clean-input simple-select" 
-                        asp-for="Genero" 
-                        name="Genero"
-                        required>
+                    <select class="clean-input simple-select" asp-for="Genero" name="Genero" required>
                         <option value="" disabled selected>Selecione</option>
                         <option value="feminino">Feminino</option>
                         <option value="masculino">Masculino</option>
@@ -97,10 +80,7 @@
                 </div>
                 <div class="input-content">
                     <label for="Ocupacao">Ocupação</label>
-                    <input 
-                        type="text" 
-                        class="clean-input" 
-                        asp-for="Ocupacao" 
+                    <input type="text" class="clean-input" asp-for="Ocupacao"
                         placeholder="Ex: Psicóloga, Assistente Social" />
                 </div>
             </div>
@@ -119,11 +99,7 @@
             </div>
             <div class="input-content">
                 <label for="FkIdPerfil">Perfil de Acesso *</label>
-                <select 
-                    class="clean-input simple-select" 
-                    asp-for="FkIdPerfil" 
-                    asp-items="ViewBag.PerfilLista" 
-                    required>
+                <select class="clean-input simple-select" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" required>
                     <option value="" disabled selected>Selecione o perfil</option>
                 </select>
             </div>
@@ -140,7 +116,5 @@
                 Salvar Usuário
             </button>
         </div>
-
     </form>
-
 </div>

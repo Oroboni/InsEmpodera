@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
     <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
 }
 
 <div class="modern-container">
@@ -20,7 +21,7 @@
         </h2>
     </div>
 
-    <!-- Barra de Busca e Filtros -->
+    <!-- Barra de Busca -->
     <div class="search-container">
         <div class="search-input-group">
             <div class="search-wrapper">
@@ -29,18 +30,6 @@
                 <button type="button" class="btn-search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-            </div>
-
-            <div class="input-card" style="margin-bottom: 0; width: auto; min-width: 200px;">
-                <div class="input-content" style="flex-direction: row; align-items: center; gap: 1rem;">
-                    <label class="toggle-switch" style="margin: 0;">
-                        <input type="checkbox" id="toggleInativos" name="incluirInativos" />
-                        <span class="slider round"></span>
-                    </label>
-                    <label for="toggleInativos" style="margin: 0; cursor: pointer; user-select: none;">
-                        Incluir Inativos
-                    </label>
-                </div>
             </div>
         </div>
 
@@ -61,23 +50,46 @@
             </div>
         </div>
 
+        @{
+            var ativos = Model.Count(u => u.Ativo == "S");
+        }
         <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="activeUsers">@Model.Count(u => u.Ativo
-                                == "S")</span>
+            <span class="card-title" style="font-size: var(--font-size-4xl);" id="activeUsers">@ativos</span>
             <span class="card-subtitle">Usuários Ativos</span>
             <div class="card-icons">
                 <i class="fas fa-check-circle"></i>
             </div>
         </div>
 
+        @{
+            var inativos = Model.Count(u => u.Ativo == "N");
+        }
         <div class="action-card stats-card" style="background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="inactiveUsers">@Model.Count(u =>
-                                u.Ativo == "N")</span>
+            <span class="card-title" style="font-size: var(--font-size-4xl);" id="inactiveUsers">@inativos</span>
             <span class="card-subtitle">Usuários Inativos</span>
             <div class="card-icons">
                 <i class="fas fa-times-circle"></i>
             </div>
         </div>
+    </div>
+
+    <!-- Filtro por Status -->
+    <div class="purple-divider"></div>
+    <div class="section-label">Filtrar por Status</div>
+
+    <div class="eixos-filter-container">
+        <button class="filter-eixo-btn active" data-status="todos">
+            <i class="fas fa-th"></i>
+            Todos
+        </button>
+        <button class="filter-eixo-btn" data-status="ativos">
+            <i class="fas fa-check-circle"></i>
+            Ativos
+        </button>
+        <button class="filter-eixo-btn" data-status="inativos">
+            <i class="fas fa-times-circle"></i>
+            Inativos
+        </button>
     </div>
 
     <!-- Lista de Usuários -->
@@ -91,31 +103,45 @@
             {
                 var isAtivo = user.Ativo == "S";
 
-                <div class="form-item user-item" data-ativo="@isAtivo.ToString().ToLower()" data-nome="@user.Nome?.ToLower()"
-                    data-email="@user.Email?.ToLower()">
+                <div class="form-item user-item" 
+                     data-ativo="@isAtivo.ToString().ToLower()" 
+                     data-nome="@user.Nome?.ToLower()"
+                     data-email="@user.Email?.ToLower()">
 
                     <div class="form-info" style="flex: 1;">
                         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                            <div class="user-avatar">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                                 <i class="fas fa-user"></i>
                             </div>
-                            <div>
+                            <div style="flex: 1;">
                                 <p class="name" style="margin: 0;">@user.Nome</p>
-                                <p class="date" style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                                    <i class="fas fa-envelope" style="font-size: 0.75rem;"></i>
+                                <p style="color: var(--color-gray-500); font-size: 0.875rem; margin: 0.25rem 0 0 0;">
+                                    <i class="fas fa-envelope" style="margin-right: 0.25rem;"></i>
                                     @user.Email
                                 </p>
+                                
+                                <div class="tag-list" style="margin-top: 0.5rem;">
+                                    @if (isAtivo)
+                                    {
+                                        <span class="tag-item tag-green">
+                                            <i class="fas fa-check-circle"></i>
+                                            Ativo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="tag-item tag-red">
+                                            <i class="fas fa-times-circle"></i>
+                                            Inativo
+                                        </span>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="actions" style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div class="user-status-badge @(isAtivo ? "status-active" : "status-inactive")">
-                            <i class="fas fa-circle"></i>
-                            @(isAtivo ? "Ativo" : "Inativo")
-                        </div>
-
-                        <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
+                    <div class="actions">
+                        <a class="btn-action" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
                             title="Ver detalhes">
                             <i class="fa-solid fa-eye"></i>
                         </a>
@@ -127,7 +153,7 @@
         {
             <div class="no-records" style="padding: 3rem; text-align: center;">
                 <div style="margin-bottom: 1.5rem;">
-                    <i class="fas fa-users-slash" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+                    <i class="fas fa-users" style="font-size: 4rem; color: var(--color-gray-400);"></i>
                 </div>
                 <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum usuário cadastrado</h3>
                 <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
@@ -156,15 +182,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchUsersInput');
-            const toggleInativos = document.getElementById('toggleInativos');
             const usersGrid = document.getElementById('usersGrid');
             const noResultsMessage = document.getElementById('noResultsMessage');
             const userItems = document.querySelectorAll('.user-item');
+            const filterButtons = document.querySelectorAll('.filter-eixo-btn');
+
+            let currentStatusFilter = 'todos';
 
             // Função para filtrar usuários
             function filterUsers() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                const incluirInativos = toggleInativos.checked;
                 let visibleCount = 0;
 
                 userItems.forEach(item => {
@@ -175,8 +202,15 @@
                     // Verificar se corresponde à busca
                     const matchesSearch = nome.includes(searchTerm) || email.includes(searchTerm);
 
-                    // Verificar se deve mostrar baseado no status
-                    const shouldShow = matchesSearch && (incluirInativos || ativo);
+                    // Verificar se corresponde ao filtro de status
+                    let matchesStatus = true;
+                    if (currentStatusFilter === 'ativos') {
+                        matchesStatus = ativo;
+                    } else if (currentStatusFilter === 'inativos') {
+                        matchesStatus = !ativo;
+                    }
+
+                    const shouldShow = matchesSearch && matchesStatus;
 
                     if (shouldShow) {
                         item.style.display = 'flex';
@@ -196,9 +230,25 @@
                 }
             }
 
-            // Event listeners
+            // Event listener para busca
             searchInput.addEventListener('input', filterUsers);
-            toggleInativos.addEventListener('change', filterUsers);
+
+            // Event listeners para filtros de status
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Remover active de todos os botões
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Adicionar active no botão clicado
+                    this.classList.add('active');
+
+                    // Atualizar filtro atual
+                    currentStatusFilter = this.getAttribute('data-status');
+
+                    // Aplicar filtros
+                    filterUsers();
+                });
+            });
 
             // Limpar busca ao pressionar ESC
             searchInput.addEventListener('keydown', function (e) {
@@ -207,9 +257,6 @@
                     filterUsers();
                 }
             });
-
-            // Aplicar filtro inicial (ocultar inativos por padrão)
-            filterUsers();
         });
     </script>
 }

@@ -2,22 +2,33 @@
 @using Empodera.Models
 @{
     ViewData["Title"] = "Ficha de Primeiro Contato";
-    ViewData["PageCSS"] = "fichaprimeirocontato";
+    ViewData["PageCSS"] = "homepage";
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
     <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
 }
 
-<div class="forms-container">
-    <h2 class="page-title">Ficha de Primeiro Contato</h2>
+<div class="modern-container">
+    <!-- Header -->
+    <div class="header-section">
+        <h2>
+            <strong class="text-primary">Ficha de Primeiro Contato</strong>
+        </h2>
+    </div>
 
-    <div class="filter-bar">
-        <form asp-action="Index" method="get" id="filterForm">
-            <div class="main-select-wrapper">
-                <select class="main-select" name="comunidade" id="comunidadeFilter" onchange="submitFilter()">
+    <!-- Filtros -->
+    <form asp-action="Index" method="get" id="filterForm">
+        <!-- Filtro de Comunidade -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-home"></i></div>
+            <div class="input-content">
+                <label for="comunidadeFilter">Filtrar por Comunidade</label>
+                <select class="clean-input" name="comunidade" id="comunidadeFilter" onchange="submitFilter()">
                     <option value="">Todas as Comunidades</option>
                     @foreach (var item in ViewBag.Comunidades)
                     {
@@ -26,290 +37,349 @@
                     }
                 </select>
             </div>
+        </div>
 
-            <div class="bottom-filters">
-                <div class="search-container">
-                    <div class="search-input-group">
-                        <div class="search-wrapper">
-                            <input type="search" 
-                                   class="search-input" 
-                                   name="search" 
-                                   value="@ViewData["CurrentFilter"]"
-                                   placeholder="Procure pelo nome do ator" 
-                                   id="searchInput" />
-                            <button type="submit" class="btn-search">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-
-                        <div class="select-wrapper secondary-select-wrapper">
-                            <select class="secondary-select" name="status" id="statusFilter" onchange="submitFilter()">
-                                <option value="">Todos os Status</option>
-                                <option value="EmProgresso"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "EmProgresso")">
-                                    Em progresso
-                                </option>
-                                <option value="Concluida"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Concluida")">
-                                    Concluídas
-                                </option>
-                                <option value="Abandonada"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Abandonada")">
-                                    Abandonadas
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <a class="btn-add" asp-action="Create" title="Adicionar Nova Ficha">
-                        <i class="fa fa-plus"></i>
-                    </a>
+        <!-- Barra de Busca e Filtro de Status -->
+        <div class="search-container">
+            <div class="search-input-group">
+                <div class="search-wrapper">
+                    <input type="search" 
+                           name="search" 
+                           value="@ViewData["CurrentFilter"]"
+                           id="searchInput" 
+                           placeholder="Busque pelo nome do ator..."
+                           aria-label="Buscar fichas" />
+                    <button type="submit" class="btn-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                 </div>
             </div>
-        </form>
-    </div>
 
-    <div class="forms-list" id="fichasContainer">
-        @if (Model != null && Model.Any())
-        {
+            <div class="input-card" style="flex: 0 0 200px; margin: 0;">
+                <div class="input-content" style="padding: 0;">
+                    <select class="clean-input" name="status" id="statusFilter" onchange="submitFilter()">
+                        <option value="">Todos os Status</option>
+                        <option value="EmProgresso"
+                            selected="@(ViewData["CurrentStatus"]?.ToString() == "EmProgresso")">
+                            Em progresso
+                        </option>
+                        <option value="Concluida"
+                            selected="@(ViewData["CurrentStatus"]?.ToString() == "Concluida")">
+                            Concluídas
+                        </option>
+                        <option value="Abandonada"
+                            selected="@(ViewData["CurrentStatus"]?.ToString() == "Abandonada")">
+                            Abandonadas
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="button" class="btn-add" 
+                onclick="window.location.href='@Url.Action("Create", "FichaPrimeiroContato")'"
+                title="Adicionar Nova Ficha">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <!-- Estatísticas -->
+        <div class="section-label">Resumo</div>
+        <div class="actions-grid">
+            <div class="action-card stats-card">
+                <span class="card-title" style="font-size: var(--font-size-4xl);">@Model.Count()</span>
+                <span class="card-subtitle">Total de Fichas</span>
+                <div class="card-icons">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+            </div>
+
+            @{
+                var emProgresso = Model.Count(f => f.Status == StatusFicha.EmProgresso);
+            }
+            <div class="action-card stats-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
+                <span class="card-title" style="font-size: var(--font-size-4xl);">@emProgresso</span>
+                <span class="card-subtitle">Em Progresso</span>
+                <div class="card-icons">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+            </div>
+
+            @{
+                var concluidas = Model.Count(f => f.Status == StatusFicha.Concluida);
+            }
+            <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #218838 100%);">
+                <span class="card-title" style="font-size: var(--font-size-4xl);">@concluidas</span>
+                <span class="card-subtitle">Concluídas</span>
+                <div class="card-icons">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+
+            @{
+                var abandonadas = Model.Count(f => f.Status == StatusFicha.Abandonada);
+            }
+            <div class="action-card stats-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                <span class="card-title" style="font-size: var(--font-size-4xl);">@abandonadas</span>
+                <span class="card-subtitle">Abandonadas</span>
+                <div class="card-icons">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Fichas -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Todas as Fichas</div>
+
+        <div class="forms-list" id="fichasContainer">
             @foreach (var form in Model)
             {
                 bool isFinalized = form.Status != StatusFicha.EmProgresso;
-                var nomeAtor = form.Ator?.Nome?.ToLower() ?? "";
-                <div class="form-item" data-search="@nomeAtor">
-                    <div class="form-info">
-                        <p class="name">@form.Ator?.Nome</p>
-
-                        <!-- Exibir comunidades associadas -->
-                        @if (form.FichaComunidades != null && form.FichaComunidades.Any())
-                        {
-                            <p class="community">
-                                @{
-                                    var comunidades = form.FichaComunidades.Take(2).ToList();
-                                    for (int i = 0; i < comunidades.Count; i++)
-                                    {
-                                        <span class="community-tag">@comunidades[i].Comunidade.Nome</span>
-                                        @if (i < comunidades.Count - 1)
-                                        {
-                                            <span>, </span>
+                var nomeAtor = form.Ator?.Nome ?? "Sem nome";
+                
+                <div class="form-item" data-search="@nomeAtor.ToLower()">
+                    <div class="form-info" style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p class="name" style="margin: 0;">@nomeAtor</p>
+                                
+                                <!-- Comunidades -->
+                                @if (form.FichaComunidades != null && form.FichaComunidades.Any())
+                                {
+                                    <p style="color: var(--color-gray-500); font-size: 0.875rem; margin: 0.25rem 0 0 0;">
+                                        <i class="fas fa-home" style="margin-right: 0.25rem;"></i>
+                                        @{
+                                            var comunidades = form.FichaComunidades.Take(2).ToList();
+                                            var comunidadesNomes = string.Join(", ", comunidades.Select(c => c.Comunidade.Nome));
+                                            if (form.FichaComunidades.Count > 2)
+                                            {
+                                                comunidadesNomes += "...";
+                                            }
                                         }
-                                    }
-                                    @if (form.FichaComunidades.Count > 2)
-                                    {
-                                        <span>...</span>
-                                    }
+                                        @comunidadesNomes
+                                    </p>
                                 }
-                            </p>
-                        }
-
-                        <div class="form-status">
-                            <p class="date">@form.DtContato.ToString("dd/MM/yyyy")</p>
-
-                            @if (form.Status == StatusFicha.Concluida)
-                            {
-                                <span class="tag-item tag-green">Concluída</span>
-                            }
-                            else if (form.Status == StatusFicha.Abandonada)
-                            {
-                                <span class="tag-item tag-red">Abandonada</span>
-                            }
-                            else if (form.Status == StatusFicha.EmProgresso)
-                            {
-                                <span class="tag-item tag-yellow">Em Progresso</span>
-                            }
+                                
+                                <!-- Data e Status -->
+                                <div class="tag-list" style="margin-top: 0.5rem;">
+                                    <span class="tag-item tag-default">
+                                        <i class="fas fa-calendar"></i>
+                                        @form.DtContato.ToString("dd/MM/yyyy")
+                                    </span>
+                                    
+                                    @if (form.Status == StatusFicha.Concluida)
+                                    {
+                                        <span class="tag-item tag-green">
+                                            <i class="fas fa-check-circle"></i>
+                                            Concluída
+                                        </span>
+                                    }
+                                    else if (form.Status == StatusFicha.Abandonada)
+                                    {
+                                        <span class="tag-item tag-red">
+                                            <i class="fas fa-times-circle"></i>
+                                            Abandonada
+                                        </span>
+                                    }
+                                    else if (form.Status == StatusFicha.EmProgresso)
+                                    {
+                                        <span class="tag-item tag-yellow">
+                                            <i class="fas fa-hourglass-half"></i>
+                                            Em Progresso
+                                        </span>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="actions">
                         <button type="button" 
-                                class="btn-action btn-concluir @(isFinalized ? "gray" : "")"
+                                class="btn-action @(isFinalized ? "disabled" : "")"
                                 data-id="@form.IdFicha"
-                                data-nome="@form.Ator?.Nome" 
-                                title="Concluir" 
+                                data-nome="@nomeAtor" 
+                                title="Concluir"
+                                style="@(isFinalized ? "opacity: 0.5; cursor: not-allowed;" : "")"
+                                onclick="@(isFinalized ? "" : $"openModalConcluir({form.IdFicha}, '{nomeAtor}')")"
                                 @(isFinalized ? "disabled" : "")>
-                            <i class="fa fa-check"></i>
+                            <i class="fa fa-check" style="color: #28a745;"></i>
                         </button>
 
                         <button type="button" 
-                                class="btn-action btn-abandonar @(isFinalized ? "gray" : "")"
+                                class="btn-action @(isFinalized ? "disabled" : "")"
                                 data-id="@form.IdFicha"
-                                data-nome="@form.Ator?.Nome"
-                                title="Abandonar" 
+                                data-nome="@nomeAtor"
+                                title="Abandonar"
+                                style="@(isFinalized ? "opacity: 0.5; cursor: not-allowed;" : "")"
+                                onclick="@(isFinalized ? "" : $"openModalAbandonar({form.IdFicha}, '{nomeAtor}')")"
                                 @(isFinalized ? "disabled" : "")>
-                            <i class="fa fa-times"></i>
+                            <i class="fa fa-times" style="color: #dc3545;"></i>
                         </button>
 
                         <a asp-action="Edit" 
                            asp-route-id="@form.IdFicha" 
                            class="btn-action" 
-                           title="Detalhes">
+                           title="Ver detalhes">
                             <i class="fa fa-eye"></i>
                         </a>
                     </div>
                 </div>
             }
-        }
-        else
-        {
-            <p class="no-records">Nenhuma ficha encontrada.</p>
-        }
-    </div>
-
-    <!-- Modal de Concluir Ficha -->
-    <div class="modal-overlay" id="modalConcluir">
-        <div class="modal-content">
-            <div class="modal-icon">
-                <i class="fas fa-check-circle" style="color: #28a745;"></i>
-            </div>
-
-            <h3 class="modal-title">Concluir Ficha</h3>
-
-            <p class="modal-text">
-                Você realmente deseja marcar a ficha de <strong id="nomeAtorConcluir"></strong> como concluída?
-            </p>
-
-            <div class="button-container">
-                <div class="modal-actions">
-                    <button type="button" 
-                            class="btn-modal-cancel wizard-btn btn-prev" 
-                            onclick="closeModal('modalConcluir')">
-                        Cancelar
-                    </button>
-
-                    <form id="formConcluir" method="post" style="margin: 0;">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" 
-                                class="btn-modal-confirm wizard-btn btn-next"
-                                style="background-color: #28a745 !important;">
-                            Sim, Concluir
-                        </button>
-                    </form>
-                </div>
-            </div>
         </div>
-    </div>
-
-    <!-- Modal de Abandonar Ficha -->
-    <div class="modal-overlay" id="modalAbandonar">
-        <div class="modal-content">
-            <div class="modal-icon">
-                <i class="fas fa-exclamation-triangle"></i>
+    }
+    else
+    {
+        <!-- Nenhuma ficha encontrada -->
+        <div class="no-records" style="padding: 3rem; text-align: center;">
+            <div style="margin-bottom: 1.5rem;">
+                <i class="fas fa-file-alt" style="font-size: 4rem; color: var(--color-gray-400);"></i>
             </div>
-
-            <h3 class="modal-title">Abandonar Ficha</h3>
-
-            <p class="modal-text">
-                Você realmente deseja abandonar a ficha de <strong id="nomeAtorAbandonar"></strong>?<br>
-                Esta ação pode ser revertida posteriormente.
+            <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhuma ficha cadastrada</h3>
+            <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
+                Comece adicionando a primeira ficha de primeiro contato.
             </p>
+            <button type="button" class="btn-save" 
+                onclick="window.location.href='@Url.Action("Create", "FichaPrimeiroContato")'">
+                <i class="fa-solid fa-plus"></i> Adicionar Primeira Ficha
+            </button>
+        </div>
+    }
+</div>
 
-            <div class="button-container">
-                <div class="modal-actions">
-                    <button type="button" 
-                            class="btn-modal-cancel wizard-btn btn-prev" 
-                            onclick="closeModal('modalAbandonar')">
-                        Cancelar
-                    </button>
+<!-- Modal de Concluir Ficha -->
+<div class="modal-overlay" id="modalConcluir">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-check-circle" style="color: #28a745;"></i>
+        </div>
 
-                    <form id="formAbandonar" method="post" style="margin: 0;">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" 
-                                class="btn-modal-confirm wizard-btn btn-next">
-                            Sim, Abandonar
-                        </button>
-                    </form>
-                </div>
-            </div>
+        <h3 class="modal-title">Concluir Ficha</h3>
+
+        <p class="modal-text">
+            Você realmente deseja marcar a ficha de <strong id="nomeAtorConcluir"></strong> como concluída?
+        </p>
+
+        <div class="modal-actions">
+            <button type="button" 
+                    class="btn-modal-cancel wizard-btn btn-prev" 
+                    onclick="closeModal('modalConcluir')">
+                Cancelar
+            </button>
+
+            <form id="formConcluir" method="post" style="margin: 0;">
+                @Html.AntiForgeryToken()
+                <button type="submit" 
+                        class="btn-modal-confirm wizard-btn btn-next"
+                        style="background-color: #28a745 !important;">
+                    Sim, Concluir
+                </button>
+            </form>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Variáveis globais dos modais
-    const modalConcluir = document.getElementById('modalConcluir');
-    const modalAbandonar = document.getElementById('modalAbandonar');
-    const formConcluir = document.getElementById('formConcluir');
-    const formAbandonar = document.getElementById('formAbandonar');
-    const nomeAtorConcluir = document.getElementById('nomeAtorConcluir');
-    const nomeAtorAbandonar = document.getElementById('nomeAtorAbandonar');
+<!-- Modal de Abandonar Ficha -->
+<div class="modal-overlay" id="modalAbandonar">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
 
-    // Função para abrir modal
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.style.display = 'flex';
-        setTimeout(() => {
-            modal.classList.add('active');
-        }, 10);
-    }
+        <h3 class="modal-title">Abandonar Ficha</h3>
 
-    // Função para fechar modal (global para ser chamada inline)
-    window.closeModal = function(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.remove('active');
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 300);
-    };
+        <p class="modal-text">
+            Você realmente deseja abandonar a ficha de <strong id="nomeAtorAbandonar"></strong>?<br>
+            Esta ação pode ser revertida posteriormente.
+        </p>
 
-    // Botões de concluir
-    document.querySelectorAll('.btn-concluir').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (this.disabled) return;
-            
-            const fichaId = this.dataset.id;
-            const nomeAtor = this.dataset.nome || 'este ator';
-            
-            nomeAtorConcluir.textContent = nomeAtor;
-            formConcluir.action = `/FichaPrimeiroContato/Concluir/${fichaId}`;
-            openModal('modalConcluir');
-        });
-    });
+        <div class="modal-actions">
+            <button type="button" 
+                    class="btn-modal-cancel wizard-btn btn-prev" 
+                    onclick="closeModal('modalAbandonar')">
+                Cancelar
+            </button>
 
-    // Botões de abandonar
-    document.querySelectorAll('.btn-abandonar').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (this.disabled) return;
-            
-            const fichaId = this.dataset.id;
-            const nomeAtor = this.dataset.nome || 'este ator';
-            
-            nomeAtorAbandonar.textContent = nomeAtor;
-            formAbandonar.action = `/FichaPrimeiroContato/Abandonar/${fichaId}`;
-            openModal('modalAbandonar');
-        });
-    });
-
-    // Fechar modal ao clicar fora
-    window.addEventListener('click', function(e) {
-        if (e.target === modalConcluir) {
-            closeModal('modalConcluir');
-        }
-        if (e.target === modalAbandonar) {
-            closeModal('modalAbandonar');
-        }
-    });
-
-    // Fechar modal com ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            if (modalConcluir.classList.contains('active')) {
-                closeModal('modalConcluir');
-            }
-            if (modalAbandonar.classList.contains('active')) {
-                closeModal('modalAbandonar');
-            }
-        }
-    });
-
-    // Função de filtro (se existir)
-    window.submitFilter = function() {
-        document.getElementById('filterForm').submit();
-    };
-});
-</script>
+            <form id="formAbandonar" method="post" style="margin: 0;">
+                @Html.AntiForgeryToken()
+                <button type="submit" 
+                        class="btn-modal-confirm wizard-btn btn-delete">
+                    Sim, Abandonar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/js/fichaprimeirocontato.js"></script>
-    <script src="~/js/site.js"></script>
+    <script>
+        // Função para submeter filtro
+        function submitFilter() {
+            document.getElementById('filterForm').submit();
+        }
+
+        // Função para abrir modal de concluir
+        function openModalConcluir(fichaId, nomeAtor) {
+            document.getElementById('nomeAtorConcluir').textContent = nomeAtor;
+            document.getElementById('formConcluir').action = `/FichaPrimeiroContato/Concluir/${fichaId}`;
+            openModal('modalConcluir');
+        }
+
+        // Função para abrir modal de abandonar
+        function openModalAbandonar(fichaId, nomeAtor) {
+            document.getElementById('nomeAtorAbandonar').textContent = nomeAtor;
+            document.getElementById('formAbandonar').action = `/FichaPrimeiroContato/Abandonar/${fichaId}`;
+            openModal('modalAbandonar');
+        }
+
+        // Função para abrir modal
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        }
+
+        // Função para fechar modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalConcluir = document.getElementById('modalConcluir');
+            const modalAbandonar = document.getElementById('modalAbandonar');
+
+            // Fechar modal ao clicar fora
+            window.addEventListener('click', function(e) {
+                if (e.target === modalConcluir) {
+                    closeModal('modalConcluir');
+                }
+                if (e.target === modalAbandonar) {
+                    closeModal('modalAbandonar');
+                }
+            });
+
+            // Fechar modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (modalConcluir.classList.contains('active')) {
+                        closeModal('modalConcluir');
+                    }
+                    if (modalAbandonar.classList.contains('active')) {
+                        closeModal('modalAbandonar');
+                    }
+                }
+            });
+        });
+    </script>
 }

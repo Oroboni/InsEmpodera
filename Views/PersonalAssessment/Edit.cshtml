@@ -1,34 +1,45 @@
 @model Empodera.Models.AvaliacaoPessoal
 @{
-    ViewData["Title"] = "Detalhes da Avaliação Pessoal";
+    ViewData["Title"] = "Avaliação Pessoal - Editar";
+    ViewData["PageCSS"] = "personal-assessment-form";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
-    <link rel="stylesheet" href="~/css/pages/create-form.css" />
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
 }
-<div class="container">
-   <div class="breadcrumb">
-    <h1>
-        <a asp-controller="PersonalAssessment" asp-action="Index">Avaliações Pessoais</a> 
-        > 
-        <strong>Detalhes da Avaliação Pessoal</strong>
-    </h1>
-</div>
 
-    <form asp-controller="PersonalAssessment" asp-action="edit" asp-route-id="@ViewBag.atorId" method="post">
-        
-        <div class="form-group">
-            <label for="AtorId">Ator</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <select asp-for="FkIdUsuario" class="form-control" asp-items="ViewBag.AtoresList" disabled></select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+<form asp-controller="PersonalAssessment" asp-action="Edit" asp-route-id="@Model.IdAvaliacao" method="post" class="main-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IdAvaliacao" />
+
+    <div class="modern-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="PersonalAssessment" asp-action="Index" class="text-primary">Avaliações Pessoais</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Detalhes da Avaliação Pessoal</strong>
+            </h2>
+        </div>
+
+        <!-- Seleção de Ator -->
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-user"></i></div>
+            <div class="input-content">
+                <label asp-for="FkIdUsuario">Ator</label>
+                <select asp-for="FkIdUsuario" class="clean-input" asp-items="ViewBag.AtoresList" disabled>
+                    <option value="">Selecione um Ator</option>
+                </select>
             </div>
         </div>
+
+        <!-- Métricas de Avaliação -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Dimensões de Avaliação</div>
 
         <div class="metric-form-group">
             <label class="metric-label" for="RedePrimaria">Rede primária 
@@ -92,52 +103,188 @@
             </label>
             <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5">
         </div>
-        <details class="form-footer" open>
-            <summary>
-                <div class="footer-text">
-                    <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy")</strong> por <strong>[Nome do Avaliador]</strong></span>
-                </div>
-                <i class="fa-solid fa-chevron-down"></i>
-            </summary>
-            <div class="metadata-content">
-                <div class="form-group">
+
+        <!-- Informações do Sistema -->
+        @if (Model.IdAvaliacao > 0)
+        {
+            <div class="purple-divider"></div>
+            <div class="section-label">Informações do Sistema</div>
+
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-user-edit"></i></div>
+                <div class="input-content">
                     <label>Criado por</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" value="@Model.Usuario.Nome" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Atualizado por</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" value="@Model.Usuario.Nome" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Data de criação</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Última atualização</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                    <div class="system-info-display">
+                        <span class="info-user">
+                            <i class="fa-solid fa-user"></i>
+                            @Model.Usuario?.Nome
+                        </span>
                     </div>
                 </div>
             </div>
-        </details>
-        <div class="form-buttons">
-            <button type="button" class="btn btn-delete">DELETAR</button>
-            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.IdAvaliacao" class="btn btn-secondary">VOLTAR</a>
-            <button type="submit" class="btn btn-primary">EDITAR</button>
+
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-calendar-plus"></i></div>
+                <div class="input-content">
+                    <label>Data de Criação</label>
+                    <div class="system-info-display">
+                        <span class="info-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="input-content">
+                    <label>Última Atualização</label>
+                    <div class="system-info-display">
+                        <span class="info-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                        @if (Model.Usuario != null)
+                        {
+                            <span class="info-user">
+                                <i class="fa-solid fa-user"></i>
+                                @Model.Usuario.Nome
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Botões de Ação -->
+        <div class="buttons-container">
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.IdAvaliacao" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <div class="action-buttons-group">
+                <button type="button" class="wizard-btn" id="edit-save-btn">
+                    <i class="fa-solid fa-edit"></i> Editar
+                </button>
+
+                @if (Model.IdAvaliacao > 0)
+                {
+                    <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                        <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
+                }
+            </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
+
+<!-- Modal de Confirmação de Exclusão -->
+@if (Model.IdAvaliacao > 0)
+{
+    <div class="modal-overlay" id="deleteConfirmationModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="modal-title">Confirmar Exclusão</h3>
+            <p class="modal-text">
+                Você tem certeza que deseja deletar esta avaliação pessoal?
+                <br><br>
+                Essa ação não pode ser desfeita.
+            </p>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">
+                    Cancelar
+                </button>
+
+                <form asp-controller="PersonalAssessment" asp-action="Delete" method="post" asp-route-id="@Model.IdAvaliacao">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-modal-confirm wizard-btn btn-delete">
+                        Sim, Deletar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
 
 @section Scripts {
     <script src="~/js/personal-assessment.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.main-form');
+            const inputFields = form.querySelectorAll('.clean-input, .metric-slider');
+            const editSaveBtn = document.getElementById('edit-save-btn');
+            
+            let isEditMode = false;
+            let isSubmitting = false;
+
+            // Configurar estado dos campos
+            function setPageState() {
+                if (isEditMode) {
+                    inputFields.forEach(field => field.disabled = false);
+                    editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+                    editSaveBtn.setAttribute('type', 'submit');
+                    editSaveBtn.classList.add('btn-save-final');
+                    editSaveBtn.classList.remove('btn-next');
+                } else {
+                    inputFields.forEach(field => field.disabled = true);
+                    editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+                    editSaveBtn.setAttribute('type', 'button');
+                    editSaveBtn.classList.add('btn-next');
+                    editSaveBtn.classList.remove('btn-save-final');
+                }
+            }
+
+            setPageState();
+
+            // Handler do botão editar/salvar
+            editSaveBtn.addEventListener('click', function (e) {
+                if (editSaveBtn.getAttribute('type') === 'submit') {
+                    if (!isSubmitting && form.checkValidity()) {
+                        isSubmitting = true;
+                        editSaveBtn.disabled = true;
+                        editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+                        form.submit();
+                    }
+                } else {
+                    e.preventDefault();
+                    isEditMode = true;
+                    setPageState();
+                }
+            });
+
+            // Lógica do modal de exclusão
+            const deleteModal = document.getElementById('deleteConfirmationModal');
+            const openDeleteBtn = document.getElementById('openDeleteModalBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+            if (openDeleteBtn) {
+                openDeleteBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    deleteModal.style.display = 'flex';
+                    setTimeout(() => deleteModal.classList.add('active'), 10);
+                });
+            }
+
+            if (cancelDeleteBtn) {
+                cancelDeleteBtn.addEventListener('click', function () {
+                    closeDeleteModal();
+                });
+            }
+
+            window.addEventListener('click', function (e) {
+                if (e.target === deleteModal) {
+                    closeDeleteModal();
+                }
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && deleteModal && deleteModal.classList.contains('active')) {
+                    closeDeleteModal();
+                }
+            });
+
+            function closeDeleteModal() {
+                deleteModal.classList.remove('active');
+                setTimeout(() => deleteModal.style.display = 'none', 300);
+            }
+        });
+    </script>
 }
