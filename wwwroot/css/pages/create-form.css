@@ -174,14 +174,7 @@ select {
     margin: var(--space-8) 0;
 }
 
-/* ... (Estilos do action-card, pulados para economizar espaço, mantenha os seus) ... */
-.action-card {
-    background-color: var(--color-primary);
-    /* ... etc ... */
-}
 
-
-/* ... (Estilos do form-footer, pulados, mantenha os seus) ... */
 /* Botões de Ação Final */
 .form-buttons {
     display: flex;

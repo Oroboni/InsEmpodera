@@ -6,146 +6,22 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
-    <style>
-        /* ------------------------------------------- */
-        /* ESTILOS DE COMPONENTE: MODAL DE CONFIRMAÇÃO */
-        /* ------------------------------------------- */
-
-        /* 1. OVERLAY (O Fundo Escuro que Oculta o Modal) */
-        .modal-overlay {
-            /* Esconde por padrão. O JS muda para 'flex' */
-            display: none;
-
-            /* Configuração de tela cheia e sobreposição */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-
-            /* Fundo semi-transparente */
-            background-color: rgba(0, 0, 0, 0.6);
-
-            /* Centralização usando flexbox */
-            justify-content: center;
-            align-items: center;
-
-            /* Garante que fique acima de todos os elementos */
-            z-index: 9999;
-
-            /* Transição suave para opacidade/display */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        /* O JavaScript adiciona a classe 'active' para exibir */
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            display: flex;
-        }
-
-        /* 2. MODAL CONTENT (A Caixa Branca) */
-        .modal-content {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-
-        /* Pequeno efeito de entrada quando o modal está ativo */
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-
-        /* 3. ÍCONE DE ALERTA */
-        .modal-icon {
-            color: #ff9800;
-            /* Laranja/Amarelo de Alerta, comum em modais de exclusão */
-            margin-bottom: 20px;
-        }
-
-        .modal-icon i {
-            font-size: 48px;
-        }
-
-        /* 4. TÍTULO E TEXTO */
-        .modal-title {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .modal-text {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        .modal-text strong {
-            color: #000;
-            font-weight: 700;
-        }
-
-
-        /* 5. BOTÕES DE AÇÃO */
-        .modal-actions {
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
-        }
-
-        .btn-modal-cancel,
-        .btn-modal-confirm {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            flex: 1;
-            /* Para que ocupem o mesmo espaço */
-        }
-
-        .btn-modal-cancel {
-            background-color: #ccc;
-            color: #333;
-        }
-
-        .btn-modal-cancel:hover {
-            background-color: #bbb;
-        }
-
-        .btn-modal-confirm {
-            /* Cor de exclusão (vermelho) */
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .btn-modal-confirm:hover {
-            background-color: #c82333;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/pages/atores.css">
+    <link rel="stylesheet" href="~/css/pages/site.css">
+    <link rel="stylesheet" href="~/css/pages/create-form.css">
 }
 
 <div class="modern-container">
     <div class="header-section">
         <h2>
             <a asp-controller="Atores" asp-action="Index" class="text-primary">Atores</a>
-            <span class="separator">></span>
-            <strong class="text-muted">Detalhes</strong>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Detalhes do Ator</strong>
         </h2>
     </div>
 
-    <form asp-action="Edit" method="post">
+    <form asp-action="Edit" method="post" class="main-form">
+        @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdAtores" />
 
         <div class="section-label">Informações Básicas</div>
@@ -154,9 +30,11 @@
             <div class="icon-box purple"><i class="fa-solid fa-city"></i></div>
             <div class="input-content">
                 <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
-                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required>
+                <select id="ComunidadeId" name="ComunidadeId" class="clean-input simple-select"
+                    asp-items="ViewBag.Comunidades" required disabled>
                     <option value="">Selecione a comunidade</option>
                 </select>
+                <i class="fa-solid fa-chevron-down dropdown-icon"></i>
             </div>
         </div>
 
@@ -164,7 +42,7 @@
             <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
             <div class="input-content">
                 <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
-                <input asp-for="Nome" type="text" class="clean-input" placeholder="Nome do ator" required>
+                <input asp-for="Nome" type="text" class="clean-input" placeholder="Nome do ator" required disabled>
             </div>
         </div>
 
@@ -176,7 +54,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
                 <div class="input-content">
                     <label for="DtNascimento">Data de Nascimento</label>
-                    <input asp-for="DtNascimento" type="date" class="clean-input">
+                    <input asp-for="DtNascimento" type="date" class="clean-input" disabled>
                 </div>
             </div>
 
@@ -184,22 +62,23 @@
                 <div class="icon-box purple"><i class="fa-solid fa-venus-mars"></i></div>
                 <div class="input-content">
                     <label asp-for="Genero">Gênero</label>
-                    <select asp-for="Genero" class="clean-input">
+                    <select asp-for="Genero" class="clean-input simple-select" disabled>
                         <option value="">Selecione</option>
                         <option value="Feminino">Feminino</option>
                         <option value="Masculino">Masculino</option>
                         <option value="NaoDeclarado">Não declarado</option>
                         <option value="Transgenero">Transgênero</option>
                     </select>
+                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
                 </div>
             </div>
         </div>
 
         <div class="input-card full-width">
             <div class="input-content">
-                <label for="da-equipe">
+                <label for="da-equipe" style="display: flex; align-items: center; cursor: pointer;">
                     <input type="checkbox" id="da-equipe" name="da-equipe" asp-for="DaEquipe"
-                        style="width: auto; height: auto; margin-right: 8px;">
+                        style="width: auto; height: auto; margin-right: 8px;" disabled>
                     Da Equipe
                 </label>
             </div>
@@ -210,7 +89,8 @@
                 <div class="icon-box purple"><i class="fa-solid fa-people-group"></i></div>
                 <div class="input-content">
                     <label asp-for="PapelSocial1">Papel Social</label>
-                    <input asp-for="PapelSocial1" type="text" class="clean-input" placeholder="Papel social principal">
+                    <input asp-for="PapelSocial1" type="text" class="clean-input" placeholder="Papel social principal"
+                        disabled>
                 </div>
             </div>
 
@@ -218,7 +98,8 @@
                 <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
                 <div class="input-content">
                     <label asp-for="PapelSocial2">Interesses</label>
-                    <input asp-for="PapelSocial2" type="text" class="clean-input" placeholder="Interesses do ator">
+                    <input asp-for="PapelSocial2" type="text" class="clean-input" placeholder="Interesses do ator"
+                        disabled>
                 </div>
             </div>
         </div>
@@ -228,7 +109,7 @@
             <div class="input-content">
                 <label asp-for="Telefone">Telefone</label>
                 <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input"
-                    placeholder="(00) 00000-0000">
+                    placeholder="(00) 00000-0000" disabled>
             </div>
         </div>
 
@@ -268,129 +149,205 @@
         </div>
 
         <div class="purple-divider"></div>
+        <div class="section-label">Informações do Sistema</div>
 
-        <details class="input-card full-width" style="border: 1px solid var(--color-border); padding: var(--space-4);"
-            open>
-
-
-            <div
-                style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
-                <div class="grid-row">
-                    <div class="input-card">
-                        <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
-                        <div class="input-content">
-                            <label>Criado por</label>
-                            <input type="text" value="@ViewBag.UsuarioOriginal?.Nome" readonly class="clean-input">
-                        </div>
-                    </div>
-                    <div class="input-card">
-                        <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
-                        <div class="input-content">
-                            <label>Atualizado por</label>
-                            <input type="text" value="@Context.Session.GetString("Nome")" readonly class="clean-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="grid-row">
-                    <div class="input-card">
-                        <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
-                        <div class="input-content">
-                            <label>Data de criação</label>
-                            <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly
-                                class="clean-input">
-                        </div>
-                    </div>
-                    <div class="input-card">
-                        <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
-                        <div class="input-content">
-                            <label>Última atualização</label>
-                            <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly
-                                class="clean-input">
-                        </div>
-                    </div>
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+                <div class="input-content">
+                    <label>Criado por</label>
+                    <input type="text" value="@ViewBag.UsuarioOriginal?.Nome" readonly disabled class="clean-input">
                 </div>
             </div>
-        </details>
-
-        <div class="form-actions">
-
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+                <div class="input-content">
+                    <label>Atualizado por</label>
+                    <input type="text" value="@Context.Session.GetString("Nome")" readonly disabled class="clean-input">
+                </div>
+            </div>
         </div>
+
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="input-content">
+                    <label>Data de criação</label>
+                    <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly disabled
+                        class="clean-input">
+                </div>
+            </div>
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="input-content">
+                    <label>Última atualização</label>
+                    <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly disabled
+                        class="clean-input">
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
         <div class="buttons-container">
             <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </a>
 
-            <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn"><i
-                    class="fa-solid fa-trash"></i> Deletar</button>
+            <div class="action-buttons-group">
+                <button type="button" class="wizard-btn btn-next" id="edit-save-btn">
+                    <i class="fa-solid fa-edit"></i> Editar
+                </button>
 
-            <div class="form-buttons">
-                <button type="submit" class="wizard-btn btn-primary">Atualizar ator</button>
+                <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                    <i class="fa-solid fa-trash"></i> Deletar
+                </button>
             </div>
+        </div>
+
     </form>
-
-
 </div>
 
+<!-- Modal de Confirmação de Exclusão -->
 <div class="modal-overlay" id="deleteConfirmationModal">
     <div class="modal-content">
         <div class="modal-icon">
             <i class="fas fa-exclamation-triangle"></i>
         </div>
+
         <h3 class="modal-title">Confirmar Exclusão</h3>
+
         <p class="modal-text">
-            Você tem certeza que deseja deletar o Ator <strong>@Model.Nome</strong>?
-            <br>Essa ação não pode ser desfeita.
+            Você tem certeza que deseja deletar o Ator <strong>@Model.Nome</strong>?<br>
+            Essa ação não pode ser desfeita.
         </p>
 
-        <div class="modal-actions">
-            <button type="button" class="btn-modal-cancel" id="cancelDeleteBtn">Cancelar</button>
+        <div class="button-container">
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">
+                    Cancelar
+                </button>
 
-            <form asp-controller="Atores" asp-action="Delete" method="post" asp-route-id="@Model.IdAtores">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn-modal-confirm">Sim, Deletar</button>
-            </form>
+                <form asp-controller="Atores" asp-action="Delete" method="post" asp-route-id="@Model.IdAtores">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-modal-confirm wizard-btn btn-next">
+                        Sim, Deletar
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- Lógica do Modal de Exclusão ---
+        const form = document.querySelector('.main-form');
+        const inputFields = form.querySelectorAll('.clean-input, select.clean-input, input[type="checkbox"]');
+        const editSaveBtn = document.getElementById('edit-save-btn');
+
+        // Variáveis de controle
+        let isEditMode = false;
+        let isSubmitting = false;
+
+        // Configurar estado dos campos
+        function setPageState() {
+            if (isEditMode) {
+                // Modo edição ativo
+                inputFields.forEach(field => {
+                    // Não habilitar campos readonly (metadados)
+                    if (!field.hasAttribute('readonly')) {
+                        field.disabled = false;
+                    }
+                });
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+                editSaveBtn.setAttribute('type', 'submit');
+                editSaveBtn.classList.remove('btn-next');
+                editSaveBtn.classList.add('btn-save-final');
+            } else {
+                // Modo visualização
+                inputFields.forEach(field => field.disabled = true);
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+                editSaveBtn.setAttribute('type', 'button');
+                editSaveBtn.classList.remove('btn-save-final');
+                editSaveBtn.classList.add('btn-next');
+            }
+        }
+
+        // Inicializar estado (visualização)
+        setPageState();
+
+        // Handler do botão editar/salvar
+        editSaveBtn.addEventListener('click', function (e) {
+            if (editSaveBtn.getAttribute('type') === 'submit') {
+                // Se for submit, o navegador faz a validação HTML5 automática
+                if (!isSubmitting && form.checkValidity()) {
+                    isSubmitting = true;
+                    editSaveBtn.disabled = true;
+                    editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+                    form.submit();
+                }
+            } else {
+                // Alternar para modo edição
+                e.preventDefault();
+                isEditMode = true;
+                setPageState();
+                // Focar no primeiro campo editável
+                const firstInput = form.querySelector('input:not([disabled]):not([type="hidden"]):not([readonly])');
+                if (firstInput) firstInput.focus();
+            }
+        });
+
+        // Lógica do modal de exclusão
         const deleteModal = document.getElementById('deleteConfirmationModal');
         const openDeleteBtn = document.getElementById('openDeleteModalBtn');
         const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
-        // 1. Função para abrir o modal
         if (openDeleteBtn) {
             openDeleteBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                deleteModal.style.display = 'flex'; // Torna visível para centralizar
-                // Pequeno delay para permitir a transição CSS de opacidade
+                deleteModal.style.display = 'flex';
                 setTimeout(() => {
                     deleteModal.classList.add('active');
                 }, 10);
             });
         }
 
-        // 2. Função para fechar o modal (botão Cancelar)
         if (cancelDeleteBtn) {
             cancelDeleteBtn.addEventListener('click', function () {
-                deleteModal.classList.remove('active');
-                // Espera a animação terminar para esconder o display
-                setTimeout(() => {
-                    deleteModal.style.display = 'none'; // Oculta totalmente
-                }, 300);
+                closeDeleteModal();
             });
         }
 
-        // 3. Fechar se clicar fora da caixinha (overlay)
+        // Fechar modal ao clicar fora
         window.addEventListener('click', function (e) {
             if (e.target === deleteModal) {
-                deleteModal.classList.remove('active');
-                setTimeout(() => {
-                    deleteModal.style.display = 'none';
-                }, 300);
+                closeDeleteModal();
             }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && deleteModal.classList.contains('active')) {
+                closeDeleteModal();
+            }
+        });
+
+        function closeDeleteModal() {
+            deleteModal.classList.remove('active');
+            setTimeout(() => {
+                deleteModal.style.display = 'none';
+            }, 300);
+        }
+
+        // Validação em tempo real para campos obrigatórios
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            field.addEventListener('blur', function () {
+                if (!this.value || (typeof this.value === 'string' && !this.value.trim())) {
+                    this.classList.add('invalid');
+                } else {
+                    this.classList.remove('invalid');
+                }
+            });
         });
     });
 </script>
