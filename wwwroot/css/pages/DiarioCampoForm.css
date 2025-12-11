@@ -1,68 +1,253 @@
-#logo-empodera {
-    width: 10%;
-    height: auto;
+/* ================================================
+   DIÁRIO DE CAMPO - ESTILOS COMPLEMENTARES
+   ================================================ */
+
+/* Container para listas de ações */
+.actions-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    min-height: 60px;
+    padding: 1rem;
+    background: var(--color-background-secondary, #f8f9fa);
+    border-radius: 8px;
+    border: 2px dashed var(--color-border, #dee2e6);
 }
-#instituto-text {
-    font-family: var(--font-family-thin);
-    font-size: var(--font-size-5xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-secondary);
-    text-transform: uppercase;
-}
-#empodera-text {
-    font-size: var(--font-size-5xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    text-transform: uppercase;
-}
-/* Container do logo + textos */
-.text-box {
+
+.actions-list-container:empty::before {
+    content: 'Nenhuma ação adicionada ainda';
+    color: var(--color-text-secondary, #6c757d);
+    font-style: italic;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    height: 100%;
 }
 
-/* Cards de estatĆ­sticas */
-.cards-container {
+/* Item de ação adicionado */
+.action-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border, #dee2e6);
     display: flex;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
 }
 
-.card {
-    flex: 1 1 155px; /* cresce atĆ© preencher, mĆ­nimo 175px */
-    background-color: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--border-radius-lg);
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: var(--box-shadow);
+.action-item:hover {
+    border-color: var(--color-primary, #007bff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card h2 {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: 0.5rem;
-    color: var(--color-primary);
+.action-item-content {
+    flex: 1;
 }
 
-.card p {
-    font-size: var(--font-size-lg);
-    margin-bottom: 1rem;
-    color: var(--color-text);
+.action-item-title {
+    font-weight: 600;
+    color: var(--color-text-primary, #212529);
+    margin-bottom: 0.25rem;
 }
 
-.card button {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+.action-item-details {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #6c757d);
+}
+
+.action-item-remove {
+    background: var(--color-danger, #dc3545);
+    color: white;
     border: none;
-    border-radius: var(--border-radius-md);
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-item-remove:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+/* Layout de duas colunas */
+.two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .two-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilo para selects múltiplos */
+select[multiple].clean-input {
+    padding: 0.5rem;
+    height: auto;
+}
+
+select[multiple].clean-input option {
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin: 2px 0;
+}
+
+select[multiple].clean-input option:checked {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+}
+
+/* Estilos para inputs de arquivo */
+input[type="file"].clean-input {
+    padding: 0.75rem;
+    cursor: pointer;
+}
+
+input[type="file"].clean-input::file-selector-button {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
     padding: 0.5rem 1rem;
     cursor: pointer;
-    font-weight: var(--font-weight-bold);
+    margin-right: 1rem;
+    transition: all 0.3s ease;
 }
 
-.card button:hover {
-    background-color: var(--color-secondary);
+input[type="file"].clean-input::file-selector-button:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+}
+
+/* Modal form groups */
+.modal-form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary, #212529);
+}
+
+.modal-form-group .text-muted {
+    display: block;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Mention box (para menções com @@) */
+.mention-box {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--color-border, #dee2e6);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.mention-box.active {
+    display: block;
+}
+
+.mention-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.mention-item:hover {
+    background: var(--color-background-secondary, #f8f9fa);
+}
+
+.mention-item.selected {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Melhorias para textarea com menções */
+textarea.mention-area {
+    position: relative;
+}
+
+/* Ajustes para mapa */
+.default-map-container {
+    margin: 1rem 0;
+}
+
+/* Small text muted */
+small.text-muted {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #6c757d);
+    margin-top: 0.25rem;
+    font-style: italic;
+}
+
+/* Espaçamento para inputs readonly */
+input.clean-input[readonly] {
+    background-color: var(--color-background-secondary, #f8f9fa);
+    cursor: not-allowed;
+}
+
+/* Animação para items adicionados */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-item {
+    animation: slideIn 0.3s ease;
+}
+
+/* Loading state para botões */
+.wizard-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.wizard-btn i.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsividade adicional */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .buttons-container .wizard-btn {
+        width: 100%;
+    }
 }

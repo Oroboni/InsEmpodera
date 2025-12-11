@@ -8,6 +8,7 @@
 @section Styles {
   <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
   <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+  <link rel="stylesheet" href="~/css/pages/site.css" />
 }
 
 <form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post" class="main-form">
@@ -100,48 +101,38 @@
       </div>
     </div>
 
-    <!-- Métricas (apenas para edição) -->
     @if (Model.IdComunidade > 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">Estatísticas da Comunidade</div>
 
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-value">@ViewBag.qAtores</div>
-          <div class="metric-label">Atores vinculados</div>
-          <div class="metric-actions">
-            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade"
-              class="metric-action-btn" title="Visualizar">
-              <i class="fas fa-eye"></i>
-            </a>
-            
+      <div class="actions-grid">
+        <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade"
+          class="action-card">
+          <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qAtores</span>
+          <span class="card-subtitle">Atores vinculados</span>
+          <div class="card-icons">
+            <i class="fas fa-eye"></i>
           </div>
-        </div>
+        </a>
 
-        <div class="metric-card">
-          <div class="metric-value">@ViewBag.qAtividades</div>
-          <div class="metric-label">Atividades</div>
-          <div class="metric-actions">
-            <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.IdComunidade"
-              class="metric-action-btn" title="Visualizar">
-              <i class="fas fa-eye"></i>
-            </a>
-            
+        <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.IdComunidade"
+          class="action-card">
+          <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qAtividades</span>
+          <span class="card-subtitle">Atividades</span>
+          <div class="card-icons">
+            <i class="fas fa-eye"></i>
           </div>
-        </div>
+        </a>
 
-        <div class="metric-card">
-          <div class="metric-value">@ViewBag.qRecursos</div>
-          <div class="metric-label">Recursos</div>
-          <div class="metric-actions">
-            <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.IdComunidade"
-              class="metric-action-btn" title="Visualizar">
-              <i class="fas fa-eye"></i>
-            </a>
-            
+        <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.IdComunidade"
+          class="action-card">
+          <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qRecursos</span>
+          <span class="card-subtitle">Recursos</span>
+          <div class="card-icons">
+            <i class="fas fa-eye"></i>
           </div>
-        </div>
+        </a>
       </div>
     }
 

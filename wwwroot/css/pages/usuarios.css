@@ -3,7 +3,6 @@
     display: flex;
     align-items: center;
     margin-left: 20px; /* Adiciona algum espaço entre a barra de busca e o toggle */
-    /* Você pode precisar ajustar o layout do .atores-search-container para acomodar */
 }
 
 .toggle-label {
@@ -142,7 +141,7 @@
     align-items: center;
 
     gap: 16px;
-    /* Espaço entre a busca e o botão */
+    
 }
 
 /* Barra de busca */
@@ -204,3 +203,5 @@
 
     height: 20px;
 }
+
+

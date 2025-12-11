@@ -2,25 +2,36 @@
 
 @{
     ViewData["Title"] = "Novo Diário de Campo";
-    ViewData["PageCSS"] = "diariocampoform";
+    ViewData["PageCSS"] = "homepage";
+    Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/DiarioCampoForm.css" /> 
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" /> 
-
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampoForm.css" />
 }
 
-<h2 class="page-title">Novo Diário de Campo</h2>
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="main-form">
+    @Html.AntiForgeryToken()
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="formulario">
+    <div class="modern-container">
+        <!-- Header -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="DiarioCampo" asp-action="Index" class="text-primary">Diário de Campo</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Novo Registro</strong>
+            </h2>
+        </div>
 
         <!-- Comunidade -->
-        <div class="form-group">
-            <label for="ComunidadeId">Comunidade</label>
-            <div class="select-wrapper">
-                <select id="ComunidadeId" name="ComunidadeId" required>
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-users"></i></div>
+            <div class="input-content">
+                <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
+                <select id="ComunidadeId" name="ComunidadeId" class="clean-input" required>
                     <option value="">Selecione uma comunidade</option>
                     <option value="1">Comunidade Exemplo A</option>
                     <option value="2">Comunidade Exemplo B</option>
@@ -29,199 +40,261 @@
         </div>
 
         <!-- Data -->
-        <div class="form-group">
-            <label for="DataDiario">Data</label>
-            <input type="date" id="DataDiario" name="DataDiario" class="input" required />
+        <div class="input-card">
+            <div class="icon-box purple"><i class="fa-solid fa-calendar"></i></div>
+            <div class="input-content">
+                <label for="DataDiario">Data <span class="text-danger">*</span></label>
+                <input type="date" id="DataDiario" name="DataDiario" class="clean-input" required />
+            </div>
         </div>
 
         <!-- Eixos múltiplos -->
-        <div class="form-group">
-            <label for="EixosMulti">Selecione múltiplos eixos</label>
-            <select id="EixosMulti" name="EixosSelecionados" multiple class="multi-click-select" size="5">
-                <option value="1">Eixo 1</option>
-                <option value="2">Eixo 2</option>
-                <option value="3">Eixo 3</option>
-                <option value="4">Eixo 4</option>
-                <option value="1">Eixo 5</option>
-                <option value="2">Eixo 6</option>
-                <option value="3">Eixo 7</option>
-                <option value="4">Eixo 8</option>
-            </select>
-        </div>
-
-
-        <!-- =============================== -->
-        <!-- MODAL: ADICIONAR AÇÃO DA EQUIPE -->
-        <!-- =============================== -->
-        <div id="modalAtividade" class="modal hidden">
-            <div class="modal-content">
-                <h3>Adicionar Ação da Equipe</h3>
-
-                <label>Selecione a atividade</label>
-                <select id="atividadeLista" class="input">
-                    <option value="Escuta ativa">Escuta ativa</option>
-                    <option value="Dia das crianças">Dia das crianças</option>
-                    <option value="Acompanhamento do Projeto Semear">Acompanhamento do Projeto Semear</option>
-                </select>
-
-                <label>Atores</label>
-                <select id="modalAtorAtividade" class="input" multiple size="4">
-                    <option value="Educador">Educador</option>
-                    <option value="Coordenador">Coordenador</option>
-                    <option value="Apoio">Apoio</option>
-                </select>
-
-                <label>Quantidade</label>
-                <input type="number" id="modalQtdAtividade" class="input modal-quantidade" min="1" />
-
-                <div class="modal-buttons">
-                    <button type="button" class="btn-primary" onclick="confirmarAtividade()">Adicionar</button>
-                    <button type="button" class="btn-secondary" onclick="fecharModal('modalAtividade')">Cancelar</button>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Ações da Equipe -->
-        <div class="form-group">
-            <label>Ações da Equipe</label>
-            <div id="atividadesContainer" class="itens-lista"></div>
-
-            <button type="button" class="btn-secondary" onclick="addAtividade()">
-                + Adicionar Ação da Equipe
-            </button>
-        </div>
-
-
-        <!-- =============================== -->
-        <!-- MODAL: AÇÃO INSTITUCIONAL -->
-        <!-- =============================== -->
-        <div id="modalInstitucional" class="modal hidden">
-            <div class="modal-content">
-                <h3>Adicionar Ação Institucional</h3>
-
-                <label>Nome</label>
-                <input type="text" id="instNome" class="input modal-nome"/>
-
-                <label>Eixos</label>
-                <select id="instEixo" class="input" multiple size="4">
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="input-content">
+                <label for="EixosMulti">Eixos <span class="text-danger">*</span></label>
+                <select id="EixosMulti" name="EixosSelecionados" multiple class="clean-input" size="5" required>
                     <option value="1">Eixo 1</option>
                     <option value="2">Eixo 2</option>
                     <option value="3">Eixo 3</option>
+                    <option value="4">Eixo 4</option>
+                    <option value="5">Eixo 5</option>
+                    <option value="6">Eixo 6</option>
+                    <option value="7">Eixo 7</option>
+                    <option value="8">Eixo 8</option>
                 </select>
+                <small class="text-muted">Mantenha Ctrl pressionado para selecionar múltiplos</small>
+            </div>
+        </div>
 
-                <label>Provedor Externo</label>
-                <input type="text" id="instProvedor" class="input modal-provedor" />
+        <!-- Ações da Equipe -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Ações da Equipe</div>
 
-                <label>Atores</label>
-                <select id="instAtores" class="input" multiple size="4">
-                    <option value="Educador">Educador</option>
-                    <option value="Coordenador">Coordenador</option>
-                    <option value="Apoio">Apoio</option>
-                </select>
+        <div id="atividadesContainer" class="actions-list-container">
+            <!-- Itens serão adicionados aqui dinamicamente -->
+        </div>
 
-                <label>Quantidade</label>
-                <input type="number" id="instQtd" class="input modal-quantidade" min="1" />
+        <button type="button" class="wizard-btn btn-next" onclick="abrirModal('modalAtividade')">
+            <i class="fa-solid fa-plus"></i> Adicionar Ação da Equipe
+        </button>
 
-                <div class="modal-buttons">
-                    <button type="button" class="btn-primary" onclick="confirmarInstitucional()">Adicionar</button>
-                    <button type="button" class="btn-secondary" onclick="fecharModal('modalInstitucional')">Cancelar</button>
+        <!-- Ações Institucionais -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Ações Institucionais</div>
+
+        <div id="acoesInstitucionaisContainer" class="actions-list-container">
+            <!-- Itens serão adicionados aqui dinamicamente -->
+        </div>
+
+        <button type="button" class="wizard-btn btn-next" onclick="abrirModal('modalInstitucional')">
+            <i class="fa-solid fa-plus"></i> Adicionar Ação Institucional
+        </button>
+
+        <!-- Localização -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Localização</div>
+
+        <div class="two-columns">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="input-content">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" class="clean-input" onblur="buscarCEP()" maxlength="9"
+                        placeholder="00000-000" />
+                </div>
+            </div>
+
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-hashtag"></i></div>
+                <div class="input-content">
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" class="clean-input" placeholder="Nº" />
                 </div>
             </div>
         </div>
 
-
-        <!-- Lista Institucional -->
-        <div class="form-group">
-            <label>Ações Institucionais</label>
-            <div id="acoesInstitucionaisContainer" class="itens-lista"></div>
-
-            <button type="button" class="btn-secondary" onclick="abrirModal('modalInstitucional')">
-                + Adicionar Ação Institucional
-            </button>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-road"></i></div>
+            <div class="input-content">
+                <label for="rua">Rua</label>
+                <input type="text" id="rua" class="clean-input" readonly
+                    placeholder="Será preenchido automaticamente" />
+            </div>
         </div>
 
-
-        <!-- Localização -->
-        <div class="form-group localizacao-wrapper">
-            <label style="font-weight: 600; font-size: 16px;">Localização</label>
-
-            <div class="localizacao-group">
-                <div class="col">
-                    <label for="cep">CEP</label>
-                    <input type="text" id="cep" class="input" onblur="buscarCEP()" maxlength="9" />
-                </div>
-
-                <div class="col">
-                    <label for="numero">Número</label>
-                    <input type="text" id="numero" class="input" />
-                </div>
-
-                <div class="col local-rua">
-                    <label for="rua">Rua</label>
-                    <input type="text" id="rua" class="input" readonly />
-                </div>
-
-                <div class="col">
+        <div class="two-columns">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-map-marked"></i></div>
+                <div class="input-content">
                     <label for="bairro">Bairro</label>
-                    <input type="text" id="bairro" class="input" readonly />
+                    <input type="text" id="bairro" class="clean-input" readonly />
                 </div>
+            </div>
 
-                <div class="col">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-city"></i></div>
+                <div class="input-content">
                     <label for="cidade">Cidade</label>
-                    <input type="text" id="cidade" class="input" readonly />
+                    <input type="text" id="cidade" class="clean-input" readonly />
                 </div>
+            </div>
+        </div>
 
-                <div class="col local-estado">
+        <div class="two-columns">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-flag"></i></div>
+                <div class="input-content">
                     <label for="estado">Estado</label>
-                    <input type="text" id="estado" class="input" readonly />
+                    <input type="text" id="estado" class="clean-input" readonly />
                 </div>
+            </div>
 
-                <div class="col local-complemento">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-diamond-turn-right"></i></div>
+                <div class="input-content">
                     <label for="complemento">Complemento</label>
-                    <input type="text" id="complemento" class="input" />
+                    <input type="text" id="complemento" class="clean-input" placeholder="Apto, bloco, etc..." />
                 </div>
             </div>
         </div>
 
         <!-- Mapa -->
-        <div class="form-group mapa-wrapper">
-            <div id="mapaContainer">
-                <iframe
-                    id="mapaFrame"
-                    width="100%"
-                    height="100%"
-                    style="border:0;"
-                    loading="lazy"
-                    allowfullscreen
-                    referrerpolicy="no-referrer-when-downgrade"
-                    src="https://www.google.com/maps?q=Brasil&output=embed">
-                </iframe>
+        <div id="mapa-diario" class="default-map-container"></div>
+
+        <!-- Anexos -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Anexos e Descrição</div>
+
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-paperclip"></i></div>
+            <div class="input-content">
+                <label for="Anexos">Anexos</label>
+                <input type="file" name="Anexos" id="Anexos" class="clean-input" multiple />
+                <small class="text-muted">Você pode selecionar múltiplos arquivos</small>
             </div>
         </div>
 
-        <!-- Anexos -->
-        <div class="form-group full-width">
-            <label>Anexos</label>
-            <input type="file" name="Anexos" id="Anexos" class="input" multiple />
-        </div>
-
         <!-- Descrição -->
-        <div class="form-group full-width">
-            <label for="Descricao">Descrição</label>
-            <textarea id="Descricao" name="Descricao" class="input mention-area" rows="4"
-                placeholder="Digite @@ para mencionar atividade, ator ou comunidade"></textarea>
-            <div id="mentionBox" class="mention-box"></div>
+        <div class="input-card full-width">
+            <div class="icon-box"><i class="fa-solid fa-align-left"></i></div>
+            <div class="input-content">
+                <label for="Descricao">Descrição</label>
+                <textarea id="Descricao" name="Descricao" class="clean-input" rows="6"
+                    placeholder="Digite @@ para mencionar atividade, ator ou comunidade"></textarea>
+                <div id="mentionBox" class="mention-box"></div>
+            </div>
         </div>
 
-        <!-- Botões -->
-        <div class="buttons">
-            <button type="submit" class="btn-primary">Salvar</button>
-            <a asp-action="Index" class="btn-secondary">Cancelar</a>
-        </div>
+        <!-- Botões de Ação -->
+        <div class="buttons-container">
+            <a asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
 
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-save"></i> Salvar Diário
+            </button>
+        </div>
     </div>
 </form>
+
+<!-- MODAL: ADICIONAR AÇÃO DA EQUIPE -->
+<div class="modal-overlay" id="modalAtividade">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-tasks"></i>
+        </div>
+        <h3 class="modal-title">Adicionar Ação da Equipe</h3>
+
+        <div class="modal-form-group">
+            <label>Selecione a atividade</label>
+            <select id="atividadeLista" class="clean-input">
+                <option value="">Escolha uma atividade</option>
+                <option value="Escuta ativa">Escuta ativa</option>
+                <option value="Dia das crianças">Dia das crianças</option>
+                <option value="Acompanhamento do Projeto Semear">Acompanhamento do Projeto Semear</option>
+            </select>
+        </div>
+
+        <div class="modal-form-group">
+            <label>Atores</label>
+            <select id="modalAtorAtividade" class="clean-input" multiple size="4">
+                <option value="Educador">Educador</option>
+                <option value="Coordenador">Coordenador</option>
+                <option value="Apoio">Apoio</option>
+            </select>
+            <small class="text-muted">Mantenha Ctrl para selecionar múltiplos</small>
+        </div>
+
+        <div class="modal-form-group">
+            <label>Quantidade</label>
+            <input type="number" id="modalQtdAtividade" class="clean-input" min="1" value="1" />
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel wizard-btn btn-prev" onclick="fecharModal('modalAtividade')">
+                Cancelar
+            </button>
+            <button type="button" class="btn-modal-confirm wizard-btn btn-next" onclick="confirmarAtividade()">
+                Adicionar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: AÇÃO INSTITUCIONAL -->
+<div class="modal-overlay" id="modalInstitucional">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-building"></i>
+        </div>
+        <h3 class="modal-title">Adicionar Ação Institucional</h3>
+
+        <div class="modal-form-group">
+            <label>Nome</label>
+            <input type="text" id="instNome" class="clean-input" placeholder="Nome da ação" />
+        </div>
+
+        <div class="modal-form-group">
+            <label>Eixos</label>
+            <select id="instEixo" class="clean-input" multiple size="4">
+                <option value="1">Eixo 1</option>
+                <option value="2">Eixo 2</option>
+                <option value="3">Eixo 3</option>
+            </select>
+        </div>
+
+        <div class="modal-form-group">
+            <label>Provedor Externo</label>
+            <input type="text" id="instProvedor" class="clean-input" placeholder="Nome do provedor" />
+        </div>
+
+        <div class="modal-form-group">
+            <label>Atores</label>
+            <select id="instAtores" class="clean-input" multiple size="4">
+                <option value="Educador">Educador</option>
+                <option value="Coordenador">Coordenador</option>
+                <option value="Apoio">Apoio</option>
+            </select>
+        </div>
+
+        <div class="modal-form-group">
+            <label>Quantidade</label>
+            <input type="number" id="instQtd" class="clean-input" min="1" value="1" />
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel wizard-btn btn-prev"
+                onclick="fecharModal('modalInstitucional')">
+                Cancelar
+            </button>
+            <button type="button" class="btn-modal-confirm wizard-btn btn-next" onclick="confirmarInstitucional()">
+                Adicionar
+            </button>
+        </div>
+    </div>
+</div>
 
 <script>
     const EIXOS = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Eixos));
@@ -232,4 +305,43 @@
 
 @section Scripts {
     <script src="~/js/diariocampo.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar mapa
+            if (typeof initMapSelector === 'function') {
+                initMapSelector('mapa-diario', 'rua');
+            }
+
+            // Lógica dos modais
+            window.abrirModal = function (modalId) {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('active'), 10);
+            };
+
+            window.fecharModal = function (modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('active');
+                setTimeout(() => modal.style.display = 'none', 300);
+            };
+
+            // Fechar ao clicar fora
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        fecharModal(this.id);
+                    }
+                });
+            });
+
+            // Fechar com ESC
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                        fecharModal(modal.id);
+                    });
+                }
+            });
+        });
+    </script>
 }

@@ -3,10 +3,6 @@ body {
     background-color: #eee;
     color: var(--color-primary);
 }
-a {
-    text-decoration: none;
-    color: var(--color-primary-800);
-}
 
 .section-2.with-scroll {
     overflow-y: auto;
@@ -18,63 +14,17 @@ a {
     height: 100vh;
 }
 
-/* Cores das tags */
-.tag-blue {
-    background-color: #e0f2fe;
-    color: #026aa2;
+a {
+    text-decoration: none;
+    color: var(--color-primary-800);
+}
+a.action-card {
+    text-decoration: none;
 }
 
-.tag-green {
-    background-color: #d1fae5;
-    color: #065f46;
-}
-
-.tag-yellow {
-    background-color: #fef3c7;
-    color: #92400e;
-}
-
-.tag-purple {
-    background-color: #ebebff;
-    color: #5b21b6;
-}
-
-.tag-lightgreen {
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-.tag-red {
-    background-color: #fee2e2;
-    color: #991b1b;
-}
-
-.tag-lightblue {
-    background-color: #dbeafe;
-    color: #1e40af;
-}
-
-.tag-pink {
-    background-color: #fce7f3;
-    color: #9d174d;
-}
-
-.tag-darkred {
-    background-color: #ffe4e6;
-    color: #a92128;
-}
-
-.tag-item {
-    padding: 4px 10px;
-    border-radius: 16px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    white-space: nowrap;
-}
-.tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+a.action-card:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
 }
 /* Overlay */
 .modal-overlay {
@@ -319,4 +269,66 @@ label:has(input[type="checkbox"]) {
     .action-card {
         padding: 1.25rem;
     }
+}
+
+
+
+
+/* Cores das tags */
+.tag-blue {
+    background-color: #e0f2fe;
+    color: #026aa2;
+}
+
+.tag-green {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.tag-yellow {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.tag-purple {
+    background-color: #ebebff;
+    color: #5b21b6;
+}
+
+.tag-lightgreen {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.tag-red {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.tag-lightblue {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.tag-pink {
+    background-color: #fce7f3;
+    color: #9d174d;
+}
+
+.tag-darkred {
+    background-color: #ffe4e6;
+    color: #a92128;
+}
+
+.tag-item {
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
