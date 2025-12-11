@@ -43,7 +43,7 @@
     <div class="section-label">Resumo</div>
     <div class="actions-grid">
         <div class="action-card stats-card">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="totalUsers">@Model.Count()</span>
+            <span class="card-title" id="totalUsers">@Model.Count()</span>
             <span class="card-subtitle">Total de Usuários</span>
             <div class="card-icons">
                 <i class="fas fa-users"></i>
@@ -53,8 +53,8 @@
         @{
             var ativos = Model.Count(u => u.Ativo == "S");
         }
-        <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="activeUsers">@ativos</span>
+        <div class="action-card stats-card stats-card-active">
+            <span class="card-title" id="activeUsers">@ativos</span>
             <span class="card-subtitle">Usuários Ativos</span>
             <div class="card-icons">
                 <i class="fas fa-check-circle"></i>
@@ -64,8 +64,8 @@
         @{
             var inativos = Model.Count(u => u.Ativo == "N");
         }
-        <div class="action-card stats-card" style="background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="inactiveUsers">@inativos</span>
+        <div class="action-card stats-card stats-card-red">
+            <span class="card-title" id="inactiveUsers">@inativos</span>
             <span class="card-subtitle">Usuários Inativos</span>
             <div class="card-icons">
                 <i class="fas fa-times-circle"></i>
@@ -108,34 +108,32 @@
                      data-nome="@user.Nome?.ToLower()"
                      data-email="@user.Email?.ToLower()">
 
-                    <div class="form-info" style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div style="flex: 1;">
-                                <p class="name" style="margin: 0;">@user.Nome</p>
-                                <p style="color: var(--color-gray-500); font-size: 0.875rem; margin: 0.25rem 0 0 0;">
-                                    <i class="fas fa-envelope" style="margin-right: 0.25rem;"></i>
-                                    @user.Email
-                                </p>
-                                
-                                <div class="tag-list" style="margin-top: 0.5rem;">
-                                    @if (isAtivo)
-                                    {
-                                        <span class="tag-item tag-green">
-                                            <i class="fas fa-check-circle"></i>
-                                            Ativo
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="tag-item tag-red">
-                                            <i class="fas fa-times-circle"></i>
-                                            Inativo
-                                        </span>
-                                    }
-                                </div>
+                    <div class="item-header">
+                        <div class="activity-icon activity-icon-purple">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="item-content">
+                            <p class="item-name">@user.Nome</p>
+                            <p class="item-subtitle">
+                                <i class="fas fa-envelope"></i>
+                                @user.Email
+                            </p>
+                            
+                            <div class="tag-list">
+                                @if (isAtivo)
+                                {
+                                    <span class="tag-item tag-green">
+                                        <i class="fas fa-check-circle"></i>
+                                        Ativo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="tag-item tag-red">
+                                        <i class="fas fa-times-circle"></i>
+                                        Inativo
+                                    </span>
+                                }
                             </div>
                         </div>
                     </div>
@@ -151,14 +149,12 @@
         }
         else
         {
-            <div class="no-records" style="padding: 3rem; text-align: center;">
-                <div style="margin-bottom: 1.5rem;">
-                    <i class="fas fa-users" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+            <div class="no-records">
+                <div class="no-records-icon">
+                    <i class="fas fa-users"></i>
                 </div>
-                <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum usuário cadastrado</h3>
-                <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
-                    Comece adicionando seu primeiro usuário ao sistema.
-                </p>
+                <h3>Nenhum usuário cadastrado</h3>
+                <p>Comece adicionando seu primeiro usuário ao sistema.</p>
                 <button type="button" class="btn-save" onclick="window.location.href='@Url.Action("Create", "Users")'">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeiro Usuário
                 </button>
@@ -167,14 +163,12 @@
     </div>
 
     <!-- Mensagem quando nenhum resultado for encontrado -->
-    <div class="no-records" id="noResultsMessage" style="display: none; padding: 3rem; text-align: center;">
-        <div style="margin-bottom: 1.5rem;">
-            <i class="fas fa-search" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+    <div class="no-records" id="noResultsMessage" style="display: none;">
+        <div class="no-records-icon">
+            <i class="fas fa-search"></i>
         </div>
-        <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum usuário encontrado</h3>
-        <p style="color: var(--color-gray-500);">
-            Tente ajustar os filtros ou termos de busca.
-        </p>
+        <h3>Nenhum usuário encontrado</h3>
+        <p>Tente ajustar os filtros ou termos de busca.</p>
     </div>
 </div>
 

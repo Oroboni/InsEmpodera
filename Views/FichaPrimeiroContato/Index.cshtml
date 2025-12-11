@@ -89,7 +89,7 @@
         <div class="section-label">Resumo</div>
         <div class="actions-grid">
             <div class="action-card stats-card">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@Model.Count()</span>
+                <span class="card-title">@Model.Count()</span>
                 <span class="card-subtitle">Total de Fichas</span>
                 <div class="card-icons">
                     <i class="fas fa-file-alt"></i>
@@ -99,8 +99,8 @@
             @{
                 var emProgresso = Model.Count(f => f.Status == StatusFicha.EmProgresso);
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@emProgresso</span>
+            <div class="action-card stats-card stats-card-yellow">
+                <span class="card-title">@emProgresso</span>
                 <span class="card-subtitle">Em Progresso</span>
                 <div class="card-icons">
                     <i class="fas fa-hourglass-half"></i>
@@ -110,8 +110,8 @@
             @{
                 var concluidas = Model.Count(f => f.Status == StatusFicha.Concluida);
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #218838 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@concluidas</span>
+            <div class="action-card stats-card stats-card-green">
+                <span class="card-title">@concluidas</span>
                 <span class="card-subtitle">Concluídas</span>
                 <div class="card-icons">
                     <i class="fas fa-check-circle"></i>
@@ -121,8 +121,8 @@
             @{
                 var abandonadas = Model.Count(f => f.Status == StatusFicha.Abandonada);
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@abandonadas</span>
+            <div class="action-card stats-card stats-card-red">
+                <span class="card-title">@abandonadas</span>
                 <span class="card-subtitle">Abandonadas</span>
                 <div class="card-icons">
                     <i class="fas fa-times-circle"></i>
@@ -141,19 +141,18 @@
                 var nomeAtor = form.Ator?.Nome ?? "Sem nome";
                 
                 <div class="form-item" data-search="@nomeAtor.ToLower()">
-                    <div class="form-info" style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="form-info">
+                        <div class="item-header">
+                            <div class="activity-icon activity-icon-purple">
                                 <i class="fas fa-file-alt"></i>
                             </div>
-                            <div style="flex: 1;">
-                                <p class="name" style="margin: 0;">@nomeAtor</p>
+                            <div class="item-content">
+                                <p class="name item-name">@nomeAtor</p>
                                 
-                                <!-- Comunidades -->
                                 @if (form.FichaComunidades != null && form.FichaComunidades.Any())
                                 {
-                                    <p style="color: var(--color-gray-500); font-size: 0.875rem; margin: 0.25rem 0 0 0;">
-                                        <i class="fas fa-home" style="margin-right: 0.25rem;"></i>
+                                    <p class="item-subtitle">
+                                        <i class="fas fa-home"></i>
                                         @{
                                             var comunidades = form.FichaComunidades.Take(2).ToList();
                                             var comunidadesNomes = string.Join(", ", comunidades.Select(c => c.Comunidade.Nome));
@@ -166,8 +165,7 @@
                                     </p>
                                 }
                                 
-                                <!-- Data e Status -->
-                                <div class="tag-list" style="margin-top: 0.5rem;">
+                                <div class="tag-list">
                                     <span class="tag-item tag-default">
                                         <i class="fas fa-calendar"></i>
                                         @form.DtContato.ToString("dd/MM/yyyy")
@@ -205,7 +203,6 @@
                                 data-id="@form.IdFicha"
                                 data-nome="@nomeAtor" 
                                 title="Concluir"
-                                style="@(isFinalized ? "opacity: 0.5; cursor: not-allowed;" : "")"
                                 onclick="@(isFinalized ? "" : $"openModalConcluir({form.IdFicha}, '{nomeAtor}')")"
                                 @(isFinalized ? "disabled" : "")>
                             <i class="fa fa-check" style="color: #28a745;"></i>
@@ -216,7 +213,6 @@
                                 data-id="@form.IdFicha"
                                 data-nome="@nomeAtor"
                                 title="Abandonar"
-                                style="@(isFinalized ? "opacity: 0.5; cursor: not-allowed;" : "")"
                                 onclick="@(isFinalized ? "" : $"openModalAbandonar({form.IdFicha}, '{nomeAtor}')")"
                                 @(isFinalized ? "disabled" : "")>
                             <i class="fa fa-times" style="color: #dc3545;"></i>
@@ -236,14 +232,12 @@
     else
     {
         <!-- Nenhuma ficha encontrada -->
-        <div class="no-records" style="padding: 3rem; text-align: center;">
-            <div style="margin-bottom: 1.5rem;">
-                <i class="fas fa-file-alt" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+        <div class="no-records">
+            <div class="no-records-icon">
+                <i class="fas fa-file-alt"></i>
             </div>
-            <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhuma ficha cadastrada</h3>
-            <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
-                Comece adicionando a primeira ficha de primeiro contato.
-            </p>
+            <h3>Nenhuma ficha cadastrada</h3>
+            <p>Comece adicionando a primeira ficha de primeiro contato.</p>
             <button type="button" class="btn-save" 
                 onclick="window.location.href='@Url.Action("Create", "FichaPrimeiroContato")'">
                 <i class="fa-solid fa-plus"></i> Adicionar Primeira Ficha
@@ -272,7 +266,7 @@
                 Cancelar
             </button>
 
-            <form id="formConcluir" method="post" style="margin: 0;">
+            <form id="formConcluir" method="post">
                 @Html.AntiForgeryToken()
                 <button type="submit" 
                         class="btn-modal-confirm wizard-btn btn-next"
@@ -305,7 +299,7 @@
                 Cancelar
             </button>
 
-            <form id="formAbandonar" method="post" style="margin: 0;">
+            <form id="formAbandonar" method="post">
                 @Html.AntiForgeryToken()
                 <button type="submit" 
                         class="btn-modal-confirm wizard-btn btn-delete">
@@ -318,26 +312,22 @@
 
 @section Scripts {
     <script>
-        // Função para submeter filtro
         function submitFilter() {
             document.getElementById('filterForm').submit();
         }
 
-        // Função para abrir modal de concluir
         function openModalConcluir(fichaId, nomeAtor) {
             document.getElementById('nomeAtorConcluir').textContent = nomeAtor;
             document.getElementById('formConcluir').action = `/FichaPrimeiroContato/Concluir/${fichaId}`;
             openModal('modalConcluir');
         }
 
-        // Função para abrir modal de abandonar
         function openModalAbandonar(fichaId, nomeAtor) {
             document.getElementById('nomeAtorAbandonar').textContent = nomeAtor;
             document.getElementById('formAbandonar').action = `/FichaPrimeiroContato/Abandonar/${fichaId}`;
             openModal('modalAbandonar');
         }
 
-        // Função para abrir modal
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.style.display = 'flex';
@@ -346,7 +336,6 @@
             }, 10);
         }
 
-        // Função para fechar modal
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('active');
@@ -359,7 +348,6 @@
             const modalConcluir = document.getElementById('modalConcluir');
             const modalAbandonar = document.getElementById('modalAbandonar');
 
-            // Fechar modal ao clicar fora
             window.addEventListener('click', function(e) {
                 if (e.target === modalConcluir) {
                     closeModal('modalConcluir');
@@ -369,7 +357,6 @@
                 }
             });
 
-            // Fechar modal com ESC
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (modalConcluir.classList.contains('active')) {

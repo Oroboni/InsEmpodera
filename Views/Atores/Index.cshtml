@@ -45,7 +45,7 @@
         <div class="section-label">Resumo</div>
         <div class="actions-grid">
             <div class="action-card stats-card">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@Model.Count()</span>
+                <span class="card-title">@Model.Count()</span>
                 <span class="card-subtitle">Total de Atores</span>
                 <div class="card-icons">
                     <i class="fas fa-users"></i>
@@ -56,8 +56,8 @@
                 var papeisUnicos = Model.Where(a => !string.IsNullOrEmpty(a.PapelSocial1))
                     .Select(a => a.PapelSocial1).Distinct().Count();
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@papeisUnicos</span>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title">@papeisUnicos</span>
                 <span class="card-subtitle">Papéis Sociais</span>
                 <div class="card-icons">
                     <i class="fas fa-briefcase"></i>
@@ -68,8 +68,8 @@
                 var generosUnicos = Model.Where(a => !string.IsNullOrEmpty(a.Genero))
                     .Select(a => a.Genero).Distinct().Count();
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@generosUnicos</span>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title">@generosUnicos</span>
                 <span class="card-subtitle">Gêneros</span>
                 <div class="card-icons">
                     <i class="fas fa-venus-mars"></i>
@@ -85,23 +85,23 @@
             @foreach (var ator in Model)
             {
                 <div class="form-item ator-item" data-nome="@ator.Nome?.ToLower()">
-                    <div class="form-info" style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="form-info">
+                        <div class="item-header">
+                            <div class="activity-icon activity-icon-purple">
                                 <i class="fas fa-user"></i>
                             </div>
-                            <div style="flex: 1;">
-                                <p class="name" style="margin: 0;">@ator.Nome</p>
+                            <div class="item-content">
+                                <p class="name item-name">@ator.Nome</p>
                                 
                                 @if (!string.IsNullOrEmpty(ator.PapelSocial1))
                                 {
-                                    <p style="color: var(--color-gray-500); font-size: 0.875rem; margin: 0.25rem 0 0 0;">
-                                        <i class="fas fa-briefcase" style="margin-right: 0.25rem;"></i>
+                                    <p class="item-subtitle">
+                                        <i class="fas fa-briefcase"></i>
                                         Papel: @ator.PapelSocial1
                                     </p>
                                 }
                                 
-                                <div class="tag-list" style="margin-top: 0.5rem;">
+                                <div class="tag-list">
                                     @if (!string.IsNullOrEmpty(ator.Genero))
                                     {
                                         var generoClass = ator.Genero.ToLower() switch {
@@ -132,14 +132,12 @@
     else
     {
         <!-- Nenhum ator cadastrado -->
-        <div class="no-records" style="padding: 3rem; text-align: center;">
-            <div style="margin-bottom: 1.5rem;">
-                <i class="fas fa-users" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+        <div class="no-records">
+            <div class="no-records-icon">
+                <i class="fas fa-users"></i>
             </div>
-            <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum ator cadastrado</h3>
-            <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
-                Comece adicionando o primeiro ator ao sistema.
-            </p>
+            <h3>Nenhum ator cadastrado</h3>
+            <p>Comece adicionando o primeiro ator ao sistema.</p>
             <button type="button" class="btn-save" 
                 onclick="window.location.href='@Url.Action("Create", "Atores")'">
                 <i class="fa-solid fa-plus"></i> Adicionar Primeiro Ator
@@ -148,14 +146,12 @@
     }
 
     <!-- Mensagem quando nenhum resultado for encontrado -->
-    <div class="no-records" id="noResultsMessage" style="display: none; padding: 3rem; text-align: center;">
-        <div style="margin-bottom: 1.5rem;">
-            <i class="fas fa-search" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+    <div class="no-records" id="noResultsMessage" style="display: none;">
+        <div class="no-records-icon">
+            <i class="fas fa-search"></i>
         </div>
-        <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum ator encontrado</h3>
-        <p style="color: var(--color-gray-500);">
-            Tente ajustar os termos de busca.
-        </p>
+        <h3>Nenhum ator encontrado</h3>
+        <p>Tente ajustar os termos de busca.</p>
     </div>
 </div>
 
@@ -167,7 +163,6 @@
             const noResultsMessage = document.getElementById('noResultsMessage');
             const atorItems = document.querySelectorAll('.ator-item');
 
-            // Função para filtrar atores
             function filterAtores() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 let visibleCount = 0;
@@ -184,7 +179,6 @@
                     }
                 });
 
-                // Mostrar/ocultar mensagem de "nenhum resultado"
                 if (visibleCount === 0 && atorItems.length > 0) {
                     if (atoresGrid) atoresGrid.style.display = 'none';
                     if (noResultsMessage) noResultsMessage.style.display = 'block';
@@ -194,11 +188,9 @@
                 }
             }
 
-            // Event listener para busca
             if (searchInput) {
                 searchInput.addEventListener('input', filterAtores);
 
-                // Limpar busca ao pressionar ESC
                 searchInput.addEventListener('keydown', function (e) {
                     if (e.key === 'Escape') {
                         searchInput.value = '';
