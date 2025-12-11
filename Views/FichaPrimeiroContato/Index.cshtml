@@ -6,6 +6,11 @@
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+}
+
 <div class="forms-container">
     <h2 class="page-title">Ficha de Primeiro Contato</h2>
 
@@ -26,9 +31,12 @@
                 <div class="search-container">
                     <div class="search-input-group">
                         <div class="search-wrapper">
-                            <!-- Mudamos o type para "search" e adicionamos classe para busca em tempo real -->
-                            <input type="search" class="search-input" name="search" value="@ViewData["CurrentFilter"]"
-                                placeholder="Procure pelo nome do ator" id="searchInput" />
+                            <input type="search" 
+                                   class="search-input" 
+                                   name="search" 
+                                   value="@ViewData["CurrentFilter"]"
+                                   placeholder="Procure pelo nome do ator" 
+                                   id="searchInput" />
                             <button type="submit" class="btn-search">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -113,17 +121,28 @@
                     </div>
 
                     <div class="actions">
-                        <button type="button" class="btn-action btn-concluir @(isFinalized ? "gray" : "")"
-                            data-id="@form.IdFicha" title="Concluir" @(isFinalized ? "disabled" : "")>
+                        <button type="button" 
+                                class="btn-action btn-concluir @(isFinalized ? "gray" : "")"
+                                data-id="@form.IdFicha"
+                                data-nome="@form.Ator?.Nome" 
+                                title="Concluir" 
+                                @(isFinalized ? "disabled" : "")>
                             <i class="fa fa-check"></i>
                         </button>
 
-                        <button type="button" class="btn-action btn-abandonar @(isFinalized ? "gray" : "")"
-                            data-id="@form.IdFicha" title="Abandonar" @(isFinalized ? "disabled" : "")>
+                        <button type="button" 
+                                class="btn-action btn-abandonar @(isFinalized ? "gray" : "")"
+                                data-id="@form.IdFicha"
+                                data-nome="@form.Ator?.Nome"
+                                title="Abandonar" 
+                                @(isFinalized ? "disabled" : "")>
                             <i class="fa fa-times"></i>
                         </button>
 
-                        <a asp-action="Edit" asp-route-id="@form.IdFicha" class="btn-action" title="Detalhes">
+                        <a asp-action="Edit" 
+                           asp-route-id="@form.IdFicha" 
+                           class="btn-action" 
+                           title="Detalhes">
                             <i class="fa fa-eye"></i>
                         </a>
                     </div>
@@ -136,30 +155,161 @@
         }
     </div>
 
-    <!-- Modais (mantenha como está) -->
-    <div id="modalConcluir" class="custom-modal">
+    <!-- Modal de Concluir Ficha -->
+    <div class="modal-overlay" id="modalConcluir">
         <div class="modal-content">
-            <h3>Completar ficha</h3>
-            <p>Você realmente deseja completar essa ficha?</p>
-            <form id="formConcluir" method="post">
-                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
-                <button type="submit" class="wizard-btn btn-next btn-confirm">Sim</button>
-            </form>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+            </div>
+
+            <h3 class="modal-title">Concluir Ficha</h3>
+
+            <p class="modal-text">
+                Você realmente deseja marcar a ficha de <strong id="nomeAtorConcluir"></strong> como concluída?
+            </p>
+
+            <div class="button-container">
+                <div class="modal-actions">
+                    <button type="button" 
+                            class="btn-modal-cancel wizard-btn btn-prev" 
+                            onclick="closeModal('modalConcluir')">
+                        Cancelar
+                    </button>
+
+                    <form id="formConcluir" method="post" style="margin: 0;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" 
+                                class="btn-modal-confirm wizard-btn btn-next"
+                                style="background-color: #28a745 !important;">
+                            Sim, Concluir
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="modalAbandonar" class="custom-modal">
+    <!-- Modal de Abandonar Ficha -->
+    <div class="modal-overlay" id="modalAbandonar">
         <div class="modal-content">
-            <h3>Abandonar ficha</h3>
-            <p>Você realmente deseja abandonar esta ficha?</p>
-            <form id="formAbandonar" method="post">
-                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
-                <button type="submit" class="wizard-btn btn-next btn-confirm">Sim</button>
-            </form>
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <h3 class="modal-title">Abandonar Ficha</h3>
+
+            <p class="modal-text">
+                Você realmente deseja abandonar a ficha de <strong id="nomeAtorAbandonar"></strong>?<br>
+                Esta ação pode ser revertida posteriormente.
+            </p>
+
+            <div class="button-container">
+                <div class="modal-actions">
+                    <button type="button" 
+                            class="btn-modal-cancel wizard-btn btn-prev" 
+                            onclick="closeModal('modalAbandonar')">
+                        Cancelar
+                    </button>
+
+                    <form id="formAbandonar" method="post" style="margin: 0;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" 
+                                class="btn-modal-confirm wizard-btn btn-next">
+                            Sim, Abandonar
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Variáveis globais dos modais
+    const modalConcluir = document.getElementById('modalConcluir');
+    const modalAbandonar = document.getElementById('modalAbandonar');
+    const formConcluir = document.getElementById('formConcluir');
+    const formAbandonar = document.getElementById('formAbandonar');
+    const nomeAtorConcluir = document.getElementById('nomeAtorConcluir');
+    const nomeAtorAbandonar = document.getElementById('nomeAtorAbandonar');
+
+    // Função para abrir modal
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
+    }
+
+    // Função para fechar modal (global para ser chamada inline)
+    window.closeModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    };
+
+    // Botões de concluir
+    document.querySelectorAll('.btn-concluir').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.disabled) return;
+            
+            const fichaId = this.dataset.id;
+            const nomeAtor = this.dataset.nome || 'este ator';
+            
+            nomeAtorConcluir.textContent = nomeAtor;
+            formConcluir.action = `/FichaPrimeiroContato/Concluir/${fichaId}`;
+            openModal('modalConcluir');
+        });
+    });
+
+    // Botões de abandonar
+    document.querySelectorAll('.btn-abandonar').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.disabled) return;
+            
+            const fichaId = this.dataset.id;
+            const nomeAtor = this.dataset.nome || 'este ator';
+            
+            nomeAtorAbandonar.textContent = nomeAtor;
+            formAbandonar.action = `/FichaPrimeiroContato/Abandonar/${fichaId}`;
+            openModal('modalAbandonar');
+        });
+    });
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', function(e) {
+        if (e.target === modalConcluir) {
+            closeModal('modalConcluir');
+        }
+        if (e.target === modalAbandonar) {
+            closeModal('modalAbandonar');
+        }
+    });
+
+    // Fechar modal com ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (modalConcluir.classList.contains('active')) {
+                closeModal('modalConcluir');
+            }
+            if (modalAbandonar.classList.contains('active')) {
+                closeModal('modalAbandonar');
+            }
+        }
+    });
+
+    // Função de filtro (se existir)
+    window.submitFilter = function() {
+        document.getElementById('filterForm').submit();
+    };
+});
+</script>
+
 @section Scripts {
     <script src="~/js/fichaprimeirocontato.js"></script>
+    <script src="~/js/site.js"></script>
 }

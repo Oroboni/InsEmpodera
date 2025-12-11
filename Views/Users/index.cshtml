@@ -3,94 +3,213 @@
 @{
     ViewData["Title"] = "Usuários";
     Layout = "_Layout";
-    ViewData["PageCSS"] = "usuarios";
-    ViewData["DisableMainScroll"] = "true"; // <-- ADICIONE ESTA LINHA
+    ViewData["PageCSS"] = "homepage";
 }
 
-<!DOCTYPE html>
-<html lang="pt-br">
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/comunidadesDetalhes.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Ator</title>
-    <link rel="stylesheet" href="~/css/pages/indexAtores.css">
-    <link rel="stylesheet" href="~/css/pages/usuarios.css">
-</head>
+<div class="modern-container">
+    <!-- Header -->
+    <div class="header-section">
+        <h2>
+            <strong class="text-primary">Usuários</strong>
+        </h2>
+    </div>
 
-<body>
-    <div class="atores-content-area">
+    <!-- Barra de Busca e Filtros -->
+    <div class="search-container">
+        <div class="search-input-group">
+            <div class="search-wrapper">
+                <input type="search" id="searchUsersInput" placeholder="Busque por nome ou email..."
+                    aria-label="Buscar usuários" />
+                <button type="button" class="btn-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
 
-        <div class="atores-header">
-            <h2>Usuários</h2>
-        </div>
-
-        <div class="usuarios-search-container">
-            <form class="usuarios-search-bar" method="get">
-                <input type="search" class="search-input" placeholder="Pesquise por usuários..." name="q" />
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            </form>
-
-            <a asp-controller="Users" asp-action="Create" class="atores-add-button">+</a>
-        </div>
-
-        <div class="toggle-container">
-            <label class="toggle-switch">
-                <input type="checkbox" id="toggleInativos" name="incluirInativos" />
-                <span class="slider round"></span>
-            </label>
-            <label for="toggleInativos" class="toggle-label">Incluir Inativos</label>
-        </div>
-
-        <div class="atores-list-container">
-            @foreach (var user in Model)
-            {
-                <div class="ator-card" id="@user.Ativo">
-    
-                    <div class="container-info">
-                        <span class="ator-name2">@user.Nome</span>
-                        <p>@user.Email</p>
-                    </div>
-
-                    <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario">
-                        <i class="fa-solid fa-eye"></i>
-                    </a>
+            <div class="input-card" style="margin-bottom: 0; width: auto; min-width: 200px;">
+                <div class="input-content" style="flex-direction: row; align-items: center; gap: 1rem;">
+                    <label class="toggle-switch" style="margin: 0;">
+                        <input type="checkbox" id="toggleInativos" name="incluirInativos" />
+                        <span class="slider round"></span>
+                    </label>
+                    <label for="toggleInativos" style="margin: 0; cursor: pointer; user-select: none;">
+                        Incluir Inativos
+                    </label>
                 </div>
-            }
+            </div>
+        </div>
+
+        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create", "Users")'"
+            title="Adicionar Novo Usuário">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="section-label">Resumo</div>
+    <div class="actions-grid">
+        <div class="action-card stats-card">
+            <span class="card-title" style="font-size: var(--font-size-4xl);" id="totalUsers">@Model.Count()</span>
+            <span class="card-subtitle">Total de Usuários</span>
+            <div class="card-icons">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+
+        <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+            <span class="card-title" style="font-size: var(--font-size-4xl);" id="activeUsers">@Model.Count(u => u.Ativo
+                                == "S")</span>
+            <span class="card-subtitle">Usuários Ativos</span>
+            <div class="card-icons">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+
+        <div class="action-card stats-card" style="background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);">
+            <span class="card-title" style="font-size: var(--font-size-4xl);" id="inactiveUsers">@Model.Count(u =>
+                                u.Ativo == "N")</span>
+            <span class="card-subtitle">Usuários Inativos</span>
+            <div class="card-icons">
+                <i class="fas fa-times-circle"></i>
+            </div>
         </div>
     </div>
-</body>
 
-</html>
-<script>
-    onload = filterAtores();
-    function filterAtores() {
-        var incluirInativos = document.getElementById('toggleInativos').checked;
-        var atores = document.querySelectorAll('.ator-card');
+    <!-- Lista de Usuários -->
+    <div class="purple-divider"></div>
+    <div class="section-label">Todos os Usuários</div>
 
-        atores.forEach(function (ator) {
-            if (ator.id === 'N' && !incluirInativos) {
-                ator.style.display = 'none';
-            } else {
-                ator.style.display = 'flex'; // <--- CORREÇÃO: Deve ser 'flex' para manter o layout!
+    <div class="forms-list" id="usersGrid">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var user in Model)
+            {
+                var isAtivo = user.Ativo == "S";
+
+                <div class="form-item user-item" data-ativo="@isAtivo.ToString().ToLower()" data-nome="@user.Nome?.ToLower()"
+                    data-email="@user.Email?.ToLower()">
+
+                    <div class="form-info" style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <p class="name" style="margin: 0;">@user.Nome</p>
+                                <p class="date" style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-envelope" style="font-size: 0.75rem;"></i>
+                                    @user.Email
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="user-status-badge @(isAtivo ? "status-active" : "status-inactive")">
+                            <i class="fas fa-circle"></i>
+                            @(isAtivo ? "Ativo" : "Inativo")
+                        </div>
+
+                        <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
+                            title="Ver detalhes">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
             }
-        });
-    }
-    document.getElementById('toggleInativos').addEventListener('change', function () {
-        filterAtores();
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.querySelector(".search-input");
-        const cards = document.querySelectorAll(".ator-card");
+        }
+        else
+        {
+            <div class="no-records" style="padding: 3rem; text-align: center;">
+                <div style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-users-slash" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+                </div>
+                <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum usuário cadastrado</h3>
+                <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
+                    Comece adicionando seu primeiro usuário ao sistema.
+                </p>
+                <button type="button" class="btn-save" onclick="window.location.href='@Url.Action("Create", "Users")'">
+                    <i class="fa-solid fa-plus"></i> Adicionar Primeiro Usuário
+                </button>
+            </div>
+        }
+    </div>
 
-        searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
-            cards.forEach(card => {
-                const name = card.querySelector(".ator-name").textContent.toLowerCase();
-                card.style.display = name.includes(query) ? "flex" : "none";
+    <!-- Mensagem quando nenhum resultado for encontrado -->
+    <div class="no-records" id="noResultsMessage" style="display: none; padding: 3rem; text-align: center;">
+        <div style="margin-bottom: 1.5rem;">
+            <i class="fas fa-search" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+        </div>
+        <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum usuário encontrado</h3>
+        <p style="color: var(--color-gray-500);">
+            Tente ajustar os filtros ou termos de busca.
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchUsersInput');
+            const toggleInativos = document.getElementById('toggleInativos');
+            const usersGrid = document.getElementById('usersGrid');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            const userItems = document.querySelectorAll('.user-item');
+
+            // Função para filtrar usuários
+            function filterUsers() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const incluirInativos = toggleInativos.checked;
+                let visibleCount = 0;
+
+                userItems.forEach(item => {
+                    const nome = item.getAttribute('data-nome') || '';
+                    const email = item.getAttribute('data-email') || '';
+                    const ativo = item.getAttribute('data-ativo') === 'true';
+
+                    // Verificar se corresponde à busca
+                    const matchesSearch = nome.includes(searchTerm) || email.includes(searchTerm);
+
+                    // Verificar se deve mostrar baseado no status
+                    const shouldShow = matchesSearch && (incluirInativos || ativo);
+
+                    if (shouldShow) {
+                        item.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Mostrar/ocultar mensagem de "nenhum resultado"
+                if (visibleCount === 0 && userItems.length > 0) {
+                    usersGrid.style.display = 'none';
+                    noResultsMessage.style.display = 'block';
+                } else {
+                    usersGrid.style.display = 'flex';
+                    noResultsMessage.style.display = 'none';
+                }
+            }
+
+            // Event listeners
+            searchInput.addEventListener('input', filterUsers);
+            toggleInativos.addEventListener('change', filterUsers);
+
+            // Limpar busca ao pressionar ESC
+            searchInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    filterUsers();
+                }
             });
+
+            // Aplicar filtro inicial (ocultar inativos por padrão)
+            filterUsers();
         });
-    });
-</script>
+    </script>
+}

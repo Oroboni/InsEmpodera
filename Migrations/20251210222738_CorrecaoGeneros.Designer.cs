@@ -3,6 +3,7 @@ using System;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251210222738_CorrecaoGeneros")]
+    partial class CorrecaoGeneros
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
@@ -527,7 +530,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Caio Nascimento",
+                            Nome = "Ator 1",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Voluntario",
                             Rope = false,
@@ -545,7 +548,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Clara Veloso",
+                            Nome = "Ator 2",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
                             Rope = false,
@@ -563,7 +566,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Milton Nascimento",
+                            Nome = "Ator 3",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
                             Rope = false,
@@ -581,7 +584,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Marisa Monte",
+                            Nome = "Ator 4",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Coordenador",
                             Rope = false,
@@ -599,7 +602,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "César Lattes",
+                            Nome = "Ator 5",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Voluntario",
                             Rope = false,
@@ -617,7 +620,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Teresa Leite",
+                            Nome = "Ator 6",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Membro",
                             Rope = false,
@@ -635,7 +638,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Cássio Drummond",
+                            Nome = "Ator 7",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Voluntario",
                             Rope = false,
@@ -653,7 +656,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Lia Guimarães",
+                            Nome = "Ator 8",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
                             Rope = false,
@@ -668,10 +671,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1996, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 1,
-                            Genero = "Transgênero",
+                            Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Djair Sócrates",
+                            Nome = "Ator 9",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
                             Rope = false,
@@ -689,7 +692,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Marisa Prestes",
+                            Nome = "Ator 10",
                             PapelSocial1 = "Lider",
                             PapelSocial2 = "Coordenador",
                             Rope = false,
@@ -707,7 +710,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Ana Marighella",
+                            Nome = "Ator 11",
                             PapelSocial1 = "Beneficiario",
                             PapelSocial2 = "Membro",
                             Rope = false,
@@ -725,7 +728,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Sara Assis",
+                            Nome = "Ator 12",
                             PapelSocial1 = "Parceiro",
                             PapelSocial2 = "Voluntario",
                             Rope = false,
@@ -743,7 +746,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Caio Freire",
+                            Nome = "Ator 13",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
                             Rope = false,
@@ -761,7 +764,7 @@ namespace InsEmpodera.Migrations
                             Genero = "Feminino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Paula Souza",
+                            Nome = "Ator 14",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
                             Rope = false,
@@ -776,10 +779,10 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DtNascimento = new DateTime(1979, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 1,
-                            Genero = "Feminino",
+                            Genero = "Masculino",
                             Lopiniao = false,
                             Mcomunidade = false,
-                            Nome = "Darcy Fernandes",
+                            Nome = "Ator 15",
                             PapelSocial1 = "Membro",
                             PapelSocial2 = "",
                             Rope = false,
@@ -988,7 +991,7 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 1,
                             Local = "Bairro A",
-                            Nome = "Comunidade Alva-Branda",
+                            Nome = "Comunidade Alpha",
                             Status = "Em Processo"
                         },
                         new
@@ -1002,7 +1005,7 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 2,
                             Local = "Bairro B",
-                            Nome = "Comunidade Brenda Luxemburgo",
+                            Nome = "Comunidade Beta",
                             Status = "Em diagnóstico"
                         },
                         new
@@ -1016,7 +1019,7 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 3,
                             Local = "Bairro C",
-                            Nome = "Comunidade Cachoeirinha",
+                            Nome = "Comunidade Gamma",
                             Status = "Em diagnóstico"
                         },
                         new
@@ -1030,7 +1033,7 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 4,
                             Local = "Bairro D",
-                            Nome = "Comunidade Divina Luz",
+                            Nome = "Comunidade Delta",
                             Status = "Em diagnóstico"
                         },
                         new
@@ -1044,7 +1047,7 @@ namespace InsEmpodera.Migrations
                             DtModificacao = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FkIdUsuario = 5,
                             Local = "Bairro E",
-                            Nome = "Comunidade Estrela d’Alva",
+                            Nome = "Comunidade Epsilon",
                             Status = "Em diagnóstico"
                         });
                 });

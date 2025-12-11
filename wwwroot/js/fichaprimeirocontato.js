@@ -92,20 +92,6 @@ function initIndexPage() {
         }
     }
 
-    if (searchInput) {
-        searchInput.addEventListener("input", function () {
-            filterFichas(this.value.toLowerCase().trim());
-        });
-        searchInput.addEventListener("search", function () {
-            if (this.value === "") {
-                filterFichas("");
-            }
-        });
-        if (searchInput.value) {
-            filterFichas(searchInput.value.toLowerCase().trim());
-        }
-    }
-
     function submitFilter() {
         setTimeout(() => {
             if (filterForm) {
@@ -124,21 +110,201 @@ function initFormPage() {
     window.currentStep = 1;
     window.totalSteps = 3;
 
-    // 4. CONFIGURAÇÃO DE VALIDAÇÃO
+    // Detectar modo da página
+    const form = document.getElementById("wizardForm");
+    const idFichaInput = document.getElementById("IdFicha");
+    const isEditPage = idFichaInput && idFichaInput.value && idFichaInput.value !== "0";
+    const isCreatePage = !isEditPage;
+
+    // Inicializar mapa
+    if (typeof initMapSelector === 'function') {
+        initMapSelector('mapa-principal', 'input-endereco');
+    } else {
+        console.error("ERRO: initMapSelector não encontrada");
+    }
+
+    // Se for página de edição, configurar modo visualização/edição
+    if (isEditPage) {
+        initEditMode();
+    }
+
+    // Configuração de validação
     setupValidation();
 
-    // 5. INICIALIZA WIZARD
+    // Inicializa Wizard
     updateButtons();
 
-    // 6. VALIDAÇÃO FINAL AO ENVIAR
-    const wizardForm = document.getElementById("wizardForm");
-    if (wizardForm) {
-        wizardForm.addEventListener("submit", function (e) {
+    // Validação final ao enviar
+    if (form) {
+        form.addEventListener("submit", function (e) {
             if (!validateAllSteps()) {
                 e.preventDefault();
             }
         });
     }
+}
+
+// ==========================================
+// MODO DE EDIÇÃO (VISUALIZAÇÃO/EDIÇÃO)
+// ==========================================
+
+function initEditMode() {
+    const form = document.getElementById("wizardForm");
+    const inputFields = form.querySelectorAll('.clean-input, select.clean-input, textarea.clean-input');
+    const radioInputs = form.querySelectorAll('input[type="radio"]');
+    const checkboxInputs = form.querySelectorAll('input[type="checkbox"]');
+    const btnSave = document.getElementById('btn-save');
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    
+    // Verificar se a ficha está bloqueada
+    const alertWarning = document.querySelector('.alert-warning');
+    const isLocked = alertWarning !== null;
+    
+    let isEditMode = false;
+    let isSubmitting = false;
+
+    function setFieldsState(disabled) {
+        inputFields.forEach(field => field.disabled = disabled);
+        radioInputs.forEach(field => field.disabled = disabled);
+        checkboxInputs.forEach(field => field.disabled = disabled);
+    }
+
+    function updateEditButtons() {
+        if (isLocked) {
+            
+            btnSave.innerHTML = '<i class="fa-solid fa-times"></i> Fechar';
+            btnSave.style.display = '';
+            btnSave.setAttribute('type', 'button');
+            btnSave.onclick = function(e) {
+                e.preventDefault();
+                window.location.href = '/FichaPrimeiroContato/Index';
+            };
+            setFieldsState(true);
+            
+            // Permitir navegação entre steps mesmo bloqueado
+            if (btnNext) btnNext.style.display = window.currentStep < window.totalSteps ? 'inline-flex' : 'none';
+            if (btnPrev) btnPrev.style.display = window.currentStep > 1 ? 'inline-flex' : 'none';
+            return;
+        }
+
+        if (isEditMode) {
+            // Modo edição: salvar
+            btnSave.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+            btnSave.setAttribute('type', 'submit');
+            btnSave.onclick = null;
+            setFieldsState(false);
+            
+            // Mostrar navegação normal
+            updateButtons();
+        } else {
+            // Modo visualização: editar
+            btnSave.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+            btnSave.setAttribute('type', 'button');
+            btnSave.onclick = function(e) {
+                e.preventDefault();
+                isEditMode = true;
+                updateEditButtons();
+                
+                // Focar no primeiro campo editável
+                const firstInput = form.querySelector('input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled])');
+                if (firstInput) firstInput.focus();
+            };
+            setFieldsState(true);
+            
+            // Permitir navegação entre steps
+            if (btnNext) btnNext.style.display = window.currentStep < window.totalSteps ? 'inline-flex' : 'none';
+            if (btnPrev) btnPrev.style.display = window.currentStep > 1 ? 'inline-flex' : 'none';
+        }
+    }
+
+    // Handler de submit do formulário
+    form.addEventListener('submit', function(e) {
+        if (!isEditMode || isSubmitting || isLocked) {
+            e.preventDefault();
+            return;
+        }
+
+        if (!form.checkValidity() || !validateAllSteps()) {
+            e.preventDefault();
+            return;
+        }
+
+        isSubmitting = true;
+        btnSave.disabled = true;
+        btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+    });
+
+    // Inicializar no modo visualização
+    updateEditButtons();
+
+    // Sobrescrever a função updateButtons para respeitar o modo de edição
+    const originalUpdateButtons = window.updateButtons;
+    window.updateButtons = function() {
+        if (isEditMode && !isLocked) {
+            // Modo edição: usar navegação normal do wizard
+            originalUpdateButtons();
+        } else {
+            // Modo visualização ou bloqueado: usar botões customizados
+            updateEditButtons();
+        }
+    };
+
+    // Prevenir validação quando em modo visualização
+    const originalChangeStep = window.changeStep;
+    window.changeStep = function(direction) {
+        if (!isEditMode && !isLocked) {
+            // Modo visualização: permitir navegação sem validação
+            const nextStep = window.currentStep + direction;
+            if (nextStep < 1 || nextStep > window.totalSteps) return;
+
+            const stepAtual = document.getElementById(`step-${window.currentStep}`);
+            if (stepAtual) stepAtual.classList.remove("active");
+
+            window.currentStep = nextStep;
+
+            const stepNovo = document.getElementById(`step-${window.currentStep}`);
+            if (stepNovo) stepNovo.classList.add("active");
+
+            // Atualizar header steps
+            for (let i = 1; i <= window.totalSteps; i++) {
+                const stepEl = document.getElementById(`header-step-${i}`);
+                if (stepEl) {
+                    if (i <= window.currentStep) {
+                        stepEl.classList.add("active");
+                    } else {
+                        stepEl.classList.remove("active");
+                    }
+                }
+            }
+
+            // Atualizar linhas
+            for (let i = 1; i < window.totalSteps; i++) {
+                const lineEl = document.getElementById(`line-${i}`);
+                if (lineEl) {
+                    if (window.currentStep > i) {
+                        lineEl.classList.add("active");
+                    } else {
+                        lineEl.classList.remove("active");
+                    }
+                }
+            }
+
+            updateEditButtons();
+
+            // Scroll suave
+            const stepperContainer = document.querySelector(".stepper-container");
+            if (stepperContainer) {
+                stepperContainer.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        } else {
+            // Modo edição ou bloqueado: usar navegação original com validação
+            originalChangeStep(direction);
+        }
+    };
 }
 
 // ==========================================
@@ -643,6 +809,33 @@ function addErrorStyles() {
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(-10px); }
                 to { opacity: 1; transform: translateY(0); }
+            }
+
+            /* Estilos para campos desabilitados */
+            .clean-input:disabled,
+            select.clean-input:disabled
+
+            input[type="radio"]:disabled,
+            input[type="checkbox"]:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            input[type="radio"]:disabled + .radio-label,
+            input[type="checkbox"]:disabled + .radio-label {
+                color: #6c757d;
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+
+            .clean-input:disabled:hover,
+            select.clean-input:disabled:hover,
+            textarea.clean-input:disabled:hover {
+                border-color: #e0e0e0;
+            }
+
+            .input-card:has(.clean-input:disabled) .icon-box {
+                opacity: 0.6;
             }
         `;
         document.head.appendChild(style);

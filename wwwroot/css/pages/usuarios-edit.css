@@ -1,144 +1,279 @@
-/* Container que cobre a tela toda */
-body {
-    background-color: #f7f7f7; /* Cor de fundo da sua tela principal */
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+/* usuarios-edit.css */
+
+/* 
+ * IMPORTANTE: Este arquivo COMPLEMENTA o CSS de fichaprimeirocontato.css
+ * Reutiliza ao máximo as classes já existentes.
+ * Adiciona estilos específicos para a tela de Edit (metadata, delete, etc)
+ */
+
+/* ===== FONT FAMILY GLOBAL ===== */
+input,
+button,
+textarea,
+select {
+    font-family: var(--font-family-primary);
 }
 
-/* O "Modal" em si */
-.modal-dialog-content {
-    position: fixed; /* Fixa o modal */
-    top: 0;
-    left: 0;         /* <-- MUDAR: Garante que comece do canto superior esquerdo */
-    right: 0;        /* <-- MUDAR: Estica a largura total (ou use width: 100%) */
-    width: 100%;     /* <-- MUDAR: Garante a largura total */
-    height: 100vh;   /* Altura total da tela */
-    background-color: white; /* Cor de fundo */
-    box-shadow: none; /* <-- Opcional: Remova a sombra de painel lateral */
-    overflow-y: auto; /* Adiciona scroll se o conteúdo for grande */
-    z-index: 1050;
+/* ===== AJUSTES ESPECÍFICOS PARA TELA DE EDIT ===== */
+
+/* Container com largura máxima para centralizar o formulário */
+.modern-container {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-/* Cabeçalho do Modal */
-.modal-header {
-    background-color: #343a40; /* Cor escura do cabeçalho */
-    color: white;
-    padding: 15px 20px;
+/* Ajuste do título */
+.page-title {
+    margin-bottom: var(--space-8);
+}
+
+/* Section label com ícone */
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.section-label i {
+    color: var(--color-primary);
+}
+
+/* ===== SELECT COM DROPDOWN ICON ===== */
+.simple-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    padding-right: var(--space-6);
+}
+
+.input-content {
+    position: relative;
+}
+
+.dropdown-icon {
+    position: absolute;
+    right: var(--space-2);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-gray-500);
+    pointer-events: none;
+}
+
+/* ===== SEÇÃO DE METADADOS (COLAPSÍVEL) ===== */
+.metadata-section {
+    background-color: var(--color-gray-300);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-6);
+    border: 1px solid var(--color-gray-400);
+}
+
+.metadata-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+    transition: var(--transition-base);
+}
+
+.metadata-header:hover {
+    background-color: var(--color-gray-400);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.metadata-section[open] .metadata-header {
+    border-bottom: 1px solid var(--color-gray-400);
+}
+
+.metadata-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metadata-label {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-800);
+    font-size: var(--font-size-sm);
+}
+
+.metadata-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-600);
+}
+
+.metadata-toggle {
+    color: var(--color-gray-600);
+    transition: transform var(--transition-base);
+}
+
+.metadata-section[open] .metadata-toggle {
+    transform: rotate(180deg);
+}
+
+.metadata-content {
+    padding: var(--space-5);
+}
+
+/* ===== BOTÕES DE AÇÃO ===== */
+.form-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #7A3288;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-gray-300);
 }
 
-.modal-title {
-    margin: 0;
-    font-size: 18px;
+.form-actions-right {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
 }
-
-.close-button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    line-height: 1;
-}
-
-/* Corpo do Modal */
-.modal-body {
-    padding: 30px 20px;
-    justify-self: center;
-    width: 80%;
-}
-
-/* Estilo para a foto de perfil circular */
-.profile-photo-container {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.profile-photo {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%; /* Torna a imagem circular */
-    object-fit: cover;
-    background-color: #e0e0e0; /* Placeholder cinza */
-    border: 1px solid #ccc;
-    padding: 5px;
-}
-
-/* Estilo dos campos de formulário */
-.form-group {
-    margin-bottom: 20px;
-}
-
-.control-label {
-    display: block;
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-bottom: 1px solid #ccc; /* Linha inferior como na imagem */
-    font-size: 16px;
-    outline: none;
-
-    /* === PROPRIEDADES CHAVE PARA O RISCO AO REDOR === */
-    border: 1px solid #ccc; /* Borda cinza clara de 1px em todos os 4 lados */
-    border-radius: 4px; /* Opcional: Adiciona cantos levemente arredondados */
-    background-color: white; /* Garante que o fundo seja branco */
-    /* ============================================== */
-
-    transition: border-color 0.3s;
-    background-color: transparent;
-}
-
-/* Estilo para campos somente leitura (readonly) */
-.form-control[readonly] {
-    background-color: #f9f9f9; 
-    cursor: default;
-}
-
-/* Estilo para o Select (Perfil de acesso) */
-.form-control:not([readonly]) {
-    cursor: pointer;
-}
-
-/* BOTÔES */
-
-.btn-save {
-    background-color: #7A3288;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-.btn-save:hover {
-    background-color: #5a2460;
-}
-
+/* Botão Cancelar */
 .btn-cancel {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
+    background-color: var(--color-gray-500);
+    color: var(--color-white);
     border: none;
-    border-radius: 4px;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-md);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
 }
 
 .btn-cancel:hover {
-    background-color: rgb(148, 3, 3);
+    background-color: var(--color-gray-600);
+    transform: translateY(-2px);
 }
 
+/* Botão Excluir */
+.btn-delete {
+    background-color: var(--color-error);
+    color: var(--color-white);
+    border: none;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-md);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.btn-delete:hover {
+    background-color: #c62828;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ===== VALIDAÇÃO VISUAL ===== */
+.input-card:has(.clean-input:invalid:not(:placeholder-shown)) {
+    border-color: var(--color-error);
+}
+
+/* ===== ACESSIBILIDADE ===== */
+.clean-input:focus,
+.simple-select:focus {
+    outline: 2px solid var(--color-primary-300);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Remove a seta padrão do details */
+.metadata-section > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (min-width: 640px) {
+    .grid-row {
+        flex-direction: row;
+    }
+}
+
+@media (min-width: 768px) {
+    .modern-container {
+        padding: var(--space-8) var(--space-12);
+    }
+
+    .page-title {
+        font-size: var(--font-size-3xl);
+    }
+}
+
+@media (max-width: 640px) {
+    .modern-container {
+        padding: var(--space-4) var(--space-3);
+    }
+
+    .page-title {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--space-4);
+    }
+
+    .section-label {
+        font-size: var(--font-size-base);
+        margin-top: var(--space-4);
+    }
+
+    .input-card {
+        padding: var(--space-3);
+    }
+
+    .icon-box {
+        width: 32px;
+        height: 32px;
+        font-size: var(--font-size-lg);
+        margin-right: var(--space-3);
+    }
+
+    /* Empilha os botões no mobile */
+    .form-actions {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .form-actions-right {
+        flex-direction: column;
+        width: 100%;
+        gap: var(--space-3);
+    }
+
+    .btn-save,
+    .btn-cancel,
+    .btn-delete {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Ajusta ordem dos botões no mobile: Delete fica no topo */
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .purple-divider {
+        margin: var(--space-6) 0;
+    }
+
+    .metadata-header {
+        padding: var(--space-3);
+    }
+
+    .metadata-content {
+        padding: var(--space-3);
+    }
+}

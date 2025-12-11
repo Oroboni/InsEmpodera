@@ -4,7 +4,7 @@ using Empodera.Models;
 using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering; 
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Empodera.Controllers;
 
@@ -25,7 +25,7 @@ public class AtoresController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        
+
         var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
         return View(Atores);
     }
@@ -38,19 +38,19 @@ public class AtoresController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        
+
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.ToListAsync(), 
-            "IdComunidade", 
+            await _context.Comunidades.ToListAsync(),
+            "IdComunidade",
             "Nome"
         );
-        
+
         var novoAtor = new Atores
         {
             DtCriacao = DateTime.Now,
-            DtModificacao = DateTime.Now 
+            DtModificacao = DateTime.Now
         };
-        
+
         return View(novoAtor);
     }
 
@@ -96,18 +96,24 @@ public class AtoresController : Controller
         if (ator == null)
             return NotFound();
 
-        ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuario).FirstOrDefault();
-        ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuarioM).FirstOrDefault();
+        // Busca usuários para exibição (opcional)
+        ViewBag.UsuarioOriginal = _context.Usuarios
+            .Where(z => z.IdUsuario == ator.FkIdUsuario)
+            .FirstOrDefault();
+        ViewBag.UsuarioNovo = _context.Usuarios
+            .Where(z => z.IdUsuario == ator.FkIdUsuarioM)
+            .FirstOrDefault();
 
+        // ✅ CORREÇÃO: Busca a relação correta
         var atorCom = await _context.AtorComunidades
             .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
 
-
+        // ✅ CORREÇÃO: Passa o FkIdComunidade como valor selecionado
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
             "IdComunidade",
             "Nome",
-            atorCom?.IdAtorComunidade
+            atorCom?.FkIdComunidade  // ✅ Agora está correto
         );
 
         return View(ator);
@@ -115,17 +121,33 @@ public class AtoresController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Atores atores,int id, int ComunidadeId)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(Atores atorFormulario, int id, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        var ator = await _context.Atores.FindAsync(id);
-        if (ator == null)
+        // ✅ Busca o ator existente
+        var atorDb = await _context.Atores.FindAsync(id);
+        if (atorDb == null)
             return NotFound();
 
+        // ✅ Atualiza os dados do ator com os valores do formulário
+        atorDb.Nome = atorFormulario.Nome;
+        atorDb.Genero = atorFormulario.Genero;
+        atorDb.DtNascimento = atorFormulario.DtNascimento;
+        atorDb.PapelSocial1 = atorFormulario.PapelSocial1;
+        atorDb.PapelSocial2 = atorFormulario.PapelSocial2;
+        atorDb.Telefone = atorFormulario.Telefone;
+        atorDb.DaEquipe = atorFormulario.DaEquipe;
+        atorDb.Lopiniao = atorFormulario.Lopiniao;
+        atorDb.Mcomunidade = atorFormulario.Mcomunidade;
+        atorDb.Rope = atorFormulario.Rope;
+        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
+        atorDb.DtModificacao = DateTime.Now;
+
         var atorCom = await _context.AtorComunidades
-            .FirstOrDefaultAsync(ac => ac.IdAtorComunidade == id);
+            .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
 
         if (atorCom == null)
         {
@@ -138,24 +160,7 @@ public class AtoresController : Controller
         }
         else
         {
-            var atorDb = await _context.Atores.FindAsync(atores.IdAtores);
-            if (atorDb == null)
-                return NotFound();
-
-            atorDb.Nome = ator.Nome;
-            atorDb.Genero = ator.Genero;
-            atorDb.DtNascimento = ator.DtNascimento;
-            atorDb.PapelSocial1 = ator.PapelSocial1;
-            atorDb.PapelSocial2 = ator.PapelSocial2;
-            atorDb.Telefone = ator.Telefone;
-            atorDb.DaEquipe = ator.DaEquipe;
-            atorDb.Lopiniao = ator.Lopiniao;
-            atorDb.Mcomunidade = ator.Mcomunidade;
-            atorDb.Rope = ator.Rope;
-            atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
-            atorDb.DtModificacao = DateTime.Now;
-
-            await _context.SaveChangesAsync();
+            atorCom.FkIdComunidade = ComunidadeId;
         }
 
         await _context.SaveChangesAsync();
@@ -164,7 +169,7 @@ public class AtoresController : Controller
     }
 
 
-    // GET: /Actor/Delete/5
+    // POST: /Actor/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int? id)
@@ -178,7 +183,7 @@ public class AtoresController : Controller
         {
             return NotFound();
         }
-        
+
         var ator = await _context.Atores.FindAsync(id);
         if (ator != null)
         {
@@ -188,9 +193,6 @@ public class AtoresController : Controller
         }
         return RedirectToAction("Index", "Atores");
     }
-
-    // TODO: Você precisará adicionar os métodos [HttpPost] para Create e Edit
-    // para salvar as mudanças no banco.
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

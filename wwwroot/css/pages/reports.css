@@ -299,6 +299,12 @@ select {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: var(--space-5);
 }
+.page-title{
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-6);
+}
 .report-card {
     display: flex;
     flex-direction: column;
