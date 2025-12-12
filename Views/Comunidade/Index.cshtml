@@ -45,7 +45,7 @@
         <div class="section-label">Resumo</div>
         <div class="actions-grid">
             <div class="action-card stats-card">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@Model.Count()</span>
+                <span class="card-title">@Model.Count()</span>
                 <span class="card-subtitle">Total de Comunidades</span>
                 <div class="card-icons">
                     <i class="fas fa-home"></i>
@@ -55,8 +55,8 @@
             @{
                 var emProcesso = Model.Count(c => c.Status == "Em Processo");
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #218838 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@emProcesso</span>
+            <div class="action-card stats-card stats-card-green">
+                <span class="card-title">@emProcesso</span>
                 <span class="card-subtitle">Em Processo</span>
                 <div class="card-icons">
                     <i class="fas fa-spinner"></i>
@@ -66,8 +66,8 @@
             @{
                 var aguardando = Model.Count(c => c.Status != "Em Processo");
             }
-            <div class="action-card stats-card" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
-                <span class="card-title" style="font-size: var(--font-size-4xl);">@aguardando</span>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title">@aguardando</span>
                 <span class="card-subtitle">Aguardando Início</span>
                 <div class="card-icons">
                     <i class="fas fa-clock"></i>
@@ -85,15 +85,15 @@
                 var isEmProcesso = comunidade.Status == "Em Processo";
                 
                 <div class="form-item comunidade-item" data-nome="@comunidade.Nome?.ToLower()">
-                    <div class="form-info" style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="form-info">
+                        <div class="item-header">
+                            <div class="activity-icon activity-icon-purple">
                                 <i class="fas fa-home"></i>
                             </div>
-                            <div style="flex: 1;">
-                                <p class="name" style="margin: 0;">@comunidade.Nome</p>
+                            <div class="item-content">
+                                <p class="name item-name">@comunidade.Nome</p>
                                 
-                                <div class="tag-list" style="margin-top: 0.5rem;">
+                                <div class="tag-list">
                                     @if (isEmProcesso)
                                     {
                                         <span class="tag-item tag-green">
@@ -116,22 +116,20 @@
                     <div class="actions">
                         @if (isEmProcesso)
                         {
-                            <button class="btn-action" 
+                            <button class="btn-action btn-disabled" 
                                     disabled 
-                                    title="Comunidade em Processo"
-                                    style="opacity: 0.5; cursor: not-allowed;">
+                                    title="Comunidade em Processo">
                                 <i class="fa-solid fa-play" style="color: var(--color-gray-500);"></i>
                             </button>
                         }
                         else
                         {
-                            <a class="btn-action" 
+                            <a class="btn-action btn-action-green" 
                                asp-controller="Comunidade" 
                                asp-action="Processo" 
                                asp-route-id="@comunidade.Id"
-                               title="Iniciar Processo"
-                               style="background-color: #28a745;">
-                                <i class="fa-solid fa-play" style="color: white;"></i>
+                               title="Iniciar Processo">
+                                <i class="fa-solid fa-play"></i>
                             </a>
                         }
 
@@ -150,14 +148,12 @@
     else
     {
         <!-- Nenhuma comunidade cadastrada -->
-        <div class="no-records" style="padding: 3rem; text-align: center;">
-            <div style="margin-bottom: 1.5rem;">
-                <i class="fas fa-home" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+        <div class="no-records">
+            <div class="no-records-icon">
+                <i class="fas fa-home"></i>
             </div>
-            <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhuma comunidade cadastrada</h3>
-            <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
-                Comece adicionando a primeira comunidade ao sistema.
-            </p>
+            <h3>Nenhuma comunidade cadastrada</h3>
+            <p>Comece adicionando a primeira comunidade ao sistema.</p>
             <button type="button" class="btn-save" 
                 onclick="window.location.href='@Url.Action("ComunidadesDetalhes", "Comunidade", new { id = 0 })'">
                 <i class="fa-solid fa-plus"></i> Adicionar Primeira Comunidade
@@ -166,14 +162,12 @@
     }
 
     <!-- Mensagem quando nenhum resultado for encontrado -->
-    <div class="no-records" id="noResultsMessage" style="display: none; padding: 3rem; text-align: center;">
-        <div style="margin-bottom: 1.5rem;">
-            <i class="fas fa-search" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+    <div class="no-records" id="noResultsMessage" style="display: none;">
+        <div class="no-records-icon">
+            <i class="fas fa-search"></i>
         </div>
-        <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhuma comunidade encontrada</h3>
-        <p style="color: var(--color-gray-500);">
-            Tente ajustar os termos de busca.
-        </p>
+        <h3>Nenhuma comunidade encontrada</h3>
+        <p>Tente ajustar os termos de busca.</p>
     </div>
 </div>
 
@@ -185,7 +179,6 @@
             const noResultsMessage = document.getElementById('noResultsMessage');
             const comunidadeItems = document.querySelectorAll('.comunidade-item');
 
-            // Função para filtrar comunidades
             function filterComunidades() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 let visibleCount = 0;
@@ -202,7 +195,6 @@
                     }
                 });
 
-                // Mostrar/ocultar mensagem de "nenhum resultado"
                 if (visibleCount === 0 && comunidadeItems.length > 0) {
                     if (comunidadesGrid) comunidadesGrid.style.display = 'none';
                     if (noResultsMessage) noResultsMessage.style.display = 'block';
@@ -212,11 +204,9 @@
                 }
             }
 
-            // Event listener para busca
             if (searchInput) {
                 searchInput.addEventListener('input', filterComunidades);
 
-                // Limpar busca ao pressionar ESC
                 searchInput.addEventListener('keydown', function (e) {
                     if (e.key === 'Escape') {
                         searchInput.value = '';

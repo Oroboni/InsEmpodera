@@ -43,7 +43,7 @@
     <div class="section-label">Resumo</div>
     <div class="actions-grid">
         <div class="action-card stats-card">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="totalProfiles">@Model.Count()</span>
+            <span class="card-title" id="totalProfiles">@Model.Count()</span>
             <span class="card-subtitle">Total de Perfis</span>
             <div class="card-icons">
                 <i class="fas fa-user-shield"></i>
@@ -53,8 +53,8 @@
         @{
             var perfisAtivos = Model.Count(p => p.Usuarios != null && p.Usuarios.Any(u => u.Ativo == "S"));
         }
-        <div class="action-card stats-card" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);">@perfisAtivos</span>
+        <div class="action-card stats-card stats-card-active">
+            <span class="card-title">@perfisAtivos</span>
             <span class="card-subtitle">Perfis em Uso</span>
             <div class="card-icons">
                 <i class="fas fa-users"></i>
@@ -64,8 +64,8 @@
         @{
             var totalUsuarios = Model.Sum(p => p.Usuarios?.Count ?? 0);
         }
-        <div class="action-card stats-card" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);">@totalUsuarios</span>
+        <div class="action-card stats-card stats-card-info">
+            <span class="card-title">@totalUsuarios</span>
             <span class="card-subtitle">Total de Usuários</span>
             <div class="card-icons">
                 <i class="fas fa-user-friends"></i>
@@ -87,13 +87,13 @@
 
                 <div class="form-item profile-item" data-nome="@perfil.Nome?.ToLower()">
 
-                    <div class="form-info" style="flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                            <div class="profile-icon">
+                    <div class="form-info">
+                        <div class="profile-info-header">
+                            <div class="form-icon">
                                 <i class="fas fa-user-shield"></i>
                             </div>
-                            <div style="flex: 1;">
-                                <p class="name" style="margin: 0; display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="profile-info-content">
+                                <p class="name profile-name">
                                     @perfil.Nome
                                     @if (usuariosCount > 0)
                                     {
@@ -106,8 +106,8 @@
 
                                 @if (perfil.Permissoes != null && perfil.Permissoes.Any())
                                 {
-                                    <p class="date" style="margin: 0.25rem 0 0 0; display: flex; align-items: center; gap: 0.5rem;">
-                                        <i class="fas fa-key" style="font-size: 0.75rem;"></i>
+                                    <p class="date profile-permissions">
+                                        <i class="fas fa-key"></i>
                                         @perfil.Permissoes.Count @(perfil.Permissoes.Count == 1 ? "permissão" : "permissões")
                                     </p>
                                 }
@@ -115,7 +115,7 @@
                         </div>
                     </div>
 
-                    <div class="actions" style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="actions">
                         @if (usuariosAtivos > 0)
                         {
                             <div class="profile-status-badge status-active">
@@ -148,14 +148,12 @@
         }
         else
         {
-            <div class="no-records" style="padding: 3rem; text-align: center;">
-                <div style="margin-bottom: 1.5rem;">
-                    <i class="fas fa-user-shield" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+            <div class="no-records">
+                <div class="no-records-icon">
+                    <i class="fas fa-user-shield"></i>
                 </div>
-                <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum perfil cadastrado</h3>
-                <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
-                    Comece adicionando seu primeiro perfil de acesso ao sistema.
-                </p>
+                <h3>Nenhum perfil cadastrado</h3>
+                <p>Comece adicionando seu primeiro perfil de acesso ao sistema.</p>
                 <button type="button" class="btn-save"
                     onclick="window.location.href='@Url.Action("Create", "AccessProfile")'">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeiro Perfil
@@ -165,14 +163,12 @@
     </div>
 
     <!-- Mensagem quando nenhum resultado for encontrado -->
-    <div class="no-records" id="noResultsMessage" style="display: none; padding: 3rem; text-align: center;">
-        <div style="margin-bottom: 1.5rem;">
-            <i class="fas fa-search" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+    <div class="no-records" id="noResultsMessage" style="display: none;">
+        <div class="no-records-icon">
+            <i class="fas fa-search"></i>
         </div>
-        <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhum perfil encontrado</h3>
-        <p style="color: var(--color-gray-500);">
-            Tente ajustar os termos de busca.
-        </p>
+        <h3>Nenhum perfil encontrado</h3>
+        <p>Tente ajustar os termos de busca.</p>
     </div>
 
     <!-- Informações sobre Permissões -->

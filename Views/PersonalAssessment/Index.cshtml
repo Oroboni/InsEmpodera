@@ -64,7 +64,7 @@
             <div class="section-label">Resumo</div>
             <div class="actions-grid">
                 <div class="action-card stats-card">
-                    <span class="card-title" style="font-size: var(--font-size-4xl);" id="totalAssessments">@Model.Count()</span>
+                    <span class="card-title" id="totalAssessments">@Model.Count()</span>
                     <span class="card-subtitle">Total de Avaliações</span>
                     <div class="card-icons">
                         <i class="fas fa-star"></i>
@@ -74,8 +74,8 @@
                 @{
                     var avaliadoresUnicos = Model.Select(a => a.Usuario?.Nome).Distinct().Count();
                 }
-                <div class="action-card stats-card" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);">
-                    <span class="card-title" style="font-size: var(--font-size-4xl);">@avaliadoresUnicos</span>
+                <div class="action-card stats-card stats-card-purple">
+                    <span class="card-title">@avaliadoresUnicos</span>
                     <span class="card-subtitle">Avaliadores</span>
                     <div class="card-icons">
                         <i class="fas fa-user-friends"></i>
@@ -87,8 +87,8 @@
                     var diasDesdeUltima = ultimaAvaliacao != null ? 
                         (DateTime.Now - ultimaAvaliacao.DtCriacao).Days : 0;
                 }
-                <div class="action-card stats-card" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
-                    <span class="card-title" style="font-size: var(--font-size-4xl);">@diasDesdeUltima</span>
+                <div class="action-card stats-card stats-card-cyan">
+                    <span class="card-title">@diasDesdeUltima</span>
                     <span class="card-subtitle">Dias desde última</span>
                     <div class="card-icons">
                         <i class="fas fa-calendar-check"></i>
@@ -110,20 +110,19 @@
                          data-date="@dataFormatada.ToLower()" 
                          data-evaluator="@avaliadorNome.ToLower()">
                         
-                        <div class="form-info" style="flex: 1;">
-                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                                <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="form-info">
+                            <div class="item-header">
+                                <div class="activity-icon activity-icon-purple">
                                     <i class="fas fa-star"></i>
                                 </div>
-                                <div style="flex: 1;">
-                                    <p class="name" style="margin: 0;">Avaliação de @dataFormatada</p>
-                                    <p style="color: var(--color-gray-500); font-size: 0.875rem; margin: 0.25rem 0 0 0;">
-                                        <i class="fas fa-user" style="margin-right: 0.25rem;"></i>
+                                <div class="item-content">
+                                    <p class="name item-name">Avaliação de @dataFormatada</p>
+                                    <p class="item-subtitle">
+                                        <i class="fas fa-user"></i>
                                         Avaliado por @avaliadorNome
                                     </p>
                                     
                                     @{
-                                        // Calcular média das métricas
                                         var metricas = new[] { 
                                             avaliacao.CCrimes, 
                                             avaliacao.Prevencao, 
@@ -140,7 +139,7 @@
                                         var statusText = media <= 2 ? "Ótimo" : media <= 3.5 ? "Moderado" : "Atenção";
                                     }
                                     
-                                    <div class="tag-list" style="margin-top: 0.5rem;">
+                                    <div class="tag-list">
                                         <span class="tag-item @statusClass">
                                             <i class="fas fa-chart-line"></i>
                                             @statusText (Média: @media.ToString("F1"))
@@ -163,14 +162,12 @@
         else
         {
             <!-- Nenhuma avaliação cadastrada -->
-            <div class="no-records" style="padding: 3rem; text-align: center;">
-                <div style="margin-bottom: 1.5rem;">
-                    <i class="fas fa-star" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+            <div class="no-records">
+                <div class="no-records-icon">
+                    <i class="fas fa-star"></i>
                 </div>
-                <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhuma avaliação cadastrada</h3>
-                <p style="color: var(--color-gray-500); margin-bottom: 1.5rem;">
-                    Comece adicionando a primeira avaliação pessoal para este ator.
-                </p>
+                <h3>Nenhuma avaliação cadastrada</h3>
+                <p>Comece adicionando a primeira avaliação pessoal para este ator.</p>
                 <button type="button" class="btn-save" 
                     onclick="window.location.href='@Url.Action("Create", "PersonalAssessment", new { atorId = selectedAtorId })'">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeira Avaliação
@@ -179,27 +176,23 @@
         }
 
         <!-- Mensagem quando nenhum resultado for encontrado -->
-        <div class="no-records" id="noResultsMessage" style="display: none; padding: 3rem; text-align: center;">
-            <div style="margin-bottom: 1.5rem;">
-                <i class="fas fa-search" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+        <div class="no-records" id="noResultsMessage" style="display: none;">
+            <div class="no-records-icon">
+                <i class="fas fa-search"></i>
             </div>
-            <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Nenhuma avaliação encontrada</h3>
-            <p style="color: var(--color-gray-500);">
-                Tente ajustar os termos de busca.
-            </p>
+            <h3>Nenhuma avaliação encontrada</h3>
+            <p>Tente ajustar os termos de busca.</p>
         </div>
     }
     else
     {
         <!-- Estado vazio - Selecione um ator -->
-        <div class="no-records" style="padding: 3rem; text-align: center;">
-            <div style="margin-bottom: 1.5rem;">
-                <i class="fas fa-user" style="font-size: 4rem; color: var(--color-gray-400);"></i>
+        <div class="no-records">
+            <div class="no-records-icon">
+                <i class="fas fa-user"></i>
             </div>
-            <h3 style="color: var(--color-gray-600); margin-bottom: 0.5rem;">Selecione um Ator</h3>
-            <p style="color: var(--color-gray-500);">
-                Para visualizar as avaliações, primeiro selecione um ator no filtro acima.
-            </p>
+            <h3>Selecione um Ator</h3>
+            <p>Para visualizar as avaliações, primeiro selecione um ator no filtro acima.</p>
         </div>
     }
 </div>
@@ -215,7 +208,6 @@
             const noResultsMessage = document.getElementById('noResultsMessage');
             const assessmentItems = document.querySelectorAll('.assessment-item');
 
-            // Função para filtrar avaliações
             function filterAssessments() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 let visibleCount = 0;
@@ -223,8 +215,6 @@
                 assessmentItems.forEach(item => {
                     const date = item.getAttribute('data-date') || '';
                     const evaluator = item.getAttribute('data-evaluator') || '';
-
-                    // Verificar se corresponde à busca
                     const matchesSearch = date.includes(searchTerm) || evaluator.includes(searchTerm);
 
                     if (matchesSearch) {
@@ -235,7 +225,6 @@
                     }
                 });
 
-                // Mostrar/ocultar mensagem de "nenhum resultado"
                 if (visibleCount === 0 && assessmentItems.length > 0) {
                     if (assessmentsGrid) assessmentsGrid.style.display = 'none';
                     if (noResultsMessage) noResultsMessage.style.display = 'block';
@@ -245,10 +234,8 @@
                 }
             }
 
-            // Event listener para busca
             searchInput.addEventListener('input', filterAssessments);
 
-            // Limpar busca ao pressionar ESC
             searchInput.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     searchInput.value = '';

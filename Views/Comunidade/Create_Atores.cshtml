@@ -1,122 +1,280 @@
-@using Microsoft.AspNetCore.Components.Forms
 @model Empodera.Models.Atores
 @{
     ViewData["Title"] = "Adicionar Novo Ator";
-    ViewData["PageCSS"] = "create-form";
+    Layout = "_Layout";
 }
 
-<div class="container">
-    <div class="container">
-        <div class="breadcrumb">
-            <h1>
-                <a asp-controller="Comunidade" asp-action="Index">Atores</a>
-                >
-                <strong>Adicionar novo Ator</strong>
-            </h1>
-        </div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
+    <link rel="stylesheet" href="~/css/pages/atores.css">
+    <link rel="stylesheet" href="~/css/pages/site.css">
+}
+
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@ViewBag.ComunidadeId" class="text-primary">Atores</a>
+            <span class="separator">></span>
+            <strong class="text-muted">Adicionar novo Ator</strong>
+        </h2>
     </div>
 
     <form asp-controller="Comunidade" asp-action="Create_Atores" method="post">
         @Html.AntiForgeryToken()
-        <div class="form-group">
-            <label for="comunidadeId">Comunidade</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-city"></i>
-                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" required></select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
+        
+        <div class="section-label">Informações Básicas</div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-city"></i></div>
+            <div class="input-content">
+                <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
+                <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" class="clean-input"
+                    required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
             </div>
         </div>
 
-        <div class="form-group create-field">
-            <label for="nome">Nome</label>
-            <div class="input-with-buttons">
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <input id="Nome" name="Nome" asp-for="Nome" type="text" placeholder="Nome do Ator" required />
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+            <div class="input-content">
+                <label for="Nome">Nome <span class="text-danger">*</span></label>
+                <input id="Nome" name="Nome" asp-for="Nome" type="text" class="clean-input" placeholder="Nome do Ator" required />
+            </div>
+            <button type="button" class="btn-eye" title="Adicionar Novo">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+            <button type="button" class="btn-eye" title="Importar">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
+            <div class="input-content">
+                <label for="tipoRelacionamento">Tipo de relacionamento</label>
+                <select id="tipoRelacionamento" name="tipoRelacionamento" class="clean-input">
+                    <option value="">Selecione um tipo</option>
+                    <option value="1">Amigo</option>
+                    <option value="2">Colega de trabalho</option>
+                    <option value="3">Conhecido</option>
+                    <option value="4">Familiar</option>
+                    <option value="5">Vizinho</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Recursos e Vulnerabilidades</div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-star"></i></div>
+            <div class="input-content">
+                <label>Recursos agregados</label>
+                <small class="text-muted">Selecione todos que se aplicam:</small>
+                <div class="checkbox-group dense-grid">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="RedePrimaria">
+                        <span class="checkbox-label">Rede primária</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="SeguridadeSocial">
+                        <span class="checkbox-label">Seguridade Social</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Substancias">
+                        <span class="checkbox-label">Substâncias</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Moradia">
+                        <span class="checkbox-label">Moradia</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Prevencao">
+                        <span class="checkbox-label">Prevenção</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="AssistenciaBasica">
+                        <span class="checkbox-label">Assistência Básica</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Educacao">
+                        <span class="checkbox-label">Educação</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Saude">
+                        <span class="checkbox-label">Saúde</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Ocupacao">
+                        <span class="checkbox-label">Ocupação</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="recursos" value="Lazer">
+                        <span class="checkbox-label">Lazer</span>
+                    </label>
                 </div>
-                <button type="button" class="btn-icon" title="Adicionar Novo (na lista?)"><i
-                        class="fa-solid fa-plus"></i></button>
-                <button type="button" class="btn-icon" title="Importar (da lista?)"><i
-                        class="fa-solid fa-arrow-right-to-bracket"></i></button>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="genero">Gênero</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-venus-mars"></i>
-                    <select id="Genero" asp-for="Genero" name="Genero">
-                        <option value="" disabled selected>Selecione</option>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="input-content">
+                <label>Vulnerabilidades agregadas</label>
+                <small class="text-muted">Selecione todos que se aplicam:</small>
+                <div class="checkbox-group dense-grid">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="RedePrimaria">
+                        <span class="checkbox-label">Rede primária</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="SeguridadeSocial">
+                        <span class="checkbox-label">Seguridade Social</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Substancias">
+                        <span class="checkbox-label">Substâncias</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Moradia">
+                        <span class="checkbox-label">Moradia</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Prevencao">
+                        <span class="checkbox-label">Prevenção</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="AssistenciaBasica">
+                        <span class="checkbox-label">Assistência Básica</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Educacao">
+                        <span class="checkbox-label">Educação</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Saude">
+                        <span class="checkbox-label">Saúde</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Ocupacao">
+                        <span class="checkbox-label">Ocupação</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="vulnerabilidades" value="Lazer">
+                        <span class="checkbox-label">Lazer</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Dados Pessoais</div>
+
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-venus-mars"></i></div>
+                <div class="input-content">
+                    <label for="Genero">Gênero</label>
+                    <select id="Genero" name="Genero" asp-for="Genero" class="clean-input">
+                        <option value="">Selecione</option>
                         <option value="feminino">Feminino</option>
                         <option value="masculino">Masculino</option>
                         <option value="nao-declarado">Não declarado</option>
                         <option value="transgenero">Transgênero</option>
                     </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
 
-            <div class="form-group"></div>
-            <div class="form-group-checkbox">
-                <input asp-for="DaEquipe" id="daEquipeCheckbox" type="checkbox" />
-                <label for="daEquipeCheckbox">Da Equipe</label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <input asp-for="Rope" id="ropeCheckbox" type="checkbox" />
-                <label for="ropeCheckbox">Rede Operativa</label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <input asp-for="Lopiniao" id="liderOpiniaoCheckbox" type="checkbox" />
-                <label for="liderOpiniaoCheckbox">Líder de Opinião</label>
-            </div>
-
-            <div class="form-group-checkbox">
-                <input asp-for="Mcomunidade" id="moraNaComunidadeCheckbox" type="checkbox" />
-                <label for="moraNaComunidadeCheckbox">Mora na comunidade</label>
-            </div>
-
-            <div class="form-group">
-                <label for="dataNascimento">Data de Nascimento</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-calendar-day"></i>
-                    <input asp-for="DtNascimento" type="date" class="form-control"
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="input-content">
+                    <label for="DtNascimento">Data de Nascimento</label>
+                    <input id="DtNascimento" name="DtNascimento" asp-for="DtNascimento" type="date" class="clean-input"
                         value='@(Model != null && Model.DtNascimento != default(System.DateTime) && Model.DtNascimento != System.DateTime.MinValue ? Model.DtNascimento.ToString("yyyy-MM-dd") : String.Empty)' />
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="papelSocial1">Papel Social</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-briefcase"></i>
-                <input id="papelSocial1" name="papelSocial1" asp-for="PapelSocial1" type="text"
-                    placeholder="Digite o papel social" />
+        <div class="input-card full-width checkbox-card">
+            <div class="input-content">
+                <label for="daEquipeCheckbox" class="checkbox-inline-label">
+                    <input id="daEquipeCheckbox" name="DaEquipe" asp-for="DaEquipe" type="checkbox" />
+                    Da Equipe
+                </label>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="papelSocial2">Papel Social</f>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-briefcase"></i>
-                    <input id="papelSocial2" name="papelSocial2" asp-for="PapelSocial2" type="text"
+        <div class="input-card full-width checkbox-card">
+            <div class="input-content">
+                <label for="ropeCheckbox" class="checkbox-inline-label">
+                    <input id="ropeCheckbox" name="Rope" asp-for="Rope" type="checkbox" />
+                    Rede Operativa
+                </label>
+            </div>
+        </div>
+
+        <div class="input-card full-width checkbox-card">
+            <div class="input-content">
+                <label for="liderOpiniaoCheckbox" class="checkbox-inline-label">
+                    <input id="liderOpiniaoCheckbox" name="Lopiniao" asp-for="Lopiniao" type="checkbox" />
+                    Líder de Opinião
+                </label>
+            </div>
+        </div>
+
+        <div class="input-card full-width checkbox-card">
+            <div class="input-content">
+                <label for="moraNaComunidadeCheckbox" class="checkbox-inline-label">
+                    <input id="moraNaComunidadeCheckbox" name="Mcomunidade" asp-for="Mcomunidade" type="checkbox" />
+                    Mora na comunidade
+                </label>
+            </div>
+        </div>
+
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="input-content">
+                    <label for="PapelSocial1">Papel Social</label>
+                    <input id="PapelSocial1" name="PapelSocial1" asp-for="PapelSocial1" type="text" class="clean-input"
+                        placeholder="Digite o papel social" />
+                </div>
+            </div>
+
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="input-content">
+                    <label for="PapelSocial2">Papel Social (Adicional)</label>
+                    <input id="PapelSocial2" name="PapelSocial2" asp-for="PapelSocial2" type="text" class="clean-input"
                         placeholder="Digite outro papel social (opcional)" />
                 </div>
-        </div>
-
-        <div class="form-group">
-            <label for="telefone">Telefone</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-phone"></i>
-                <input id="Telefone" asp-for="Telefone" name="Telefone" type="tel" />
             </div>
         </div>
 
-        <div class="form-buttons">
-            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@ViewBag.ComunidadeId" class="btn btn-secondary">CANCELAR</a>
-            <button type="submit" class="btn btn-primary">ADICIONAR ATOR</button>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
+            <div class="input-content">
+                <label for="Telefone">Telefone</label>
+                <input id="Telefone" id="inputTelefone" name="telefone" type="tel" class="clean-input"
+                    placeholder="(00) 00000-0000" />
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@ViewBag.ComunidadeId" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Cancelar
+            </a>
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-check"></i> Adicionar Ator
+            </button>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    }
+}
