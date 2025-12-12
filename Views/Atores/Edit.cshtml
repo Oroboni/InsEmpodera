@@ -74,11 +74,10 @@
             </div>
         </div>
 
-        <div class="input-card full-width">
+        <div class="input-card full-width checkbox-card">
             <div class="input-content">
-                <label for="da-equipe" style="display: flex; align-items: center; cursor: pointer;">
-                    <input type="checkbox" id="da-equipe" name="da-equipe" asp-for="DaEquipe"
-                        style="width: auto; height: auto; margin-right: 8px;" disabled>
+                <label for="da-equipe" class="checkbox-inline-label">
+                    <input type="checkbox" id="da-equipe" name="da-equipe" asp-for="DaEquipe" disabled>
                     Da Equipe
                 </label>
             </div>
@@ -108,7 +107,7 @@
             <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
             <div class="input-content">
                 <label asp-for="Telefone">Telefone</label>
-                <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input"
+                <input asp-for="Telefone" id="inputTelefone" name="telefone" type="tel" class="clean-input"
                     placeholder="(00) 00000-0000" disabled>
             </div>
         </div>
@@ -151,41 +150,35 @@
         <div class="purple-divider"></div>
         <div class="section-label">Informações do Sistema</div>
 
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+        @if (Model.DtCriacao > DateTime.MinValue && ViewBag.UsuarioOriginal != null)
+        {
+            <div class="input-card full-width">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-plus"></i></div>
                 <div class="input-content">
-                    <label>Criado por</label>
-                    <input type="text" value="@ViewBag.UsuarioOriginal?.Nome" readonly disabled class="clean-input">
+                    <label>Criação</label>
+                    <div class="user-info-display">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="user-name">@ViewBag.UsuarioOriginal.Nome</span>
+                        <span class="user-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
                 </div>
             </div>
-            <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
-                <div class="input-content">
-                    <label>Atualizado por</label>
-                    <input type="text" value="@Context.Session.GetString("Nome")" readonly disabled class="clean-input">
-                </div>
-            </div>
-        </div>
+        }
 
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
-                <div class="input-content">
-                    <label>Data de criação</label>
-                    <input type="text" value="@Model.DtCriacao.ToString("dd/MM/yyyy - HH:mm")" readonly disabled
-                        class="clean-input">
-                </div>
-            </div>
-            <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+        @if (Model.DtModificacao > DateTime.MinValue)
+        {
+            <div class="input-card full-width">
+                <div class="icon-box purple"><i class="fa-solid fa-user-edit"></i></div>
                 <div class="input-content">
                     <label>Última atualização</label>
-                    <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly disabled
-                        class="clean-input">
+                    <div class="user-info-display">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="user-name">@Context.Session.GetString("Nome")</span>
+                        <span class="user-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
 
         <!-- Botões de Ação -->
         <div class="buttons-container">
