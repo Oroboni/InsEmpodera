@@ -17,22 +17,28 @@
         </button>
     </div>
 
-    <div class="modal-body">        
+    <div class="modal-body">  
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
+            </div>
+        }      
         <form asp-action="Edit" method="post">
 
             <div class="form-group">
                 <label class="control-label">Nome</label>
-                <input class="form-control" asp-for="Nome" value="@Model.Nome" />
+                <input class="form-control" asp-for="Nome" value="@Model.Nome" required/>
             </div>
             
             <div class="form-group">
                 <label  class="control-label">E-mail</label>
-                <input class="form-control" asp-for="Email" value="@Model.Email" />
+                <input class="form-control" asp-for="Email" value="@Model.Email" readonly/>
             </div>
 
             <div class="form-group">
                 <label  class="control-label">Senha</label>
-                <input class="form-control" asp-for="Senha" value="@Model.Senha" />
+                <input class="form-control" asp-for="Senha" value="@Model.Senha" required/>
             </div>
 
             <div class="form-group">
@@ -68,7 +74,7 @@
             </div>
 
             <div class="form-actions">
-                <button class="btn-save" type="submit" onclick="window.location.href='/Users/Index.cshtml'">Salvar</button>
+                <button class="btn-save" type="submit">Salvar</button>
             </div>
         </form>
     </div>

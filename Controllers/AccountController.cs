@@ -4,6 +4,7 @@ using SQLitePCL;
 using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Empodera.Controllers;
 
@@ -18,19 +19,26 @@ public class AccountController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(String Email, String Password)
+    public async Task<IActionResult> Index(string Email, string Password)
     {
-        var user = await _context.Usuarios
-            .FirstOrDefaultAsync(u => u.Email == Email && u.Senha == Password);
+        var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == Email);
 
-        
-        if (user != null)
+        if (user == null)
+        {
+            return View();
+        }
+
+        var hasher = new PasswordHasher<Usuario>();
+        var result = hasher.VerifyHashedPassword(user, user.Senha, Password);
+
+        if (result == PasswordVerificationResult.Success)
         {
             HttpContext.Session.SetString("Email", user.Email);
             HttpContext.Session.SetString("Nome", user.Nome);
             HttpContext.Session.SetString("ID", user.IdUsuario.ToString());
             return RedirectToAction("Index", "Home");
         }
+
         return View();
     }
 

@@ -24,6 +24,13 @@ public class PersonalAssessmentController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeAvaliacao == null || PodeAvaliacao.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalAssessment");
+        }
+
         ViewBag.AtoresList = new SelectList(
             await _context.Atores.Where(a => a.Ativo == "S").OrderBy(a => a.IdAtores).ToListAsync(),
             "IdAtores",
@@ -34,7 +41,6 @@ public class PersonalAssessmentController : Controller
         // 2. Guardar o ID selecionado
         ViewBag.SelectedAtorId = atorId;
 
-        // 3. Buscar as avaliações APENAS se um ator foi selecionado
         List<AvaliacaoPessoal> avaliacoes = new List<AvaliacaoPessoal>();
         if (atorId.HasValue)
         {
@@ -59,6 +65,13 @@ public class PersonalAssessmentController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeAvaliacao == null || PodeAvaliacao.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalAssessment");
+        }
+
         ViewBag.AtorId = atorId;
         
         // Carrega a lista de atores para o dropdown do formulário
@@ -80,9 +93,16 @@ public class PersonalAssessmentController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeAvaliacao == null || PodeAvaliacao.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalAssessment");
+        }
+
         avaliacao.DtCriacao = DateTime.Now;
         avaliacao.DtModificacao = DateTime.Now;
-        avaliacao.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
+        avaliacao.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         _context.AvaliacaoPessoal.Add(avaliacao);
         await _context.SaveChangesAsync();
         return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacao.FKidAtores});
@@ -99,6 +119,13 @@ public class PersonalAssessmentController : Controller
         if (id == null)
         {
             return NotFound();
+        }
+
+        var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeAvaliacao == null || PodeAvaliacao.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalAssessment");
         }
 
         var avaliacao = await _context.AvaliacaoPessoal.Include(a => a.Usuario).FirstOrDefaultAsync(a => a.IdAvaliacao == id);
@@ -131,6 +158,13 @@ public class PersonalAssessmentController : Controller
         if (id == null)
         {
             return NotFound();
+        }
+
+        var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeAvaliacao == null || PodeAvaliacao.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalAssessment");
         }
 
         var avaliacaobd = await _context.AvaliacaoPessoal.FirstOrDefaultAsync(a => a.IdAvaliacao == id);

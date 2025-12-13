@@ -19,6 +19,16 @@ namespace Empodera.Controllers
 
         public async Task<IActionResult> Index(string search)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+
             var q = _context.DiariosCampo
                 .Include(d => d.Comunidade)
                 .AsQueryable();
@@ -48,6 +58,16 @@ namespace Empodera.Controllers
 
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+            
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+
             PreencherViewBags();
             return View();
         }
@@ -84,6 +104,16 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DiarioCampo diarioCampo)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+
             if (ModelState.IsValid)
             {
                 diarioCampo.DtCriacao = DateTime.Now;
@@ -101,6 +131,16 @@ namespace Empodera.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+            
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+
             if (id == null) return NotFound();
 
             var diarioCampo = await _context.DiariosCampo.FindAsync(id);
@@ -114,6 +154,16 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DiarioCampo diarioCampo)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+            
             if (id != diarioCampo.IdDCampo)
                 return NotFound();
 
@@ -142,6 +192,16 @@ namespace Empodera.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDetalhar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+
             if (id == null) return NotFound();
 
             var diarioCampo = await _context.DiariosCampo
@@ -154,6 +214,16 @@ namespace Empodera.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+
             if (id == null) return NotFound();
 
             var diarioCampo = await _context.DiariosCampo
@@ -168,6 +238,16 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
+            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+            {
+                return RedirectToAction("Index", "DiariosCampo");
+            }
+            
             var diarioCampo = await _context.DiariosCampo.FindAsync(id);
 
             if (diarioCampo != null)

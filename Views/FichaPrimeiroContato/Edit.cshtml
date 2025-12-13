@@ -6,7 +6,7 @@
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
 }
 
-@if (Model.Status != StatusFicha.EmProgresso)
+@if (Model.Status != "EmProgresso")
 {
     <div class="alert alert-warning">
         Esta ficha está @Model.Status e não pode mais ser editada.
@@ -324,7 +324,6 @@
                         "Inicia um programa", "Inclusão em atividades"
                         };
 
-                // RECUPERA O QUE JÁ ESTAVA SALVO (vindo do Controller)
                 var savedCondicoes = ViewBag.SelectedCondicoes as List<string> ?? new List<string>();
                 var savedPeticoes = ViewBag.SelectedPeticoes as List<string> ?? new List<string>();
                 var savedRespostas = ViewBag.SelectedRespostas as List<string> ?? new List<string>();
@@ -342,7 +341,7 @@
                             <!-- MUDANÇA 3: Verifica se está na lista salva -->
                             var isChecked = savedCondicoes.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedCondicoes" value="@item" checked="@isChecked" />
+                                <input type="checkbox" name="SelectedCondicoes" value="@item" @(savedCondicoes.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -360,7 +359,7 @@
                         {
                             var isChecked = savedPeticoes.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedPeticoes" value="@item" checked="@isChecked" />
+                                <input type="checkbox" name="SelectedPeticoes" value="@item" @(savedPeticoes.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -378,7 +377,7 @@
                         {
                             var isChecked = savedRespostas.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedRespostas" value="@item" checked="@isChecked" />
+                                <input type="checkbox" name="SelectedRespostas" value="@item" @(savedRespostas.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -396,7 +395,7 @@
                         {
                             var isChecked = savedResultados.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedResultados" value="@item" checked="@isChecked" />
+                               <input type="checkbox" name="SelectedResultados" value="@item" @(savedResultados.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }

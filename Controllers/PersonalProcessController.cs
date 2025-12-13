@@ -24,6 +24,13 @@ public class PersonalProcessController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalProcess");
+        }
+
         // 1. Carregar lista de Atores
         ViewBag.AtorList = new SelectList(
             await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
@@ -65,7 +72,17 @@ public class PersonalProcessController : Controller
     // GET: /PersonalProcess/Create
     public async Task<IActionResult> Create(int atorId)
     {
-        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
+
+        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalProcess");
+        }
         
         ViewBag.AtorList = new SelectList(
             await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), 
@@ -96,7 +113,17 @@ public class PersonalProcessController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(DiarioCampo diario, int[] eixosIds)
     {
-        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
+
+        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalProcess");
+        }
 
         // Força datas de sistema
         diario.DtCriacao = DateTime.Now;
@@ -129,7 +156,17 @@ public class PersonalProcessController : Controller
     // GET: /PersonalProcess/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
-        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
+
+        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalProcess");
+        }
 
         if (id == null) return NotFound();
 
@@ -147,9 +184,7 @@ public class PersonalProcessController : Controller
 
         return View(diario);
     }
-    // =================================================================
-    // ADICIONE ESTE BLOCO PARA SALVAR OS DADOS
-    // =================================================================
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(DiarioCampo diario, int SelectedAtorId, int[] eixosIds)
@@ -157,6 +192,13 @@ public class PersonalProcessController : Controller
         if (HttpContext.Session.GetString("Email") == null) 
         { 
             return RedirectToAction("Index", "Account"); 
+        }
+
+        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalProcess");
         }
 
         try 
@@ -215,6 +257,18 @@ public class PersonalProcessController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, DiarioCampo diario)
     {
+
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
+
+        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "PersonalProcess");
+        }
          if (id != diario.IdDCampo) return NotFound();
 
          if (ModelState.IsValid)

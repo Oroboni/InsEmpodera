@@ -8,7 +8,7 @@ namespace Empodera.Models
     {
         public int IdPermissoes { get; set; }
         public int FkIdPerfil { get; set; }
-        public string Permissao { get; set; } = null!;
+        public string Modulo { get; set; } = null!;
         public string PodeListar { get; set; } = null!;
         public string PodeDetalhar { get; set; } = null!;
         public string PodeCriar { get; set; } = null!;

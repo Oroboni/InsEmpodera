@@ -38,7 +38,7 @@
                             <select class="secondary-select" name="status" id="statusFilter" onchange="submitFilter()">
                                 <option value="">Todos os Status</option>
                                 <option value="EmProgresso"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "EmProgresso")">
+                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Em Progresso")">
                                     Em progresso
                                 </option>
                                 <option value="Concluida"
@@ -66,7 +66,7 @@
         {
             @foreach (var form in Model)
             {
-                bool isFinalized = form.Status != StatusFicha.EmProgresso;
+                bool isFinalized = form.Status != "EmProgresso";
                 var nomeAtor = form.Ator?.Nome?.ToLower() ?? "";
                 <div class="form-item" data-search="@nomeAtor">
                     <div class="form-info">
@@ -97,15 +97,15 @@
                         <div class="form-status">
                             <p class="date">@form.DtContato.ToString("dd/MM/yyyy")</p>
 
-                            @if (form.Status == StatusFicha.Concluida)
+                            @if (form.Status == "Concluida")
                             {
                                 <span class="tag-item tag-green">Concluída</span>
                             }
-                            else if (form.Status == StatusFicha.Abandonada)
+                            else if (form.Status == "Abandonada")
                             {
                                 <span class="tag-item tag-red">Abandonada</span>
                             }
-                            else if (form.Status == StatusFicha.EmProgresso)
+                            else if (form.Status == "EmProgresso")
                             {
                                 <span class="tag-item tag-yellow">Em Progresso</span>
                             }

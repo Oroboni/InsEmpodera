@@ -19,14 +19,20 @@ public class ReportController : Controller
     // GET: /Report/
     public IActionResult Index()
     {
-        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
         return View();
     }
 
     // GET: /Report/Rsc
     public async Task<IActionResult> Rsc(int? comunidadeId)
     {
-        if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
+        if (HttpContext.Session.GetString("Email") == null) 
+        { 
+            return RedirectToAction("Index", "Account"); 
+        }
         ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
         return View();
     }
