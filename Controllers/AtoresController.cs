@@ -26,6 +26,13 @@ public class AtoresController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        {
+            return RedirectToAction("Index", "Atores");
+        }
+
         var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
         return View(Atores);
     }
@@ -37,6 +44,13 @@ public class AtoresController : Controller
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
+        }
+
+        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "Atores");
         }
 
         ViewBag.Comunidades = new SelectList(
@@ -63,9 +77,16 @@ public class AtoresController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "Atores");
+        }
+
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
-        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
+        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         _context.Atores.Add(ator);
         await _context.SaveChangesAsync();
@@ -92,11 +113,17 @@ public class AtoresController : Controller
         if (id == null)
             return NotFound();
 
+        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "Atores");
+        }
+
         var ator = await _context.Atores.FindAsync(id);
         if (ator == null)
             return NotFound();
 
-        // Busca usuários para exibição (opcional)
         ViewBag.UsuarioOriginal = _context.Usuarios
             .Where(z => z.IdUsuario == ator.FkIdUsuario)
             .FirstOrDefault();
@@ -104,16 +131,14 @@ public class AtoresController : Controller
             .Where(z => z.IdUsuario == ator.FkIdUsuarioM)
             .FirstOrDefault();
 
-        // ✅ CORREÇÃO: Busca a relação correta
         var atorCom = await _context.AtorComunidades
             .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
 
-        // ✅ CORREÇÃO: Passa o FkIdComunidade como valor selecionado
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
             "IdComunidade",
             "Nome",
-            atorCom?.FkIdComunidade  // ✅ Agora está correto
+            atorCom?.FkIdComunidade 
         );
 
         return View(ator);
@@ -124,15 +149,24 @@ public class AtoresController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Atores atorFormulario, int id, int ComunidadeId)
     {
-        if (HttpContext.Session.GetString("Email") == null)
+        if (HttpContext.Session.GetString("ID") == null)
+        {
             return RedirectToAction("Index", "Account");
+        }
 
-        // ✅ Busca o ator existente
+        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "Atores");
+        }
+
         var atorDb = await _context.Atores.FindAsync(id);
         if (atorDb == null)
+        {
             return NotFound();
+        }
 
-        // ✅ Atualiza os dados do ator com os valores do formulário
         atorDb.Nome = atorFormulario.Nome;
         atorDb.Genero = atorFormulario.Genero;
         atorDb.DtNascimento = atorFormulario.DtNascimento;
@@ -143,11 +177,10 @@ public class AtoresController : Controller
         atorDb.Lopiniao = atorFormulario.Lopiniao;
         atorDb.Mcomunidade = atorFormulario.Mcomunidade;
         atorDb.Rope = atorFormulario.Rope;
-        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
+        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
 
-        var atorCom = await _context.AtorComunidades
-            .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
+        var atorCom = await _context.AtorComunidades.FirstOrDefaultAsync(ac => ac.FKidAtores == id);
 
         if (atorCom == null)
         {
@@ -179,6 +212,13 @@ public class AtoresController : Controller
             return RedirectToAction("Index", "Account");
         }
 
+        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+        {
+            return RedirectToAction("Index", "Atores");
+        }
+
         if (id == null)
         {
             return NotFound();
@@ -197,6 +237,6 @@ public class AtoresController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
 }

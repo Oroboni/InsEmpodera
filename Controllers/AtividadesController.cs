@@ -18,6 +18,13 @@ public class AtividadesController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
+        var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        {
+            return RedirectToAction("Index", "Atividades");
+        }
+
         var atividades = await _context.Atividades
             .Include(a => a.AtividadesEixos)
             .ThenInclude(ae => ae.Eixo)
@@ -30,6 +37,13 @@ public class AtividadesController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
+
+        var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "Atividades");
+        }
 
         ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
 
@@ -55,10 +69,17 @@ public class AtividadesController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
+        var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "Atividades");
+        }
+
         atividade.DtCriacao = DateTime.Now;
         atividade.DtModificacao = DateTime.Now;
         atividade.FkIdComunidade = ComunidadeId;
-        atividade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID"));
+        atividade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         _context.Atividades.Add(atividade);
         await _context.SaveChangesAsync();
@@ -83,6 +104,13 @@ public class AtividadesController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
+
+        var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "Atividades");
+        }
 
         if (id == null) return NotFound();
 
@@ -114,6 +142,13 @@ public class AtividadesController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
+        var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "Atividades");
+        }
+        
         if (id != atividade.IdAtividade) return NotFound();
 
         var existingAtividade = await _context.Atividades
@@ -126,7 +161,7 @@ public class AtividadesController : Controller
         existingAtividade.Descricao = atividade.Descricao;
         existingAtividade.FkIdComunidade = ComunidadeId;
         existingAtividade.DtModificacao = DateTime.Now;
-        existingAtividade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID"));
+        existingAtividade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         var existingEixoIds = existingAtividade.AtividadesEixos.Select(ae => ae.FkIdEixo).ToList();
 

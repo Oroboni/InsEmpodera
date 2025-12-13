@@ -1,368 +1,81 @@
 @model Empodera.Models.Perfil
-
 @{
-    ViewData["Title"] = "Perfil de Acesso - Editar";
-    ViewData["PageCSS"] = "access-profile-form";
+    ViewData["Title"] = "Editar Perfil de Acesso";
     Layout = "_Layout";
 }
 
 @section Styles {
-    
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
+    <link rel="stylesheet" href="~/css/pages/create-form.css" />
 }
 
-<form asp-controller="AccessProfile" asp-action="Edit" method="post" class="main-form">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="IdPerfil" />
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Perfis de acesso > <strong>@Model.Nome</strong></h1>
+    </div>
 
-    <div class="modern-container">
-        <!-- Header -->
-        <div class="header-section">
-            <h2>
-                <a asp-controller="AccessProfile" asp-action="Index" class="text-primary">Perfis de Acesso</a>
-                <span class="separator">></span>
-                <strong class="text-muted">@(Model.IdPerfil > 0 ? "Detalhes do Perfil" : "Novo Perfil")</strong>
-            </h2>
-        </div>
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="IdPerfil" />
 
-        <!-- Nome do Perfil -->
-        <div class="input-card full-width">
-            <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
-            <div class="input-content">
-                <label asp-for="Nome">Nome do Perfil <span class="text-danger">*</span></label>
-                <input type="text" asp-for="Nome" class="clean-input" required
-                       placeholder="Digite o nome do perfil de acesso" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
+        <div class="form-group">
+            <label>Nome</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved"></i>
+                <input asp-for="Nome" type="text" required />
             </div>
         </div>
 
-        <!-- Tabela de Permissões -->
-        <div class="purple-divider"></div>
-        <div class="section-label">Permissões de Acesso</div>
+        <table class="permission-table">
+            <thead>
+                <tr>
+                    <th>Módulo</th>
+                    <th>Listar</th>
+                    <th>Detalhar</th>
+                    <th>Criar</th>
+                    <th>Atualizar</th>
+                    <th>Deletar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Permissoes != null && Model.Permissoes.Any())
+                {
+                    for (int i = 0; i < Model.Permissoes.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model.Permissoes[i].Modulo
+                                <input type="hidden" asp-for="Permissoes[@i].IdPermissoes" />
+                                <input type="hidden" asp-for="Permissoes[@i].Modulo" />
+                            </td>
 
-        <div class="permissions-table-container">
-            <table class="permissions-table">
-                <thead>
+                            @foreach (var prop in new[] { "PodeListar", "PodeDetalhar", "PodeCriar", "PodeAtualizar",
+                                        "PodeDeletar" })
+                            {
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" name="Permissoes[@i].@(prop)" value="S"
+                                            @(Model.Permissoes[i].GetType().GetProperty(prop)?.GetValue(Model.Permissoes[i])?.ToString()
+                                                                            == "S" ? "checked" : "") />
+                                        <span class="slider"></span>
+                                    </label>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                else
+                {
                     <tr>
-                        <th class="permission-name">Módulo</th>
-                        <th class="permission-action">
-                            <i class="fas fa-list"></i>
-                            <span>Listar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-eye"></i>
-                            <span>Detalhar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-plus"></i>
-                            <span>Criar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-edit"></i>
-                            <span>Atualizar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-trash"></i>
-                            <span>Deletar</span>
-                        </th>
+                        <td colspan="6">Nenhuma permissão associada a este perfil.</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var modulos = new[] {
-                            new { Nome = "Usuários", Icone = "fa-users" },
-                            new { Nome = "Perfis de Acesso", Icone = "fa-user-shield" },
-                            new { Nome = "Atividades", Icone = "fa-tasks" },
-                            new { Nome = "Comunidades", Icone = "fa-home" },
-                            new { Nome = "Vulnerabilidades", Icone = "fa-exclamation-triangle" },
-                            new { Nome = "Recursos", Icone = "fa-box" },
-                            new { Nome = "Diários de Campo", Icone = "fa-book" },
-                            new { Nome = "Atores", Icone = "fa-user-friends" },
-                            new { Nome = "Ficha de 1º Contato", Icone = "fa-file-alt" },
-                            new { Nome = "Diários de Processo Pessoal", Icone = "fa-journal-whills" },
-                            new { Nome = "Avaliações Pessoais", Icone = "fa-star" },
-                            new { Nome = "SER", Icone = "fa-chart-line" }
-                        };
+                }
+            </tbody>
 
-                        foreach (var modulo in modulos)
-                        {
-                            <tr>
-                                <td class="module-name">
-                                    <i class="fas @modulo.Icone"></i>
-                                    <span>@modulo.Nome</span>
-                                </td>
-                                <td>
-                                    <label class="permission-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="switch-slider"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <label class="permission-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="switch-slider"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <label class="permission-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="switch-slider"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <label class="permission-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="switch-slider"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <label class="permission-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="switch-slider"></span>
-                                    </label>
-                                </td>
-                            </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+        </table>
+
+        <div class="form-buttons">
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
-
-        <!-- Ações Rápidas -->
-        <div class="quick-actions">
-            <button type="button" class="wizard-btn btn-next" onclick="toggleAllPermissions(true)">
-                <i class="fas fa-check-double"></i> Marcar Todas
-            </button>
-            <button type="button" class="wizard-btn btn-prev" onclick="toggleAllPermissions(false)">
-                <i class="fas fa-times"></i> Desmarcar Todas
-            </button>
-        </div>
-
-        <!-- Informações do Sistema -->
-        @if (Model.IdPerfil > 0)
-        {
-            <div class="purple-divider"></div>
-            <div class="section-label">Informações do Sistema</div>
-
-            <div class="input-card full-width">
-                <div class="icon-box"><i class="fa-solid fa-calendar-plus"></i></div>
-                <div class="input-content">
-                    <label>Data de Criação</label>
-                    <div class="system-info-display">
-                        <span class="info-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-card full-width">
-                <div class="icon-box"><i class="fa-solid fa-calendar-day"></i></div>
-                <div class="input-content">
-                    <label>Última Atualização</label>
-                    <div class="system-info-display">
-                        <span class="info-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
-                        @if (!string.IsNullOrEmpty(Context.Session.GetString("Nome")))
-                        {
-                            <span class="info-user">
-                                <i class="fa-solid fa-user"></i>
-                                @Context.Session.GetString("Nome")
-                            </span>
-                        }
-                    </div>
-                </div>
-            </div>
-
-            @if (Model.Usuarios != null && Model.Usuarios.Any())
-            {
-                <div class="input-card full-width">
-                    <div class="icon-box"><i class="fa-solid fa-users"></i></div>
-                    <div class="input-content">
-                        <label>Usuários Vinculados</label>
-                        <div class="users-list">
-                            @foreach (var usuario in Model.Usuarios.Take(5))
-                            {
-                                <span class="user-badge @(usuario.Ativo == "S" ? "active" : "inactive")">
-                                    <i class="fas fa-circle"></i>
-                                    @usuario.Nome
-                                </span>
-                            }
-                            @if (Model.Usuarios.Count > 5)
-                            {
-                                <span class="user-badge-more">
-                                    +@(Model.Usuarios.Count - 5) mais
-                                </span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-
-        <!-- Botões de Ação -->
-        <div class="buttons-container">
-            <a asp-controller="AccessProfile" asp-action="Index" class="wizard-btn btn-prev">
-                <i class="fa-solid fa-arrow-left"></i> Voltar
-            </a>
-
-            <div class="action-buttons-group">
-                <button type="button" class="wizard-btn" id="edit-save-btn">
-                    @if (Model.IdPerfil == 0)
-                    {
-                        <text><i class="fa-solid fa-plus"></i> Criar Perfil</text>
-                    }
-                    else
-                    {
-                        <text><i class="fa-solid fa-edit"></i> Editar</text>
-                    }
-                </button>
-
-                @if (Model.IdPerfil > 0)
-                {
-                    <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
-                        <i class="fa-solid fa-trash"></i> Deletar
-                    </button>
-                }
-            </div>
-        </div>
-    </div>
-</form>
-
-<!-- Modal de Confirmação de Exclusão -->
-@if (Model.IdPerfil > 0)
-{
-    <div class="modal-overlay" id="deleteConfirmationModal">
-        <div class="modal-content">
-            <div class="modal-icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h3 class="modal-title">Confirmar Exclusão</h3>
-            <p class="modal-text">
-                Você tem certeza que deseja deletar o perfil <strong>@Model.Nome</strong>?
-                <br><br>
-                @if (Model.Usuarios != null && Model.Usuarios.Any())
-                {
-                    <span style="color: #dc3545; font-weight: bold;">
-                        ⚠️ Este perfil possui @Model.Usuarios.Count usuário(s) vinculado(s)!
-                    </span>
-                    <br>
-                }
-                Essa ação não pode ser desfeita.
-            </p>
-
-            <div class="modal-actions">
-                <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">
-                    Cancelar
-                </button>
-
-                <form asp-controller="AccessProfile" asp-action="Delete" method="post" asp-route-id="@Model.IdPerfil">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn-modal-confirm wizard-btn btn-delete">
-                        Sim, Deletar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-}
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('.main-form');
-            const inputFields = form.querySelectorAll('.clean-input');
-            const editSaveBtn = document.getElementById('edit-save-btn');
-            
-            const isCreateMode = @(Model.IdPerfil == 0 ? "true" : "false");
-            let isEditMode = isCreateMode;
-            let isSubmitting = false;
-
-            // Configurar estado dos campos
-            function setPageState() {
-                if (isCreateMode) {
-                    inputFields.forEach(field => field.disabled = false);
-                    editSaveBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Criar Perfil';
-                    editSaveBtn.setAttribute('type', 'submit');
-                    editSaveBtn.classList.add('btn-next');
-                    editSaveBtn.classList.remove('btn-prev');
-                } else {
-                    if (isEditMode) {
-                        inputFields.forEach(field => field.disabled = false);
-                        editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
-                        editSaveBtn.setAttribute('type', 'submit');
-                        editSaveBtn.classList.add('btn-save-final');
-                        editSaveBtn.classList.remove('btn-next');
-                    } else {
-                        inputFields.forEach(field => field.disabled = true);
-                        editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
-                        editSaveBtn.setAttribute('type', 'button');
-                        editSaveBtn.classList.add('btn-next');
-                        editSaveBtn.classList.remove('btn-save-final');
-                    }
-                }
-            }
-
-            setPageState();
-
-            // Handler do botão editar/salvar
-            editSaveBtn.addEventListener('click', function (e) {
-                if (editSaveBtn.getAttribute('type') === 'submit') {
-                    if (!isSubmitting && form.checkValidity()) {
-                        isSubmitting = true;
-                        editSaveBtn.disabled = true;
-                        editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
-                        form.submit();
-                    }
-                } else {
-                    e.preventDefault();
-                    isEditMode = true;
-                    setPageState();
-                }
-            });
-
-            // Lógica do modal de exclusão
-            const deleteModal = document.getElementById('deleteConfirmationModal');
-            const openDeleteBtn = document.getElementById('openDeleteModalBtn');
-            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-
-            if (openDeleteBtn) {
-                openDeleteBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    deleteModal.style.display = 'flex';
-                    setTimeout(() => deleteModal.classList.add('active'), 10);
-                });
-            }
-
-            if (cancelDeleteBtn) {
-                cancelDeleteBtn.addEventListener('click', function () {
-                    closeDeleteModal();
-                });
-            }
-
-            window.addEventListener('click', function (e) {
-                if (e.target === deleteModal) {
-                    closeDeleteModal();
-                }
-            });
-
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && deleteModal && deleteModal.classList.contains('active')) {
-                    closeDeleteModal();
-                }
-            });
-
-            function closeDeleteModal() {
-                deleteModal.classList.remove('active');
-                setTimeout(() => deleteModal.style.display = 'none', 300);
-            }
-        });
-
-        // Função para marcar/desmarcar todas as permissões
-        function toggleAllPermissions(checked) {
-            const checkboxes = document.querySelectorAll('.permissions-table input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = checked;
-            });
-        }
-    </script>
-}
+    </form>
+</div>

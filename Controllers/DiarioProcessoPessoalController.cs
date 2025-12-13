@@ -6,6 +6,10 @@ namespace Empodera.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Email") == null) 
+            { 
+                return RedirectToAction("Index", "Account"); 
+            }
             return DefaultIndex();
         }
     }

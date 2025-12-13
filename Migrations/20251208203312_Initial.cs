@@ -49,7 +49,7 @@ namespace InsEmpodera.Migrations
                     IdPermissoes = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     FkIdPerfil = table.Column<int>(type: "INTEGER", nullable: false),
-                    Permissao = table.Column<string>(type: "TEXT", nullable: false),
+                    Modulo = table.Column<string>(type: "TEXT", nullable: false),
                     PodeListar = table.Column<string>(type: "TEXT", nullable: false),
                     PodeDetalhar = table.Column<string>(type: "TEXT", nullable: false),
                     PodeCriar = table.Column<string>(type: "TEXT", nullable: false),
@@ -202,26 +202,27 @@ namespace InsEmpodera.Migrations
                     IdFicha = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     FKidAtores = table.Column<int>(type: "INTEGER", nullable: false),
-                    Endereco = table.Column<string>(type: "TEXT", nullable: false),
+                    Endereco = table.Column<string>(type: "TEXT", nullable: true),
                     Complemento = table.Column<string>(type: "TEXT", nullable: true),
-                    Emprego = table.Column<string>(type: "TEXT", nullable: false),
-                    CEstabeleceu = table.Column<string>(type: "TEXT", nullable: false),
-                    NovoParceiro = table.Column<string>(type: "TEXT", nullable: false),
-                    FornecidoParceiro = table.Column<string>(type: "TEXT", nullable: false),
+                    Emprego = table.Column<string>(type: "TEXT", nullable: true),
+                    CEstabeleceu = table.Column<string>(type: "TEXT", nullable: true),
+                    NovoParceiro = table.Column<string>(type: "TEXT", nullable: true),
+                    FornecidoParceiro = table.Column<string>(type: "TEXT", nullable: true),
                     Telefone = table.Column<string>(type: "TEXT", nullable: true),
-                    LContato = table.Column<string>(type: "TEXT", nullable: false),
-                    FonteDados = table.Column<string>(type: "TEXT", nullable: false),
-                    EstaFamiliar = table.Column<string>(type: "TEXT", nullable: false),
-                    EstruFamiliar = table.Column<string>(type: "TEXT", nullable: false),
-                    NFIlhos = table.Column<int>(type: "INTEGER", nullable: false),
-                    NFilhas = table.Column<int>(type: "INTEGER", nullable: false),
-                    AEscolar = table.Column<int>(type: "INTEGER", nullable: false),
-                    SLer = table.Column<string>(type: "TEXT", nullable: false),
-                    SCalc = table.Column<string>(type: "TEXT", nullable: false),
-                    SComp = table.Column<string>(type: "TEXT", nullable: false),
-                    QReabili = table.Column<int>(type: "INTEGER", nullable: false),
-                    LTrat = table.Column<string>(type: "TEXT", nullable: false),
-                    Coment = table.Column<string>(type: "TEXT", nullable: false),
+                    LContato = table.Column<string>(type: "TEXT", nullable: true),
+                    FonteDados = table.Column<string>(type: "TEXT", nullable: true),
+                    EstaFamiliar = table.Column<string>(type: "TEXT", nullable: true),
+                    EstruFamiliar = table.Column<string>(type: "TEXT", nullable: true),
+                    NFIlhos = table.Column<int>(type: "INTEGER", nullable: true),
+                    NFilhas = table.Column<int>(type: "INTEGER", nullable: true),
+                    AEscolar = table.Column<int>(type: "INTEGER", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    SLer = table.Column<string>(type: "TEXT", nullable: true),
+                    SCalc = table.Column<string>(type: "TEXT", nullable: true),
+                    SComp = table.Column<string>(type: "TEXT", nullable: true),
+                    QReabili = table.Column<int>(type: "INTEGER", nullable: true),
+                    LTrat = table.Column<string>(type: "TEXT", nullable: true),
+                    Coment = table.Column<string>(type: "TEXT", nullable: true),
                     DtContato = table.Column<DateTime>(type: "TEXT", nullable: false),
                     HoraContato = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -421,6 +422,32 @@ namespace InsEmpodera.Migrations
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
                         principalColumn: "IdComunidade",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ficha1oContatoComunidades",
+                columns: table => new
+                {
+                    IdFichaComunidade = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    IdFicha = table.Column<int>(type: "INTEGER", nullable: false),
+                    FkIdComunidade = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ficha1oContatoComunidades", x => x.IdFichaComunidade);
+                    table.ForeignKey(
+                        name: "FK_Ficha1oContatoComunidades_Comunidades_FkIdComunidade",
+                        column: x => x.FkIdComunidade,
+                        principalTable: "Comunidades",
+                        principalColumn: "IdComunidade",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ficha1oContatoComunidades_FichasPrimeiroContato_IdFicha",
+                        column: x => x.IdFicha,
+                        principalTable: "FichasPrimeiroContato",
+                        principalColumn: "IdFicha",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -925,14 +952,69 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "Permissoes",
-                columns: new[] { "IdPermissoes", "FkIdPerfil", "Permissao", "PodeAtualizar", "PodeCriar", "PodeDeletar", "PodeDetalhar", "PodeListar" },
+                columns: new[] { "IdPermissoes", "FkIdPerfil", "Modulo", "PodeAtualizar", "PodeCriar", "PodeDeletar", "PodeDetalhar", "PodeListar" },
                 values: new object[,]
                 {
-                    { 1, 1, "Todas", "S", "S", "S", "S", "S" },
-                    { 2, 2, "Conteudo", "S", "S", "N", "S", "S" },
-                    { 3, 3, "Campo", "N", "N", "N", "S", "S" },
-                    { 4, 4, "Leitura", "N", "N", "N", "S", "S" },
-                    { 5, 5, "Gerencia", "S", "S", "N", "S", "S" }
+                    { 1, 1, "Usuarios", "S", "S", "S", "S", "S" },
+                    { 2, 1, "Perfis", "S", "S", "S", "S", "S" },
+                    { 3, 1, "Atividades", "S", "S", "S", "S", "S" },
+                    { 4, 1, "Comunidades", "S", "S", "S", "S", "S" },
+                    { 5, 1, "Vulnerabilidades", "S", "S", "S", "S", "S" },
+                    { 6, 1, "Recursos", "S", "S", "S", "S", "S" },
+                    { 7, 1, "DiariosCampo", "S", "S", "S", "S", "S" },
+                    { 8, 1, "Atores", "S", "S", "S", "S", "S" },
+                    { 9, 1, "Ficha1Contato", "S", "S", "S", "S", "S" },
+                    { 10, 1, "DiariosProcessoPessoal", "S", "S", "S", "S", "S" },
+                    { 11, 1, "AvaliacoesPessoais", "S", "S", "S", "S", "S" },
+                    { 12, 1, "SER", "S", "S", "S", "S", "S" },
+                    { 13, 2, "Usuarios", "S", "S", "N", "S", "S" },
+                    { 14, 2, "Perfis", "S", "S", "N", "S", "S" },
+                    { 15, 2, "Atividades", "S", "S", "N", "S", "S" },
+                    { 16, 2, "Comunidades", "S", "S", "N", "S", "S" },
+                    { 17, 2, "Vulnerabilidades", "S", "S", "N", "S", "S" },
+                    { 18, 2, "Recursos", "S", "S", "N", "S", "S" },
+                    { 19, 2, "DiariosCampo", "S", "S", "N", "S", "S" },
+                    { 20, 2, "Atores", "S", "S", "N", "S", "S" },
+                    { 21, 2, "Ficha1Contato", "S", "S", "N", "S", "S" },
+                    { 22, 2, "DiariosProcessoPessoal", "S", "S", "N", "S", "S" },
+                    { 23, 2, "AvaliacoesPessoais", "S", "S", "N", "S", "S" },
+                    { 24, 2, "SER", "S", "S", "N", "S", "S" },
+                    { 25, 3, "Usuarios", "N", "N", "N", "S", "S" },
+                    { 26, 3, "Perfis", "N", "N", "N", "S", "S" },
+                    { 27, 3, "Atividades", "N", "N", "N", "S", "S" },
+                    { 28, 3, "Comunidades", "N", "N", "N", "S", "S" },
+                    { 29, 3, "Vulnerabilidades", "N", "N", "N", "S", "S" },
+                    { 30, 3, "Recursos", "N", "N", "N", "S", "S" },
+                    { 31, 3, "DiariosCampo", "N", "N", "N", "S", "S" },
+                    { 32, 3, "Atores", "N", "N", "N", "S", "S" },
+                    { 33, 3, "Ficha1Contato", "N", "N", "N", "S", "S" },
+                    { 34, 3, "DiariosProcessoPessoal", "N", "N", "N", "S", "S" },
+                    { 35, 3, "AvaliacoesPessoais", "N", "N", "N", "S", "S" },
+                    { 36, 3, "SER", "N", "N", "N", "S", "S" },
+                    { 37, 4, "Usuarios", "N", "N", "N", "N", "S" },
+                    { 38, 4, "Perfis", "N", "N", "N", "N", "S" },
+                    { 39, 4, "Atividades", "N", "N", "N", "N", "S" },
+                    { 40, 4, "Comunidades", "N", "N", "N", "N", "S" },
+                    { 41, 4, "Vulnerabilidades", "N", "N", "N", "N", "S" },
+                    { 42, 4, "Recursos", "N", "N", "N", "N", "S" },
+                    { 43, 4, "DiariosCampo", "N", "N", "N", "N", "S" },
+                    { 44, 4, "Atores", "N", "N", "N", "N", "S" },
+                    { 45, 4, "Ficha1Contato", "N", "N", "N", "N", "S" },
+                    { 46, 4, "DiariosProcessoPessoal", "N", "N", "N", "N", "S" },
+                    { 47, 4, "AvaliacoesPessoais", "N", "N", "N", "N", "S" },
+                    { 48, 4, "SER", "N", "N", "N", "N", "S" },
+                    { 49, 5, "Usuarios", "S", "S", "N", "S", "S" },
+                    { 50, 5, "Perfis", "S", "S", "N", "S", "S" },
+                    { 51, 5, "Atividades", "S", "S", "N", "S", "S" },
+                    { 52, 5, "Comunidades", "S", "S", "N", "S", "S" },
+                    { 53, 5, "Vulnerabilidades", "S", "S", "N", "S", "S" },
+                    { 54, 5, "Recursos", "S", "S", "N", "S", "S" },
+                    { 55, 5, "DiariosCampo", "S", "S", "N", "S", "S" },
+                    { 56, 5, "Atores", "S", "S", "N", "S", "S" },
+                    { 57, 5, "Ficha1Contato", "S", "S", "N", "S", "S" },
+                    { 58, 5, "DiariosProcessoPessoal", "S", "S", "N", "S", "S" },
+                    { 59, 5, "AvaliacoesPessoais", "S", "S", "N", "S", "S" },
+                    { 60, 5, "SER", "S", "S", "N", "S", "S" }
                 });
 
             migrationBuilder.InsertData(
@@ -952,11 +1034,11 @@ namespace InsEmpodera.Migrations
                 columns: new[] { "IdUsuario", "Ativo", "DtAtualizacao", "DtCriacao", "DtNascimento", "Email", "FkIdPerfil", "Foto", "Genero", "Nome", "Ocupacao", "Senha" },
                 values: new object[,]
                 {
-                    { 1, "S", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "joao@email.com", 1, "foto1.jpg", "M", "joao", "Coordenador", "123456" },
-                    { 2, "S", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "u2@example.com", 2, "foto2.jpg", "F", "Usuario Dois", "Pesquisador", "senha2" },
-                    { 3, "S", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1995, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "u3@example.com", 3, "foto3.jpg", "M", "Usuario Tres", "Voluntario", "senha3" },
-                    { 4, "S", new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1992, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "u4@example.com", 4, "foto4.jpg", "F", "Usuario Quatro", "Analista", "senha4" },
-                    { 5, "S", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "u5@example.com", 5, "foto5.jpg", "M", "Usuario Cinco", "Gerente", "senha5" }
+                    { 1, "S", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "joao@email.com", 1, "foto1.jpg", "M", "joao", "Coordenador", "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==" },
+                    { 2, "S", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "u2@example.com", 2, "foto2.jpg", "F", "Usuario Dois", "Pesquisador", "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==" },
+                    { 3, "S", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1995, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "u3@example.com", 3, "foto3.jpg", "M", "Usuario Tres", "Voluntario", "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==" },
+                    { 4, "N", new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1992, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "u4@example.com", 4, "foto4.jpg", "F", "Usuario Quatro", "Analista", "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==" },
+                    { 5, "N", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1988, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "u5@example.com", 5, "foto5.jpg", "M", "Usuario Cinco", "Gerente", "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==" }
                 });
 
             migrationBuilder.InsertData(
@@ -1021,14 +1103,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "FichasPrimeiroContato",
-                columns: new[] { "IdFicha", "AEscolar", "CEstabeleceu", "Coment", "Complemento", "DtContato", "DtCriacao", "DtModificacao", "Emprego", "Endereco", "EstaFamiliar", "EstruFamiliar", "FKidAtores", "FkIdUsuario", "FonteDados", "FornecidoParceiro", "HoraContato", "LContato", "LTrat", "NFIlhos", "NFilhas", "NovoParceiro", "QReabili", "SCalc", "SComp", "SLer", "Telefone" },
+                columns: new[] { "IdFicha", "AEscolar", "CEstabeleceu", "Coment", "Complemento", "DtContato", "DtCriacao", "DtModificacao", "Emprego", "Endereco", "EstaFamiliar", "EstruFamiliar", "FKidAtores", "FkIdUsuario", "FonteDados", "FornecidoParceiro", "HoraContato", "LContato", "LTrat", "NFIlhos", "NFilhas", "NovoParceiro", "QReabili", "SCalc", "SComp", "SLer", "Status", "Telefone" },
                 values: new object[,]
                 {
-                    { 1, 12, "Sim", "Pessoa comunicativa, busca oportunidade.", "Apto 101", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auxiliar Administrativo", "Rua das Flores, 123", "Casado", "Família nuclear", 1, 1, "Cadastro local", "Não", new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 2, 1, "Não", 0, "Sim", "Sim", "Sim", null },
-                    { 2, 16, "Não", "Precisa de acompanhamento psicológico.", "Casa", new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Professor", "Av. Brasil, 457", "Solteiro", "Mora sozinho", 2, 1, "Registro comunitário", "Sim", new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified), "Telefone", "Fisioterapia", 0, 0, "Sim", 1, "Sim", "Sim", "Sim", null },
-                    { 3, 8, "Sim", "Demonstra interesse em programas sociais.", "Bloco B", new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Autônomo", "Rua São João, 998", "Casado", "Família extensa", 3, 2, "Auto-relato", "Não", new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified), "WhatsApp", "Nenhum", 1, 2, "Não", 0, "Não", "Sim", "Sim", null },
-                    { 4, 10, "Não", "Procura recolocação no mercado.", "", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Desempregado", "Travessa do Sol, 55", "Separado", "Família monoparental", 4, 3, "Centro comunitário", "Não", new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 3, 0, "Não", 0, "Sim", "Não", "Sim", null },
-                    { 5, 14, "Sim", "Interessado em projetos educacionais.", "Sala 5", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comerciante", "Praça Central, 321", "Viúvo", "Família nuclear", 5, 1, "Instituição parceira", "Sim", new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), "E-mail", "Nenhum", 1, 1, "Não", 0, "Sim", "Sim", "Sim", null }
+                    { 1, 12, "Sim", "Pessoa comunicativa, busca oportunidade.", "Apto 101", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auxiliar Administrativo", "Rua das Flores, 123", "Casado", "Família nuclear", 1, 1, "Cadastro local", "Não", new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 2, 1, "Não", 0, "Sim", "Sim", "Sim", null, null },
+                    { 2, 16, "Não", "Precisa de acompanhamento psicológico.", "Casa", new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Professor", "Av. Brasil, 457", "Solteiro", "Mora sozinho", 2, 1, "Registro comunitário", "Sim", new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified), "Telefone", "Fisioterapia", 0, 0, "Sim", 1, "Sim", "Sim", "Sim", null, null },
+                    { 3, 8, "Sim", "Demonstra interesse em programas sociais.", "Bloco B", new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Autônomo", "Rua São João, 998", "Casado", "Família extensa", 3, 2, "Auto-relato", "Não", new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified), "WhatsApp", "Nenhum", 1, 2, "Não", 0, "Não", "Sim", "Sim", null, null },
+                    { 4, 10, "Não", "Procura recolocação no mercado.", "", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Desempregado", "Travessa do Sol, 55", "Separado", "Família monoparental", 4, 3, "Centro comunitário", "Não", new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 3, 0, "Não", 0, "Sim", "Não", "Sim", null, null },
+                    { 5, 14, "Sim", "Interessado em projetos educacionais.", "Sala 5", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comerciante", "Praça Central, 321", "Viúvo", "Família nuclear", 5, 1, "Instituição parceira", "Sim", new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), "E-mail", "Nenhum", 1, 1, "Não", 0, "Sim", "Sim", "Sim", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1354,6 +1436,16 @@ namespace InsEmpodera.Migrations
                 column: "FkIdUsuario");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ficha1oContatoComunidades_FkIdComunidade",
+                table: "Ficha1oContatoComunidades",
+                column: "FkIdComunidade");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ficha1oContatoComunidades_IdFicha",
+                table: "Ficha1oContatoComunidades",
+                column: "IdFicha");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FichaCondicoes_FkIdFicha",
                 table: "FichaCondicoes",
                 column: "FkIdFicha");
@@ -1483,6 +1575,9 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.DropTable(
                 name: "DiarioEixos");
+
+            migrationBuilder.DropTable(
+                name: "Ficha1oContatoComunidades");
 
             migrationBuilder.DropTable(
                 name: "FichaCondicoes");

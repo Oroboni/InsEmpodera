@@ -17,7 +17,7 @@ namespace Empodera.Data
         public int Nivel_Permissao { get; set; }
         public DateTime Dt_Criacao { get; set; }
         public DateTime? Dt_Atualizacao { get; set; }
-        public string Ativo { get; set; } = "S";
+        public string Ativo { get; set; } = string.Empty;
         
         public int FkIdPerfil { get; set; }
         
@@ -42,14 +42,16 @@ namespace Empodera.Data
 
     public class PermissoesSeed
     {
-        public int Id_Permissoes { get; set; }
-        public int Fk_id_Perfil { get; set; }
-        public string Permissao { get; set; } = string.Empty;
-        public string PodeListar { get; set; } = string.Empty;
-        public string PodeDetalhar { get; set; } = string.Empty;
-        public string PodeCriar { get; set; } = string.Empty;
-        public string PodeAtualizat { get; set; } = string.Empty;
-        public string Deletar { get; set; } = string.Empty;
+        public int IdPermissoes { get; set; }
+        public int FkIdPerfil { get; set; }
+        public string Modulo { get; set; } = string.Empty;
+        public string PodeListar { get; set; } = "N";
+        public string PodeDetalhar { get; set; } = "N";
+        public string PodeCriar { get; set; } = "N";
+        public string PodeAtualizar { get; set; } = "N";
+        public string PodeDeletar { get; set; } = "N";
+
+        public Perfil Perfil { get; set; } = null!;
     }
 
     public class ComunidadeSeed
@@ -278,24 +280,24 @@ namespace Empodera.Data
         public int FKidAtores{ get; set; }       
         public string Endereco { get; set; } = null!;
         public string? Complemento { get; set; } = null!; 
-        public string Emprego { get; set; } = null!;
-        public string CEstabeleceu { get; set; } = null!;
-        public string NovoParceiro { get; set; } = null!;
-        public string FornecidoParceiro { get; set; } = null!;
+        public string? Emprego { get; set; } = null!;
+        public string? CEstabeleceu { get; set; } = null!;
+        public string? NovoParceiro { get; set; } = null!;
+        public string? FornecidoParceiro { get; set; } = null!;
         public string? Telefone { get; set; } = null!;
-        public string LContato { get; set; } = null!;
-        public string FonteDados { get; set; } = null!;
-        public string EstaFamiliar { get; set; } = null!;
-        public string EstruFamiliar { get; set; } = null!;
-        public int NFIlhos { get; set; }        
-        public int NFilhas { get; set; }         
-        public int AEscolar { get; set; }       
-        public string SLer { get; set; } = null!;
-        public string SCalc { get; set; } = null!;
-        public string SComp { get; set; } = null!;
-        public int QReabili { get; set; }
-        public string LTrat { get; set; } = null!;
-        public string Coment { get; set; } = null!;
+        public string? LContato { get; set; } = null!;
+        public string? FonteDados { get; set; } = null!;
+        public string? EstaFamiliar { get; set; } = null!;
+        public string? EstruFamiliar { get; set; } = null!;
+        public int? NFIlhos { get; set; }        
+        public int? NFilhas { get; set; }         
+        public int? AEscolar { get; set; }       
+        public string? SLer { get; set; } = null!;
+        public string? SCalc { get; set; } = null!;
+        public string? SComp { get; set; } = null!;
+        public int? QReabili { get; set; }
+        public string? LTrat { get; set; }
+        public string? Coment { get; set; } = null!;
         public DateTime DtContato { get; set; }
         public DateTime HoraContato { get; set; } 
         public DateTime DtCriacao { get; set; }
@@ -303,10 +305,10 @@ namespace Empodera.Data
         public int FkIdUsuario { get; set; }
 
         public List<FonteInfSeed>? Fontes { get; set; }
-        public List<FichaCondicoesSeed>? Condicoes { get; set; }
-        public List<FichaPeticoesSeed>? Peticoes { get; set; }
-        public List<FichaRespSeed>? Respostas { get; set; }
-        public List<FichaResultSeed>? Resultados { get; set; }
+        public ICollection<FichaCondicoes>? FichaCondicoes { get; set; }
+        public ICollection<FichaPeticoes>? FichaPeticoes { get; set; }
+        public ICollection<FichaResp>? FichaRespostas { get; set; }
+        public ICollection<FichaResult>? FichaResultados { get; set; }
     }
 
     public class FonteInfSeed

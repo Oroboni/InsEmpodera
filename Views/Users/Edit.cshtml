@@ -1,332 +1,81 @@
 @model Empodera.Models.Usuario
 @{
-    ViewData["Title"] = "Editar Usuário";
+    ViewData["Title"] = "Detalhes de Usuário";
     ViewData["PageCSS"] = "usuarios-edit"; 
+    Layout = null; // IMPORTANTE: Define Layout como null para que esta View não use o _Layout.cshtml
 }
 <head>
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
     <link rel="stylesheet" href="~/css/pages/usuarios-edit.css">
 </head>
 
-<div class="modern-container">
+<div class="modal-dialog-content">
     
-    <!-- Cabeçalho -->
-    <div class="header-section">
-        <h2 class="page-title">
-            <a asp-controller="Users" asp-action="Index" class="text-primary">Usuários</a>
-            <span class="separator"> > </span>
-            <strong class="text-muted">Detalhes do Usuário</strong>
-        </h2>
+    <div class="modal-header">
+        <h3 class="modal-title">Editar Usuario</h3>
+        <button type="button" class="close-button" onclick="window.location.href='/Users/Index'">
+            &times;
+        </button>
     </div>
 
-    <!-- Formulário -->
-    <form asp-action="Edit" method="post" class="main-form">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="IdUsuario" />
-
-        <!-- Dados Pessoais -->
-        <div class="section-label">
-            <i class="fa-solid fa-user"></i> Dados Pessoais
-        </div>
-
-        <div class="input-card full-width">
-            <div class="icon-box purple">
-                <i class="fa-solid fa-signature"></i>
+    <div class="modal-body">  
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
             </div>
-            <div class="input-content">
-                <label for="Nome">Nome Completo</label>
-                <input 
-                    type="text" 
-                    class="clean-input" 
-                    asp-for="Nome" 
-                    placeholder="Digite o nome completo"
-                    required
-                    disabled />
-            </div>
-        </div>
+        }      
+        <form asp-action="Edit" method="post">
 
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Email">E-mail</label>
-                    <input 
-                        type="email" 
-                        class="clean-input" 
-                        asp-for="Email" 
-                        placeholder="exemplo@email.com"
-                        required
-                        disabled />
-                </div>
+            <div class="form-group">
+                <label class="control-label">Nome</label>
+                <input class="form-control" asp-for="Nome" value="@Model.Nome" required/>
+            </div>
+            
+            <div class="form-group">
+                <label  class="control-label">E-mail</label>
+                <input class="form-control" asp-for="Email" value="@Model.Email" readonly/>
             </div>
 
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Senha">Senha</label>
-                    <input 
-                        type="password" 
-                        class="clean-input" 
-                        asp-for="Senha" 
-                        placeholder="Digite a senha"
-                        required
-                        disabled />
-                </div>
+            <div class="form-group">
+                <label  class="control-label">Senha</label>
+                <input class="form-control" asp-for="Senha" value="@Model.Senha" required/>
             </div>
-        </div>
 
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple">
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="select-wrapper">
                     <i class="fa-solid fa-venus-mars"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Genero">Gênero</label>
-                    <select 
-                        class="clean-input simple-select" 
-                        asp-for="Genero" 
-                        name="Genero"
-                        required
-                        disabled>
-                        <option value="" disabled>Selecione</option>
+                    <select class="form-control" id="Genero" asp-for="Genero" name="Genero">
                         <option value="feminino">Feminino</option>
                         <option value="masculino">Masculino</option>
                         <option value="nao-declarado">Não declarado</option>
                         <option value="transgenero">Transgênero</option>
                     </select>
-                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
-
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-briefcase"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Ocupacao">Ocupação</label>
-                    <input 
-                        type="text" 
-                        class="clean-input" 
-                        asp-for="Ocupacao" 
-                        placeholder="Ex: Psicóloga, Assistente Social"
-                        disabled />
-                </div>
+            
+             <div class="form-group">
+                <label class="control-label">Ocupação</label>
+                <input class="form-control" asp-for="Ocupacao" value="@Model.Ocupacao" />
             </div>
-        </div>
-
-        <!-- Configurações de Acesso -->
-        <div class="purple-divider"></div>
-
-        <div class="section-label">
-            <i class="fa-solid fa-shield-halved"></i> Configurações de Acesso
-        </div>
-
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-                <div class="input-content">
-                    <label for="FkIdPerfil">Perfil de Acesso *</label>
-                    <select 
-                        class="clean-input simple-select" 
-                        asp-for="FkIdPerfil" 
-                        asp-items="ViewBag.PerfilLista" 
-                        required
-                        disabled>
-                        <option value="" disabled>Selecione o perfil</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
-                </div>
+           
+            <div class="form-group">
+                <label class="control-label">Perfil de acesso *</label>
+                <select class="form-control" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" required></select>
             </div>
 
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-toggle-on"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Ativo">Status do Usuário</label>
-                    <select 
-                        class="clean-input simple-select" 
-                        asp-for="Ativo"
-                        required
-                        disabled>
-                        <option value="S">Ativo</option>
-                        <option value="N">Inativo</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
-                </div>
+            <div class="form-group">
+                <label class="control-label">Ativo</label>
+                <select class="form-control" asp-for="Ativo">
+                    <option value="S">Sim</option>
+                    <option value="N">Não</option>
+                </select>
             </div>
-        </div>
 
-        <!-- Botões de Ação -->
-        <div class="buttons-container">
-            <a href="@Url.Action("Index", "Users")" class="wizard-btn btn-prev">
-                <i class="fa-solid fa-arrow-left"></i> Voltar
-            </a>
-
-            <div class="action-buttons-group">
-                <button type="button" class="wizard-btn btn-next" id="edit-save-btn">
-                    <i class="fa-solid fa-edit"></i> Editar
-                </button>
-
-                <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
-                    <i class="fa-solid fa-trash"></i> Deletar
-                </button>
+            <div class="form-actions">
+                <button class="btn-save" type="submit">Salvar</button>
             </div>
-        </div>
-
-    </form>
-
-</div>
-
-<!-- Modal de Confirmação de Exclusão -->
-<div class="modal-overlay" id="deleteConfirmationModal">
-    <div class="modal-content">
-        <div class="modal-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-
-        <h3 class="modal-title">Confirmar Exclusão</h3>
-
-        <p class="modal-text">
-            Você tem certeza que deseja deletar o usuário <strong>@Model.Nome</strong>?<br>
-            Essa ação não pode ser desfeita.
-        </p>
-
-        <div class="button-container">
-            <div class="modal-actions">
-                <button type="button"
-                        class="btn-modal-cancel wizard-btn btn-prev"
-                        id="cancelDeleteBtn">
-                    Cancelar
-                </button>
-
-                <form asp-controller="Users"
-                      asp-action="Delete"
-                      method="post"
-                      asp-route-id="@Model.IdUsuario">
-                    @Html.AntiForgeryToken()
-
-                    <button type="submit"
-                            class="btn-modal-confirm wizard-btn btn-next">
-                        Sim, Deletar
-                    </button>
-                </form>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('.main-form');
-    const inputFields = form.querySelectorAll('.clean-input, select.clean-input');
-    const editSaveBtn = document.getElementById('edit-save-btn');
-
-    // Variáveis de controle
-    let isEditMode = false;
-    let isSubmitting = false;
-
-    // Configurar estado dos campos
-    function setPageState() {
-        if (isEditMode) {
-            // Modo edição ativo
-            inputFields.forEach(field => field.disabled = false);
-            editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
-            editSaveBtn.setAttribute('type', 'submit');
-            editSaveBtn.classList.remove('btn-next');
-            editSaveBtn.classList.add('btn-save-final');
-        } else {
-            // Modo visualização
-            inputFields.forEach(field => field.disabled = true);
-            editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
-            editSaveBtn.setAttribute('type', 'button');
-            editSaveBtn.classList.remove('btn-save-final');
-            editSaveBtn.classList.add('btn-next');
-        }
-    }
-
-    // Inicializar estado (visualização)
-    setPageState();
-
-    // Handler do botão editar/salvar
-    editSaveBtn.addEventListener('click', function (e) {
-        if (editSaveBtn.getAttribute('type') === 'submit') {
-            // Se for submit, o navegador faz a validação HTML5 automática
-            if (!isSubmitting && form.checkValidity()) {
-                isSubmitting = true;
-                editSaveBtn.disabled = true;
-                editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
-                form.submit();
-            }
-        } else {
-            // Alternar para modo edição
-            e.preventDefault();
-            isEditMode = true;
-            setPageState();
-            // Focar no primeiro campo editável
-            const firstInput = form.querySelector('input:not([disabled]):not([type="hidden"])');
-            if (firstInput) firstInput.focus();
-        }
-    });
-
-    // Lógica do modal de exclusão
-    const deleteModal = document.getElementById('deleteConfirmationModal');
-    const openDeleteBtn = document.getElementById('openDeleteModalBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-
-    if (openDeleteBtn) {
-        openDeleteBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            deleteModal.style.display = 'flex';
-            setTimeout(() => {
-                deleteModal.classList.add('active');
-            }, 10);
-        });
-    }
-
-    if (cancelDeleteBtn) {
-        cancelDeleteBtn.addEventListener('click', function () {
-            closeDeleteModal();
-        });
-    }
-
-    // Fechar modal ao clicar fora
-    window.addEventListener('click', function (e) {
-        if (e.target === deleteModal) {
-            closeDeleteModal();
-        }
-    });
-
-    // Fechar modal com ESC
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && deleteModal.classList.contains('active')) {
-            closeDeleteModal();
-        }
-    });
-
-    function closeDeleteModal() {
-        deleteModal.classList.remove('active');
-        setTimeout(() => {
-            deleteModal.style.display = 'none';
-        }, 300);
-    }
-
-    // Validação em tempo real para campos obrigatórios
-    const requiredFields = form.querySelectorAll('[required]');
-    requiredFields.forEach(field => {
-        field.addEventListener('blur', function () {
-            if (!this.value.trim()) {
-                this.classList.add('invalid');
-            } else {
-                this.classList.remove('invalid');
-            }
-        });
-    });
-});
-</script>

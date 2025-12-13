@@ -1,120 +1,74 @@
 @model Empodera.Models.Usuario
 @{
-    ViewData["Title"] = "Criar Usuário";
-    ViewData["PageCSS"] = "usuarios-create";
+    ViewData["Title"] = "Detalhes de Usuário";
+    ViewData["PageCSS"] = "usuarios-edit"; 
+    Layout = null; // IMPORTANTE: Define Layout como null para que esta View não use o _Layout.cshtml
 }
-
 <head>
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
     <link rel="stylesheet" href="~/css/pages/usuarios-edit.css">
 </head>
 
-<div class="modern-container">
-
-    <!-- Cabeçalho -->
-    <div class="header-section">
-        <h2 class="page-title">Criar Novo Usuário</h2>
+<div class="modal-dialog-content">
+    
+    <div class="modal-header">
+        <h3 class="modal-title">Criar Usuario</h3>
+        <button type="button" class="close-button" onclick="window.location.href='/Users/Index'">
+            &times;
+        </button>
     </div>
 
-    <!-- Formulário -->
-    <form asp-action="Create" method="post">
-
-        <!-- Dados Pessoais -->
-        <div class="section-label">
-            <i class="fa-solid fa-user"></i> Dados Pessoais
-        </div>
-
-        <div class="input-card full-width">
-            <div class="icon-box purple">
-                <i class="fa-solid fa-signature"></i>
+    <div class="modal-body">       
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
             </div>
-            <div class="input-content">
-                <label for="Nome">Nome Completo *</label>
-                <input type="text" class="clean-input" asp-for="Nome" placeholder="Digite o nome completo" required />
-            </div>
-        </div>
+        }
+        <form asp-action="Create" method="post">
 
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Email">E-mail</label>
-                    <input type="email" class="clean-input" asp-for="Email" placeholder="exemplo@email.com" required />
-                </div>
+            <div class="form-group">
+                <label class="control-label">Nome</label>
+                <input class="form-control" asp-for="Nome" />
+            </div>
+            
+            <div class="form-group">
+                <label  class="control-label">E-mail</label>
+                <input class="form-control" asp-for="Email" />
             </div>
 
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Senha">Senha</label>
-                    <input type="password" class="clean-input" asp-for="Senha" placeholder="Mínimo 6 caracteres"
-                        required />
-                </div>
+            <div class="form-group">
+                <label  class="control-label">Senha</label>
+                <input class="form-control" asp-for="Senha" />
             </div>
-        </div>
 
-        <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple">
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <div class="select-wrapper">
                     <i class="fa-solid fa-venus-mars"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Genero">Gênero</label>
-                    <select class="clean-input simple-select" asp-for="Genero" name="Genero" required>
+                    <select class="form-control" id="Genero" asp-for="Genero" name="Genero">
                         <option value="" disabled selected>Selecione</option>
                         <option value="feminino">Feminino</option>
                         <option value="masculino">Masculino</option>
                         <option value="nao-declarado">Não declarado</option>
                         <option value="transgenero">Transgênero</option>
                     </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
-
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-briefcase"></i>
-                </div>
-                <div class="input-content">
-                    <label for="Ocupacao">Ocupação</label>
-                    <input type="text" class="clean-input" asp-for="Ocupacao"
-                        placeholder="Ex: Psicóloga, Assistente Social" />
-                </div>
+            
+             <div class="form-group">
+                <label class="control-label">Ocupação</label>
+                <input class="form-control" asp-for="Ocupacao" />
             </div>
-        </div>
-
-        <!-- Configurações de Acesso -->
-        <div class="purple-divider"></div>
-
-        <div class="section-label">
-            <i class="fa-solid fa-shield-halved"></i> Perfil de Acesso
-        </div>
-
-        <div class="input-card full-width">
-            <div class="icon-box purple">
-                <i class="fa-solid fa-user-shield"></i>
+           
+            <div class="form-group">
+                <label class="control-label">Perfil de acesso *</label>
+                <select class="form-control" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" required></select>
             </div>
-            <div class="input-content">
-                <label for="FkIdPerfil">Perfil de Acesso *</label>
-                <select class="clean-input simple-select" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" required>
-                    <option value="" disabled selected>Selecione o perfil</option>
-                </select>
-            </div>
-        </div>
 
-        <!-- Botões de Ação -->
-        <div class="form-actions">
-            <a href="/Users/Index" class="btn-cancel">
-                <i class="fa-solid fa-times"></i>
-                Cancelar
-            </a>
-            <button class="btn-save" type="submit">
-                <i class="fa-solid fa-check"></i>
-                Salvar Usuário
-            </button>
-        </div>
-    </form>
+            <div class="form-actions">
+                <button class="btn-save" type="submit" onclick="window.location.href='/Users/Index.cshtml'">Salvar</button>
+            </div>
+        </form>
+    </div>
 </div>

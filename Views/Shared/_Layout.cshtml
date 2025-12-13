@@ -21,7 +21,7 @@
         var cssName = ViewData["PageCSS"] as string;
         if (string.IsNullOrEmpty(cssName))
         {
-            cssName = ViewContext.RouteData.Values["controller"]?.ToString().ToLower();
+            cssName = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLower();
         }
     }
 
