@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InsEmpodera.Migrations
 {
     /// <inheritdoc />
-    public partial class CorrecaoBanco : Migration
+    public partial class CorrecaoBuild : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

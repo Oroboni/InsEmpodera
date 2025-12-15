@@ -26,7 +26,7 @@
         <div class="step" id="header-step-3">3</div>
     </div>
 
-    <form asp-action="Edit" class="main-form" id="wizardForm">
+    <form asp-action="Edit" class="main-form" id="wizardForm" data-mode="edit">
 
         <input type="hidden" asp-for="IdFicha" />
 
@@ -493,7 +493,7 @@
     }
 
     <script src="~/js/ficha/wizard.js"></script>
-    <script src="~/js/ficha/wizard.js"></script>
     <script src="~/js/ficha/edit-mode.js"></script>
+    <script src="~/js/ficha/delete-modal.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 }

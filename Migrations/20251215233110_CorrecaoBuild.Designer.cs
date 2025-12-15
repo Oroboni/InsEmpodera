@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Migrations/20251215230001_CorrecaoBanco.Designer.cs
-    [Migration("20251215230001_CorrecaoBanco")]
-    partial class CorrecaoBanco
-========
-    [Migration("20251215202126_Initial")]
-    partial class Initial
->>>>>>>> 9405f5ab8aff1008d7a51b93a1d2dd5409ebd419:Migrations/20251215202126_Initial.Designer.cs
+    [Migration("20251215233110_CorrecaoBuild")]
+    partial class CorrecaoBuild
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
