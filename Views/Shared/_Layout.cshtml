@@ -34,6 +34,11 @@
 </head>
 
 <body>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="~/js/app-maps.js"></script>
+
     <div class="body-page">
 
         <!-- 1. BACKDROP (Fundo escuro para mobile) -->
@@ -135,43 +140,61 @@
     </div>
 
     <!-- Scripts do mapa -->
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Plugin de Geocoding do Leaflet -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="~/js/app-maps.js"></script>
 
 
     <!-- 4. LÓGICA DO MENU MOBILE -->
-    <!-- Colocamos aqui para garantir que carregue em todas as páginas -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Seletores atualizados para usar IDs quando possível
-            const sidebar = document.getElementById("sidebar") || document.querySelector(".section-1");
+            const sidebar = document.getElementById("sidebar");
             const backdrop = document.getElementById("sidebarBackdrop");
             const toggleBtn = document.getElementById("sidebarToggle");
 
-            // Função para abrir/fechar
+            // Verificação de segurança
+            if (!sidebar || !backdrop || !toggleBtn) {
+                console.warn('Elementos do menu não encontrados');
+                return;
+            }
+
             function toggleSidebar() {
-                if (sidebar) sidebar.classList.toggle("open");
-                if (backdrop) backdrop.classList.toggle("show");
+                sidebar.classList.toggle("open");
+                backdrop.classList.toggle("show");
                 document.body.classList.toggle("sidebar-open");
+
+                // Acessibilidade: atualiza aria-label
+                const isOpen = sidebar.classList.contains("open");
+                toggleBtn.setAttribute("aria-label", isOpen ? "Fechar Menu" : "Abrir Menu");
+                toggleBtn.setAttribute("aria-expanded", isOpen);
             }
 
             // Evento no botão de hambúrguer
-            if (toggleBtn) {
-                toggleBtn.addEventListener("click", function (e) {
-                    e.stopPropagation();
-                    toggleSidebar();
-                });
-            }
+            toggleBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                toggleSidebar();
+            });
 
-            // Fechar ao clicar no fundo escuro (Backdrop)
-            if (backdrop) {
-                backdrop.addEventListener("click", function () {
-                    if (sidebar) sidebar.classList.remove("open");
-                    backdrop.classList.remove("show");
-                    document.body.classList.remove("sidebar-open");
-                });
-            }
+            // Fechar ao clicar no backdrop
+            backdrop.addEventListener("click", function () {
+                if (sidebar.classList.contains("open")) {
+                    toggleSidebar();
+                }
+            });
+
+            // Fechar ao pressionar ESC
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape" && sidebar.classList.contains("open")) {
+                    toggleSidebar();
+                }
+            });
         });
     </script>
 

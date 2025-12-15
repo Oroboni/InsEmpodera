@@ -1,14 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector(".main-form");
-    if (!form) return;
+window.pageInit = function () {
+    // Telefone
+    initTelefoneMask("inputTelefone");
 
-    const mode = form.dataset.mode;
+    // Data de contato
+    initDateMaxToday("DtContato");
 
-    if (mode === "create") {
-        console.log("🟢 Modo CREATE");
+    // Mapa
+    initMapSafe("mapa-principal", "input-endereco");
+
+    // Estado inicial dos campos (se houver modo edição)
+    if (typeof setPageState === "function") {
+        setPageState();
     }
-
-    if (mode === "edit") {
-        console.log("🟡 Modo EDIT");
-    }
-});
+};

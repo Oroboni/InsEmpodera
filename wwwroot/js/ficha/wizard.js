@@ -1,4 +1,7 @@
-let currentStep = 1;
+if (typeof window.currentStep === "undefined") {
+    window.currentStep = 1;
+}
+
 let totalSteps = document.querySelectorAll(".step-content").length;
 
 function showStep(step) {
@@ -32,7 +35,8 @@ function updateButtonVisibility() {
     btnNext.style.display = "inline-flex";
 
     if (currentStep === 1) {
-        btnPrev.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Sair da ficha';
+        btnPrev.innerHTML =
+            '<i class="fa-solid fa-arrow-left"></i> Sair da ficha';
         btnPrev.onclick = () => window.history.back();
     } else {
         btnPrev.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Voltar';
