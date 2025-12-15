@@ -24,7 +24,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -81,7 +81,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -90,9 +90,20 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
 
-            ViewBag.Atores = new SelectList(_context.Atores, "IdAtores", "Nome");
+            // Filtrar atores ativos
+            ViewBag.Atores = new SelectList(
+                _context.Atores
+                    .Where(a => a.Ativo == "S")  // Filtra apenas atores ativos
+                    .OrderBy(a => a.Nome),
+                "IdAtores",
+                "Nome"
+            );
+
+            // Filtrar comunidades ativas
             ViewBag.ComunidadesList = new SelectList(
-                _context.Comunidades.OrderBy(c => c.Nome),
+                _context.Comunidades
+                    .Where(c => c.Ativo == "S")
+                    .OrderBy(c => c.Nome),
                 "IdComunidade",
                 "Nome"
             );
@@ -116,7 +127,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -127,12 +138,12 @@ namespace Empodera.Controllers
 
             ficha.DtCriacao = DateTime.Now;
             ficha.DtModificacao = DateTime.Now;
-            
+
             if (string.IsNullOrEmpty(ficha.Status))
             {
                 ficha.Status = "EmProgresso";
             }
-            
+
             ficha.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
             _context.FichasPrimeiroContato.Add(ficha);
@@ -191,6 +202,7 @@ namespace Empodera.Controllers
         }
 
         // GET: FichaPrimeiroContato/Edit/5
+        // GET: FichaPrimeiroContato/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -205,9 +217,21 @@ namespace Empodera.Controllers
 
             if (ficha == null) return NotFound();
 
-            ViewBag.Atores = new SelectList(_context.Atores, "IdAtores", "Nome", ficha.FKidAtores);
+            // Filtrar atores ativos
+            ViewBag.Atores = new SelectList(
+                _context.Atores
+                    .Where(a => a.Ativo == "S")
+                    .OrderBy(a => a.Nome),
+                "IdAtores",
+                "Nome",
+                ficha.FKidAtores
+            );
+
+            // Filtrar comunidades ativas
             ViewBag.ComunidadesList = new SelectList(
-                _context.Comunidades.OrderBy(c => c.Nome),
+                _context.Comunidades
+                    .Where(c => c.Ativo == "S")
+                    .OrderBy(c => c.Nome),
                 "IdComunidade",
                 "Nome",
                 ficha.FkIdComunidade
@@ -238,7 +262,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -264,7 +288,7 @@ namespace Empodera.Controllers
                 ficha.DtCriacao = fichaExistente.DtCriacao;
                 ficha.FkIdUsuario = fichaExistente.FkIdUsuario;
                 ficha.DtModificacao = DateTime.Now;
-                
+
                 // ✅ Atualizar a ficha principal
                 _context.Update(ficha);
                 await _context.SaveChangesAsync();
@@ -363,7 +387,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -400,7 +424,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -435,7 +459,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -465,7 +489,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") 
+                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 

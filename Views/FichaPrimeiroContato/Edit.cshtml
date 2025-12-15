@@ -32,6 +32,17 @@
 
         <div class="step-content active" id="step-1">
 
+            <div class="section-label">Comunidade</div>
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-people-roof"></i></div>
+                <div class="input-content">
+                    <label asp-for="FkIdComunidade">Comunidade <span class="text-danger">*</span></label>
+                    <select asp-for="FkIdComunidade" asp-items="ViewBag.ComunidadesList" class="clean-input" required>
+                        <option value="">Selecione a comunidade</option>
+                    </select>
+                    <span asp-validation-for="FkIdComunidade" class="text-danger"></span>
+                </div>
+            </div>
             <div class="section-label">Parceiro</div>
             <div class="input-card full-width">
                 <div class="icon-box"><i class="fa-solid fa-person"></i></div>

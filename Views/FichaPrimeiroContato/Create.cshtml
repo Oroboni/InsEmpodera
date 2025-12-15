@@ -9,7 +9,7 @@
     <div class="header-section">
         <h2>
             <a asp-controller="FichaPrimeiroContato" asp-action="Index" class="text-primary">Ficha Primeiro Contato</a>
-            <span class="separator">></span>
+            <span class="separato1r">></span>
             <strong class="text-muted">Nova Ficha</strong>
         </h2>
     </div>
@@ -24,6 +24,18 @@
 
     <form asp-action="Create" class="main-form" id="wizardForm">
         <div class="step-content active" id="step-1">
+
+            <div class="section-label">Comunidade</div>
+            <div class="input-card full-width">
+                <div class="icon-box"><i class="fa-solid fa-people-roof"></i></div>
+                <div class="input-content">
+                    <label asp-for="FkIdComunidade">Comunidade <span class="text-danger">*</span></label>
+                    <select asp-for="FkIdComunidade" asp-items="ViewBag.ComunidadesList" class="clean-input" required>
+                        <option value="">Selecione a comunidade</option>
+                    </select>
+                    <span asp-validation-for="FkIdComunidade" class="text-danger"></span>
+                </div>
+            </div>
 
             <div class="section-label">Parceiro</div>
             <div class="input-card full-width">
@@ -413,7 +425,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="buttons-container">
             <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)"
                 style="display: none;">
@@ -438,4 +450,5 @@
 
     <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/ficha/wizard.js" asp-append-version="true"></script>
 }
