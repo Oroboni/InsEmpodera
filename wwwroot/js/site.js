@@ -18,32 +18,13 @@ if (campoTelefone) {
     }
 }
 
-const dataContatoInput = document.getElementById("DtContato");
-if (dataContatoInput) {
-    const today = new Date().toISOString().split("T")[0];
-    dataContatoInput.setAttribute("max", today);
-
-    dataContatoInput.addEventListener("change", function () {
-        validateDateField(this);
-    });
-
-    if (dataContatoInput.value) {
-        validateDateField(dataContatoInput);
-    }
-
-    dataContatoInput.addEventListener("input", function () {
-        setTimeout(() => {
-            validateDateField(this);
-        }, 100);
-    });
-}
-
 if (typeof initMapSelector === "function") {
-
-     // Inicializar mapa
-    if (typeof initMapSelector === 'function') {
-      initMapSelector('mapa-principal', 'input-endereco');
+    // Inicializar mapa
+    if (typeof initMapSelector === "function") {
+        initMapSelector("mapa-principal", "input-endereco");
     } else {
-      console.error("ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js");
+        console.error(
+            "ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js"
+        );
     }
 }
