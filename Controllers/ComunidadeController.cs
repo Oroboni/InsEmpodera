@@ -103,37 +103,53 @@ public class ComunidadeController : Controller
         return View(comunidade);
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, int id)
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, int id)
+{
+    if (HttpContext.Session.GetString("Email") == null)
     {
-        if (HttpContext.Session.GetString("Email") == null)
-        {
-            return RedirectToAction("Index", "Account");
-        }
-        
-        var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
+        return RedirectToAction("Index", "Account");
+    }
+    
+    var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades"))
-        {
-            return RedirectToAction("Index", "Comunidade");
-        }
-        if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N") || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
-        {
-            return RedirectToAction("Index", "Comunidade");
-        }
-        if (comunidade.IdComunidade == 0)
-        {
-            comunidade.DtCriacao = DateTime.Now;
-            comunidade.DtModificacao = DateTime.Now;
-            comunidade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
-            
-            _context.Comunidades.Add(comunidade);
-            _context.SaveChanges();
-            
-            return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
-        }
+    // 1. Verifica se tem o módulo OU se o módulo nega criação/atualização.
+    // Usuário SEM o módulo OU com permissões negadas (N) deve ser redirecionado.
+    if (PodeComunidade == null || (comunidade.IdComunidade == 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N")) || (comunidade.IdComunidade > 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N")))
+    {
+        return RedirectToAction("Index", "Comunidade");
+    }
+    
+    // OBS: O código original tinha duas verificações. Simplificando para a verificação correta do bloco original:
+    /*
+    if (PodeComunidade == null)
+    {
+         return RedirectToAction("Index", "Comunidade");
+    }
+    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N") && comunidade.IdComunidade == 0)
+    {
+        return RedirectToAction("Index", "Comunidade");
+    }
+    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N") && comunidade.IdComunidade > 0)
+    {
+        return RedirectToAction("Index", "Comunidade");
+    }
+    */
+
+    // Se a IdComunidade for 0, é uma nova criação
+    if (comunidade.IdComunidade == 0)
+    {
+        comunidade.DtCriacao = DateTime.Now;
+        comunidade.DtModificacao = DateTime.Now;
+        comunidade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        
+        _context.Comunidades.Add(comunidade);
+        _context.SaveChanges();
+        
+        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
+    }
         
         // 2. Lógica de EDIÇÃO (IdComunidade > 0)
         var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);

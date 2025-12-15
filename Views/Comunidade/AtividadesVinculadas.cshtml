@@ -8,6 +8,8 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
 }
 
 <div class="atores-content-area">
@@ -22,22 +24,24 @@
         </h1>
     </div>
 
-    <div class="atores-search-container">
-        <div class="atores-search-bar" method="get">
-            <input type="search" class="search-input" placeholder="Buscar..." name="q" />
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <div class="search-container">
+        <div class="search-wrapper" method="get">
+            <input type="search" class="search-input" placeholder="Buscar..." name="q" value="@(ViewData["CurrentFilter"])" />
+            <button type="button" class="btn-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </div>
 
         <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
     </div>
 
-    <div class="atores-list-container">
+    <div class="forms-list">
 
         @foreach (var atividade in Model)
         {
-            <div class="ator-card">
-                <div class="activity-card-info">
-                    <span class="ator-name">@atividade.Nome</span>
+            <div class="form-item comunidade-item">
+                <div class="form-info">
+                    <span class="name item-name">@atividade.Nome</span>
                     <div class="tag-list" style="margin-top: 8px;">
                         @foreach (var eixo in atividade.AtividadesEixos)
                         {
@@ -57,8 +61,8 @@
                         }
                     </div>
                 </div>
-                <a class="details-icon" asp-controller="Comunidade" asp-action="Edit_Atividades" asp-route-id="@atividade.IdAtividade" asp-route-comunidadeId="@ViewBag.ComunidadeId">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                <a class="btn-action" asp-controller="Comunidade" asp-action="Edit_Atividades" asp-route-id="@atividade.IdAtividade" asp-route-comunidadeId="@ViewBag.ComunidadeId">
+                    <i class="fa-solid fa-eye"></i>
                 </a>
             </div>
         }
