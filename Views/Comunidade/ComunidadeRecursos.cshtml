@@ -8,18 +8,25 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
 }
 
 <div class="atores-content-area">
 
     <div class="atores-header">
-        <h2>Recursos</h2>
+        <h1>
+            <span><a asp-controller="Comunidade" asp-action="Index">Comunidades</a></span>
+            <i class="fas fa-chevron-right fa-icon"></i>
+            <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="@ViewBag.ComunidadeId">Detalhes da Comunidade</a>
+            <i class="fas fa-chevron-right fa-icon"></i>
+            <strong>Recursos</strong>
+        </h1>
     </div>
 
-    <div class="atores-search-container">
-        <form class="atores-search-bar" method="get">
+    <div class="search-container">
+        <form class="search-wrapper" method="get">
             <input type="search" class="search-input" placeholder="Buscar..." name="q" />
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </form>
 
         <a asp-controller="Comunidade" asp-action="Create_Recursos" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
@@ -56,8 +63,8 @@
                         }
                     </div>
                 </div>
-                <a class="details-icon" asp-controller="Comunidade" asp-action="ComunidadeDetalhesRecursos" asp-route-id="@item.IdRede">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
+                <a class="btn-action" asp-controller="Comunidade" asp-action="ComunidadeDetalhesRecursos" asp-route-id="@item.IdRede">
+                    <i class="fa-solid fa-eye"></i>
                 </a>
             </div>
         }
