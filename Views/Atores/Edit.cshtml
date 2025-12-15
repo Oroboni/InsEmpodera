@@ -5,10 +5,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css">
-    <link rel="stylesheet" href="~/css/pages/atores.css">
     <link rel="stylesheet" href="~/css/pages/site.css">
-    <link rel="stylesheet" href="~/css/pages/create-form.css">
 }
 
 <div class="modern-container">
@@ -216,7 +213,7 @@
 
         <div class="button-container">
             <div class="modal-actions">
-                <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">
+                <button type="button" class="wizard-btn btn-prev" id="cancelDeleteBtn">
                     Cancelar
                 </button>
 
@@ -348,7 +345,6 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     }
 }
