@@ -71,15 +71,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* 
-   NOTA: As classes abaixo JÁ EXISTEM no site.css e são reutilizadas:
-   - .tag-list
-   - .tag-item
-   - .tag-blue, .tag-green, .tag-yellow, .tag-purple, etc.
-   - .action-card
-   - .actions-grid
-*/
-
 /* Responsividade */
 @media (max-width: 768px) {
     .eixos-filter-container {
