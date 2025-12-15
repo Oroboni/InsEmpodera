@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Empodera.Data;
 using Empodera.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Empodera.Controllers
 {
@@ -17,217 +18,205 @@ namespace Empodera.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string search)
+        // ==========================================================
+        // INDEX
+        // ==========================================================
+        public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
 
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
+            // Verifica Permissão
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Listar"))
+                return RedirectToAction("Index", "Home"); // Redireciona se não tiver acesso
 
-            var q = _context.DiariosCampo
+            // 1. Carrega todos os diários (o filtro visual é feito via JavaScript na View)
+            var diarios = await _context.DiariosCampo
                 .Include(d => d.Comunidade)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                q = q.Where(d =>
-                    d.Descricao.Contains(search) ||
-                    d.Localizacao.Contains(search) ||
-                    d.Comunidade.Nome.Contains(search)
-                );
-            }
-
-            var list = await q
-                .OrderByDescending(d => d.DtCriacao)
+                // .Include(d => d.DiarioEixos).ThenInclude(de => de.Eixo) // Descomente se precisar mostrar eixos na lista
+                .OrderByDescending(d => d.Data)
                 .ToListAsync();
 
-            list.ForEach(d =>
-            {
-                if (!string.IsNullOrEmpty(d.Descricao) && d.Descricao.Length > 50)
-                    d.Descricao = d.Descricao.Substring(0, 35) + "...";
-            });
+            // 2. Preenche a lista para o Filtro de Comunidades (Dropdown do topo)
+            // Pegamos apenas comunidades que existem no banco
+            ViewBag.Comunidades = await _context.Comunidades
+                .OrderBy(c => c.Nome)
+                .Select(c => new { c.Nome }) 
+                .Distinct()
+                .ToListAsync();
 
-            return View(list);
+            return View(diarios);
         }
 
-
-        public IActionResult Create()
+        // ==========================================================
+        // CREATE (GET)
+        // ==========================================================
+        public async Task<IActionResult> Create()
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
-            
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
-            PreencherViewBags();
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Criar"))
+                return RedirectToAction("Index");
+
+            await PreencherViewBagsDoBanco(); // Usa dados REAIS
             return View();
         }
 
-        private void PreencherViewBags()
-        {
-            ViewBag.Comunidades = new List<dynamic>
-            {
-                new { IdComunidade = 1, Nome = "Comunidade A" },
-                new { IdComunidade = 2, Nome = "Comunidade B" }
-            };
-
-            ViewBag.Eixos = new List<dynamic>
-            {
-                new { IdEixo = 1, Nome = "Cidadania" },
-                new { IdEixo = 2, Nome = "Educação" },
-                new { IdEixo = 3, Nome = "Esporte" }
-            };
-
-            ViewBag.Atividades = new List<dynamic>
-            {
-                new { IdAtividade = 1, Nome = "Oficina" },
-                new { IdAtividade = 2, Nome = "Acompanhamento" }
-            };
-
-            ViewBag.Acoes = new List<dynamic>
-            {
-                new { IdAcao = 1, Nome = "Visita" },
-                new { IdAcao = 2, Nome = "Reunião" }
-            };
-        }
-
+        // ==========================================================
+        // CREATE (POST)
+        // ==========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DiarioCampo diarioCampo)
+        public async Task<IActionResult> Create(DiarioCampo diarioCampo, int[] EixosSelecionados)
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
+            // Preenche dados automáticos
+            diarioCampo.DtCriacao = DateTime.Now;
+            diarioCampo.DtModificacao = DateTime.Now;
+            diarioCampo.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+
+            // Remove validações de navegação que podem dar erro
+            ModelState.Remove("Comunidade");
+            ModelState.Remove("Usuario");
 
             if (ModelState.IsValid)
             {
-                diarioCampo.DtCriacao = DateTime.Now;
-                diarioCampo.DtModificacao = diarioCampo.DtCriacao;
-
                 _context.Add(diarioCampo);
                 await _context.SaveChangesAsync();
+
+                // Salvar Eixos
+                if (EixosSelecionados != null)
+                {
+                    foreach (var eixoId in EixosSelecionados)
+                    {
+                        _context.DiarioEixos.Add(new DiarioEixo { FkIdDiario = diarioCampo.IdDCampo, FkIdEixo = eixoId });
+                    }
+                    await _context.SaveChangesAsync();
+                }
 
                 return RedirectToAction(nameof(Index));
             }
 
-            PreencherViewBags();
+            await PreencherViewBagsDoBanco();
             return View(diarioCampo);
         }
 
+        // ==========================================================
+        // EDIT (GET)
+        // ==========================================================
         public async Task<IActionResult> Edit(int? id)
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
-            
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
             if (id == null) return NotFound();
 
-            var diarioCampo = await _context.DiariosCampo.FindAsync(id);
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Atualizar"))
+                return RedirectToAction("Index");
+
+            var diarioCampo = await _context.DiariosCampo
+                .Include(d => d.DiarioEixos)
+                .FirstOrDefaultAsync(d => d.IdDCampo == id);
+
             if (diarioCampo == null) return NotFound();
 
-            PreencherViewBags();
+            await PreencherViewBagsDoBanco();
             return View(diarioCampo);
         }
 
+        // ==========================================================
+        // EDIT (POST)
+        // ==========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DiarioCampo diarioCampo)
+        public async Task<IActionResult> Edit(int id, DiarioCampo diarioCampo, int[] EixosSelecionados)
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
-            
-            if (id != diarioCampo.IdDCampo)
-                return NotFound();
+            if (id != diarioCampo.IdDCampo) return NotFound();
+
+            // Remove validações de navegação
+            ModelState.Remove("Comunidade");
+            ModelState.Remove("Usuario");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    diarioCampo.DtModificacao = DateTime.Now;
-                    _context.Update(diarioCampo);
+                    var diarioDb = await _context.DiariosCampo.FindAsync(id);
+                    if (diarioDb == null) return NotFound();
+
+                    // Atualiza campos
+                    diarioDb.FkIdComunidade = diarioCampo.FkIdComunidade;
+                    diarioDb.Data = diarioCampo.Data;
+                    diarioDb.Descricao = diarioCampo.Descricao;
+                    diarioDb.Localizacao = diarioCampo.Localizacao;
+                    diarioDb.DtModificacao = DateTime.Now;
+
+                    _context.Update(diarioDb);
+                    await _context.SaveChangesAsync();
+
+                    // Atualizar Eixos (Remove antigos e adiciona novos)
+                    var eixosAntigos = _context.DiarioEixos.Where(de => de.FkIdDiario == id);
+                    _context.DiarioEixos.RemoveRange(eixosAntigos);
+                    
+                    if (EixosSelecionados != null)
+                    {
+                        foreach (var eixoId in EixosSelecionados)
+                        {
+                            _context.DiarioEixos.Add(new DiarioEixo { FkIdDiario = id, FkIdEixo = eixoId });
+                        }
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DiarioCampoExists(diarioCampo.IdDCampo))
-                        return NotFound();
-
+                    if (!DiarioCampoExists(diarioCampo.IdDCampo)) return NotFound();
                     throw;
                 }
-
                 return RedirectToAction(nameof(Index));
             }
 
-            PreencherViewBags();
+            await PreencherViewBagsDoBanco();
             return View(diarioCampo);
         }
 
+        // ==========================================================
+        // DETAILS
+        // ==========================================================
         public async Task<IActionResult> Details(int? id)
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
-
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDetalhar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
-
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
             if (id == null) return NotFound();
 
             var diarioCampo = await _context.DiariosCampo
-                .FirstOrDefaultAsync(d => d.IdDCampo == id);
+                .Include(d => d.Comunidade)
+                .Include(d => d.DiarioEixos).ThenInclude(de => de.Eixo)
+                .FirstOrDefaultAsync(m => m.IdDCampo == id);
 
             if (diarioCampo == null) return NotFound();
 
             return View(diarioCampo);
         }
 
+        // ==========================================================
+        // DELETE
+        // ==========================================================
         public async Task<IActionResult> Delete(int? id)
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
-
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
-
+            if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
             if (id == null) return NotFound();
 
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Deletar"))
+                return RedirectToAction("Index");
+
             var diarioCampo = await _context.DiariosCampo
-                .FirstOrDefaultAsync(d => d.IdDCampo == id);
+                .Include(d => d.Comunidade)
+                .FirstOrDefaultAsync(m => m.IdDCampo == id);
 
             if (diarioCampo == null) return NotFound();
 
@@ -238,30 +227,74 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (HttpContext.Session.GetString("Email") == null)
-                return RedirectToAction("Index", "Account");
-
-            var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosCampo")).FirstOrDefault();
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
-            {
-                return RedirectToAction("Index", "DiariosCampo");
-            }
-            
             var diarioCampo = await _context.DiariosCampo.FindAsync(id);
-
             if (diarioCampo != null)
             {
                 _context.DiariosCampo.Remove(diarioCampo);
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction(nameof(Index));
         }
+
+        // ==========================================================
+        // MÉTODOS AUXILIARES (PRIVADOS)
+        // ==========================================================
 
         private bool DiarioCampoExists(int id)
         {
             return _context.DiariosCampo.Any(e => e.IdDCampo == id);
+        }
+
+        // Método para preencher ViewBags com DADOS REAIS do Banco
+        private async Task PreencherViewBagsDoBanco()
+        {
+            // 1. Comunidades
+            ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "IdComunidade", "Nome");
+
+            // 2. Eixos (Para o select múltiplo)
+            ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+
+            // 3. Atores (Para a função de @Menção e Modais)
+            // Formatamos como um objeto simples { value, text } para o Javascript ler fácil
+            var atores = await _context.Atores
+                .Where(a => a.Ativo == "S")
+                .OrderBy(a => a.Nome)
+                .Select(a => new { value = a.IdAtores, text = a.Nome })
+                .ToListAsync();
+            
+            ViewBag.AtoresList = atores; // Isso vai para o JS "const listaAtores"
+
+            // 4. Atividades (Para o Modal de Ação da Equipe)
+            ViewBag.Atividades = await _context.Atividades.OrderBy(a => a.Nome).ToListAsync();
+        }
+
+        // Auxiliar para pegar usuário e permissões
+        private async Task<Usuario?> GetUsuarioLogadoAsync()
+        {
+            var idString = HttpContext.Session.GetString("ID");
+            if (string.IsNullOrEmpty(idString)) return null;
+
+            return await _context.Usuarios
+                .Include(u => u.Perfil)
+                .ThenInclude(p => p.Permissoes)
+                .FirstOrDefaultAsync(u => u.IdUsuario == int.Parse(idString));
+        }
+
+        // Auxiliar para verificar permissão
+        private bool PermiteModulo(Usuario usuario, string modulo, string acao)
+        {
+            var permissao = usuario.Perfil?.Permissoes.FirstOrDefault(p => p.Modulo == modulo);
+            if (permissao == null) return false;
+
+            return acao switch
+            {
+                "Listar" => permissao.PodeListar == "S",
+                "Criar" => permissao.PodeCriar == "S",
+                "Atualizar" => permissao.PodeAtualizar == "S",
+                "Detalhar" => permissao.PodeDetalhar == "S",
+                "Deletar" => permissao.PodeDeletar == "S",
+                _ => false
+            };
         }
     }
 }

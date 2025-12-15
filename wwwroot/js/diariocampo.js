@@ -1,298 +1,275 @@
-/* ---------------------- POPUP CONTROLLERS ------------------------ */
+// =========================================================
+// FUNÇÕES GLOBAIS DE MODAL (Disponíveis imediatamente)
+// =========================================================
+/* --- Lógica Atualizada para Checkboxes no Modal --- */
+        
+        function abrirModalAcao(tipo) {
+            document.getElementById('tipoAcaoInput').value = tipo;
+            
+            // Limpa campos de texto
+            document.getElementById('nomeAcao').value = '';
+            document.getElementById('provedorAcao').value = '';
+            document.getElementById('atorAcao').value = '';
+            document.getElementById('quantidadeAcao').value = '1';
 
-function abrirModal(id) {
-  document.getElementById(id).classList.remove("hidden");
-}
+            // Limpa os Checkboxes do Modal (desmarca todos)
+            const checkboxes = document.querySelectorAll('input[name="modalEixos"]');
+            checkboxes.forEach(cb => cb.checked = false);
 
-function fecharModal(id) {
-  document.getElementById(id).classList.add("hidden");
-}
-
-/* ---------------------- ATIVIDADE DA EQUIPE ------------------------ */
-
-let atividadeIndex = 0;
-
-function addAtividade() {
-  abrirModal("modalAtividade");
-}
-
-function confirmarAtividade() {
-  // Agora sempre será chamado depois que a DOM existir
-  const container = document.getElementById("atividadesContainer");
-
-  if (!container) {
-    console.error("ERRO: atividadesContainer não encontrado na página.");
-    return;
-  }
-
-  const atorId = document.getElementById("modalAtorAtividade").value;
-  const atorNome =
-    document.getElementById("modalAtorAtividade").selectedOptions[0].text;
-  const qtd = document.getElementById("modalQtdAtividade").value;
-
-  if (!qtd || qtd < 1) {
-    alert("Informe a quantidade.");
-    return;
-  }
-
-  const item = document.createElement("div");
-  item.classList.add("atividade-item");
-  item.innerHTML = `
-        <p><strong>${atorNome}</strong> — ${qtd} pessoa(s)</p>
-
-        <input type="hidden" name="Atividades[${atividadeIndex}].IdAtor" value="${atorId}">
-        <input type="hidden" name="Atividades[${atividadeIndex}].Quantidade" value="${qtd}">
-
-        <button type="button" class="remove-x" onclick="this.parentNode.remove()">×</button>
-    `;
-
-  container.appendChild(item);
-
-  atividadeIndex++;
-  fecharModal("modalAtividade");
-}
-
-/* ---------------------- AÇÃO DA EQUIPE ------------------------ */
-
-let acaoIndex = 0;
-
-function addAcao() {
-  abrirModal("modalAcao");
-}
-
-function confirmarAcao() {
-  const container = document.getElementById("acoesContainer");
-
-  if (!container) {
-    console.error("ERRO: acoesContainer não encontrado na página.");
-    return;
-  }
-
-  const nome = document.getElementById("modalNomeAcao").value;
-  const atorId = document.getElementById("modalAtorAcao").value;
-  const atorNome =
-    document.getElementById("modalAtorAcao").selectedOptions[0].text;
-  const qtd = document.getElementById("modalQtdAcao").value;
-  const apoiador = document.getElementById("modalApoiadorAcao").value;
-
-  if (!nome.trim()) {
-    alert("Informe o nome da atividade.");
-    return;
-  }
-  if (!qtd || qtd < 1) {
-    alert("Informe a quantidade.");
-    return;
-  }
-
-  const item = document.createElement("div");
-  item.classList.add("acao-item");
-  item.innerHTML = `
-        <p><strong>${nome}</strong> — ${atorNome} (${qtd}) 
-        ${apoiador ? "— Apoio: " + apoiador : ""}</p>
-
-        <input type="hidden" name="Acoes[${acaoIndex}].NomeAtividade" value="${nome}">
-        <input type="hidden" name="Acoes[${acaoIndex}].IdAtor" value="${atorId}">
-        <input type="hidden" name="Acoes[${acaoIndex}].Quantidade" value="${qtd}">
-        <input type="hidden" name="Acoes[${acaoIndex}].ApoiadorExterno" value="${apoiador}">
-
-        <button type="button" class="remove-x" onclick="this.parentNode.remove()">×</button>
-    `;
-
-  container.appendChild(item);
-
-  acaoIndex++;
-  fecharModal("modalAcao");
-}
-
-/* ---------------------- UTIL: SELECT DINÂMICO ------------------------ */
-function createSelect(name, list) {
-  const select = document.createElement("select");
-  select.name = name;
-
-  list.forEach((item) => {
-    const opt = document.createElement("option");
-    opt.value =
-      item.id ??
-      item.Id ??
-      item.IdAtividade ??
-      item.IdEixo ??
-      item.IdAcao ??
-      item.IdAtor;
-    opt.textContent = item.nome ?? item.Nome;
-    select.appendChild(opt);
-  });
-
-  return select;
-}
-
-/* ---------------------- BUSCA CEP ------------------------ */
-function buscarCEP() {
-  const cep = document.getElementById("cep").value.replace(/\D/g, "");
-  if (cep.length !== 8) return;
-
-  fetch(`https://viacep.com.br/ws/${cep}/json/`)
-    .then((r) => r.json())
-    .then((data) => {
-      document.getElementById("rua").value = data.logradouro || "";
-      document.getElementById("bairro").value = data.bairro || "";
-      document.getElementById("cidade").value = data.localidade || "";
-      document.getElementById("estado").value = data.uf || "";
-
-      atualizarMapa(data.logradouro, data.localidade, data.uf);
-    });
-}
-
-/* ---------------------- MAPA FICTÍCIO ------------------------ */
-function atualizarMapa(rua, cidade, estado) {
-  const mapaFrame = document.getElementById("mapaFrame");
-
-  if (!mapaFrame) {
-    console.error("Mapa não encontrado no DOM.");
-    return;
-  }
-
-  const endereco = `${rua}, ${cidade} - ${estado}`;
-  const enderecoEncoded = encodeURIComponent(endereco);
-
-  mapaFrame.src = `https://www.google.com/maps?q=${enderecoEncoded}&output=embed`;
-}
-
-/* ============================================================
-   MENÇÕES AVANÇADAS COM AUTOCOMPLETE
-   ============================================================ */
-
-const mentionArea = document.getElementById("Descricao");
-const mentionBox2 = document.getElementById("mentionBox");
-
-// DADOS FICTÍCIOS (como se viessem do banco)
-const DB = {
-    comunidade: ["Empodera", "Comunidade Alegria", "Comunidade Sul", "Vila Esperança"],
-    atividade: ["Oficina Criativa", "Roda de Conversa", "Atividade Física", "Aula de Teatro"],
-    ator: ["Educador João", "Educadora Ana", "Coordenador Paulo", "Apoio Maria"]
-};
-
-// Estado atual de menção
-let mentionMode = null; 
-let mentionStart = 0;
-
-/* ----------------------- CAPTURA DO TEXTO ---------------------- */
-mentionArea.addEventListener("keyup", function (e) {
-    
-    const cursor = mentionArea.selectionStart;
-    const valor = mentionArea.value.substring(0, cursor);
-
-    // Detectou o @
-    const match = valor.match(/@([a-zA-Z]*)$/);
-
-    if (match) {
-        const texto = match[1].toLowerCase();
-        mentionStart = cursor - (texto.length + 1);
-
-        // O usuário começou a digitar após o @ → filtra categorias
-        if (!mentionMode) {
-            filtrarCategoria(texto);
-        } else {
-            filtrarItens(texto);
+            document.getElementById('modalAcao').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
-        positionMentionBox2();
-        mentionBox2.style.display = "block";
-    } 
-    else {
-        mentionBox2.style.display = "none";
-        mentionMode = null;
+        function salvarAcaoNoGrid() {
+            // 1. Capturar dados básicos
+            const tipo = document.getElementById('tipoAcaoInput').value;
+            const nome = document.getElementById('nomeAcao').value;
+            const provedor = document.getElementById('provedorAcao').value;
+            const qtd = document.getElementById('quantidadeAcao').value;
+
+            // 2. Capturar Eixos dos Checkboxes Marcados
+            const checkboxesMarcados = document.querySelectorAll('input[name="modalEixos"]:checked');
+            
+            // Cria arrays de IDs e Nomes
+            const eixosIds = Array.from(checkboxesMarcados).map(cb => cb.value);
+            const eixosNomes = Array.from(checkboxesMarcados).map(cb => cb.getAttribute('data-nome')).join(', ');
+
+            // 3. Validações
+            if (!nome) { alert("O campo Nome é obrigatório."); return; }
+            if (eixosIds.length === 0) { alert("Selecione pelo menos um Eixo."); return; }
+            if (!provedor) { alert("O campo Provedor Externo é obrigatório."); return; }
+
+            // 4. Definir destino
+            let containerID, emptyID, counterSpanID, badgeClass;
+            
+            if (tipo === 'equipe') {
+                containerID = 'container-equipe';
+                emptyID = 'empty-equipe';
+                counterSpanID = 'count-equipe';
+                badgeClass = 'tag-blue';
+                countEquipe++;
+                document.getElementById(counterSpanID).innerText = countEquipe;
+            } else {
+                containerID = 'container-institucional';
+                emptyID = 'empty-institucional';
+                counterSpanID = 'count-institucional';
+                badgeClass = 'tag-purple';
+                countInst++;
+                document.getElementById(counterSpanID).innerText = countInst;
+            }
+
+            // 5. Esconder msg vazia
+            document.getElementById(emptyID).style.display = 'none';
+
+            // 6. Criar HTML do Item
+            const container = document.getElementById(containerID);
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'action-list-item';
+            
+            // Estilos inline
+            itemDiv.style.background = '#fff';
+            itemDiv.style.padding = '10px 15px';
+            itemDiv.style.borderRadius = '8px';
+            itemDiv.style.marginBottom = '8px';
+            itemDiv.style.border = '1px solid #e0e0e0';
+            itemDiv.style.display = 'flex';
+            itemDiv.style.justifyContent = 'space-between';
+            itemDiv.style.alignItems = 'center';
+
+            const eixoDisplay = eixosNomes ? `<span style="font-size:0.75rem; color:#888;">• ${eixosNomes}</span>` : '';
+            const timestamp = Date.now();
+
+            // Gera os inputs ocultos para cada eixo marcado (Backend receberá uma lista)
+            let inputsEixos = '';
+            eixosIds.forEach((id) => {
+                inputsEixos += `<input type="hidden" name="TempAcoes[${timestamp}].FkIdEixo" value="${id}" />`;
+            });
+
+            itemDiv.innerHTML = `
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <strong style="color: #333;">${nome}</strong>
+                        <span class="tag-item ${badgeClass}" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ${tipo==='equipe'?'#e3f2fd':'#f3e5f5'}; color: ${tipo==='equipe'?'#1565c0':'#7b1fa2'}; border: 1px solid ${tipo==='equipe'?'#90caf9':'#ce93d8'};">
+                            ${tipo === 'equipe' ? 'Equipe' : 'Institucional'}
+                        </span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #666;">
+                        <i class="fa-solid fa-building"></i> ${provedor} 
+                        ${eixoDisplay}
+                        ${qtd > 1 ? ` &bull; <strong>${qtd}x</strong>` : ''}
+                    </div>
+                </div>
+                <button type="button" onclick="removerItemGrid(this, '${tipo}')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+                
+                <input type="hidden" name="TempAcoes.Index" value="${timestamp}" />
+                <input type="hidden" name="TempAcoes[${timestamp}].Nome" value="${nome}" />
+                <input type="hidden" name="TempAcoes[${timestamp}].Provedor" value="${provedor}" />
+                <input type="hidden" name="TempAcoes[${timestamp}].Tipo" value="${tipo}" />
+                <input type="hidden" name="TempAcoes[${timestamp}].Quantidade" value="${qtd}" />
+                ${inputsEixos}
+            `;
+
+            container.appendChild(itemDiv);
+            fecharModal('modalAcao');
+        }
+// =========================================================
+// LÓGICA APÓS CARREGAMENTO DA PÁGINA
+// =========================================================
+document.addEventListener("DOMContentLoaded", function () {
+    
+    // --- 1. LÓGICA DE MENÇÃO (@) ---
+    const textarea = document.getElementById('descricaoInput');
+    const mentionList = document.getElementById('mention-list');
+    const AT_SYMBOL = String.fromCharCode(64); // @ seguro
+
+    // Tenta pegar a lista de atores injetada na View
+    const atoresList = typeof atoresDisponiveis !== 'undefined' ? atoresDisponiveis : [];
+
+    if (textarea && mentionList) {
+        textarea.addEventListener('input', function (e) {
+            const value = this.value;
+            const cursorPosition = this.selectionStart;
+            const lastAtPos = value.lastIndexOf(AT_SYMBOL, cursorPosition - 1);
+
+            if (lastAtPos !== -1) {
+                const query = value.substring(lastAtPos + 1, cursorPosition);
+                // Só ativa se não houver espaço após o @
+                if (!query.includes(' ')) {
+                    showSuggestions(query, lastAtPos);
+                } else {
+                    mentionList.style.display = 'none';
+                }
+            } else {
+                mentionList.style.display = 'none';
+            }
+        });
+
+        function showSuggestions(query, atPos) {
+            const matches = atoresList.filter(a => {
+                const nome = a.Nome || a.Text || "";
+                return nome.toLowerCase().includes(query.toLowerCase());
+            });
+
+            if (matches.length === 0) {
+                mentionList.style.display = 'none';
+                return;
+            }
+
+            mentionList.innerHTML = matches.map(actor => {
+                const nome = actor.Nome || actor.Text || "Ator";
+                return `
+                    <li class="mention-item" data-name="${nome}">
+                        <i class="fa-solid fa-user" style="margin-right:8px; color:#aaa;"></i>
+                        <span>${nome}</span>
+                    </li>`;
+            }).join('');
+
+            mentionList.style.display = 'block';
+            mentionList.style.width = textarea.offsetWidth + "px";
+        }
+
+        mentionList.addEventListener('click', function (e) {
+            const item = e.target.closest('.mention-item');
+            if (item) {
+                const name = item.getAttribute('data-name');
+                const text = textarea.value;
+                const cursorPosition = textarea.selectionStart;
+                const lastAtPos = text.lastIndexOf(AT_SYMBOL, cursorPosition - 1);
+                
+                const before = text.substring(0, lastAtPos);
+                const after = text.substring(cursorPosition);
+                
+                textarea.value = before + AT_SYMBOL + name + ' ' + after;
+                mentionList.style.display = 'none';
+                textarea.focus();
+            }
+        });
+
+        // Fechar ao clicar fora
+        document.addEventListener('click', function (e) {
+            if (e.target !== textarea && e.target !== mentionList) {
+                mentionList.style.display = 'none';
+            }
+        });
+    }
+
+    // --- 2. MAPA ---
+    if (typeof initMapSelector === 'function') {
+        initMapSelector('mapa-diario', 'rua');
+    }
+
+    // --- 3. LÓGICA DE VIEW vs EDIT (Apenas para tela de Edição) ---
+    const editSaveBtn = document.getElementById('edit-save-btn');
+    const inputFields = document.querySelectorAll('.clean-input, select.clean-input, textarea, input[type="file"]');
+    const editOnlyBtns = document.querySelectorAll('.edit-only-btn');
+    let isEditMode = false;
+
+    if (editSaveBtn) {
+        // Estado inicial
+        setPageState();
+
+        editSaveBtn.addEventListener('click', function (e) {
+            if (this.getAttribute('type') === 'button') {
+                e.preventDefault();
+                isEditMode = true;
+                setPageState();
+            }
+        });
+    }
+
+    function setPageState() {
+        if (isEditMode) {
+            inputFields.forEach(f => {
+                if (!f.hasAttribute('readonly')) f.disabled = false;
+            });
+            editOnlyBtns.forEach(b => b.style.display = 'inline-flex');
+            
+            editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+            editSaveBtn.setAttribute('type', 'submit');
+            editSaveBtn.classList.add('btn-save-final');
+            editSaveBtn.classList.remove('btn-next');
+        } else {
+            if(editSaveBtn) {
+                inputFields.forEach(f => f.disabled = true);
+                editOnlyBtns.forEach(b => b.style.display = 'none');
+
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+                editSaveBtn.setAttribute('type', 'button');
+                editSaveBtn.classList.remove('btn-save-final');
+                editSaveBtn.classList.add('btn-next');
+            }
+        }
+    }
+
+    // --- 4. FECHAR MODAIS AO CLICAR FORA ---
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function (e) {
+            if (e.target === this) fecharModal(this.id);
+        });
+    });
+
+    // --- 5. MODAL DE EXCLUSÃO ---
+    const deleteModal = document.getElementById('deleteConfirmationModal');
+    const openDeleteBtn = document.getElementById('openDeleteModalBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+    if (openDeleteBtn) {
+        openDeleteBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (deleteModal) {
+                deleteModal.style.display = 'flex';
+                setTimeout(() => deleteModal.classList.add('active'), 10);
+            }
+        });
+    }
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', function() {
+            if (deleteModal) {
+                deleteModal.classList.remove('active');
+                setTimeout(() => deleteModal.style.display = 'none', 300);
+            }
+        });
     }
 });
-
-/* ------------------ FILTRAR CATEGORIA INICIAL ------------------ */
-function filtrarCategoria(texto) {
-
-    const categorias = [
-        { key: "atividade", label: "@atividade" },
-        { key: "comunidade", label: "@comunidade" },
-        { key: "ator", label: "@ator" }
-    ];
-
-    const filtradas = categorias.filter(c => c.label.includes("@" + texto));
-
-    mentionBox2.innerHTML = filtradas.map(f => `
-        <div class="mention-option" onclick="selecionarCategoria('${f.key}')">${f.label}</div>
-    `).join("");
-}
-
-function selecionarCategoria(cat) {
-    mentionMode = cat;
-
-    // Substitui o @ por @categoria
-    inserirTexto(`@${cat} `);
-    
-    mentionBox2.style.display = "none";
-}
-
-/* ------------------- FILTRAR ITENS DA CATEGORIA ------------------- */
-function filtrarItens(texto) {
-    const lista = DB[mentionMode] || [];
-    const filt = lista.filter(item => item.toLowerCase().includes(texto.toLowerCase()));
-
-    mentionBox2.innerHTML = filt.map(i => `
-        <div class="mention-option" onclick="selecionarItem('${i}')">${i}</div>
-    `).join("");
-}
-
-function selecionarItem(nome) {
-    inserirTexto(nome + " ");
-    mentionMode = null;
-    mentionBox2.style.display = "none";
-
-    // aqui você poderá abrir detalhes futuramente:
-    // window.open(`/Comunidade/Detalhes/${nome}`, "_blank");
-}
-
-/* ----------------------- INSERIR TEXTO -------------------------- */
-function inserirTexto(texto) {
-    const start = mentionArea.selectionStart;
-    const end = mentionArea.selectionEnd;
-    const valor = mentionArea.value;
-
-    mentionArea.value = valor.substring(0, start) + texto + valor.substring(end);
-    mentionArea.selectionStart = mentionArea.selectionEnd = start + texto.length;
-}
-
-/* ----------------------- POSIÇÃO DO BOX -------------------------- */
-function positionMentionBox2() {
-    const rect = mentionArea.getBoundingClientRect();
-
-    mentionBox2.style.position = "absolute";
-    mentionBox2.style.left = rect.left + "px";
-    mentionBox2.style.top = rect.bottom + "px";
-    mentionBox2.style.width = rect.width + "px";
-    mentionBox2.style.zIndex = 999;
-}
-
-/* Excluir Diario de campo pop-up */
-
-   let dadosDiario = {};
-
-function carregarPopup(dados) {
-    dadosDiario = dados;
-
-    // preenche o popup
-    document.getElementById("pComunidade").innerText = dados.comunidade;
-    document.getElementById("pEixos").innerText = dados.eixos;
-    document.getElementById("pAcoesInst").innerText = dados.inst;
-    document.getElementById("pAcoesEquipe").innerText = dados.equipe;
-    document.getElementById("pLocalizacao").innerText = dados.local;
-    document.getElementById("pAnexos").innerText = dados.anexos;
-
-    // abre automaticamente ao carregar a página
-    document.getElementById("popupExcluir").style.display = "flex";
-}
-
-function fecharPopup() {
-    document.getElementById("popupExcluir").style.display = "none";
-}
-
-function confirmarExclusao() {
-    alert("Diário excluído (simulação sem banco)");
-    window.location.href = "/DiarioCampo"; // volta ao Index
-}

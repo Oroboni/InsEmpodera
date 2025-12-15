@@ -2,44 +2,209 @@
 
 @{
     ViewData["Title"] = "Diários de Campo";
+    Layout = "_Layout";
 }
 
-<h1>Diários de Campo</h1>
-
-<form method="get" asp-action="Index">
-    <input type="text" name="search" placeholder="Buscar por comunidade, descrição ou local" />
-    <button type="submit">Buscar</button>
-</form>
-
-<p>
-    <a asp-action="Create">Novo Diário</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Data</th>
-            <th>Comunidade</th>
-            <th>Descrição</th>
-            <th>Localização</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model)
-{
-    <tr>
-        <td>@item.Data</td>
-        <td>@item.Comunidade?.Nome</td>
-        <td>@item.Descricao</td>
-        <td>@item.Localizacao</td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.IdDCampo">Editar</a> |
-            <a asp-action="Details" asp-route-id="@item.IdDCampo">Detalhes</a> |
-            <a asp-action="Delete" asp-route-id="@item.IdDCampo">Excluir</a>
-
-        </td>
-    </tr>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
 }
-    </tbody>
-</table>
+
+<div class="modern-container">
+    <!-- Header -->
+    <div class="header-section">
+        <h2><strong class="text-primary">Diários de Campo</strong></h2>
+    </div>
+
+    <!-- Filtro de Comunidade (Obrigatório) -->
+    <div class="filter-bar">
+        <div class="input-card full-width" style="border-left: 4px solid var(--color-primary);">
+            <div class="icon-box purple">
+                <i class="fa-solid fa-city"></i>
+            </div>
+            <div class="input-content">
+                <label for="comunidadeFilter">Selecione a Comunidade</label>
+                <select id="comunidadeFilter" class="clean-input" style="font-weight: 600;">
+                    <option value="">-- Escolha uma comunidade --</option>
+                    @if (ViewBag.Comunidades != null)
+                    {
+                        foreach (dynamic item in ViewBag.Comunidades)
+                        {
+                            <option value="@item.Nome">@item.Nome</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Busca e Botão Novo -->
+    <div class="search-container">
+        <div class="search-input-group">
+            <div class="search-wrapper">
+                <input type="search" 
+                       id="searchInput" 
+                       placeholder="Buscar por data, descrição, localização..." 
+                       disabled 
+                       style="cursor: not-allowed; background-color: var(--color-gray-50);" />
+                <button type="button" class="btn-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+
+        <button type="button" 
+                class="btn-add" 
+                onclick="window.location.href='@Url.Action("Create")'" 
+                title="Novo Diário de Campo">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Mensagem Inicial -->
+    <div id="startMessage" class="no-records">
+        <div class="no-records-icon">
+            <i class="fa-solid fa-arrow-up"></i>
+        </div>
+        <h3>Selecione uma comunidade</h3>
+        <p>Para visualizar os diários de campo, escolha uma comunidade no filtro acima.</p>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div id="mainContent" style="display: none;">
+        <div class="section-label" style="margin-top: var(--space-8);">
+            Registros Encontrados (<span id="visibleCount">0</span>)
+        </div>
+
+        <div class="forms-list" id="diariosGrid">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model.OrderByDescending(x => x.Data))
+                {
+                    string comunidadeNome = item.Comunidade?.Nome ?? "Sem Comunidade";
+                    string dataFormatada = item.Data.ToString("dd/MM/yyyy");
+                    string descricaoPreview = item.Descricao?.Length > 100 
+                        ? item.Descricao.Substring(0, 100) + "..." 
+                        : item.Descricao ?? "";
+
+                    <div class="form-item diario-item" 
+                         style="display: none;" 
+                         data-comunidade="@comunidadeNome" 
+                         data-search="@(item.Descricao?.ToLower()) @(item.Localizacao?.ToLower()) @dataFormatada">
+                        
+                        <div class="item-header">
+                            <div class="activity-icon activity-icon-purple">
+                                <i class="fas fa-file-pen"></i>
+                            </div>
+                            <div class="item-content">
+                                <h3 class="item-name">@dataFormatada</h3>
+                                <p class="item-subtitle">
+                                    <i class="fa-solid fa-city"></i>
+                                    @comunidadeNome
+                                </p>
+                                @if (!string.IsNullOrEmpty(descricaoPreview))
+                                {
+                                    <p class="item-subtitle" style="margin-top: var(--space-2); color: var(--color-gray-600);">
+                                        @descricaoPreview
+                                    </p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <a class="btn-action" 
+                               asp-action="Details" 
+                               asp-route-id="@item.IdDCampo" 
+                               title="Ver Detalhes">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a class="btn-action" 
+                               asp-action="Edit" 
+                               asp-route-id="@item.IdDCampo" 
+                               title="Editar">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        
+        <div id="noRecordsMessage" class="no-records" style="display: none;">
+            <div class="no-records-icon">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h3>Nenhum registro encontrado</h3>
+            <p>Esta comunidade ainda não possui diários cadastrados ou nenhum resultado corresponde à sua busca.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const comunidadeFilter = document.getElementById('comunidadeFilter');
+            const searchInput = document.getElementById('searchInput');
+            const startMessage = document.getElementById('startMessage');
+            const mainContent = document.getElementById('mainContent');
+            const noRecordsMessage = document.getElementById('noRecordsMessage');
+            const visibleCountSpan = document.getElementById('visibleCount');
+            const items = document.querySelectorAll('.diario-item');
+
+            function updateView() {
+                const selectedComunidade = comunidadeFilter.value;
+                const searchTerm = searchInput.value.toLowerCase().trim();
+
+                // Se não há comunidade selecionada
+                if (!selectedComunidade) {
+                    startMessage.style.display = 'block';
+                    mainContent.style.display = 'none';
+                    searchInput.disabled = true;
+                    searchInput.style.cursor = 'not-allowed';
+                    searchInput.style.backgroundColor = 'var(--color-gray-50)';
+                    return;
+                }
+
+                // Comunidade selecionada - mostra conteúdo
+                startMessage.style.display = 'none';
+                mainContent.style.display = 'block';
+                searchInput.disabled = false;
+                searchInput.style.cursor = 'text';
+                searchInput.style.backgroundColor = '#fff';
+
+                let count = 0;
+
+                // Filtra os itens
+                items.forEach(item => {
+                    const itemComunidade = item.getAttribute('data-comunidade');
+                    const itemSearchData = item.getAttribute('data-search') || '';
+
+                    const matchesComunidade = itemComunidade === selectedComunidade;
+                    const matchesSearch = !searchTerm || itemSearchData.includes(searchTerm);
+
+                    if (matchesComunidade && matchesSearch) {
+                        item.style.display = 'flex';
+                        count++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Atualiza contador
+                if (visibleCountSpan) {
+                    visibleCountSpan.innerText = count;
+                }
+
+                // Mostra mensagem de "nenhum registro" se necessário
+                noRecordsMessage.style.display = count === 0 ? 'block' : 'none';
+            }
+
+            // Event listeners
+            comunidadeFilter.addEventListener('change', updateView);
+            searchInput.addEventListener('input', updateView);
+
+            // Inicialização
+            updateView();
+        });
+    </script>
+}

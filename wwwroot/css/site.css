@@ -117,7 +117,6 @@ label:has(input[type="checkbox"]) {
     justify-content: center;
     align-items: center;
     z-index: 10000;
-    opacity: 0;
     transition: opacity 0.3s ease;
 }
 
