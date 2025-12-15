@@ -3,6 +3,7 @@ using System;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251214222653_AjusteModelos")]
+    partial class AjusteModelos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
@@ -1538,6 +1541,27 @@ namespace InsEmpodera.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Empodera.Models.Ficha1oContatoComunidade", b =>
+                {
+                    b.Property<int>("IdFichaComunidade")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FkIdComunidade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdFicha")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("IdFichaComunidade");
+
+                    b.HasIndex("FkIdComunidade");
+
+                    b.HasIndex("IdFicha");
+
+                    b.ToTable("Ficha1oContatoComunidades");
+                });
+
             modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
                 {
                     b.Property<int>("IdCondicoes")
@@ -1684,9 +1708,6 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("FKidAtores")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("FkIdComunidade")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("FkIdUsuario")
                         .HasColumnType("INTEGER");
 
@@ -1736,8 +1757,6 @@ namespace InsEmpodera.Migrations
 
                     b.HasIndex("FKidAtores");
 
-                    b.HasIndex("FkIdComunidade");
-
                     b.HasIndex("FkIdUsuario");
 
                     b.ToTable("FichasPrimeiroContato");
@@ -1758,7 +1777,6 @@ namespace InsEmpodera.Migrations
                             EstaFamiliar = "Casado",
                             EstruFamiliar = "Família nuclear",
                             FKidAtores = 1,
-                            FkIdComunidade = 1,
                             FkIdUsuario = 1,
                             FonteDados = "Cadastro local",
                             FornecidoParceiro = "Não",
@@ -1771,8 +1789,7 @@ namespace InsEmpodera.Migrations
                             QReabili = 0,
                             SCalc = "Sim",
                             SComp = "Sim",
-                            SLer = "Sim",
-                            Status = "EmProgresso"
+                            SLer = "Sim"
                         },
                         new
                         {
@@ -1789,7 +1806,6 @@ namespace InsEmpodera.Migrations
                             EstaFamiliar = "Solteiro",
                             EstruFamiliar = "Mora sozinho",
                             FKidAtores = 2,
-                            FkIdComunidade = 2,
                             FkIdUsuario = 1,
                             FonteDados = "Registro comunitário",
                             FornecidoParceiro = "Sim",
@@ -1802,8 +1818,7 @@ namespace InsEmpodera.Migrations
                             QReabili = 1,
                             SCalc = "Sim",
                             SComp = "Sim",
-                            SLer = "Sim",
-                            Status = "EmProgresso"
+                            SLer = "Sim"
                         },
                         new
                         {
@@ -1820,7 +1835,6 @@ namespace InsEmpodera.Migrations
                             EstaFamiliar = "Casado",
                             EstruFamiliar = "Família extensa",
                             FKidAtores = 3,
-                            FkIdComunidade = 3,
                             FkIdUsuario = 2,
                             FonteDados = "Auto-relato",
                             FornecidoParceiro = "Não",
@@ -1833,8 +1847,7 @@ namespace InsEmpodera.Migrations
                             QReabili = 0,
                             SCalc = "Não",
                             SComp = "Sim",
-                            SLer = "Sim",
-                            Status = "EmProgresso"
+                            SLer = "Sim"
                         },
                         new
                         {
@@ -1851,7 +1864,6 @@ namespace InsEmpodera.Migrations
                             EstaFamiliar = "Separado",
                             EstruFamiliar = "Família monoparental",
                             FKidAtores = 4,
-                            FkIdComunidade = 4,
                             FkIdUsuario = 3,
                             FonteDados = "Centro comunitário",
                             FornecidoParceiro = "Não",
@@ -1864,8 +1876,7 @@ namespace InsEmpodera.Migrations
                             QReabili = 0,
                             SCalc = "Sim",
                             SComp = "Não",
-                            SLer = "Sim",
-                            Status = "EmProgresso"
+                            SLer = "Sim"
                         },
                         new
                         {
@@ -1882,7 +1893,6 @@ namespace InsEmpodera.Migrations
                             EstaFamiliar = "Viúvo",
                             EstruFamiliar = "Família nuclear",
                             FKidAtores = 5,
-                            FkIdComunidade = 5,
                             FkIdUsuario = 1,
                             FonteDados = "Instituição parceira",
                             FornecidoParceiro = "Sim",
@@ -1895,8 +1905,7 @@ namespace InsEmpodera.Migrations
                             QReabili = 0,
                             SCalc = "Sim",
                             SComp = "Sim",
-                            SLer = "Sim",
-                            Status = "EmProgresso"
+                            SLer = "Sim"
                         });
                 });
 
@@ -3619,6 +3628,25 @@ namespace InsEmpodera.Migrations
                     b.Navigation("Eixo");
                 });
 
+            modelBuilder.Entity("Empodera.Models.Ficha1oContatoComunidade", b =>
+                {
+                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
+                        .WithMany()
+                        .HasForeignKey("FkIdComunidade")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Empodera.Models.FichaPrimeiroContato", "FichaPrimeiroContato")
+                        .WithMany("FichaComunidades")
+                        .HasForeignKey("IdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comunidade");
+
+                    b.Navigation("FichaPrimeiroContato");
+                });
+
             modelBuilder.Entity("Empodera.Models.FichaCondicoes", b =>
                 {
                     b.HasOne("Empodera.Models.FichaPrimeiroContato", "Ficha")
@@ -3649,11 +3677,6 @@ namespace InsEmpodera.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Empodera.Models.Comunidade", "Comunidade")
-                        .WithMany("FichasPrimeiroContato")
-                        .HasForeignKey("FkIdComunidade")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Empodera.Models.Usuario", "Usuario")
                         .WithMany("FichasPrimeiroContato")
                         .HasForeignKey("FkIdUsuario")
@@ -3661,8 +3684,6 @@ namespace InsEmpodera.Migrations
                         .IsRequired();
 
                     b.Navigation("Ator");
-
-                    b.Navigation("Comunidade");
 
                     b.Navigation("Usuario");
                 });
@@ -3861,8 +3882,6 @@ namespace InsEmpodera.Migrations
 
                     b.Navigation("DiarioCampos");
 
-                    b.Navigation("FichasPrimeiroContato");
-
                     b.Navigation("RedeRecursos");
 
                     b.Navigation("Vulnerabilidades");
@@ -3906,6 +3925,8 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.FichaPrimeiroContato", b =>
                 {
+                    b.Navigation("FichaComunidades");
+
                     b.Navigation("FichaCondicoes");
 
                     b.Navigation("FichaPeticoes");

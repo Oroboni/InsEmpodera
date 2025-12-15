@@ -4,6 +4,12 @@
    ================================================ */
 
 /* ===== BASE & RESET ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: var(--font-family-primary);
     background-color: #eee;
@@ -57,6 +63,8 @@ label:has(input[type="checkbox"]) {
     min-height: 100vh;
     padding: var(--space-6) var(--space-10);
     font-family: var(--font-family-primary);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .forms-container {
@@ -325,7 +333,11 @@ label:has(input[type="checkbox"]) {
     width: 48px;
     height: 48px;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 100%
+    );
     display: flex;
     align-items: center;
     justify-content: center;
@@ -533,7 +545,7 @@ label:has(input[type="checkbox"]) {
     gap: 0.375rem;
     padding: 0.25rem 0.75rem;
     background-color: var(--color-primary-light, #e8f4ff);
-    color: var(--color-primary);
+    color: var(--color-white);
     border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
@@ -904,6 +916,9 @@ label:has(input[type="checkbox"]) {
     position: relative;
     border: 1px solid transparent;
     transition: var(--transition-fast);
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .input-card:focus-within {
@@ -916,6 +931,7 @@ label:has(input[type="checkbox"]) {
 }
 
 .input-content {
+    min-width: 0;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -941,6 +957,7 @@ label:has(input[type="checkbox"]) {
     font-family: var(--font-family-primary);
     background: transparent;
     font-weight: var(--font-weight-medium);
+    min-width: 0;
 }
 
 .clean-input::placeholder {
@@ -1278,11 +1295,15 @@ input[type="checkbox"]:disabled + .radio-label {
     width: 56px;
     height: 56px;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-primary-light) 0%,
+        var(--color-primary) 100%
+    );
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-primary);
+    color: var(--color-white);
     font-size: 1.5rem;
     margin-bottom: 1rem;
 }
@@ -1665,6 +1686,26 @@ input[type="checkbox"]:disabled + .radio-label {
 
     .btn-action i {
         font-size: 0.875rem;
+    }
+    .buttons-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-4);
+    }
+
+    .buttons-container .wizard-btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .action-buttons-group {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+    .modern-container {
+        padding: var(--space-4) var(--space-4);
     }
 }
 
