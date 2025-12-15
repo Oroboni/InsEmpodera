@@ -44,7 +44,7 @@
 
     <div class="input-card full-width">
       <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
-      <div class="input-content">
+      <div class="input-content">mapa-principal
         <label asp-for="Local">Endereço <span class="text-danger">*</span></label>
         <input asp-for="Local" class="clean-input" id="input-endereco"
           value="@(Model.IdComunidade > 0 ? Model.Local : string.Empty)" readonly
@@ -83,9 +83,7 @@
         }
         <select asp-for="Status" class="clean-input" required>
           <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
-          <option value="Concluído" selected="@(currentStatus == "Concluído")">Concluído</option>
-          <option value="Pendente" selected="@(currentStatus == "Pendente")">Pendente</option>
-          <option value="Cancelado" selected="@(currentStatus == "Cancelado")">Cancelado</option>
+          <option value="Em diagnóstico" selected="@(currentStatus == "Em diagnóstico")">Em diagnóstico</option>
         </select>
         <span asp-validation-for="Status" class="text-danger"></span>
       </div>
@@ -232,7 +230,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('.main-form');
-    const inputFields = form.querySelectorAll('.clean-input, select.clean-input, textarea.clean-input');
+    const inputFields = form.querySelectorAll('.clean-input, textarea.clean-input');
     const editSaveBtn = document.getElementById('edit-save-btn');
 
     // Inicializar mapa
@@ -259,7 +257,7 @@
       } else {
         if (isEditMode) {
           // Modo edição ativo
-          inputFields.forEach(field => field.disabled = false);
+            inputFields.forEach(field => { if (field.tagName !== 'SELECT'){ field.disabled = false; }});
           editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
           editSaveBtn.setAttribute('type', 'submit');
           editSaveBtn.classList.add('btn-save-final');

@@ -196,57 +196,6 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FichasPrimeiroContato",
-                columns: table => new
-                {
-                    IdFicha = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FKidAtores = table.Column<int>(type: "INTEGER", nullable: false),
-                    Endereco = table.Column<string>(type: "TEXT", nullable: true),
-                    Complemento = table.Column<string>(type: "TEXT", nullable: true),
-                    Emprego = table.Column<string>(type: "TEXT", nullable: true),
-                    CEstabeleceu = table.Column<string>(type: "TEXT", nullable: true),
-                    NovoParceiro = table.Column<string>(type: "TEXT", nullable: true),
-                    FornecidoParceiro = table.Column<string>(type: "TEXT", nullable: true),
-                    Telefone = table.Column<string>(type: "TEXT", nullable: true),
-                    LContato = table.Column<string>(type: "TEXT", nullable: true),
-                    FonteDados = table.Column<string>(type: "TEXT", nullable: true),
-                    EstaFamiliar = table.Column<string>(type: "TEXT", nullable: true),
-                    EstruFamiliar = table.Column<string>(type: "TEXT", nullable: true),
-                    NFIlhos = table.Column<int>(type: "INTEGER", nullable: true),
-                    NFilhas = table.Column<int>(type: "INTEGER", nullable: true),
-                    AEscolar = table.Column<int>(type: "INTEGER", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: true),
-                    SLer = table.Column<string>(type: "TEXT", nullable: true),
-                    SCalc = table.Column<string>(type: "TEXT", nullable: true),
-                    SComp = table.Column<string>(type: "TEXT", nullable: true),
-                    QReabili = table.Column<int>(type: "INTEGER", nullable: true),
-                    LTrat = table.Column<string>(type: "TEXT", nullable: true),
-                    Coment = table.Column<string>(type: "TEXT", nullable: true),
-                    DtContato = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    HoraContato = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FichasPrimeiroContato", x => x.IdFicha);
-                    table.ForeignKey(
-                        name: "FK_FichasPrimeiroContato_Atores_FKidAtores",
-                        column: x => x.FKidAtores,
-                        principalTable: "Atores",
-                        principalColumn: "IdAtores",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FichasPrimeiroContato_Usuarios_FkIdUsuario",
-                        column: x => x.FkIdUsuario,
-                        principalTable: "Usuarios",
-                        principalColumn: "IdUsuario",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RedesPrimarias",
                 columns: table => new
                 {
@@ -364,6 +313,64 @@ namespace InsEmpodera.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FichasPrimeiroContato",
+                columns: table => new
+                {
+                    IdFicha = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FKidAtores = table.Column<int>(type: "INTEGER", nullable: false),
+                    Endereco = table.Column<string>(type: "TEXT", nullable: true),
+                    Complemento = table.Column<string>(type: "TEXT", nullable: true),
+                    Emprego = table.Column<string>(type: "TEXT", nullable: true),
+                    CEstabeleceu = table.Column<string>(type: "TEXT", nullable: true),
+                    NovoParceiro = table.Column<string>(type: "TEXT", nullable: true),
+                    FornecidoParceiro = table.Column<string>(type: "TEXT", nullable: true),
+                    Telefone = table.Column<string>(type: "TEXT", nullable: true),
+                    LContato = table.Column<string>(type: "TEXT", nullable: true),
+                    FonteDados = table.Column<string>(type: "TEXT", nullable: true),
+                    EstaFamiliar = table.Column<string>(type: "TEXT", nullable: true),
+                    EstruFamiliar = table.Column<string>(type: "TEXT", nullable: true),
+                    NFIlhos = table.Column<int>(type: "INTEGER", nullable: true),
+                    NFilhas = table.Column<int>(type: "INTEGER", nullable: true),
+                    AEscolar = table.Column<int>(type: "INTEGER", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    SLer = table.Column<string>(type: "TEXT", nullable: true),
+                    SCalc = table.Column<string>(type: "TEXT", nullable: true),
+                    SComp = table.Column<string>(type: "TEXT", nullable: true),
+                    QReabili = table.Column<int>(type: "INTEGER", nullable: true),
+                    LTrat = table.Column<string>(type: "TEXT", nullable: true),
+                    Coment = table.Column<string>(type: "TEXT", nullable: true),
+                    DtContato = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    HoraContato = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FkIdComunidade = table.Column<int>(type: "INTEGER", nullable: true),
+                    FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichasPrimeiroContato", x => x.IdFicha);
+                    table.ForeignKey(
+                        name: "FK_FichasPrimeiroContato_Atores_FKidAtores",
+                        column: x => x.FKidAtores,
+                        principalTable: "Atores",
+                        principalColumn: "IdAtores",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FichasPrimeiroContato_Comunidades_FkIdComunidade",
+                        column: x => x.FkIdComunidade,
+                        principalTable: "Comunidades",
+                        principalColumn: "IdComunidade",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_FichasPrimeiroContato_Usuarios_FkIdUsuario",
+                        column: x => x.FkIdUsuario,
+                        principalTable: "Usuarios",
+                        principalColumn: "IdUsuario",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RedeRecursos",
                 columns: table => new
                 {
@@ -422,145 +429,6 @@ namespace InsEmpodera.Migrations
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
                         principalColumn: "IdComunidade",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ficha1oContatoComunidades",
-                columns: table => new
-                {
-                    IdFichaComunidade = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    IdFicha = table.Column<int>(type: "INTEGER", nullable: false),
-                    FkIdComunidade = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ficha1oContatoComunidades", x => x.IdFichaComunidade);
-                    table.ForeignKey(
-                        name: "FK_Ficha1oContatoComunidades_Comunidades_FkIdComunidade",
-                        column: x => x.FkIdComunidade,
-                        principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Ficha1oContatoComunidades_FichasPrimeiroContato_IdFicha",
-                        column: x => x.IdFicha,
-                        principalTable: "FichasPrimeiroContato",
-                        principalColumn: "IdFicha",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FichaCondicoes",
-                columns: table => new
-                {
-                    IdCondicoes = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
-                    Cond = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FichaCondicoes", x => x.IdCondicoes);
-                    table.ForeignKey(
-                        name: "FK_FichaCondicoes_FichasPrimeiroContato_FkIdFicha",
-                        column: x => x.FkIdFicha,
-                        principalTable: "FichasPrimeiroContato",
-                        principalColumn: "IdFicha",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FichaPeticoes",
-                columns: table => new
-                {
-                    IdPeticoes = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
-                    Pet = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FichaPeticoes", x => x.IdPeticoes);
-                    table.ForeignKey(
-                        name: "FK_FichaPeticoes_FichasPrimeiroContato_FkIdFicha",
-                        column: x => x.FkIdFicha,
-                        principalTable: "FichasPrimeiroContato",
-                        principalColumn: "IdFicha",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FichaRespostas",
-                columns: table => new
-                {
-                    IdCondicoes = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
-                    Resp = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FichaRespostas", x => x.IdCondicoes);
-                    table.ForeignKey(
-                        name: "FK_FichaRespostas_FichasPrimeiroContato_FkIdFicha",
-                        column: x => x.FkIdFicha,
-                        principalTable: "FichasPrimeiroContato",
-                        principalColumn: "IdFicha",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FichaResultados",
-                columns: table => new
-                {
-                    IdCondicoes = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
-                    Result = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FichaResultados", x => x.IdCondicoes);
-                    table.ForeignKey(
-                        name: "FK_FichaResultados_FichasPrimeiroContato_FkIdFicha",
-                        column: x => x.FkIdFicha,
-                        principalTable: "FichasPrimeiroContato",
-                        principalColumn: "IdFicha",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FontesInfo",
-                columns: table => new
-                {
-                    IdFonte = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    Genero = table.Column<string>(type: "TEXT", nullable: false),
-                    Idade = table.Column<int>(type: "INTEGER", nullable: false),
-                    PapelSocial1 = table.Column<string>(type: "TEXT", nullable: false),
-                    PapelSocial2 = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefone = table.Column<string>(type: "TEXT", nullable: false),
-                    Extra = table.Column<string>(type: "TEXT", nullable: false),
-                    Fk_Id_Ator = table.Column<int>(type: "INTEGER", nullable: false),
-                    AtorIdAtores = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FontesInfo", x => x.IdFonte);
-                    table.ForeignKey(
-                        name: "FK_FontesInfo_Atores_AtorIdAtores",
-                        column: x => x.AtorIdAtores,
-                        principalTable: "Atores",
-                        principalColumn: "IdAtores");
-                    table.ForeignKey(
-                        name: "FK_FontesInfo_FichasPrimeiroContato_FkIdFicha",
-                        column: x => x.FkIdFicha,
-                        principalTable: "FichasPrimeiroContato",
-                        principalColumn: "IdFicha",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -677,6 +545,119 @@ namespace InsEmpodera.Migrations
                         column: x => x.FkIdEixo,
                         principalTable: "Eixos",
                         principalColumn: "IdEixo",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FichaCondicoes",
+                columns: table => new
+                {
+                    IdCondicoes = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
+                    Cond = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichaCondicoes", x => x.IdCondicoes);
+                    table.ForeignKey(
+                        name: "FK_FichaCondicoes_FichasPrimeiroContato_FkIdFicha",
+                        column: x => x.FkIdFicha,
+                        principalTable: "FichasPrimeiroContato",
+                        principalColumn: "IdFicha",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FichaPeticoes",
+                columns: table => new
+                {
+                    IdPeticoes = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
+                    Pet = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichaPeticoes", x => x.IdPeticoes);
+                    table.ForeignKey(
+                        name: "FK_FichaPeticoes_FichasPrimeiroContato_FkIdFicha",
+                        column: x => x.FkIdFicha,
+                        principalTable: "FichasPrimeiroContato",
+                        principalColumn: "IdFicha",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FichaRespostas",
+                columns: table => new
+                {
+                    IdCondicoes = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
+                    Resp = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichaRespostas", x => x.IdCondicoes);
+                    table.ForeignKey(
+                        name: "FK_FichaRespostas_FichasPrimeiroContato_FkIdFicha",
+                        column: x => x.FkIdFicha,
+                        principalTable: "FichasPrimeiroContato",
+                        principalColumn: "IdFicha",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FichaResultados",
+                columns: table => new
+                {
+                    IdCondicoes = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
+                    Result = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichaResultados", x => x.IdCondicoes);
+                    table.ForeignKey(
+                        name: "FK_FichaResultados_FichasPrimeiroContato_FkIdFicha",
+                        column: x => x.FkIdFicha,
+                        principalTable: "FichasPrimeiroContato",
+                        principalColumn: "IdFicha",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FontesInfo",
+                columns: table => new
+                {
+                    IdFonte = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FkIdFicha = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    Genero = table.Column<string>(type: "TEXT", nullable: false),
+                    Idade = table.Column<int>(type: "INTEGER", nullable: false),
+                    PapelSocial1 = table.Column<string>(type: "TEXT", nullable: false),
+                    PapelSocial2 = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefone = table.Column<string>(type: "TEXT", nullable: false),
+                    Extra = table.Column<string>(type: "TEXT", nullable: false),
+                    Fk_Id_Ator = table.Column<int>(type: "INTEGER", nullable: false),
+                    AtorIdAtores = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FontesInfo", x => x.IdFonte);
+                    table.ForeignKey(
+                        name: "FK_FontesInfo_Atores_AtorIdAtores",
+                        column: x => x.AtorIdAtores,
+                        principalTable: "Atores",
+                        principalColumn: "IdAtores");
+                    table.ForeignKey(
+                        name: "FK_FontesInfo_FichasPrimeiroContato_FkIdFicha",
+                        column: x => x.FkIdFicha,
+                        principalTable: "FichasPrimeiroContato",
+                        principalColumn: "IdFicha",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -1103,14 +1084,14 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.InsertData(
                 table: "FichasPrimeiroContato",
-                columns: new[] { "IdFicha", "AEscolar", "CEstabeleceu", "Coment", "Complemento", "DtContato", "DtCriacao", "DtModificacao", "Emprego", "Endereco", "EstaFamiliar", "EstruFamiliar", "FKidAtores", "FkIdUsuario", "FonteDados", "FornecidoParceiro", "HoraContato", "LContato", "LTrat", "NFIlhos", "NFilhas", "NovoParceiro", "QReabili", "SCalc", "SComp", "SLer", "Status", "Telefone" },
+                columns: new[] { "IdFicha", "AEscolar", "CEstabeleceu", "Coment", "Complemento", "DtContato", "DtCriacao", "DtModificacao", "Emprego", "Endereco", "EstaFamiliar", "EstruFamiliar", "FKidAtores", "FkIdComunidade", "FkIdUsuario", "FonteDados", "FornecidoParceiro", "HoraContato", "LContato", "LTrat", "NFIlhos", "NFilhas", "NovoParceiro", "QReabili", "SCalc", "SComp", "SLer", "Status", "Telefone" },
                 values: new object[,]
                 {
-                    { 1, 12, "Sim", "Pessoa comunicativa, busca oportunidade.", "Apto 101", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auxiliar Administrativo", "Rua das Flores, 123", "Casado", "Família nuclear", 1, 1, "Cadastro local", "Não", new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 2, 1, "Não", 0, "Sim", "Sim", "Sim", null, null },
-                    { 2, 16, "Não", "Precisa de acompanhamento psicológico.", "Casa", new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Professor", "Av. Brasil, 457", "Solteiro", "Mora sozinho", 2, 1, "Registro comunitário", "Sim", new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified), "Telefone", "Fisioterapia", 0, 0, "Sim", 1, "Sim", "Sim", "Sim", null, null },
-                    { 3, 8, "Sim", "Demonstra interesse em programas sociais.", "Bloco B", new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Autônomo", "Rua São João, 998", "Casado", "Família extensa", 3, 2, "Auto-relato", "Não", new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified), "WhatsApp", "Nenhum", 1, 2, "Não", 0, "Não", "Sim", "Sim", null, null },
-                    { 4, 10, "Não", "Procura recolocação no mercado.", "", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Desempregado", "Travessa do Sol, 55", "Separado", "Família monoparental", 4, 3, "Centro comunitário", "Não", new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 3, 0, "Não", 0, "Sim", "Não", "Sim", null, null },
-                    { 5, 14, "Sim", "Interessado em projetos educacionais.", "Sala 5", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comerciante", "Praça Central, 321", "Viúvo", "Família nuclear", 5, 1, "Instituição parceira", "Sim", new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), "E-mail", "Nenhum", 1, 1, "Não", 0, "Sim", "Sim", "Sim", null, null }
+                    { 1, 12, "Sim", "Pessoa comunicativa, busca oportunidade.", "Apto 101", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auxiliar Administrativo", "Rua das Flores, 123", "Casado", "Família nuclear", 1, 1, 1, "Cadastro local", "Não", new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 2, 1, "Não", 0, "Sim", "Sim", "Sim", "EmProgresso", null },
+                    { 2, 16, "Não", "Precisa de acompanhamento psicológico.", "Casa", new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Professor", "Av. Brasil, 457", "Solteiro", "Mora sozinho", 2, 2, 1, "Registro comunitário", "Sim", new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified), "Telefone", "Fisioterapia", 0, 0, "Sim", 1, "Sim", "Sim", "Sim", "EmProgresso", null },
+                    { 3, 8, "Sim", "Demonstra interesse em programas sociais.", "Bloco B", new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Autônomo", "Rua São João, 998", "Casado", "Família extensa", 3, 3, 2, "Auto-relato", "Não", new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified), "WhatsApp", "Nenhum", 1, 2, "Não", 0, "Não", "Sim", "Sim", "EmProgresso", null },
+                    { 4, 10, "Não", "Procura recolocação no mercado.", "", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Desempregado", "Travessa do Sol, 55", "Separado", "Família monoparental", 4, 4, 3, "Centro comunitário", "Não", new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), "Presencial", "Nenhum", 3, 0, "Não", 0, "Sim", "Não", "Sim", "EmProgresso", null },
+                    { 5, 14, "Sim", "Interessado em projetos educacionais.", "Sala 5", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comerciante", "Praça Central, 321", "Viúvo", "Família nuclear", 5, 5, 1, "Instituição parceira", "Sim", new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), "E-mail", "Nenhum", 1, 1, "Não", 0, "Sim", "Sim", "Sim", "EmProgresso", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1436,16 +1417,6 @@ namespace InsEmpodera.Migrations
                 column: "FkIdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ficha1oContatoComunidades_FkIdComunidade",
-                table: "Ficha1oContatoComunidades",
-                column: "FkIdComunidade");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ficha1oContatoComunidades_IdFicha",
-                table: "Ficha1oContatoComunidades",
-                column: "IdFicha");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FichaCondicoes_FkIdFicha",
                 table: "FichaCondicoes",
                 column: "FkIdFicha");
@@ -1469,6 +1440,11 @@ namespace InsEmpodera.Migrations
                 name: "IX_FichasPrimeiroContato_FKidAtores",
                 table: "FichasPrimeiroContato",
                 column: "FKidAtores");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FichasPrimeiroContato_FkIdComunidade",
+                table: "FichasPrimeiroContato",
+                column: "FkIdComunidade");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FichasPrimeiroContato_FkIdUsuario",
@@ -1575,9 +1551,6 @@ namespace InsEmpodera.Migrations
 
             migrationBuilder.DropTable(
                 name: "DiarioEixos");
-
-            migrationBuilder.DropTable(
-                name: "Ficha1oContatoComunidades");
 
             migrationBuilder.DropTable(
                 name: "FichaCondicoes");

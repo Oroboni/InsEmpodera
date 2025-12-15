@@ -55,7 +55,7 @@ public class ComunidadeController : Controller
         {
             return RedirectToAction("Index", "Account");
         }
-        Comunidade comunidade;
+        Comunidade? comunidade;
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
@@ -74,8 +74,11 @@ public class ComunidadeController : Controller
             // Modo Edição: Busca a comunidade existente
             comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
 
-            ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
-            ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();
+            if (comunidade != null)
+            {
+                ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
+                ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();
+            }
             
             // Se não encontrar, retorna um modelo vazio para o modo de criação/ou erro, 
             // dependendo da sua regra de negócio. Para simplificar, trataremos como novo.
@@ -90,7 +93,7 @@ public class ComunidadeController : Controller
             comunidade.IdComunidade = 0; 
         }
 
-        var qAtores = _context.AtorComunidades.Count(a => a.FkIdComunidade == id);
+        var qAtores = _context.AtorComunidades.Include(a => a.Ator).Where(a => a.Ator.Ativo != "N").Count(a => a.FkIdComunidade == id);
 
         ViewBag.qAtores = qAtores;
 
@@ -195,7 +198,7 @@ public class ComunidadeController : Controller
 
        var comunidade = await _context.Comunidades
             .Include(c => c.AtorComunidades)
-            .ThenInclude(ac => ac.Ator)
+            .ThenInclude(ac => ac.Ator).Where(c => c.Ativo != "N")
             .FirstOrDefaultAsync(c => c.IdComunidade == id);
 
         if (comunidade == null)
@@ -303,7 +306,7 @@ public class ComunidadeController : Controller
             .Include(r => r.Comunidade)       
             .Include(r => r.RedeEixos)  
                 .ThenInclude(re => re.Eixo)
-            .Where(r => r.FkIdComunidade == comunidadeId)
+            .Where(r => r.FkIdComunidade == comunidadeId && r.Ator.Ativo != "N")
             .ToListAsync();
 
         ViewBag.ComunidadeId = comunidadeId;
@@ -329,7 +332,7 @@ public class ComunidadeController : Controller
         // 1. Busca na tabela RedeRecursos em vez de Atividades
         var recurso = await _context.RedeRecursos
             .Include(r => r.RedeEixos).ThenInclude(re => re.Eixo)
-            .Include(r => r.Ator) 
+            .Include(r => r.Ator).Where(a => a.Ator.Ativo != "N")
             .FirstOrDefaultAsync(r => r.IdRede == id);
 
         if (recurso == null) return NotFound();
@@ -340,7 +343,7 @@ public class ComunidadeController : Controller
         // Atores da comunidade para vincular o recurso
         var atores = await _context.AtorComunidades
             .Where(ac => ac.FkIdComunidade == recurso.FkIdComunidade)
-            .Select(ac => ac.Ator)
+            .Select(ac => ac.Ator).Where(a => a.Ativo != "N")
             .OrderBy(a => a.Nome)
             .ToListAsync();
         ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome", recurso.FKidAtores);
@@ -374,7 +377,7 @@ public class ComunidadeController : Controller
         // Carrega Atores daquela comunidade para o Dropdown
         var atores = await _context.AtorComunidades
             .Where(ac => ac.FkIdComunidade == comunidadeId && ac.Ator.Ativo == "S")
-            .Select(ac => ac.Ator)
+            .Select(ac => ac.Ator).Where(a => a.Ativo != "N")
             .OrderBy(a => a.Nome)
             .ToListAsync();
         

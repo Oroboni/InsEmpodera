@@ -4,11 +4,22 @@
  * @param {string} inputId - O ID do input que receberá o endereço texto.
  * @param {object} options - (Opcional) { lat, lng, zoom, readOnly }
  */
-function initMapSelector(mapId, inputId, options = {}) {
-    
+function initMapSelector(mapId, inputId) {
+    navigator.geolocation.getCurrentPosition(success(mapId, inputId));
+}
+
+function success(position, mapId, inputId) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    MapSelector(mapId, inputId, latitude, longitude);
+}
+
+function MapSelector(mapId, inputId, options = {}, latitude, longitude) {
+
     // Configurações padrão (Centro do Brasil).
-    const startLat = options.lat || -14.2350;
-    const startLng = options.lng || -51.9253;
+    if (latitude == null) latitude = -14.2350;
+    if (longitude == null) longitude = -51.9253;
     const startZoom = options.zoom || 4;
     const isReadOnly = options.readOnly || false;
 

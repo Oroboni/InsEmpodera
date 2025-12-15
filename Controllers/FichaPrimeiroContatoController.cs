@@ -37,7 +37,7 @@ namespace Empodera.Controllers
                 .Include(f => f.Ator)
                 .Include(f => f.Usuario)
                 .Include(f => f.Comunidade)
-                .AsQueryable();
+                .AsQueryable().Where(a => a.Ator.Ativo != "N");
 
             if (!string.IsNullOrEmpty(search))
             {
