@@ -4,11 +4,22 @@
  * @param {string} inputId - O ID do input que receberá o endereço texto.
  * @param {object} options - (Opcional) { lat, lng, zoom, readOnly }
  */
+function initMapSelector(mapId, inputId) {
+    navigator.geolocation.getCurrentPosition(success(mapId, inputId));
+}
 
-function initMapSelector(mapId, inputId, options = {}) {
+function success(position, mapId, inputId) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    MapSelector(mapId, inputId, latitude, longitude);
+}
+
+function MapSelector(mapId, inputId, options = {}, latitude, longitude) {
+
     // Configurações padrão (Centro do Brasil).
-    const startLat = options.lat || -23.4801068820493;
-    const startLng = options.lng || -47.427346457486244;
+    if (latitude == null) latitude = -14.2350;
+    if (longitude == null) longitude = -51.9253;
     const startZoom = options.zoom || 4;
     const isReadOnly = options.readOnly || false;
 
@@ -18,8 +29,8 @@ function initMapSelector(mapId, inputId, options = {}) {
     // 1. Inicializa o Mapa
     var map = L.map(mapId).setView([startLat, startLng], startZoom);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap",
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
     // 2. Marcador
@@ -37,32 +48,32 @@ function initMapSelector(mapId, inputId, options = {}) {
     // 3. Adiciona a Lupa de Busca (Geocoding)
     var geocoder = L.Control.geocoder({
         defaultMarkGeocode: false,
-        placeholder: "Buscar endereço...",
+        placeholder: "Buscar endereço..."
     })
-        .on("markgeocode", function (e) {
-            var bbox = e.geocode.bbox;
-            var poly = L.polygon([
-                bbox.getSouthEast(),
-                bbox.getNorthEast(),
-                bbox.getNorthWest(),
-                bbox.getSouthWest(),
-            ]);
+    .on('markgeocode', function(e) {
+        var bbox = e.geocode.bbox;
+        var poly = L.polygon([
+            bbox.getSouthEast(),
+            bbox.getNorthEast(),
+            bbox.getNorthWest(),
+            bbox.getSouthWest()
+        ]);
 
-            map.fitBounds(poly.getBounds());
-            marker.setLatLng(e.geocode.center);
+        map.fitBounds(poly.getBounds());
+        marker.setLatLng(e.geocode.center);
 
-            // Preenche o Input automaticamente
-            const inputField = document.getElementById(inputId);
-            if (inputField) {
-                inputField.value = e.geocode.name;
-                // Dispara evento de 'change' caso tenha validação ou outros scripts ouvindo
-                inputField.dispatchEvent(new Event("change"));
-            }
-        })
-        .addTo(map);
+        // Preenche o Input automaticamente
+        const inputField = document.getElementById(inputId);
+        if (inputField) {
+            inputField.value = e.geocode.name;
+            // Dispara evento de 'change' caso tenha validação ou outros scripts ouvindo
+            inputField.dispatchEvent(new Event('change')); 
+        }
+    })
+    .addTo(map);
 
     // 4. Clique no mapa (Opcional: move o pino manualmente)
-    map.on("click", function (e) {
+    map.on('click', function(e) {
         marker.setLatLng(e.latlng);
         // Nota: Para pegar o nome da rua pelo clique (Geocodificação Reversa)
         // seria necessário uma chamada API extra. Por enquanto, movemos só o pino visual.

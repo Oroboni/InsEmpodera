@@ -28,6 +28,13 @@ public class UsersController : Controller
         return RedirectToAction("Index", "Account");
     }
 
+    var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+    if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+    {
+        return RedirectToAction("Index", "Users");
+    }
+
     var users = await _context.Usuarios.ToListAsync();
     
     ViewData["DisableMainScroll"] = "true"; 
@@ -41,6 +48,13 @@ public class UsersController : Controller
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
+        }
+
+        var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "Users");
         }
         
         ViewBag.PerfilLista = new SelectList(
@@ -61,6 +75,13 @@ public class UsersController : Controller
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
+        }
+
+        var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        {
+            return RedirectToAction("Index", "Users");
         }
 
         var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email);
@@ -96,6 +117,13 @@ public class UsersController : Controller
         if (id == null)
             return NotFound();
 
+        var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "Users");
+        }
+
         ViewBag.PerfilLista = new SelectList(
             await _context.Perfis.OrderBy(a => a.Nome).ToListAsync(),
             "IdPerfil",
@@ -121,6 +149,13 @@ public class UsersController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
+
+        var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        {
+            return RedirectToAction("Index", "Users");
+        }
 
         var existingUser = await _context.Usuarios
             .FirstOrDefaultAsync(u => u.Email == usuario.Email && u.IdUsuario != id);
