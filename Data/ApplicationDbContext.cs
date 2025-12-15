@@ -39,8 +39,6 @@ namespace Empodera.Data
         public DbSet<Atividades> Atividades { get; set; } = null!;
         public DbSet<AtividadesEixo> AtividadesEixo { get; set; } = null!;
 
-        public DbSet<Ficha1oContatoComunidade> Ficha1oContatoComunidades { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
@@ -300,11 +298,19 @@ namespace Empodera.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FichaPrimeiroContato>()
+                 .HasOne(fp => fp.Comunidade)
+                 .WithMany(c => c.FichasPrimeiroContato)
+                 .HasForeignKey(fp => fp.FkIdComunidade)
+                 .OnDelete(DeleteBehavior.SetNull);
+
+            // FichaPrimeiroContato -> Ator
+            modelBuilder.Entity<FichaPrimeiroContato>()
                 .HasOne(fp => fp.Ator)
                 .WithMany(a => a.FichasPrimeiroContato)
                 .HasForeignKey(fp => fp.FKidAtores)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // FichaPrimeiroContato -> Usuario
             modelBuilder.Entity<FichaPrimeiroContato>()
                 .HasOne(fp => fp.Usuario)
                 .WithMany(u => u.FichasPrimeiroContato)
@@ -371,21 +377,6 @@ namespace Empodera.Data
                 .HasForeignKey(ae => ae.FkIdEixo)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Ficha1oContatoComunidade>(entity =>
-       {
-           entity.HasKey(e => e.IdFichaComunidade);
-
-           entity.HasOne(d => d.FichaPrimeiroContato)
-               .WithMany(p => p.FichaComunidades)
-               .HasForeignKey(d => d.IdFicha)
-               .OnDelete(DeleteBehavior.Cascade);
-
-           entity.HasOne(d => d.Comunidade)
-               .WithMany()
-               .HasForeignKey(d => d.FkIdComunidade)
-               .OnDelete(DeleteBehavior.Restrict);
-       });
-
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Usuario>().HasData(
@@ -408,74 +399,74 @@ namespace Empodera.Data
             // Permissoes
             modelBuilder.Entity<Permissoes>().HasData(
                 // ===================== ADMIN =====================
-                new Permissoes { IdPermissoes = 1,  FkIdPerfil = 1, Modulo="Usuarios", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 2,  FkIdPerfil = 1, Modulo="Perfis", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 3,  FkIdPerfil = 1, Modulo="Atividades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 4,  FkIdPerfil = 1, Modulo="Comunidades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 5,  FkIdPerfil = 1, Modulo="Vulnerabilidades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 6,  FkIdPerfil = 1, Modulo="Recursos", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 7,  FkIdPerfil = 1, Modulo="DiariosCampo", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 8,  FkIdPerfil = 1, Modulo="Atores", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 9,  FkIdPerfil = 1, Modulo="Ficha1Contato", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 10, FkIdPerfil = 1, Modulo="DiariosProcessoPessoal", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 11, FkIdPerfil = 1, Modulo="AvaliacoesPessoais", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
-                new Permissoes { IdPermissoes = 12, FkIdPerfil = 1, Modulo="SER", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="S" },
+                new Permissoes { IdPermissoes = 1, FkIdPerfil = 1, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 2, FkIdPerfil = 1, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 3, FkIdPerfil = 1, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 4, FkIdPerfil = 1, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 5, FkIdPerfil = 1, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 6, FkIdPerfil = 1, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 7, FkIdPerfil = 1, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 8, FkIdPerfil = 1, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 9, FkIdPerfil = 1, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 10, FkIdPerfil = 1, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 11, FkIdPerfil = 1, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = 12, FkIdPerfil = 1, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
 
                 // ===================== EDITOR =====================
-                new Permissoes { IdPermissoes = 13, FkIdPerfil = 2, Modulo="Usuarios", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 14, FkIdPerfil = 2, Modulo="Perfis", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 15, FkIdPerfil = 2, Modulo="Atividades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 16, FkIdPerfil = 2, Modulo="Comunidades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 17, FkIdPerfil = 2, Modulo="Vulnerabilidades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 18, FkIdPerfil = 2, Modulo="Recursos", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 19, FkIdPerfil = 2, Modulo="DiariosCampo", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 20, FkIdPerfil = 2, Modulo="Atores", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 21, FkIdPerfil = 2, Modulo="Ficha1Contato", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 22, FkIdPerfil = 2, Modulo="DiariosProcessoPessoal", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 23, FkIdPerfil = 2, Modulo="AvaliacoesPessoais", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 24, FkIdPerfil = 2, Modulo="SER", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
+                new Permissoes { IdPermissoes = 13, FkIdPerfil = 2, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 14, FkIdPerfil = 2, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 15, FkIdPerfil = 2, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 16, FkIdPerfil = 2, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 17, FkIdPerfil = 2, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 18, FkIdPerfil = 2, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 19, FkIdPerfil = 2, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 20, FkIdPerfil = 2, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 21, FkIdPerfil = 2, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 22, FkIdPerfil = 2, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 23, FkIdPerfil = 2, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 24, FkIdPerfil = 2, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
 
                 // ===================== COLABORADOR =====================
-                new Permissoes { IdPermissoes = 25, FkIdPerfil = 3, Modulo="Usuarios", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 26, FkIdPerfil = 3, Modulo="Perfis", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 27, FkIdPerfil = 3, Modulo="Atividades", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 28, FkIdPerfil = 3, Modulo="Comunidades", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 29, FkIdPerfil = 3, Modulo="Vulnerabilidades", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 30, FkIdPerfil = 3, Modulo="Recursos", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 31, FkIdPerfil = 3, Modulo="DiariosCampo", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 32, FkIdPerfil = 3, Modulo="Atores", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 33, FkIdPerfil = 3, Modulo="Ficha1Contato", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 34, FkIdPerfil = 3, Modulo="DiariosProcessoPessoal", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 35, FkIdPerfil = 3, Modulo="AvaliacoesPessoais", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 36, FkIdPerfil = 3, Modulo="SER", PodeListar="S", PodeDetalhar="S", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
+                new Permissoes { IdPermissoes = 25, FkIdPerfil = 3, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 26, FkIdPerfil = 3, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 27, FkIdPerfil = 3, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 28, FkIdPerfil = 3, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 29, FkIdPerfil = 3, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 30, FkIdPerfil = 3, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 31, FkIdPerfil = 3, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 32, FkIdPerfil = 3, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 33, FkIdPerfil = 3, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 34, FkIdPerfil = 3, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 35, FkIdPerfil = 3, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 36, FkIdPerfil = 3, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
 
                 // ===================== VISUALIZADOR =====================
-                new Permissoes { IdPermissoes = 37, FkIdPerfil = 4, Modulo="Usuarios", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 38, FkIdPerfil = 4, Modulo="Perfis", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 39, FkIdPerfil = 4, Modulo="Atividades", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 40, FkIdPerfil = 4, Modulo="Comunidades", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 41, FkIdPerfil = 4, Modulo="Vulnerabilidades", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 42, FkIdPerfil = 4, Modulo="Recursos", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 43, FkIdPerfil = 4, Modulo="DiariosCampo", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 44, FkIdPerfil = 4, Modulo="Atores", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 45, FkIdPerfil = 4, Modulo="Ficha1Contato", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 46, FkIdPerfil = 4, Modulo="DiariosProcessoPessoal", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 47, FkIdPerfil = 4, Modulo="AvaliacoesPessoais", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 48, FkIdPerfil = 4, Modulo="SER", PodeListar="S", PodeDetalhar="N", PodeCriar="N", PodeAtualizar="N", PodeDeletar="N" },
+                new Permissoes { IdPermissoes = 37, FkIdPerfil = 4, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 38, FkIdPerfil = 4, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 39, FkIdPerfil = 4, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 40, FkIdPerfil = 4, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 41, FkIdPerfil = 4, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 42, FkIdPerfil = 4, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 43, FkIdPerfil = 4, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 44, FkIdPerfil = 4, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 45, FkIdPerfil = 4, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 46, FkIdPerfil = 4, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 47, FkIdPerfil = 4, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 48, FkIdPerfil = 4, Modulo = "SER", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
 
                 // ===================== SUPERVISOR =====================
-                new Permissoes { IdPermissoes = 49, FkIdPerfil = 5, Modulo="Usuarios", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 50, FkIdPerfil = 5, Modulo="Perfis", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 51, FkIdPerfil = 5, Modulo="Atividades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 52, FkIdPerfil = 5, Modulo="Comunidades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 53, FkIdPerfil = 5, Modulo="Vulnerabilidades", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 54, FkIdPerfil = 5, Modulo="Recursos", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 55, FkIdPerfil = 5, Modulo="DiariosCampo", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 56, FkIdPerfil = 5, Modulo="Atores", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 57, FkIdPerfil = 5, Modulo="Ficha1Contato", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 58, FkIdPerfil = 5, Modulo="DiariosProcessoPessoal", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 59, FkIdPerfil = 5, Modulo="AvaliacoesPessoais", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" },
-                new Permissoes { IdPermissoes = 60, FkIdPerfil = 5, Modulo="SER", PodeListar="S", PodeDetalhar="S", PodeCriar="S", PodeAtualizar="S", PodeDeletar="N" }
+                new Permissoes { IdPermissoes = 49, FkIdPerfil = 5, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 50, FkIdPerfil = 5, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 51, FkIdPerfil = 5, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 52, FkIdPerfil = 5, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 53, FkIdPerfil = 5, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 54, FkIdPerfil = 5, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 55, FkIdPerfil = 5, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 56, FkIdPerfil = 5, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 57, FkIdPerfil = 5, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 58, FkIdPerfil = 5, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 59, FkIdPerfil = 5, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = 60, FkIdPerfil = 5, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" }
             );
 
 
@@ -688,11 +679,11 @@ namespace Empodera.Data
 
             // FichaPrimeiroContato
             modelBuilder.Entity<FichaPrimeiroContato>().HasData(
-                new FichaPrimeiroContato { IdFicha = 1, FKidAtores = 1, Endereco = "Rua das Flores, 123", Complemento = "Apto 101", Emprego = "Auxiliar Administrativo", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "Presencial", FonteDados = "Cadastro local", EstaFamiliar = "Casado", EstruFamiliar = "Família nuclear", NFIlhos = 2, NFilhas = 1, AEscolar = 12, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Pessoa comunicativa, busca oportunidade.", DtContato = new DateTime(2025, 1, 10), HoraContato = new DateTime(2025, 1, 10, 14, 30, 0), DtCriacao = new DateTime(2025, 1, 10), DtModificacao = new DateTime(2025, 1, 10), FkIdUsuario = 1 },
-                new FichaPrimeiroContato { IdFicha = 2, FKidAtores = 2, Endereco = "Av. Brasil, 457", Complemento = "Casa", Emprego = "Professor", CEstabeleceu = "Não", NovoParceiro = "Sim", FornecidoParceiro = "Sim", LContato = "Telefone", FonteDados = "Registro comunitário", EstaFamiliar = "Solteiro", EstruFamiliar = "Mora sozinho", NFIlhos = 0, NFilhas = 0, AEscolar = 16, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 1, LTrat = "Fisioterapia", Coment = "Precisa de acompanhamento psicológico.", DtContato = new DateTime(2025, 1, 5), HoraContato = new DateTime(2025, 1, 5, 9, 45, 0), DtCriacao = new DateTime(2025, 1, 5), DtModificacao = new DateTime(2025, 1, 5), FkIdUsuario = 1 },
-                new FichaPrimeiroContato { IdFicha = 3, FKidAtores = 3, Endereco = "Rua São João, 998", Complemento = "Bloco B", Emprego = "Autônomo", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "WhatsApp", FonteDados = "Auto-relato", EstaFamiliar = "Casado", EstruFamiliar = "Família extensa", NFIlhos = 1, NFilhas = 2, AEscolar = 8, SLer = "Sim", SCalc = "Não", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Demonstra interesse em programas sociais.", DtContato = new DateTime(2025, 1, 3), HoraContato = new DateTime(2025, 1, 3, 11, 15, 0), DtCriacao = new DateTime(2025, 1, 3), DtModificacao = new DateTime(2025, 1, 3), FkIdUsuario = 2 },
-                new FichaPrimeiroContato { IdFicha = 4, FKidAtores = 4, Endereco = "Travessa do Sol, 55", Complemento = "", Emprego = "Desempregado", CEstabeleceu = "Não", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "Presencial", FonteDados = "Centro comunitário", EstaFamiliar = "Separado", EstruFamiliar = "Família monoparental", NFIlhos = 3, NFilhas = 0, AEscolar = 10, SLer = "Sim", SCalc = "Sim", SComp = "Não", QReabili = 0, LTrat = "Nenhum", Coment = "Procura recolocação no mercado.", DtContato = new DateTime(2025, 1, 2), HoraContato = new DateTime(2025, 1, 2, 15, 0, 0), DtCriacao = new DateTime(2025, 1, 2), DtModificacao = new DateTime(2025, 1, 2), FkIdUsuario = 3 },
-                new FichaPrimeiroContato { IdFicha = 5, FKidAtores = 5, Endereco = "Praça Central, 321", Complemento = "Sala 5", Emprego = "Comerciante", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Sim", LContato = "E-mail", FonteDados = "Instituição parceira", EstaFamiliar = "Viúvo", EstruFamiliar = "Família nuclear", NFIlhos = 1, NFilhas = 1, AEscolar = 14, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Interessado em projetos educacionais.", DtContato = new DateTime(2025, 1, 1), HoraContato = new DateTime(2025, 1, 1, 10, 0, 0), DtCriacao = new DateTime(2025, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 }
+                new FichaPrimeiroContato { IdFicha = 1, FKidAtores = 1, FkIdComunidade = 1, Status = "EmProgresso", Endereco = "Rua das Flores, 123", Complemento = "Apto 101", Emprego = "Auxiliar Administrativo", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "Presencial", FonteDados = "Cadastro local", EstaFamiliar = "Casado", EstruFamiliar = "Família nuclear", NFIlhos = 2, NFilhas = 1, AEscolar = 12, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Pessoa comunicativa, busca oportunidade.", DtContato = new DateTime(2025, 1, 10), HoraContato = new DateTime(2025, 1, 10, 14, 30, 0), DtCriacao = new DateTime(2025, 1, 10), DtModificacao = new DateTime(2025, 1, 10), FkIdUsuario = 1 },
+                new FichaPrimeiroContato { IdFicha = 2, FKidAtores = 2, FkIdComunidade = 2, Status = "EmProgresso", Endereco = "Av. Brasil, 457", Complemento = "Casa", Emprego = "Professor", CEstabeleceu = "Não", NovoParceiro = "Sim", FornecidoParceiro = "Sim", LContato = "Telefone", FonteDados = "Registro comunitário", EstaFamiliar = "Solteiro", EstruFamiliar = "Mora sozinho", NFIlhos = 0, NFilhas = 0, AEscolar = 16, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 1, LTrat = "Fisioterapia", Coment = "Precisa de acompanhamento psicológico.", DtContato = new DateTime(2025, 1, 5), HoraContato = new DateTime(2025, 1, 5, 9, 45, 0), DtCriacao = new DateTime(2025, 1, 5), DtModificacao = new DateTime(2025, 1, 5), FkIdUsuario = 1 },
+                new FichaPrimeiroContato { IdFicha = 3, FKidAtores = 3, FkIdComunidade = 3, Status = "EmProgresso", Endereco = "Rua São João, 998", Complemento = "Bloco B", Emprego = "Autônomo", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "WhatsApp", FonteDados = "Auto-relato", EstaFamiliar = "Casado", EstruFamiliar = "Família extensa", NFIlhos = 1, NFilhas = 2, AEscolar = 8, SLer = "Sim", SCalc = "Não", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Demonstra interesse em programas sociais.", DtContato = new DateTime(2025, 1, 3), HoraContato = new DateTime(2025, 1, 3, 11, 15, 0), DtCriacao = new DateTime(2025, 1, 3), DtModificacao = new DateTime(2025, 1, 3), FkIdUsuario = 2 },
+                new FichaPrimeiroContato { IdFicha = 4, FKidAtores = 4, FkIdComunidade = 4, Status = "EmProgresso", Endereco = "Travessa do Sol, 55", Complemento = "", Emprego = "Desempregado", CEstabeleceu = "Não", NovoParceiro = "Não", FornecidoParceiro = "Não", LContato = "Presencial", FonteDados = "Centro comunitário", EstaFamiliar = "Separado", EstruFamiliar = "Família monoparental", NFIlhos = 3, NFilhas = 0, AEscolar = 10, SLer = "Sim", SCalc = "Sim", SComp = "Não", QReabili = 0, LTrat = "Nenhum", Coment = "Procura recolocação no mercado.", DtContato = new DateTime(2025, 1, 2), HoraContato = new DateTime(2025, 1, 2, 15, 0, 0), DtCriacao = new DateTime(2025, 1, 2), DtModificacao = new DateTime(2025, 1, 2), FkIdUsuario = 3 },
+                new FichaPrimeiroContato { IdFicha = 5, FKidAtores = 5, FkIdComunidade = 5, Status = "EmProgresso", Endereco = "Praça Central, 321", Complemento = "Sala 5", Emprego = "Comerciante", CEstabeleceu = "Sim", NovoParceiro = "Não", FornecidoParceiro = "Sim", LContato = "E-mail", FonteDados = "Instituição parceira", EstaFamiliar = "Viúvo", EstruFamiliar = "Família nuclear", NFIlhos = 1, NFilhas = 1, AEscolar = 14, SLer = "Sim", SCalc = "Sim", SComp = "Sim", QReabili = 0, LTrat = "Nenhum", Coment = "Interessado em projetos educacionais.", DtContato = new DateTime(2025, 1, 1), HoraContato = new DateTime(2025, 1, 1, 10, 0, 0), DtCriacao = new DateTime(2025, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 }
             );
 
             // FonteInf

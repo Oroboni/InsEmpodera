@@ -18,9 +18,9 @@ namespace Empodera.Data
         public DateTime Dt_Criacao { get; set; }
         public DateTime? Dt_Atualizacao { get; set; }
         public string Ativo { get; set; } = string.Empty;
-        
+
         public int FkIdPerfil { get; set; }
-        
+
         public Perfil Perfil { get; set; } = null!;
         public List<ComunidadeSeed>? Comunidades { get; set; }
         public List<AtoresSeed>? Atores { get; set; }
@@ -69,7 +69,7 @@ namespace Empodera.Data
         public int? FK_Id_UsuarioM { get; set; }
         public string Ativo { get; set; } = "S";
 
-        public List<UsuarioSeed>? Usuarios {get; set;}
+        public List<UsuarioSeed>? Usuarios { get; set; }
         public List<AtoresComunidadeSeed>? AtoresComunidade { get; set; }
         public List<RedeRecursosSeed>? Redes { get; set; }
         public List<DiarioCampoSeed>? Diarios { get; set; }
@@ -96,7 +96,7 @@ namespace Empodera.Data
         public int FkIdUsuario { get; set; }
         public int? FkIdUsuarioM { get; set; }
 
-        public List<UsuarioSeed>? Usuarios {get; set;}
+        public List<UsuarioSeed>? Usuarios { get; set; }
         public List<RedeRecursosSeed>? Redes { get; set; }
         public List<AtoresComunidadeSeed>? Comunidades { get; set; }
         public List<AcoesAtoresSeed>? Acoes { get; set; }
@@ -276,10 +276,10 @@ namespace Empodera.Data
 
     public class FichaPrimeiroContatoSeed
     {
-        public int IdFicha { get; set; }       
-        public int FKidAtores{ get; set; }       
+        public int IdFicha { get; set; }
+        public int FKidAtores { get; set; }
         public string Endereco { get; set; } = null!;
-        public string? Complemento { get; set; } = null!; 
+        public string? Complemento { get; set; } = null!;
         public string? Emprego { get; set; } = null!;
         public string? CEstabeleceu { get; set; } = null!;
         public string? NovoParceiro { get; set; } = null!;
@@ -289,9 +289,9 @@ namespace Empodera.Data
         public string? FonteDados { get; set; } = null!;
         public string? EstaFamiliar { get; set; } = null!;
         public string? EstruFamiliar { get; set; } = null!;
-        public int? NFIlhos { get; set; }        
-        public int? NFilhas { get; set; }         
-        public int? AEscolar { get; set; }       
+        public int? NFIlhos { get; set; }
+        public int? NFilhas { get; set; }
+        public int? AEscolar { get; set; }
         public string? SLer { get; set; } = null!;
         public string? SCalc { get; set; } = null!;
         public string? SComp { get; set; } = null!;
@@ -299,16 +299,20 @@ namespace Empodera.Data
         public string? LTrat { get; set; }
         public string? Coment { get; set; } = null!;
         public DateTime DtContato { get; set; }
-        public DateTime HoraContato { get; set; } 
+        public DateTime HoraContato { get; set; }
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
         public int FkIdUsuario { get; set; }
+        public int? FkIdComunidade { get; set; }
+        public string? Status { get; set; } = "EmProgresso";
 
         public List<FonteInfSeed>? Fontes { get; set; }
         public ICollection<FichaCondicoes>? FichaCondicoes { get; set; }
         public ICollection<FichaPeticoes>? FichaPeticoes { get; set; }
         public ICollection<FichaResp>? FichaRespostas { get; set; }
         public ICollection<FichaResult>? FichaResultados { get; set; }
+        public ComunidadeSeed? Comunidade { get; set; }
+
     }
 
     public class FonteInfSeed
@@ -363,7 +367,7 @@ namespace Empodera.Data
         public int FkIdUsuario { get; set; }
         public int? FkIdUsuarioM { get; set; }
 
-        public List<UsuarioSeed>? Usuarios {get; set;}
+        public List<UsuarioSeed>? Usuarios { get; set; }
 
         public List<AtividadeEixoSeed>? Eixos { get; set; }
         public List<AcoesSeed>? Acoes { get; set; }

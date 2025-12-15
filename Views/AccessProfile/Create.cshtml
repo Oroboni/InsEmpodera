@@ -7,7 +7,6 @@
 }
 
 @section Styles {
-    
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
     <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/access-profile-form.css" />
@@ -17,7 +16,7 @@
     @Html.AntiForgeryToken()
 
     <div class="modern-container">
-        <!-- Header -->
+        <!-- Cabeçalho -->
         <div class="header-section">
             <h2>
                 <a asp-controller="AccessProfile" asp-action="Index" class="text-primary">Perfis de Acesso</a>
@@ -28,44 +27,35 @@
 
         <!-- Nome do Perfil -->
         <div class="input-card full-width">
-            <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="icon-box purple">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
             <div class="input-content">
                 <label asp-for="Nome">Nome do Perfil <span class="text-danger">*</span></label>
                 <input type="text" asp-for="Nome" class="clean-input" required
-                       placeholder="Digite o nome do perfil de acesso" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
+                       placeholder="Ex: Administrador, Supervisor, Operador" />
+                <span asp-validation-for="Nome" class="text-danger" style="font-size: var(--font-size-xs); margin-top: 4px;"></span>
             </div>
         </div>
 
-        <!-- Tabela de Permissões -->
         <div class="purple-divider"></div>
-        <div class="section-label">Permissões de Acesso</div>
 
-        <div class="permissions-table-container">
-            <table class="permissions-table">
+        <!-- Tabela de Permissões -->
+        <div class="section-label">
+            <i class="fa-solid fa-key" style="margin-right: var(--space-2);"></i>
+            Permissões de Acesso
+        </div>
+
+        <div class="permission-table-container" style="margin-top: var(--space-4);">
+            <table class="permission-table">
                 <thead>
                     <tr>
-                        <th class="permission-name">Módulo</th>
-                        <th class="permission-action">
-                            <i class="fas fa-list"></i>
-                            <span>Listar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-eye"></i>
-                            <span>Detalhar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-plus"></i>
-                            <span>Criar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-edit"></i>
-                            <span>Atualizar</span>
-                        </th>
-                        <th class="permission-action">
-                            <i class="fas fa-trash"></i>
-                            <span>Deletar</span>
-                        </th>
+                        <th style="text-align: left; padding-left: var(--space-6);">Módulo</th>
+                        <th><i class="fa-solid fa-list"></i> Listar</th>
+                        <th><i class="fa-solid fa-eye"></i> Detalhar</th>
+                        <th><i class="fa-solid fa-plus"></i> Criar</th>
+                        <th><i class="fa-solid fa-pen"></i> Atualizar</th>
+                        <th><i class="fa-solid fa-trash"></i> Deletar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,16 +80,19 @@
                         foreach (var modulo in modulos)
                         {
                             <tr>
-                                <td class="module-name">
-                                    <i class="fas @modulo.Icone"></i>
-                                    <span>@modulo.Nome</span>
+                                <td style="text-align: left; padding-left: var(--space-6);">
+                                    <i class="fas @modulo.Icone" style="color: var(--color-primary); margin-right: var(--space-3);"></i>
+                                    <span style="font-weight: var(--font-weight-medium);">@modulo.Nome</span>
                                 </td>
                                 @foreach (var acao in acoes)
                                 {
-                                    <td>
-                                        <label class="permission-switch">
-                                            <input type="checkbox" name="Permissoes[@modulo.Key][@acao]">
-                                            <span class="switch-slider"></span>
+                                    <td style="text-align: center;">
+                                        <label class="switch">
+                                            <input type="checkbox" 
+                                                   name="Permissoes[@modulo.Key][@acao]" 
+                                                   value="S"
+                                                   @(modulo.Key == "Perfis" && (acao == "Atualizar" || acao == "Deletar") ? "" : "")>
+                                            <span class="slider"></span>
                                         </label>
                                     </td>
                                 }
@@ -111,14 +104,16 @@
         </div>
 
         <!-- Ações Rápidas -->
-        <div class="quick-actions">
-            <button type="button" class="wizard-btn btn-next" onclick="toggleAllPermissions(true)">
-                <i class="fas fa-check-double"></i> Marcar Todas
-            </button>
+        <div class="quick-actions" style="display: flex; gap: var(--space-3); margin-top: var(--space-4); justify-content: flex-end;">
             <button type="button" class="wizard-btn btn-prev" onclick="toggleAllPermissions(false)">
-                <i class="fas fa-times"></i> Desmarcar Todas
+                <i class="fa-solid fa-ban"></i> Desmarcar Todas
+            </button>
+            <button type="button" class="wizard-btn btn-next" onclick="toggleAllPermissions(true)">
+                <i class="fa-solid fa-check-double"></i> Marcar Todas
             </button>
         </div>
+
+        <div class="purple-divider" style="margin-top: var(--space-6);"></div>
 
         <!-- Botões de Ação -->
         <div class="buttons-container">
@@ -127,8 +122,8 @@
             </a>
 
             <div class="action-buttons-group">
-                <button type="submit" class="wizard-btn btn-next" id="create-btn">
-                    <i class="fa-solid fa-plus"></i> Criar Perfil
+                <button type="submit" class="wizard-btn btn-save-final" id="create-btn">
+                    <i class="fa-solid fa-check"></i> Criar Perfil
                 </button>
             </div>
         </div>
@@ -136,29 +131,70 @@
 </form>
 
 @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('.main-form');
             const createBtn = document.getElementById('create-btn');
+            const nomeInput = document.querySelector('input[name="Nome"]');
             let isSubmitting = false;
+
+            // Validação em tempo real do nome
+            if (nomeInput) {
+                nomeInput.addEventListener('blur', function () {
+                    if (!this.value.trim()) {
+                        this.closest('.input-card').classList.add('invalid');
+                    } else {
+                        this.closest('.input-card').classList.remove('invalid');
+                    }
+                });
+            }
 
             // Handler do botão criar
             form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                
                 if (!isSubmitting && form.checkValidity()) {
+                    // Verificar se pelo menos uma permissão foi selecionada
+                    const checkboxes = document.querySelectorAll('.permission-table input[type="checkbox"]');
+                    const atLeastOneChecked = Array.from(checkboxes).some(cb => cb.checked);
+                    
+                    if (!atLeastOneChecked) {
+                        alert('Por favor, selecione pelo menos uma permissão para o perfil.');
+                        return;
+                    }
+                    
                     isSubmitting = true;
                     createBtn.disabled = true;
                     createBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
+                    form.submit();
                 } else if (!form.checkValidity()) {
-                    e.preventDefault();
+                    // Mostrar validação dos campos obrigatórios
+                    form.reportValidity();
+                }
+            });
+
+            // Highlight na linha ao interagir com switch
+            document.addEventListener('change', function(e) {
+                if (e.target.type === 'checkbox') {
+                    const row = e.target.closest('tr');
+                    row.style.backgroundColor = 'var(--color-primary-light)';
+                    setTimeout(() => {
+                        row.style.backgroundColor = '';
+                    }, 300);
                 }
             });
         });
 
         // Função para marcar/desmarcar todas as permissões
         function toggleAllPermissions(checked) {
-            const checkboxes = document.querySelectorAll('.permissions-table input[type="checkbox"]');
+            const checkboxes = document.querySelectorAll('.permission-table input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
                 checkbox.checked = checked;
+                // Disparar evento change para o highlight
+                checkbox.dispatchEvent(new Event('change'));
             });
         }
     </script>

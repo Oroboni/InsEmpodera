@@ -6,7 +6,7 @@ namespace Empodera.Models
 {
     public class Comunidade
     {
-        public int IdComunidade { get; set; } 
+        public int IdComunidade { get; set; }
         public string Nome { get; set; } = null!;
         public string? Local { get; set; } = null!;
         public string Status { get; set; } = "Em diagnóstico";
@@ -18,12 +18,13 @@ namespace Empodera.Models
         public int FkIdUsuario { get; set; }
         public int? FkIdUsuarioM { get; set; }
         public string Ativo { get; set; } = "S";
-
         public Usuario Usuario { get; set; } = null!;
         public List<RedeRecursos> RedeRecursos { get; set; } = new();
         public List<AtorComunidade> AtorComunidades { get; set; } = new();
         public List<DiarioCampo> DiarioCampos { get; set; } = new();
         public List<Vulnerabilidade> Vulnerabilidades { get; set; } = new();
         public List<Atividades> Atividades { get; set; } = new();
+        public virtual ICollection<FichaPrimeiroContato> FichasPrimeiroContato { get; set; }
+   = new List<FichaPrimeiroContato>();
     }
 }

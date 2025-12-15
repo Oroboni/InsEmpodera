@@ -5,17 +5,11 @@
     ViewData["Title"] = "Editar Ficha de 1º Contato";
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
 }
+<script>
+    window.fichaStatus = "@Model.Status";
+</script>
 
-@if (Model.Status != "EmProgresso")
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll("input, select, textarea").forEach(el => el.disabled = true);
-        });
-    </script>
-}
-
-<div class="modern-container">
+<div class="modern-container" class=>
     <div class="header-section">
         <h2>
             <a asp-controller="FichaPrimeiroContato" asp-action="Index" class="text-primary">Ficha Primeiro Contato</a>
@@ -337,7 +331,8 @@
                             <!-- MUDANÇA 3: Verifica se está na lista salva -->
                             var isChecked = savedCondicoes.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedCondicoes" value="@item" @(savedCondicoes.Contains(item) ? "checked" : "") />
+                                <input type="checkbox" name="SelectedCondicoes" value="@item"
+                                    @(savedCondicoes.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -355,7 +350,8 @@
                         {
                             var isChecked = savedPeticoes.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedPeticoes" value="@item" @(savedPeticoes.Contains(item) ? "checked" : "") />
+                                <input type="checkbox" name="SelectedPeticoes" value="@item" @(savedPeticoes.Contains(item)
+                                                                                                                             ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -373,7 +369,8 @@
                         {
                             var isChecked = savedRespostas.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedRespostas" value="@item" @(savedRespostas.Contains(item) ? "checked" : "") />
+                                <input type="checkbox" name="SelectedRespostas" value="@item"
+                                    @(savedRespostas.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -391,7 +388,8 @@
                         {
                             var isChecked = savedResultados.Contains(item) ? "checked" : null;
                             <label class="checkbox-option">
-                               <input type="checkbox" name="SelectedResultados" value="@item" @(savedResultados.Contains(item) ? "checked" : "") />
+                                <input type="checkbox" name="SelectedResultados" value="@item"
+                                    @(savedResultados.Contains(item) ? "checked" : "") />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -409,26 +407,73 @@
                 </div>
             </div>
         </div>
-
         <!-- ================================================= -->
-        <!-- BOTÕES DE NAVEGAÇÃO -->
+        <!-- BOTÕES DE NAVEGAÇÃO - VERSÃO REORGANIZADA -->
         <!-- ================================================= -->
         <div class="buttons-container">
+            <!-- Botão Voltar (Esquerda) -->
             <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)"
                 style="display: none;">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </button>
 
+            <!-- Grupo Central: Editar/Salvar e Deletar -->
+            <div class="action-buttons-group">
+                <!-- Botão Editar/Salvar Alterações -->
+                <button type="button" class="wizard-btn btn-next" id="edit-save-btn">
+                    <i class="fa-solid fa-edit"></i> Editar
+                </button>
+
+                <!-- Botão Deletar -->
+                <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                    <i class="fa-solid fa-trash"></i> Deletar
+                </button>
+            </div>
+
+            <!-- Botão Próximo (Direita) -->
             <button type="button" id="btn-next" class="wizard-btn btn-next" onclick="changeStep(1)">
                 Próximo <i class="fa-solid fa-arrow-right"></i>
             </button>
 
+            <!-- Botão Atualizar Ficha (oculto, aparece no último step quando em modo edição) -->
             <button type="submit" id="btn-save" class="wizard-btn btn-save-final" style="display: none;">
                 <i class="fa-solid fa-check"></i> Atualizar Ficha
             </button>
         </div>
-
     </form>
+</div>
+
+<!-- ================================================= -->
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
+<!-- ================================================= -->
+<div class="modal-overlay" id="deleteConfirmationModal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+
+        <h3 class="modal-title">Confirmar Exclusão</h3>
+
+        <p class="modal-text">
+            Você tem certeza que deseja deletar a Ficha de 1º Contato <strong>@Model.IdFicha</strong>?<br>
+            Essa ação não pode ser desfeita.
+        </p>
+
+        <div class="button-container">
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">
+                    Cancelar
+                </button>
+
+                <form asp-action="Delete" asp-route-id="@Model.IdFicha" method="post" id="deleteForm">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-modal-confirm wizard-btn btn-next" id="confirmDeleteBtn">
+                        Sim, Deletar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

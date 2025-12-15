@@ -1,766 +1,516 @@
 // ==========================================
-// FICHAPRIMEIROCONTATO.JS - UNIFICADO
+// SISTEMA DE WIZARD E NAVEGAÇÃO
 // ==========================================
 
-document.addEventListener("DOMContentLoaded", function () {
-    // ==========================================
-    // 1. INICIALIZAÇÃO CONDICIONAL
-    // ==========================================
-
-    // Verifica se estamos na página de listagem (Index)
-    const isIndexPage = document.querySelector(".forms-list") !== null;
-
-    // Verifica se estamos na página de criação/edição (Form Wizard)
-    const isFormPage = document.getElementById("wizardForm") !== null;
-
-    // ==========================================
-    // 2. FUNÇÕES DE INDEX (LISTAGEM)
-    // ==========================================
-    if (isIndexPage) {
-        initIndexPage();
-    }
-
-    // ==========================================
-    // 3. FUNÇÕES DE FORMULÁRIO (CREATE/EDIT)
-    // ==========================================
-    if (isFormPage) {
-        initFormPage();
-    }
-
-    // ==========================================
-    // 4. FUNÇÕES COMUNS A TODAS AS PÁGINAS
-    // ==========================================
-    initCommonFeatures();
-});
-
-// ==========================================
-// FUNÇÕES PARA PÁGINA DE LISTAGEM (INDEX)
-// ==========================================
-
-function initIndexPage() {
-    const searchInput = document.getElementById("searchInput");
-    const fichasContainer = document.getElementById("fichasContainer");
-    const formItems = document.querySelectorAll(".form-item");
-    const noRecordsMessage = document.querySelector(".no-records");
-    const comunidadeFilter = document.getElementById("comunidadeFilter");
-    const statusFilter = document.getElementById("statusFilter");
-    const filterForm = document.getElementById("filterForm");
-
-    if (searchInput) {
-        searchInput.addEventListener("input", function () {
-            filterFichas(this.value.toLowerCase().trim());
-        });
-
-        searchInput.addEventListener("search", function () {
-            if (this.value === "") {
-                filterFichas("");
-            }
-        });
-
-        if (searchInput.value) {
-            filterFichas(searchInput.value.toLowerCase().trim());
-        }
-    }
-
-    if (comunidadeFilter) {
-        comunidadeFilter.addEventListener("change", submitFilter);
-    }
-
-    if (statusFilter) {
-        statusFilter.addEventListener("change", submitFilter);
-
-        // Mantém o filtro selecionado ao carregar a página
-        const urlParams = new URLSearchParams(window.location.search);
-        const statusParam = urlParams.get("status");
-        if (statusParam) {
-            statusFilter.value = statusParam;
-        }
-    }
-
-    initModais();
-
-    function filterFichas(query) {
-        let hasVisibleItems = false;
-        formItems.forEach((item) => {
-            const searchText = item.getAttribute("data-search") || "";
-            const isVisible = searchText.includes(query);
-            item.style.display = isVisible ? "flex" : "none";
-            if (isVisible) hasVisibleItems = true;
-        });
-        if (noRecordsMessage) {
-            noRecordsMessage.style.display = hasVisibleItems ? "none" : "block";
-        }
-    }
-
-    function submitFilter() {
-        setTimeout(() => {
-            if (filterForm) {
-                filterForm.submit();
-            }
-        }, 100);
-    }
-}
-
-// ==========================================
-// FUNÇÕES PARA PÁGINA DE FORMULÁRIO (CREATE/EDIT)
-// ==========================================
-
-function initFormPage() {
-    // Variáveis globais do Wizard
-    window.currentStep = 1;
-    window.totalSteps = 3;
-
-    // Detectar modo da página
-    const form = document.getElementById("wizardForm");
-    const idFichaInput = document.getElementById("IdFicha");
-    const isEditPage = idFichaInput && idFichaInput.value && idFichaInput.value !== "0";
-    const isCreatePage = !isEditPage;
-
-    // Inicializar mapa
-    if (typeof initMapSelector === 'function') {
-        initMapSelector('mapa-principal', 'input-endereco');
-    } else {
-        console.error("ERRO: initMapSelector não encontrada");
-    }
-
-    // Se for página de edição, configurar modo visualização/edição
-    if (isEditPage) {
-        initEditMode();
-    }
-
-    // Configuração de validação
-    setupValidation();
-
-    // Inicializa Wizard
-    updateButtons();
-
-    // Validação final ao enviar
-    if (form) {
-        form.addEventListener("submit", function (e) {
-            if (!validateAllSteps()) {
-                e.preventDefault();
-            }
-        });
-    }
-}
-
-// ==========================================
-// MODO DE EDIÇÃO (VISUALIZAÇÃO/EDIÇÃO)
-// ==========================================
-
-function initEditMode() {
-    const form = document.getElementById("wizardForm");
-    const inputFields = form.querySelectorAll('.clean-input, select.clean-input, textarea.clean-input');
-    const radioInputs = form.querySelectorAll('input[type="radio"]');
-    const checkboxInputs = form.querySelectorAll('input[type="checkbox"]');
-    const btnSave = document.getElementById('btn-save');
-    const btnNext = document.getElementById('btn-next');
-    const btnPrev = document.getElementById('btn-prev');
-    
-    // Verificar se a ficha está bloqueada
-    const alertWarning = document.querySelector('.alert-warning');
-    const isLocked = alertWarning !== null;
-    
-    let isEditMode = false;
-    let isSubmitting = false;
-
-    function setFieldsState(disabled) {
-        inputFields.forEach(field => field.disabled = disabled);
-        radioInputs.forEach(field => field.disabled = disabled);
-        checkboxInputs.forEach(field => field.disabled = disabled);
-    }
-
-    function updateEditButtons() {
-        if (isLocked) {
-            
-            btnSave.innerHTML = '<i class="fa-solid fa-times"></i> Fechar';
-            btnSave.style.display = '';
-            btnSave.setAttribute('type', 'button');
-            btnSave.onclick = function(e) {
-                e.preventDefault();
-                window.location.href = '/FichaPrimeiroContato/Index';
-            };
-            setFieldsState(true);
-            
-            // Permitir navegação entre steps mesmo bloqueado
-            if (btnNext) btnNext.style.display = window.currentStep < window.totalSteps ? 'inline-flex' : 'none';
-            if (btnPrev) btnPrev.style.display = window.currentStep > 1 ? 'inline-flex' : 'none';
-            return;
-        }
-
-        if (isEditMode) {
-            // Modo edição: salvar
-            btnSave.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
-            btnSave.setAttribute('type', 'submit');
-            btnSave.onclick = null;
-            setFieldsState(false);
-            
-            // Mostrar navegação normal
-            updateButtons();
-        } else {
-            // Modo visualização: editar
-            btnSave.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
-            btnSave.setAttribute('type', 'button');
-            btnSave.onclick = function(e) {
-                e.preventDefault();
-                isEditMode = true;
-                updateEditButtons();
-                
-                // Focar no primeiro campo editável
-                const firstInput = form.querySelector('input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled])');
-                if (firstInput) firstInput.focus();
-            };
-            setFieldsState(true);
-            
-            // Permitir navegação entre steps
-            if (btnNext) btnNext.style.display = window.currentStep < window.totalSteps ? 'inline-flex' : 'none';
-            if (btnPrev) btnPrev.style.display = window.currentStep > 1 ? 'inline-flex' : 'none';
-        }
-    }
-
-    // Handler de submit do formulário
-    form.addEventListener('submit', function(e) {
-        if (!isEditMode || isSubmitting || isLocked) {
-            e.preventDefault();
-            return;
-        }
-
-        if (!form.checkValidity() || !validateAllSteps()) {
-            e.preventDefault();
-            return;
-        }
-
-        isSubmitting = true;
-        btnSave.disabled = true;
-        btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
-    });
-
-    // Inicializar no modo visualização
-    updateEditButtons();
-
-    // Sobrescrever a função updateButtons para respeitar o modo de edição
-    const originalUpdateButtons = window.updateButtons;
-    window.updateButtons = function() {
-        if (isEditMode && !isLocked) {
-            // Modo edição: usar navegação normal do wizard
-            originalUpdateButtons();
-        } else {
-            // Modo visualização ou bloqueado: usar botões customizados
-            updateEditButtons();
-        }
-    };
-
-    // Prevenir validação quando em modo visualização
-    const originalChangeStep = window.changeStep;
-    window.changeStep = function(direction) {
-        if (!isEditMode && !isLocked) {
-            // Modo visualização: permitir navegação sem validação
-            const nextStep = window.currentStep + direction;
-            if (nextStep < 1 || nextStep > window.totalSteps) return;
-
-            const stepAtual = document.getElementById(`step-${window.currentStep}`);
-            if (stepAtual) stepAtual.classList.remove("active");
-
-            window.currentStep = nextStep;
-
-            const stepNovo = document.getElementById(`step-${window.currentStep}`);
-            if (stepNovo) stepNovo.classList.add("active");
-
-            // Atualizar header steps
-            for (let i = 1; i <= window.totalSteps; i++) {
-                const stepEl = document.getElementById(`header-step-${i}`);
-                if (stepEl) {
-                    if (i <= window.currentStep) {
-                        stepEl.classList.add("active");
-                    } else {
-                        stepEl.classList.remove("active");
-                    }
-                }
-            }
-
-            // Atualizar linhas
-            for (let i = 1; i < window.totalSteps; i++) {
-                const lineEl = document.getElementById(`line-${i}`);
-                if (lineEl) {
-                    if (window.currentStep > i) {
-                        lineEl.classList.add("active");
-                    } else {
-                        lineEl.classList.remove("active");
-                    }
-                }
-            }
-
-            updateEditButtons();
-
-            // Scroll suave
-            const stepperContainer = document.querySelector(".stepper-container");
-            if (stepperContainer) {
-                stepperContainer.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                });
-            }
-        } else {
-            // Modo edição ou bloqueado: usar navegação original com validação
-            originalChangeStep(direction);
-        }
-    };
-}
-
-// ==========================================
-// FUNÇÕES COMUNS
-// ==========================================
-
-function initCommonFeatures() {
-    // Modais (funcionam em todas as páginas que os tenham)
-    initModais();
-
-    // Estilos de erro dinâmicos
-    addErrorStyles();
-
-    // Fechar modais ao clicar fora
-    window.addEventListener("click", function (event) {
-        if (event.target.classList.contains("custom-modal")) {
-            event.target.style.display = "none";
-        }
-    });
-}
-
-// ==========================================
-// FUNÇÕES DE MODAL
-// ==========================================
-
-function initModais() {
-    document.querySelectorAll(".btn-concluir").forEach((btn) => {
-        btn.addEventListener("click", function (e) {
-            if (
-                this.classList.contains("gray") ||
-                this.hasAttribute("disabled")
-            ) {
-                e.preventDefault();
-                return;
-            }
-
-            const id = this.getAttribute("data-id");
-            const form = document.getElementById("formConcluir");
-            if (form) {
-                const currentUrl = window.location.href;
-                form.action =
-                    "/FichaPrimeiroContato/Concluir/" +
-                    id +
-                    "?returnUrl=" +
-                    encodeURIComponent(currentUrl);
-                showModal("modalConcluir");
-            }
-        });
-    });
-
-    document.querySelectorAll(".btn-abandonar").forEach((btn) => {
-        btn.addEventListener("click", function (e) {
-            if (
-                this.classList.contains("gray") ||
-                this.hasAttribute("disabled")
-            ) {
-                e.preventDefault();
-                return;
-            }
-
-            const id = this.getAttribute("data-id");
-            const form = document.getElementById("formAbandonar");
-            if (form) {
-                const currentUrl = window.location.href;
-                form.action =
-                    "/FichaPrimeiroContato/Abandonar/" +
-                    id +
-                    "?returnUrl=" +
-                    encodeURIComponent(currentUrl);
-                showModal("modalAbandonar");
-            }
-        });
-    });
-
-    document.querySelectorAll(".btn-cancel").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            hideAllModals();
-        });
-    });
-}
-
-function showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = "flex";
-    }
-}
-
-function hideAllModals() {
-    document.querySelectorAll(".custom-modal").forEach((m) => {
-        m.style.display = "none";
-    });
-}
-
-// ==========================================
-// FUNÇÕES DE VALIDAÇÃO (WIZARD)
-// ==========================================
-
-function validateDateField(dateInput) {
-    const selectedDate = new Date(dateInput.value);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const existingError = dateInput.parentElement.querySelector(".date-error");
-    if (existingError) existingError.remove();
-
-    dateInput.classList.remove("field-error");
-
-    if (!dateInput.value) return true;
-
-    if (selectedDate > today) {
-        showDateError(
-            dateInput,
-            "A data não pode ser futura. Selecione uma data até hoje."
-        );
-        return false;
-    }
-
-    const tenYearsAgo = new Date();
-    tenYearsAgo.setFullYear(today.getFullYear() - 10);
-
-    if (selectedDate < tenYearsAgo) {
-        showDateError(
-            dateInput,
-            "A data parece muito antiga. Por favor, verifique."
-        );
-        return false;
-    }
-
-    return true;
-}
-
-function showDateError(field, message) {
-    const parent = field.parentElement;
-    const errorSpan = document.createElement("span");
-    errorSpan.className = "text-danger custom-error date-error";
-    errorSpan.textContent = message;
-    errorSpan.style.display = "block";
-    errorSpan.style.marginTop = "5px";
-    errorSpan.style.fontSize = "0.875rem";
-    errorSpan.style.color = "#dc3545";
-
-    parent.appendChild(errorSpan);
-    field.classList.add("field-error");
-    field.focus();
-}
-
-function setupValidation() {
-    document.querySelectorAll("[required]").forEach((field) => {
-        field.addEventListener("invalid", function (e) {
-            e.preventDefault();
-
-            if (this.type === "date" && this.id === "DtContato") {
-                if (!validateDateField(this)) {
-                    return;
-                }
-            }
-
-            const existingError =
-                this.parentElement.querySelector(".custom-error");
-            if (existingError) existingError.remove();
-
-            const errorSpan = document.createElement("span");
-            errorSpan.className = "text-danger custom-error";
-            errorSpan.textContent = "Campo obrigatório.";
-
-            this.parentElement.appendChild(errorSpan);
-            this.classList.add("field-error");
-
-            if (!document.querySelector(".field-error")) {
-                this.focus();
-            }
-        });
-
-        field.addEventListener("input", function () {
-            this.classList.remove("field-error");
-            const errorSpan = this.parentElement.querySelector(".custom-error");
-            if (errorSpan) errorSpan.remove();
-        });
-    });
-
-    const radioGroups = [
-        "NovoParceiro",
-        "FornecidoParceiro",
-        "SLer",
-        "SCalc",
-        "SComp",
-    ];
-
-    radioGroups.forEach((groupName) => {
-        const radioButtons = document.querySelectorAll(
-            `input[name="${groupName}"]`
-        );
-        const groupContainer = radioButtons[0]?.closest(".input-content");
-
-        if (groupContainer) {
-            groupContainer.classList.add("required-radio-group");
-
-            const hasRequired = Array.from(radioButtons).some((radio) =>
-                radio.hasAttribute("required")
-            );
-
-            if (!hasRequired) {
-                radioButtons[0].setAttribute("required", "");
-            }
-
-            radioButtons.forEach((radio) => {
-                radio.addEventListener("change", function () {
-                    groupContainer.classList.remove("field-error");
-                    const errorSpan =
-                        groupContainer.querySelector(".custom-error");
-                    if (errorSpan) errorSpan.remove();
-
-                    radioButtons.forEach((r) => {
-                        if (r !== radioButtons[0])
-                            r.removeAttribute("required");
-                    });
-                });
-            });
-        }
-    });
-}
-
-function validateCurrentStep() {
-    const stepAtualEl = document.getElementById(`step-${window.currentStep}`);
-    let isValid = true;
-
-    if (stepAtualEl) {
-        stepAtualEl
-            .querySelectorAll(".custom-error")
-            .forEach((error) => error.remove());
-        stepAtualEl
-            .querySelectorAll(".field-error")
-            .forEach((field) => field.classList.remove("field-error"));
-
-        const campos = stepAtualEl.querySelectorAll("input, select, textarea");
-
-        for (const campo of campos) {
-            if (campo.type === "hidden" || campo.disabled) continue;
-
-            if (campo.type === "date" && campo.id === "DtContato") {
-                if (!validateDateField(campo)) {
-                    isValid = false;
-                    continue;
-                }
-            }
-
-            if (campo.hasAttribute("required")) {
-                if (!campo.value.trim()) {
-                    showFieldError(campo, "Campo obrigatório.");
-                    isValid = false;
-
-                    if (!document.querySelector(".field-error:focus")) {
-                        campo.focus();
-                    }
-                }
-            }
-
-            if (campo.tagName === "SELECT" && campo.hasAttribute("required")) {
-                if (campo.selectedIndex <= 0) {
-                    showFieldError(campo, "Campo obrigatório.");
-                    isValid = false;
-
-                    if (!document.querySelector(".field-error:focus")) {
-                        campo.focus();
-                    }
-                }
-            }
-        }
-
-        const radioGroups = stepAtualEl.querySelectorAll(
-            ".required-radio-group"
-        );
-
-        radioGroups.forEach((group) => {
-            const groupName = group.querySelector('input[type="radio"]')?.name;
-            const radioButtons = document.querySelectorAll(
-                `input[name="${groupName}"]`
-            );
-            const isChecked = Array.from(radioButtons).some(
-                (radio) => radio.checked
-            );
-
-            if (!isChecked) {
-                const campoFicticio = document.createElement("div");
-                campoFicticio.className = "radio-group-error";
-
-                showFieldError(campoFicticio, "Campo obrigatório.", group);
-                isValid = false;
-
-                if (!document.querySelector(".field-error:focus")) {
-                    radioButtons[0].focus();
-                }
-            }
-        });
-    }
-
-    return isValid;
-}
-
-function showFieldError(field, message, container = null) {
-    const parent = container || field.parentElement;
-    let errorSpan = parent.querySelector(".custom-error");
-
-    if (!errorSpan) {
-        errorSpan = document.createElement("span");
-        errorSpan.className = "text-danger custom-error";
-        parent.appendChild(errorSpan);
-    }
-
-    errorSpan.textContent = message;
-    errorSpan.style.display = "block";
-    errorSpan.style.marginTop = "5px";
-    errorSpan.style.fontSize = "0.875rem";
-
-    if (field.classList) {
-        field.classList.add("field-error");
-    }
-}
+let currentStep = 1;
+const totalSteps = 3;
 
 function changeStep(direction) {
-    if (direction > 0) {
-        if (!validateCurrentStep()) {
-            const firstError = document.querySelector(".field-error");
-            if (firstError) {
-                firstError.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                    inline: "nearest",
-                });
-            }
-            return;
+    const steps = document.querySelectorAll(".step-content");
+    const headerSteps = document.querySelectorAll(".step");
+    const lines = document.querySelectorAll(".line");
+    
+    // Ocultar step atual
+    steps[currentStep - 1].classList.remove("active");
+    headerSteps[currentStep - 1].classList.remove("active");
+    
+    // Atualizar currentStep
+    currentStep += direction;
+    
+    // Garantir que currentStep está dentro dos limites
+    if (currentStep < 1) currentStep = 1;
+    if (currentStep > totalSteps) currentStep = totalSteps;
+    
+    // Mostrar novo step
+    steps[currentStep - 1].classList.add("active");
+    headerSteps[currentStep - 1].classList.add("active");
+    
+    // Atualizar linhas de progresso
+    for (let i = 0; i < lines.length; i++) {
+        if (i < currentStep - 1) {
+            lines[i].classList.add("active");
+        } else {
+            lines[i].classList.remove("active");
         }
     }
-
-    const nextStep = window.currentStep + direction;
-    if (nextStep < 1 || nextStep > window.totalSteps) return;
-
-    const stepAtual = document.getElementById(`step-${window.currentStep}`);
-    if (stepAtual) stepAtual.classList.remove("active");
-
-    window.currentStep = nextStep;
-
-    const stepNovo = document.getElementById(`step-${window.currentStep}`);
-    if (stepNovo) stepNovo.classList.add("active");
-
-    for (let i = 1; i <= window.totalSteps; i++) {
-        const stepEl = document.getElementById(`header-step-${i}`);
-        if (stepEl) {
-            if (i <= window.currentStep) {
-                stepEl.classList.add("active");
-            } else {
-                stepEl.classList.remove("active");
-            }
-        }
-    }
-
-    for (let i = 1; i < window.totalSteps; i++) {
-        const lineEl = document.getElementById(`line-${i}`);
-        if (lineEl) {
-            if (window.currentStep > i) {
-                lineEl.classList.add("active");
-            } else {
-                lineEl.classList.remove("active");
-            }
-        }
-    }
-
-    updateButtons();
-
-    const stepperContainer = document.querySelector(".stepper-container");
-    if (stepperContainer) {
-        stepperContainer.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-        });
-    }
+    
+    // Atualizar visibilidade dos botões
+    updateButtonVisibility();
+    
+    // Scroll para o topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function updateButtons() {
+function updateButtonVisibility() {
     const btnPrev = document.getElementById("btn-prev");
     const btnNext = document.getElementById("btn-next");
     const btnSave = document.getElementById("btn-save");
-
-    if (!btnPrev || !btnNext || !btnSave) return;
-
-    if (window.currentStep === 1) {
-        btnPrev.style.display = "none";
-    } else {
-        btnPrev.style.display = "inline-flex";
+    const editSaveBtn = document.getElementById("edit-save-btn");
+    const deleteBtn = document.getElementById("openDeleteModalBtn");
+    
+    const isEditMode = editSaveBtn && editSaveBtn.getAttribute("type") === "submit";
+    
+    // Botão Voltar
+    if (btnPrev) {
+        btnPrev.style.display = currentStep === 1 ? "none" : "inline-block";
     }
-
-    if (window.currentStep === window.totalSteps) {
-        btnNext.style.display = "none";
-        btnSave.style.display = "inline-flex";
-    } else {
-        btnNext.style.display = "inline-flex";
-        btnSave.style.display = "none";
+    
+    // Botão Próximo
+    if (btnNext) {
+        btnNext.style.display = currentStep === totalSteps ? "none" : "inline-block";
+    }
+    
+    // Botões centrais (Editar/Salvar e Deletar)
+    if (editSaveBtn) {
+        editSaveBtn.style.display = currentStep === totalSteps ? "none" : "inline-block";
+    }
+    if (deleteBtn) {
+        deleteBtn.style.display = currentStep === totalSteps ? "none" : "inline-block";
+    }
+    
+    // Botão Atualizar Ficha (só aparece no último step em modo edição)
+    if (btnSave) {
+        btnSave.style.display = (currentStep === totalSteps && isEditMode) ? "inline-block" : "none";
     }
 }
 
-function validateAllSteps() {
-    let allStepsValid = true;
-    const originalStep = window.currentStep;
+// ==========================================
+// FILTROS E BUSCA (INDEX)
+// ==========================================
 
-    window.currentStep = 1;
-    if (!validateCurrentStep()) {
-        allStepsValid = false;
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("🔵 DOMContentLoaded - Filtros e Busca");
+    
+    const searchInput = document.getElementById("searchInput");
+    const fichasContainer = document.getElementById("fichasContainer");
+    const noResultsMessage = document.getElementById("noResultsMessage");
+    const fichaItems = document.querySelectorAll(".ficha-item");
+    const filterStatusButtons = document.querySelectorAll(".filter-eixo-btn");
+    const filterComunidadeButtons = document.querySelectorAll(".filter-comunidade-btn");
+
+    // Se não há fichaItems, não é a página Index
+    if (fichaItems.length === 0) {
+        console.log("⚪ Não é página Index - pulando inicialização de filtros");
     }
 
-    window.currentStep = 2;
-    if (allStepsValid && !validateCurrentStep()) {
-        allStepsValid = false;
+    let currentStatusFilter = "todos";
+    let currentComunidadeFilter = "todas";
+
+    // Função para filtrar fichas
+    function filterFichas() {
+        if (!searchInput) return;
+        
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        fichaItems.forEach((item) => {
+            const nome = item.getAttribute("data-nome") || "";
+            const status = item.getAttribute("data-status") || "";
+            const comunidade = item.getAttribute("data-comunidade") || "";
+
+            const matchesSearch = nome.includes(searchTerm);
+            
+            let matchesStatus = true;
+            if (currentStatusFilter !== "todos") {
+                matchesStatus = status === currentStatusFilter;
+            }
+
+            let matchesComunidade = true;
+            if (currentComunidadeFilter !== "todas") {
+                matchesComunidade = comunidade === currentComunidadeFilter;
+            }
+
+            const shouldShow = matchesSearch && matchesStatus && matchesComunidade;
+
+            if (shouldShow) {
+                item.style.display = "flex";
+                visibleCount++;
+            } else {
+                item.style.display = "none";
+            }
+        });
+
+        // Mostrar/ocultar mensagem de "nenhum resultado"
+        if (visibleCount === 0 && fichaItems.length > 0) {
+            if (fichasContainer) fichasContainer.style.display = "none";
+            if (noResultsMessage) noResultsMessage.style.display = "block";
+        } else {
+            if (fichasContainer) fichasContainer.style.display = "flex";
+            if (noResultsMessage) noResultsMessage.style.display = "none";
+        }
+
+        updateCounters();
     }
 
-    window.currentStep = 3;
-    if (allStepsValid && !validateCurrentStep()) {
-        allStepsValid = false;
+    // Função para atualizar contadores
+    function updateCounters() {
+        const visibleItems = Array.from(fichaItems).filter(
+            (item) => item.style.display !== "none"
+        );
+
+        const totalVisible = visibleItems.length;
+        const emProgressoVisible = visibleItems.filter(
+            (item) => item.getAttribute("data-status") === "EmProgresso"
+        ).length;
+        const concluidasVisible = visibleItems.filter(
+            (item) => item.getAttribute("data-status") === "Concluida"
+        ).length;
+        const abandonadasVisible = visibleItems.filter(
+            (item) => item.getAttribute("data-status") === "Abandonada"
+        ).length;
+
+        const totalEl = document.getElementById("totalFichas");
+        const progressoEl = document.getElementById("emProgressoCount");
+        const concluidasEl = document.getElementById("concluidasCount");
+        const abandonadasEl = document.getElementById("abandonadasCount");
+
+        if (totalEl) totalEl.textContent = totalVisible;
+        if (progressoEl) progressoEl.textContent = emProgressoVisible;
+        if (concluidasEl) concluidasEl.textContent = concluidasVisible;
+        if (abandonadasEl) abandonadasEl.textContent = abandonadasVisible;
     }
 
-    window.currentStep = originalStep;
-    updateButtons();
+    // Event listener para busca
+    if (searchInput) {
+        searchInput.addEventListener("input", filterFichas);
+        searchInput.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                searchInput.value = "";
+                filterFichas();
+            }
+        });
+    }
 
-    if (!allStepsValid) {
-        const firstError = document.querySelector(".field-error");
-        if (firstError) {
-            firstError.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-            });
+    // Event listeners para filtros de status
+    filterStatusButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            filterStatusButtons.forEach((btn) => btn.classList.remove("active"));
+            this.classList.add("active");
+            currentStatusFilter = this.getAttribute("data-status");
+            filterFichas();
+        });
+    });
 
-            if (!document.querySelector(".global-error-message")) {
-                const globalError = document.createElement("div");
-                globalError.className =
-                    "alert alert-danger global-error-message";
-                globalError.textContent =
-                    "Por favor, corrija os campos obrigatórios antes de enviar.";
-                globalError.style.margin = "10px 0";
-                globalError.style.padding = "10px";
-                globalError.style.borderRadius = "5px";
+    // Event listeners para filtros de comunidade
+    filterComunidadeButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            filterComunidadeButtons.forEach((btn) => btn.classList.remove("active"));
+            this.classList.add("active");
+            currentComunidadeFilter = this.getAttribute("data-comunidade");
+            filterFichas();
+        });
+    });
 
-                const form = document.getElementById("wizardForm");
-                if (form) {
-                    form.insertBefore(globalError, form.firstChild);
+    // ==========================================
+    // MODAIS CONCLUIR E ABANDONAR (INDEX)
+    // ==========================================
+    const modalConcluir = document.getElementById("modalConcluir");
+    const modalAbandonar = document.getElementById("modalAbandonar");
+    const formConcluir = document.getElementById("formConcluir");
+    const formAbandonar = document.getElementById("formAbandonar");
 
-                    setTimeout(() => {
-                        globalError.remove();
-                    }, 5000);
+    // Botões de concluir
+    document.querySelectorAll(".btn-concluir").forEach((btn) => {
+        btn.addEventListener("click", function () {
+            if (!this.disabled) {
+                const id = this.getAttribute("data-id");
+                if (formConcluir) {
+                    formConcluir.action = '/FichaPrimeiroContato/Concluir/' + id;
+                    modalConcluir.style.display = "flex";
+                    setTimeout(() => modalConcluir.classList.add("active"), 10);
                 }
             }
+        });
+    });
+
+    // Botões de abandonar
+    document.querySelectorAll(".btn-abandonar").forEach((btn) => {
+        btn.addEventListener("click", function () {
+            if (!this.disabled) {
+                const id = this.getAttribute("data-id");
+                if (formAbandonar) {
+                    formAbandonar.action = '/FichaPrimeiroContato/Abandonar/' + id;
+                    modalAbandonar.style.display = "flex";
+                    setTimeout(() => modalAbandonar.classList.add("active"), 10);
+                }
+            }
+        });
+    });
+
+    // Fechar modais
+    document.querySelectorAll(".btn-cancel").forEach((btn) => {
+        btn.addEventListener("click", function () {
+            closeModal(modalConcluir);
+            closeModal(modalAbandonar);
+        });
+    });
+
+    // Fechar ao clicar fora
+    [modalConcluir, modalAbandonar].forEach((modal) => {
+        if (modal) {
+            modal.addEventListener("click", function (e) {
+                if (e.target === modal) {
+                    closeModal(modal);
+                }
+            });
         }
-        return false;
+    });
+
+    // Fechar com ESC (apenas para modais Index)
+    if (modalConcluir || modalAbandonar) {
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                if (modalConcluir) closeModal(modalConcluir);
+                if (modalAbandonar) closeModal(modalAbandonar);
+            }
+        });
     }
 
-    return true;
-}
+    function closeModal(modal) {
+        if (modal) {
+            modal.classList.remove("active");
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        }
+    }
+
+    // Loading nos botões de submit dos modais
+    [formConcluir, formAbandonar].forEach((form) => {
+        if (form) {
+            form.addEventListener("submit", function () {
+                const btn = this.querySelector(".btn-confirm");
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+                }
+            });
+        }
+    });
+});
+
+// ==========================================
+// MODAL DELETE E MODO EDIÇÃO (EDIT)
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("🟢 DOMContentLoaded - Modal Delete e Modo Edição");
+    
+    const form = document.querySelector(".main-form");
+    
+    // Debug: verificar se encontrou o formulário
+    console.log("Form encontrado:", form ? "✅ Sim" : "❌ Não");
+    
+    if (!form) {
+        console.log("⚪ Não é página Edit - pulando inicialização");
+        return;
+    }
+    
+    const inputFields = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
+    const editSaveBtn = document.getElementById("edit-save-btn");
+    const deleteModal = document.getElementById("deleteConfirmationModal");
+    const openDeleteBtn = document.getElementById("openDeleteModalBtn");
+    
+    // Debug: verificar elementos
+    console.log("Edit/Save Button:", editSaveBtn ? "✅ Encontrado" : "❌ Não encontrado");
+    console.log("Delete Modal:", deleteModal ? "✅ Encontrado" : "❌ Não encontrado");
+    console.log("Open Delete Button:", openDeleteBtn ? "✅ Encontrado" : "❌ Não encontrado");
+    console.log("Input Fields:", inputFields.length);
+    
+    // Buscar status do Model (via window.fichaStatus ou data-attribute)
+    const statusFromWindow = window.fichaStatus;
+    const statusFromAttribute = document.querySelector("[data-status-model]")?.getAttribute("data-status-model");
+    const statusFromModel = statusFromWindow || statusFromAttribute;
+    const isEmProgresso = statusFromModel === "EmProgresso";
+    
+    console.log("Status do Model (window):", statusFromWindow || "Não encontrado");
+    console.log("Status do Model (attribute):", statusFromAttribute || "Não encontrado");
+    console.log("Status Final:", statusFromModel || "Não encontrado");
+    console.log("É Em Progresso?", isEmProgresso ? "✅ Sim" : "❌ Não");
+    
+    let isSubmitting = false;
+    
+    // Configurar estado inicial
+    function setInitialState() {
+        console.log("🔧 Configurando estado inicial...");
+        
+        if (isEmProgresso) {
+            // Modo edição ativo
+            enableEditing();
+            if (editSaveBtn) {
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+                editSaveBtn.setAttribute("type", "submit");
+                editSaveBtn.classList.remove("btn-next");
+                editSaveBtn.classList.add("btn-save-final");
+                console.log("✅ Modo Edição ativado");
+            }
+        } else {
+            // Modo visualização
+            disableEditing();
+            if (editSaveBtn) {
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+                editSaveBtn.setAttribute("type", "button");
+                editSaveBtn.classList.remove("btn-save-final");
+                editSaveBtn.classList.add("btn-next");
+                console.log("✅ Modo Visualização ativado");
+            }
+        }
+        
+        // Atualizar visibilidade dos botões
+        updateButtonVisibility();
+    }
+    
+    function enableEditing() {
+        console.log("🔓 Habilitando edição de", inputFields.length, "campos");
+        inputFields.forEach((field) => {
+            if (!field.hasAttribute("readonly")) {
+                field.disabled = false;
+            }
+        });
+    }
+    
+    function disableEditing() {
+        console.log("🔒 Desabilitando edição de", inputFields.length, "campos");
+        inputFields.forEach((field) => {
+            field.disabled = true;
+        });
+    }
+    
+    // Inicializar
+    setInitialState();
+    
+    // Handler do botão Editar/Salvar
+    if (editSaveBtn) {
+        console.log("📌 Adicionando listener ao botão Edit/Save");
+        
+        editSaveBtn.addEventListener("click", function (e) {
+            console.log("🖱️ Botão Edit/Save clicado!");
+            console.log("Tipo atual:", editSaveBtn.getAttribute("type"));
+            
+            if (editSaveBtn.getAttribute("type") === "submit") {
+                console.log("💾 Modo Salvar - validando formulário...");
+                
+                // Modo Salvar Alterações - submeter formulário
+                if (!isSubmitting && form.checkValidity()) {
+                    console.log("✅ Formulário válido - submetendo...");
+                    isSubmitting = true;
+                    editSaveBtn.disabled = true;
+                    editSaveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+                    form.submit();
+                } else if (!form.checkValidity()) {
+                    console.log("❌ Formulário inválido!");
+                    form.reportValidity();
+                }
+            } else {
+                console.log("✏️ Modo Editar - ativando edição...");
+                
+                // Modo Editar - ativar edição
+                e.preventDefault();
+                enableEditing();
+                
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+                editSaveBtn.setAttribute("type", "submit");
+                editSaveBtn.classList.remove("btn-next");
+                editSaveBtn.classList.add("btn-save-final");
+                
+                console.log("✅ Edição ativada - botão mudou para Salvar");
+                
+                // Atualizar visibilidade dos botões
+                updateButtonVisibility();
+                
+                // Focar no primeiro campo
+                const firstInput = form.querySelector('input:not([disabled]):not([type="hidden"]):not([readonly])');
+                if (firstInput) firstInput.focus();
+            }
+        });
+    } else {
+        console.log("⚠️ Botão Edit/Save não encontrado!");
+    }
+    
+    // ==========================================
+    // MODAL DE EXCLUSÃO
+    // ==========================================
+    
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    const deleteForm = document.getElementById("deleteForm");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    
+    console.log("Delete Form:", deleteForm ? "✅ Encontrado" : "❌ Não encontrado");
+    
+    if (openDeleteBtn) {
+        console.log("📌 Adicionando listener ao botão Open Delete");
+        
+        openDeleteBtn.addEventListener("click", function (e) {
+            console.log("🖱️ Botão Delete clicado!");
+            e.preventDefault();
+            
+            if (deleteModal) {
+                console.log("✅ Abrindo modal de exclusão");
+                deleteModal.style.display = "flex";
+                setTimeout(() => deleteModal.classList.add("active"), 10);
+            } else {
+                console.log("❌ Modal de exclusão não encontrado!");
+            }
+        });
+    } else {
+        console.log("⚠️ Botão Open Delete não encontrado!");
+    }
+    
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener("click", function () {
+            console.log("❌ Cancelando exclusão");
+            closeDeleteModal();
+        });
+    }
+    
+    // Loading no botão de delete
+    if (deleteForm) {
+        deleteForm.addEventListener("submit", function () {
+            console.log("🗑️ Submetendo formulário de exclusão");
+            if (confirmDeleteBtn && !confirmDeleteBtn.disabled) {
+                confirmDeleteBtn.disabled = true;
+                confirmDeleteBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deletando...';
+            }
+        });
+    }
+    
+    // Fechar modal ao clicar fora
+    if (deleteModal) {
+        window.addEventListener("click", function (e) {
+            if (e.target === deleteModal) {
+                console.log("👆 Clicou fora do modal - fechando");
+                closeDeleteModal();
+            }
+        });
+        
+        // Fechar modal com ESC
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && deleteModal.classList.contains("active")) {
+                console.log("⌨️ ESC pressionado - fechando modal");
+                closeDeleteModal();
+            }
+        });
+    }
+    
+    function closeDeleteModal() {
+        if (deleteModal) {
+            console.log("🚪 Fechando modal de exclusão");
+            deleteModal.classList.remove("active");
+            setTimeout(() => {
+                deleteModal.style.display = "none";
+            }, 300);
+        }
+    }
+    
+    // Prevenir envio duplo
+    form.addEventListener("submit", function (e) {
+        if (isSubmitting) {
+            console.log("⚠️ Envio duplo prevenido!");
+            e.preventDefault();
+            return false;
+        }
+    });
+});
 
 // ==========================================
 // ESTILOS DINÂMICOS
@@ -813,8 +563,8 @@ function addErrorStyles() {
 
             /* Estilos para campos desabilitados */
             .clean-input:disabled,
-            select.clean-input:disabled
-
+            select.clean-input:disabled,
+            textarea.clean-input:disabled,
             input[type="radio"]:disabled,
             input[type="checkbox"]:disabled {
                 opacity: 0.5;
@@ -842,41 +592,5 @@ function addErrorStyles() {
     }
 }
 
-// ==========================================
-// EXPORTA FUNÇÕES PARA USO EXTERNO
-// ==========================================
-if (typeof window !== "undefined") {
-    window.FichaPrimeiroContato = {
-        changeStep: changeStep,
-        validateCurrentStep: validateCurrentStep,
-        showModal: showModal,
-        hideAllModals: hideAllModals,
-        filterFichas: function (query) {
-            const formItems = document.querySelectorAll(".form-item");
-            const noRecordsMessage = document.querySelector(".no-records");
-
-            if (formItems.length > 0) {
-                let hasVisibleItems = false;
-
-                formItems.forEach((item) => {
-                    const searchText = item.getAttribute("data-search") || "";
-                    const isVisible = searchText.includes(
-                        query.toLowerCase().trim()
-                    );
-
-                    item.style.display = isVisible ? "flex" : "none";
-
-                    if (isVisible) {
-                        hasVisibleItems = true;
-                    }
-                });
-
-                if (noRecordsMessage) {
-                    noRecordsMessage.style.display = hasVisibleItems
-                        ? "none"
-                        : "block";
-                }
-            }
-        },
-    };
-}
+// Executar ao carregar
+addErrorStyles();

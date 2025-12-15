@@ -1,122 +1,89 @@
-/* ================================================
-   EDIT PERFIL DE ACESSO - ESTILOS COMPLEMENTARES
-   ================================================ */
-
-/* Container da Tabela de Permissões */
-.permissions-table-container {
-    background: white;
+.permission-table-container {
+    background-color: var(--color-white);
     border-radius: var(--radius-xl);
-    padding: 1.5rem;
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
     box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-border, #dee2e6);
     overflow-x: auto;
-    margin-bottom: 1rem;
 }
 
-/* Tabela de Permissões */
-.permissions-table {
+.permission-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-family: var(--font-family-primary);
-}
-
-.permissions-table thead {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: white;
-}
-
-.permissions-table thead th {
-    padding: 1rem;
-    text-align: center;
-    font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
+}
+
+.permission-table thead {
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 100%
+    );
+}
+
+.permission-table thead th {
+    color: white;
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    padding: var(--space-4) var(--space-3);
+    text-align: center;
+    font-size: var(--font-size-xs);
 }
 
-.permissions-table thead th:first-child {
-    border-top-left-radius: var(--radius-lg);
+.permission-table thead th:first-child {
     text-align: left;
+    padding-left: var(--space-4);
+    border-top-left-radius: var(--radius-lg);
 }
 
-.permissions-table thead th:last-child {
+.permission-table thead th:last-child {
     border-top-right-radius: var(--radius-lg);
 }
 
-.permission-name {
-    min-width: 200px;
-}
-
-.permission-action {
-    min-width: 100px;
-    white-space: nowrap;
-}
-
-.permission-action i {
-    display: block;
-    font-size: 1.25rem;
-    margin-bottom: 0.25rem;
-}
-
-.permission-action span {
-    display: block;
-    font-size: 0.75rem;
-}
-
-/* Corpo da Tabela */
-.permissions-table tbody tr {
-    border-bottom: 1px solid var(--color-border, #dee2e6);
+.permission-table tbody tr {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
     transition: background-color 0.2s ease;
 }
 
-.permissions-table tbody tr:hover {
-    background-color: var(--color-background-secondary, #f8f9fa);
+.permission-table tbody tr:hover {
+    background-color: var(--color-gray-50);
 }
 
-.permissions-table tbody tr:last-child {
+.permission-table tbody tr:last-child {
     border-bottom: none;
 }
 
-.permissions-table tbody td {
-    padding: 1rem;
+.permission-table tbody td {
+    padding: var(--space-4) var(--space-3);
     text-align: center;
     vertical-align: middle;
 }
 
-/* Nome do Módulo */
-.module-name {
-    text-align: left !important;
+.permission-table tbody td:first-child {
+    text-align: left;
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary, #212529);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    color: var(--color-gray-900);
+    padding-left: var(--space-4);
 }
 
-.module-name i {
-    font-size: 1.25rem;
-    color: var(--color-primary);
-    width: 24px;
-    text-align: center;
-}
-
-/* Switch de Permissão */
-.permission-switch {
+/* Switch Toggle Modernizado */
+.switch {
     position: relative;
     display: inline-block;
     width: 48px;
     height: 26px;
-    cursor: pointer;
 }
 
-.permission-switch input {
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.switch-slider {
+.slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -124,196 +91,61 @@
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: 0.4s;
+    transition: 0.3s;
     border-radius: 26px;
 }
 
-.switch-slider:before {
+.slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
     background-color: white;
-    transition: 0.4s;
+    transition: 0.3s;
     border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.permission-switch input:checked + .switch-slider {
-    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+input:checked + .slider {
+    background-color: var(--color-primary);
 }
 
-.permission-switch input:checked + .switch-slider:before {
+input:checked + .slider:before {
     transform: translateX(22px);
 }
 
-.permission-switch input:focus + .switch-slider {
-    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
-}
-
-/* Ações Rápidas */
-.quick-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-bottom: 1.5rem;
-}
-
-.quick-actions .wizard-btn {
-    min-width: 160px;
-}
-
-/* Informações do Sistema */
-.system-info-display {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.info-date {
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary, #212529);
-}
-
-.info-user {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    background-color: rgba(0, 123, 255, 0.1);
-    color: var(--color-primary);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-}
-
-/* Lista de Usuários Vinculados */
-.users-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.user-badge {
-    padding: 0.375rem 0.75rem;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-bold);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    text-transform: capitalize;
-}
-
-.user-badge i {
-    font-size: 0.5rem;
-}
-
-.user-badge.active {
-    background-color: rgba(40, 167, 69, 0.1);
-    color: #28a745;
-}
-
-.user-badge.inactive {
-    background-color: rgba(108, 117, 125, 0.1);
-    color: #6c757d;
-}
-
-.user-badge-more {
-    padding: 0.375rem 0.75rem;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-bold);
-    background-color: var(--color-background-secondary, #f8f9fa);
-    color: var(--color-text-secondary, #6c757d);
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-primary);
 }
 
 /* Responsividade */
-@media (max-width: 992px) {
-    .permissions-table-container {
-        padding: 1rem;
-    }
-
-    .permission-action span {
-        display: none;
-    }
-
-    .permission-action i {
-        margin-bottom: 0;
-    }
-
-    .permissions-table thead th,
-    .permissions-table tbody td {
-        padding: 0.75rem 0.5rem;
-    }
-
-    .permission-name {
-        min-width: 150px;
-    }
-
-    .permission-action {
-        min-width: 60px;
-    }
-}
-
 @media (max-width: 768px) {
-    .quick-actions {
-        flex-direction: column;
+    .permission-table-container {
+        padding: var(--space-4);
     }
 
-    .quick-actions .wizard-btn {
-        width: 100%;
+    .permission-table {
+        font-size: var(--font-size-xs);
     }
 
-    .module-name {
-        font-size: 0.875rem;
+    .permission-table thead th,
+    .permission-table tbody td {
+        padding: var(--space-2);
     }
 
-    .module-name i {
-        font-size: 1rem;
-    }
-
-    .permissions-table thead th:first-child {
-        position: sticky;
-        left: 0;
-        background: var(--color-primary);
-        z-index: 2;
-    }
-
-    .permissions-table tbody td:first-child {
-        position: sticky;
-        left: 0;
-        background: white;
-        z-index: 1;
-    }
-
-    .permissions-table tbody tr:hover td:first-child {
-        background-color: var(--color-background-secondary, #f8f9fa);
-    }
-}
-
-@media (max-width: 576px) {
-    .permission-switch {
+    .switch {
         width: 40px;
         height: 22px;
     }
 
-    .switch-slider:before {
+    .slider:before {
         height: 16px;
         width: 16px;
-        left: 3px;
-        bottom: 3px;
     }
 
-    .permission-switch input:checked + .switch-slider:before {
+    input:checked + .slider:before {
         transform: translateX(18px);
-    }
-
-    .permissions-table thead th,
-    .permissions-table tbody td {
-        padding: 0.5rem 0.25rem;
     }
 }

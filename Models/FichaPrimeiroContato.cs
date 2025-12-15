@@ -16,49 +16,50 @@ namespace Empodera.Models
         public string? Emprego { get; set; }
 
         public string? CEstabeleceu { get; set; }
-        
+
         public string? NovoParceiro { get; set; }
-        
+
         public string? FornecidoParceiro { get; set; }
-        
+
         public string? Telefone { get; set; }
         public string? LContato { get; set; }
         public string? FonteDados { get; set; }
         public string? EstaFamiliar { get; set; }
         public string? EstruFamiliar { get; set; }
-        
+
         public int? NFIlhos { get; set; }
         public int? NFilhas { get; set; }
         public int? AEscolar { get; set; }
+        public string? Status { get; set; } = "EmProgresso";
 
-        public string? Status { get; set; } = null!;
-        
         public string? SLer { get; set; }
-        
+
         public string? SCalc { get; set; }
-        
+
         public string? SComp { get; set; }
-        
+
         public int? QReabili { get; set; }
-        
+
         public string? LTrat { get; set; }
-        
+
         public string? Coment { get; set; }
-        
+
         [DataType(DataType.Date)]
         public DateTime DtContato { get; set; }
-        
+
         [DataType(DataType.Time)]
         public DateTime HoraContato { get; set; }
-        
+
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
-        
+        public int? FkIdComunidade { get; set; }
+        [ForeignKey("FkIdComunidade")]
+        public virtual Comunidade? Comunidade { get; set; }
         public int FkIdUsuario { get; set; }
 
         [ForeignKey("FKidAtores")]
         public virtual Atores Ator { get; set; } = null!;
-        
+
         [ForeignKey("FkIdUsuario")]
         public virtual Usuario Usuario { get; set; } = null!;
 
@@ -68,6 +69,5 @@ namespace Empodera.Models
         public ICollection<FichaResp>? FichaRespostas { get; set; }
         public ICollection<FichaResult>? FichaResultados { get; set; }
 
-        public virtual ICollection<Ficha1oContatoComunidade> FichaComunidades { get; set; } = new List<Ficha1oContatoComunidade>();
     }
 }

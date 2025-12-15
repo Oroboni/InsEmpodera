@@ -479,6 +479,43 @@ a {
     gap: 0.5rem;
 }
 
+/* FILTERS */
+
+/* Botões de Filtro de comunidade */
+.filter-comunidade-btn {
+    padding: 0.625rem 1.25rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius-full);
+    background-color: var(--color-white);
+    color: var(--color-gray-700);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-family-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+}
+
+.filter-comunidade-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.filter-comunidade-btn.active {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.filter-comunidade-btn i {
+    font-size: 1rem;
+}
+
 /* ===== INPUT COMPONENTS ===== */
 .input-card {
     background-color: var(--color-white);

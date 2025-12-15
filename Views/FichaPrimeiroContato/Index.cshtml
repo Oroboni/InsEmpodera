@@ -6,160 +6,450 @@
     Layout = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ? null : "_Layout";
 }
 
-<div class="forms-container">
-    <h2 class="page-title">Ficha de Primeiro Contato</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+}
 
-    <div class="filter-bar">
-        <form asp-action="Index" method="get" id="filterForm">
-            <div class="main-select-wrapper">
-                <select class="main-select" name="comunidade" id="comunidadeFilter" onchange="submitFilter()">
-                    <option value="">Todas as Comunidades</option>
-                    @foreach (var item in ViewBag.Comunidades)
-                    {
-                        var isSelected = item.Value == ViewData["CurrentComunidade"]?.ToString();
-                        <option value="@item.Value" selected="@isSelected">@item.Text</option>
-                    }
-                </select>
-            </div>
-
-            <div class="bottom-filters">
-                <div class="search-container">
-                    <div class="search-input-group">
-                        <div class="search-wrapper">
-                            <!-- Mudamos o type para "search" e adicionamos classe para busca em tempo real -->
-                            <input type="search" class="search-input" name="search" value="@ViewData["CurrentFilter"]"
-                                placeholder="Procure pelo nome do ator" id="searchInput" />
-                            <button type="submit" class="btn-search">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-
-                        <div class="select-wrapper secondary-select-wrapper">
-                            <select class="secondary-select" name="status" id="statusFilter" onchange="submitFilter()">
-                                <option value="">Todos os Status</option>
-                                <option value="EmProgresso"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Em Progresso")">
-                                    Em progresso
-                                </option>
-                                <option value="Concluida"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Concluida")">
-                                    Concluídas
-                                </option>
-                                <option value="Abandonada"
-                                    selected="@(ViewData["CurrentStatus"]?.ToString() == "Abandonada")">
-                                    Abandonadas
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <a class="btn-add" asp-action="Create" title="Adicionar Nova Ficha">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                </div>
-            </div>
-        </form>
+<div class="modern-container">
+    <!-- Header -->
+    <div class="header-section">
+        <h2>
+            <strong class="text-primary">Ficha de Primeiro Contato</strong>
+        </h2>
     </div>
 
-    <div class="forms-list" id="fichasContainer">
-        @if (Model != null && Model.Any())
+    <!-- Barra de Busca -->
+    <div class="search-container">
+        <div class="search-input-group">
+            <div class="search-wrapper">
+                <input type="search" id="searchInput" placeholder="Busque por nome do ator..."
+                    aria-label="Buscar fichas" />
+                <button type="button" class="btn-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+
+        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create")'"
+            title="Adicionar Nova Ficha">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <!-- Estatísticas -->
+        <div class="section-label">Resumo</div>
+        <div class="actions-grid">
+            <div class="action-card stats-card">
+                <span class="card-title" id="totalFichas">@Model.Count()</span>
+                <span class="card-subtitle">Total de Fichas</span>
+                <div class="card-icons">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+            </div>
+
+            @{
+                var emProgresso = Model.Count(f => f.Status == "EmProgresso");
+            }
+            <div class="action-card stats-card stats-card-yellow">
+                <span class="card-title" id="emProgressoCount">@emProgresso</span>
+                <span class="card-subtitle">Em Progresso</span>
+                <div class="card-icons">
+                    <i class="fas fa-spinner"></i>
+                </div>
+            </div>
+
+            @{
+                var concluidas = Model.Count(f => f.Status == "Concluida");
+            }
+            <div class="action-card stats-card stats-card-green">
+                <span class="card-title" id="concluidasCount">@concluidas</span>
+                <span class="card-subtitle">Concluídas</span>
+                <div class="card-icons">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+
+            @{
+                var abandonadas = Model.Count(f => f.Status == "Abandonada");
+            }
+            <div class="action-card stats-card stats-card-red">
+                <span class="card-title" id="abandonadasCount">@abandonadas</span>
+                <span class="card-subtitle">Abandonadas</span>
+                <div class="card-icons">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro por Status -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Filtrar por Status</div>
+
+        <div class="eixos-filter-container">
+            <button class="filter-eixo-btn active" data-status="todos">
+                <i class="fas fa-th"></i>
+                Todos
+            </button>
+            <button class="filter-eixo-btn" data-status="EmProgresso">
+                <i class="fas fa-spinner"></i>
+                Em Progresso
+            </button>
+            <button class="filter-eixo-btn" data-status="Concluida">
+                <i class="fas fa-check-circle"></i>
+                Concluídas
+            </button>
+            <button class="filter-eixo-btn" data-status="Abandonada">
+                <i class="fas fa-times-circle"></i>
+                Abandonadas
+            </button>
+        </div>
+
+        <!-- Filtro por Comunidade -->
+        @if (ViewBag.Comunidades != null && ((IEnumerable<dynamic>)ViewBag.Comunidades).Any())
         {
+            <div class="purple-divider"></div>
+            <div class="section-label">Filtrar por Comunidade</div>
+
+            <div class="eixos-filter-container">
+                <button class="filter-comunidade-btn active" data-comunidade="todas">
+                    <i class="fas fa-home"></i>
+                    Todas as Comunidades
+                </button>
+                @foreach (var item in ViewBag.Comunidades)
+                {
+                    <button class="filter-comunidade-btn" data-comunidade="@item.Value">
+                        <i class="fas fa-map-marker-alt"></i>
+                        @item.Text
+                    </button>
+                }
+            </div>
+        }
+
+        <!-- Lista de Fichas -->
+        <div class="purple-divider"></div>
+        <div class="section-label">Todas as Fichas</div>
+
+        <div class="forms-list" id="fichasContainer">
             @foreach (var form in Model)
             {
                 bool isFinalized = form.Status != "EmProgresso";
                 var nomeAtor = form.Ator?.Nome?.ToLower() ?? "";
-                <div class="form-item" data-search="@nomeAtor">
-                    <div class="form-info">
-                        <p class="name">@form.Ator?.Nome</p>
 
-                        <!-- Exibir comunidades associadas -->
-                        @if (form.FichaComunidades != null && form.FichaComunidades.Any())
-                        {
-                            <p class="community">
-                                @{
-                                    var comunidades = form.FichaComunidades.Take(2).ToList();
-                                    for (int i = 0; i < comunidades.Count; i++)
-                                    {
-                                        <span class="community-tag">@comunidades[i].Comunidade.Nome</span>
-                                        @if (i < comunidades.Count - 1)
-                                        {
-                                            <span>, </span>
-                                        }
-                                    }
-                                    @if (form.FichaComunidades.Count > 2)
-                                    {
-                                        <span>...</span>
-                                    }
-                                }
+                @* ✅ MUDANÇA: Usar FkIdComunidade diretamente *@
+                var comunidadeId = form.FkIdComunidade?.ToString() ?? "";
+
+                <div class="form-item ficha-item" data-status="@form.Status" data-nome="@nomeAtor"
+                    data-comunidade="@comunidadeId">
+
+                    <div class="item-header">
+                        <div class="activity-icon activity-icon-purple">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="item-content">
+                            <p class="item-name">@form.Ator?.Nome</p>
+
+                            <p class="item-subtitle">
+                                <i class="fa-solid fa-calendar"></i>
+                                @form.DtContato.ToString("dd/MM/yyyy")
                             </p>
-                        }
 
-                        <div class="form-status">
-                            <p class="date">@form.DtContato.ToString("dd/MM/yyyy")</p>
+                            <!-- Comunidade e Status -->
+                            <div class="tag-list">
+                                @* ✅ MUDANÇA: Usar form.Comunidade em vez de FichaComunidades *@
+                                @if (form.Comunidade != null)
+                                {
+                                    <span class="tag-item tag-blue">
+                                        <i class="fas fa-home"></i>
+                                        @form.Comunidade.Nome
+                                    </span>
+                                }
 
-                            @if (form.Status == "Concluida")
-                            {
-                                <span class="tag-item tag-green">Concluída</span>
-                            }
-                            else if (form.Status == "Abandonada")
-                            {
-                                <span class="tag-item tag-red">Abandonada</span>
-                            }
-                            else if (form.Status == "EmProgresso")
-                            {
-                                <span class="tag-item tag-yellow">Em Progresso</span>
-                            }
+                                @if (form.Status == "Concluida")
+                                {
+                                    <span class="tag-item tag-green">
+                                        <i class="fas fa-check-circle"></i>
+                                        Concluída
+                                    </span>
+                                }
+                                else if (form.Status == "Abandonada")
+                                {
+                                    <span class="tag-item tag-red">
+                                        <i class="fas fa-times-circle"></i>
+                                        Abandonada
+                                    </span>
+                                }
+                                else if (form.Status == "EmProgresso")
+                                {
+                                    <span class="tag-item tag-yellow">
+                                        <i class="fas fa-spinner"></i>
+                                        Em Progresso
+                                    </span>
+                                }
+                            </div>
                         </div>
                     </div>
 
                     <div class="actions">
                         <button type="button" class="btn-action btn-concluir @(isFinalized ? "gray" : "")"
                             data-id="@form.IdFicha" title="Concluir" @(isFinalized ? "disabled" : "")>
-                            <i class="fa fa-check"></i>
+                            <i class="fa-solid fa-check"></i>
                         </button>
 
                         <button type="button" class="btn-action btn-abandonar @(isFinalized ? "gray" : "")"
                             data-id="@form.IdFicha" title="Abandonar" @(isFinalized ? "disabled" : "")>
-                            <i class="fa fa-times"></i>
+                            <i class="fa-solid fa-times"></i>
                         </button>
 
-                        <a asp-action="Edit" asp-route-id="@form.IdFicha" class="btn-action" title="Detalhes">
-                            <i class="fa fa-eye"></i>
+                        <a asp-action="Edit" asp-route-id="@form.IdFicha" class="btn-action" title="Ver detalhes">
+                            <i class="fa-solid fa-eye"></i>
                         </a>
                     </div>
                 </div>
             }
-        }
-        else
-        {
-            <p class="no-records">Nenhuma ficha encontrada.</p>
-        }
-    </div>
-
-    <!-- Modais (mantenha como está) -->
-    <div id="modalConcluir" class="custom-modal">
-        <div class="modal-content">
-            <h3>Completar ficha</h3>
-            <p>Você realmente deseja completar essa ficha?</p>
-            <form id="formConcluir" method="post">
-                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
-                <button type="submit" class="wizard-btn btn-next btn-confirm">Sim</button>
-            </form>
         </div>
-    </div>
-
-    <div id="modalAbandonar" class="custom-modal">
-        <div class="modal-content">
-            <h3>Abandonar ficha</h3>
-            <p>Você realmente deseja abandonar esta ficha?</p>
-            <form id="formAbandonar" method="post">
-                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
-                <button type="submit" class="wizard-btn btn-next btn-confirm">Sim</button>
-            </form>
+    }
+    else
+    {
+        <!-- Nenhuma ficha cadastrada -->
+        <div class="no-records">
+            <div class="no-records-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <h3>Nenhuma ficha cadastrada</h3>
+            <p>Comece adicionando a primeira ficha de primeiro contato ao sistema.</p>
+            <button type="button" class="btn-save" onclick="window.location.href='@Url.Action("Create")'">
+                <i class="fa-solid fa-plus"></i> Adicionar Primeira Ficha
+            </button>
         </div>
+    }
+
+    <!-- Mensagem quando nenhum resultado for encontrado -->
+    <div class="no-records" id="noResultsMessage" style="display: none;">
+        <div class="no-records-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <h3>Nenhuma ficha encontrada</h3>
+        <p>Tente ajustar os filtros ou termos de busca.</p>
+    </div>
+</div>
+
+<!-- Modais -->
+<div id="modalConcluir" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-check-circle" style="color: #28a745;"></i>
+        </div>
+        <h3 class="modal-title">Completar Ficha</h3>
+        <p class="modal-text">Você realmente deseja completar essa ficha?</p>
+        <form id="formConcluir" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-actions">
+                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
+                <button type="submit" class="wizard-btn btn-save-final btn-confirm">Sim, Completar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalAbandonar" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="modal-title">Abandonar Ficha</h3>
+        <p class="modal-text">Você realmente deseja abandonar esta ficha?</p>
+        <form id="formAbandonar" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-actions">
+                <button type="button" class="wizard-btn btn-prev btn-cancel">Cancelar</button>
+                <button type="submit" class="wizard-btn btn-delete btn-confirm">Sim, Abandonar</button>
+            </div>
+        </form>
     </div>
 </div>
 
 @section Scripts {
-    <script src="~/js/fichaprimeirocontato.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const fichasContainer = document.getElementById('fichasContainer');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+            const fichaItems = document.querySelectorAll('.ficha-item');
+            const filterStatusButtons = document.querySelectorAll('.filter-eixo-btn');
+            const filterComunidadeButtons = document.querySelectorAll('.filter-comunidade-btn');
+
+            let currentStatusFilter = 'todos';
+            let currentComunidadeFilter = 'todas';
+
+            // Função para filtrar fichas
+            function filterFichas() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                fichaItems.forEach(item => {
+                    const nome = item.getAttribute('data-nome') || '';
+                    const status = item.getAttribute('data-status') || '';
+                    const comunidade = item.getAttribute('data-comunidade') || ''; // ✅ Singular agora!
+
+                    // Verificar se corresponde à busca
+                    const matchesSearch = nome.includes(searchTerm);
+
+                    // Verificar se corresponde ao filtro de status
+                    let matchesStatus = true;
+                    if (currentStatusFilter !== 'todos') {
+                        matchesStatus = status === currentStatusFilter;
+                    }
+
+                    // ✅ MUDANÇA: Comparação direta, não mais array
+                    let matchesComunidade = true;
+                    if (currentComunidadeFilter !== 'todas') {
+                        matchesComunidade = comunidade === currentComunidadeFilter;
+                    }
+
+                    const shouldShow = matchesSearch && matchesStatus && matchesComunidade;
+
+                    if (shouldShow) {
+                        item.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Mostrar/ocultar mensagem de "nenhum resultado"
+                if (visibleCount === 0 && fichaItems.length > 0) {
+                    fichasContainer.style.display = 'none';
+                    noResultsMessage.style.display = 'block';
+                } else {
+                    fichasContainer.style.display = 'flex';
+                    noResultsMessage.style.display = 'none';
+                }
+
+                // Atualizar contadores
+                updateCounters();
+            }
+
+            // Função para atualizar contadores
+            function updateCounters() {
+                const visibleItems = Array.from(fichaItems).filter(item => item.style.display !== 'none');
+
+                const totalVisible = visibleItems.length;
+                const emProgressoVisible = visibleItems.filter(item => item.getAttribute('data-status') === 'EmProgresso').length;
+                const concluidasVisible = visibleItems.filter(item => item.getAttribute('data-status') === 'Concluida').length;
+                const abandonadasVisible = visibleItems.filter(item => item.getAttribute('data-status') === 'Abandonada').length;
+
+                document.getElementById('totalFichas').textContent = totalVisible;
+                document.getElementById('emProgressoCount').textContent = emProgressoVisible;
+                document.getElementById('concluidasCount').textContent = concluidasVisible;
+                document.getElementById('abandonadasCount').textContent = abandonadasVisible;
+            }
+
+            // Event listener para busca
+            if (searchInput) {
+                searchInput.addEventListener('input', filterFichas);
+
+                searchInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        searchInput.value = '';
+                        filterFichas();
+                    }
+                });
+            }
+
+            // Event listeners para filtros de status
+            filterStatusButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    filterStatusButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentStatusFilter = this.getAttribute('data-status');
+                    filterFichas();
+                });
+            });
+
+            // Event listeners para filtros de comunidade
+            filterComunidadeButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    filterComunidadeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentComunidadeFilter = this.getAttribute('data-comunidade');
+                    filterFichas();
+                });
+            });
+
+            // Modais
+            const modalConcluir = document.getElementById('modalConcluir');
+            const modalAbandonar = document.getElementById('modalAbandonar');
+            const formConcluir = document.getElementById('formConcluir');
+            const formAbandonar = document.getElementById('formAbandonar');
+
+            // Botões de concluir
+            document.querySelectorAll('.btn-concluir').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    if (!this.disabled) {
+                        const id = this.getAttribute('data-id');
+                        formConcluir.action = '@Url.Action("Concluir")/' + id;
+                        modalConcluir.style.display = 'flex';
+                        setTimeout(() => modalConcluir.classList.add('active'), 10);
+                    }
+                });
+            });
+
+            // Botões de abandonar
+            document.querySelectorAll('.btn-abandonar').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    if (!this.disabled) {
+                        const id = this.getAttribute('data-id');
+                        formAbandonar.action = '@Url.Action("Abandonar")/' + id;
+                        modalAbandonar.style.display = 'flex';
+                        setTimeout(() => modalAbandonar.classList.add('active'), 10);
+                    }
+                });
+            });
+
+            // Fechar modais
+            document.querySelectorAll('.btn-cancel').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    closeModal(modalConcluir);
+                    closeModal(modalAbandonar);
+                });
+            });
+
+            // Fechar ao clicar fora
+            [modalConcluir, modalAbandonar].forEach(modal => {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) {
+                        closeModal(modal);
+                    }
+                });
+            });
+
+            // Fechar com ESC
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeModal(modalConcluir);
+                    closeModal(modalAbandonar);
+                }
+            });
+
+            function closeModal(modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+
+            // Loading nos botões de submit dos modais
+            [formConcluir, formAbandonar].forEach(form => {
+                form.addEventListener('submit', function () {
+                    const btn = this.querySelector('.btn-confirm');
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+                });
+            });
+        });
+    </script>
 }

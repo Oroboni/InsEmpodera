@@ -1,74 +1,123 @@
 @model Empodera.Models.Usuario
 @{
-    ViewData["Title"] = "Detalhes de Usuário";
-    ViewData["PageCSS"] = "usuarios-edit"; 
-    Layout = null; // IMPORTANTE: Define Layout como null para que esta View não use o _Layout.cshtml
+    ViewData["Title"] = "Usuários";
+    ViewData["PageCSS"] = "usuarios-edit";
+    Layout = "_Layout";
 }
-<head>
-    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css">
-</head>
 
-<div class="modal-dialog-content">
-    
-    <div class="modal-header">
-        <h3 class="modal-title">Criar Usuario</h3>
-        <button type="button" class="close-button" onclick="window.location.href='/Users/Index'">
-            &times;
-        </button>
-    </div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css" />
+}
 
-    <div class="modal-body">       
+<div class="modern-container">
+    <form asp-action="Create" method="post" class="main-form">
+        @Html.AntiForgeryToken()
+
+
+        <!-- Cabeçalho -->
+        <div class="header-section">
+            <h2>
+                <a asp-controller="Users" asp-action="Index" class="text-primary">Usuários</a>
+                <span class="separator">></span>
+                <strong class="text-muted">Novo Usuário</strong>
+            </h2>
+        </div>
+
         @if (ViewBag.ErrorMessage != null)
         {
             <div class="alert alert-danger">
                 @ViewBag.ErrorMessage
             </div>
         }
-        <form asp-action="Create" method="post">
 
-            <div class="form-group">
-                <label class="control-label">Nome</label>
-                <input class="form-control" asp-for="Nome" />
+        <!-- Nome -->
+        <div class="input-card full-width">
+            <div class="icon-box">
+                <i class="fa-solid fa-user"></i>
             </div>
-            
-            <div class="form-group">
-                <label  class="control-label">E-mail</label>
-                <input class="form-control" asp-for="Email" />
+            <div class="input-content">
+                <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
+                <input asp-for="Nome" class="clean-input" placeholder="Digite o nome do usuário" required />
+            </div>
+        </div>
+
+
+        <!-- Email -->
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="Email">E-mail <span class="text-danger">*</span></label>
+                    <input asp-for="Email" type="email" class="clean-input" placeholder="Digite o e-mail" required />
+                </div>
             </div>
 
-            <div class="form-group">
-                <label  class="control-label">Senha</label>
-                <input class="form-control" asp-for="Senha" />
+            <div class="input-card">
+                <div class="icon-box purple">
+                    <i class="fa-solid fa-id-badge"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="FkIdPerfil">Perfil <span class="text-danger">*</span></label>
+                    <select asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" class="clean-input" required>
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="genero">Gênero</label>
-                <div class="select-wrapper">
+
+        <!-- Senha -->
+        <div class="input-card full-width">
+            <div class="icon-box">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="input-content">
+                <label asp-for="Senha">Senha <span class="text-danger">*</span></label>
+                <input asp-for="Senha" type="password" class="clean-input" placeholder="Digite a senha" required />
+            </div>
+        </div>
+
+
+        <!-- Gênero -->
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple">
                     <i class="fa-solid fa-venus-mars"></i>
-                    <select class="form-control" id="Genero" asp-for="Genero" name="Genero">
-                        <option value="" disabled selected>Selecione</option>
+                </div>
+                <div class="input-content">
+                    <label asp-for="Genero">Gênero</label>
+                    <select asp-for="Genero" class="clean-input">
+                        <option value="">Selecione</option>
                         <option value="feminino">Feminino</option>
                         <option value="masculino">Masculino</option>
                         <option value="nao-declarado">Não declarado</option>
                         <option value="transgenero">Transgênero</option>
                     </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
-            
-             <div class="form-group">
-                <label class="control-label">Ocupação</label>
-                <input class="form-control" asp-for="Ocupacao" />
-            </div>
-           
-            <div class="form-group">
-                <label class="control-label">Perfil de acesso *</label>
-                <select class="form-control" asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" required></select>
-            </div>
 
-            <div class="form-actions">
-                <button class="btn-save" type="submit" onclick="window.location.href='/Users/Index.cshtml'">Salvar</button>
+            <div class="input-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="Ocupacao">Ocupação</label>
+                    <input asp-for="Ocupacao" class="clean-input" placeholder="Ex: Assistente social" />
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="buttons-container">
+            <a asp-controller="Users" asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-check"></i> Salvar Usuário
+            </button>
+        </div>
+    </form>
 </div>
