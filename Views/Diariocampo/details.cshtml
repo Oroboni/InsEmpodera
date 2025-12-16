@@ -1,167 +1,243 @@
 @model Empodera.Models.DiarioCampo
 
 @{
-    ViewData["Title"] = "Detalhes do Diário de Campo";
-    ViewData["PageCSS"] = "diarioCampoForm";
+    ViewData["Title"] = "Detalhes do Diário";
+    Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/diarioCampoForm.css"/> 
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css"/>
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* Estilos específicos "Teia" para visualização */
+        .action-group-container {
+            margin-bottom: 25px;
+        }
+        .action-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .action-header label {
+            font-weight: 700; 
+            color: #444; 
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-list-container {
+            background: #fafafa; 
+            border-radius: 12px; 
+            padding: 15px; 
+            border: 1px dashed #ccc;
+            min-height: 60px;
+        }
+        .action-item-readonly {
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+        /* Forçar altura do mapa caso o CSS externo falhe */
+        #mapa-diario {
+            height: 400px !important;
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            z-index: 1;
+        }
+    </style>
 }
 
-<h2 class="page-title">Detalhes do Diário de Campo</h2>
-
-<div class="formulario">
-
-    <!-- Comunidade -->
-    <div class="form-group">
-        <label>Comunidade</label>
-        <div class="input readonly-box">Comunidade Exemplo A</div>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-controller="DiarioCampo" asp-action="Index" class="text-primary">Diários de Campo</a>
+            <span class="separator">></span>
+            <strong class="text-muted">Detalhes do Registro</strong>
+        </h2>
     </div>
 
-    <!-- Data -->
-    <div class="form-group">
-        <label>Data</label>
-        <div class="input readonly-box">25/11/2025</div>
+    <div class="section-label">Informações Básicas</div>
+    
+    <div class="input-card full-width">
+        <div class="icon-box purple">
+            <i class="fa-solid fa-city"></i>
+        </div>
+        <div class="input-content">
+            <label>Comunidade</label>
+            <input type="text" class="clean-input" value="@(Model.Comunidade?.Nome ?? "Não informado")" readonly />
+        </div>
     </div>
 
-    <!-- Eixos múltiplos -->
-    <div class="form-group">
-        <label>Eixos Selecionados</label>
-        <ul class="readonly-list">
-            <li>Eixo 1</li>
-            <li>Eixo 2</li>
-        </ul>
-    </div>
-
-    <!-- Ações da Equipe -->
-    <div class="form-group">
-        <label>Ações da Equipe</label>
-        <div class="itens-lista">
-            <div class="item">
-                <strong>Escuta ativa</strong><br />
-                Atores: Educador, Apoio<br />
-                Quantidade: 3
+    <div class="grid-row">
+        <div class="input-card">
+            <div class="icon-box purple">
+                <i class="fa-solid fa-calendar-day"></i>
             </div>
-
-            <div class="item">
-                <strong>Acompanhamento do Projeto Semear</strong><br />
-                Atores: Coordenador<br />
-                Quantidade: 1
+            <div class="input-content">
+                <label>Data do Registro</label>
+                <input type="text" class="clean-input" value="@Model.Data.ToString("dd/MM/yyyy")" readonly />
             </div>
         </div>
     </div>
 
-    <!-- Ações Institucionais -->
-    <div class="form-group">
-        <label>Ações Institucionais</label>
-        <div class="itens-lista">
-            <div class="item">
-                <strong>Roda de Conversa</strong><br />
-                Eixos: 1, 2<br />
-                Provedor: ONG XPTO<br />
-                Atores: Educador<br />
-                Quantidade: 3
-            </div>
-
-            <div class="item">
-                <strong>Oficina Criativa</strong><br />
-                Eixo: 3<br />
-                Provedor: Parceiro ABC<br />
-                Atores: Coordenador<br />
-                Quantidade: 2
+    <div class="input-card full-width">
+        <div class="icon-box purple">
+            <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div class="input-content">
+            <label>Eixos Selecionados</label>
+            <div class="tag-list" style="margin-top: var(--space-3);">
+                @if (Model.DiarioEixos != null && Model.DiarioEixos.Any())
+                {
+                    foreach (var de in Model.DiarioEixos)
+                    {
+                        var colorClass = "tag-blue";
+                        switch(de.FkIdEixo) {
+                            case 1: colorClass = "tag-purple"; break;
+                            case 2: colorClass = "tag-blue"; break;
+                            case 3: colorClass = "tag-green"; break;
+                            case 4: colorClass = "tag-yellow"; break;
+                            case 5: colorClass = "tag-lightblue"; break;
+                            case 6: colorClass = "tag-red"; break;
+                            case 7: colorClass = "tag-orange"; break;
+                        }
+                        <span class="tag-item @colorClass">
+                            <i class="fa-solid fa-check"></i>
+                            @de.Eixo?.Nome
+                        </span>
+                    }
+                }
+                else
+                {
+                    <span class="tag-item tag-default">
+                        <i class="fa-solid fa-minus"></i>
+                        Nenhum eixo selecionado
+                    </span>
+                }
             </div>
         </div>
     </div>
 
-    <!-- Localização -->
-    <div class="form-group localizacao-wrapper">
-        <label style="font-weight: 600; font-size: 16px;">Localização</label>
+    <div class="purple-divider"></div>
 
-        <div class="localizacao-group">
-            <div class="col">
-                <label>CEP</label>
-                <div class="input readonly-box">12345-678</div>
-            </div>
-
-            <div class="col">
-                <label>Número</label>
-                <div class="input readonly-box">100</div>
-            </div>
-
-            <div class="col local-rua">
-                <label>Rua</label>
-                <div class="input readonly-box">Rua Exemplo</div>
-            </div>
-
-            <div class="col">
-                <label>Bairro</label>
-                <div class="input readonly-box">Bairro Exemplo</div>
-            </div>
-
-            <div class="col">
-                <label>Cidade</label>
-                <div class="input readonly-box">São Paulo</div>
-            </div>
-
-            <div class="col local-estado">
-                <label>Estado</label>
-                <div class="input readonly-box">SP</div>
-            </div>
-
-            <div class="col local-complemento">
-                <label>Complemento</label>
-                <div class="input readonly-box">Bloco A</div>
-            </div>
+    <div class="section-label">Descrição do Registro</div>
+    
+    <div class="input-card full-width">
+        <div class="icon-box purple">
+            <i class="fa-solid fa-align-left"></i>
+        </div>
+        <div class="input-content">
+            <label>Relato / Descrição</label>
+            <textarea class="clean-input" rows="8" readonly style="resize: vertical;">@Model.Descricao</textarea>
         </div>
     </div>
 
-    <!-- Mapa -->
-    <div class="form-group mapa-wrapper">
-        <div id="mapaContainer">
-            <iframe
-                width="100%"
-                height="100%"
-                style="border:0;"
-                loading="lazy"
-                allowfullscreen
-                src="https://www.google.com/maps?q=Rua+Exemplo+100+São+Paulo+SP&output=embed">
-            </iframe>
+    <div class="purple-divider"></div>
+
+    <div class="section-label">Ações Realizadas</div>
+
+
+    <div class="action-group-container">
+        <div class="action-header">
+            <label>
+                <i class="fa-solid fa-building" style="color: var(--color-primary);"></i>
+                Ações Institucionais 
+                <span>(@(Model.DiarioDAcoes?.Count ?? 0) itens)</span>
+            </label>
+        </div>
+
+        <div class="action-list-container">
+            @if(Model.DiarioDAcoes != null && Model.DiarioDAcoes.Any()) {
+                foreach(var acao in Model.DiarioDAcoes) {
+                    <div class="action-item-readonly">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <strong style="color: #333;">@acao.Nome</strong>
+                                <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;">
+                                    Institucional
+                                </span>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #666;">
+                                <i class="fa-solid fa-building"></i> @(acao.PeovedorEx ?? "Não informado")
+                            </div>
+                        </div>
+                    </div>
+                }
+            } else {
+                <div class="empty-state-acoes" style="text-align: center; color: #777; padding: 10px;">
+                    <i class="fa-solid fa-building" style="font-size: 1.5rem; margin-bottom: 5px; color: #ccc;"></i>
+                    <p style="font-size: 0.85rem; margin: 0;">Nenhum item encontrado</p>
+                </div>
+            }
         </div>
     </div>
 
-    <!-- Anexos -->
-    <div class="form-group full-width">
-        <label>Anexos</label>
-        <ul class="readonly-list">
-            <li><a href="#">foto1.jpg</a></li>
-            <li><a href="#">documento.pdf</a></li>
-        </ul>
-    </div>
+    <div class="purple-divider"></div>
+    <div class="section-label">Localização</div>
 
-    <!-- Descrição -->
-    <div class="form-group full-width">
-        <label>Descrição</label>
-        <div class="input readonly-box">
-            Exemplo de descrição do diário de campo.
+    <div id="mapa-diario" style="height: 400px; width: 100%; border-radius: 12px; margin-bottom: 20px; background: #eee;"></div>
+
+    <div class="input-card full-width">
+        <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
+        <div class="input-content">
+            <label>Endereço Completo</label>
+            <input id="rua" class="clean-input" readonly value="@Model.Localizacao" placeholder="Endereço não registrado" />
         </div>
     </div>
 
-    <!-- Metadados -->
-    <div class="form-group full-width">
-        <label>Criação</label>
-        <div class="input readonly-box">25/11/2025 14:30 — João Silva</div>
-
-        <label>Modificado em</label>
-        <div class="input readonly-box">25/11/2025 15:00 — Maria Oliveira</div>
+    <div class="grid-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="input-card">
+            <div class="icon-box purple"><i class="fa-solid fa-diamond-turn-right"></i></div>
+            <div class="input-content">
+                <label>Complemento / Referência</label>
+                <input class="clean-input" readonly placeholder="-" />
+            </div>
+        </div>
+        <div class="input-card">
+            </div>
     </div>
 
-    <!-- Botões -->
-    <div class="buttons full-width">
-        <a asp-action="Edit" class="btn-primary">Editar</a>
-        <a asp-action="Index" class="btn-secondary">Voltar</a>
-    </div>
+    <div class="purple-divider"></div>
 
+    <div class="buttons-container">
+        <a asp-action="Index" class="wizard-btn btn-prev">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+        
+        <div class="action-buttons-group">
+            <a asp-action="Edit" asp-route-id="@Model.IdDCampo" class="wizard-btn btn-next">
+                <i class="fa-solid fa-pen"></i> Editar
+            </a>
+        </div>
+    </div>
 </div>
 
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="~/js/app-maps.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Delay pequeno para garantir que a DIV do mapa foi renderizada
+            setTimeout(function() {
+                // Tenta inicializar o mapa usando a função global e o ID 'rua'
+                if (typeof initMapSelector === 'function' && document.getElementById('mapa-diario')) {
+                    console.log("Iniciando mapa em modo Details...");
+                    // 3º parametro 'true' para travar em modo leitura (se sua função suportar)
+                    initMapSelector('mapa-diario', 'rua', true);
+                }
+            }, 200);
+        });
+    </script>
+}

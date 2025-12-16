@@ -2,232 +2,466 @@
 
 @{
     ViewData["Title"] = "Editar Diário de Campo";
-    ViewData["PageCSS"] = "diarioCampoForm";
-}
+    Layout = "_Layout";
 
+    // Configuração dos Eixos
+    var listaEixosCorretos = new List<dynamic> {
+        new { IdEixo = 1, Nome = "Prevenção" },
+        new { IdEixo = 2, Nome = "Ocupação" },
+        new { IdEixo = 3, Nome = "Lazer" },
+        new { IdEixo = 4, Nome = "Segurança Social" },
+        new { IdEixo = 5, Nome = "Educação" },
+        new { IdEixo = 6, Nome = "Saúde" },
+        new { IdEixo = 7, Nome = "Assistência Básica" }
+    };
+
+    // Configuração dos Atores (JSON para o JS)
+    string jsonAtores = "[]";
+    if (ViewBag.Atores != null) {
+        try {
+            var options = new System.Text.Json.JsonSerializerOptions {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = false
+            };
+            jsonAtores = System.Text.Json.JsonSerializer.Serialize(ViewBag.Atores, options);
+        } catch { 
+            jsonAtores = "[]"; 
+        }
+    }
+}
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/diarioCampoForm.css" /> 
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" /> 
+    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* Estilos específicos Teia */
+        .action-group-container { margin-bottom: 25px; }
+        .action-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .action-header label { font-weight: 700; color: #444; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+        .btn-add-circle { background: var(--color-primary); color: white; border: none; border-radius: 50%; cursor: pointer; align-items: center; justify-content: center; transition: transform 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-add-circle:hover { background: var(--color-primary-dark); transform: scale(1.1); }
+        .action-list-container { background: #fafafa; border-radius: 12px; padding: 15px; border: 1px dashed #ccc; min-height: 60px; }
+        
+        /* Ajuste do Mapa */
+        #mapa-diario { height: 400px !important; width: 100%; border-radius: 12px; border: 2px solid #ddd; z-index: 1; }
+    </style>
 }
 
-<h2 class="page-title">Editar Diário de Campo</h2>
-
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div class="formulario">
-
-        <!-- Comunidade -->
-        <div class="form-group">
-            <label for="ComunidadeId">Comunidade</label>
-            <div class="select-wrapper">
-                <select id="ComunidadeId" name="ComunidadeId" required>
-                    <option value="">Selecione uma comunidade</option>
-                    <option value="1">Comunidade Exemplo A</option>
-                    <option value="2">Comunidade Exemplo B</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Data -->
-        <div class="form-group">
-            <label for="DataDiario">Data</label>
-            <input type="date" id="DataDiario" name="DataDiario" class="input" required />
-        </div>
-
-        <!-- Eixos múltiplos -->
-        <div class="form-group">
-            <label for="EixosMulti">Selecione múltiplos eixos</label>
-            <select id="EixosMulti" name="EixosSelecionados" multiple class="multi-click-select" size="5">
-                <option value="1">Eixo 1</option>
-                <option value="2">Eixo 2</option>
-                <option value="3">Eixo 3</option>
-                <option value="4">Eixo 4</option>
-                <option value="5">Eixo 5</option>
-                <option value="6">Eixo 6</option>
-                <option value="7">Eixo 7</option>
-                <option value="8">Eixo 8</option>
-            </select>
-        </div>
-
-
-        <!-- =============================== -->
-        <!-- MODAL: ADICIONAR AÇÃO DA EQUIPE -->
-        <!-- =============================== -->
-        <div id="modalAtividade" class="modal hidden">
-            <div class="modal-content">
-                <h3>Adicionar Ação da Equipe</h3>
-
-                <label>Selecione a atividade</label>
-                <select id="atividadeLista" class="input">
-                    <option value="Escuta ativa">Escuta ativa</option>
-                    <option value="Dia das crianças">Dia das crianças</option>
-                    <option value="Acompanhamento do Projeto Semear">Acompanhamento do Projeto Semear</option>
-                </select>
-
-                <label>Atores</label>
-                <select id="modalAtorAtividade" class="input" multiple size="4">
-                    <option value="Educador">Educador</option>
-                    <option value="Coordenador">Coordenador</option>
-                    <option value="Apoio">Apoio</option>
-                </select>
-
-                <label>Quantidade</label>
-                <input type="number" id="modalQtdAtividade" class="input modal-quantidade" min="1" />
-
-                <div class="modal-buttons">
-                    <button type="button" class="btn-primary" onclick="confirmarAtividade()">Adicionar</button>
-                    <button type="button" class="btn-secondary" onclick="fecharModal('modalAtividade')">Cancelar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ações da Equipe -->
-        <div class="form-group">
-            <label>Ações da Equipe</label>
-            <div id="atividadesContainer" class="itens-lista"></div>
-
-            <button type="button" class="btn-secondary" onclick="addAtividade()">
-                + Adicionar Ação da Equipe
-            </button>
-        </div>
-
-
-        <!-- =============================== -->
-        <!-- MODAL: AÇÃO INSTITUCIONAL -->
-        <!-- =============================== -->
-        <div id="modalInstitucional" class="modal hidden">
-            <div class="modal-content">
-                <h3>Adicionar Ação Institucional</h3>
-
-                <label>Nome</label>
-                <input type="text" id="instNome" class="input modal-nome"/>
-
-                <label>Eixos</label>
-                <select id="instEixo" class="input" multiple size="4">
-                    <option value="1">Eixo 1</option>
-                    <option value="2">Eixo 2</option>
-                    <option value="3">Eixo 3</option>
-                </select>
-
-                <label>Provedor Externo</label>
-                <input type="text" id="instProvedor" class="input modal-provedor" />
-
-                <label>Atores</label>
-                <select id="instAtores" class="input" multiple size="4">
-                    <option value="Educador">Educador</option>
-                    <option value="Coordenador">Coordenador</option>
-                    <option value="Apoio">Apoio</option>
-                </select>
-
-                <label>Quantidade</label>
-                <input type="number" id="instQtd" class="input modal-quantidade" min="1" />
-
-                <div class="modal-buttons">
-                    <button type="button" class="btn-primary" onclick="confirmarInstitucional()">Adicionar</button>
-                    <button type="button" class="btn-secondary" onclick="fecharModal('modalInstitucional')">Cancelar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Lista Institucional -->
-        <div class="form-group">
-            <label>Ações Institucionais</label>
-            <div id="acoesInstitucionaisContainer" class="itens-lista"></div>
-
-            <button type="button" class="btn-secondary" onclick="abrirModal('modalInstitucional')">
-                + Adicionar Ação Institucional
-            </button>
-        </div>
-
-
-        <!-- Localização -->
-        <div class="form-group localizacao-wrapper">
-            <label style="font-weight: 600; font-size: 16px;">Localização</label>
-
-            <div class="localizacao-group">
-                <div class="col">
-                    <label for="cep">CEP</label>
-                    <input type="text" id="cep" class="input" onblur="buscarCEP()" maxlength="9" />
-                </div>
-
-                <div class="col">
-                    <label for="numero">Número</label>
-                    <input type="text" id="numero" class="input" />
-                </div>
-
-                <div class="col local-rua">
-                    <label for="rua">Rua</label>
-                    <input type="text" id="rua" class="input" readonly />
-                </div>
-
-                <div class="col">
-                    <label for="bairro">Bairro</label>
-                    <input type="text" id="bairro" class="input" readonly />
-                </div>
-
-                <div class="col">
-                    <label for="cidade">Cidade</label>
-                    <input type="text" id="cidade" class="input" readonly />
-                </div>
-
-                <div class="col local-estado">
-                    <label for="estado">Estado</label>
-                    <input type="text" id="estado" class="input" readonly />
-                </div>
-
-                <div class="col local-complemento">
-                    <label for="complemento">Complemento</label>
-                    <input type="text" id="complemento" class="input" />
-                </div>
-            </div>
-        </div>
-
-        <!-- Mapa -->
-        <div class="form-group mapa-wrapper">
-            <div id="mapaContainer">
-                <iframe
-                    id="mapaFrame"
-                    width="100%"
-                    height="100%"
-                    style="border:0;"
-                    loading="lazy"
-                    allowfullscreen
-                    referrerpolicy="no-referrer-when-downgrade"
-                    src="https://www.google.com/maps?q=Brasil&output=embed">
-                </iframe>
-            </div>
-        </div>
-
-        <!-- Anexos -->
-        <div class="form-group full-width">
-            <label>Anexos</label>
-            <input type="file" name="Anexos" id="Anexos" class="input" multiple />
-        </div>
-
-        <!-- Descrição -->
-        <div class="form-group full-width">
-            <label for="Descricao">Descrição</label>
-            <textarea id="Descricao" name="Descricao" class="input mention-area" rows="4"
-                placeholder="Digite @@ para mencionar atividade, ator ou comunidade"></textarea>
-            <div id="mentionBox" class="mention-box"></div>
-        </div>
-
-        <!-- Botões -->
-        <div class="buttons">
-            <button type="submit" class="btn-primary">Salvar</button>
-            <a asp-action="Index" class="btn-secondary">Cancelar</a>
-        </div>
-
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-controller="DiarioCampo" asp-action="Index" class="text-primary">Diários de Campo</a>
+            <span class="separator">></span>
+            <strong class="text-muted">Editar Registro</strong>
+        </h2>
     </div>
-</form>
 
-<script>
-    const EIXOS = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Eixos));
-    const ATIVIDADES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Atividades));
-    const ATORES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Atores));
-    const ACOES = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.Acoes));
-</script>
+    <div style="margin-bottom: var(--space-6); display: flex; justify-content: flex-end;">
+        <span id="modeBadge" class="tag-item tag-green" style="font-weight: var(--font-weight-semibold);">
+            <i class="fa-solid fa-edit"></i> Modo Edição Ativo
+        </span>
+    </div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editForm" class="main-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="IdDCampo" />
+
+        <div class="section-label">Informações Básicas</div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple">
+                <i class="fa-solid fa-city"></i>
+            </div>
+            <div class="input-content">
+                <label asp-for="FkIdComunidade">Comunidade <span class="text-danger">*</span></label>
+                <select asp-for="FkIdComunidade" class="clean-input" required>
+                    <option value="">Selecione...</option>
+                    @if (ViewBag.Comunidades != null) {
+                        foreach (dynamic item in ViewBag.Comunidades) {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="Data">Data <span class="text-danger">*</span></label>
+                    <input asp-for="Data" type="date" class="clean-input" required />
+                </div>
+            </div>
+        </div>
+
+        <div class="input-card full-width" style="display: block;">
+            <div class="icon-box purple" style="float: left; margin-right: 15px;">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div class="input-content">
+                <label>Eixos Selecionados</label>
+                <div class="eixos-options-grid">
+                    @foreach (dynamic eixo in listaEixosCorretos) {
+                        bool isSelected = Model.DiarioEixos != null && Model.DiarioEixos.Any(de => de.FkIdEixo == eixo.IdEixo);
+                        <label class="checkbox-card-label">
+                            <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo" @(isSelected ? "checked" : "")>
+                            <span>@eixo.Nome</span>
+                        </label>
+                    }
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Detalhamento</div>
+
+        <div class="input-card full-width" style="position: relative; overflow: visible;">
+            <div class="icon-box purple">
+                <i class="fa-solid fa-align-left"></i>
+            </div>
+            <div class="input-content">
+                <label asp-for="Descricao">Relato / Descrição</label>
+                <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Use para mencionar atores..."></textarea>
+                <ul id="mention-list"></ul>
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+
+        <div class="section-label">Ações Realizadas</div>
+
+
+        <div class="action-group-container">
+            <div class="action-header">
+                <label>
+                    <i class="fa-solid fa-building" style="color: var(--color-primary);"></i>
+                    Ações Institucionais (<span id="count-institucional">0</span> itens)
+                </label>
+                <button type="button" class="btn-add-circle" onclick="abrirModalAcao('institucional')" title="Adicionar Ação">
+                    <i class="fa-solid fa-plus" style="font-size: 12px;"></i>
+                </button>
+            </div>
+
+            <div id="container-institucional" class="action-list-container">
+                <div class="empty-state-acoes" id="empty-institucional" style="text-align: center; color: #777; padding: 10px; display: @(Model.DiarioDAcoes != null && Model.DiarioDAcoes.Any() ? "none" : "block")">
+                    <i class="fa-solid fa-building" style="font-size: 1.5rem; margin-bottom: 5px; color: #ccc;"></i>
+                    <p style="font-size: 0.85rem; margin: 0;">Nenhum item encontrado</p>
+                </div>
+
+                 @if(Model.DiarioDAcoes != null) {
+                    foreach(var acao in Model.DiarioDAcoes) {
+                        <div class="action-list-item" style="background: #fff; padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                    <strong style="color: #333;">@acao.Nome</strong>
+                                    <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;">Institucional</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: #666;">
+                                    <i class="fa-solid fa-building"></i> @acao.PeovedorEx
+                                </div>
+                            </div>
+                            <button type="button" onclick="removerItemGrid(this, 'institucional')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                             
+                             <input type="hidden" name="DAcoesExistentes" value="@acao.IdDAcoes" /> 
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Localização</div>
+
+        <div id="mapa-diario" style="margin-bottom: 20px;"></div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
+            <div class="input-content">
+                <label for="rua">Endereço</label>
+                <input asp-for="Localizacao" id="rua" class="clean-input" readonly placeholder="Use a lupa no mapa acima para buscar..." />
+            </div>
+        </div>
+
+        <div class="grid-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+             <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
+                <div class="input-content">
+                    <label>CEP</label>
+                    <input type="text" id="cep" class="clean-input" placeholder="00000-000">
+                </div>
+            </div>
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-hashtag"></i></div>
+                <div class="input-content">
+                    <label>Número</label>
+                    <input type="text" id="numero" class="clean-input" placeholder="Nº">
+                </div>
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+
+        <div class="buttons-container">
+            <a asp-action="Index" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+
+            <div class="action-buttons-group">
+                <button type="submit" class="wizard-btn btn-save-final">
+                    <i class="fa-solid fa-check"></i> Salvar Alterações
+                </button>
+
+                <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                    <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-overlay" id="deleteConfirmationModal" style="display: none;">
+    <div class="modal-content" style="max-width: 450px; text-align: center;">
+        <div class="modal-icon" style="margin: 0 auto var(--space-4);">
+            <i class="fa-solid fa-exclamation-triangle"></i>
+        </div>
+        <h3 style="margin-bottom: var(--space-3);">Confirmar Exclusão</h3>
+        <p class="text-muted" style="margin-bottom: var(--space-6);">
+            Tem certeza que deseja excluir este diário de campo? Esta ação não pode ser desfeita.
+        </p>
+        <div style="display: flex; gap: var(--space-4); justify-content: center;">
+            <button class="wizard-btn btn-prev" style="flex: 1;" id="cancelDeleteBtn">Cancelar</button>
+            <form asp-action="Delete" asp-route-id="@Model.IdDCampo" method="post" style="flex: 1;">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="wizard-btn btn-delete" style="width: 100%;">Sim, Excluir</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modalAcao" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 600px;">
+        
+        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 class="modal-title" style="margin: 0;">Detalhes de ação</h3>
+            <button type="button" class="btn-close-modal" onclick="fecharModal('modalAcao')" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #666;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="formAdicionarAcao">
+            <input type="hidden" id="tipoAcaoInput" />
+
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <label>Nome <span class="text-danger">*</span></label>
+                    <input type="text" id="nomeAcao" class="clean-input" required placeholder="Nome da ação..." />
+                </div>
+            </div>
+
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <label>Eixos</label>
+                    <select id="eixoAcao" class="clean-input">
+                        <option value="">Selecione um eixo</option>
+                        @foreach (dynamic eixo in listaEixosCorretos) {
+                            <option value="@eixo.IdEixo">@eixo.Nome</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <label>Provedor externo <span class="text-danger">*</span></label>
+                    <input type="text" id="provedorAcao" class="clean-input" required placeholder="Ex: UBS, Escola..." />
+                </div>
+            </div>
+
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <label>Atores</label>
+                    <select id="atorAcao" class="clean-input">
+                        <option value="">Selecione os atores</option>
+                        @if (ViewBag.Atores != null) {
+                             foreach (dynamic ator in ViewBag.Atores) {
+                                 <option value="@ator.Id">@ator.Nome</option>
+                             }
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-card full-width">
+                <div class="input-content no-icon">
+                    <label>Quantidade</label>
+                    <input type="number" id="quantidadeAcao" class="clean-input" min="1" value="1" />
+                </div>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 25px;">
+                <button type="button" onclick="salvarAcaoNoGrid()" class="wizard-btn btn-save-final btn-confirm full-width" style="width: 100%; justify-content: center;">
+                    ADICIONAR AÇÃO
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="~/js/app-maps.js"></script>
     <script src="~/js/diariocampo.js"></script>
+
+    <script>
+        var atoresDisponiveis = @Html.Raw(jsonAtores);
+
+        // Inicializa contadores com o que já veio do banco
+        var countEquipe = @(Model.DiarioAcoes != null ? Model.DiarioAcoes.Count : 0);
+        var countInst = @(Model.DiarioDAcoes != null ? Model.DiarioDAcoes.Count : 0);
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Atualiza os labels de contagem iniciais
+            document.getElementById('count-equipe').innerText = countEquipe;
+            document.getElementById('count-institucional').innerText = countInst;
+
+            // Inicializa mapa com delay
+            setTimeout(function() {
+                if (typeof initMapSelector === 'function' && document.getElementById('mapa-diario')) {
+                    initMapSelector('mapa-diario', 'rua'); // 'rua' é o ID do input de endereço
+                }
+            }, 200);
+
+            // Modal de exclusão
+            const openDeleteModalBtn = document.getElementById('openDeleteModalBtn');
+            const deleteModal = document.getElementById('deleteConfirmationModal');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+            if(openDeleteModalBtn) {
+                openDeleteModalBtn.addEventListener('click', function() { deleteModal.style.display = 'flex'; });
+                cancelDeleteBtn.addEventListener('click', function() { deleteModal.style.display = 'none'; });
+                deleteModal.addEventListener('click', function(e) { if (e.target === deleteModal) deleteModal.style.display = 'none'; });
+            }
+        });
+
+        // --- Lógica de Ações e Modal ---
+
+        function abrirModalAcao(tipo) {
+            document.getElementById('tipoAcaoInput').value = tipo;
+            
+            // Limpa campos
+            document.getElementById('nomeAcao').value = '';
+            document.getElementById('eixoAcao').value = '';
+            document.getElementById('provedorAcao').value = '';
+            document.getElementById('atorAcao').value = '';
+            document.getElementById('quantidadeAcao').value = '1';
+
+            document.getElementById('modalAcao').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('modalAcao').addEventListener('click', function(e) {
+            if (e.target === this) fecharModal('modalAcao');
+        });
+
+        function salvarAcaoNoGrid() {
+            const tipo = document.getElementById('tipoAcaoInput').value;
+            const nome = document.getElementById('nomeAcao').value;
+            const eixoId = document.getElementById('eixoAcao').value;
+            const provedor = document.getElementById('provedorAcao').value;
+            const qtd = document.getElementById('quantidadeAcao').value;
+
+            if (!nome) { alert("O campo Nome é obrigatório."); return; }
+            if (!provedor) { alert("O campo Provedor Externo é obrigatório."); return; }
+
+            let containerID, emptyID, counterSpanID, badgeClass;
+            
+            if (tipo === 'equipe') {
+                containerID = 'container-equipe';
+                emptyID = 'empty-equipe';
+                counterSpanID = 'count-equipe';
+                badgeClass = 'tag-blue';
+                countEquipe++;
+                document.getElementById(counterSpanID).innerText = countEquipe;
+            } else {
+                containerID = 'container-institucional';
+                emptyID = 'empty-institucional';
+                counterSpanID = 'count-institucional';
+                badgeClass = 'tag-purple';
+                countInst++;
+                document.getElementById(counterSpanID).innerText = countInst;
+            }
+
+            document.getElementById(emptyID).style.display = 'none';
+
+            const container = document.getElementById(containerID);
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'action-list-item';
+            
+            // Estilos inline para garantir visual imediato
+            itemDiv.style.background = '#fff';
+            itemDiv.style.padding = '10px 15px';
+            itemDiv.style.borderRadius = '8px';
+            itemDiv.style.marginBottom = '8px';
+            itemDiv.style.border = '1px solid #e0e0e0';
+            itemDiv.style.display = 'flex';
+            itemDiv.style.justifyContent = 'space-between';
+            itemDiv.style.alignItems = 'center';
+
+            itemDiv.innerHTML = `
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <strong style="color: #333;">${nome}</strong>
+                        <span class="tag-item ${badgeClass}" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ${tipo==='equipe'?'#e3f2fd':'#f3e5f5'}; color: ${tipo==='equipe'?'#1565c0':'#7b1fa2'}; border: 1px solid ${tipo==='equipe'?'#90caf9':'#ce93d8'};">
+                            ${tipo === 'equipe' ? 'Equipe' : 'Institucional'}
+                        </span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #666;">
+                        <i class="fa-solid fa-building"></i> ${provedor} 
+                        ${qtd > 1 ? ` &bull; <strong>${qtd}x</strong>` : ''}
+                    </div>
+                </div>
+                <button type="button" onclick="removerItemGrid(this, '${tipo}')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+                
+                <input type="hidden" name="TempAcoes.Index" value="${Date.now()}" />
+                <input type="hidden" name="TempAcoes[${Date.now()}].Nome" value="${nome}" />
+                <input type="hidden" name="TempAcoes[${Date.now()}].Provedor" value="${provedor}" />
+                <input type="hidden" name="TempAcoes[${Date.now()}].Tipo" value="${tipo}" />
+                <input type="hidden" name="TempAcoes[${Date.now()}].FkIdEixo" value="${eixoId}" />
+                <input type="hidden" name="TempAcoes[${Date.now()}].Quantidade" value="${qtd}" />
+            `;
+
+            container.appendChild(itemDiv);
+            fecharModal('modalAcao');
+        }
+
+        function removerItemGrid(btn, tipo) {
+            btn.closest('.action-list-item').remove();
+
+            if (tipo === 'equipe') {
+                countEquipe--;
+                document.getElementById('count-equipe').innerText = countEquipe;
+                if (countEquipe === 0) document.getElementById('empty-equipe').style.display = 'block';
+            } else {
+                countInst--;
+                document.getElementById('count-institucional').innerText = countInst;
+                if (countInst === 0) document.getElementById('empty-institucional').style.display = 'block';
+            }
+        }
+    </script>
 }
