@@ -23,8 +23,14 @@ public class AccessProfileController : Controller
             return RedirectToAction("Index", "Account");
         }
 
-        var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+        var PodePerfis = _context.Usuarios
+            .Include(c => c.Perfil)
+            .ThenInclude(p => p.Permissoes)
+            .Where(u =>
+                u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") &&
+                u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis"))
+            .FirstOrDefault();
+
         if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
         {
             return RedirectToAction("Index", "AccessProfile");
@@ -32,7 +38,18 @@ public class AccessProfileController : Controller
 
         ViewData["DisableMainScroll"] = "true";
 
-        var perfis = await _context.Perfis.OrderBy(p => p.Nome).ToListAsync();
+        // 🔹 CARREGA PERFIS COM USUÁRIOS
+        var perfis = await _context.Perfis
+            .Include(p => p.Usuarios) // ESSENCIAL
+            .OrderBy(p => p.Nome)
+            .ToListAsync();
+
+        // 🔹 CALCULA TOTAL DE USUÁRIOS
+        ViewBag.TotalUsuarios = perfis.Sum(p => p.Usuarios.Count);
+
+        ViewBag.PerfisAtivos = perfis.Count(p =>
+        p.Usuarios.Any(u => u.Ativo == "S")
+    );
 
         return View(perfis);
     }
@@ -157,7 +174,7 @@ public class AccessProfileController : Controller
         {
             return RedirectToAction("Index", "AccessProfile");
         }
-        
+
         if (id != perfilAtualizado.IdPerfil)
             return NotFound();
 

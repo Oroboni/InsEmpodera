@@ -7,7 +7,7 @@
 }
 
 @section Styles {
-    
+
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
     <link rel="stylesheet" href="~/css/pages/site.css" />
     <link rel="stylesheet" href="~/css/pages/perfisacesso.css" />
@@ -50,22 +50,17 @@
             </div>
         </div>
 
-        @{
-            var perfisAtivos = Model.Count(p => p.Usuarios != null && p.Usuarios.Any(u => u.Ativo == "S"));
-        }
         <div class="action-card stats-card stats-card-active">
-            <span class="card-title">@perfisAtivos</span>
+            <span class="card-title">@ViewBag.PerfisAtivos</span>
             <span class="card-subtitle">Perfis em Uso</span>
             <div class="card-icons">
                 <i class="fas fa-users"></i>
             </div>
         </div>
 
-        @{
-            var totalUsuarios = Model.Sum(p => p.Usuarios?.Count ?? 0);
-        }
         <div class="action-card stats-card stats-card-info">
-            <span class="card-title">@totalUsuarios</span>
+            <span class="card-title">@ViewBag.TotalUsuarios</span>
+
             <span class="card-subtitle">Total de Usuários</span>
             <div class="card-icons">
                 <i class="fas fa-user-friends"></i>
@@ -103,14 +98,6 @@
                                         </span>
                                     }
                                 </p>
-
-                                @if (perfil.Permissoes != null && perfil.Permissoes.Any())
-                                {
-                                    <p class="date profile-permissions">
-                                        <i class="fas fa-key"></i>
-                                        @perfil.Permissoes.Count @(perfil.Permissoes.Count == 1 ? "permissão" : "permissões")
-                                    </p>
-                                }
                             </div>
                         </div>
                     </div>
