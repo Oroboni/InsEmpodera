@@ -299,7 +299,7 @@ namespace Empodera.Data
         public string? LTrat { get; set; }
         public string? Coment { get; set; } = null!;
         public DateTime DtContato { get; set; }
-        public DateTime HoraContato { get; set; }
+        public TimeSpan HoraContato { get; set; }
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
         public int FkIdUsuario { get; set; }

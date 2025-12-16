@@ -4,22 +4,10 @@
  * @param {string} inputId - O ID do input que receberá o endereço texto.
  * @param {object} options - (Opcional) { lat, lng, zoom, readOnly }
  */
-function initMapSelector(mapId, inputId) {
-    navigator.geolocation.getCurrentPosition(success(mapId, inputId));
-}
-
-function success(position, mapId, inputId) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    MapSelector(mapId, inputId, latitude, longitude);
-}
-
-function MapSelector(mapId, inputId, options = {}, latitude, longitude) {
-
+function initMapSelector(mapId, inputId, options = {}) {
     // Configurações padrão (Centro do Brasil).
-    if (latitude == null) latitude = -14.2350;
-    if (longitude == null) longitude = -51.9253;
+    const latitude = -14.2350;
+    const longitude = -51.9253;
     const startZoom = options.zoom || 4;
     const isReadOnly = options.readOnly || false;
 
@@ -27,14 +15,14 @@ function MapSelector(mapId, inputId, options = {}, latitude, longitude) {
     if (!document.getElementById(mapId)) return;
 
     // 1. Inicializa o Mapa
-    var map = L.map(mapId).setView([startLat, startLng], startZoom);
+    var map = L.map(mapId).setView([latitude, longitude], startZoom);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
     // 2. Marcador
-    var marker = L.marker([startLat, startLng]).addTo(map);
+    var marker = L.marker([latitude, longitude]).addTo(map);
 
     // Se for apenas visualização (ex: Detalhes), desativa controles
     if (isReadOnly) {

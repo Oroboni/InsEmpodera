@@ -1696,7 +1696,7 @@ namespace InsEmpodera.Migrations
                     b.Property<string>("FornecidoParceiro")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("HoraContato")
+                    b.Property<TimeSpan>("HoraContato")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LContato")
@@ -1762,7 +1762,7 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 1,
                             FonteDados = "Cadastro local",
                             FornecidoParceiro = "Não",
-                            HoraContato = new DateTime(2025, 1, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            HoraContato = new TimeSpan(0, 10, 0, 0, 0),
                             LContato = "Presencial",
                             LTrat = "Nenhum",
                             NFIlhos = 2,
@@ -1793,7 +1793,7 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 1,
                             FonteDados = "Registro comunitário",
                             FornecidoParceiro = "Sim",
-                            HoraContato = new DateTime(2025, 1, 5, 9, 45, 0, 0, DateTimeKind.Unspecified),
+                            HoraContato = new TimeSpan(0, 10, 0, 0, 0),
                             LContato = "Telefone",
                             LTrat = "Fisioterapia",
                             NFIlhos = 0,
@@ -1824,7 +1824,7 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 2,
                             FonteDados = "Auto-relato",
                             FornecidoParceiro = "Não",
-                            HoraContato = new DateTime(2025, 1, 3, 11, 15, 0, 0, DateTimeKind.Unspecified),
+                            HoraContato = new TimeSpan(0, 10, 0, 0, 0),
                             LContato = "WhatsApp",
                             LTrat = "Nenhum",
                             NFIlhos = 1,
@@ -1855,7 +1855,7 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 3,
                             FonteDados = "Centro comunitário",
                             FornecidoParceiro = "Não",
-                            HoraContato = new DateTime(2025, 1, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            HoraContato = new TimeSpan(0, 10, 0, 0, 0),
                             LContato = "Presencial",
                             LTrat = "Nenhum",
                             NFIlhos = 3,
@@ -1886,7 +1886,7 @@ namespace InsEmpodera.Migrations
                             FkIdUsuario = 1,
                             FonteDados = "Instituição parceira",
                             FornecidoParceiro = "Sim",
-                            HoraContato = new DateTime(2025, 1, 1, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            HoraContato = new TimeSpan(0, 10, 0, 0, 0),
                             LContato = "E-mail",
                             LTrat = "Nenhum",
                             NFIlhos = 1,

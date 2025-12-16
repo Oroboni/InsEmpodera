@@ -176,6 +176,7 @@ public class PersonalAssessmentController : Controller
         avaliacaobd.CCrimes = avaliacao.CCrimes;
         avaliacaobd.DtModificacao = DateTime.Now;
         avaliacaobd.Lazer = avaliacao.Lazer;
+        avaliacaobd.Educacao = avaliacao.Educacao;
         avaliacaobd.Moradia = avaliacao.Moradia;
         avaliacaobd.Ocupacao = avaliacao.Ocupacao;
         avaliacaobd.Prevencao = avaliacao.Prevencao;

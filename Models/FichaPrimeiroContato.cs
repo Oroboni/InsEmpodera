@@ -48,7 +48,7 @@ namespace Empodera.Models
         public DateTime DtContato { get; set; }
 
         [DataType(DataType.Time)]
-        public DateTime HoraContato { get; set; }
+        public TimeSpan HoraContato { get; set; }
 
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
