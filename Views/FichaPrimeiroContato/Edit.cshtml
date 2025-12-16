@@ -113,8 +113,7 @@
                     <div class="input-content no-icon">
                         <label>Hora do 1º Contato</label>
                         <!-- Se a hora for salva separada ou extraída da data, ajuste o value aqui -->
-                        <input type="time" class="clean-input" name="HoraContato"
-                            value="@Model.DtContato.ToString("HH:mm")" />
+                        <input type="time" class="clean-input" asp-for="HoraContato" />
                     </div>
                 </div>
 
