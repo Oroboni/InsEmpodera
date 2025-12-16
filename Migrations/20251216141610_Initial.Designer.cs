@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251216140538_Initial")]
+    [Migration("20251216141610_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
