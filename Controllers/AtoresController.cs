@@ -230,6 +230,7 @@ public class AtoresController : Controller
             ator.Ativo = "N";
             _context.Atores.Update(ator);
             await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Atores");
         }
         return RedirectToAction("Index", "Atores");
     }

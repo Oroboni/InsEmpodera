@@ -21,7 +21,7 @@ public class AccountController : Controller
 
     public async Task<IActionResult> Index(string Email, string Password)
     {
-        var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == Email);
+        var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == Email && u.Ativo != "N");
 
         if (user == null)
         {
