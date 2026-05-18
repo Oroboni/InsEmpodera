@@ -7,24 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Empodera.Controllers;
 
-public class ReportController : Controller
+public class ReporteController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public ReportController(ApplicationDbContext context)
+    public ReporteController(ApplicationDbContext context)
     {
         _context = context;
     }
 
     // GET: /Report/
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        if (HttpContext.Session.GetString("Email") == null) 
-        { 
-            return RedirectToAction("Index", "Account"); 
+        if (HttpContext.Session.GetString("Email") == null)
+        {
+            return RedirectToAction("Index", "Account");
         }
         return View();
     }
+
 
     // GET: /Report/Rsc
     public async Task<IActionResult> Rsc(int? comunidadeId)
