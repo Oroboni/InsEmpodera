@@ -13,10 +13,22 @@
     </div>
 
     <div class="report-menu-group">
-        <h2>Comunidade</h2>
         <div class="report-card-grid">
-            <form>
-                
+            <form asp-action="RelatorioComunidade" method="post" enctype="multipart/form-data">
+                <div class="report-card-content">
+                    <h3>Selecione os arquivos</h3>
+
+                    <input 
+                        type="file" 
+                        name="files" 
+                        class="report-card-input"
+                        accept=".xlsx,.xls"
+                        multiple />
+                </div>
+
+                <button type="submit" class="report-card-button">
+                    Importar Relatórios
+                </button>
             </form>
         </div>
     </div>
