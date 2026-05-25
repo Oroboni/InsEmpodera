@@ -187,9 +187,6 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DtNascimento")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("FkIdUsuario")
                         .HasColumnType("INTEGER");
 
@@ -198,6 +195,9 @@ namespace InsEmpodera.Migrations
 
                     b.Property<string>("Genero")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("Idade")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Lopiniao")
                         .HasColumnType("INTEGER");

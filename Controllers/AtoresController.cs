@@ -169,7 +169,7 @@ public class AtoresController : Controller
 
         atorDb.Nome = atorFormulario.Nome;
         atorDb.Genero = atorFormulario.Genero;
-        atorDb.DtNascimento = atorFormulario.DtNascimento;
+        atorDb.Idade = atorFormulario.Idade;
         atorDb.PapelSocial1 = atorFormulario.PapelSocial1;
         atorDb.PapelSocial2 = atorFormulario.PapelSocial2;
         atorDb.Telefone = atorFormulario.Telefone;

@@ -188,9 +188,8 @@
             <div class="input-card">
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
                 <div class="input-content">
-                    <label for="DtNascimento">Data de Nascimento</label>
-                    <input id="DtNascimento" name="DtNascimento" asp-for="DtNascimento" type="date" class="clean-input"
-                        value='@(Model != null && Model.DtNascimento != default(System.DateTime) && Model.DtNascimento != System.DateTime.MinValue ? Model.DtNascimento.ToString("yyyy-MM-dd") : String.Empty)' />
+                    <label for="Idade">Idade</label>
+                    <input id="Idade" name="Idade" asp-for="Idade" type="number" class="clean-input" />
                 </div>
             </div>
         </div>

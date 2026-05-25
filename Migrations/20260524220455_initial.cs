@@ -104,7 +104,7 @@ namespace InsEmpodera.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
                     Genero = table.Column<string>(type: "TEXT", nullable: true),
-                    DtNascimento = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Idade = table.Column<int>(type: "INTEGER", nullable: true),
                     PapelSocial1 = table.Column<string>(type: "TEXT", nullable: true),
                     PapelSocial2 = table.Column<string>(type: "TEXT", nullable: true),
                     Telefone = table.Column<string>(type: "TEXT", nullable: true),

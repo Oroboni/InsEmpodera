@@ -627,7 +627,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         atorDb.Nome = ator.Nome;
         atorDb.Genero = ator.Genero;
-        atorDb.DtNascimento = ator.DtNascimento;
+        atorDb.Idade = ator.Idade;
         atorDb.PapelSocial1 = ator.PapelSocial1;
         atorDb.PapelSocial2 = ator.PapelSocial2;
         atorDb.Telefone = ator.Telefone;

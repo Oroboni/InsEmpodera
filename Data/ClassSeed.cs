@@ -82,7 +82,7 @@ namespace Empodera.Data
         public int Id_Atores { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string? Genero { get; set; }
-        public DateTime? Dt_Nascimento { get; set; }
+        public int? Idade { get; set; }
         public string? Papel_Social1 { get; set; }
         public string? Papel_Social2 { get; set; }
         public int? Telefone { get; set; }

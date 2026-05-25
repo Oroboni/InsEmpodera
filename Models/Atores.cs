@@ -9,7 +9,7 @@ namespace Empodera.Models
         public int IdAtores { get; set; }   
         public string Nome { get; set; } = null!;
         public string? Genero { get; set; }
-        public DateTime DtNascimento { get; set; }
+        public int? Idade { get; set; }
         public string? PapelSocial1 { get; set; }
         public string? PapelSocial2 { get; set; }
         public string? Telefone { get; set; }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260518234602_initial")]
+    [Migration("20260524220455_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -190,9 +190,6 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DtNascimento")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("FkIdUsuario")
                         .HasColumnType("INTEGER");
 
@@ -201,6 +198,9 @@ namespace InsEmpodera.Migrations
 
                     b.Property<string>("Genero")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("Idade")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Lopiniao")
                         .HasColumnType("INTEGER");

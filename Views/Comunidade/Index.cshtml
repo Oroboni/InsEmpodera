@@ -53,18 +53,18 @@
             </div>
 
             @{
-                var emProcesso = Model.Count(c => c.Status == "Em Processo");
+                var emProcesso = Model.Count(c => c.Status == "Diagnosticado");
             }
             <div class="action-card stats-card stats-card-green">
                 <span class="card-title">@emProcesso</span>
-                <span class="card-subtitle">Em Processo</span>
+                <span class="card-subtitle">Diagnosticado</span>
                 <div class="card-icons">
                     <i class="fas fa-spinner"></i>
                 </div>
             </div>
 
             @{
-                var aguardando = Model.Count(c => c.Status != "Em Processo");
+                var aguardando = Model.Count(c => c.Status != "Diagnosticado");
             }
             <div class="action-card stats-card stats-card-cyan">
                 <span class="card-title">@aguardando</span>
@@ -82,7 +82,7 @@
         <div class="forms-list" id="comunidadesGrid">
             @foreach (var comunidade in Model)
             {
-                var isEmProcesso = comunidade.Status == "Em Processo";
+                var isEmProcesso = comunidade.Status == "Diagnosticado";
                 
                 <div class="form-item comunidade-item" data-nome="@comunidade.Nome?.ToLower()">
                     <div class="form-info">
@@ -98,7 +98,7 @@
                                     {
                                         <span class="tag-item tag-green">
                                             <i class="fas fa-spinner"></i>
-                                            Em Processo
+                                            Diagnosticado
                                         </span>
                                     }
                                     else
@@ -118,7 +118,7 @@
                         {
                             <button class="btn-action btn-disabled" 
                                     disabled 
-                                    title="Comunidade em Processo">
+                                    title="Comunidade Diagnosticado">
                                 <i class="fa-solid fa-play" style="color: var(--color-gray-500);"></i>
                             </button>
                         }

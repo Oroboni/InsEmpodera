@@ -497,6 +497,26 @@ label:has(input[type="checkbox"]) {
     color: #5b21b6;
 }
 
+.tag-trans {
+    background: linear-gradient(
+        to bottom,
+        #5BCEFA 0%,
+        #5BCEFA 20%,
+        #F5A9B8 20%,
+        #F5A9B8 40%,
+        #FFFFFF 40%,
+        #FFFFFF 60%,
+        #F5A9B8 60%,
+        #F5A9B8 80%,
+        #5BCEFA 80%,
+        #5BCEFA 100%
+    );
+    
+    color: #222;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+
 .tag-green {
     background-color: #d1fae5;
     color: #065f46;
