@@ -268,6 +268,41 @@
     }
 }
 
+/* Botão visual de exportação nas barras de busca */
+.search-container .btn-export {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 !important;
+    flex-shrink: 0;
+    background-color: #25a84a !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 168, 74, 0.22);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.search-container .btn-export:hover {
+    background-color: #1e873d !important;
+    transform: translateY(-1px);
+}
+
+.search-container .btn-export i {
+    color: #fff !important;
+    font-size: 1rem;
+    line-height: 1;
+}
+
 /* Impressão */
 @media print {
     .card button {
