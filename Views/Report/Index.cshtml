@@ -13,34 +13,23 @@
     </div>
 
     <div class="report-menu-group">
-        <h2>Comunidade</h2>
         <div class="report-card-grid">
-            <a asp-action="Rsc" class="report-card">
-                <i class="fa-solid fa-people-group"></i>
-                <span>RSC</span>
-            </a>
-            <a asp-action="FirstContact" class="report-card">
-                <i class="fa-solid fa-file-signature"></i>
-                <span>Fichas de 1º Contato</span>
-            </a>
-        </div>
-    </div>
+            <form asp-action="RelatorioComunidade" method="post" enctype="multipart/form-data">
+                <div class="report-card-content">
+                    <h3>Selecione os arquivos</h3>
 
-    <div class="report-menu-group">
-        <h2>Parceiro</h2>
-        <div class="report-card-grid">
-            <a asp-action="PersonalAssessment" class="report-card">
-                <i class="fa-solid fa-user-check"></i>
-                <span>Avaliações Pessoais</span>
-            </a>
-            <a asp-action="Actions" class="report-card">
-                <i class="fa-solid fa-heart-pulse"></i>
-                <span>Ações</span>
-            </a>
-             <a asp-action="PrimaryNetwork" class="report-card">
-                <i class="fa-solid fa-share-nodes"></i>
-                <span>Rede Primária</span>
-            </a>
+                    <input 
+                        type="file" 
+                        name="files" 
+                        class="report-card-input"
+                        accept=".xlsx,.xls"
+                        multiple />
+                </div>
+
+                <button type="submit" class="report-card-button">
+                    Importar Relatórios
+                </button>
+            </form>
         </div>
     </div>
 </div>

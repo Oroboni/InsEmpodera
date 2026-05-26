@@ -9,11 +9,11 @@ using System.Text;
 
 namespace Empodera.Controllers;
 
-public class ReporteController : Controller
+public class ReportController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public ReporteController(ApplicationDbContext context)
+    public ReportController(ApplicationDbContext context)
     {
         _context = context;
     }

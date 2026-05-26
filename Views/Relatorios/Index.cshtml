@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Relatórios";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/reports.css" />
+}
+
+<div class="report-page-container">
+    <div class="report-breadcrumb">
+        <h2 class="page-title">Relatórios</h2>
+    </div>
+
+    <div class="report-menu-group">
+        <h2>Comunidade</h2>
+        <div class="report-card-grid">
+            <a asp-action="Rsc" class="report-card">
+                <i class="fa-solid fa-people-group"></i>
+                <span>RSC</span>
+            </a>
+            <a asp-action="FirstContact" class="report-card">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>Fichas de 1º Contato</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="report-menu-group">
+        <h2>Parceiro</h2>
+        <div class="report-card-grid">
+            <a asp-action="PersonalAssessment" class="report-card">
+                <i class="fa-solid fa-user-check"></i>
+                <span>Avaliações Pessoais</span>
+            </a>
+            <a asp-action="Actions" class="report-card">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span>Ações</span>
+            </a>
+             <a asp-action="PrimaryNetwork" class="report-card">
+                <i class="fa-solid fa-share-nodes"></i>
+                <span>Rede Primária</span>
+            </a>
+        </div>
+    </div>
+</div>
