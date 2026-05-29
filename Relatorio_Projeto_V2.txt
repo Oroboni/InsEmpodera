@@ -1,7 +1,7 @@
 ========================================================== 
 RELATORIO DE PROJETO ASP.NET - Gerado em 15/12/2025 14:29:44,60 
 ========================================================== 
-Diretorio base: C:\Users\elian\µrea de Trabalho\InsEmpodera 
+Diretorio base: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera 
 ========================================================== 
  
 ========================================================== 
@@ -9,8 +9,8 @@ ESTRUTURA DE ARQUIVOS (ARVORE)
 ========================================================== 
  
 Listagem de caminhos de pasta
-O número de série do volume é 086A-2581
-C:\USERS\ELIAN\ÁREA DE TRABALHO\INSEMPODERA
+O nï¿½mero de sï¿½rie do volume ï¿½ 086A-2581
+C:\USERS\ELIAN\ï¿½REA DE TRABALHO\INSEMPODERA
 |   .gitignore
 |   appsettings.Development.json
 |   appsettings.json
@@ -830,129 +830,129 @@ C:\USERS\ELIAN\ÁREA DE TRABALHO\INSEMPODERA
 DIAGNOSTICO: ARQUIVOS ENCONTRADOS 
 ========================================================== 
  
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Program.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AccountController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AtividadesController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AtoresController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\BaseController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\ComunidadeController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\ConfiguracoesController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DashboardController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DiarioCampoController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DiarioProcessoPessoalController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DiariosDeCampoController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\FichaPrimeiroContatoController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\PersonalProcessController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\RelatoriosController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\ReportController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\UsersController.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Data\ApplicationDbContext.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Data\ClassSeed.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Acoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AcoesAtores.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AnexosDiario.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Atividades.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AtividadesEixo.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AtorComunidade.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Atores.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AvaliacaoPessoal.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Comunidade.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\ComunidadeDto.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DAAtores.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DetalhesDAcoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DetalhesEixos.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioAcoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioCampo.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioDAcoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioEixo.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Eixo.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\ErrorViewModel.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaCondicoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaPeticoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaPrimeiroContato.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaResp.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaResult.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FonteInf.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Perfil.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Permissoes.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\RedeEixo.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\RedePrimaria.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\RedeRecursos.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Usuario.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Vulnerabilidade.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\VulnerabilidadesEixo.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Services\AtorRelatorioDto.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Services\RelatorioExcelService.cs 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\_ViewImports.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Delete.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\AtividadesVinculadas.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\AtoresVinculados.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeDetalhesRecursos.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeRecursos.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadesDetalhes.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atividades.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atores.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Recursos.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Delete_Atores.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atividades.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atores.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Processo.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\VoltarAtor.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\delete.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\details.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\_TagsScript.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\CreatePost.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Delete.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Details.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Home\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Home\Privacy.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\FirstContact.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\PersonalAssessment.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\PrimaryNetwork.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Rsc.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_ValidationScriptsPartial.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Create.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Delete.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Edit.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\index.cshtml 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\InsEmpodera.csproj 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\InsEmpodera.sln 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\appsettings.Development.json 
-[INCLUIDO] C:\Users\elian\µrea de Trabalho\InsEmpodera\appsettings.json 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Program.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AccountController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AtividadesController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AtoresController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\BaseController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\ComunidadeController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\ConfiguracoesController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DashboardController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DiarioCampoController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DiarioProcessoPessoalController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DiariosDeCampoController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\FichaPrimeiroContatoController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\PersonalProcessController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\RelatoriosController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\ReportController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\UsersController.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Data\ApplicationDbContext.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Data\ClassSeed.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Acoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AcoesAtores.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AnexosDiario.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Atividades.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AtividadesEixo.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AtorComunidade.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Atores.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AvaliacaoPessoal.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Comunidade.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\ComunidadeDto.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DAAtores.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DetalhesDAcoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DetalhesEixos.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioAcoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioCampo.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioDAcoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioEixo.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Eixo.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\ErrorViewModel.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaCondicoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaPeticoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaPrimeiroContato.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaResp.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaResult.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FonteInf.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Perfil.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Permissoes.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\RedeEixo.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\RedePrimaria.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\RedeRecursos.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Usuario.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Vulnerabilidade.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\VulnerabilidadesEixo.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Services\AtorRelatorioDto.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Services\RelatorioExcelService.cs 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\_ViewImports.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Account\index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atividades\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atividades\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atividades\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Delete.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\AtividadesVinculadas.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\AtoresVinculados.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeDetalhesRecursos.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeRecursos.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadesDetalhes.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atividades.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atores.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Create_Recursos.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Delete_Atores.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atividades.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atores.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Processo.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\VoltarAtor.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\delete.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\details.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\_TagsScript.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\CreatePost.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Delete.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Details.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Home\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Home\Privacy.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalProcess\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalProcess\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\FirstContact.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\Index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\PersonalAssessment.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\PrimaryNetwork.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\Rsc.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\_ValidationScriptsPartial.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\Create.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\Delete.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\Edit.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\index.cshtml 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\InsEmpodera.csproj 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\InsEmpodera.sln 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\appsettings.Development.json 
+[INCLUIDO] C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\appsettings.json 
  
 Total de arquivos a processar: 123 
  
@@ -963,7 +963,7 @@ CONTEUDO DOS ARQUIVOS DE CODIGO
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Program.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Program.cs 
 ========================================================== 
  
 using Microsoft.EntityFrameworkCore;
@@ -1031,7 +1031,7 @@ app.Run();
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AccessProfileController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -1245,7 +1245,7 @@ public class AccessProfileController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AccountController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AccountController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -1318,7 +1318,7 @@ public class AccountController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AtividadesController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AtividadesController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -1372,7 +1372,7 @@ public class AtividadesController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
-            "IdComunidade", 
+            "Id_Comunidade", 
             "Nome"
         );
 
@@ -1444,7 +1444,7 @@ public class AtividadesController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
-            "IdComunidade",
+            "Id_Comunidade",
             "Nome",
             atividade?.FkIdComunidade
         );
@@ -1519,7 +1519,7 @@ public class AtividadesController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\AtoresController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\AtoresController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -1579,7 +1579,7 @@ public class AtoresController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.ToListAsync(),
-            "IdComunidade",
+            "Id_Comunidade",
             "Nome"
         );
 
@@ -1660,7 +1660,7 @@ public class AtoresController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
-            "IdComunidade",
+            "Id_Comunidade",
             "Nome",
             atorCom?.FkIdComunidade 
         );
@@ -1767,7 +1767,7 @@ public class AtoresController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\BaseController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\BaseController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -1801,7 +1801,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\ComunidadeController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\ComunidadeController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -1843,7 +1843,7 @@ public class ComunidadeController : Controller
         var comunidades = _context.Comunidades
             .Select(c => new Empodera.Models.ComunidadeDto
             {
-                Id = c.IdComunidade,
+                Id = c.Id_Comunidade,
                 Nome = c.Nome,
                 Status = c.Status,
                 Ativo = c.Ativo
@@ -1878,7 +1878,7 @@ public class ComunidadeController : Controller
         if (id > 0)
         {
             // Modo EdiÃ§Ã£o: Busca a comunidade existente
-            comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+            comunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == id);
 
             ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
             ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();
@@ -1893,7 +1893,7 @@ public class ComunidadeController : Controller
         else
         {
             comunidade = new Comunidade();
-            comunidade.IdComunidade = 0; 
+            comunidade.Id_Comunidade = 0; 
         }
 
         var qAtores = _context.AtorComunidades.Count(a => a.FkIdComunidade == id);
@@ -1929,7 +1929,7 @@ public class ComunidadeController : Controller
         {
             return RedirectToAction("Index", "Comunidade");
         }
-        if (comunidade.IdComunidade == 0)
+        if (comunidade.Id_Comunidade == 0)
         {
             comunidade.DtCriacao = DateTime.Now;
             comunidade.DtModificacao = DateTime.Now;
@@ -1938,11 +1938,11 @@ public class ComunidadeController : Controller
             _context.Comunidades.Add(comunidade);
             _context.SaveChanges();
             
-            return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
+            return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.Id_Comunidade });
         }
         
-        // 2. LÃ³gica de EDIÃ‡ÃƒO (IdComunidade > 0)
-        var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);
+        // 2. LÃ³gica de EDIÃ‡ÃƒO (Id_Comunidade > 0)
+        var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
         if (existingComunidade != null)
         {
             existingComunidade.Nome = comunidade.Nome;
@@ -1957,10 +1957,10 @@ public class ComunidadeController : Controller
             _context.SaveChanges();
         }
 
-        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
+        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.Id_Comunidade });
 
         // A
-            //     var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);
+            //     var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
             //     if (existingComunidade != null)
             //     {
             //         existingComunidade.Nome = comunidade.Nome;
@@ -2002,7 +2002,7 @@ public class ComunidadeController : Controller
        var comunidade = await _context.Comunidades
             .Include(c => c.AtorComunidades)
             .ThenInclude(ac => ac.Ator)
-            .FirstOrDefaultAsync(c => c.IdComunidade == id);
+            .FirstOrDefaultAsync(c => c.Id_Comunidade == id);
 
         if (comunidade == null)
             return RedirectToAction("Index", "Comunidade");
@@ -2038,7 +2038,7 @@ public class ComunidadeController : Controller
         }
 
         var comunidadebd = await _context.Comunidades
-            .FirstOrDefaultAsync(c => c.IdComunidade == id);
+            .FirstOrDefaultAsync(c => c.Id_Comunidade == id);
 
         if (comunidadebd == null)
         {
@@ -2080,7 +2080,7 @@ public class ComunidadeController : Controller
             .ToList();
         ViewData["id"] = id;
 
-        var comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+        var comunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == id);
         if (comunidade != null)
         {
             ViewBag.ComunidadeNome = comunidade.Nome;
@@ -2141,7 +2141,7 @@ public class ComunidadeController : Controller
         if (recurso == null) return NotFound();
 
         // 2. Carrega listas para os Dropdowns (Atores e Comunidades)
-        ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "IdComunidade", "Nome", recurso.FkIdComunidade);
+        ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "Id_Comunidade", "Nome", recurso.FkIdComunidade);
         
         // Atores da comunidade para vincular o recurso
         var atores = await _context.AtorComunidades
@@ -2305,8 +2305,8 @@ public class ComunidadeController : Controller
         }
         
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.Where(c => c.IdComunidade == id).ToListAsync(), 
-            "IdComunidade", 
+            await _context.Comunidades.Where(c => c.Id_Comunidade == id).ToListAsync(), 
+            "Id_Comunidade", 
             "Nome"
         );
         
@@ -2382,8 +2382,8 @@ public class ComunidadeController : Controller
         ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuarioM).FirstOrDefault();
 
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.Where(c => c.IdComunidade == comunidadeId).ToListAsync(),
-            "IdComunidade",
+            await _context.Comunidades.Where(c => c.Id_Comunidade == comunidadeId).ToListAsync(),
+            "Id_Comunidade",
             "Nome"
         );
 
@@ -2650,7 +2650,7 @@ public class ComunidadeController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\ConfiguracoesController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\ConfiguracoesController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -2672,7 +2672,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DashboardController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DashboardController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -2694,7 +2694,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DiarioCampoController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DiarioCampoController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -2775,8 +2775,8 @@ namespace Empodera.Controllers
         {
             ViewBag.Comunidades = new List<dynamic>
             {
-                new { IdComunidade = 1, Nome = "Comunidade A" },
-                new { IdComunidade = 2, Nome = "Comunidade B" }
+                new { Id_Comunidade = 1, Nome = "Comunidade A" },
+                new { Id_Comunidade = 2, Nome = "Comunidade B" }
             };
 
             ViewBag.Eixos = new List<dynamic>
@@ -2968,7 +2968,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DiarioProcessoPessoalController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DiarioProcessoPessoalController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -2990,7 +2990,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\DiariosDeCampoController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\DiariosDeCampoController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -3012,7 +3012,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\FichaPrimeiroContatoController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\FichaPrimeiroContatoController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -3079,7 +3079,7 @@ namespace Empodera.Controllers
                 .OrderBy(c => c.Nome)
                 .Select(c => new SelectListItem
                 {
-                    Value = c.IdComunidade.ToString(),
+                    Value = c.Id_Comunidade.ToString(),
                     Text = c.Nome
                 })
                 .ToListAsync();
@@ -3110,7 +3110,7 @@ namespace Empodera.Controllers
             ViewBag.Atores = new SelectList(_context.Atores, "IdAtores", "Nome");
             ViewBag.ComunidadesList = new SelectList(
                 _context.Comunidades.OrderBy(c => c.Nome),
-                "IdComunidade",
+                "Id_Comunidade",
                 "Nome"
             );
 
@@ -3225,7 +3225,7 @@ namespace Empodera.Controllers
             ViewBag.Atores = new SelectList(_context.Atores, "IdAtores", "Nome", ficha.FKidAtores);
             ViewBag.ComunidadesList = new SelectList(
                 _context.Comunidades.OrderBy(c => c.Nome),
-                "IdComunidade",
+                "Id_Comunidade",
                 "Nome",
                 ficha.FkIdComunidade
             );
@@ -3510,7 +3510,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\HomeController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -3553,7 +3553,7 @@ public class HomeController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\PersonalAssessmentController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -3748,7 +3748,7 @@ public class PersonalAssessmentController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\PersonalProcessController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\PersonalProcessController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -4057,7 +4057,7 @@ public class PersonalProcessController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\RelatoriosController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\RelatoriosController.cs 
 ========================================================== 
  
 using Microsoft.AspNetCore.Mvc;
@@ -4079,7 +4079,7 @@ namespace Empodera.Controllers
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\ReportController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\ReportController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -4117,7 +4117,7 @@ public class ReportController : Controller
         { 
             return RedirectToAction("Index", "Account"); 
         }
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
 
@@ -4125,7 +4125,7 @@ public class ReportController : Controller
     public async Task<IActionResult> FirstContact(int? comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
 
@@ -4142,7 +4142,7 @@ public class ReportController : Controller
     public async Task<IActionResult> Actions(int? comunidadeId, int? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null) { return RedirectToAction("Index", "Account"); }
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         ViewBag.AtorList = new SelectList(await _context.Atores.ToListAsync(), "IdAtores", "Nome", atorId);
         return View();
     }
@@ -4164,7 +4164,7 @@ public class ReportController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Controllers\UsersController.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Controllers\UsersController.cs 
 ========================================================== 
  
 using System.Diagnostics;
@@ -4337,7 +4337,7 @@ public class UsersController : Controller
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Data\ApplicationDbContext.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Data\ApplicationDbContext.cs 
 ========================================================== 
  
 using Microsoft.EntityFrameworkCore;
@@ -4386,7 +4386,7 @@ namespace Empodera.Data
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
             modelBuilder.Entity<Perfil>().HasKey(p => p.IdPerfil);
             modelBuilder.Entity<Permissoes>().HasKey(p => p.IdPermissoes);
-            modelBuilder.Entity<Comunidade>().HasKey(c => c.IdComunidade);
+            modelBuilder.Entity<Comunidade>().HasKey(c => c.Id_Comunidade);
             modelBuilder.Entity<Atores>().HasKey(a => a.IdAtores);
             modelBuilder.Entity<RedeRecursos>().HasKey(r => r.IdRede);
             modelBuilder.Entity<Eixo>().HasKey(e => e.IdEixo);
@@ -4814,11 +4814,11 @@ namespace Empodera.Data
 
             // Comunidades
             modelBuilder.Entity<Comunidade>().HasData(
-                new Comunidade { IdComunidade = 1, Nome = "Comunidade Alpha", Local = "Bairro A", Status = "Em Processo", Complemento = "", Descricao = "Comunidade piloto", DescricaoAcessibilidade = "Rampa", DtCriacao = new DateTime(2023, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 },
-                new Comunidade { IdComunidade = 2, Nome = "Comunidade Beta", Local = "Bairro B", Status = "Em diagnÃ³stico", Complemento = "Sala 2", Descricao = "Comunidade secundÃ¡ria", DescricaoAcessibilidade = "Elevador", DtCriacao = new DateTime(2023, 2, 1), DtModificacao = new DateTime(2025, 2, 1), FkIdUsuario = 2 },
-                new Comunidade { IdComunidade = 3, Nome = "Comunidade Gamma", Local = "Bairro C", Status = "Em diagnÃ³stico", Complemento = "", Descricao = "Comunidade remota", DescricaoAcessibilidade = "Rampas", DtCriacao = new DateTime(2023, 3, 1), DtModificacao = new DateTime(2025, 3, 1), FkIdUsuario = 3 },
-                new Comunidade { IdComunidade = 4, Nome = "Comunidade Delta", Local = "Bairro D", Status = "Em diagnÃ³stico", Complemento = "Anexo", Descricao = "Comunidade urbana", DescricaoAcessibilidade = "Acesso", DtCriacao = new DateTime(2023, 4, 1), DtModificacao = new DateTime(2025, 4, 1), FkIdUsuario = 4 },
-                new Comunidade { IdComunidade = 5, Nome = "Comunidade Epsilon", Local = "Bairro E", Status = "Em diagnÃ³stico", Complemento = "", Descricao = "Comunidade rural", DescricaoAcessibilidade = "Sem acesso especial", DtCriacao = new DateTime(2023, 5, 1), DtModificacao = new DateTime(2025, 5, 1), FkIdUsuario = 5 }
+                new Comunidade { Id_Comunidade = 1, Nome = "Comunidade Alpha", Local = "Bairro A", Status = "Em Processo", Complemento = "", Descricao = "Comunidade piloto", DescricaoAcessibilidade = "Rampa", DtCriacao = new DateTime(2023, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 },
+                new Comunidade { Id_Comunidade = 2, Nome = "Comunidade Beta", Local = "Bairro B", Status = "Em diagnÃ³stico", Complemento = "Sala 2", Descricao = "Comunidade secundÃ¡ria", DescricaoAcessibilidade = "Elevador", DtCriacao = new DateTime(2023, 2, 1), DtModificacao = new DateTime(2025, 2, 1), FkIdUsuario = 2 },
+                new Comunidade { Id_Comunidade = 3, Nome = "Comunidade Gamma", Local = "Bairro C", Status = "Em diagnÃ³stico", Complemento = "", Descricao = "Comunidade remota", DescricaoAcessibilidade = "Rampas", DtCriacao = new DateTime(2023, 3, 1), DtModificacao = new DateTime(2025, 3, 1), FkIdUsuario = 3 },
+                new Comunidade { Id_Comunidade = 4, Nome = "Comunidade Delta", Local = "Bairro D", Status = "Em diagnÃ³stico", Complemento = "Anexo", Descricao = "Comunidade urbana", DescricaoAcessibilidade = "Acesso", DtCriacao = new DateTime(2023, 4, 1), DtModificacao = new DateTime(2025, 4, 1), FkIdUsuario = 4 },
+                new Comunidade { Id_Comunidade = 5, Nome = "Comunidade Epsilon", Local = "Bairro E", Status = "Em diagnÃ³stico", Complemento = "", Descricao = "Comunidade rural", DescricaoAcessibilidade = "Sem acesso especial", DtCriacao = new DateTime(2023, 5, 1), DtModificacao = new DateTime(2025, 5, 1), FkIdUsuario = 5 }
             );
 
             // Atores
@@ -5099,7 +5099,7 @@ namespace Empodera.Data
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Data\ClassSeed.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Data\ClassSeed.cs 
 ========================================================== 
  
 using System;
@@ -5488,7 +5488,7 @@ namespace Empodera.Data
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Acoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Acoes.cs 
 ========================================================== 
  
 using System;
@@ -5514,7 +5514,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AcoesAtores.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AcoesAtores.cs 
 ========================================================== 
  
 using System;
@@ -5536,7 +5536,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AnexosDiario.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AnexosDiario.cs 
 ========================================================== 
  
 using System;
@@ -5557,7 +5557,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Atividades.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Atividades.cs 
 ========================================================== 
  
 using System;
@@ -5586,7 +5586,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AtividadesEixo.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AtividadesEixo.cs 
 ========================================================== 
  
 using System;
@@ -5608,7 +5608,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AtorComunidade.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AtorComunidade.cs 
 ========================================================== 
  
 using System;
@@ -5630,7 +5630,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Atores.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Atores.cs 
 ========================================================== 
  
 using System;
@@ -5671,7 +5671,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\AvaliacaoPessoal.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\AvaliacaoPessoal.cs 
 ========================================================== 
  
 using System;
@@ -5704,7 +5704,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Comunidade.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Comunidade.cs 
 ========================================================== 
  
 using System;
@@ -5715,7 +5715,7 @@ namespace Empodera.Models
 {
     public class Comunidade
     {
-        public int IdComunidade { get; set; }
+        public int Id_Comunidade { get; set; }
         public string Nome { get; set; } = null!;
         public string? Local { get; set; } = null!;
         public string Status { get; set; } = "Em diagnÃ³stico";
@@ -5740,7 +5740,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\ComunidadeDto.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\ComunidadeDto.cs 
 ========================================================== 
  
 namespace Empodera.Models;
@@ -5754,7 +5754,7 @@ public class ComunidadeDto
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DAAtores.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DAAtores.cs 
 ========================================================== 
  
 using System;
@@ -5776,7 +5776,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DetalhesDAcoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DetalhesDAcoes.cs 
 ========================================================== 
  
 using System;
@@ -5797,7 +5797,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DetalhesEixos.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DetalhesEixos.cs 
 ========================================================== 
  
 using System;
@@ -5819,7 +5819,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioAcoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioAcoes.cs 
 ========================================================== 
  
 using System;
@@ -5841,7 +5841,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioCampo.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioCampo.cs 
 ========================================================== 
  
 using System;
@@ -5873,7 +5873,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioDAcoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioDAcoes.cs 
 ========================================================== 
  
 using System;
@@ -5898,7 +5898,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\DiarioEixo.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\DiarioEixo.cs 
 ========================================================== 
  
 using System;
@@ -5920,7 +5920,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Eixo.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Eixo.cs 
 ========================================================== 
  
 using System;
@@ -5944,7 +5944,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\ErrorViewModel.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\ErrorViewModel.cs 
 ========================================================== 
  
 namespace Empodera.Models;
@@ -5959,7 +5959,7 @@ public class ErrorViewModel
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaCondicoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaCondicoes.cs 
 ========================================================== 
  
 using System;
@@ -5980,7 +5980,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaPeticoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaPeticoes.cs 
 ========================================================== 
  
 using System;
@@ -6001,7 +6001,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaPrimeiroContato.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaPrimeiroContato.cs 
 ========================================================== 
  
 using System;
@@ -6080,7 +6080,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaResp.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaResp.cs 
 ========================================================== 
  
 using System;
@@ -6101,7 +6101,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FichaResult.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FichaResult.cs 
 ========================================================== 
  
 using System;
@@ -6122,7 +6122,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\FonteInf.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\FonteInf.cs 
 ========================================================== 
  
 using System;
@@ -6151,7 +6151,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Perfil.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Perfil.cs 
 ========================================================== 
  
 using System;
@@ -6175,7 +6175,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Permissoes.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Permissoes.cs 
 ========================================================== 
  
 using System;
@@ -6201,7 +6201,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\RedeEixo.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\RedeEixo.cs 
 ========================================================== 
  
 using System;
@@ -6223,7 +6223,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\RedePrimaria.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\RedePrimaria.cs 
 ========================================================== 
  
 using System;
@@ -6246,7 +6246,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\RedeRecursos.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\RedeRecursos.cs 
 ========================================================== 
  
 using System;
@@ -6278,7 +6278,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Usuario.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Usuario.cs 
 ========================================================== 
  
 using System;
@@ -6315,7 +6315,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\Vulnerabilidade.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\Vulnerabilidade.cs 
 ========================================================== 
  
 using System;
@@ -6339,7 +6339,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Models\VulnerabilidadesEixo.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Models\VulnerabilidadesEixo.cs 
 ========================================================== 
  
 using System;
@@ -6361,7 +6361,7 @@ namespace Empodera.Models
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Services\AtorRelatorioDto.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Services\AtorRelatorioDto.cs 
 ========================================================== 
  
 using System;
@@ -6393,7 +6393,7 @@ namespace Empodera.Services
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Services\RelatorioExcelService.cs 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Services\RelatorioExcelService.cs 
 ========================================================== 
  
 using System;
@@ -6460,7 +6460,7 @@ namespace Empodera.Services
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\_ViewImports.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\_ViewImports.cshtml 
 ========================================================== 
  
 ï»¿@using Empodera
@@ -6470,7 +6470,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\_ViewImports.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml 
 ========================================================== 
  
 ï»¿@{
@@ -6480,7 +6480,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\_ViewStart.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\AccessProfile\Create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Perfil
@@ -6687,7 +6687,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Create.
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Perfil
@@ -6908,7 +6908,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Edit.cs
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\AccessProfile\Index.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.Perfil>
@@ -7166,7 +7166,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\AccessProfile\Index.c
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml 
 ========================================================== 
  
 @{
@@ -7256,7 +7256,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\Forgot.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Account\index.cshtml 
 ========================================================== 
  
 @{
@@ -7344,14 +7344,14 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\index.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Account\Logout.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atividades\Create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atividades
@@ -7546,7 +7546,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Create.csh
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atividades\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atividades
@@ -7893,7 +7893,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Edit.cshtm
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atividades\Index.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.Atividades>
@@ -8172,7 +8172,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atividades\Index.csht
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Create.cshtml 
 ========================================================== 
  
 @{
@@ -8425,14 +8425,14 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Create.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Delete.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Delete.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atores
@@ -8788,7 +8788,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Edit.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Atores\Index.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.Atores>
@@ -8997,7 +8997,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Atores\Index.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\AtividadesVinculadas.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\AtividadesVinculadas.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.Atividades>
@@ -9085,7 +9085,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Atividades
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\AtoresVinculados.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\AtoresVinculados.cshtml 
 ========================================================== 
  
 @{
@@ -9160,7 +9160,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\AtoresVinc
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeDetalhesRecursos.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeDetalhesRecursos.cshtml 
 ========================================================== 
  
 @model Empodera.Models.RedeRecursos
@@ -9328,7 +9328,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeRecursos.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadeRecursos.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.RedeRecursos>
@@ -9415,7 +9415,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadesDetalhes.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\ComunidadesDetalhes.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Comunidade
@@ -9433,18 +9433,18 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
 
 <form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post" class="main-form">
   @Html.AntiForgeryToken()
-  <input type="hidden" name="id" value="@(Model.IdComunidade)" />
+  <input type="hidden" name="id" value="@(Model.Id_Comunidade)" />
 
   <div class="modern-container">
     <div class="header-section">
       <h2>
         <a asp-controller="Comunidade" asp-action="Index" class="text-primary">Comunidades</a>
         <span class="separator">></span>
-        <strong class="text-muted">@(Model.IdComunidade > 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
+        <strong class="text-muted">@(Model.Id_Comunidade > 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
       </h2>
     </div>
 
-    <input type="hidden" asp-for="IdComunidade" />
+    <input type="hidden" asp-for="Id_Comunidade" />
 
     <!-- Nome -->
     <div class="input-card full-width">
@@ -9452,7 +9452,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="input-content">
         <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
         <input type="text" asp-for="Nome" class="clean-input"
-          value="@(Model.IdComunidade > 0 ? Model.Nome : string.Empty)" required
+          value="@(Model.Id_Comunidade > 0 ? Model.Nome : string.Empty)" required
           placeholder="Digite o nome da comunidade" />
         <span asp-validation-for="Nome" class="text-danger"></span>
       </div>
@@ -9467,7 +9467,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="input-content">
         <label asp-for="Local">EndereÃ§o <span class="text-danger">*</span></label>
         <input asp-for="Local" class="clean-input" id="input-endereco"
-          value="@(Model.IdComunidade > 0 ? Model.Local : string.Empty)" readonly
+          value="@(Model.Id_Comunidade > 0 ? Model.Local : string.Empty)" readonly
           placeholder="Use a lupa no mapa acima para buscar..." required />
         <span asp-validation-for="Local" class="text-danger"></span>
       </div>
@@ -9479,7 +9479,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="input-content">
         <label asp-for="Complemento">Complemento/ReferÃªncia</label>
         <input asp-for="Complemento" class="clean-input"
-          value="@(Model.IdComunidade > 0 ? Model.Complemento : string.Empty)"
+          value="@(Model.Id_Comunidade > 0 ? Model.Complemento : string.Empty)"
           placeholder="Ex: Ponto de referÃªncia, detalhes adicionais..." />
       </div>
     </div>
@@ -9490,7 +9490,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="input-content">
         <label asp-for="Descricao">DescriÃ§Ã£o</label>
         <textarea asp-for="Descricao" class="clean-input" rows="4"
-          placeholder="Adicione uma descriÃ§Ã£o sobre a comunidade...">@(Model.IdComunidade > 0 ? Model.Descricao : string.Empty)</textarea>
+          placeholder="Adicione uma descriÃ§Ã£o sobre a comunidade...">@(Model.Id_Comunidade > 0 ? Model.Descricao : string.Empty)</textarea>
       </div>
     </div>
 
@@ -9499,7 +9499,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="input-content no-icon">
         <label asp-for="Status">Status <span class="text-danger">*</span></label>
         @{
-          var currentStatus = Model.IdComunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
+          var currentStatus = Model.Id_Comunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
         }
         <select asp-for="Status" class="clean-input" required>
           <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
@@ -9517,17 +9517,17 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="input-content">
         <label asp-for="DescricaoAcessibilidade">DescriÃ§Ã£o de Acessibilidade</label>
         <textarea asp-for="DescricaoAcessibilidade" class="clean-input" rows="4"
-          placeholder="Adicione informaÃ§Ãµes sobre acessibilidade...">@(Model.IdComunidade > 0 ? Model.DescricaoAcessibilidade : string.Empty)</textarea>
+          placeholder="Adicione informaÃ§Ãµes sobre acessibilidade...">@(Model.Id_Comunidade > 0 ? Model.DescricaoAcessibilidade : string.Empty)</textarea>
       </div>
     </div>
 
-    @if (Model.IdComunidade > 0)
+    @if (Model.Id_Comunidade > 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">EstatÃ­sticas da Comunidade</div>
 
       <div class="actions-grid">
-        <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade"
+        <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.Id_Comunidade"
           class="action-card">
           <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qAtores</span>
           <span class="card-subtitle">Atores vinculados</span>
@@ -9536,7 +9536,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
           </div>
         </a>
 
-        <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.IdComunidade"
+        <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.Id_Comunidade"
           class="action-card">
           <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qAtividades</span>
           <span class="card-subtitle">Atividades</span>
@@ -9545,7 +9545,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
           </div>
         </a>
 
-        <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.IdComunidade"
+        <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.Id_Comunidade"
           class="action-card">
           <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qRecursos</span>
           <span class="card-subtitle">Recursos</span>
@@ -9557,7 +9557,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
     }
 
     <!-- InformaÃ§Ãµes de CriaÃ§Ã£o e AtualizaÃ§Ã£o -->
-    @if (Model.IdComunidade > 0)
+    @if (Model.Id_Comunidade > 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">InformaÃ§Ãµes do Sistema</div>
@@ -9601,7 +9601,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
 
       <div class="action-buttons-group">
         <button type="button" class="wizard-btn" id="edit-save-btn">
-          @if (Model.IdComunidade == 0)
+          @if (Model.Id_Comunidade == 0)
           {
             <text><i class="fa-solid fa-plus"></i> Criar Comunidade</text>
           }
@@ -9611,7 +9611,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
           }
         </button>
 
-        @if (Model.IdComunidade > 0)
+        @if (Model.Id_Comunidade > 0)
         {
           <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
             <i class="fa-solid fa-trash"></i> Deletar
@@ -9639,7 +9639,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
       <div class="modal-actions">
         <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">Cancelar</button>
 
-        <form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.IdComunidade">
+        <form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.Id_Comunidade">
           @Html.AntiForgeryToken()
           <button type="submit" class="btn-modal-confirm wizard-btn btn-next">Sim, Deletar</button>
         </form>
@@ -9663,7 +9663,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
     }
 
     // Configurar modo da pÃ¡gina
-    const isCreateMode = @(Model.IdComunidade == 0 ? "true" : "false");
+    const isCreateMode = @(Model.Id_Comunidade == 0 ? "true" : "false");
     let isEditMode = isCreateMode;
     let isSubmitting = false;
 
@@ -9860,7 +9860,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Comunidade
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atividades.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atividades.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atividades
@@ -10012,7 +10012,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Ati
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atores.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Create_Atores.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atores
@@ -10298,7 +10298,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Ato
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Recursos.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Create_Recursos.cshtml 
 ========================================================== 
  
 @model Empodera.Models.RedeRecursos
@@ -10452,14 +10452,14 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Create_Rec
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Delete_Atores.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Delete_Atores.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atividades.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atividades.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atividades
@@ -10651,7 +10651,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Ativi
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atores.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atores.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Atores
@@ -11121,7 +11121,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Edit_Atore
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Index.cshtml 
 ========================================================== 
  
 @model List<Empodera.Models.ComunidadeDto>
@@ -11346,21 +11346,21 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Index.csht
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\Processo.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\Processo.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Comunidade\VoltarAtor.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Comunidade\VoltarAtor.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.DiarioCampo
@@ -11713,7 +11713,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\create.cs
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\delete.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\delete.cshtml 
 ========================================================== 
  
 @{
@@ -11788,7 +11788,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\delete.cs
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\details.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\details.cshtml 
 ========================================================== 
  
 @model Empodera.Models.DiarioCampo
@@ -11962,7 +11962,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\details.c
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.DiarioCampo
@@ -12202,7 +12202,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\edit.csht
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\index.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.DiarioCampo>
@@ -12254,7 +12254,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\index.csh
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\_TagsScript.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Diariocampo\_TagsScript.cshtml 
 ========================================================== 
  
 <script src="~/js/diariocampotags.js"></script>
@@ -12262,7 +12262,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Diariocampo\_TagsScri
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.FichaPrimeiroContato
@@ -12709,21 +12709,21 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\CreatePost.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\CreatePost.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Delete.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Delete.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Details.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Details.cshtml 
 ========================================================== 
  
 @model Empodera.Models.FichaPrimeiroContato
@@ -13158,7 +13158,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.FichaPrimeiroContato
@@ -13649,7 +13649,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\Index.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.FichaPrimeiroContato>
@@ -14110,7 +14110,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\FichaPrimeiroContato\
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Home\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Home\Index.cshtml 
 ========================================================== 
  
 ï»¿@{
@@ -14150,7 +14150,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Home\Index.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Home\Privacy.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Home\Privacy.cshtml 
 ========================================================== 
  
 ï»¿@{
@@ -14163,7 +14163,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Home\Privacy.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.AvaliacaoPessoal
@@ -14318,7 +14318,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Cr
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.AvaliacaoPessoal
@@ -14614,7 +14614,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Ed
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalAssessment\Index.cshtml 
 ========================================================== 
  
 @model List<Empodera.Models.AvaliacaoPessoal>
@@ -14867,7 +14867,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalAssessment\In
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalProcess\Create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.DiarioCampo
@@ -15035,7 +15035,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Creat
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.DiarioCampo
@@ -15300,7 +15300,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Edit.
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\PersonalProcess\Index.cshtml 
 ========================================================== 
  
 @model List<Empodera.Models.DiarioCampo>
@@ -15457,7 +15457,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\PersonalProcess\Index
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml 
 ========================================================== 
  
 @{
@@ -15557,7 +15557,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Actions.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\FirstContact.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\FirstContact.cshtml 
 ========================================================== 
  
 @{
@@ -15847,7 +15847,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\FirstContact.c
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\Index.cshtml 
 ========================================================== 
  
 @{
@@ -15899,7 +15899,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Index.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\PersonalAssessment.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\PersonalAssessment.cshtml 
 ========================================================== 
  
 @{
@@ -15975,7 +15975,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\PersonalAssess
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\PrimaryNetwork.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\PrimaryNetwork.cshtml 
 ========================================================== 
  
 @{
@@ -16062,7 +16062,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\PrimaryNetwork
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Rsc.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Report\Rsc.cshtml 
 ========================================================== 
  
 @{
@@ -16171,7 +16171,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Report\Rsc.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml 
 ========================================================== 
  
 ï»¿@model ErrorViewModel
@@ -16203,7 +16203,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\Error.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml 
 ========================================================== 
  
 ï»¿ï»¿<!DOCTYPE html>
@@ -16399,7 +16399,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_Layout.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout.cshtml 
 ========================================================== 
  
 @* cÃ³digo de login a ser integrado apÃ³s entrega da funcionalidade de login *@<!DOCTYPE html>
@@ -16418,7 +16418,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_LoginLayout.c
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_ValidationScriptsPartial.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Shared\_ValidationScriptsPartial.cshtml 
 ========================================================== 
  
 ï»¿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -16427,7 +16427,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Shared\_ValidationScr
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Create.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\Create.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Usuario
@@ -16556,14 +16556,14 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Create.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Delete.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\Delete.cshtml 
 ========================================================== 
  
  
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Edit.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\Edit.cshtml 
 ========================================================== 
  
 @model Empodera.Models.Usuario
@@ -16900,7 +16900,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\Edit.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\index.cshtml 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\Views\Users\index.cshtml 
 ========================================================== 
  
 @model IEnumerable<Empodera.Models.Usuario>
@@ -17162,7 +17162,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\Views\Users\index.cshtml
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\InsEmpodera.csproj 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\InsEmpodera.csproj 
 ========================================================== 
  
 <Project Sdk="Microsoft.NET.Sdk.Web">
@@ -17191,7 +17191,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\InsEmpodera.csproj
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\InsEmpodera.sln 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\InsEmpodera.sln 
 ========================================================== 
  
 Microsoft Visual Studio Solution File, Format Version 12.00
@@ -17222,7 +17222,7 @@ EndGlobal
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\appsettings.Development.json 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\appsettings.Development.json 
 ========================================================== 
  
 {
@@ -17237,7 +17237,7 @@ ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\appsettings.Development.jso
  
  
 ========================================================== 
-ARQUIVO: C:\Users\elian\µrea de Trabalho\InsEmpodera\appsettings.json 
+ARQUIVO: C:\Users\elian\ï¿½rea de Trabalho\InsEmpodera\appsettings.json 
 ========================================================== 
  
 {

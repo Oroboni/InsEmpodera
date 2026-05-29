@@ -284,7 +284,7 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.Comunidade", b =>
                 {
-                    b.Property<int>("IdComunidade")
+                    b.Property<int>("Id_Comunidade")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -298,19 +298,19 @@ namespace InsEmpodera.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DescricaoAcessibilidade")
+                    b.Property<string>("Descricao_Acessibilidade")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DtCriacao")
+                    b.Property<DateTime>("Dt_Criacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DtModificacao")
+                    b.Property<DateTime>("Dt_Modificacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FkIdUsuario")
+                    b.Property<int>("FK_Id_Usuario")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("FkIdUsuarioM")
+                    b.Property<int?>("FK_Id_UsuarioM")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Local")
@@ -324,9 +324,9 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("IdComunidade");
+                    b.HasKey("Id_Comunidade");
 
-                    b.HasIndex("FkIdUsuarioM");
+                    b.HasIndex("FK_Id_UsuarioM");
 
                     b.ToTable("Comunidades");
                 });
@@ -1920,7 +1920,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Usuario", "Usuario")
                         .WithMany("Comunidades")
-                        .HasForeignKey("FkIdUsuarioM")
+                        .HasForeignKey("FK_Id_UsuarioM")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Usuario");

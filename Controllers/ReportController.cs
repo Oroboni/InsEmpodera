@@ -84,11 +84,11 @@ public class ReportController : Controller
             comunidade.Nome                    = sheet.Rows[0][1]?.ToString()?.Trim();
             comunidade.Local                   = sheet.Rows[1][1]?.ToString()?.Trim();
             comunidade.Descricao               = sheet.Rows[2][1]?.ToString()?.Trim();
-            comunidade.DescricaoAcessibilidade = sheet.Rows[3][1]?.ToString()?.Trim();
+            comunidade.Descricao_Acessibilidade = sheet.Rows[3][1]?.ToString()?.Trim();
             comunidade.Status                  = NormalizeStatus(sheet.Rows[4][1]?.ToString());
-            comunidade.DtCriacao               = DateTime.Now;
-            comunidade.DtModificacao           = DateTime.Now;
-            comunidade.FkIdUsuario             = userId;
+            comunidade.Dt_Criacao               = DateTime.Now;
+            comunidade.Dt_Modificacao           = DateTime.Now;
+            comunidade.FK_Id_Usuario             = userId;
             comunidade.Ativo                   = "S";
 
             _context.Comunidades.Add(comunidade);
@@ -139,7 +139,7 @@ public class ReportController : Controller
 
                 _context.AtorComunidades.Add(new AtorComunidade
                 {
-                    FkIdComunidade = comunidade.IdComunidade,
+                    FkIdComunidade = comunidade.Id_Comunidade,
                     FKidAtores     = ator.IdAtores
                 });
             }
@@ -165,7 +165,7 @@ public class ReportController : Controller
                 {
                     Nome           = nome,
                     Descricao      = row[2]?.ToString()?.Trim() ?? string.Empty,
-                    FkIdComunidade = comunidade.IdComunidade,
+                    FkIdComunidade = comunidade.Id_Comunidade,
                     FkIdUsuario    = userId
                 });
             }
@@ -200,7 +200,7 @@ public class ReportController : Controller
                     Localizacao    = row[4]?.ToString()?.Trim(),
                     Dispositivo    = row[5]?.ToString()?.Trim(),
                     Servicos       = row[6]?.ToString()?.Trim(),
-                    FkIdComunidade = comunidade.IdComunidade,
+                    FkIdComunidade = comunidade.Id_Comunidade,
                     FKidAtores       = idAtor,
                     DtCriacao      = DateTime.Now,
                     DtModificacao  = DateTime.Now,
@@ -230,7 +230,7 @@ public class ReportController : Controller
                     Nome           = nome,
                     Localizacao    = row[2]?.ToString()?.Trim() ?? string.Empty,
                     Servicos       = string.Empty,
-                    FkIdComunidade = comunidade.IdComunidade
+                    FkIdComunidade = comunidade.Id_Comunidade
                 });
             }
             await _context.SaveChangesAsync();
@@ -258,7 +258,7 @@ public class ReportController : Controller
 
                 _context.DiariosCampo.Add(new DiarioCampo
                 {
-                    FkIdComunidade = comunidade.IdComunidade,
+                    FkIdComunidade = comunidade.Id_Comunidade,
                     Data           = data == default ? DateTime.Now : data,
                     Descricao      = descricao,
                     Localizacao    = row[3]?.ToString()?.Trim() ?? string.Empty,
@@ -356,7 +356,7 @@ public class ReportController : Controller
                 // Adapte para o modelo DiarioProcessoPessoal se ele existir
                 _context.DiariosCampo.Add(new DiarioCampo
                 {
-                    FkIdComunidade = comunidade.IdComunidade,
+                    FkIdComunidade = comunidade.Id_Comunidade,
                     Data           = data == default ? DateTime.Now : data,
                     Descricao      = descricao ?? string.Empty,
                     Localizacao    = string.Empty,
@@ -422,7 +422,7 @@ public class ReportController : Controller
                     DtCriacao          = DateTime.Now,
                     DtModificacao      = DateTime.Now,
                     FkIdUsuario        = userId,
-                    FkIdComunidade     = comunidade.IdComunidade,
+                    FkIdComunidade     = comunidade.Id_Comunidade,
                     Status             = "EmProgresso"
                 };
 
@@ -694,7 +694,7 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
 
@@ -704,7 +704,7 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
 
@@ -725,7 +725,7 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "IdComunidade", "Nome", comunidadeId);
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         ViewBag.AtorList = new SelectList(await _context.Atores.ToListAsync(), "IdAtores", "Nome", atorId);
         return View();
     }

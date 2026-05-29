@@ -44,7 +44,7 @@ namespace Empodera.Data
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
             modelBuilder.Entity<Perfil>().HasKey(p => p.IdPerfil);
             modelBuilder.Entity<Permissoes>().HasKey(p => p.IdPermissoes);
-            modelBuilder.Entity<Comunidade>().HasKey(c => c.IdComunidade);
+            modelBuilder.Entity<Comunidade>().HasKey(c => c.Id_Comunidade);
             modelBuilder.Entity<Atores>().HasKey(a => a.IdAtores);
             modelBuilder.Entity<RedeRecursos>().HasKey(r => r.IdRede);
             modelBuilder.Entity<Eixo>().HasKey(e => e.IdEixo);
@@ -92,13 +92,13 @@ namespace Empodera.Data
             modelBuilder.Entity<Comunidade>()
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Comunidades)
-                .HasForeignKey(c => c.FkIdUsuario)
+                .HasForeignKey(c => c.FK_Id_Usuario)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Comunidade>()
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Comunidades)
-                .HasForeignKey(c => c.FkIdUsuarioM)
+                .HasForeignKey(c => c.FK_Id_UsuarioM)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Atores>()

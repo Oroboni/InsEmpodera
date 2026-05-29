@@ -924,6 +924,46 @@ label:has(input[type="checkbox"]) {
     box-shadow: var(--shadow-xl);
 }
 
+.atores-export-button {
+
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px;
+    min-height: 48px;
+    flex-shrink: 0;
+    padding: 0 !important;
+    background-color: #25a84a !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(37, 168, 74, 0.22);
+    overflow: hidden;
+}
+
+.atores-export-button:hover {
+
+    background-color: #1e873d !important;
+    transform: translateY(-1px);
+
+}
+
+.atores-export-button i {
+
+    color: #fff !important;
+    font-size: 1.25rem;
+    line-height: 1;
+
+}
+
 .btn-prev {
     background-color: var(--color-gray-500);
 }

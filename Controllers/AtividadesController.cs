@@ -49,7 +49,7 @@ public class AtividadesController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
-            "IdComunidade", 
+            "Id_Comunidade", 
             "Nome"
         );
 
@@ -121,7 +121,7 @@ public class AtividadesController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
-            "IdComunidade",
+            "Id_Comunidade",
             "Nome",
             atividade?.FkIdComunidade
         );

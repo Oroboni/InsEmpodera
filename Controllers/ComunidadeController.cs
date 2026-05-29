@@ -37,7 +37,7 @@ public class ComunidadeController : Controller
         var comunidades = _context.Comunidades
             .Select(c => new Empodera.Models.ComunidadeDto
             {
-                Id = c.IdComunidade,
+                Id = c.Id_Comunidade,
                 Nome = c.Nome,
                 Status = c.Status,
                 Ativo = c.Ativo
@@ -72,12 +72,12 @@ public class ComunidadeController : Controller
         if (id > 0)
         {
             // Modo Edição: Busca a comunidade existente
-            comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+            comunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == id);
 
             if (comunidade != null)
             {
-                ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuario).FirstOrDefault();
-                ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FkIdUsuarioM).FirstOrDefault();
+                ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FK_Id_Usuario).FirstOrDefault();
+                ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FK_Id_UsuarioM).FirstOrDefault();
             }
             
             // Se não encontrar, retorna um modelo vazio para o modo de criação/ou erro, 
@@ -90,7 +90,7 @@ public class ComunidadeController : Controller
         else
         {
             comunidade = new Comunidade();
-            comunidade.IdComunidade = 0; 
+            comunidade.Id_Comunidade = 0; 
         }
 
         var qAtores = _context.AtorComunidades.Include(a => a.Ator).Where(a => a.Ator.Ativo != "N").Count(a => a.FkIdComunidade == id);
@@ -120,7 +120,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     // 1. Verifica se tem o módulo OU se o módulo nega criação/atualização.
     // Usuário SEM o módulo OU com permissões negadas (N) deve ser redirecionado.
-    if (PodeComunidade == null || (comunidade.IdComunidade == 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N")) || (comunidade.IdComunidade > 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N")))
+    if (PodeComunidade == null || (comunidade.Id_Comunidade == 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N")) || (comunidade.Id_Comunidade > 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N")))
     {
         return RedirectToAction("Index", "Comunidade");
     }
@@ -131,31 +131,31 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     {
          return RedirectToAction("Index", "Comunidade");
     }
-    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N") && comunidade.IdComunidade == 0)
+    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N") && comunidade.Id_Comunidade == 0)
     {
         return RedirectToAction("Index", "Comunidade");
     }
-    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N") && comunidade.IdComunidade > 0)
+    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N") && comunidade.Id_Comunidade > 0)
     {
         return RedirectToAction("Index", "Comunidade");
     }
     */
 
-    // Se a IdComunidade for 0, é uma nova criação
-    if (comunidade.IdComunidade == 0)
+    // Se a Id_Comunidade for 0, é uma nova criação
+    if (comunidade.Id_Comunidade == 0)
     {
-        comunidade.DtCriacao = DateTime.Now;
-        comunidade.DtModificacao = DateTime.Now;
-        comunidade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        comunidade.Dt_Criacao = DateTime.Now;
+        comunidade.Dt_Modificacao = DateTime.Now;
+        comunidade.FK_Id_Usuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         
         _context.Comunidades.Add(comunidade);
         _context.SaveChanges();
         
-        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
+        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.Id_Comunidade });
     }
         
-        // 2. Lógica de EDIÇÃO (IdComunidade > 0)
-        var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);
+        // 2. Lógica de EDIÇÃO (Id_Comunidade > 0)
+        var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
         if (existingComunidade != null)
         {
             existingComunidade.Nome = comunidade.Nome;
@@ -163,17 +163,17 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             existingComunidade.Status = comunidade.Status;
             existingComunidade.Complemento = comunidade.Complemento;
             existingComunidade.Descricao = comunidade.Descricao;
-            existingComunidade.DescricaoAcessibilidade = comunidade.DescricaoAcessibilidade;
-            existingComunidade.DtModificacao = DateTime.Now;
-            existingComunidade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+            existingComunidade.Descricao_Acessibilidade = comunidade.Descricao_Acessibilidade;
+            existingComunidade.Dt_Modificacao = DateTime.Now;
+            existingComunidade.FK_Id_UsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
             _context.SaveChanges();
         }
 
-        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.IdComunidade });
+        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.Id_Comunidade });
 
         // A
-            //     var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == comunidade.IdComunidade);
+            //     var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
             //     if (existingComunidade != null)
             //     {
             //         existingComunidade.Nome = comunidade.Nome;
@@ -215,7 +215,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
        var comunidade = await _context.Comunidades
             .Include(c => c.AtorComunidades)
             .ThenInclude(ac => ac.Ator).Where(c => c.Ativo != "N")
-            .FirstOrDefaultAsync(c => c.IdComunidade == id);
+            .FirstOrDefaultAsync(c => c.Id_Comunidade == id);
 
         if (comunidade == null)
             return RedirectToAction("Index", "Comunidade");
@@ -251,7 +251,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var comunidadebd = await _context.Comunidades
-            .FirstOrDefaultAsync(c => c.IdComunidade == id);
+            .FirstOrDefaultAsync(c => c.Id_Comunidade == id);
 
         if (comunidadebd == null)
         {
@@ -293,7 +293,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .ToList();
         ViewData["id"] = id;
 
-        var comunidade = _context.Comunidades.FirstOrDefault(c => c.IdComunidade == id);
+        var comunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == id);
         if (comunidade != null)
         {
             ViewBag.ComunidadeNome = comunidade.Nome;
@@ -354,7 +354,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         if (recurso == null) return NotFound();
 
         // 2. Carrega listas para os Dropdowns (Atores e Comunidades)
-        ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "IdComunidade", "Nome", recurso.FkIdComunidade);
+        ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "Id_Comunidade", "Nome", recurso.FkIdComunidade);
         
         // Atores da comunidade para vincular o recurso
         var atores = await _context.AtorComunidades
@@ -518,8 +518,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
         
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.Where(c => c.IdComunidade == id).ToListAsync(), 
-            "IdComunidade", 
+            await _context.Comunidades.Where(c => c.Id_Comunidade == id).ToListAsync(), 
+            "Id_Comunidade", 
             "Nome"
         );
         
@@ -595,8 +595,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == ator.FkIdUsuarioM).FirstOrDefault();
 
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.Where(c => c.IdComunidade == comunidadeId).ToListAsync(),
-            "IdComunidade",
+            await _context.Comunidades.Where(c => c.Id_Comunidade == comunidadeId).ToListAsync(),
+            "Id_Comunidade",
             "Nome"
         );
 

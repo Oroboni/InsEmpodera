@@ -55,7 +55,7 @@ public class AtoresController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.ToListAsync(),
-            "IdComunidade",
+            "Id_Comunidade",
             "Nome"
         );
 
@@ -136,7 +136,7 @@ public class AtoresController : Controller
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
-            "IdComunidade",
+            "Id_Comunidade",
             "Nome",
             atorCom?.FkIdComunidade 
         );

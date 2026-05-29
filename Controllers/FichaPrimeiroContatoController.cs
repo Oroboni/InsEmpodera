@@ -62,7 +62,7 @@ namespace Empodera.Controllers
                 .OrderBy(c => c.Nome)
                 .Select(c => new SelectListItem
                 {
-                    Value = c.IdComunidade.ToString(),
+                    Value = c.Id_Comunidade.ToString(),
                     Text = c.Nome
                 })
                 .ToListAsync();
@@ -104,7 +104,7 @@ namespace Empodera.Controllers
                 _context.Comunidades
                     .Where(c => c.Ativo == "S")
                     .OrderBy(c => c.Nome),
-                "IdComunidade",
+                "Id_Comunidade",
                 "Nome"
             );
 
@@ -232,7 +232,7 @@ namespace Empodera.Controllers
                 _context.Comunidades
                     .Where(c => c.Ativo == "S")
                     .OrderBy(c => c.Nome),
-                "IdComunidade",
+                "Id_Comunidade",
                 "Nome",
                 ficha.FkIdComunidade
             );

@@ -133,26 +133,26 @@ namespace InsEmpodera.Migrations
                 name: "Comunidades",
                 columns: table => new
                 {
-                    IdComunidade = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id_Comunidade = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
                     Local = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<string>(type: "TEXT", nullable: false),
                     Complemento = table.Column<string>(type: "TEXT", nullable: true),
                     Descricao = table.Column<string>(type: "TEXT", nullable: true),
-                    DescricaoAcessibilidade = table.Column<string>(type: "TEXT", nullable: true),
-                    DtCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DtModificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    FkIdUsuario = table.Column<int>(type: "INTEGER", nullable: false),
-                    FkIdUsuarioM = table.Column<int>(type: "INTEGER", nullable: true),
+                    Descricao_Acessibilidade = table.Column<string>(type: "TEXT", nullable: true),
+                    Dt_Criacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Dt_Modificacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FK_Id_Usuario = table.Column<int>(type: "INTEGER", nullable: false),
+                    FK_Id_UsuarioM = table.Column<int>(type: "INTEGER", nullable: true),
                     Ativo = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comunidades", x => x.IdComunidade);
+                    table.PrimaryKey("PK_Comunidades", x => x.Id_Comunidade);
                     table.ForeignKey(
-                        name: "FK_Comunidades_Usuarios_FkIdUsuarioM",
-                        column: x => x.FkIdUsuarioM,
+                        name: "FK_Comunidades_Usuarios_FK_Id_UsuarioM",
+                        column: x => x.FK_Id_UsuarioM,
                         principalTable: "Usuarios",
                         principalColumn: "IdUsuario",
                         onDelete: ReferentialAction.SetNull);
@@ -244,7 +244,7 @@ namespace InsEmpodera.Migrations
                         name: "FK_Atividades_Comunidades_FkIdComunidade",
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
+                        principalColumn: "Id_Comunidade",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Atividades_Usuarios_FkIdUsuarioM",
@@ -276,7 +276,7 @@ namespace InsEmpodera.Migrations
                         name: "FK_AtorComunidades_Comunidades_FkIdComunidade",
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
+                        principalColumn: "Id_Comunidade",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -302,7 +302,7 @@ namespace InsEmpodera.Migrations
                         name: "FK_DiariosCampo_Comunidades_FkIdComunidade",
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
+                        principalColumn: "Id_Comunidade",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DiariosCampo_Usuarios_FkIdUsuario",
@@ -360,7 +360,7 @@ namespace InsEmpodera.Migrations
                         name: "FK_FichasPrimeiroContato_Comunidades_FkIdComunidade",
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
+                        principalColumn: "Id_Comunidade",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_FichasPrimeiroContato_Usuarios_FkIdUsuario",
@@ -400,7 +400,7 @@ namespace InsEmpodera.Migrations
                         name: "FK_RedeRecursos_Comunidades_FkIdComunidade",
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
+                        principalColumn: "Id_Comunidade",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RedeRecursos_Usuarios_FkIdUsuario",
@@ -428,7 +428,7 @@ namespace InsEmpodera.Migrations
                         name: "FK_Vulnerabilidades_Comunidades_FkIdComunidade",
                         column: x => x.FkIdComunidade,
                         principalTable: "Comunidades",
-                        principalColumn: "IdComunidade",
+                        principalColumn: "Id_Comunidade",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -994,9 +994,9 @@ namespace InsEmpodera.Migrations
                 column: "FkIdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comunidades_FkIdUsuarioM",
+                name: "IX_Comunidades_FK_Id_UsuarioM",
                 table: "Comunidades",
-                column: "FkIdUsuarioM");
+                column: "FK_Id_UsuarioM");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DAAtores_FKidAtores",

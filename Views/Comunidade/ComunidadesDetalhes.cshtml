@@ -6,25 +6,25 @@
 }
 
 @section Styles {
-  
+
   <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
   <link rel="stylesheet" href="~/css/pages/site.css" />
 }
 
 <form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post" class="main-form">
   @Html.AntiForgeryToken()
-  <input type="hidden" name="id" value="@(Model.IdComunidade)" />
+  <input type="hidden" name="id" value="@(Model.Id_Comunidade)" />
 
   <div class="modern-container">
     <div class="header-section">
       <h2>
         <a asp-controller="Comunidade" asp-action="Index" class="text-primary">Comunidades</a>
         <span class="separator">></span>
-        <strong class="text-muted">@(Model.IdComunidade > 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
+        <strong class="text-muted">@(Model.Id_Comunidade > 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
       </h2>
     </div>
 
-    <input type="hidden" asp-for="IdComunidade" />
+    <input type="hidden" asp-for="Id_Comunidade" />
 
     <!-- Nome -->
     <div class="input-card full-width">
@@ -32,8 +32,8 @@
       <div class="input-content">
         <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
         <input type="text" asp-for="Nome" class="clean-input"
-          value="@(Model.IdComunidade > 0 ? Model.Nome : string.Empty)" required
-          placeholder="Digite o nome da comunidade" />
+               value="@(Model.Id_Comunidade > 0 ? Model.Nome : string.Empty)" required
+               placeholder="Digite o nome da comunidade" />
         <span asp-validation-for="Nome" class="text-danger"></span>
       </div>
     </div>
@@ -47,8 +47,8 @@
       <div class="input-content">mapa-principal
         <label asp-for="Local">Endereço <span class="text-danger">*</span></label>
         <input asp-for="Local" class="clean-input" id="input-endereco"
-          value="@(Model.IdComunidade > 0 ? Model.Local : string.Empty)" readonly
-          placeholder="Use a lupa no mapa acima para buscar..." required />
+               value="@(Model.Id_Comunidade > 0 ? Model.Local : string.Empty)" readonly
+               placeholder="Use a lupa no mapa acima para buscar..." required />
         <span asp-validation-for="Local" class="text-danger"></span>
       </div>
     </div>
@@ -59,8 +59,8 @@
       <div class="input-content">
         <label asp-for="Complemento">Complemento/Referência</label>
         <input asp-for="Complemento" class="clean-input"
-          value="@(Model.IdComunidade > 0 ? Model.Complemento : string.Empty)"
-          placeholder="Ex: Ponto de referência, detalhes adicionais..." />
+               value="@(Model.Id_Comunidade > 0 ? Model.Complemento : string.Empty)"
+               placeholder="Ex: Ponto de referência, detalhes adicionais..." />
       </div>
     </div>
 
@@ -70,7 +70,7 @@
       <div class="input-content">
         <label asp-for="Descricao">Descrição</label>
         <textarea asp-for="Descricao" class="clean-input" rows="4"
-          placeholder="Adicione uma descrição sobre a comunidade...">@(Model.IdComunidade > 0 ? Model.Descricao : string.Empty)</textarea>
+                  placeholder="Adicione uma descrição sobre a comunidade...">@(Model.Id_Comunidade > 0 ? Model.Descricao : string.Empty)</textarea>
       </div>
     </div>
 
@@ -79,7 +79,7 @@
       <div class="input-content no-icon">
         <label asp-for="Status">Status <span class="text-danger">*</span></label>
         @{
-          var currentStatus = Model.IdComunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
+          var currentStatus = Model.Id_Comunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
         }
         <select asp-for="Status" class="clean-input" required>
           <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
@@ -93,20 +93,20 @@
     <div class="input-card full-width">
       <div class="icon-box"><i class="fa-solid fa-universal-access"></i></div>
       <div class="input-content">
-        <label asp-for="DescricaoAcessibilidade">Descrição de Acessibilidade</label>
-        <textarea asp-for="DescricaoAcessibilidade" class="clean-input" rows="4"
-          placeholder="Adicione informações sobre acessibilidade...">@(Model.IdComunidade > 0 ? Model.DescricaoAcessibilidade : string.Empty)</textarea>
+        <label asp-for="Descricao_Acessibilidade">Descrição de Acessibilidade</label>
+        <textarea asp-for="Descricao_Acessibilidade" class="clean-input" rows="4"
+                  placeholder="Adicione informações sobre acessibilidade...">@(Model.Id_Comunidade > 0 ? Model.Descricao_Acessibilidade : string.Empty)</textarea>
       </div>
     </div>
 
-    @if (Model.IdComunidade > 0)
+    @if (Model.Id_Comunidade > 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">Estatísticas da Comunidade</div>
 
       <div class="actions-grid">
-        <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.IdComunidade"
-          class="action-card">
+        <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@Model.Id_Comunidade"
+           class="action-card">
           <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qAtores</span>
           <span class="card-subtitle">Atores vinculados</span>
           <div class="card-icons">
@@ -114,8 +114,8 @@
           </div>
         </a>
 
-        <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.IdComunidade"
-          class="action-card">
+        <a asp-controller="Comunidade" asp-action="AtividadesVinculadas" asp-route-comunidadeId="@Model.Id_Comunidade"
+           class="action-card">
           <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qAtividades</span>
           <span class="card-subtitle">Atividades</span>
           <div class="card-icons">
@@ -123,8 +123,8 @@
           </div>
         </a>
 
-        <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.IdComunidade"
-          class="action-card">
+        <a asp-controller="Comunidade" asp-action="ComunidadeRecursos" asp-route-comunidadeId="@Model.Id_Comunidade"
+           class="action-card">
           <span class="card-title" style="font-size: var(--font-size-4xl);">@ViewBag.qRecursos</span>
           <span class="card-subtitle">Recursos</span>
           <div class="card-icons">
@@ -135,12 +135,12 @@
     }
 
     <!-- Informações de Criação e Atualização -->
-    @if (Model.IdComunidade > 0)
+    @if (Model.Id_Comunidade > 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">Informações do Sistema</div>
 
-      @if (Model.DtCriacao > DateTime.MinValue && ViewBag.UsuarioOriginal != null)
+      @if (Model.Dt_Criacao > DateTime.MinValue && ViewBag.UsuarioOriginal != null)
       {
         <div class="input-card full-width">
           <div class="icon-box"><i class="fa-solid fa-calendar-plus"></i></div>
@@ -149,13 +149,13 @@
             <div class="user-info-display">
               <i class="fa-solid fa-user"></i>
               <span class="user-name">@ViewBag.UsuarioOriginal.Nome</span>
-              <span class="user-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
+              <span class="user-date">@Model.Dt_Criacao.ToString("dd/MM/yyyy HH:mm")</span>
             </div>
           </div>
         </div>
       }
 
-      @if (Model.DtModificacao > DateTime.MinValue && ViewBag.UsuarioNovo != null)
+      @if (Model.Dt_Modificacao > DateTime.MinValue && ViewBag.UsuarioNovo != null)
       {
         <div class="input-card full-width">
           <div class="icon-box"><i class="fa-solid fa-user-edit"></i></div>
@@ -164,7 +164,7 @@
             <div class="user-info-display">
               <i class="fa-solid fa-user"></i>
               <span class="user-name">@ViewBag.UsuarioNovo.Nome</span>
-              <span class="user-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+              <span class="user-date">@Model.Dt_Modificacao.ToString("dd/MM/yyyy HH:mm")</span>
             </div>
           </div>
         </div>
@@ -178,8 +178,15 @@
       </a>
 
       <div class="action-buttons-group">
+        @if (Model.Id_Comunidade > 0)
+        {
+          <a href="@Url.Action("ExportComunidade", "Services", new { id = Model.Id_Comunidade })"
+             class="atores-export-button" title="Exportar dados">
+            <i class="fa-solid fa-file-arrow-down"></i>
+          </a>
+        }
         <button type="button" class="wizard-btn" id="edit-save-btn">
-          @if (Model.IdComunidade == 0)
+          @if (Model.Id_Comunidade == 0)
           {
             <text><i class="fa-solid fa-plus"></i> Criar Comunidade</text>
           }
@@ -189,7 +196,7 @@
           }
         </button>
 
-        @if (Model.IdComunidade > 0)
+        @if (Model.Id_Comunidade > 0)
         {
           <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
             <i class="fa-solid fa-trash"></i> Deletar
@@ -217,7 +224,7 @@
       <div class="modal-actions">
         <button type="button" class="btn-modal-cancel wizard-btn btn-prev" id="cancelDeleteBtn">Cancelar</button>
 
-        <form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.IdComunidade">
+        <form asp-controller="Comunidade" asp-action="Delete" method="post" asp-route-id="@Model.Id_Comunidade">
           @Html.AntiForgeryToken()
           <button type="submit" class="btn-modal-confirm wizard-btn btn-next">Sim, Deletar</button>
         </form>
@@ -241,7 +248,7 @@
     }
 
     // Configurar modo da página
-    const isCreateMode = @(Model.IdComunidade == 0 ? "true" : "false");
+    const isCreateMode = @(Model.Id_Comunidade == 0 ? "true" : "false");
     let isEditMode = isCreateMode;
     let isSubmitting = false;
 
@@ -257,7 +264,7 @@
       } else {
         if (isEditMode) {
           // Modo edição ativo
-            inputFields.forEach(field => { if (field.tagName !== 'SELECT'){ field.disabled = false; }});
+          inputFields.forEach(field => { if (field.tagName !== 'SELECT') { field.disabled = false; } });
           editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
           editSaveBtn.setAttribute('type', 'submit');
           editSaveBtn.classList.add('btn-save-final');

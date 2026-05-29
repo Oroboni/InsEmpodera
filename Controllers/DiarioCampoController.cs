@@ -249,7 +249,7 @@ namespace Empodera.Controllers
         private async Task PreencherViewBagsDoBanco()
         {
             // 1. Comunidades
-            ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "IdComunidade", "Nome");
+            ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "Id_Comunidade", "Nome");
 
             // 2. Eixos (Para o select múltiplo)
             ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
