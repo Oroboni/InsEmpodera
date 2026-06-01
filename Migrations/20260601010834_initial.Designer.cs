@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsEmpodera.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260526020558_initial")]
+    [Migration("20260601010834_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -53,7 +53,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FKidAtores")
+                    b.Property<int>("FK_id_Atores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FkIdAcoes")
@@ -61,7 +61,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdAAtores");
 
-                    b.HasIndex("FKidAtores");
+                    b.HasIndex("FK_id_Atores");
 
                     b.HasIndex("FkIdAcoes");
 
@@ -156,7 +156,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FKidAtores")
+                    b.Property<int>("FK_id_Atores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FkIdComunidade")
@@ -164,7 +164,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdAtorComunidade");
 
-                    b.HasIndex("FKidAtores");
+                    b.HasIndex("FK_id_Atores");
 
                     b.HasIndex("FkIdComunidade");
 
@@ -252,7 +252,7 @@ namespace InsEmpodera.Migrations
                     b.Property<int>("Educacao")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FKidAtores")
+                    b.Property<int>("FK_id_Atores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FkIdUsuario")
@@ -278,7 +278,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdAvaliacao");
 
-                    b.HasIndex("FKidAtores");
+                    b.HasIndex("FK_id_Atores");
 
                     b.HasIndex("FkIdUsuario");
 
@@ -340,7 +340,7 @@ namespace InsEmpodera.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FKidAtores")
+                    b.Property<int>("FK_id_Atores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FkIdDDacoes")
@@ -348,7 +348,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FKidAtores");
+                    b.HasIndex("FK_id_Atores");
 
                     b.HasIndex("FkIdDDacoes");
 
@@ -601,7 +601,7 @@ namespace InsEmpodera.Migrations
                     b.Property<string>("EstruFamiliar")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FKidAtores")
+                    b.Property<int>("FK_id_Atores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("FkIdComunidade")
@@ -654,7 +654,7 @@ namespace InsEmpodera.Migrations
 
                     b.HasKey("IdFicha");
 
-                    b.HasIndex("FKidAtores");
+                    b.HasIndex("FK_id_Atores");
 
                     b.HasIndex("FkIdComunidade");
 
@@ -1522,6 +1522,33 @@ namespace InsEmpodera.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Empodera.Models.RecursosAtores", b =>
+                {
+                    b.Property<int>("Id_Recursos_Atores")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FK_id_Atores")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Pode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id_Recursos_Atores");
+
+                    b.HasIndex("FK_id_Atores");
+
+                    b.ToTable("RecursosAtores");
+                });
+
             modelBuilder.Entity("Empodera.Models.RedeEixo", b =>
                 {
                     b.Property<int>("IdRedeEixo")
@@ -1570,7 +1597,7 @@ namespace InsEmpodera.Migrations
 
             modelBuilder.Entity("Empodera.Models.RedeRecursos", b =>
                 {
-                    b.Property<int>("IdRede")
+                    b.Property<int>("Id_Rede")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -1583,7 +1610,7 @@ namespace InsEmpodera.Migrations
                     b.Property<DateTime>("DtModificacao")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("FKidAtores")
+                    b.Property<int?>("FK_id_Atores")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("FkIdComunidade")
@@ -1605,9 +1632,9 @@ namespace InsEmpodera.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("IdRede");
+                    b.HasKey("Id_Rede");
 
-                    b.HasIndex("FKidAtores");
+                    b.HasIndex("FK_id_Atores");
 
                     b.HasIndex("FkIdComunidade");
 
@@ -1808,7 +1835,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("AcoesAtores")
-                        .HasForeignKey("FKidAtores")
+                        .HasForeignKey("FK_id_Atores")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1875,7 +1902,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("Comunidades")
-                        .HasForeignKey("FKidAtores")
+                        .HasForeignKey("FK_id_Atores")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1904,7 +1931,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("Avaliacoes")
-                        .HasForeignKey("FKidAtores")
+                        .HasForeignKey("FK_id_Atores")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1933,7 +1960,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("DAAtores")
-                        .HasForeignKey("FKidAtores")
+                        .HasForeignKey("FK_id_Atores")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2072,7 +2099,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("FichasPrimeiroContato")
-                        .HasForeignKey("FKidAtores")
+                        .HasForeignKey("FK_id_Atores")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2144,6 +2171,17 @@ namespace InsEmpodera.Migrations
                     b.Navigation("Perfil");
                 });
 
+            modelBuilder.Entity("Empodera.Models.RecursosAtores", b =>
+                {
+                    b.HasOne("Empodera.Models.Atores", "Atores")
+                        .WithMany("RecursosAtores")
+                        .HasForeignKey("FK_id_Atores")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Atores");
+                });
+
             modelBuilder.Entity("Empodera.Models.RedeEixo", b =>
                 {
                     b.HasOne("Empodera.Models.Eixo", "Eixo")
@@ -2186,7 +2224,7 @@ namespace InsEmpodera.Migrations
                 {
                     b.HasOne("Empodera.Models.Atores", "Ator")
                         .WithMany("Redes")
-                        .HasForeignKey("FKidAtores")
+                        .HasForeignKey("FK_id_Atores")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Empodera.Models.Comunidade", "Comunidade")
@@ -2276,6 +2314,8 @@ namespace InsEmpodera.Migrations
                     b.Navigation("FichasPrimeiroContato");
 
                     b.Navigation("FonteInfos");
+
+                    b.Navigation("RecursosAtores");
 
                     b.Navigation("Redes");
                 });

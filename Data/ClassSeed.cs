@@ -102,6 +102,7 @@ namespace Empodera.Data
         public List<AcoesAtoresSeed>? Acoes { get; set; }
         public List<AvaliacaoPessoalSeed>? Avaliacoes { get; set; }
         public List<RedePrimariaSeed>? RedesPrimarias { get; set; }
+        public List<RecursosAtores>? RecursosAtores { get; set; }
     }
 
     public class RedeRecursosSeed
@@ -277,7 +278,7 @@ namespace Empodera.Data
     public class FichaPrimeiroContatoSeed
     {
         public int IdFicha { get; set; }
-        public int FKidAtores { get; set; }
+        public int FK_id_Atores { get; set; }
         public string Endereco { get; set; } = null!;
         public string? Complemento { get; set; } = null!;
         public string? Emprego { get; set; } = null!;
@@ -378,5 +379,15 @@ namespace Empodera.Data
         public int Id_A_Eixo { get; set; }
         public int Fk_Id_Eixo { get; set; }
         public int Fk_Id_Atividade { get; set; }
+    }
+
+    public class RecursosAtoresSeed
+    {
+        public int Id_Recursos_Atores { get; set; }
+        public int FK_id_Atores { get; set; }     
+        public string Tipo { get; set; } = null!;
+        public string Nome { get; set; } = null!;
+        public string? Pode { get; set; } = null!;
+        public Atores? Atores { get; set; }
     }
 }

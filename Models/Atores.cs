@@ -30,6 +30,7 @@ namespace Empodera.Models
         public List<FonteInf> FonteInfos { get; set; } = new();
         public List<FichaPrimeiroContato> FichasPrimeiroContato { get; set; } = new();
         public ICollection<AvaliacaoPessoal> Avaliacoes { get; set; } = new List<AvaliacaoPessoal>();
+        public List<RecursosAtores> RecursosAtores { get; set; } = new();
 
     }
 }

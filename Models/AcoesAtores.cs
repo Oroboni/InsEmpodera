@@ -7,7 +7,7 @@ namespace Empodera.Models
      public class AcoesAtores
     {
         public int IdAAtores { get; set; }      
-        public int FKidAtores { get; set; }     
+        public int FK_id_Atores { get; set; }     
         public int FkIdAcoes { get; set; }     
 
         public Atores Ator { get; set; } = null!;

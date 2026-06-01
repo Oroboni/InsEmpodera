@@ -32,7 +32,6 @@
                 <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
                 <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" class="clean-input"
                     required disabled>
-                    <option value="">Selecione a comunidade</option>
                 </select>
             </div>
         </div>
@@ -51,7 +50,7 @@
             </button>
         </div>
 
-        <div class="input-card full-width">
+        @* <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
             <div class="input-content">
                 <label for="tipoRelacionamento">Tipo de relacionamento</label>
@@ -64,7 +63,7 @@
                     <option value="5">Vizinho</option>
                 </select>
             </div>
-        </div>
+        </div> *@
 
         <div class="purple-divider"></div>
         <div class="section-label">Recursos e Vulnerabilidades</div>
@@ -76,43 +75,43 @@
                 <small class="text-muted">Selecione todos que se aplicam:</small>
                 <div class="checkbox-group dense-grid">
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="RedePrimaria" disabled>
+                        <input type="checkbox" name="recursos" value="RedePrimaria" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "RedePrimaria" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Rede primária</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="SeguridadeSocial" disabled>
+                        <input type="checkbox" name="recursos" value="SeguridadeSocial" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "SeguridadeSocial" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Seguridade Social</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Substancias" disabled>
+                        <input type="checkbox" name="recursos" value="Substancias" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Substancias" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Substâncias</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Moradia" disabled>
+                        <input type="checkbox" name="recursos" value="Moradia" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Moradia" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Moradia</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Prevencao" disabled>
+                        <input type="checkbox" name="recursos" value="Prevencao" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Prevencao" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Prevenção</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="AssistenciaBasica" disabled>
+                        <input type="checkbox" name="recursos" value="AssistenciaBasica" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "AssistenciaBasica" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Assistência Básica</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Educacao" disabled>
+                        <input type="checkbox" name="recursos" value="Educacao" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Educacao" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Educação</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Saude" disabled>
+                        <input type="checkbox" name="recursos" value="Saude" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Saude" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Saúde</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Ocupacao" disabled>
+                        <input type="checkbox" name="recursos" value="Ocupacao" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Ocupacao" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Ocupação</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="recursos" value="Lazer" disabled>
+                        <input type="checkbox" name="recursos" value="Lazer" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Lazer" && r.Tipo == "Recurso" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Lazer</span>
                     </label>
                 </div>
@@ -126,43 +125,43 @@
                 <small class="text-muted">Selecione todos que se aplicam:</small>
                 <div class="checkbox-group dense-grid">
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="RedePrimaria" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="RedePrimaria" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "RedePrimaria" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Rede primária</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="SeguridadeSocial" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="SeguridadeSocial" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "SeguridadeSocial" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Seguridade Social</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Substancias" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Substancias" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Substancias" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Substâncias</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Moradia" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Moradia" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Moradia" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Moradia</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Prevencao" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Prevencao" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Prevencao" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Prevenção</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="AssistenciaBasica" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="AssistenciaBasica" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "AssistenciaBasica" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Assistência Básica</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Educacao" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Educacao" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Educacao" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Educação</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Saude" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Saude" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Saude" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Saúde</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Ocupacao" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Ocupacao" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Ocupacao" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Ocupação</span>
                     </label>
                     <label class="checkbox-option">
-                        <input type="checkbox" name="vulnerabilidades" value="Lazer" disabled>
+                        <input type="checkbox" name="vulnerabilidades" value="Lazer" Disabled @(Model.RecursosAtores.Any(r => r.Nome == "Lazer" && r.Tipo == "Vulnerabilidade" && r.Pode == "S") ? "checked" : "")>
                         <span class="checkbox-label">Lazer</span>
                     </label>
                 </div>

@@ -6,8 +6,8 @@ namespace Empodera.Models
 {
     public class RedeRecursos
     {
-        public int IdRede { get; set; }         
-        public int? FKidAtores{ get; set; }     
+        public int Id_Rede { get; set; }         
+        public int? FK_id_Atores{ get; set; }     
         public int FkIdComunidade { get; set; } 
         public string? Nome { get; set; }
         public string Tipo { get; set; } = null!;

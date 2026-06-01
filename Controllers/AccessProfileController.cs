@@ -38,13 +38,11 @@ public class AccessProfileController : Controller
 
         ViewData["DisableMainScroll"] = "true";
 
-        // 🔹 CARREGA PERFIS COM USUÁRIOS
         var perfis = await _context.Perfis
-            .Include(p => p.Usuarios) // ESSENCIAL
+            .Include(p => p.Usuarios) 
             .OrderBy(p => p.Nome)
             .ToListAsync();
 
-        // 🔹 CALCULA TOTAL DE USUÁRIOS
         ViewBag.TotalUsuarios = perfis.Sum(p => p.Usuarios.Count);
 
         ViewBag.PerfisAtivos = perfis.Count(p =>

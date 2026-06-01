@@ -38,6 +38,7 @@ namespace Empodera.Data
         public DbSet<FichaResult> FichaResultados { get; set; } = null!;
         public DbSet<Atividades> Atividades { get; set; } = null!;
         public DbSet<AtividadesEixo> AtividadesEixo { get; set; } = null!;
+        public DbSet<RecursosAtores> RecursosAtores { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,7 +47,7 @@ namespace Empodera.Data
             modelBuilder.Entity<Permissoes>().HasKey(p => p.IdPermissoes);
             modelBuilder.Entity<Comunidade>().HasKey(c => c.Id_Comunidade);
             modelBuilder.Entity<Atores>().HasKey(a => a.IdAtores);
-            modelBuilder.Entity<RedeRecursos>().HasKey(r => r.IdRede);
+            modelBuilder.Entity<RedeRecursos>().HasKey(r => r.Id_Rede);
             modelBuilder.Entity<Eixo>().HasKey(e => e.IdEixo);
             modelBuilder.Entity<RedeEixo>().HasKey(re => re.IdRedeEixo);
             modelBuilder.Entity<AtorComunidade>().HasKey(ac => ac.IdAtorComunidade);
@@ -72,6 +73,7 @@ namespace Empodera.Data
             modelBuilder.Entity<FichaResult>().HasKey(fr => fr.IdCondicoes);
             modelBuilder.Entity<Atividades>().HasKey(at => at.IdAtividade);
             modelBuilder.Entity<AtividadesEixo>().HasKey(ae => ae.IdAEixo);
+            modelBuilder.Entity<RecursosAtores>().HasKey(ra => ra.Id_Recursos_Atores);
 
             // Perfil -> Usuario (many Perfis belong to one Usuario)
             modelBuilder.Entity<Usuario>()
@@ -117,7 +119,7 @@ namespace Empodera.Data
             modelBuilder.Entity<RedeRecursos>()
                 .HasOne(r => r.Ator)
                 .WithMany(a => a.Redes)
-                .HasForeignKey(r => r.FKidAtores)
+                .HasForeignKey(r => r.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<RedeRecursos>()
@@ -155,7 +157,7 @@ namespace Empodera.Data
             modelBuilder.Entity<AtorComunidade>()
                 .HasOne(ac => ac.Ator)
                 .WithMany(a => a.Comunidades)
-                .HasForeignKey(ac => ac.FKidAtores)
+                .HasForeignKey(ac => ac.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // DiarioCampo -> Comunidade & Usuario
@@ -216,7 +218,7 @@ namespace Empodera.Data
             modelBuilder.Entity<DAAtores>()
                 .HasOne(d => d.Ator)
                 .WithMany(a => a.DAAtores)
-                .HasForeignKey(d => d.FKidAtores)
+                .HasForeignKey(d => d.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DiarioEixo>()
@@ -246,7 +248,7 @@ namespace Empodera.Data
             modelBuilder.Entity<AcoesAtores>()
                 .HasOne(aa => aa.Ator)
                 .WithMany(a => a.AcoesAtores)
-                .HasForeignKey(aa => aa.FKidAtores)
+                .HasForeignKey(aa => aa.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AnexosDiario>()
@@ -288,7 +290,7 @@ namespace Empodera.Data
             modelBuilder.Entity<AvaliacaoPessoal>()
                 .HasOne(ap => ap.Ator)
                 .WithMany(a => a.Avaliacoes)
-                .HasForeignKey(ap => ap.FKidAtores)
+                .HasForeignKey(ap => ap.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AvaliacaoPessoal>()
@@ -307,7 +309,7 @@ namespace Empodera.Data
             modelBuilder.Entity<FichaPrimeiroContato>()
                 .HasOne(fp => fp.Ator)
                 .WithMany(a => a.FichasPrimeiroContato)
-                .HasForeignKey(fp => fp.FKidAtores)
+                .HasForeignKey(fp => fp.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // FichaPrimeiroContato -> Usuario
@@ -375,6 +377,12 @@ namespace Empodera.Data
                 .HasOne(ae => ae.Eixo)
                 .WithMany(e => e.AtividadesEixo)
                 .HasForeignKey(ae => ae.FkIdEixo)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RecursosAtores>()
+                .HasOne(ra => ra.Atores)
+                .WithMany(a => a.RecursosAtores)
+                .HasForeignKey(ra => ra.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);

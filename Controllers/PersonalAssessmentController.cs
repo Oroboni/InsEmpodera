@@ -46,7 +46,7 @@ public class PersonalAssessmentController : Controller
         {
             avaliacoes = await _context.AvaliacaoPessoal
                 .Include(b => b.Usuario)
-                .Where(a => a.FKidAtores == atorId.Value)
+                .Where(a => a.FK_id_Atores == atorId.Value)
                 .OrderByDescending(a => a.DtCriacao)
                 .ToListAsync();
         }
@@ -105,7 +105,7 @@ public class PersonalAssessmentController : Controller
         avaliacao.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         _context.AvaliacaoPessoal.Add(avaliacao);
         await _context.SaveChangesAsync();
-        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacao.FKidAtores});
+        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacao.FK_id_Atores});
     }
 
     // GET: /PersonalAssessment/Edit/5
@@ -139,7 +139,7 @@ public class PersonalAssessmentController : Controller
             await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
             "IdAtores",
             "Nome",
-            avaliacao.FKidAtores 
+            avaliacao.FK_id_Atores 
         );
 
         ViewBag.atorId = id;

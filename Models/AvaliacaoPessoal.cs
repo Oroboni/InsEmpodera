@@ -7,7 +7,7 @@ namespace Empodera.Models
     public class AvaliacaoPessoal
     {
         public int IdAvaliacao { get; set; }   
-        public int FKidAtores{ get; set; }     
+        public int FK_id_Atores{ get; set; }     
         public int CCrimes { get; set; }
         public int Substancias { get; set; }
         public int Moradia { get; set; }

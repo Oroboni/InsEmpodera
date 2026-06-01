@@ -8,7 +8,7 @@ namespace Empodera.Models
     {
         public int IdAtorComunidade { get; set; }   
         public int FkIdComunidade { get; set; }     
-        public int FKidAtores{ get; set; }           
+        public int FK_id_Atores{ get; set; }           
 
         public Comunidade Comunidade { get; set; } = null!;
         public Atores Ator { get; set; } = null!;

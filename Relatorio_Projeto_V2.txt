@@ -2136,7 +2136,7 @@ public class ComunidadeController : Controller
         var recurso = await _context.RedeRecursos
             .Include(r => r.RedeEixos).ThenInclude(re => re.Eixo)
             .Include(r => r.Ator) 
-            .FirstOrDefaultAsync(r => r.IdRede == id);
+            .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recurso == null) return NotFound();
 
@@ -2229,7 +2229,7 @@ public class ComunidadeController : Controller
         {
             foreach (var eixoId in EixosSelecionados)
             {
-                _context.RedeEixos.Add(new RedeEixo { FkIdRede = recurso.IdRede, FkIdEixo = eixoId });
+                _context.RedeEixos.Add(new RedeEixo { FkIdRede = recurso.Id_Rede, FkIdEixo = eixoId });
             }
             await _context.SaveChangesAsync();
         }
@@ -2258,7 +2258,7 @@ public class ComunidadeController : Controller
 
         var recursoDb = await _context.RedeRecursos
             .Include(r => r.RedeEixos)
-            .FirstOrDefaultAsync(r => r.IdRede == id);
+            .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recursoDb == null) return NotFound();
 
@@ -4388,7 +4388,7 @@ namespace Empodera.Data
             modelBuilder.Entity<Permissoes>().HasKey(p => p.IdPermissoes);
             modelBuilder.Entity<Comunidade>().HasKey(c => c.Id_Comunidade);
             modelBuilder.Entity<Atores>().HasKey(a => a.IdAtores);
-            modelBuilder.Entity<RedeRecursos>().HasKey(r => r.IdRede);
+            modelBuilder.Entity<RedeRecursos>().HasKey(r => r.Id_Rede);
             modelBuilder.Entity<Eixo>().HasKey(e => e.IdEixo);
             modelBuilder.Entity<RedeEixo>().HasKey(re => re.IdRedeEixo);
             modelBuilder.Entity<AtorComunidade>().HasKey(ac => ac.IdAtorComunidade);
@@ -4866,11 +4866,11 @@ namespace Empodera.Data
 
             // RedeRecursos
             modelBuilder.Entity<RedeRecursos>().HasData(
-                new RedeRecursos { IdRede = 1, FKidAtores = 1, FkIdComunidade = 1, Tipo = "Recurso Strutural", Dispositivo = "Router", Servicos = "Internet", DtCriacao = new DateTime(2024, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 },
-                new RedeRecursos { IdRede = 2, FKidAtores = 5, FkIdComunidade = 2, Tipo = "Recurso Relacional", Dispositivo = "Switch", Servicos = "Conexão", DtCriacao = new DateTime(2024, 2, 1), DtModificacao = new DateTime(2025, 2, 1), FkIdUsuario = 2 },
-                new RedeRecursos { IdRede = 3, FKidAtores = 9, FkIdComunidade = 3, Tipo = "Recurso Relacional", Dispositivo = "OLT", Servicos = "Backbone", DtCriacao = new DateTime(2024, 3, 1), DtModificacao = new DateTime(2025, 3, 1), FkIdUsuario = 3 },
-                new RedeRecursos { IdRede = 4, FKidAtores = 12, FkIdComunidade = 4, Tipo = "Recurso Relacional", Dispositivo = "Modem", Servicos = "Dados", DtCriacao = new DateTime(2024, 4, 1), DtModificacao = new DateTime(2025, 4, 1), FkIdUsuario = 4 },
-                new RedeRecursos { IdRede = 5, FKidAtores = 15, FkIdComunidade = 5, Tipo = "Recurso Relacional", Dispositivo = "Dish", Servicos = "Satélite", DtCriacao = new DateTime(2024, 5, 1), DtModificacao = new DateTime(2025, 5, 1), FkIdUsuario = 5 }
+                new RedeRecursos { Id_Rede = 1, FKidAtores = 1, FkIdComunidade = 1, Tipo = "Recurso Strutural", Dispositivo = "Router", Servicos = "Internet", DtCriacao = new DateTime(2024, 1, 1), DtModificacao = new DateTime(2025, 1, 1), FkIdUsuario = 1 },
+                new RedeRecursos { Id_Rede = 2, FKidAtores = 5, FkIdComunidade = 2, Tipo = "Recurso Relacional", Dispositivo = "Switch", Servicos = "Conexão", DtCriacao = new DateTime(2024, 2, 1), DtModificacao = new DateTime(2025, 2, 1), FkIdUsuario = 2 },
+                new RedeRecursos { Id_Rede = 3, FKidAtores = 9, FkIdComunidade = 3, Tipo = "Recurso Relacional", Dispositivo = "OLT", Servicos = "Backbone", DtCriacao = new DateTime(2024, 3, 1), DtModificacao = new DateTime(2025, 3, 1), FkIdUsuario = 3 },
+                new RedeRecursos { Id_Rede = 4, FKidAtores = 12, FkIdComunidade = 4, Tipo = "Recurso Relacional", Dispositivo = "Modem", Servicos = "Dados", DtCriacao = new DateTime(2024, 4, 1), DtModificacao = new DateTime(2025, 4, 1), FkIdUsuario = 4 },
+                new RedeRecursos { Id_Rede = 5, FKidAtores = 15, FkIdComunidade = 5, Tipo = "Recurso Relacional", Dispositivo = "Dish", Servicos = "Satélite", DtCriacao = new DateTime(2024, 5, 1), DtModificacao = new DateTime(2025, 5, 1), FkIdUsuario = 5 }
             );
 
             // Eixos
@@ -6257,7 +6257,7 @@ namespace Empodera.Models
 {
     public class RedeRecursos
     {
-        public int IdRede { get; set; }         
+        public int Id_Rede { get; set; }         
         public int? FKidAtores{ get; set; }     
         public int FkIdComunidade { get; set; } 
         public string? Nome { get; set; }
@@ -9184,7 +9184,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Comunidade\Comunida
     
     <form method="post" asp-controller="Comunidade" asp-action="Edit_Recursos">
         @Html.AntiForgeryToken()
-        <input type="hidden" name="id" value="@Model.IdRede" />
+        <input type="hidden" name="id" value="@Model.Id_Rede" />
         <input type="hidden" asp-for="FkIdComunidade" />
 
         <div class="form-group">
@@ -9389,7 +9389,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Comunidade\Comunida
                         }
                     </div>
                 </div>
-                <a class="details-icon" asp-controller="Comunidade" asp-action="ComunidadeDetalhesRecursos" asp-route-id="@item.IdRede">
+                <a class="details-icon" asp-controller="Comunidade" asp-action="ComunidadeDetalhesRecursos" asp-route-id="@item.Id_Rede">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" /></svg>
                 </a>
             </div>

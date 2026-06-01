@@ -94,7 +94,7 @@ public class AtoresController : Controller
         var relacao = new AtorComunidade
         {
             FkIdComunidade = ComunidadeId,
-            FKidAtores = ator.IdAtores
+            FK_id_Atores = ator.IdAtores
         };
 
         _context.AtorComunidades.Add(relacao);
@@ -132,7 +132,7 @@ public class AtoresController : Controller
             .FirstOrDefault();
 
         var atorCom = await _context.AtorComunidades
-            .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
+            .FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
@@ -180,13 +180,13 @@ public class AtoresController : Controller
         atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
 
-        var atorCom = await _context.AtorComunidades.FirstOrDefaultAsync(ac => ac.FKidAtores == id);
+        var atorCom = await _context.AtorComunidades.FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
 
         if (atorCom == null)
         {
             atorCom = new AtorComunidade
             {
-                FKidAtores = id,
+                FK_id_Atores = id,
                 FkIdComunidade = ComunidadeId
             };
             _context.AtorComunidades.Add(atorCom);

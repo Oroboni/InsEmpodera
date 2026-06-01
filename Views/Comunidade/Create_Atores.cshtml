@@ -30,7 +30,6 @@
                 <label for="ComunidadeId">Comunidade <span class="text-danger">*</span></label>
                 <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" class="clean-input"
                     required>
-                    <option value="">Selecione a comunidade</option>
                 </select>
             </div>
         </div>
@@ -49,7 +48,7 @@
             </button>
         </div>
 
-        <div class="input-card full-width">
+        @* <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
             <div class="input-content">
                 <label for="tipoRelacionamento">Tipo de relacionamento</label>
@@ -62,7 +61,7 @@
                     <option value="5">Vizinho</option>
                 </select>
             </div>
-        </div>
+        </div> *@
 
         <div class="purple-divider"></div>
         <div class="section-label">Recursos e Vulnerabilidades</div>

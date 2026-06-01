@@ -224,7 +224,7 @@ namespace Empodera.Controllers
                     .OrderBy(a => a.Nome),
                 "IdAtores",
                 "Nome",
-                ficha.FKidAtores
+                ficha.FK_id_Atores
             );
 
             // Filtrar comunidades ativas

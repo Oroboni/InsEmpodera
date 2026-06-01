@@ -349,7 +349,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         var recurso = await _context.RedeRecursos
             .Include(r => r.RedeEixos).ThenInclude(re => re.Eixo)
             .Include(r => r.Ator).Where(a => a.Ator.Ativo != "N")
-            .FirstOrDefaultAsync(r => r.IdRede == id);
+            .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recurso == null) return NotFound();
 
@@ -362,7 +362,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .Select(ac => ac.Ator).Where(a => a.Ativo != "N")
             .OrderBy(a => a.Nome)
             .ToListAsync();
-        ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome", recurso.FKidAtores);
+        ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome", recurso.FK_id_Atores);
 
         ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
         
@@ -442,7 +442,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         {
             foreach (var eixoId in EixosSelecionados)
             {
-                _context.RedeEixos.Add(new RedeEixo { FkIdRede = recurso.IdRede, FkIdEixo = eixoId });
+                _context.RedeEixos.Add(new RedeEixo { FkIdRede = recurso.Id_Rede, FkIdEixo = eixoId });
             }
             await _context.SaveChangesAsync();
         }
@@ -450,7 +450,6 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return RedirectToAction("ComunidadeRecursos", new { comunidadeId });
     }
 
-    // Adicione também o POST para Salvar as edições dessa tela
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit_Recursos(int id, RedeRecursos? recurso, List<int> EixosSelecionados)
@@ -471,18 +470,16 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var recursoDb = await _context.RedeRecursos
             .Include(r => r.RedeEixos)
-            .FirstOrDefaultAsync(r => r.IdRede == id);
+            .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recursoDb == null) return NotFound();
 
-        // Atualiza campos
         recursoDb.Tipo = recurso.Tipo;
         recursoDb.Dispositivo = recurso.Dispositivo;
         recursoDb.Servicos = recurso.Servicos;
-        recursoDb.FKidAtores = recurso.FKidAtores;
+        recursoDb.FK_id_Atores = recurso.FK_id_Atores;
         recursoDb.DtModificacao = DateTime.Now;
         
-        // Atualiza Eixos
         _context.RedeEixos.RemoveRange(recursoDb.RedeEixos);
         if (EixosSelecionados != null)
         {
@@ -536,7 +533,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create_Atores(Atores ator, int ComunidadeId)
+    public async Task<IActionResult> Create_Atores(Atores ator, List<string>? recursos, List<string>? vulnerabilidades, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -560,10 +557,42 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         var relacao = new AtorComunidade
         {
             FkIdComunidade = ComunidadeId,
-            FKidAtores = ator.IdAtores
+            FK_id_Atores = ator.IdAtores
         };
 
         _context.AtorComunidades.Add(relacao);
+        string[] todosRecursos =
+        {
+            "RedePrimaria",
+            "SeguridadeSocial",
+            "Substancias",
+            "Moradia",
+            "Prevencao",
+            "AssistenciaBasica",
+            "Educacao",
+            "Saude",
+            "Ocupacao",
+            "Lazer"
+        };
+        foreach (var nome in todosRecursos)
+        {
+            _context.RecursosAtores.Add(new RecursosAtores
+            {
+                FK_id_Atores = ator.IdAtores,
+                Nome = nome,
+                Tipo = "Recurso",
+                Pode = recursos?.Contains(nome) == true ? "S" : "N"
+            });
+
+            _context.RecursosAtores.Add(new RecursosAtores
+            {
+                FK_id_Atores = ator.IdAtores,
+                Nome = nome,
+                Tipo = "Vulnerabilidade",
+                Pode = vulnerabilidades?.Contains(nome) == true ? "S" : "N"
+            });
+        }
+
         await _context.SaveChangesAsync();
 
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = ComunidadeId });
@@ -585,7 +614,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
 
-        var ator = await _context.Atores.FindAsync(id);
+        var ator = await _context.Atores.Include(c => c.RecursosAtores).Where(a => a.IdAtores == id).FirstOrDefaultAsync();
         if (ator == null)
         {
             return NotFound();
@@ -609,7 +638,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit_Atores(Atores ator, int ComunidadeId)
+    public async Task<IActionResult> Edit_Atores(Atores ator, int ComunidadeId, List<string>? recursos, List<string>? vulnerabilidades)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -637,6 +666,22 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         atorDb.Rope = ator.Rope;
         atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
+
+        var recursosAtores = await _context.RecursosAtores
+            .Where(r => r.FK_id_Atores == ator.IdAtores)
+            .ToListAsync();
+
+        foreach (var recursoAtor in recursosAtores)
+        {
+            if (recursoAtor.Tipo == "Recurso")
+            {
+                recursoAtor.Pode = recursos?.Contains(recursoAtor.Nome) == true ? "S" : "N";
+            }
+            else if (recursoAtor.Tipo == "Vulnerabilidade")
+            {
+                recursoAtor.Pode = vulnerabilidades?.Contains(recursoAtor.Nome) == true ? "S" : "N";
+            }
+        }
 
         await _context.SaveChangesAsync();
 
@@ -674,7 +719,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             await _context.SaveChangesAsync();
         }
         var atorCom = await _context.AtorComunidades
-            .FirstOrDefaultAsync(ac => ac.FKidAtores == id);
+            .FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
             
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = atorCom?.FkIdComunidade });
     }

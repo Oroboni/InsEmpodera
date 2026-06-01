@@ -140,7 +140,7 @@ public class ReportController : Controller
                 _context.AtorComunidades.Add(new AtorComunidade
                 {
                     FkIdComunidade = comunidade.Id_Comunidade,
-                    FKidAtores     = ator.IdAtores
+                    FK_id_Atores     = ator.IdAtores
                 });
             }
             await _context.SaveChangesAsync();
@@ -201,7 +201,7 @@ public class ReportController : Controller
                     Dispositivo    = row[5]?.ToString()?.Trim(),
                     Servicos       = row[6]?.ToString()?.Trim(),
                     FkIdComunidade = comunidade.Id_Comunidade,
-                    FKidAtores       = idAtor,
+                    FK_id_Atores       = idAtor,
                     DtCriacao      = DateTime.Now,
                     DtModificacao  = DateTime.Now,
                     FkIdUsuario    = userId
@@ -313,7 +313,7 @@ public class ReportController : Controller
 
                 _context.AvaliacaoPessoal.Add(new AvaliacaoPessoal
                 {
-                    FKidAtores      = idAtor,
+                    FK_id_Atores      = idAtor,
                     // Rede primária (coluna 2) não possui campo numérico padrão; ignora ou adapte
                     Substancias   = ParseInt(row[4]?.ToString()),
                     Moradia       = ParseInt(row[5]?.ToString()),
@@ -400,7 +400,7 @@ public class ReportController : Controller
 
                 var ficha = new FichaPrimeiroContato
                 {
-                    FKidAtores         = idAtor,
+                    FK_id_Atores         = idAtor,
                     Endereco           = row[1]?.ToString()?.Trim() ?? string.Empty,
                     Emprego            = row[5]?.ToString()?.Trim(),
                     CEstabeleceu       = row[8]?.ToString()?.Trim(),
