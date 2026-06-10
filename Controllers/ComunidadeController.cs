@@ -145,6 +145,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     if (comunidade.Id_Comunidade == 0)
     {
         comunidade.LocalMapa = BuildMapSearchAddress(comunidade.LocalMapa, comunidade.Local, comunidade.Nome);
+        comunidade.Status = NormalizeCommunityStatus(comunidade.Status);
 
         if (string.IsNullOrWhiteSpace(comunidade.Local))
         {
@@ -172,6 +173,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
                 comunidade.Nome,
                 existingComunidade.LocalMapa
             );
+            comunidade.Status = NormalizeCommunityStatus(comunidade.Status);
 
             if (string.IsNullOrWhiteSpace(comunidade.Local))
             {
@@ -219,20 +221,29 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         string? communityName,
         string? currentMapAddress = null)
     {
-        if (!string.IsNullOrWhiteSpace(explicitMapAddress))
+        var normalizedExplicit = NormalizeMapAddress(explicitMapAddress);
+        var normalizedOriginal = NormalizeMapAddress(originalAddress);
+        var normalizedCurrent = NormalizeMapAddress(currentMapAddress);
+        var geographicAddress = ExtractGeographicAddress(normalizedOriginal);
+
+        if (IsUsableMapAddress(normalizedExplicit, normalizedOriginal))
         {
-            return NormalizeMapAddress(explicitMapAddress);
+            return normalizedExplicit;
         }
 
-        var geographicAddress = ExtractGeographicAddress(originalAddress);
         if (!string.IsNullOrWhiteSpace(geographicAddress))
         {
             return geographicAddress;
         }
 
-        if (!string.IsNullOrWhiteSpace(currentMapAddress))
+        if (IsUsableMapAddress(normalizedOriginal))
         {
-            return NormalizeMapAddress(currentMapAddress);
+            return normalizedOriginal;
+        }
+
+        if (IsUsableMapAddress(normalizedCurrent, normalizedOriginal))
+        {
+            return normalizedCurrent;
         }
 
         return NormalizeMapAddress(communityName);
@@ -292,7 +303,40 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return normalized;
         }
 
+        if (filteredParts.Count < 2 && parts.Count >= 3)
+        {
+            return normalized;
+        }
+
         return string.Join(", ", filteredParts);
+    }
+
+    private static bool IsUsableMapAddress(string? candidate, string? referenceOriginal = null)
+    {
+        if (string.IsNullOrWhiteSpace(candidate))
+        {
+            return false;
+        }
+
+        var parts = candidate
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length >= 3)
+        {
+            return true;
+        }
+
+        if (candidate.Any(char.IsDigit) && parts.Length >= 2)
+        {
+            return true;
+        }
+
+        if (!string.IsNullOrWhiteSpace(referenceOriginal))
+        {
+            return candidate.Length >= Math.Max(18, referenceOriginal.Length / 2);
+        }
+
+        return candidate.Length >= 18 && parts.Length >= 2;
     }
 
     private static bool LooksLikeInstitutionName(string value)
@@ -322,6 +366,21 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         };
 
         return institutionMarkers.Any(marker => value.Contains(marker, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string NormalizeCommunityStatus(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            return "Em processo";
+        }
+
+        return status.Trim() switch
+        {
+            "Em Processo" => "Em processo",
+            "Em Diagnóstico" => "Em diagnóstico",
+            _ => status.Trim()
+        };
     }
 
     [HttpPost]

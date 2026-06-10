@@ -27,7 +27,7 @@
     <input type="hidden" asp-for="Id_Comunidade" />
 
     <!-- Nome -->
-    <div class="input-card full-width">
+    <div class="input-card full-width address-input-card">
       <div class="icon-box"><i class="fa-solid fa-book"></i></div>
       <div class="input-content">
         <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
@@ -46,9 +46,9 @@
       <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
       <div class="input-content">
         <label asp-for="Local">Endereço original <span class="text-danger">*</span></label>
-        <input asp-for="Local" class="clean-input" id="input-endereco"
-               value="@(Model.Id_Comunidade > 0 ? Model.Local : string.Empty)"
-               placeholder="Digite o endereço ou use a lupa no mapa..." required />
+        <textarea asp-for="Local" class="clean-input address-input" id="input-endereco"
+                  rows="2"
+                  placeholder="Digite o endereço ou use a lupa no mapa..." required></textarea>
         <span asp-validation-for="Local" class="text-danger"></span>
       </div>
     </div>
@@ -81,7 +81,7 @@
       <div class="input-content no-icon">
         <label asp-for="Status">Status <span class="text-danger">*</span></label>
         @{
-          var currentStatus = Model.Id_Comunidade > 0 && !string.IsNullOrEmpty(Model.Status) ? Model.Status : "Em        processo";
+          var currentStatus = Model.Id_Comunidade > 0 && !string.IsNullOrWhiteSpace(Model.Status) ? Model.Status : "Em processo";
         }
         <select asp-for="Status" class="clean-input" required>
           <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
@@ -246,6 +246,7 @@
     if (typeof initMapSelector === 'function') {
       initMapSelector('mapa-principal', 'input-endereco-mapa', {
         sourceInputId: 'input-endereco-mapa',
+        mirrorInputId: 'input-endereco',
         manualInputId: 'input-endereco'
       });
     } else {

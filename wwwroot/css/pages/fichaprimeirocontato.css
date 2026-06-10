@@ -570,6 +570,13 @@ a {
     color: var(--color-gray-500);
     font-weight: var(--font-weight-medium);
 }
+
+.address-input {
+    resize: vertical;
+    min-height: 3.5rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
 /* Estilo para input-card quando contém campos desabilitados */
 .input-card:has(.clean-input:disabled),
 .input-card:has(select.clean-input:disabled),

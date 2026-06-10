@@ -690,6 +690,11 @@ public class ReportController : Controller
             return value;
         }
 
+        if (filteredParts.Count < 2 && parts.Count >= 3)
+        {
+            return value;
+        }
+
         return string.Join(", ", filteredParts);
     }
 

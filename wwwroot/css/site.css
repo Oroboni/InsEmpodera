@@ -1032,6 +1032,15 @@ label:has(input[type="checkbox"]) {
     letter-spacing: 0.02em;
 }
 
+.address-input-card {
+    overflow: visible;
+    z-index: 40;
+}
+
+.address-input-card .input-content {
+    overflow: visible;
+}
+
 .clean-input {
     border: none;
     outline: none;
@@ -1047,6 +1056,91 @@ label:has(input[type="checkbox"]) {
 .clean-input::placeholder {
     color: var(--color-gray-500);
     font-weight: var(--font-weight-medium);
+}
+
+.address-suggestions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #fcf9ff 100%);
+    border: 1px solid rgba(170, 120, 199, 0.22);
+    box-shadow: 0 18px 32px rgba(56, 29, 74, 0.14);
+    max-height: 280px;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+}
+
+.address-suggestions[hidden] {
+    display: none !important;
+}
+
+.address-suggestions-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 6px 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-primary-700);
+}
+
+.address-suggestions-header::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, #d9b4f1 100%);
+    box-shadow: 0 0 0 4px rgba(170, 120, 199, 0.14);
+}
+
+.address-suggestion-item {
+    width: 100%;
+    border: none;
+    background: rgba(255, 255, 255, 0.88);
+    text-align: left;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid rgba(170, 120, 199, 0.08);
+}
+
+.address-suggestion-item:hover,
+.address-suggestion-item:focus {
+    background: linear-gradient(180deg, #f8efff 0%, #f4e8ff 100%);
+    color: var(--color-primary-900);
+    outline: none;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(98, 53, 127, 0.12);
+}
+
+.address-suggestion-primary {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-primary-900);
+    line-height: 1.35;
+}
+
+.address-suggestion-secondary {
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--color-gray-600);
 }
 
 /* Estados desabilitados */
