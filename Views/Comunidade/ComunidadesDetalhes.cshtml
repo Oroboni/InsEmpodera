@@ -44,14 +44,16 @@
 
     <div class="input-card full-width">
       <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
-      <div class="input-content">mapa-principal
-        <label asp-for="Local">Endereço <span class="text-danger">*</span></label>
+      <div class="input-content">
+        <label asp-for="Local">Endereço original <span class="text-danger">*</span></label>
         <input asp-for="Local" class="clean-input" id="input-endereco"
-               value="@(Model.Id_Comunidade > 0 ? Model.Local : string.Empty)" readonly
-               placeholder="Use a lupa no mapa acima para buscar..." required />
+               value="@(Model.Id_Comunidade > 0 ? Model.Local : string.Empty)"
+               placeholder="Digite o endereço ou use a lupa no mapa..." required />
         <span asp-validation-for="Local" class="text-danger"></span>
       </div>
     </div>
+    <input type="hidden" asp-for="LocalMapa" id="input-endereco-mapa"
+           value="@(Model.Id_Comunidade > 0 ? (Model.LocalMapa ?? Model.Local) : string.Empty)" />
 
     <!-- Complemento -->
     <div class="input-card full-width">
@@ -242,7 +244,10 @@
 
     // Inicializar mapa
     if (typeof initMapSelector === 'function') {
-      initMapSelector('mapa-principal', 'input-endereco');
+      initMapSelector('mapa-principal', 'input-endereco-mapa', {
+        sourceInputId: 'input-endereco-mapa',
+        manualInputId: 'input-endereco'
+      });
     } else {
       console.error("ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js");
     }

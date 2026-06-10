@@ -9,6 +9,7 @@ namespace Empodera.Models
         public int Id_Comunidade { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string? Local { get; set; } = string.Empty;
+        public string? LocalMapa { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string? Complemento { get; set; } = string.Empty;
         public string? Descricao { get; set; } = string.Empty;

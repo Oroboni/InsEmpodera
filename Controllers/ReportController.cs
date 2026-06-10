@@ -80,9 +80,11 @@ public class ReportController : Controller
         if (dataSet.Tables.Count > 0)
         {
             var sheet = dataSet.Tables[0];
+            var localOriginal = sheet.Rows[1][1]?.ToString()?.Trim();
 
             comunidade.Nome                    = sheet.Rows[0][1]?.ToString()?.Trim();
-            comunidade.Local                   = sheet.Rows[1][1]?.ToString()?.Trim();
+            comunidade.Local                   = localOriginal;
+            comunidade.LocalMapa               = BuildMapSearchAddress(localOriginal, comunidade.Nome);
             comunidade.Descricao               = sheet.Rows[2][1]?.ToString()?.Trim();
             comunidade.Descricao_Acessibilidade = sheet.Rows[3][1]?.ToString()?.Trim();
             comunidade.Status                  = NormalizeStatus(sheet.Rows[4][1]?.ToString());
@@ -586,6 +588,140 @@ public class ReportController : Controller
                 await _context.SaveChangesAsync();
             }
         }
+    }
+
+    private static string BuildMapSearchAddress(string? originalAddress, string? communityName)
+    {
+        var normalizedOriginal = NormalizeMapAddress(originalAddress);
+        var geographicAddress = ExtractGeographicAddress(normalizedOriginal);
+
+        if (!string.IsNullOrWhiteSpace(geographicAddress))
+        {
+            return geographicAddress;
+        }
+
+        var parts = new List<string>();
+
+        void AddPart(string? value)
+        {
+            var normalized = NormalizeMapAddress(value);
+            if (!string.IsNullOrWhiteSpace(normalized) && !parts.Contains(normalized, StringComparer.OrdinalIgnoreCase))
+            {
+                parts.Add(normalized);
+            }
+        }
+
+        AddPart(normalizedOriginal);
+        AddPart(communityName);
+
+        return string.Join(", ", parts);
+    }
+
+    private static string NormalizeMapAddress(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        var normalized = value.Trim();
+        normalized = normalized.Replace('\n', ' ');
+        normalized = normalized.Replace('\r', ' ');
+
+        while (normalized.Contains("  "))
+        {
+            normalized = normalized.Replace("  ", " ");
+        }
+
+        var noiseMarkers = new[]
+        {
+            "(",
+            " Horarios de atención",
+            " Horário de atendimento",
+            " Horario de atendimento",
+            " Vías de contacto",
+            " Vias de contacto",
+            " Vias de contato",
+            " Vías de contato",
+            " mail:",
+            " email:",
+            " cel.",
+            " tel."
+        };
+
+        foreach (var marker in noiseMarkers)
+        {
+            var index = normalized.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+            if (index > 0)
+            {
+                normalized = normalized[..index].Trim();
+            }
+        }
+
+        normalized = normalized.Replace(" - ", ", ");
+        normalized = normalized.Replace(" / ", ", ");
+        normalized = normalized.Replace(";", ",");
+
+        return normalized.Trim(' ', ',', '-');
+    }
+
+    private static string ExtractGeographicAddress(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        var parts = value
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToList();
+
+        if (parts.Count <= 1)
+        {
+            return value;
+        }
+
+        var filteredParts = parts
+            .Where(part => !LooksLikeInstitutionName(part))
+            .ToList();
+
+        if (filteredParts.Count == 0)
+        {
+            return value;
+        }
+
+        return string.Join(", ", filteredParts);
+    }
+
+    private static bool LooksLikeInstitutionName(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        var normalized = value.Trim();
+        var institutionMarkers = new[]
+        {
+            "centro",
+            "hospital",
+            "healthcare",
+            "fundacion",
+            "fundação",
+            "fundacion",
+            "unidad",
+            "penal",
+            "rehabilit",
+            "corrección",
+            "correccion",
+            "church",
+            "escuela",
+            "association",
+            "asociación",
+            "asociacion"
+        };
+
+        return institutionMarkers.Any(marker => normalized.Contains(marker, StringComparison.OrdinalIgnoreCase));
     }
 
     // ─── Helpers ───────────────────────────────────────────────────────

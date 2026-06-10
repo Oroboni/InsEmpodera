@@ -316,6 +316,9 @@ namespace InsEmpodera.Migrations
                     b.Property<string>("Local")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("LocalMapa")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");

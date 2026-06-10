@@ -144,9 +144,17 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     // Se a Id_Comunidade for 0, é uma nova criação
     if (comunidade.Id_Comunidade == 0)
     {
+        comunidade.LocalMapa = BuildMapSearchAddress(comunidade.LocalMapa, comunidade.Local, comunidade.Nome);
+
+        if (string.IsNullOrWhiteSpace(comunidade.Local))
+        {
+            comunidade.Local = comunidade.LocalMapa;
+        }
+
         comunidade.Dt_Criacao = DateTime.Now;
         comunidade.Dt_Modificacao = DateTime.Now;
         comunidade.FK_Id_Usuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        comunidade.LocalMapa ??= comunidade.Local;
         
         _context.Comunidades.Add(comunidade);
         _context.SaveChanges();
@@ -158,8 +166,23 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
         if (existingComunidade != null)
         {
+            comunidade.LocalMapa = BuildMapSearchAddress(
+                comunidade.LocalMapa,
+                comunidade.Local,
+                comunidade.Nome,
+                existingComunidade.LocalMapa
+            );
+
+            if (string.IsNullOrWhiteSpace(comunidade.Local))
+            {
+                comunidade.Local = comunidade.LocalMapa;
+            }
+
             existingComunidade.Nome = comunidade.Nome;
             existingComunidade.Local = comunidade.Local;
+            existingComunidade.LocalMapa = string.IsNullOrWhiteSpace(comunidade.LocalMapa)
+                ? comunidade.Local
+                : comunidade.LocalMapa;
             existingComunidade.Status = comunidade.Status;
             existingComunidade.Complemento = comunidade.Complemento;
             existingComunidade.Descricao = comunidade.Descricao;
@@ -188,6 +211,117 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             //     }
 
             // return RedirectToAction("Comunidades");
+    }
+
+    private static string BuildMapSearchAddress(
+        string? explicitMapAddress,
+        string? originalAddress,
+        string? communityName,
+        string? currentMapAddress = null)
+    {
+        if (!string.IsNullOrWhiteSpace(explicitMapAddress))
+        {
+            return NormalizeMapAddress(explicitMapAddress);
+        }
+
+        var geographicAddress = ExtractGeographicAddress(originalAddress);
+        if (!string.IsNullOrWhiteSpace(geographicAddress))
+        {
+            return geographicAddress;
+        }
+
+        if (!string.IsNullOrWhiteSpace(currentMapAddress))
+        {
+            return NormalizeMapAddress(currentMapAddress);
+        }
+
+        return NormalizeMapAddress(communityName);
+    }
+
+    private static string NormalizeMapAddress(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        var normalized = value.Trim();
+        normalized = normalized.Replace('\n', ' ');
+        normalized = normalized.Replace('\r', ' ');
+
+        while (normalized.Contains("  "))
+        {
+            normalized = normalized.Replace("  ", " ");
+        }
+
+        normalized = normalized.Replace(" - ", ", ");
+        normalized = normalized.Replace(" / ", ", ");
+        normalized = normalized.Replace(";", ",");
+
+        return normalized.Trim(' ', ',', '-');
+    }
+
+    private static string ExtractGeographicAddress(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        var normalized = NormalizeMapAddress(value);
+        normalized = System.Text.RegularExpressions.Regex.Replace(normalized, @"\([^)]*\)", " ");
+        normalized = System.Text.RegularExpressions.Regex.Replace(normalized, @"\b[0-9A-Z]{4,}\+[0-9A-Z]{2,}\b", " ");
+        normalized = System.Text.RegularExpressions.Regex.Replace(normalized, @"\b\d{4,6}\b", " ");
+        normalized = System.Text.RegularExpressions.Regex.Replace(normalized, @"\s{2,}", " ").Trim();
+
+        var parts = normalized
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToList();
+
+        if (parts.Count <= 1)
+        {
+            return normalized;
+        }
+
+        var filteredParts = parts
+            .Where(part => !LooksLikeInstitutionName(part))
+            .ToList();
+
+        if (filteredParts.Count == 0)
+        {
+            return normalized;
+        }
+
+        return string.Join(", ", filteredParts);
+    }
+
+    private static bool LooksLikeInstitutionName(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        var institutionMarkers = new[]
+        {
+            "centro",
+            "hospital",
+            "healthcare",
+            "fundacion",
+            "fundação",
+            "unidad",
+            "penal",
+            "rehabilit",
+            "corrección",
+            "correccion",
+            "church",
+            "escuela",
+            "association",
+            "asociación",
+            "asociacion"
+        };
+
+        return institutionMarkers.Any(marker => value.Contains(marker, StringComparison.OrdinalIgnoreCase));
     }
 
     [HttpPost]
