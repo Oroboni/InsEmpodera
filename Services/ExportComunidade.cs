@@ -135,120 +135,44 @@ namespace Empodera.Services
             // ABA ATORES
             // =====================================================
 
-            var wsAtores =
-                workbook.Worksheets.Add("Atores");
+            var wsAtores = workbook.Worksheets.Add("Atores");
 
-            int linhaAtor = 1;
+            wsAtores.Cell(1, 1).Value = "Nome";
+            wsAtores.Cell(1, 2).Value = "Gênero";
+            wsAtores.Cell(1, 3).Value = "Idade";
+            wsAtores.Cell(1, 4).Value = "Papel Social 1";
+            wsAtores.Cell(1, 5).Value = "Papel Social 2";
+            wsAtores.Cell(1, 6).Value = "Telefone";
+            wsAtores.Cell(1, 7).Value = "Da Equipe";
+            wsAtores.Cell(1, 8).Value = "ROPE";
+            wsAtores.Cell(1, 9).Value = "Lidera Opinião";
+            wsAtores.Cell(1, 10).Value = "Mobiliza Comunidade";
+
+            int linhaAtor = 2;
 
             foreach (var ator in atores)
             {
-                wsAtores.Cell(linhaAtor, 1).Value =
-                    "Nome";
-
-                wsAtores.Cell(linhaAtor, 2).Value =
-                    ator.Nome;
-
-                linhaAtor++;
-
-                wsAtores.Cell(linhaAtor, 1).Value =
-                    "Gênero";
-
-                wsAtores.Cell(linhaAtor, 2).Value =
-                    ator.Genero;
+                wsAtores.Cell(linhaAtor, 1).Value = ator.Nome;
+                wsAtores.Cell(linhaAtor, 2).Value = ator.Genero;
+                wsAtores.Cell(linhaAtor, 3).Value = ator.Idade;
+                wsAtores.Cell(linhaAtor, 4).Value = ator.PapelSocial1;
+                wsAtores.Cell(linhaAtor, 5).Value = ator.PapelSocial2;
+                wsAtores.Cell(linhaAtor, 6).Value = ator.Telefone;
+                wsAtores.Cell(linhaAtor, 7).Value = ator.DaEquipe ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 8).Value = ator.Rope ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 9).Value = ator.Lopiniao ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 10).Value = ator.Mcomunidade ? "Sim" : "Não";
 
                 linhaAtor++;
-
-                wsAtores.Cell(linhaAtor, 1).Value =
-                    "Idade";
-
-                wsAtores.Cell(linhaAtor, 2).Value =
-                    ator.Idade;
-
-                linhaAtor++;
-
-                wsAtores.Cell(linhaAtor, 1).Value =
-                    "Telefone";
-
-                wsAtores.Cell(linhaAtor, 2).Value =
-                    ator.Telefone;
-
-                linhaAtor++;
-
-                // =========================================
-                // RECURSOS DO ATOR
-                // =========================================
-
-                wsAtores.Cell(linhaAtor, 1).Value =
-                    "Recursos";
-
-                linhaAtor++;
-
-                if (ator.Redes != null &&
-                    ator.Redes.Any())
-                {
-                    foreach (var rede in ator.Redes)
-                    {
-                        wsAtores.Cell(linhaAtor, 2).Value =
-                            rede.Nome;
-
-                        wsAtores.Cell(linhaAtor, 3).Value =
-                            rede.Tipo;
-
-                        linhaAtor++;
-                    }
-                }
-                else
-                {
-                    wsAtores.Cell(linhaAtor, 2).Value =
-                        "Nenhum recurso";
-
-                    linhaAtor++;
-                }
-
-                // =========================================
-                // VULNERABILIDADES
-                // =========================================
-
-                wsAtores.Cell(linhaAtor, 1).Value =
-                    "Vulnerabilidades";
-
-                linhaAtor++;
-
-                if (ator.Avaliacoes != null &&
-                    ator.Avaliacoes.Any())
-                {
-                    foreach (var av in ator.Avaliacoes)
-                    {
-                        wsAtores.Cell(linhaAtor, 2).Value =
-                            $"Crimes: {av.CCrimes}";
-
-                        wsAtores.Cell(linhaAtor, 3).Value =
-                            $"Saúde: {av.Saude}";
-
-                        wsAtores.Cell(linhaAtor, 4).Value =
-                            $"Moradia: {av.Moradia}";
-
-                        linhaAtor++;
-                    }
-                }
-                else
-                {
-                    wsAtores.Cell(linhaAtor, 2).Value =
-                        "Nenhuma vulnerabilidade";
-
-                    linhaAtor++;
-                }
-
-                linhaAtor += 2;
             }
 
-            var estiloAtores =
-                wsAtores.Range($"A1:A{linhaAtor}");
+            var cabecalho = wsAtores.Range("A1:J1");
 
-            estiloAtores.Style.Font.Bold = true;
+            cabecalho.Style.Font.Bold = true;
+            cabecalho.Style.Fill.BackgroundColor = XLColor.LightBlue;
 
-            estiloAtores.Style.Fill.BackgroundColor =
-                XLColor.LightBlue;
+            // Ajusta largura automaticamente
+            wsAtores.Columns().AdjustToContents();
 
             // =====================================================
             // AJUSTE FINAL
