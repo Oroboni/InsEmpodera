@@ -7200,7 +7200,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\Forgot.csht
         <!-- PAINEL ESQUERDO - FORMULÁRIO (INVERTIDO) -->
         <section class="painel-recovery">
             <div class="logo">
-                <img src="@Url.Content("~/images/logo-empodera.svg")" alt="Logo">
+                <img src="@Url.Content("~/img/logo-empodera.svg")" alt="Logo">
             </div>
 
             <form class="recovery-form" method="post" asp-action="ForgotPassword" asp-controller="Account">
@@ -7295,7 +7295,7 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Views\Account\index.cshtm
 
         <section class="painel-login">
             <div class="logo">
-                <img src="@Url.Content("~/images/logo-empodera.svg")" alt="Logo">
+                <img src="@Url.Content("~/img/logo-empodera.svg")" alt="Logo">
             </div>
 
             <form class="login-form" method="post" asp-action="Index" asp-controller="Account">
