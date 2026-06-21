@@ -21,9 +21,13 @@ namespace Empodera.Controllers
                 .Include(c => c.Atividades)
                 .FirstOrDefault(c => c.Id_Comunidade == id);
 
-            var atores = _context.Atores
-                .Include(a => a.Redes)
-                .Include(a => a.Avaliacoes)
+            var atores = _context.AtorComunidades
+                .Where(ac => ac.FkIdComunidade == id)
+                .Include(ac => ac.Ator)
+                    .ThenInclude(a => a.Redes)
+                .Include(ac => ac.Ator)
+                    .ThenInclude(a => a.Avaliacoes)
+                .Select(ac => ac.Ator)
                 .ToList();
 
             var exportService = new ExportComunidade();

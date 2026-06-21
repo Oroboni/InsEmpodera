@@ -37,7 +37,9 @@
                 <label>Comunidade</label>
                 <div class="select-wrapper">
                     <i class="fa-solid fa-city"></i>
-                    <select asp-items="ViewBag.ComunidadeList"><option value="">Selecione...</option></select>
+                    <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades">
+                        <option value="">Selecione...</option>
+                    </select>
                     <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>

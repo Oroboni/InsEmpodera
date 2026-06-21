@@ -1,42 +1,44 @@
 @{
     ViewData["Title"] = "Relatório - Fichas de 1º Contato";
     Layout = "_Layout";
-    
+
     // Variável auxiliar para verificar se há comunidade selecionada
     bool temComunidade = !string.IsNullOrEmpty(Context.Request.Query["comunidadeId"]);
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/reports.css" />
-    
+
 }
 
 <div class="report-page-container">
     <div class="report-breadcrumb">
         <h1>
-            <a asp-controller="Report" asp-action="index">Relatórios</a> 
-            > 
+            <a asp-controller="Report" asp-action="index">Relatórios</a>
+            >
             <strong>Fichas de 1º Contato</strong>
         </h1>
     </div>
 
     <div class="report-content-box">
         <div class="report-filters">
-            
+
             <!-- Seleção Principal de Comunidade (SEMPRE VISÍVEL) -->
-            <form asp-action="FirstContact" method="get" id="comunidadeForm" style="margin-bottom: @(temComunidade ? "20px" : "0");">
+            <form asp-action="FirstContact" method="get" id="comunidadeForm"
+                  style="margin-bottom: @(temComunidade ? "20px" : "0");">
                 <div class="form-group">
                     <label for="comunidadeId" style="font-weight: bold; font-size: 1rem;">Comunidade</label>
                     <div class="select-wrapper">
                         <i class="fa-solid fa-city"></i>
-                        <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.ComunidadeList" onchange="this.form.submit()" style="border-color: #4f46e5; border-width: 2px;">
+                        <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades"
+                                onchange="this.form.submit()" style="border-color: #4f46e5; border-width: 2px;">
                             <option value="">Selecione uma comunidade...</option>
                         </select>
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
             </form>
-            
+
             <!-- SÓ MOSTRA OS OUTROS FILTROS SE TIVER COMUNIDADE SELECIONADA -->
             @if (temComunidade)
             {
@@ -46,7 +48,7 @@
                         <span><i class="fa-solid fa-filter" style="margin-right: 8px;"></i> Filtros Avançados</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </summary>
-                    
+
                     <div class="filter-grid">
                         <div class="form-group">
                             <label>Gênero</label>
@@ -113,7 +115,8 @@
                                     <option value="sem_trabalho">Sem trabalho</option>
                                     <option value="substancias_alcool">Substâncias/álcool</option>
                                     <option value="trabalho_sexual">Trabalho sexual</option>
-                                    <option value="transtorno_estresse_pos_traumatico">Transtorno estresse pós traumático</option>
+                                    <option value="transtorno_estresse_pos_traumatico">Transtorno estresse pós traumático
+                                    </option>
                                     <option value="trafico_pessoas">Tráfico de pessoas</option>
                                     <option value="tuberculoso">Tuberculoso</option>
                                     <option value="vida_rua">Vida de rua</option>
@@ -222,63 +225,64 @@
 
                         <!-- Botão de Filtrar para confirmar a ação -->
                         <div class="form-group" style="justify-content: flex-end;">
-                             <label>&nbsp;</label> <!-- Espaço vazio para alinhar -->
-                            <button type="button" class="btn btn-primary" style="height: 42px; width: 100%;">Aplicar Filtros</button>
+                            <label>&nbsp;</label> <!-- Espaço vazio para alinhar -->
+                            <button type="button" class="btn btn-primary" style="height: 42px; width: 100%;">Aplicar
+                                Filtros</button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- Configurações de Visualização (fora do sanfona) -->
+                    <div class="report-type-filters">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Tipo de Visualização</label>
+                            <div class="select-wrapper">
+                                <select name="tipo" id="tipo">
+                                    <option value="por_categoria">Por categoria</option>
+                                    <option value="por_tabela">Por tabela</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Campo Principal *</label>
+                            <div class="select-wrapper">
+                                <select name="campo" id="campo">
+                                    <option value="" selected disabled>Selecione...</option>
+                                    <option value="como_estabeleceu_contato">Como se estabeleceu o primeiro contato</option>
+                                    <option value="emprego">Emprego</option>
+                                    <option value="estado">Estado</option>
+                                    <option value="estado_familiar">Estado familiar</option>
+                                    <option value="estrutura_familiar">Estrutura familiar</option>
+                                    <option value="genero">Gênero</option>
+                                    <option value="hora_primeiro_contato">Hora do primeiro contato</option>
+                                    <option value="local_tratamento">Local de tratamento</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+                            </div>
                         </div>
                     </div>
-                </details>
-                
-                <!-- Configurações de Visualização (fora do sanfona) -->
-                <div class="report-type-filters">
-                    <div class="form-group" style="flex: 1;">
-                        <label>Tipo de Visualização</label>
-                        <div class="select-wrapper">
-                            <select name="tipo" id="tipo">
-                                <option value="por_categoria">Por categoria</option>
-                                <option value="por_tabela">Por tabela</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
+                }
+            </div>
+
+            <div class="report-body">
+                @if (!temComunidade)
+                {
+                    <div class="report-empty-state">
+                        <img src="~/images/MulherPlaceholder.webp" alt="Selecione uma comunidade" />
+                        <p>Primeiro selecione uma comunidade.</p>
                     </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label>Campo Principal *</label>
-                        <div class="select-wrapper">
-                            <select name="campo" id="campo">
-                                <option value="" selected disabled>Selecione...</option>
-                                <option value="como_estabeleceu_contato">Como se estabeleceu o primeiro contato</option>
-                                <option value="emprego">Emprego</option>
-                                <option value="estado">Estado</option>
-                                <option value="estado_familiar">Estado familiar</option>
-                                <option value="estrutura_familiar">Estrutura familiar</option>
-                                <option value="genero">Gênero</option>
-                                <option value="hora_primeiro_contato">Hora do primeiro contato</option>
-                                <option value="local_tratamento">Local de tratamento</option>
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
+                }
+                else
+                {
+                    <div class="chart-container">
+                        <canvas id="firstContactPieChart"></canvas>
                     </div>
-                </div>
-            }
-        </div> 
-        
-        <div class="report-body">
-            @if (!temComunidade)
-            {
-                <div class="report-empty-state">
-                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione uma comunidade" />
-                    <p>Primeiro selecione uma comunidade.</p>
-                </div>
-            }
-            else
-            {
-                <div class="chart-container">
-                    <canvas id="firstContactPieChart"></canvas>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
-</div>
 
-@section Scripts {
-    <script src="~/js/reports.js"></script>
-}
+    @section Scripts {
+        <script src="~/js/reports.js"></script>
+    }
