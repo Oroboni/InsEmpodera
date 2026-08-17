@@ -6,7 +6,7 @@ function validateDateField(input) {
     today.setHours(0, 0, 0, 0);
 
     if (selectedDate > today) {
-        input.setCustomValidity("A data não pode ser futura.");
+        input.setCustomValidity(window.translateText?.("A data não pode ser futura.") ?? "A data não pode ser futura.");
     } else {
         input.setCustomValidity("");
     }
@@ -86,7 +86,7 @@ function validateDateField(input) {
     today.setHours(0, 0, 0, 0);
 
     if (selectedDate > today) {
-        input.setCustomValidity("A data não pode ser futura.");
+        input.setCustomValidity(window.translateText?.("A data não pode ser futura.") ?? "A data não pode ser futura.");
     } else {
         input.setCustomValidity("");
     }

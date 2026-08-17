@@ -5,6 +5,7 @@ using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Empodera.Services;
 
 namespace Empodera.Controllers;
 
@@ -36,6 +37,7 @@ public class AccountController : Controller
             HttpContext.Session.SetString("Email", user.Email);
             HttpContext.Session.SetString("Nome", user.Nome);
             HttpContext.Session.SetString("ID", user.IdUsuario.ToString());
+            UserCultureService.ApplyPreference(Response, user.IdiomaPreferido);
             return RedirectToAction("Index", "Home");
         }
 
@@ -50,6 +52,7 @@ public class AccountController : Controller
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
+        UserCultureService.ClearPreference(Response);
         return RedirectToAction("Index", "Account");
     }
 

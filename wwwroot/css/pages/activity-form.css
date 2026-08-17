@@ -151,7 +151,7 @@ input[type="text"]::placeholder {
     display: inline !important;
     width: auto !important;
     height: auto !important;
-    padding: 25px !important;
+    padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
     line-height: normal !important;

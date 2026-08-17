@@ -197,7 +197,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- 2. MAPA ---
     if (typeof initMapSelector === 'function') {
-        initMapSelector('mapa-diario', 'rua');
+        initMapSelector('mapa-diario', 'rua', {
+            sourceInputId: 'rua',
+            manualInputId: 'rua',
+            showSearchControl: false
+        });
     }
 
     // --- 3. LÓGICA DE VIEW vs EDIT (Apenas para tela de Edição) ---

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name='resmimetype'>
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name='version'>
+    <value>2.0</value>
+  </resheader>
+  <resheader name='reader'>
+    <value>
+      System.Resources.ResXResourceReader, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <resheader name='writer'>
+    <value>
+      System.Resources.ResXResourceWriter, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <data name='Ui_0049aa51a630b791' xml:space='preserve'>
+    <value>RO</value>
+    <comment>Source: RO</comment>
+  </data>
+  <data name='Ui_905463a25488a95b' xml:space='preserve'>
+    <value>Actor</value>
+    <comment>Source: Ator</comment>
+  </data>
+  <data name='Ui_cec3a9b89b2e3913' xml:space='preserve'>
+    <value>Fecha</value>
+    <comment>Source: Data</comment>
+  </data>
+  <data name='Ui_5086900635fec3ef' xml:space='preserve'>
+    <value>Nombre</value>
+    <comment>Source: Nome</comment>
+  </data>
+  <data name='Ui_85fe1ca05112338f' xml:space='preserve'>
+    <value>Hola,</value>
+    <comment>Source: Olá,</comment>
+  </data>
+  <data name='Ui_fe0addd707813a35' xml:space='preserve'>
+    <value>Ayuda</value>
+    <comment>Source: Ajuda</comment>
+  </data>
+  <data name='Ui_5a4cc65d866b2781' xml:space='preserve'>
+    <value>Cuenta</value>
+    <comment>Source: Conta</comment>
+  </data>
+  <data name='Ui_68148f2f667cdefb' xml:space='preserve'>
+    <value>Actores</value>
+    <comment>Source: Atores</comment>
+  </data>
+  <data name='Ui_e7f0e6d956c17ec8' xml:space='preserve'>
+    <value>Importar</value>
+    <comment>Source: Importar</comment>
+  </data>
+  <data name='Ui_06fd415dc5e18b2f' xml:space='preserve'>
+    <value>Usuarios</value>
+    <comment>Source: Usuários</comment>
+  </data>
+  <data name='Ui_565b6715afea2171' xml:space='preserve'>
+    <value>["Título"]</value>
+    <comment>Source: ["Title"]</comment>
+  </data>
+  <data name='Ui_28ced066091b8403' xml:space='preserve'>
+    <value>Abrir menú</value>
+    <comment>Source: Abrir Menu</comment>
+  </data>
+  <data name='Ui_dff6624256ba2a95' xml:space='preserve'>
+    <value>Actividades</value>
+    <comment>Source: Atividades</comment>
+  </data>
+  <data name='Ui_f54058e0d610c422' xml:space='preserve'>
+    <value>Comunidad</value>
+    <comment>Source: Comunidade</comment>
+  </data>
+  <data name='Ui_2c56036f0c97dc2a' xml:space='preserve'>
+    <value>Principal</value>
+    <comment>Source: Principais</comment>
+  </data>
+  <data name='Ui_dc4bb10b6d41fdbf' xml:space='preserve'>
+    <value>Informes</value>
+    <comment>Source: Relatórios</comment>
+  </data>
+  <data name='Ui_8d0bc92e603ac7e7' xml:space='preserve'>
+    <value>Comunidades</value>
+    <comment>Source: Comunidades</comment>
+  </data>
+  <data name='Ui_21b6a798321a49f7' xml:space='preserve'>
+    <value>Desarrollo</value>
+    <comment>Source: Development</comment>
+  </data>
+  <data name='Ui_cbee7844d5997663' xml:space='preserve'>
+    <value>Cambiando a</value>
+    <comment>Source: Swapping to</comment>
+  </data>
+  <data name='Ui_76b0fb6ad18939ac' xml:space='preserve'>
+    <value>Ajustes</value>
+    <comment>Source: Configurações</comment>
+  </data>
+  <data name='Ui_11c232e7b1a22169' xml:space='preserve'>
+    <value>Diario personal</value>
+    <comment>Source: Diário Pessoal</comment>
+  </data>
+  <data name='Ui_857ba347e9501289' xml:space='preserve'>
+    <value>Diarios de campo</value>
+    <comment>Source: Diários de Campo</comment>
+  </data>
+  <data name='Ui_cf204cce749b6159' xml:space='preserve'>
+    <value>1er formulario de contacto</value>
+    <comment>Source: Ficha 1º Contato</comment>
+  </data>
+  <data name='Ui_74bfe92ce9eab8c1' xml:space='preserve'>
+    <value>Perfiles de acceso</value>
+    <comment>Source: Perfis de Acesso</comment>
+  </data>
+  <data name='Ui_12975bf9d6ad5555' xml:space='preserve'>
+    <value>Importar informes</value>
+    <comment>Source: Importar Relatórios</comment>
+  </data>
+  <data name='Ui_8fc6872952495dfd' xml:space='preserve'>
+    <value>ASPNETCORE_ENVIRONMENT</value>
+    <comment>Source: ASPNETCORE_ENVIRONMENT</comment>
+  </data>
+  <data name='Ui_d24a1eb266ca75bc' xml:space='preserve'>
+    <value>y reiniciando la aplicación.</value>
+    <comment>Source: and restarting the app.</comment>
+  </data>
+  <data name='Ui_e62437ebee1aa381' xml:space='preserve'>
+    <value>Corbatas - Instituto Empodera</value>
+    <comment>Source: Laços - Instituto Empodera</comment>
+  </data>
+  <data name='Ui_9e39bd9a411e0038' xml:space='preserve'>
+    <value>ambiente configurando el</value>
+    <comment>Source: environment by setting the</comment>
+  </data>
+  <data name='Ui_78a892ca130f9bdf' xml:space='preserve'>
+    <value>RenderSectionAsync("Scripts", requerido: falso)</value>
+    <comment>Source: RenderSectionAsync("Scripts", required: false)</comment>
+  </data>
+  <data name='Ui_b80f19578e3d6cc4' xml:space='preserve'>
+    <value>Se produjo un error al procesar su solicitud.</value>
+    <comment>Source: An error occurred while processing your request.</comment>
+  </data>
+  <data name='Ui_e42473490ddcb03a' xml:space='preserve'>
+    <value>
+      El entorno de desarrollo no debe estar habilitado para aplicaciones
+      implementadas.
+    </value>
+    <comment>
+      Source: The Development environment shouldn't be enabled for deployed
+      applications.
+    </comment>
+  </data>
+  <data name='Ui_9a85f00d94771464' xml:space='preserve'>
+    <value>El entorno mostrará información más detallada sobre el error ocurrido.</value>
+    <comment>
+      Source: environment will display more detailed information about the error
+      that occurred.
+    </comment>
+  </data>
+  <data name='Ui_b1a593c350c2d80f' xml:space='preserve'>
+    <value>campo</value>
+    <comment>Source: campo</comment>
+  </data>
+  <data name='Ui_9816956c5f704fc9' xml:space='preserve'>
+    <value>actores</value>
+    <comment>Source: atores</comment>
+  </data>
+  <data name='Ui_aca61213dae535f5' xml:space='preserve'>
+    <value>comunidad</value>
+    <comment>Source: comunidade</comment>
+  </data>
+  <data name='Ui_4b5d63a0f3da3639' xml:space='preserve'>
+    <value>Elementos del menú no encontrados</value>
+    <comment>Source: Elementos do menu não encontrados</comment>
+  </data>
+</root>

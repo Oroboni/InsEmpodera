@@ -1,0 +1,1055 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <resheader name='resmimetype'>
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name='version'>
+    <value>2.0</value>
+  </resheader>
+  <resheader name='reader'>
+    <value>
+       System.Resources.ResXResourceReader, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089 
+    </value>
+  </resheader>
+  <resheader name='writer'>
+    <value>
+       System.Resources.ResXResourceWriter, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089 
+    </value>
+  </resheader>
+  <data name='Ui_9bc947e58b62b2fe' xml:space='preserve'>
+    <value>Não</value>
+    <comment>Source: Não</comment>
+  </data>
+  <data name='Ui_9313455e45aa2243' xml:space='preserve'>
+    <value>Sim</value>
+    <comment>Source: Sim</comment>
+  </data>
+  <data name='Ui_905463a25488a95b' xml:space='preserve'>
+    <value>Ator</value>
+    <comment>Source: Ator</comment>
+  </data>
+  <data name='Ui_cec3a9b89b2e3913' xml:space='preserve'>
+    <value>Data</value>
+    <comment>Source: Data</comment>
+  </data>
+  <data name='Ui_5a4cc65d866b2781' xml:space='preserve'>
+    <value>Conta</value>
+    <comment>Source: Conta</comment>
+  </data>
+  <data name='Ui_4787eaf7c938045f' xml:space='preserve'>
+    <value>Legal</value>
+    <comment>Source: Legal</comment>
+  </data>
+  <data name='Ui_5ba3cea99095f674' xml:space='preserve'>
+    <value>Outro</value>
+    <comment>Source: Outro</comment>
+  </data>
+  <data name='Ui_521bac2c00686155' xml:space='preserve'>
+    <value>Saúde</value>
+    <comment>Source: Saúde</comment>
+  </data>
+  <data name='Ui_68148f2f667cdefb' xml:space='preserve'>
+    <value>Atores</value>
+    <comment>Source: Atores</comment>
+  </data>
+  <data name='Ui_2eba946b2e1ee4b6' xml:space='preserve'>
+    <value>Editar</value>
+    <comment>Source: Editar</comment>
+  </data>
+  <data name='Ui_98e5acddb6c46a24' xml:space='preserve'>
+    <value>Estado</value>
+    <comment>Source: Estado</comment>
+  </data>
+  <data name='Ui_f5132b569fe355f6' xml:space='preserve'>
+    <value>Na rua</value>
+    <comment>Source: Na rua</comment>
+  </data>
+  <data name='Ui_67e494d69c2d20d0' xml:space='preserve'>
+    <value>Número</value>
+    <comment>Source: Número</comment>
+  </data>
+  <data name='Ui_59dc926760d04aea' xml:space='preserve'>
+    <value>Voltar</value>
+    <comment>Source: Voltar</comment>
+  </data>
+  <data name='Ui_77c77dba3b1a90da' xml:space='preserve'>
+    <value>Emprego</value>
+    <comment>Source: Emprego</comment>
+  </data>
+  <data name='Ui_4a1772b0c06a6a72' xml:space='preserve'>
+    <value>Próximo</value>
+    <comment>Source: Próximo</comment>
+  </data>
+  <data name='Ui_620915ae84d6ada2' xml:space='preserve'>
+    <value>Educação</value>
+    <comment>Source: Educação</comment>
+  </data>
+  <data name='Ui_ef5e7e12bdacd07e' xml:space='preserve'>
+    <value>Endereço</value>
+    <comment>Source: Endereço</comment>
+  </data>
+  <data name='Ui_68c26e6b87e1ad71' xml:space='preserve'>
+    <value>Familiar</value>
+    <comment>Source: Familiar</comment>
+  </data>
+  <data name='Ui_3580dffa20c1eb68' xml:space='preserve'>
+    <value>Hepatite</value>
+    <comment>Source: Hepatite</comment>
+  </data>
+  <data name='Ui_1f8fd361b26185c3' xml:space='preserve'>
+    <value>Ocupação</value>
+    <comment>Source: Ocupação</comment>
+  </data>
+  <data name='Ui_f2a864aa4c6d60ac' xml:space='preserve'>
+    <value>Parceiro</value>
+    <comment>Source: Parceiro</comment>
+  </data>
+  <data name='Ui_66b2b25725a7454f' xml:space='preserve'>
+    <value>Pessoais</value>
+    <comment>Source: Pessoais</comment>
+  </data>
+  <data name='Ui_b7fcf3393760cb2a' xml:space='preserve'>
+    <value>Petições</value>
+    <comment>Source: Petições</comment>
+  </data>
+  <data name='Ui_2f151735cce73ad3' xml:space='preserve'>
+    <value>Telefone</value>
+    <comment>Source: Telefone</comment>
+  </data>
+  <data name='Ui_dafb59613e123614' xml:space='preserve'>
+    <value>Atualizar</value>
+    <comment>Source: Atualizar</comment>
+  </data>
+  <data name='Ui_c1ebce32bd8f3420' xml:space='preserve'>
+    <value>Escolares</value>
+    <comment>Source: Escolares</comment>
+  </data>
+  <data name='Ui_fb2541074dc9a648' xml:space='preserve'>
+    <value>Estudante</value>
+    <comment>Source: Estudante</comment>
+  </data>
+  <data name='Ui_5b1903568ebadd63' xml:space='preserve'>
+    <value>Respostas</value>
+    <comment>Source: Respostas</comment>
+  </data>
+  <data name='Ui_5a98f24ca2530ba5' xml:space='preserve'>
+    <value>Sabe Ler?</value>
+    <comment>Source: Sabe Ler?</comment>
+  </data>
+  <data name='Ui_987d5be9f4bf7651' xml:space='preserve'>
+    <value>Selecione</value>
+    <comment>Source: Selecione</comment>
+  </data>
+  <data name='Ui_565b6715afea2171' xml:space='preserve'>
+    <value>["Title"]</value>
+    <comment>Source: ["Title"]</comment>
+  </data>
+  <data name='Ui_31056106ce607411' xml:space='preserve'>
+    <value>Resultados</value>
+    <comment>Source: Resultados</comment>
+  </data>
+  <data name='Ui_4da4d95e72151e0f' xml:space='preserve'>
+    <value>Localização</value>
+    <comment>Source: Localização</comment>
+  </data>
+  <data name='Ui_60aed1c253bd710a' xml:space='preserve'>
+    <value>Relacionais</value>
+    <comment>Source: Relacionais</comment>
+  </data>
+  <data name='Ui_df5ec6c72e44e0f1' xml:space='preserve'>
+    <value>Substâncias</value>
+    <comment>Source: Substâncias</comment>
+  </data>
+  <data name='Ui_1701b5926fb60e1d' xml:space='preserve'>
+    <value>Tuberculoso</value>
+    <comment>Source: Tuberculoso</comment>
+  </data>
+  <data name='Ui_faa216a5bc4eb69d' xml:space='preserve'>
+    <value>Vida de rua</value>
+    <comment>Source: Vida de rua</comment>
+  </data>
+  <data name='Ui_fa42d79d079ee0e4' xml:space='preserve'>
+    <value>Deslocamento</value>
+    <comment>Source: Deslocamento</comment>
+  </data>
+  <data name='Ui_acba9e46543d27f8' xml:space='preserve'>
+    <value>Editar Ficha</value>
+    <comment>Source: Editar Ficha</comment>
+  </data>
+  <data name='Ui_61f9fb4909d04a76' xml:space='preserve'>
+    <value>Empreendedor</value>
+    <comment>Source: Empreendedor</comment>
+  </data>
+  <data name='Ui_9ef3d40a6e575a59' xml:space='preserve'>
+    <value>Escolaridade</value>
+    <comment>Source: Escolaridade</comment>
+  </data>
+  <data name='Ui_e79edbd2274fe3eb' xml:space='preserve'>
+    <value>Incapacidade</value>
+    <comment>Source: Incapacidade</comment>
+  </data>
+  <data name='Ui_7573165e41acaf61' xml:space='preserve'>
+    <value>Por telefone</value>
+    <comment>Source: Por telefone</comment>
+  </data>
+  <data name='Ui_eb1afd23c2f1799b' xml:space='preserve'>
+    <value>Sem trabalho</value>
+    <comment>Source: Sem trabalho</comment>
+  </data>
+  <data name='Ui_0898525bbba0cac9' xml:space='preserve'>
+    <value>Analfabetismo</value>
+    <comment>Source: Analfabetismo</comment>
+  </data>
+  <data name='Ui_3c5f157792786195' xml:space='preserve'>
+    <value>Psiquiátricas</value>
+    <comment>Source: Psiquiátricas</comment>
+  </data>
+  <data name='Ui_9eee40637a39d4d1' xml:space='preserve'>
+    <value>Acompanhamento</value>
+    <comment>Source: Acompanhamento</comment>
+  </data>
+  <data name='Ui_6550d8166b5451f7' xml:space='preserve'>
+    <value>Comportamental</value>
+    <comment>Source: Comportamental</comment>
+  </data>
+  <data name='Ui_961e39bba9ef98d9' xml:space='preserve'>
+    <value>Encaminhamento</value>
+    <comment>Source: Encaminhamento</comment>
+  </data>
+  <data name='Ui_a03516eb84659af0' xml:space='preserve'>
+    <value>Exclusão grave</value>
+    <comment>Source: Exclusão grave</comment>
+  </data>
+  <data name='Ui_4e8a58a668143d47' xml:space='preserve'>
+    <value>Gravidez/parto</value>
+    <comment>Source: Gravidez/parto</comment>
+  </data>
+  <data name='Ui_76826dd0b0d42049' xml:space='preserve'>
+    <value>Sabe Calcular?</value>
+    <comment>Source: Sabe Calcular?</comment>
+  </data>
+  <data name='Ui_7ac1f587759b07e6' xml:space='preserve'>
+    <value>Seguiu contato</value>
+    <comment>Source: Seguiu contato</comment>
+  </data>
+  <data name='Ui_bda28811c518319d' xml:space='preserve'>
+    <value>É um parceiro?</value>
+    <comment>Source: É um parceiro?</comment>
+  </data>
+  <data name='Ui_4ec0bbf0e0d32551' xml:space='preserve'>
+    <value>Apoio econômico</value>
+    <comment>Source: Apoio econômico</comment>
+  </data>
+  <data name='Ui_bb6fe2039314272b' xml:space='preserve'>
+    <value>Atualizar Ficha</value>
+    <comment>Source: Atualizar Ficha</comment>
+  </data>
+  <data name='Ui_933133b7022c1456' xml:space='preserve'>
+    <value>Estado Familiar</value>
+    <comment>Source: Estado Familiar</comment>
+  </data>
+  <data name='Ui_dfef17e053f2439d' xml:space='preserve'>
+    <value>Estado familiar</value>
+    <comment>Source: Estado familiar</comment>
+  </data>
+  <data name='Ui_65e1b240e596f33d' xml:space='preserve'>
+    <value>Nunca Trabalhou</value>
+    <comment>Source: Nunca Trabalhou</comment>
+  </data>
+  <data name='Ui_0383c475e27cce7d' xml:space='preserve'>
+    <value>Pobreza extrema</value>
+    <comment>Source: Pobreza extrema</comment>
+  </data>
+  <data name='Ui_7a0e1edb8b376161' xml:space='preserve'>
+    <value>Trabalho Formal</value>
+    <comment>Source: Trabalho Formal</comment>
+  </data>
+  <data name='Ui_5f240d8507030bdb' xml:space='preserve'>
+    <value>Trabalho sexual</value>
+    <comment>Source: Trabalho sexual</comment>
+  </data>
+  <data name='Ui_3d5a699bc932e86a' xml:space='preserve'>
+    <value>(DDD) 99999-9999</value>
+    <comment>Source: (DDD) 99999-9999</comment>
+  </data>
+  <data name='Ui_07ecf7d7a1a6e065' xml:space='preserve'>
+    <value>Cuidados médicos</value>
+    <comment>Source: Cuidados médicos</comment>
+  </data>
+  <data name='Ui_4b529acbb954f142' xml:space='preserve'>
+    <value>Número de Filhas</value>
+    <comment>Source: Número de Filhas</comment>
+  </data>
+  <data name='Ui_99e0b3d124aac6ac' xml:space='preserve'>
+    <value>Número de Filhos</value>
+    <comment>Source: Número de Filhos</comment>
+  </data>
+  <data name='Ui_3138109ba4905648' xml:space='preserve'>
+    <value>Primeiro Contato</value>
+    <comment>Source: Primeiro Contato</comment>
+  </data>
+  <data name='Ui_885d905f9c3beebc' xml:space='preserve'>
+    <value>Veio ao encontro</value>
+    <comment>Source: Veio ao encontro</comment>
+  </data>
+  <data name='Ui_5e52d557b3edef57' xml:space='preserve'>
+    <value>Crise psicológica</value>
+    <comment>Source: Crise psicológica</comment>
+  </data>
+  <data name='Ui_eaeb9ec90deaf353' xml:space='preserve'>
+    <value>Na casa da pessoa</value>
+    <comment>Source: Na casa da pessoa</comment>
+  </data>
+  <data name='Ui_0e98d3950d7c2a5e' xml:space='preserve'>
+    <value>Problemas sexuais</value>
+    <comment>Source: Problemas sexuais</comment>
+  </data>
+  <data name='Ui_6a15991e9a48270b' xml:space='preserve'>
+    <value>Trabalho Informal</value>
+    <comment>Source: Trabalho Informal</comment>
+  </data>
+  <data name='Ui_cdf30f8fcd731eaa' xml:space='preserve'>
+    <value>Data do 1º Contato</value>
+    <comment>Source: Data do 1º Contato</comment>
+  </data>
+  <data name='Ui_da50d7ecef128887' xml:space='preserve'>
+    <value>Estrutura Familiar</value>
+    <comment>Source: Estrutura Familiar</comment>
+  </data>
+  <data name='Ui_5d6a03f7ea9989d9' xml:space='preserve'>
+    <value>Hora do 1º Contato</value>
+    <comment>Source: Hora do 1º Contato</comment>
+  </data>
+  <data name='Ui_c2dede5ebc57cb31' xml:space='preserve'>
+    <value>Inicia um programa</value>
+    <comment>Source: Inicia um programa</comment>
+  </data>
+  <data name='Ui_db4b2cadfbe08187' xml:space='preserve'>
+    <value>Migração/Imigração</value>
+    <comment>Source: Migração/Imigração</comment>
+  </data>
+  <data name='Ui_2d3e0c23d654adc0' xml:space='preserve'>
+    <value>Número de Telefone</value>
+    <comment>Source: Número de Telefone</comment>
+  </data>
+  <data name='Ui_4258a3acfb5f78b0' xml:space='preserve'>
+    <value>Problemas de saúde</value>
+    <comment>Source: Problemas de saúde</comment>
+  </data>
+  <data name='Ui_476c2c17e50a7f80' xml:space='preserve'>
+    <value>Qtd. Reabilitações</value>
+    <comment>Source: Qtd. Reabilitações</comment>
+  </data>
+  <data name='Ui_07fdae287f3f6eb8' xml:space='preserve'>
+    <value>Saúde e Tratamento</value>
+    <comment>Source: Saúde e Tratamento</comment>
+  </data>
+  <data name='Ui_86e0dda372d15e0c' xml:space='preserve'>
+    <value>Substâncias/álcool</value>
+    <comment>Source: Substâncias/álcool</comment>
+  </data>
+  <data name='Ui_5f3865063a83ff07' xml:space='preserve'>
+    <value>Tráfico de pessoas</value>
+    <comment>Source: Tráfico de pessoas</comment>
+  </data>
+  <data name='Ui_2c8bb8faa9eaac20' xml:space='preserve'>
+    <value>Violação de adulto</value>
+    <comment>Source: Violação de adulto</comment>
+  </data>
+  <data name='Ui_d2ed96be1048ef09' xml:space='preserve'>
+    <value>Como se estabeleceu</value>
+    <comment>Source: Como se estabeleceu</comment>
+  </data>
+  <data name='Ui_81c0020f6f6aff01' xml:space='preserve'>
+    <value>Conselho/Orientação</value>
+    <comment>Source: Conselho/Orientação</comment>
+  </data>
+  <data name='Ui_ca8b19d8c9de23d4' xml:space='preserve'>
+    <value>Drogas intravenosas</value>
+    <comment>Source: Drogas intravenosas</comment>
+  </data>
+  <data name='Ui_23b515ebad2f89b3' xml:space='preserve'>
+    <value>Higiene/Roupa limpa</value>
+    <comment>Source: Higiene/Roupa limpa</comment>
+  </data>
+  <data name='Ui_9dfc9e61de22ddb8' xml:space='preserve'>
+    <value>Interrompeu contato</value>
+    <comment>Source: Interrompeu contato</comment>
+  </data>
+  <data name='Ui_9c5c738c20f32c37' xml:space='preserve'>
+    <value>Local de Tratamento</value>
+    <comment>Source: Local de Tratamento</comment>
+  </data>
+  <data name='Ui_40d507b10e83e365' xml:space='preserve'>
+    <value>Local de tratamento</value>
+    <comment>Source: Local de tratamento</comment>
+  </data>
+  <data name='Ui_39e43163562617ac' xml:space='preserve'>
+    <value>Outras dependências</value>
+    <comment>Source: Outras dependências</comment>
+  </data>
+  <data name='Ui_c611d2a10c4544db' xml:space='preserve'>
+    <value>Resultados obtidos:</value>
+    <comment>Source: Resultados obtidos:</comment>
+  </data>
+  <data name='Ui_4131784742be38c4' xml:space='preserve'>
+    <value>Anos de Escolaridade</value>
+    <comment>Source: Anos de Escolaridade</comment>
+  </data>
+  <data name='Ui_b9d718aa23549c6e' xml:space='preserve'>
+    <value>Como se estabeleceu?</value>
+    <comment>Source: Como se estabeleceu?</comment>
+  </data>
+  <data name='Ui_18ef0854858c45f2' xml:space='preserve'>
+    <value>Dá-se uma informação</value>
+    <comment>Source: Dá-se uma informação</comment>
+  </data>
+  <data name='Ui_573982729b87c950' xml:space='preserve'>
+    <value>Marca-se um encontro</value>
+    <comment>Source: Marca-se um encontro</comment>
+  </data>
+  <data name='Ui_4127c42009b57fe8' xml:space='preserve'>
+    <value>Problemas familiares</value>
+    <comment>Source: Problemas familiares</comment>
+  </data>
+  <data name='Ui_d2735a73add4b8a4' xml:space='preserve'>
+    <value>Violação de crianças</value>
+    <comment>Source: Violação de crianças</comment>
+  </data>
+  <data name='Ui_0436726f02293392' xml:space='preserve'>
+    <value>Condutas antissociais</value>
+    <comment>Source: Condutas antissociais</comment>
+  </data>
+  <data name='Ui_50a5fe19404d7bd5' xml:space='preserve'>
+    <value>Indicações, sugestões</value>
+    <comment>Source: Indicações, sugestões</comment>
+  </data>
+  <data name='Ui_a7cc8ed4fae30148' xml:space='preserve'>
+    <value>Respostas fornecidas:</value>
+    <comment>Source: Respostas fornecidas:</comment>
+  </data>
+  <data name='Ui_b0d767bd23732339' xml:space='preserve'>
+    <value>Sabe usar Computador?</value>
+    <comment>Source: Sabe usar Computador?</comment>
+  </data>
+  <data name='Ui_4b1b02d78a6ce370' xml:space='preserve'>
+    <value>Capacitação e formação</value>
+    <comment>Source: Capacitação e formação</comment>
+  </data>
+  <data name='Ui_be5d2713d45881f9' xml:space='preserve'>
+    <value>Educação e Habilidades</value>
+    <comment>Source: Educação e Habilidades</comment>
+  </data>
+  <data name='Ui_231b9522477e391c' xml:space='preserve'>
+    <value>Em outras instituições</value>
+    <comment>Source: Em outras instituições</comment>
+  </data>
+  <data name='Ui_66cd5146407179fc' xml:space='preserve'>
+    <value>Ficha Primeiro Contato</value>
+    <comment>Source: Ficha Primeiro Contato</comment>
+  </data>
+  <data name='Ui_f200ed22edbc9250' xml:space='preserve'>
+    <value>Inclusão em atividades</value>
+    <comment>Source: Inclusão em atividades</comment>
+  </data>
+  <data name='Ui_32ddc91ee731aa32' xml:space='preserve'>
+    <value>Acolhida (dia ou noite)</value>
+    <comment>Source: Acolhida (dia ou noite)</comment>
+  </data>
+  <data name='Ui_a95aa4ad5decfb8c' xml:space='preserve'>
+    <value>Ex: Solteiro, Casado...</value>
+    <comment>Source: Ex: Solteiro, Casado...</comment>
+  </data>
+  <data name='Ui_01dbe20fb22d4d31' xml:space='preserve'>
+    <value>Violência intrafamiliar</value>
+    <comment>Source: Violência intrafamiliar</comment>
+  </data>
+  <data name='Ui_5acd6b03cd981302' xml:space='preserve'>
+    <value>Complemento / Referência</value>
+    <comment>Source: Complemento / Referência</comment>
+  </data>
+  <data name='Ui_515dc4c9aac705d6' xml:space='preserve'>
+    <value>Selecione o nome do ator</value>
+    <comment>Source: Selecione o nome do ator</comment>
+  </data>
+  <data name='Ui_0e1313b770b3deee' xml:space='preserve'>
+    <value>Redes interinstitucionais</value>
+    <comment>Source: Redes interinstitucionais</comment>
+  </data>
+  <data name='Ui_fff4369b266e0cec' xml:space='preserve'>
+    <value>Organização e planejamento</value>
+    <comment>Source: Organização e planejamento</comment>
+  </data>
+  <data name='Ui_42940d0724d5658e' xml:space='preserve'>
+    <value>Violência intracomunitária</value>
+    <comment>Source: Violência intracomunitária</comment>
+  </data>
+  <data name='Ui_7bd97cbe3f561e63' xml:space='preserve'>
+    <value>Dados Familiares e Pessoais</value>
+    <comment>Source: Dados Familiares e Pessoais</comment>
+  </data>
+  <data name='Ui_36ba0f1a8dca1779' xml:space='preserve'>
+    <value>Na estrutura da organização</value>
+    <comment>Source: Na estrutura da organização</comment>
+  </data>
+  <data name='Ui_c8e3847ca973d83e' xml:space='preserve'>
+    <value>Ex: Nuclear, Monoparental...</value>
+    <comment>Source: Ex: Nuclear, Monoparental...</comment>
+  </data>
+  <data name='Ui_7ea37fda6f622043' xml:space='preserve'>
+    <value>Condições do Primeiro Contato</value>
+    <comment>Source: Condições do Primeiro Contato</comment>
+  </data>
+  <data name='Ui_73752a2289327c44' xml:space='preserve'>
+    <value>Estigma por identidade sexual</value>
+    <comment>Source: Estigma por identidade sexual</comment>
+  </data>
+  <data name='Ui_a565b886dceb924a' xml:space='preserve'>
+    <value>Dados fornecidos pelo parceiro?</value>
+    <comment>Source: Dados fornecidos pelo parceiro?</comment>
+  </data>
+  <data name='Ui_950de641839fc9b9' xml:space='preserve'>
+    <value>Escuta imediata/manejo de crise</value>
+    <comment>Source: Escuta imediata/manejo de crise</comment>
+  </data>
+  <data name='Ui_d3b05a94136b56f1' xml:space='preserve'>
+    <value>Comentários / Observações Finais</value>
+    <comment>Source: Comentários / Observações Finais</comment>
+  </data>
+  <data name='Ui_eeb34616f14ab0ec' xml:space='preserve'>
+    <value>Ex: Sede da associação, Escola...</value>
+    <comment>Source: Ex: Sede da associação, Escola...</comment>
+  </data>
+  <data name='Ui_e1b275d406560b7a' xml:space='preserve'>
+    <value>Selecione as petições solicitadas:</value>
+    <comment>Source: Selecione as petições solicitadas:</comment>
+  </data>
+  <data name='Ui_89d54d8d10e7e0cf' xml:space='preserve'>
+    <value>Transtorno estresse pós traumático</value>
+    <comment>Source: Transtorno estresse pós traumático</comment>
+  </data>
+  <data name='Ui_cede13abf6147434' xml:space='preserve'>
+    <value>Insira observações relevantes aqui...</value>
+    <comment>Source: Insira observações relevantes aqui...</comment>
+  </data>
+  <data name='Ui_cbe7a83cbaf6e9d8' xml:space='preserve'>
+    <value>Local atual de tratamento (se houver)</value>
+    <comment>Source: Local atual de tratamento (se houver)</comment>
+  </data>
+  <data name='Ui_498b66c23818c12e' xml:space='preserve'>
+    <value>Use a lupa no mapa acima para buscar...</value>
+    <comment>Source: Use a lupa no mapa acima para buscar...</comment>
+  </data>
+  <data name='Ui_d1b42d5dd2e35b22' xml:space='preserve'>
+    <value>Selecione todas as condições que se aplicam:</value>
+    <comment>Source: Selecione todas as condições que se aplicam:</comment>
+  </data>
+  <data name='Ui_4ba6238eaad567c9' xml:space='preserve'>
+    <value>nome</value>
+    <comment>Source: nome</comment>
+  </data>
+  <data name='Ui_8c31e6e7223097e2' xml:space='preserve'>
+    <value>Local</value>
+    <comment>Source: Local</comment>
+  </data>
+  <data name='Ui_528dc9e9eb82f310' xml:space='preserve'>
+    <value>saúde</value>
+    <comment>Source: saúde</comment>
+  </data>
+  <data name='Ui_e266ea0f7ee3ddc5' xml:space='preserve'>
+    <value>todas</value>
+    <comment>Source: todas</comment>
+  </data>
+  <data name='Ui_b0f8a4c6147a77ca' xml:space='preserve'>
+    <value>Atenção</value>
+    <comment>Source: Atenção</comment>
+  </data>
+  <data name='Ui_381940686eef1640' xml:space='preserve'>
+    <value>telefone</value>
+    <comment>Source: telefone</comment>
+  </data>
+  <data name='Ui_20be5de55beb69b7' xml:space='preserve'>
+    <value>Informação</value>
+    <comment>Source: Informação</comment>
+  </data>
+  <data name='Ui_4893969fbad1494d' xml:space='preserve'>
+    <value>Internação</value>
+    <comment>Source: Internação</comment>
+  </data>
+  <data name='Ui_0853883db432646e' xml:space='preserve'>
+    <value>Alimentação</value>
+    <comment>Source: Alimentação</comment>
+  </data>
+  <data name='Ui_2c57d553084ba33f' xml:space='preserve'>
+    <value>Burocrático</value>
+    <comment>Source: Burocrático</comment>
+  </data>
+  <data name='Ui_ffde58a79f679352' xml:space='preserve'>
+    <value>Serviço social</value>
+    <comment>Source: Serviço social</comment>
+  </data>
+  <data name='Ui_986ca04c731a58c8' xml:space='preserve'>
+    <value>Serviços legais</value>
+    <comment>Source: Serviços legais</comment>
+  </data>
+  <data name='Ui_0fbabb54c33fe027' xml:space='preserve'>
+    <value>Atenção ao parto</value>
+    <comment>Source: Atenção ao parto</comment>
+  </data>
+  <data name='Ui_9c936815b6ea0bc2' xml:space='preserve'>
+    <value>Ocupação/trabalho</value>
+    <comment>Source: Ocupação/trabalho</comment>
+  </data>
+  <data name='Ui_65090dd808ca2971' xml:space='preserve'>
+    <value>Fianças/Empréstimo</value>
+    <comment>Source: Fianças/Empréstimo</comment>
+  </data>
+  <data name='Ui_84b2bea22308cbe1' xml:space='preserve'>
+    <value>Internação forçada</value>
+    <comment>Source: Internação forçada</comment>
+  </data>
+  <data name='Ui_98369e85a7626e44' xml:space='preserve'>
+    <value>Ficha de 1º Contato</value>
+    <comment>Source: Ficha de 1º Contato</comment>
+  </data>
+  <data name='Ui_b50663fe8d3b1d72' xml:space='preserve'>
+    <value>Recuperação escolar</value>
+    <comment>Source: Recuperação escolar</comment>
+  </data>
+  <data name='Ui_6a2955e8b24fd330' xml:space='preserve'>
+    <value>Formação/Capacitação</value>
+    <comment>Source: Formação/Capacitação</comment>
+  </data>
+  <data name='Ui_dd8e457a48f15485' xml:space='preserve'>
+    <value>Integração comunitária</value>
+    <comment>Source: Integração comunitária</comment>
+  </data>
+  <data name='Ui_86433045f48779b8' xml:space='preserve'>
+    <value>Exames/Cuidados médicos</value>
+    <comment>Source: Exames/Cuidados médicos</comment>
+  </data>
+  <data name='Ui_e69f9e6077159999' xml:space='preserve'>
+    <value>Editar Ficha de 1º Contato</value>
+    <comment>Source: Editar Ficha de 1º Contato</comment>
+  </data>
+  <data name='Ui_203494cfb6a76a0d' xml:space='preserve'>
+    <value>Serviços de higiene/Roupa limpa</value>
+    <comment>Source: Serviços de higiene/Roupa limpa</comment>
+  </data>
+  <data name='Ui_a45c845091c36c1f' xml:space='preserve'>
+    <value>Ex: 2</value>
+    <comment>Source: Ex: 2</comment>
+  </data>
+  <data name='Ui_5d1229412d2c1834' xml:space='preserve'>
+    <value>Ex: 12</value>
+    <comment>Source: Ex: 12</comment>
+  </data>
+  <data name='Ui_086895f29375a96f' xml:space='preserve'>
+    <value>Viúvo/a</value>
+    <comment>Source: Viúvo/a</comment>
+  </data>
+  <data name='Ui_6f0bf627aaacc95b' xml:space='preserve'>
+    <value>Casado/a</value>
+    <comment>Source: Casado/a</comment>
+  </data>
+  <data name='Ui_f54058e0d610c422' xml:space='preserve'>
+    <value>Comunidade</value>
+    <comment>Source: Comunidade</comment>
+  </data>
+  <data name='Ui_e36a68015be4b546' xml:space='preserve'>
+    <value>Nova Ficha</value>
+    <comment>Source: Nova Ficha</comment>
+  </data>
+  <data name='Ui_c3c8c8e726abf289' xml:space='preserve'>
+    <value>Separado/a</value>
+    <comment>Source: Separado/a</comment>
+  </data>
+  <data name='Ui_e6b50ab5cd230229' xml:space='preserve'>
+    <value>Solteiro/a</value>
+    <comment>Source: Solteiro/a</comment>
+  </data>
+  <data name='Ui_9cf2588e219604b8' xml:space='preserve'>
+    <value>Comcubinato</value>
+    <comment>Source: Comcubinato</comment>
+  </data>
+  <data name='Ui_8d0bc92e603ac7e7' xml:space='preserve'>
+    <value>Comunidades</value>
+    <comment>Source: Comunidades</comment>
+  </data>
+  <data name='Ui_5f175a9a7fb27eb7' xml:space='preserve'>
+    <value>Divorciado/a</value>
+    <comment>Source: Divorciado/a</comment>
+  </data>
+  <data name='Ui_2ee733cd227eeceb' xml:space='preserve'>
+    <value>Mora sozinho</value>
+    <comment>Source: Mora sozinho</comment>
+  </data>
+  <data name='Ui_1cfabe79a02db36b' xml:space='preserve'>
+    <value>Salvar Ficha</value>
+    <comment>Source: Salvar Ficha</comment>
+  </data>
+  <data name='Ui_375470bac74fbf64' xml:space='preserve'>
+    <value>Família nuclear</value>
+    <comment>Source: Família nuclear</comment>
+  </data>
+  <data name='Ui_ff96a18b8d69fa69' xml:space='preserve'>
+    <value>Selecione uma opção</value>
+    <comment>Source: Selecione uma opção</comment>
+  </data>
+  <data name='Ui_efb909923541f600' xml:space='preserve'>
+    <value>Mora com os filhos/as</value>
+    <comment>Source: Mora com os filhos/as</comment>
+  </data>
+  <data name='Ui_255ac3041e6c3427' xml:space='preserve'>
+    <value>Selecione a comunidade</value>
+    <comment>Source: Selecione a comunidade</comment>
+  </data>
+  <data name='Ui_5c85a302157cadc5' xml:space='preserve'>
+    <value>Companheiro/a sem matrimônio</value>
+    <comment>Source: Companheiro/a sem matrimônio</comment>
+  </data>
+  <data name='Ui_59e9d92a835a0a77' xml:space='preserve'>
+    <value>Família sem matrimônio formal</value>
+    <comment>Source: Família sem matrimônio formal</comment>
+  </data>
+  <data name='Ui_aca61213dae535f5' xml:space='preserve'>
+    <value>comunidade</value>
+    <comment>Source: comunidade</comment>
+  </data>
+  <data name='Ui_3592aa1fa19ccc92' xml:space='preserve'>
+    <value>Nova Ficha de 1º Contato</value>
+    <comment>Source: Nova Ficha de 1º Contato</comment>
+  </data>
+  <data name='Ui_883173decc42570f' xml:space='preserve'>
+    <value>Deletar</value>
+    <comment>Source: Deletar</comment>
+  </data>
+  <data name='Ui_bb9dbb406dcbd524' xml:space='preserve'>
+    <value>Cancelar</value>
+    <comment>Source: Cancelar</comment>
+  </data>
+  <data name='Ui_3e69f57a8b911064' xml:space='preserve'>
+    <value>Sim, Deletar</value>
+    <comment>Source: Sim, Deletar</comment>
+  </data>
+  <data name='Ui_d5060516d6c6def9' xml:space='preserve'>
+    <value>Salvar Alterações</value>
+    <comment>Source: Salvar Alterações</comment>
+  </data>
+  <data name='Ui_d76f94dd0a8a7e74' xml:space='preserve'>
+    <value>Confirmar Exclusão</value>
+    <comment>Source: Confirmar Exclusão</comment>
+  </data>
+  <data name='Ui_a667e7e619935dd5' xml:space='preserve'>
+    <value>Essa ação não pode ser desfeita.</value>
+    <comment>Source: Essa ação não pode ser desfeita.</comment>
+  </data>
+  <data name='Ui_673790a42b20fce5' xml:space='preserve'>
+    <value>Você tem certeza que deseja deletar a Ficha de 1º Contato</value>
+    <comment>Source: Você tem certeza que deseja deletar a Ficha de 1º Contato</comment>
+  </data>
+  <data name='Ui_5086900635fec3ef' xml:space='preserve'>
+    <value>Nome</value>
+    <comment>Source: Nome</comment>
+  </data>
+  <data name='Ui_aff4d19d6ee43b20' xml:space='preserve'>
+    <value>Todas</value>
+    <comment>Source: Todas</comment>
+  </data>
+  <data name='Ui_bd02b9a7d71dac67' xml:space='preserve'>
+    <value>Todos</value>
+    <comment>Source: Todos</comment>
+  </data>
+  <data name='Ui_a2e643e46888525a' xml:space='preserve'>
+    <value>?.Nome</value>
+    <comment>Source: ?.Nome</comment>
+  </data>
+  <data name='Ui_3c9717bdf2260bc9' xml:space='preserve'>
+    <value>Resumo</value>
+    <comment>Source: Resumo</comment>
+  </data>
+  <data name='Ui_70502ff6bb853560' xml:space='preserve'>
+    <value>sistema</value>
+    <comment>Source: sistema</comment>
+  </data>
+  <data name='Ui_6e91752edf51a9a4' xml:space='preserve'>
+    <value>Concluir</value>
+    <comment>Source: Concluir</comment>
+  </data>
+  <data name='Ui_2a9baf5c3825064d' xml:space='preserve'>
+    <value>Abandonar</value>
+    <comment>Source: Abandonar</comment>
+  </data>
+  <data name='Ui_734601b1cdc91cf1' xml:space='preserve'>
+    <value>Concluída</value>
+    <comment>Source: Concluída</comment>
+  </data>
+  <data name='Ui_eed987b8c4a5f0a7' xml:space='preserve'>
+    <value>Abandonada</value>
+    <comment>Source: Abandonada</comment>
+  </data>
+  <data name='Ui_93405da2cd3cc08c' xml:space='preserve'>
+    <value>Concluídas</value>
+    <comment>Source: Concluídas</comment>
+  </data>
+  <data name='Ui_0cce96d609b1bb09' xml:space='preserve'>
+    <value>Abandonadas</value>
+    <comment>Source: Abandonadas</comment>
+  </data>
+  <data name='Ui_2b29b9e6ec5e734a' xml:space='preserve'>
+    <value>Em Progresso</value>
+    <comment>Source: Em Progresso</comment>
+  </data>
+  <data name='Ui_4a4ed02d3dcaa86e' xml:space='preserve'>
+    <value>Ver detalhes</value>
+    <comment>Source: Ver detalhes</comment>
+  </data>
+  <data name='Ui_89d4bd84c7180dda' xml:space='preserve'>
+    <value>Buscar fichas</value>
+    <comment>Source: Buscar fichas</comment>
+  </data>
+  <data name='Ui_94d0641e8ebc8551' xml:space='preserve'>
+    <value>Sim, Abandonar</value>
+    <comment>Source: Sim, Abandonar</comment>
+  </data>
+  <data name='Ui_7ce4ccf8283ca9b2' xml:space='preserve'>
+    <value>Sim, Completar</value>
+    <comment>Source: Sim, Completar</comment>
+  </data>
+  <data name='Ui_19e49db9d29029ec' xml:space='preserve'>
+    <value>Abandonar Ficha</value>
+    <comment>Source: Abandonar Ficha</comment>
+  </data>
+  <data name='Ui_e91ef673db19a1bf' xml:space='preserve'>
+    <value>Completar Ficha</value>
+    <comment>Source: Completar Ficha</comment>
+  </data>
+  <data name='Ui_cf7df40e72570066' xml:space='preserve'>
+    <value>Todas as Fichas</value>
+    <comment>Source: Todas as Fichas</comment>
+  </data>
+  <data name='Ui_c8ad91e01da51053' xml:space='preserve'>
+    <value>Total de Fichas</value>
+    <comment>Source: Total de Fichas</comment>
+  </data>
+  <data name='Ui_ba99664f6f5dd344' xml:space='preserve'>
+    <value>Filtrar por Status</value>
+    <comment>Source: Filtrar por Status</comment>
+  </data>
+  <data name='Ui_b85530dc0e837fad' xml:space='preserve'>
+    <value>Adicionar Nova Ficha</value>
+    <comment>Source: Adicionar Nova Ficha</comment>
+  </data>
+  <data name='Ui_05e22e68465e63a0' xml:space='preserve'>
+    <value>Todas as Comunidades</value>
+    <comment>Source: Todas as Comunidades</comment>
+  </data>
+  <data name='Ui_918d989330663e2b' xml:space='preserve'>
+    <value>Filtrar por Comunidade</value>
+    <comment>Source: Filtrar por Comunidade</comment>
+  </data>
+  <data name='Ui_ef5c9a01b1f83e14' xml:space='preserve'>
+    <value>Adicionar Primeira Ficha</value>
+    <comment>Source: Adicionar Primeira Ficha</comment>
+  </data>
+  <data name='Ui_4c90a14f9f2914ed' xml:space='preserve'>
+    <value>Nenhuma ficha cadastrada</value>
+    <comment>Source: Nenhuma ficha cadastrada</comment>
+  </data>
+  <data name='Ui_c23e8ce6169e50d1' xml:space='preserve'>
+    <value>Nenhuma ficha encontrada</value>
+    <comment>Source: Nenhuma ficha encontrada</comment>
+  </data>
+  <data name='Ui_e2476bd25feac5e3' xml:space='preserve'>
+    <value>Ficha de Primeiro Contato</value>
+    <comment>Source: Ficha de Primeiro Contato</comment>
+  </data>
+  <data name='Ui_a47d211429dfb6d3' xml:space='preserve'>
+    <value>Busque por nome do ator...</value>
+    <comment>Source: Busque por nome do ator...</comment>
+  </data>
+  <data name='Ui_f7eb608bc62cbffe' xml:space='preserve'>
+    <value>Você realmente deseja abandonar esta ficha?</value>
+    <comment>Source: Você realmente deseja abandonar esta ficha?</comment>
+  </data>
+  <data name='Ui_fd99fd32d45f1d71' xml:space='preserve'>
+    <value>Você realmente deseja completar essa ficha?</value>
+    <comment>Source: Você realmente deseja completar essa ficha?</comment>
+  </data>
+  <data name='Ui_09aae5fd4bade88c' xml:space='preserve'>
+    <value>Tente ajustar os filtros ou termos de busca.</value>
+    <comment>Source: Tente ajustar os filtros ou termos de busca.</comment>
+  </data>
+  <data name='Ui_4019bdff8c77917e' xml:space='preserve'>
+    <value>Comece adicionando a primeira ficha de primeiro contato ao sistema.</value>
+    <comment>Source: Comece adicionando a primeira ficha de primeiro contato ao sistema.</comment>
+  </data>
+  <data name='Ui_c8f7ce276036333f' xml:space='preserve'>
+    <value>todos</value>
+    <comment>Source: todos</comment>
+  </data>
+  <data name='Ui_ef32558a5de4e055' xml:space='preserve'>
+    <value>nenhum resultado</value>
+    <comment>Source: nenhum resultado</comment>
+  </data>
+  <data name='Ui_3d52c062cd33d32a' xml:space='preserve'>
+    <value>Aplicar Filtros</value>
+    <comment>Source: Aplicar Filtros</comment>
+  </data>
+  <data name='Ui_e582ab43d6afee59' xml:space='preserve'>
+    <value>CEP não encontrado.</value>
+    <comment>Source: CEP não encontrado.</comment>
+  </data>
+  <data name='Ui_d10fc417ce46ac3a' xml:space='preserve'>
+    <value>Erro ao buscar CEP.</value>
+    <comment>Source: Erro ao buscar CEP.</comment>
+  </data>
+  <data name='Ui_f5c2ee444cb0bcb8' xml:space='preserve'>
+    <value>Email já cadastrado.</value>
+    <comment>Source: Email já cadastrado.</comment>
+  </data>
+  <data name='Ui_4915df961ab3983e' xml:space='preserve'>
+    <value>O Ator é obrigatório.</value>
+    <comment>Source: O Ator é obrigatório.</comment>
+  </data>
+  <data name='Ui_8baa6f5c8f4af612' xml:space='preserve'>
+    <value>Formato de CEP inválido.</value>
+    <comment>Source: Formato de CEP inválido.</comment>
+  </data>
+  <data name='Ui_5c83c39316b2453e' xml:space='preserve'>
+    <value>Selecione o tipo de ação</value>
+    <comment>Source: Selecione o tipo de ação</comment>
+  </data>
+  <data name='Ui_fcda7947db4bfa6c' xml:space='preserve'>
+    <value>A data não pode ser futura.</value>
+    <comment>Source: A data não pode ser futura.</comment>
+  </data>
+  <data name='Ui_bd603ffc0bc8273c' xml:space='preserve'>
+    <value>O nome da ação é obrigatório</value>
+    <comment>Source: O nome da ação é obrigatório</comment>
+  </data>
+  <data name='Ui_4fa8635741523828' xml:space='preserve'>
+    <value>Erro de conexão. Tente novamente.</value>
+    <comment>Source: Erro de conexão. Tente novamente.</comment>
+  </data>
+  <data name='Ui_6b73b4fbaa60ddcf' xml:space='preserve'>
+    <value>Digite uma nova senha para alterar</value>
+    <comment>Source: Digite uma nova senha para alterar</comment>
+  </data>
+  <data name='Ui_90f95c31065c12bc' xml:space='preserve'>
+    <value>Por favor, digite um e-mail válido.</value>
+    <comment>Source: Por favor, digite um e-mail válido.</comment>
+  </data>
+  <data name='Ui_9da62ae762b232bc' xml:space='preserve'>
+    <value>Clique na lupa do mapa para buscar...</value>
+    <comment>Source: Clique na lupa do mapa para buscar...</comment>
+  </data>
+  <data name='Ui_dfc98b840b7ba33b' xml:space='preserve'>
+    <value>Html.PartialAsync("_LanguageSelector")</value>
+    <comment>Source: Html.PartialAsync("_LanguageSelector")</comment>
+  </data>
+  <data name='Ui_9e3ddb009a49d19b' xml:space='preserve'>
+    <value>Para ações institucionais, o provedor é obrigatório</value>
+    <comment>Source: Para ações institucionais, o provedor é obrigatório</comment>
+  </data>
+  <data name='Ui_7f5dc85903f26ae6' xml:space='preserve'>
+    <value>
+       It can result in displaying sensitive information from exceptions to end
+      users. For local debugging, enable the 
+    </value>
+    <comment>
+       Source: It can result in displaying sensitive information from exceptions
+      to end users. For local debugging, enable the 
+    </comment>
+  </data>
+  <data name='Js_PageNotFound' xml:space='preserve'>
+    <value>Página não encontrada.</value>
+    <comment>Source: Página não encontrada.</comment>
+  </data>
+  <data name='Js_SearchAddress' xml:space='preserve'>
+    <value>Buscar endereço...</value>
+    <comment>Source: Buscar endereço...</comment>
+  </data>
+  <data name='Js_AddressSuggestions' xml:space='preserve'>
+    <value>Sugestões de endereço</value>
+    <comment>Source: Sugestões de endereço</comment>
+  </data>
+  <data name='Ui_651546976e0c2891' xml:space='preserve'>
+    <value>fundação</value>
+    <comment>Source: fundação</comment>
+  </data>
+  <data name='Ui_ccc996c8bc0a716e' xml:space='preserve'>
+    <value>asociación</value>
+    <comment>Source: asociación</comment>
+  </data>
+  <data name='Ui_a98a2c3c109df826' xml:space='preserve'>
+    <value>corrección</value>
+    <comment>Source: corrección</comment>
+  </data>
+  <data name='Ui_365ee9f9205b75ec' xml:space='preserve'>
+    <value>Erro de rede:</value>
+    <comment>Source: Erro de rede:</comment>
+  </data>
+  <data name='Ui_5a25681418a37025' xml:space='preserve'>
+    <value>Número de nós</value>
+    <comment>Source: Número de nós</comment>
+  </data>
+  <data name='Ui_3cba7bab77490fec' xml:space='preserve'>
+    <value>Em Diagnóstico</value>
+    <comment>Source: Em Diagnóstico</comment>
+  </data>
+  <data name='Ui_08eef56611b4a7bf' xml:space='preserve'>
+    <value>em diagnóstico</value>
+    <comment>Source: em diagnóstico</comment>
+  </data>
+  <data name='Ui_e2683695e06f70c7' xml:space='preserve'>
+    <value>en diagnóstico</value>
+    <comment>Source: en diagnóstico</comment>
+  </data>
+  <data name='Ui_d32c626aeb4069de' xml:space='preserve'>
+    <value>Vias de contato</value>
+    <comment>Source: Vias de contato</comment>
+  </data>
+  <data name='Ui_27c306006a6bdf56' xml:space='preserve'>
+    <value>Vías de contato</value>
+    <comment>Source: Vías de contato</comment>
+  </data>
+  <data name='Ui_a448e9d01ffd59fc' xml:space='preserve'>
+    <value>Ator obrigatório</value>
+    <comment>Source: Ator obrigatório</comment>
+  </data>
+  <data name='Ui_afab31cfa8245401' xml:space='preserve'>
+    <value>Vías de contacto</value>
+    <comment>Source: Vías de contacto</comment>
+  </data>
+  <data name='Ui_52901a18743ae3b5' xml:space='preserve'>
+    <value>Horarios de atención</value>
+    <comment>Source: Horarios de atención</comment>
+  </data>
+  <data name='Ui_65aca7093de4e3bc' xml:space='preserve'>
+    <value>Horário de atendimento</value>
+    <comment>Source: Horário de atendimento</comment>
+  </data>
+  <data name='Ui_a66b38f14932f68e' xml:space='preserve'>
+    <value>Sugestão ArcGIS falhou:</value>
+    <comment>Source: Sugestão ArcGIS falhou:</comment>
+  </data>
+  <data name='Ui_01a4d8f0a1b2dc3c' xml:space='preserve'>
+    <value>Erro ao carregar página:</value>
+    <comment>Source: Erro ao carregar página:</comment>
+  </data>
+  <data name='Ui_349ea2bbff159120' xml:space='preserve'>
+    <value>Falha de geocodificação:</value>
+    <comment>Source: Falha de geocodificação:</comment>
+  </data>
+  <data name='Ui_2db2276fcc8462c2' xml:space='preserve'>
+    <value>’.\-\s]+),\s*([A-Za-zÀ-ÿ</value>
+    <comment>Source: ’.\-\s]+),\s*([A-Za-zÀ-ÿ</comment>
+  </data>
+  <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
+    <value>Sugestão Nominatim falhou:</value>
+    <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+</root>

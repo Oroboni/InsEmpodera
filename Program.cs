@@ -1,11 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Empodera.Data;
 using Empodera.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -20,6 +25,35 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<RelatorioExcelService>();
 
 var app = builder.Build();
+
+var supportedCultures = new[]
+{
+    new CultureInfo("pt-BR"),
+    new CultureInfo("en"),
+    new CultureInfo("es")
+};
+
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("pt-BR"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+localizationOptions.RequestCultureProviders =
+[
+    // Public account pages always follow the browser, never a previous user's cookie.
+    new CustomRequestCultureProvider(context =>
+        context.Request.Path.StartsWithSegments("/Account", StringComparison.OrdinalIgnoreCase)
+            ? Task.FromResult<ProviderCultureResult?>(new ProviderCultureResult(
+                UserCultureService.FromBrowser(context.Request.Headers.AcceptLanguage)))
+            : Task.FromResult<ProviderCultureResult?>(null)),
+    new CookieRequestCultureProvider(),
+    new CustomRequestCultureProvider(context => Task.FromResult<ProviderCultureResult?>(
+        new ProviderCultureResult(UserCultureService.FromBrowser(context.Request.Headers.AcceptLanguage))))
+];
+
+app.UseRequestLocalization(localizationOptions);
 
 using (var scope = app.Services.CreateScope())
 {
@@ -38,6 +72,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Route data is required to select the RESX catalogue for the current view.
+app.UseMiddleware<LocalizedHtmlMiddleware>();
 
 app.UseSession();
 

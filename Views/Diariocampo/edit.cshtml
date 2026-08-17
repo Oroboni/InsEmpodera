@@ -109,7 +109,7 @@
                         bool isSelected = Model.DiarioEixos != null && Model.DiarioEixos.Any(de => de.FkIdEixo == eixo.IdEixo);
                         <label class="checkbox-card-label">
                             <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo" @(isSelected ? "checked" : "")>
-                            <span>@eixo.Nome</span>
+                            <span data-i18n-text>@eixo.Nome</span>
                         </label>
                     }
                 </div>
@@ -185,7 +185,7 @@
             <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
             <div class="input-content">
                 <label for="rua">Endereço</label>
-                <input asp-for="Localizacao" id="rua" class="clean-input" readonly placeholder="Use a lupa no mapa acima para buscar..." />
+                <input asp-for="Localizacao" id="rua" class="clean-input" autocomplete="street-address" placeholder="Digite o endereço completo..." />
             </div>
         </div>
 
@@ -245,46 +245,49 @@
     </div>
 </div>
 
-<div id="modalAcao" class="modal-overlay" style="display: none;">
-    <div class="modal-content" style="max-width: 600px;">
+<div id="modalAcao" class="modal-overlay action-modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalAcaoTitulo">
+    <div class="modal-content action-modal-content">
         
-        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 class="modal-title" style="margin: 0;">Detalhes de ação</h3>
-            <button type="button" class="btn-close-modal" onclick="fecharModal('modalAcao')" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #666;">
+        <div class="modal-header action-modal-header">
+            <div>
+                <h3 id="modalAcaoTitulo" class="modal-title">Detalhes de ação</h3>
+                <p>Informe os dados da ação realizada.</p>
+            </div>
+            <button type="button" class="btn-close-modal" onclick="fecharModal('modalAcao')" aria-label="Fechar modal">
                 <i class="fas fa-times"></i>
             </button>
         </div>
 
-        <form id="formAdicionarAcao">
+        <form id="formAdicionarAcao" class="action-modal-form">
             <input type="hidden" id="tipoAcaoInput" />
 
-            <div class="input-card full-width">
+            <div class="input-card action-modal-field action-modal-field-wide action-modal-name">
                 <div class="input-content no-icon">
                     <label>Nome <span class="text-danger">*</span></label>
                     <input type="text" id="nomeAcao" class="clean-input" required placeholder="Nome da ação..." />
                 </div>
             </div>
 
-            <div class="input-card full-width">
+            <div class="input-card action-modal-field action-modal-field-wide action-modal-axis-select">
                 <div class="input-content no-icon">
                     <label>Eixos</label>
                     <select id="eixoAcao" class="clean-input">
                         <option value="">Selecione um eixo</option>
                         @foreach (dynamic eixo in listaEixosCorretos) {
-                            <option value="@eixo.IdEixo">@eixo.Nome</option>
+                            <option value="@eixo.IdEixo" data-i18n-text>@eixo.Nome</option>
                         }
                     </select>
                 </div>
             </div>
 
-            <div class="input-card full-width">
+            <div class="input-card action-modal-field action-modal-field-wide action-modal-provider">
                 <div class="input-content no-icon">
                     <label>Provedor externo <span class="text-danger">*</span></label>
                     <input type="text" id="provedorAcao" class="clean-input" required placeholder="Ex: UBS, Escola..." />
                 </div>
             </div>
 
-            <div class="input-card full-width">
+            <div class="input-card action-modal-field action-modal-actors">
                 <div class="input-content no-icon">
                     <label>Atores</label>
                     <select id="atorAcao" class="clean-input">
@@ -298,22 +301,25 @@
                 </div>
             </div>
 
-            <div class="input-card full-width">
+            <div class="input-card action-modal-field action-modal-quantity">
                 <div class="input-content no-icon">
                     <label>Quantidade</label>
                     <input type="number" id="quantidadeAcao" class="clean-input" min="1" value="1" />
                 </div>
             </div>
 
-            <div class="modal-actions" style="margin-top: 25px;">
-                <button type="button" onclick="salvarAcaoNoGrid()" class="wizard-btn btn-save-final btn-confirm full-width" style="width: 100%; justify-content: center;">
-                    ADICIONAR AÇÃO
+            <div class="modal-actions action-modal-actions">
+                <button type="button" onclick="fecharModal('modalAcao')" class="wizard-btn action-modal-cancel">
+                    Cancelar
+                </button>
+                <button type="button" onclick="salvarAcaoNoGrid()" class="wizard-btn btn-save-final btn-confirm">
+                    <i class="fa-solid fa-plus"></i> ADICIONAR AÇÃO
                 </button>
             </div>
         </form>
     </div>
 </div>
-c
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -336,7 +342,11 @@ c
             // Inicializa mapa com delay
             setTimeout(function() {
                 if (typeof initMapSelector === 'function' && document.getElementById('mapa-diario')) {
-                    initMapSelector('mapa-diario', 'rua'); // 'rua' é o ID do input de endereço
+                    initMapSelector('mapa-diario', 'rua', {
+                        sourceInputId: 'rua',
+                        manualInputId: 'rua',
+                        showSearchControl: false
+                    });
                 }
             }, 200);
 
@@ -366,6 +376,7 @@ c
 
             document.getElementById('modalAcao').style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            window.setTimeout(() => document.getElementById('nomeAcao')?.focus(), 0);
         }
 
         function fecharModal(modalId) {
@@ -375,6 +386,10 @@ c
 
         document.getElementById('modalAcao').addEventListener('click', function(e) {
             if (e.target === this) fecharModal('modalAcao');
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modalAcao').style.display === 'flex') fecharModal('modalAcao');
         });
 
         function salvarAcaoNoGrid() {

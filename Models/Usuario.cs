@@ -17,6 +17,8 @@ namespace Empodera.Models
         public DateTime DtCriacao { get; set; }
         public DateTime? DtAtualizacao { get; set; }
         public string Ativo { get; set; } = "S";
+        [EnumDataType(typeof(IdiomaPreferido))]
+        public IdiomaPreferido IdiomaPreferido { get; set; } = IdiomaPreferido.Default;
         public int FkIdPerfil { get; set; }
         
         public Perfil Perfil { get; set; } = null!;

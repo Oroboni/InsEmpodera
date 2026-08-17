@@ -1,0 +1,455 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <resheader name='resmimetype'>
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name='version'>
+    <value>2.0</value>
+  </resheader>
+  <resheader name='reader'>
+    <value>
+       System.Resources.ResXResourceReader, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089 
+    </value>
+  </resheader>
+  <resheader name='writer'>
+    <value>
+       System.Resources.ResXResourceWriter, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089 
+    </value>
+  </resheader>
+  <data name='Ui_9bc947e58b62b2fe' xml:space='preserve'>
+    <value>No</value>
+    <comment>Source: Não</comment>
+  </data>
+  <data name='Ui_9313455e45aa2243' xml:space='preserve'>
+    <value>Sí</value>
+    <comment>Source: Sim</comment>
+  </data>
+  <data name='Ui_cec3a9b89b2e3913' xml:space='preserve'>
+    <value>Fecha</value>
+    <comment>Source: Data</comment>
+  </data>
+  <data name='Ui_5086900635fec3ef' xml:space='preserve'>
+    <value>Nombre</value>
+    <comment>Source: Nome</comment>
+  </data>
+  <data name='Ui_499ee302f6884f27' xml:space='preserve'>
+    <value>Activo</value>
+    <comment>Source: Ativo</comment>
+  </data>
+  <data name='Ui_d482c10b3d4d2a19' xml:space='preserve'>
+    <value>Contraseña</value>
+    <comment>Source: Senha</comment>
+  </data>
+  <data name='Ui_2eba946b2e1ee4b6' xml:space='preserve'>
+    <value>Editar</value>
+    <comment>Source: Editar</comment>
+  </data>
+  <data name='Ui_b1aaf41c0f892b14' xml:space='preserve'>
+    <value>Género</value>
+    <comment>Source: Gênero</comment>
+  </data>
+  <data name='Ui_7ae9d418353b399f' xml:space='preserve'>
+    <value>Idioma</value>
+    <comment>Source: Idioma</comment>
+  </data>
+  <data name='Ui_00d551e63dd540fc' xml:space='preserve'>
+    <value>Perfil</value>
+    <comment>Source: Perfil</comment>
+  </data>
+  <data name='Ui_59dc926760d04aea' xml:space='preserve'>
+    <value>Volver</value>
+    <comment>Source: Voltar</comment>
+  </data>
+  <data name='Ui_883173decc42570f' xml:space='preserve'>
+    <value>Eliminar</value>
+    <comment>Source: Deletar</comment>
+  </data>
+  <data name='Ui_0eb3de691bb5a0fe' xml:space='preserve'>
+    <value>Inactivo</value>
+    <comment>Source: Inativo</comment>
+  </data>
+  <data name='Ui_bb9dbb406dcbd524' xml:space='preserve'>
+    <value>Cancelar</value>
+    <comment>Source: Cancelar</comment>
+  </data>
+  <data name='Ui_f3602ece1606872c' xml:space='preserve'>
+    <value>Femenino</value>
+    <comment>Source: Feminino</comment>
+  </data>
+  <data name='Ui_1f8fd361b26185c3' xml:space='preserve'>
+    <value>Ocupación</value>
+    <comment>Source: Ocupação</comment>
+  </data>
+  <data name='Ui_06fd415dc5e18b2f' xml:space='preserve'>
+    <value>Usuarios</value>
+    <comment>Source: Usuários</comment>
+  </data>
+  <data name='Ui_cbb8b78dc192f1be' xml:space='preserve'>
+    <value>Masculino</value>
+    <comment>Source: Masculino</comment>
+  </data>
+  <data name='Ui_987d5be9f4bf7651' xml:space='preserve'>
+    <value>Seleccionar</value>
+    <comment>Source: Selecione</comment>
+  </data>
+  <data name='Ui_565b6715afea2171' xml:space='preserve'>
+    <value>["Título"]</value>
+    <comment>Source: ["Title"]</comment>
+  </data>
+  <data name='Ui_69302e74537e0482' xml:space='preserve'>
+    <value>transgénero</value>
+    <comment>Source: Transgênero</comment>
+  </data>
+  <data name='Ui_3e69f57a8b911064' xml:space='preserve'>
+    <value>Sí, eliminar</value>
+    <comment>Source: Sim, Deletar</comment>
+  </data>
+  <data name='Ui_52015b04c01add60' xml:space='preserve'>
+    <value>nombre completo</value>
+    <comment>Source: Nome completo</comment>
+  </data>
+  <data name='Ui_8cb1fdc1deaf5b6f' xml:space='preserve'>
+    <value>No declarado</value>
+    <comment>Source: Não declarado</comment>
+  </data>
+  <data name='Ui_095d0f62ae75a0f6' xml:space='preserve'>
+    <value>Editar usuario</value>
+    <comment>Source: Editar Usuário</comment>
+  </data>
+  <data name='Ui_e5b8c780be5230c9' xml:space='preserve'>
+    <value>Perfil de acceso</value>
+    <comment>Source: Perfil de Acesso</comment>
+  </data>
+  <data name='Ui_d5060516d6c6def9' xml:space='preserve'>
+    <value>Guardar cambios</value>
+    <comment>Source: Salvar Alterações</comment>
+  </data>
+  <data name='Ui_d76f94dd0a8a7e74' xml:space='preserve'>
+    <value>Confirmar eliminación</value>
+    <comment>Source: Confirmar Exclusão</comment>
+  </data>
+  <data name='Ui_84c3f0c52fb06260' xml:space='preserve'>
+    <value>Ej: trabajador social</value>
+    <comment>Source: Ex: Assistente social</comment>
+  </data>
+  <data name='Ui_a667e7e619935dd5' xml:space='preserve'>
+    <value>Esta acción no se puede deshacer.</value>
+    <comment>Source: Essa ação não pode ser desfeita.</comment>
+  </data>
+  <data name='Ui_07eb9a8295556a71' xml:space='preserve'>
+    <value>¿Estás seguro de que deseas eliminar al usuario?</value>
+    <comment>Source: Você tem certeza que deseja deletar o usuário</comment>
+  </data>
+  <data name='Ui_b1a593c350c2d80f' xml:space='preserve'>
+    <value>campo</value>
+    <comment>Source: campo</comment>
+  </data>
+  <data name='Ui_2e7f8e8c72e5a917' xml:space='preserve'>
+    <value>estado</value>
+    <comment>Source: estado</comment>
+  </data>
+  <data name='Ui_c4197364c8d5c78c' xml:space='preserve'>
+    <value>usuario</value>
+    <comment>Source: usuário</comment>
+  </data>
+  <data name='Ui_4f214bb1b4d02d99' xml:space='preserve'>
+    <value>La contraseña no ha sido cambiada. ¿Quieres continuar?</value>
+    <comment>Source: A senha não foi alterada. Deseja continuar?</comment>
+  </data>
+  <data name='CloseModal' xml:space='preserve'>
+    <value>Cerrar diálogo</value>
+    <comment>Source: Fechar modal</comment>
+  </data>
+  <data name='DefaultLanguage' xml:space='preserve'>
+    <value>Idioma predeterminado</value>
+    <comment>Source: Idioma padrão</comment>
+  </data>
+  <data name='BrowserDefaultLanguage' xml:space='preserve'>
+    <value>Predeterminado (idioma del navegador)</value>
+    <comment>Source: Default (idioma do navegador)</comment>
+  </data>
+  <data name='Ui_bd02b9a7d71dac67' xml:space='preserve'>
+    <value>Todo</value>
+    <comment>Source: Todos</comment>
+  </data>
+  <data name='Ui_46e6638c8237c786' xml:space='preserve'>
+    <value>Activos</value>
+    <comment>Source: Ativos</comment>
+  </data>
+  <data name='Ui_3c9717bdf2260bc9' xml:space='preserve'>
+    <value>Resumen</value>
+    <comment>Source: Resumo</comment>
+  </data>
+  <data name='Ui_a3037dc71a43fa40' xml:space='preserve'>
+    <value>Eliminar</value>
+    <comment>Source: Remover</comment>
+  </data>
+  <data name='Ui_70502ff6bb853560' xml:space='preserve'>
+    <value>sistema</value>
+    <comment>Source: sistema</comment>
+  </data>
+  <data name='Ui_11995dc6d958d587' xml:space='preserve'>
+    <value>Inactivo</value>
+    <comment>Source: Inativos</comment>
+  </data>
+  <data name='Ui_dafb59613e123614' xml:space='preserve'>
+    <value>Para actualizar</value>
+    <comment>Source: Atualizar</comment>
+  </data>
+  <data name='Ui_5ebccaa217541228' xml:space='preserve'>
+    <value>Nuevo usuario</value>
+    <comment>Source: Novo Usuário</comment>
+  </data>
+  <data name='Ui_4a4ed02d3dcaa86e' xml:space='preserve'>
+    <value>Ver detalles</value>
+    <comment>Source: Ver detalhes</comment>
+  </data>
+  <data name='Ui_d2cc2488bf51ff5f' xml:space='preserve'>
+    <value>Agregar nuevo</value>
+    <comment>Source: Adicionar Novo</comment>
+  </data>
+  <data name='Ui_86c737cfd6e8b536' xml:space='preserve'>
+    <value>Buscar usuarios</value>
+    <comment>Source: Buscar usuários</comment>
+  </data>
+  <data name='Ui_9f9db293ccf84e2a' xml:space='preserve'>
+    <value>Usuarios activos</value>
+    <comment>Source: Usuários Ativos</comment>
+  </data>
+  <data name='Ui_3890d74f32fd061b' xml:space='preserve'>
+    <value>Todos los usuarios</value>
+    <comment>Source: Todos os Usuários</comment>
+  </data>
+  <data name='Ui_25419df515485f8c' xml:space='preserve'>
+    <value>Usuarios totales</value>
+    <comment>Source: Total de Usuários</comment>
+  </data>
+  <data name='Ui_13e55739c2589d30' xml:space='preserve'>
+    <value>Usuarios inactivos</value>
+    <comment>Source: Usuários Inativos</comment>
+  </data>
+  <data name='Ui_ba99664f6f5dd344' xml:space='preserve'>
+    <value>Filtrar por estado</value>
+    <comment>Source: Filtrar por Status</comment>
+  </data>
+  <data name='Ui_0e9bed015ef778b8' xml:space='preserve'>
+    <value>Agregar nuevo usuario</value>
+    <comment>Source: Adicionar Novo Usuário</comment>
+  </data>
+  <data name='Ui_0dcebee34b21390d' xml:space='preserve'>
+    <value>Ningún usuario registrado</value>
+    <comment>Source: Nenhum usuário cadastrado</comment>
+  </data>
+  <data name='Ui_c73b0b98a1ae5b83' xml:space='preserve'>
+    <value>No se encontraron usuarios</value>
+    <comment>Source: Nenhum usuário encontrado</comment>
+  </data>
+  <data name='Ui_dfa8732de4b24594' xml:space='preserve'>
+    <value>Agregar primer usuario</value>
+    <comment>Source: Adicionar Primeiro Usuário</comment>
+  </data>
+  <data name='Ui_8f269548f7a49887' xml:space='preserve'>
+    <value>Buscar por nombre o correo electrónico...</value>
+    <comment>Source: Busque por nome ou email...</comment>
+  </data>
+  <data name='Ui_09aae5fd4bade88c' xml:space='preserve'>
+    <value>Intente ajustar los filtros o los términos de búsqueda.</value>
+    <comment>Source: Tente ajustar os filtros ou termos de busca.</comment>
+  </data>
+  <data name='Ui_4e850b91ebd84d3a' xml:space='preserve'>
+    <value>Comience agregando su primer usuario al sistema.</value>
+    <comment>Source: Comece adicionando seu primeiro usuário ao sistema.</comment>
+  </data>
+  <data name='Ui_4ba6238eaad567c9' xml:space='preserve'>
+    <value>nombre</value>
+    <comment>Source: nome</comment>
+  </data>
+  <data name='Ui_c8f7ce276036333f' xml:space='preserve'>
+    <value>todo</value>
+    <comment>Source: todos</comment>
+  </data>
+  <data name='Ui_e60b20e7ae69d844' xml:space='preserve'>
+    <value>usuarios</value>
+    <comment>Source: usuários</comment>
+  </data>
+  <data name='Ui_ef32558a5de4e055' xml:space='preserve'>
+    <value>sin resultados</value>
+    <comment>Source: nenhum resultado</comment>
+  </data>
+  <data name='Ui_ee3fffd42a616241' xml:space='preserve'>
+    <value>Introduce la contraseña</value>
+    <comment>Source: Digite a senha</comment>
+  </data>
+  <data name='Ui_2e1d378e3955acbb' xml:space='preserve'>
+    <value>Guardar usuario</value>
+    <comment>Source: Salvar Usuário</comment>
+  </data>
+  <data name='Ui_7822e772d432158b' xml:space='preserve'>
+    <value>Ingrese el correo electrónico</value>
+    <comment>Source: Digite o e-mail</comment>
+  </data>
+  <data name='Ui_6ad8ff2d64f726cc' xml:space='preserve'>
+    <value>Introduzca el nombre de usuario</value>
+    <comment>Source: Digite o nome do usuário</comment>
+  </data>
+  <data name='Ui_3d52c062cd33d32a' xml:space='preserve'>
+    <value>Aplicar filtros</value>
+    <comment>Source: Aplicar Filtros</comment>
+  </data>
+  <data name='Ui_e582ab43d6afee59' xml:space='preserve'>
+    <value>Código postal no encontrado.</value>
+    <comment>Source: CEP não encontrado.</comment>
+  </data>
+  <data name='Ui_d10fc417ce46ac3a' xml:space='preserve'>
+    <value>Error al buscar código postal.</value>
+    <comment>Source: Erro ao buscar CEP.</comment>
+  </data>
+  <data name='Ui_f5c2ee444cb0bcb8' xml:space='preserve'>
+    <value>Correo electrónico ya registrado.</value>
+    <comment>Source: Email já cadastrado.</comment>
+  </data>
+  <data name='Ui_4915df961ab3983e' xml:space='preserve'>
+    <value>El Actor es obligatorio.</value>
+    <comment>Source: O Ator é obrigatório.</comment>
+  </data>
+  <data name='Ui_8baa6f5c8f4af612' xml:space='preserve'>
+    <value>Formato de código postal no válido.</value>
+    <comment>Source: Formato de CEP inválido.</comment>
+  </data>
+  <data name='Ui_5c83c39316b2453e' xml:space='preserve'>
+    <value>Selecciona el tipo de acción</value>
+    <comment>Source: Selecione o tipo de ação</comment>
+  </data>
+  <data name='Ui_fcda7947db4bfa6c' xml:space='preserve'>
+    <value>La fecha no puede ser en el futuro.</value>
+    <comment>Source: A data não pode ser futura.</comment>
+  </data>
+  <data name='Ui_bd603ffc0bc8273c' xml:space='preserve'>
+    <value>El nombre de la acción es obligatorio.</value>
+    <comment>Source: O nome da ação é obrigatório</comment>
+  </data>
+  <data name='Ui_4fa8635741523828' xml:space='preserve'>
+    <value>Error de conexión. Por favor inténtalo de nuevo.</value>
+    <comment>Source: Erro de conexão. Tente novamente.</comment>
+  </data>
+  <data name='Ui_6b73b4fbaa60ddcf' xml:space='preserve'>
+    <value>Ingrese una nueva contraseña para cambiar</value>
+    <comment>Source: Digite uma nova senha para alterar</comment>
+  </data>
+  <data name='Ui_90f95c31065c12bc' xml:space='preserve'>
+    <value>Por favor ingrese un correo electrónico válido.</value>
+    <comment>Source: Por favor, digite um e-mail válido.</comment>
+  </data>
+  <data name='Ui_9da62ae762b232bc' xml:space='preserve'>
+    <value>Haz clic en la lupa del mapa para buscar...</value>
+    <comment>Source: Clique na lupa do mapa para buscar...</comment>
+  </data>
+  <data name='Ui_dfc98b840b7ba33b' xml:space='preserve'>
+    <value>Html.PartialAsync("_LanguageSelector")</value>
+    <comment>Source: Html.PartialAsync("_LanguageSelector")</comment>
+  </data>
+  <data name='Ui_9e3ddb009a49d19b' xml:space='preserve'>
+    <value>Para acciones institucionales, el proveedor es obligatorio.</value>
+    <comment>Source: Para ações institucionais, o provedor é obrigatório</comment>
+  </data>
+  <data name='Ui_7f5dc85903f26ae6' xml:space='preserve'>
+    <value>
+       Puede dar lugar a que se muestre información confidencial de excepciones
+      a los usuarios finales. Para la depuración local, habilite el 
+    </value>
+    <comment>
+       Source: It can result in displaying sensitive information from exceptions
+      to end users. For local debugging, enable the 
+    </comment>
+  </data>
+  <data name='Js_PageNotFound' xml:space='preserve'>
+    <value>Página no encontrada.</value>
+    <comment>Source: Página não encontrada.</comment>
+  </data>
+  <data name='Js_SearchAddress' xml:space='preserve'>
+    <value>Buscar dirección...</value>
+    <comment>Source: Buscar endereço...</comment>
+  </data>
+  <data name='Js_AddressSuggestions' xml:space='preserve'>
+    <value>Sugerencias de direcciones</value>
+    <comment>Source: Sugestões de endereço</comment>
+  </data>
+  <data name='Ui_651546976e0c2891' xml:space='preserve'>
+    <value>base</value>
+    <comment>Source: fundação</comment>
+  </data>
+  <data name='Ui_ccc996c8bc0a716e' xml:space='preserve'>
+    <value>asociación</value>
+    <comment>Source: asociación</comment>
+  </data>
+  <data name='Ui_a98a2c3c109df826' xml:space='preserve'>
+    <value>corrección</value>
+    <comment>Source: corrección</comment>
+  </data>
+  <data name='Ui_365ee9f9205b75ec' xml:space='preserve'>
+    <value>Error de red:</value>
+    <comment>Source: Erro de rede:</comment>
+  </data>
+  <data name='Ui_5a25681418a37025' xml:space='preserve'>
+    <value>Número de nodos</value>
+    <comment>Source: Número de nós</comment>
+  </data>
+  <data name='Ui_3cba7bab77490fec' xml:space='preserve'>
+    <value>En Diagnóstico</value>
+    <comment>Source: Em Diagnóstico</comment>
+  </data>
+  <data name='Ui_08eef56611b4a7bf' xml:space='preserve'>
+    <value>en diagnostico</value>
+    <comment>Source: em diagnóstico</comment>
+  </data>
+  <data name='Ui_e2683695e06f70c7' xml:space='preserve'>
+    <value>en diagnostico</value>
+    <comment>Source: en diagnóstico</comment>
+  </data>
+  <data name='Ui_d32c626aeb4069de' xml:space='preserve'>
+    <value>Vías de contacto</value>
+    <comment>Source: Vias de contato</comment>
+  </data>
+  <data name='Ui_27c306006a6bdf56' xml:space='preserve'>
+    <value>Métodos de contacto</value>
+    <comment>Source: Vías de contato</comment>
+  </data>
+  <data name='Ui_a448e9d01ffd59fc' xml:space='preserve'>
+    <value>Actor obligatorio</value>
+    <comment>Source: Ator obrigatório</comment>
+  </data>
+  <data name='Ui_afab31cfa8245401' xml:space='preserve'>
+    <value>Vías de contacto</value>
+    <comment>Source: Vías de contacto</comment>
+  </data>
+  <data name='Ui_52901a18743ae3b5' xml:space='preserve'>
+    <value>Horario de apertura</value>
+    <comment>Source: Horarios de atención</comment>
+  </data>
+  <data name='Ui_65aca7093de4e3bc' xml:space='preserve'>
+    <value>Horario de apertura</value>
+    <comment>Source: Horário de atendimento</comment>
+  </data>
+  <data name='Ui_a66b38f14932f68e' xml:space='preserve'>
+    <value>Sugerencia fallida de ArcGIS:</value>
+    <comment>Source: Sugestão ArcGIS falhou:</comment>
+  </data>
+  <data name='Ui_01a4d8f0a1b2dc3c' xml:space='preserve'>
+    <value>Error al cargar la página:</value>
+    <comment>Source: Erro ao carregar página:</comment>
+  </data>
+  <data name='Ui_349ea2bbff159120' xml:space='preserve'>
+    <value>Fallo de geocodificación:</value>
+    <comment>Source: Falha de geocodificação:</comment>
+  </data>
+  <data name='Ui_2db2276fcc8462c2' xml:space='preserve'>
+    <value>’.\-\s]+),\s*([A-Za-zÀ-ÿ</value>
+    <comment>Source: ’.\-\s]+),\s*([A-Za-zÀ-ÿ</comment>
+  </data>
+  <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
+    <value>La sugerencia de nominatim falló:</value>
+    <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+</root>

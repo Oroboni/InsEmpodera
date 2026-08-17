@@ -116,17 +116,35 @@
         </div>
 
         <!-- Status Ativo -->
-        <div class="input-card full-width">
-            <div class="icon-box">
-                <i class="fa-solid fa-toggle-on"></i>
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box">
+                    <i class="fa-solid fa-toggle-on"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="Ativo">Status</label>
+                    <select asp-for="Ativo" class="clean-input simple-select" disabled>
+                        <option value="S">Ativo</option>
+                        <option value="N">Inativo</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                </div>
             </div>
-            <div class="input-content">
-                <label asp-for="Ativo">Status</label>
-                <select asp-for="Ativo" class="clean-input simple-select" disabled>
-                    <option value="S">Ativo</option>
-                    <option value="N">Inativo</option>
-                </select>
-                <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+
+            <div class="input-card">
+                <div class="icon-box purple">
+                    <i class="fa-solid fa-language"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="IdiomaPreferido">Idioma padrão</label>
+                    <select asp-for="IdiomaPreferido" class="clean-input simple-select" disabled>
+                        <option value="0">Default (idioma do navegador)</option>
+                        <option value="1">Português</option>
+                        <option value="2">English</option>
+                        <option value="3">Español</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                </div>
             </div>
         </div>
 
@@ -137,7 +155,7 @@
             </a>
 
             <div class="action-buttons-group">
-                <button type="button" class="wizard-btn btn-next" id="edit-save-btn">
+                <button type="button" class="wizard-btn btn-next" id="edit-save-btn" data-i18n-text>
                     <i class="fa-solid fa-edit"></i> Editar
                 </button>
 

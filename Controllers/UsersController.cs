@@ -6,6 +6,7 @@ using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
 using Microsoft.AspNetCore.Identity;
+using Empodera.Services;
 
 
 namespace InsEmpodera.Controllers;
@@ -181,6 +182,7 @@ public class UsersController : Controller
         usuariobd.Ativo = usuario.Ativo;
         usuariobd.Ocupacao = usuario.Ocupacao;
         usuariobd.Genero = usuario.Genero;
+        usuariobd.IdiomaPreferido = usuario.IdiomaPreferido;
         usuariobd.DtAtualizacao = DateTime.Now;
 
         if (!string.IsNullOrWhiteSpace(usuario.Senha))
@@ -190,6 +192,10 @@ public class UsersController : Controller
         }
 
         await _context.SaveChangesAsync();
+
+        if (HttpContext.Session.GetString("ID") == id.ToString())
+            UserCultureService.ApplyPreference(Response, usuariobd.IdiomaPreferido);
+
         return RedirectToAction("index", "Users");
     }
 

@@ -15,7 +15,7 @@ namespace InsEmpodera.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
             modelBuilder.Entity("Empodera.Models.Acoes", b =>
                 {
@@ -1675,6 +1675,9 @@ namespace InsEmpodera.Migrations
                     b.Property<string>("Genero")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("IdiomaPreferido")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -1705,6 +1708,7 @@ namespace InsEmpodera.Migrations
                             FkIdPerfil = 1,
                             Foto = "foto1.jpg",
                             Genero = "Masculino",
+                            IdiomaPreferido = 0,
                             Nome = "joao",
                             Ocupacao = "Coordenador",
                             Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=="
@@ -1720,6 +1724,7 @@ namespace InsEmpodera.Migrations
                             FkIdPerfil = 2,
                             Foto = "foto2.jpg",
                             Genero = "Feminino",
+                            IdiomaPreferido = 0,
                             Nome = "Usuario Dois",
                             Ocupacao = "Pesquisador",
                             Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=="
@@ -1735,6 +1740,7 @@ namespace InsEmpodera.Migrations
                             FkIdPerfil = 3,
                             Foto = "foto3.jpg",
                             Genero = "Masculino",
+                            IdiomaPreferido = 0,
                             Nome = "Usuario Tres",
                             Ocupacao = "Voluntario",
                             Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=="
@@ -1750,6 +1756,7 @@ namespace InsEmpodera.Migrations
                             FkIdPerfil = 4,
                             Foto = "foto4.jpg",
                             Genero = "Feminino",
+                            IdiomaPreferido = 0,
                             Nome = "Usuario Quatro",
                             Ocupacao = "Analista",
                             Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=="
@@ -1765,6 +1772,7 @@ namespace InsEmpodera.Migrations
                             FkIdPerfil = 5,
                             Foto = "foto5.jpg",
                             Genero = "Masculino",
+                            IdiomaPreferido = 0,
                             Nome = "Usuario Cinco",
                             Ocupacao = "Gerente",
                             Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=="

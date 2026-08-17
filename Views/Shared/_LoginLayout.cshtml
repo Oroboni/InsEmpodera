@@ -1,11 +1,12 @@
 @* código de login a ser integrado após entrega da funcionalidade de login *@<!DOCTYPE html>
-<html lang="pt-br">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
     <link rel="stylesheet" href="~/css/login.css" />
+    <script src="~/js/localization.js" asp-append-version="true" defer></script>
 </head>
 <body class="login-body">
     @RenderBody()

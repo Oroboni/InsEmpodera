@@ -254,15 +254,23 @@ namespace Empodera.Controllers
             // 2. Eixos (Para o select múltiplo)
             ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
 
-            // 3. Atores (Para a função de @Menção e Modais)
-            // Formatamos como um objeto simples { value, text } para o Javascript ler fácil
+            // 3. Atores ativos (para menções e para o modal de ações).
+            // Mantemos os dois formatos de propriedades para compatibilidade com
+            // as views Razor (Id/Nome) e scripts existentes (Value/Text).
             var atores = await _context.Atores
                 .Where(a => a.Ativo == "S")
                 .OrderBy(a => a.Nome)
-                .Select(a => new { value = a.IdAtores, text = a.Nome })
+                .Select(a => new
+                {
+                    Id = a.IdAtores,
+                    Nome = a.Nome,
+                    Value = a.IdAtores,
+                    Text = a.Nome
+                })
                 .ToListAsync();
-            
-            ViewBag.AtoresList = atores; // Isso vai para o JS "const listaAtores"
+
+            ViewBag.Atores = atores;
+            ViewBag.AtoresList = atores;
 
             // 4. Atividades (Para o Modal de Ação da Equipe)
             ViewBag.Atividades = await _context.Atividades.OrderBy(a => a.Nome).ToListAsync();

@@ -2,7 +2,7 @@
  * Inicializa um mapa com busca e seleção de endereço.
  * @param {string} mapId - O ID da div onde o mapa ficará.
  * @param {string} inputId - O ID do input que receberá o endereço texto.
- * @param {object|boolean} options - (Opcional) { lat, lng, zoom, readOnly, sourceInputId, mirrorInputId, manualInputId } ou apenas true para readOnly.
+ * @param {object|boolean} options - (Opcional) { lat, lng, zoom, readOnly, sourceInputId, mirrorInputId, manualInputId, showSearchControl } ou apenas true para readOnly.
  */
 function initMapSelector(mapId, inputId, options = {}) {
     if (typeof options === "boolean") {
@@ -19,6 +19,7 @@ function initMapSelector(mapId, inputId, options = {}) {
     const sourceInputId = options.sourceInputId || inputId;
     const mirrorInputId = options.mirrorInputId || null;
     const manualInputId = options.manualInputId || null;
+    const showSearchControl = options.showSearchControl !== false;
     const geocodeCacheKey = "empodera_geocode_cache_v1";
 
     // Verifica se o elemento existe para evitar erros
@@ -503,17 +504,19 @@ function initMapSelector(mapId, inputId, options = {}) {
         }
     };
 
-    var geocoder = L.Control.geocoder({
-        defaultMarkGeocode: false,
-        placeholder: "Buscar endereço...",
-        geocoder: customGeocoder
-    })
-    .on('markgeocode', function(e) {
-        isSyncingManualInput = true;
-        applyGeocodeResult(e.geocode, true, true, true);
-        isSyncingManualInput = false;
-    })
-    .addTo(map);
+    if (showSearchControl) {
+        L.Control.geocoder({
+            defaultMarkGeocode: false,
+            placeholder: "Buscar endereço...",
+            geocoder: customGeocoder
+        })
+        .on('markgeocode', function(e) {
+            isSyncingManualInput = true;
+            applyGeocodeResult(e.geocode, true, true, true);
+            isSyncingManualInput = false;
+        })
+        .addTo(map);
+    }
 
     const sourceInput = document.getElementById(sourceInputId);
     const targetInput = document.getElementById(inputId);
