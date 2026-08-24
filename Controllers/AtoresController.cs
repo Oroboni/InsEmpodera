@@ -33,6 +33,9 @@ public class AtoresController : Controller
         }
 
         var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
+
+        ViewBag.qGenero = _context.Atores.Where(a => a.Ativo != "N").Select(a => a.Genero).Distinct().Count();
+
         return View(Atores);
     }
 

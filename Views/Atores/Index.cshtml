@@ -76,11 +76,12 @@
                         1 => "Masculino",
                         2 => "Feminino",
                         3 => "Transgênero",
+                        0 => "Outro",
                         _ => "Outro"
                     });
             }
             <div class="action-card stats-card stats-card-cyan">
-                <span class="card-title">@string.Join(", ", generos)</span>
+                <span class="card-title">@ViewBag.qgenero</span>
                 <span class="card-subtitle">Gêneros</span>
                 <div class="card-icons">
                     <i class="fas fa-venus-mars"></i>
