@@ -98,10 +98,10 @@ namespace Empodera.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Comunidade>()
-                .HasOne(c => c.Usuario)
-                .WithMany(u => u.Comunidades)
+                .HasOne<Usuario>()
+                .WithMany()
                 .HasForeignKey(c => c.FK_Id_UsuarioM)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Atores>()
                 .HasOne(c => c.Usuario)
@@ -110,10 +110,10 @@ namespace Empodera.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Atores>()
-                 .HasOne(c => c.Usuario)
-                 .WithMany(u => u.Atores)
+                 .HasOne<Usuario>()
+                 .WithMany()
                  .HasForeignKey(c => c.FkIdUsuarioM)
-                 .OnDelete(DeleteBehavior.Cascade);
+                 .OnDelete(DeleteBehavior.Restrict);
 
             // RedeRecursos -> Atores and Comunidade and Usuario
             modelBuilder.Entity<RedeRecursos>()
@@ -362,10 +362,10 @@ namespace Empodera.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Atividades>()
-                 .HasOne(c => c.Usuario)
-                 .WithMany(u => u.Atividades)
+                 .HasOne<Usuario>()
+                 .WithMany()
                  .HasForeignKey(c => c.FkIdUsuarioM)
-                 .OnDelete(DeleteBehavior.Cascade);
+                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AtividadesEixo>()
                 .HasOne(ae => ae.Atividades)
