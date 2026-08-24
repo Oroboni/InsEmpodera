@@ -12,7 +12,7 @@ namespace Empodera.Models
         public string? Foto { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Ocupacao { get; set; } = null!;
-        public string? Genero { get; set; } = null!;
+        public int? Genero { get; set; }
         public DateTime DtNascimento { get; set; }
         public DateTime DtCriacao { get; set; }
         public DateTime? DtAtualizacao { get; set; }

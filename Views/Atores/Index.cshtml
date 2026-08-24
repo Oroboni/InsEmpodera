@@ -69,11 +69,18 @@
             </div>
 
             @{
-                var generosUnicos = Model.Where(a => !string.IsNullOrEmpty(a.Genero))
-                    .Select(a => a.Genero).Distinct().Count();
+                var generos = Model.Where(a => a.Genero != 0)
+                    .Select(a => a.Genero)
+                    .Distinct()
+                    .Select(g => g switch {
+                        1 => "Masculino",
+                        2 => "Feminino",
+                        3 => "Transgênero",
+                        _ => "Outro"
+                    });
             }
             <div class="action-card stats-card stats-card-cyan">
-                <span class="card-title">@generosUnicos</span>
+                <span class="card-title">@string.Join(", ", generos)</span>
                 <span class="card-subtitle">Gêneros</span>
                 <div class="card-icons">
                     <i class="fas fa-venus-mars"></i>
@@ -106,17 +113,22 @@
                                 }
                                 
                                 <div class="tag-list">
-                                    @if (!string.IsNullOrEmpty(ator.Genero))
+                                    @if (ator.Genero != 0)
                                     {
-                                        var generoClass = ator.Genero.ToLower() switch {
-                                            "masculino" => "tag-blue",
-                                            "feminino" => "tag-purple",
-                                            "transgénero" => "tag-trans",
+                                        var generoClass = ator.Genero switch {
+                                            1 => "tag-blue",
+                                            2 => "tag-purple",
+                                            3 => "tag-trans",
                                             _ => "tag-default"
                                         };
                                         <span class="tag-item @generoClass">
                                             <i class="fas fa-venus-mars"></i>
-                                            @ator.Genero
+                                            @(ator.Genero switch {
+                                                1 => "Masculino",
+                                                2 => "Feminino",
+                                                3 => "Transgênero",
+                                                _ => "Outro"
+                                            })
                                         </span>
                                     }
                                 </div>

@@ -108,51 +108,6 @@ public class PersonalProcessController : Controller
         return View(model);
     }
 
-    // POST: /PersonalProcess/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(DiarioCampo diario, int[] eixosIds)
-    {
-        if (HttpContext.Session.GetString("Email") == null) 
-        { 
-            return RedirectToAction("Index", "Account"); 
-        }
-
-        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
-        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
-        {
-            return RedirectToAction("Index", "PersonalProcess");
-        }
-
-        // Força datas de sistema
-        diario.DtCriacao = DateTime.Now;
-        diario.DtModificacao = DateTime.Now;
-
-        // Validação básica
-        if (diario.FkIdUsuario == 0)
-        {
-            ModelState.AddModelError("FkIdUsuario", "O Ator é obrigatório.");
-        }
-
-        if (ModelState.IsValid)
-        {
-            _context.Add(diario);
-            await _context.SaveChangesAsync();
-            
-            // Aqui você salvaria os eixosIds na tabela de ligação (DiarioEixo) se necessário
-            // ... lógica de salvar eixos ...
-
-            return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
-        }
-        
-        // Se falhar, recarrega as listas
-        ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
-        ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
-        
-        return View(diario);
-    }
-
     // GET: /PersonalProcess/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {

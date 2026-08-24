@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
@@ -79,13 +78,8 @@ public class ComunidadeController : Controller
                 ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FK_Id_Usuario).FirstOrDefault();
                 ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == comunidade.FK_Id_UsuarioM).FirstOrDefault();
             }
-            
-            // Se não encontrar, retorna um modelo vazio para o modo de criação/ou erro, 
-            // dependendo da sua regra de negócio. Para simplificar, trataremos como novo.
             if (comunidade == null)
-            {
-                comunidade = new Comunidade();
-            }
+                return NotFound();
         }
         else
         {
@@ -165,7 +159,9 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         
         // 2. Lógica de EDIÇÃO (Id_Comunidade > 0)
         var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
-        if (existingComunidade != null)
+        if (existingComunidade == null)
+            return NotFound();
+
         {
             comunidade.LocalMapa = BuildMapSearchAddress(
                 comunidade.LocalMapa,

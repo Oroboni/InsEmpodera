@@ -4,6 +4,8 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsEmpodera", "InsEmpodera.csproj", "{1F95E660-C496-25FD-446D-5D64572E7131}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsEmpodera.Tests", "InsEmpodera.Tests\InsEmpodera.Tests.csproj", "{FDC1F929-A975-404A-98F7-EC86F722A33F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,10 @@ Global
 		{1F95E660-C496-25FD-446D-5D64572E7131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F95E660-C496-25FD-446D-5D64572E7131}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F95E660-C496-25FD-446D-5D64572E7131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC1F929-A975-404A-98F7-EC86F722A33F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC1F929-A975-404A-98F7-EC86F722A33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC1F929-A975-404A-98F7-EC86F722A33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC1F929-A975-404A-98F7-EC86F722A33F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

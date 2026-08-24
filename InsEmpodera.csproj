@@ -16,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,5 +34,12 @@
   <ItemGroup>
     <Content Remove="wwwroot/uploads/**" />
     <None Include="wwwroot/uploads/**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="InsEmpodera.Tests\**\*.cs" />
+    <Content Remove="InsEmpodera.Tests\**" />
+    <EmbeddedResource Remove="InsEmpodera.Tests\**" />
+    <None Remove="InsEmpodera.Tests\**" />
   </ItemGroup>
 </Project>

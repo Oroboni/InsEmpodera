@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -84,6 +83,18 @@ public class AtoresController : Controller
             return RedirectToAction("Index", "Atores");
         }
 
+        var comunidadeExiste = await _context.Comunidades
+            .AnyAsync(item => item.Id_Comunidade == ComunidadeId && item.Ativo != "N");
+        ModelState.Remove(nameof(Atores.Usuario));
+        if (!ModelState.IsValid || !comunidadeExiste)
+        {
+            if (!comunidadeExiste)
+                ModelState.AddModelError(nameof(ComunidadeId), "A comunidade selecionada não existe ou está inativa.");
+            ViewBag.Comunidades = new SelectList(
+                await _context.Comunidades.Where(item => item.Ativo != "N").OrderBy(item => item.Nome).ToListAsync(),
+                "Id_Comunidade", "Nome", ComunidadeId);
+            return View(ator);
+        }
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
         ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
@@ -161,6 +172,8 @@ public class AtoresController : Controller
             return RedirectToAction("Index", "Atores");
         }
 
+        if (!await _context.Comunidades.AnyAsync(item => item.Id_Comunidade == ComunidadeId && item.Ativo != "N"))
+            return NotFound();
         var atorDb = await _context.Atores.FindAsync(id);
         if (atorDb == null)
         {

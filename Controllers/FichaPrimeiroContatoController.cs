@@ -205,6 +205,17 @@ namespace Empodera.Controllers
         // GET: FichaPrimeiroContato/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+            var permission = await _context.Usuarios
+                .Where(user => user.IdUsuario == loggedUserId)
+                .SelectMany(user => user.Perfil.Permissoes)
+                .FirstOrDefaultAsync(item => item.Modulo == "Ficha1Contato");
+            if (permission?.PodeAtualizar != "S")
+                return RedirectToAction(nameof(Index));
+
             if (id == null) return NotFound();
 
             var ficha = await _context.FichasPrimeiroContato
@@ -276,21 +287,39 @@ namespace Empodera.Controllers
 
             try
             {
-                // ✅ CORREÇÃO PRINCIPAL: Buscar ficha existente sem rastreamento
                 var fichaExistente = await _context.FichasPrimeiroContato
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(f => f.IdFicha == id);
 
                 if (fichaExistente == null)
                     return NotFound();
 
-                // ✅ Preservar campos importantes
-                ficha.DtCriacao = fichaExistente.DtCriacao;
-                ficha.FkIdUsuario = fichaExistente.FkIdUsuario;
-                ficha.DtModificacao = DateTime.Now;
-
-                // ✅ Atualizar a ficha principal
-                _context.Update(ficha);
+                // Update only fields editable by the form. Identity and audit data are preserved.
+                fichaExistente.FK_id_Atores = ficha.FK_id_Atores;
+                fichaExistente.Endereco = ficha.Endereco;
+                fichaExistente.Complemento = ficha.Complemento;
+                fichaExistente.Emprego = ficha.Emprego;
+                fichaExistente.CEstabeleceu = ficha.CEstabeleceu;
+                fichaExistente.NovoParceiro = ficha.NovoParceiro;
+                fichaExistente.FornecidoParceiro = ficha.FornecidoParceiro;
+                fichaExistente.Telefone = ficha.Telefone;
+                fichaExistente.LContato = ficha.LContato;
+                fichaExistente.FonteDados = ficha.FonteDados;
+                fichaExistente.EstaFamiliar = ficha.EstaFamiliar;
+                fichaExistente.EstruFamiliar = ficha.EstruFamiliar;
+                fichaExistente.NFIlhos = ficha.NFIlhos;
+                fichaExistente.NFilhas = ficha.NFilhas;
+                fichaExistente.AEscolar = ficha.AEscolar;
+                fichaExistente.Status = ficha.Status;
+                fichaExistente.SLer = ficha.SLer;
+                fichaExistente.SCalc = ficha.SCalc;
+                fichaExistente.SComp = ficha.SComp;
+                fichaExistente.QReabili = ficha.QReabili;
+                fichaExistente.LTrat = ficha.LTrat;
+                fichaExistente.Coment = ficha.Coment;
+                fichaExistente.DtContato = ficha.DtContato;
+                fichaExistente.HoraContato = ficha.HoraContato;
+                fichaExistente.FkIdComunidade = ficha.FkIdComunidade;
+                fichaExistente.DtModificacao = DateTime.Now;
                 await _context.SaveChangesAsync();
 
                 // ✅ Atualizar condições
@@ -407,10 +436,8 @@ namespace Empodera.Controllers
 
             await _context.SaveChangesAsync();
 
-            if (!string.IsNullOrEmpty(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
+            if (IsSafeLocalReturnUrl(returnUrl))
+                return LocalRedirect(returnUrl);
 
             return RedirectToAction(nameof(Index));
         }
@@ -444,10 +471,8 @@ namespace Empodera.Controllers
 
             await _context.SaveChangesAsync();
 
-            if (!string.IsNullOrEmpty(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
+            if (IsSafeLocalReturnUrl(returnUrl))
+                return LocalRedirect(returnUrl);
 
             return RedirectToAction(nameof(Index));
         }
@@ -508,6 +533,11 @@ namespace Empodera.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private static bool IsSafeLocalReturnUrl(string? returnUrl) =>
+            !string.IsNullOrWhiteSpace(returnUrl) &&
+            returnUrl.StartsWith('/') &&
+            !returnUrl.StartsWith("//", StringComparison.Ordinal) &&
+            !returnUrl.StartsWith("/\\", StringComparison.Ordinal);
         private bool FichaExists(int id)
         {
             return _context.FichasPrimeiroContato.Any(e => e.IdFicha == id);

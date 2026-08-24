@@ -95,25 +95,25 @@ namespace Empodera.Data
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Comunidades)
                 .HasForeignKey(c => c.FK_Id_Usuario)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Comunidade>()
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Comunidades)
                 .HasForeignKey(c => c.FK_Id_UsuarioM)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Atores>()
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Atores)
                 .HasForeignKey(c => c.FkIdUsuario)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Atores>()
                  .HasOne(c => c.Usuario)
                  .WithMany(u => u.Atores)
                  .HasForeignKey(c => c.FkIdUsuarioM)
-                 .OnDelete(DeleteBehavior.SetNull);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             // RedeRecursos -> Atores and Comunidade and Usuario
             modelBuilder.Entity<RedeRecursos>()
@@ -132,7 +132,7 @@ namespace Empodera.Data
                 .HasOne(r => r.Usuario)
                 .WithMany(u => u.RedeRecursos)
                 .HasForeignKey(r => r.FkIdUsuario)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // RedeEixo -> RedeRecursos <-> Eixo
             modelBuilder.Entity<RedeEixo>()
@@ -171,7 +171,7 @@ namespace Empodera.Data
                 .HasOne(d => d.Usuario)
                 .WithMany(u => u.DiarioCampos)
                 .HasForeignKey(d => d.FkIdUsuario)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DiarioAcoes>()
                 .HasOne(da => da.Acoes)
@@ -303,7 +303,7 @@ namespace Empodera.Data
                  .HasOne(fp => fp.Comunidade)
                  .WithMany(c => c.FichasPrimeiroContato)
                  .HasForeignKey(fp => fp.FkIdComunidade)
-                 .OnDelete(DeleteBehavior.SetNull);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             // FichaPrimeiroContato -> Ator
             modelBuilder.Entity<FichaPrimeiroContato>()
@@ -317,7 +317,7 @@ namespace Empodera.Data
                 .HasOne(fp => fp.Usuario)
                 .WithMany(u => u.FichasPrimeiroContato)
                 .HasForeignKey(fp => fp.FkIdUsuario)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FonteInf>()
                 .HasOne(fi => fi.Ficha)
@@ -359,13 +359,13 @@ namespace Empodera.Data
                 .HasOne(c => c.Usuario)
                 .WithMany(u => u.Atividades)
                 .HasForeignKey(c => c.FkIdUsuario)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Atividades>()
                  .HasOne(c => c.Usuario)
                  .WithMany(u => u.Atividades)
                  .HasForeignKey(c => c.FkIdUsuarioM)
-                 .OnDelete(DeleteBehavior.SetNull);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AtividadesEixo>()
                 .HasOne(ae => ae.Atividades)
@@ -388,11 +388,11 @@ namespace Empodera.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { IdUsuario = 1, Nome = "joao", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto1.jpg", Email = "joao@email.com", Ocupacao = "Coordenador", Genero = "Masculino", DtNascimento = new DateTime(1990, 1, 1), DtCriacao = new DateTime(2024, 1, 1), DtAtualizacao = new DateTime(2025, 1, 1), FkIdPerfil = 1, Ativo = "S" },
-                new Usuario { IdUsuario = 2, Nome = "Usuario Dois", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto2.jpg", Email = "u2@example.com", Ocupacao = "Pesquisador", Genero = "Feminino", DtNascimento = new DateTime(1985, 2, 2), DtCriacao = new DateTime(2024, 2, 1), DtAtualizacao = new DateTime(2025, 2, 1), FkIdPerfil = 2, Ativo = "S" },
-                new Usuario { IdUsuario = 3, Nome = "Usuario Tres", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto3.jpg", Email = "u3@example.com", Ocupacao = "Voluntario", Genero = "Masculino", DtNascimento = new DateTime(1995, 3, 3), DtCriacao = new DateTime(2024, 3, 1), DtAtualizacao = new DateTime(2025, 3, 1), FkIdPerfil = 3, Ativo = "S" },
-                new Usuario { IdUsuario = 4, Nome = "Usuario Quatro", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto4.jpg", Email = "u4@example.com", Ocupacao = "Analista", Genero = "Feminino", DtNascimento = new DateTime(1992, 4, 4), DtCriacao = new DateTime(2024, 4, 1), DtAtualizacao = new DateTime(2025, 4, 1), FkIdPerfil = 4, Ativo = "N" },
-                new Usuario { IdUsuario = 5, Nome = "Usuario Cinco", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto5.jpg", Email = "u5@example.com", Ocupacao = "Gerente", Genero = "Masculino", DtNascimento = new DateTime(1988, 5, 5), DtCriacao = new DateTime(2024, 5, 1), DtAtualizacao = new DateTime(2025, 5, 1), FkIdPerfil = 5, Ativo = "N" }
+                new Usuario { IdUsuario = 1, Nome = "joao", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto1.jpg", Email = "joao@email.com", Ocupacao = "Coordenador", Genero = 1, DtNascimento = new DateTime(1990, 1, 1), DtCriacao = new DateTime(2024, 1, 1), DtAtualizacao = new DateTime(2025, 1, 1), FkIdPerfil = 1, Ativo = "S" },
+                new Usuario { IdUsuario = 2, Nome = "Usuario Dois", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto2.jpg", Email = "u2@example.com", Ocupacao = "Pesquisador", Genero = 2, DtNascimento = new DateTime(1985, 2, 2), DtCriacao = new DateTime(2024, 2, 1), DtAtualizacao = new DateTime(2025, 2, 1), FkIdPerfil = 2, Ativo = "S" },
+                new Usuario { IdUsuario = 3, Nome = "Usuario Tres", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto3.jpg", Email = "u3@example.com", Ocupacao = "Voluntario", Genero = 1, DtNascimento = new DateTime(1995, 3, 3), DtCriacao = new DateTime(2024, 3, 1), DtAtualizacao = new DateTime(2025, 3, 1), FkIdPerfil = 3, Ativo = "S" },
+                new Usuario { IdUsuario = 4, Nome = "Usuario Quatro", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto4.jpg", Email = "u4@example.com", Ocupacao = "Analista", Genero = 2, DtNascimento = new DateTime(1992, 4, 4), DtCriacao = new DateTime(2024, 4, 1), DtAtualizacao = new DateTime(2025, 4, 1), FkIdPerfil = 4, Ativo = "N" },
+                new Usuario { IdUsuario = 5, Nome = "Usuario Cinco", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto5.jpg", Email = "u5@example.com", Ocupacao = "Gerente", Genero = 1, DtNascimento = new DateTime(1988, 5, 5), DtCriacao = new DateTime(2024, 5, 1), DtAtualizacao = new DateTime(2025, 5, 1), FkIdPerfil = 5, Ativo = "N" }
             );
 
             // Perfis

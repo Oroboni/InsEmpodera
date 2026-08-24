@@ -1,0 +1,30 @@
+@model Empodera.Models.FichaPrimeiroContato
+@{
+    ViewData["Title"] = "Excluir ficha de primeiro contato";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="breadcrumb">
+        <h1>Ficha de Primeiro Contato &gt; <strong>Excluir</strong></h1>
+    </div>
+    <section class="main-form" aria-labelledby="delete-title">
+        <h2 id="delete-title">Confirmar exclusão</h2>
+        <p>Esta ação excluirá permanentemente a ficha e suas respostas vinculadas.</p>
+        <dl>
+            <dt>Ator</dt>
+            <dd>@(Model.Ator?.Nome ?? "Não informado")</dd>
+            <dt>Comunidade</dt>
+            <dd>@(Model.Comunidade?.Nome ?? "Não informada")</dd>
+            <dt>Data do contato</dt>
+            <dd>@Model.DtContato.ToString("dd/MM/yyyy")</dd>
+            <dt>Status</dt>
+            <dd>@Model.Status</dd>
+        </dl>
+        <form asp-action="Delete" asp-route-id="@Model.IdFicha" method="post">
+            @Html.AntiForgeryToken()
+            <a asp-action="Edit" asp-route-id="@Model.IdFicha" class="wizard-btn btn-prev">CANCELAR</a>
+            <button type="submit" class="wizard-btn btn-delete">EXCLUIR DEFINITIVAMENTE</button>
+        </form>
+    </section>
+</div>

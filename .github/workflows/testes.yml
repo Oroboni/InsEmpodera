@@ -1,0 +1,28 @@
+name: Testes automáticos
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+      - name: Preparar o .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restaurar dependências
+        run: dotnet restore InsEmpodera.sln
+      - name: Compilar
+        run: dotnet build InsEmpodera.sln --configuration Release --no-restore
+      - name: Executar testes
+        run: dotnet test InsEmpodera.sln --configuration Release --no-build --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=testes.trx" --results-directory TestResults
+      - name: Publicar relatório dos testes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultado-dos-testes
+          path: TestResults

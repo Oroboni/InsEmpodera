@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using SQLitePCL;
 using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;

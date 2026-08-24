@@ -4,7 +4,6 @@ using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using SQLitePCL;
 
 public class PersonalAssessmentController : Controller
 {
@@ -86,6 +85,7 @@ public class PersonalAssessmentController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> create(AvaliacaoPessoal avaliacao)
     {
         if (HttpContext.Session.GetString("ID") == null)
@@ -148,6 +148,7 @@ public class PersonalAssessmentController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> edit(AvaliacaoPessoal avaliacao, int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
@@ -185,6 +186,34 @@ public class PersonalAssessmentController : Controller
 
         _context.AvaliacaoPessoal.Update(avaliacaobd);
         await _context.SaveChangesAsync();
-        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacaobd.FkIdUsuario});
+        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacaobd.FK_id_Atores});
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == null)
+            return NotFound();
+
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUser = await _context.Usuarios
+            .Include(user => user.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
+        var permission = loggedUser?.Perfil.Permissoes.FirstOrDefault(item => item.Modulo == "AvaliacoesPessoais");
+        if (permission?.PodeDeletar != "S")
+            return RedirectToAction(nameof(Index));
+
+        var assessment = await _context.AvaliacaoPessoal.FindAsync(id.Value);
+        if (assessment == null)
+            return NotFound();
+
+        var actorId = assessment.FK_id_Atores;
+        _context.AvaliacaoPessoal.Remove(assessment);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index), new { atorId = actorId });
     }
 }

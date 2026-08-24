@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
@@ -189,6 +188,33 @@ public class AtividadesController : Controller
 
         await _context.SaveChangesAsync();
 
+        return RedirectToAction(nameof(Index));
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == null)
+            return NotFound();
+
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUser = await _context.Usuarios
+            .Include(user => user.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
+        var permission = loggedUser?.Perfil.Permissoes.FirstOrDefault(item => item.Modulo == "Atividades");
+        if (permission?.PodeDeletar != "S")
+            return RedirectToAction(nameof(Index));
+
+        var activity = await _context.Atividades.FindAsync(id.Value);
+        if (activity == null)
+            return NotFound();
+
+        _context.Atividades.Remove(activity);
+        await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 }

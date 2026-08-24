@@ -1250,7 +1250,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AccountContro
  
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using SQLitePCL;
 using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
@@ -1324,7 +1323,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AtividadesCon
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
@@ -1525,7 +1523,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\AtoresControl
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -1807,7 +1804,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\ComunidadeCon
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
@@ -3562,7 +3558,6 @@ using Empodera.Data;
 using Empodera.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using SQLitePCL;
 
 public class PersonalAssessmentController : Controller
 {
@@ -4170,7 +4165,6 @@ ARQUIVO: C:\Users\elian\�rea de Trabalho\InsEmpodera\Controllers\UsersControll
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 

@@ -12,7 +12,7 @@ namespace Empodera.Data
         public string? Foto { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Ocupacao { get; set; } = string.Empty;
-        public string? Genero { get; set; } = string.Empty;
+        public int? Genero { get; set; }
         public DateTime Dt_Nascimento { get; set; }
         public int Nivel_Permissao { get; set; }
         public DateTime Dt_Criacao { get; set; }
@@ -81,7 +81,7 @@ namespace Empodera.Data
     {
         public int Id_Atores { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string? Genero { get; set; }
+        public int? Genero { get; set; }
         public int? Idade { get; set; }
         public string? Papel_Social1 { get; set; }
         public string? Papel_Social2 { get; set; }
@@ -321,7 +321,7 @@ namespace Empodera.Data
         public int Id_Fonte { get; set; }
         public int Fk_Id_Ficha { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string Genero { get; set; } = string.Empty;
+        public int? Genero { get; set; }
         public int Idade { get; set; }
         public string Papel_Social1 { get; set; } = string.Empty;
         public string Papel_Social2 { get; set; } = string.Empty;

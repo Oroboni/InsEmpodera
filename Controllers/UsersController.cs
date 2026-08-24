@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
-using SQLitePCL;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
@@ -200,6 +199,37 @@ public class UsersController : Controller
     }
 
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == null)
+            return NotFound();
+
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUser = await _context.Usuarios
+            .Include(user => user.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
+        var permission = loggedUser?.Perfil.Permissoes.FirstOrDefault(item => item.Modulo == "Usuarios");
+        if (permission?.PodeDeletar != "S")
+            return RedirectToAction("Index", "Users");
+
+        if (id.Value == loggedUserId)
+            return BadRequest("O usuário conectado não pode desativar a própria conta.");
+
+        var user = await _context.Usuarios.FindAsync(id.Value);
+        if (user == null)
+            return NotFound();
+
+        user.Ativo = "N";
+        user.DtAtualizacao = DateTime.Now;
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

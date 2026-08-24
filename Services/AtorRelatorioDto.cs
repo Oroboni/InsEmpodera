@@ -12,7 +12,7 @@ namespace Empodera.Services
     {
         public int IdAtor { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string Genero { get; set; } = string.Empty;
+        public int? Genero { get; set; }
         public int Idade { get; set; }
         public string PapelSocial1 { get; set; } = string.Empty;
         public string PapelSocial2 { get; set; } = string.Empty;

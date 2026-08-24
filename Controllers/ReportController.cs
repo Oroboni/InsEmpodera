@@ -765,20 +765,20 @@ public class ReportController : Controller
         };
     }
 
-    private static string NormalizeGenero(string? value)
+    private static int NormalizeGenero(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+        if (string.IsNullOrWhiteSpace(value)) return 0;
 
         return value.Trim().ToLowerInvariant() switch
         {
-            "femenino"  => "Feminino",
-            "feminino"  => "Feminino",
-            "female"    => "Feminino",
-            "f"         => "Feminino",
-            "masculino" => "Masculino",
-            "male"      => "Masculino",
-            "m"         => "Masculino",
-            _           => value.Trim()
+            "femenino"  => 2,
+            "feminino"  => 2,
+            "female"    => 2,
+            "f"         => 2,
+            "masculino" => 1,
+            "male"      => 1,
+            "m"         => 1,
+            _           => ParseInt(value)
         };
     }
 

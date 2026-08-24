@@ -13,8 +13,14 @@ builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
-    .EnableSensitiveDataLogging());
+{
+    if (builder.Environment.IsEnvironment("Testing"))
+        options.UseSqlite("Data Source=:memory:");
+    else
+        options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 29)));
+
+    options.EnableSensitiveDataLogging();
+});
 
 builder.Services.AddSwaggerGen();
 
@@ -58,7 +64,10 @@ app.UseRequestLocalization(localizationOptions);
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.MigrateAsync();
+    if (app.Environment.IsEnvironment("Testing"))
+        await db.Database.EnsureCreatedAsync();
+    else
+        await db.Database.MigrateAsync();
 }
 
 // Configure the HTTP request pipeline.
@@ -92,3 +101,6 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+// Exposes the application entry point to the integration-test host.
+public partial class Program { }

@@ -1,0 +1,83 @@
+USE Empodera;
+
+SET @db = 'Empodera';
+
+DROP PROCEDURE IF EXISTS CorrigirDatas;
+
+DELIMITER $$
+
+CREATE PROCEDURE CorrigirDatas()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE tabela VARCHAR(255);
+    DECLARE coluna VARCHAR(255);
+    DECLARE nullable_col VARCHAR(3);
+
+    DECLARE cur CURSOR FOR
+        SELECT
+            TABLE_NAME,
+            COLUMN_NAME,
+            IS_NULLABLE
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = @db
+          AND DATA_TYPE IN ('text', 'longtext', 'mediumtext', 'varchar')
+          AND (
+              COLUMN_NAME LIKE 'Dt%'
+              OR COLUMN_NAME LIKE '%Data%'
+              OR COLUMN_NAME LIKE '%Hora%'
+          );
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO tabela, coluna, nullable_col;
+
+        IF done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+
+        /* Remove a 7ª casa decimal vinda do DateTime do .NET/SQLite */
+        SET @sql_update = CONCAT(
+            'UPDATE `', tabela, '` ',
+            'SET `', coluna, '` = LEFT(`', coluna, '`, 26) ',
+            'WHERE `', coluna, '` IS NOT NULL ',
+            'AND LENGTH(`', coluna, '`) > 26'
+        );
+
+        PREPARE stmt FROM @sql_update;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+
+        /* Converte a coluna para DATETIME(6) */
+        IF nullable_col = 'YES' THEN
+
+            SET @sql_alter = CONCAT(
+                'ALTER TABLE `', tabela, '` ',
+                'MODIFY COLUMN `', coluna, '` DATETIME(6) NULL'
+            );
+
+        ELSE
+
+            SET @sql_alter = CONCAT(
+                'ALTER TABLE `', tabela, '` ',
+                'MODIFY COLUMN `', coluna, '` DATETIME(6) NOT NULL'
+            );
+
+        END IF;
+
+        PREPARE stmt FROM @sql_alter;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+
+CALL CorrigirDatas();
+
+DROP PROCEDURE CorrigirDatas;

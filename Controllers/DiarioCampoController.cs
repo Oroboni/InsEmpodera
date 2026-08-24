@@ -73,6 +73,10 @@ namespace Empodera.Controllers
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Criar"))
+                return RedirectToAction(nameof(Index));
+
             // Preenche dados automáticos
             diarioCampo.DtCriacao = DateTime.Now;
             diarioCampo.DtModificacao = DateTime.Now;
@@ -136,6 +140,10 @@ namespace Empodera.Controllers
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Atualizar"))
+                return RedirectToAction(nameof(Index));
+
             if (id != diarioCampo.IdDCampo) return NotFound();
 
             // Remove validações de navegação
@@ -192,6 +200,10 @@ namespace Empodera.Controllers
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
             if (id == null) return NotFound();
 
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Detalhar"))
+                return RedirectToAction(nameof(Index));
+
             var diarioCampo = await _context.DiariosCampo
                 .Include(d => d.Comunidade)
                 .Include(d => d.DiarioEixos).ThenInclude(de => de.Eixo)
@@ -227,6 +239,13 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("Email") == null)
+                return RedirectToAction("Index", "Account");
+
+            var usuarioLogado = await GetUsuarioLogadoAsync();
+            if (usuarioLogado == null || !PermiteModulo(usuarioLogado, "DiariosCampo", "Deletar"))
+                return RedirectToAction(nameof(Index));
+
             var diarioCampo = await _context.DiariosCampo.FindAsync(id);
             if (diarioCampo != null)
             {
