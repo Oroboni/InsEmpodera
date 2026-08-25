@@ -1,23 +1,12 @@
 @{
     ViewData["Title"] = "Recuperar Senha";
-    Layout = null;
+    Layout = "_LoginLayout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/forget.css" />
 }
 
-<!DOCTYPE html>
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="shortcut icon" href="~/images/logo-empodera.svg" type="image/x-icon">
-    <link rel="stylesheet" href="~/css/forget.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="~/js/localization.js" asp-append-version="true" defer></script>
-</head>
-<body>
-    <div class="background-circles">
+<div class="background-circles">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
         <div class="circle circle-3"></div>
@@ -80,6 +69,6 @@
         </section>
     </main>
 
+@section Scripts {
     <script src="~/js/forget.js"></script>
-</body>
-</html>
+}

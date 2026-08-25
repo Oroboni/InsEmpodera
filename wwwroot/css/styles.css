@@ -27,6 +27,107 @@ body {
     overflow: hidden;
 }
 
+.login-language-switcher {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 10;
+    color: var(--cor-texto-escuro);
+}
+
+.login-language-switcher summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 9px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 8px 24px var(--cor-sombra);
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.login-language-switcher summary::-webkit-details-marker {
+    display: none;
+}
+
+.login-language-switcher summary:focus-visible,
+.login-language-menu button:focus-visible {
+    outline: 3px solid var(--cor-destaque);
+    outline-offset: 2px;
+}
+
+.login-language-switcher summary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px var(--cor-sombra);
+}
+
+.login-language-switcher[open] summary span:last-child {
+    transform: rotate(180deg);
+}
+
+.login-language-menu {
+    width: max-content;
+    min-width: 205px;
+    margin-top: 8px;
+    margin-left: auto;
+    padding: 6px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 12px 30px var(--cor-sombra);
+    animation: language-menu-in 140ms ease-out;
+}
+
+@keyframes language-menu-in {
+    from { opacity: 0; transform: translateY(-5px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-language-menu button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--cor-texto-escuro);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.login-language-menu button:hover {
+    background: var(--cor-fundo-input);
+    color: var(--cor-painel-info);
+}
+
+.login-language-menu button.is-active {
+    background: rgba(107, 192, 183, 0.15);
+    color: var(--cor-painel-info);
+    font-weight: 600;
+}
+
+.language-selected-mark {
+    color: #3b938a;
+    font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .login-language-switcher summary,
+    .login-language-menu {
+        animation: none;
+        transition: none;
+    }
+}
+
 /* --- Círculos Decorativos de Fundo COM ANIMAÇÃO --- */
 .background-circles {
     position: absolute;
@@ -317,6 +418,15 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 480px) {
+    .login-language-switcher {
+        top: 12px;
+        right: 12px;
+    }
+
+    .login-language-switcher summary {
+        padding: 8px 11px;
+    }
+
     .container-geral {
         width: 95%;
         margin: 20px;

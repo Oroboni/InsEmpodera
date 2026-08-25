@@ -1,0 +1,237 @@
+.settings-page {
+    width: min(1080px, calc(100% - 2rem));
+    margin: 1.5rem auto 3rem;
+    color: var(--color-gray-800);
+}
+
+.settings-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(255, 255, 255, .18), transparent 28%),
+        linear-gradient(135deg, var(--color-primary-800), var(--color-primary-500));
+    color: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.settings-hero h1, .settings-card h2 { margin: 0; }
+.settings-hero p { margin: .75rem 0 0; }
+
+.settings-current-language {
+    display: grid;
+    gap: .15rem;
+    min-width: 170px;
+    padding: .9rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .13);
+    backdrop-filter: blur(10px);
+}
+
+.settings-current-language span { font-size: .75rem; opacity: .85; }
+.settings-current-language strong { font-size: 1.05rem; }
+
+.settings-page .page-eyebrow {
+    display: block;
+    margin-bottom: .4rem;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.settings-language-panel {
+    margin: 1.25rem 0;
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 22px;
+    background: white;
+    box-shadow: var(--shadow-md);
+}
+
+.settings-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.settings-section-heading h2 { margin: 0; color: var(--color-primary-800); font-size: 1.25rem; }
+.settings-section-heading p { margin: .3rem 0 0; color: var(--color-gray-600); }
+
+.settings-section-icon {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 3rem;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+    font-size: 1.35rem;
+}
+
+.language-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .8rem;
+    margin-top: 1.35rem;
+}
+
+.language-option {
+    display: grid;
+    grid-template-columns: 2.65rem 1fr 1.5rem;
+    align-items: center;
+    gap: .85rem;
+    width: 100%;
+    min-height: 72px;
+    padding: .8rem 1rem;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 15px;
+    background: var(--color-gray-50, #fafafa);
+    color: var(--color-gray-800);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.language-option:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-primary-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.language-option:focus-visible {
+    outline: 3px solid var(--color-primary-200);
+    outline-offset: 2px;
+}
+
+.language-option.is-active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
+    box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.language-code {
+    display: grid;
+    width: 2.65rem;
+    height: 2.65rem;
+    place-items: center;
+    border-radius: 12px;
+    background: white;
+    color: var(--color-primary-800);
+    box-shadow: var(--shadow-sm);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .03em;
+}
+
+.language-copy { display: grid; gap: .15rem; }
+.language-copy strong { color: var(--color-primary-800); font-size: .95rem; }
+.language-copy small { color: var(--color-gray-600); font-size: .78rem; }
+
+.language-check {
+    display: grid;
+    width: 1.45rem;
+    height: 1.45rem;
+    place-items: center;
+    border: 1px solid var(--color-gray-300);
+    border-radius: 50%;
+    color: transparent;
+    font-size: .7rem;
+}
+
+.language-option.is-active .language-check {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: white;
+}
+
+.settings-language-note {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: 1rem;
+    color: var(--color-gray-600);
+    font-size: .82rem;
+}
+
+.settings-language-note i { color: var(--color-primary); }
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.settings-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.35rem;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 18px;
+    background: white;
+    box-shadow: var(--shadow-sm);
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.settings-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.settings-card > i {
+    width: 2.5rem;
+    color: var(--color-primary);
+    font-size: 1.65rem;
+    text-align: center;
+}
+
+.settings-card h2 { color: var(--color-primary-800); font-size: 1.1rem; }
+.settings-card p { margin: .4rem 0 .7rem; line-height: 1.55; }
+.settings-card a,
+.settings-card-action {
+    color: var(--color-primary-700);
+    font-weight: 700;
+}
+
+.settings-card-danger > i,
+.settings-card-danger .settings-card-action { color: var(--color-danger, #b42318); }
+
+.settings-card-action {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+.settings-card a:focus-visible,
+.settings-card-action:focus-visible {
+    border-radius: 4px;
+    outline: 3px solid var(--color-primary-200);
+    outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+    .settings-page { width: min(100% - 1rem, 1000px); margin-top: .75rem; }
+    .settings-hero { align-items: flex-start; }
+    .settings-current-language { min-width: 140px; }
+    .language-options, .settings-grid { grid-template-columns: 1fr; }
+    .settings-card { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+    .settings-hero { display: grid; gap: 1.25rem; }
+    .settings-current-language { width: 100%; }
+    .settings-language-panel { padding: 1rem; border-radius: 18px; }
+    .settings-section-heading { align-items: flex-start; }
+    .language-option { grid-template-columns: 2.4rem 1fr 1.4rem; padding: .75rem; }
+    .language-code { width: 2.4rem; height: 2.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .language-option, .settings-card { transition: none; }
+}

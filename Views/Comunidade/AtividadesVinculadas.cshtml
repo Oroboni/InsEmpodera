@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css" />
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 }
 
 <div class="atores-content-area">
@@ -32,7 +32,7 @@
             </button>
         </div>
 
-        <button type="button" class="atores-export-button" title="Exportar dados">
+        <button type="button" class="atores-export-button" disabled aria-disabled="true" title="Exportação ainda não disponível nesta tela">
             <i class="fa-solid fa-file-arrow-down"></i>
         </button>
         <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
@@ -76,12 +76,13 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.querySelector(".search-input");
-        const cards = document.querySelectorAll(".ator-card");
+        const cards = document.querySelectorAll(".form-item");
+        if (!searchInput) return;
 
         searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
+            const query = this.value.toLocaleLowerCase('pt-BR').trim();
             cards.forEach(card => {
-                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                const name = card.querySelector(".item-name")?.textContent?.toLocaleLowerCase('pt-BR') ?? '';
                 card.style.display = name.includes(query) ? "flex" : "none";
             });
         });

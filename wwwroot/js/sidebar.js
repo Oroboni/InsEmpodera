@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'comunidades': 'Comunidades',
         'atores': 'Atores',
         'fichaprimeirocontato': 'FichaPrimeiroContato',
-        'diariosdeampo': 'DiariosDeCampo',
+        'diariosdecampo': 'DiariosDeCampo',
         'diarioprocessopessoal': 'DiarioProcessoPessoal',
         'relatorios': 'Relatorios',
         'dashboard': 'Dashboard',

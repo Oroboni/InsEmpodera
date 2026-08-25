@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\obj\InsEmpodera.E2ETests\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)..\bin\InsEmpodera.E2ETests\</BaseOutputPath>
+  </PropertyGroup>
+</Project>

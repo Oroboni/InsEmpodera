@@ -1,11 +1,11 @@
-﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laços - Instituto Empodera</title>
-    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
+    <link rel="icon" href="~/images/Logo-empodera.svg" type="image/x-icon">
 
     <!-- CSS Base -->
     <link rel="stylesheet" href="~/css/_variaveis.css" />
@@ -20,10 +20,6 @@
 
     @{
         var cssName = ViewData["PageCSS"] as string;
-        if (string.IsNullOrEmpty(cssName))
-        {
-            cssName = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLower();
-        }
     }
 
     @if (!string.IsNullOrEmpty(cssName))
@@ -122,9 +118,11 @@
                         </a>
                     </li>
                     <li data-page="logout">
-                        <a asp-controller="Account" asp-action="Logout">
-                            <p><i class="fas fa-sign-out-alt"></i> Logout</p>
-                        </a>
+                        <form asp-controller="Account" asp-action="Logout" method="post" asp-antiforgery="true" class="sidebar-logout-form">
+                            <button type="submit" class="sidebar-logout-button">
+                                <p><i class="fas fa-sign-out-alt"></i> Logout</p>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

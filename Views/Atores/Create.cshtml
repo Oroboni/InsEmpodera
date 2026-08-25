@@ -18,6 +18,7 @@
     </div>
 
     <form asp-action="Create" method="post">
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
         <div class="section-label">Informações Básicas</div>
 
         <div class="input-card full-width">
@@ -37,10 +38,10 @@
                 <label for="nome">Nome <span class="text-danger">*</span></label>
                 <input id="nome" name="nome" type="text" class="clean-input" placeholder="Nome do Ator" required />
             </div>
-            <button type="button" class="btn-eye" title="Adicionar Novo">
+            <button type="button" class="btn-eye" disabled aria-disabled="true" title="Atalho de criação ainda não disponível">
                 <i class="fa-solid fa-plus"></i>
             </button>
-            <button type="button" class="btn-eye" title="Importar">
+            <button type="button" class="btn-eye" disabled aria-disabled="true" title="Importação de atores ainda não disponível">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
             </button>
         </div>
@@ -222,7 +223,7 @@
         <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
             <div class="input-content">
-                <label for="telefone">Telefone</label>
+                <label for="inputTelefone">Telefone</label>
                 <input id="inputTelefone" name="telefone" type="tel" class="clean-input"
                     placeholder="(00) 00000-0000" />
             </div>

@@ -19,27 +19,50 @@ public class AccountController : Controller
         _context = context;
     }
 
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Index(string Email, string Password)
     {
-        var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == Email && u.Ativo != "N");
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+        {
+            ViewData["LoginError"] = "Informe o e-mail e a senha.";
+            return View();
+        }
 
+        var normalizedEmail = Email.Trim().ToUpperInvariant();
+        var user = await _context.Usuarios.FirstOrDefaultAsync(u =>
+            u.Ativo == "S" && u.Email.ToUpper() == normalizedEmail);
         if (user == null)
         {
+            ViewData["LoginError"] = "E-mail ou senha inválidos.";
             return View();
         }
 
         var hasher = new PasswordHasher<Usuario>();
         var result = hasher.VerifyHashedPassword(user, user.Senha, Password);
-
-        if (result == PasswordVerificationResult.Success)
+        if (result is PasswordVerificationResult.Success or PasswordVerificationResult.SuccessRehashNeeded)
         {
+            if (result == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.Senha = hasher.HashPassword(user, Password);
+                await _context.SaveChangesAsync();
+            }
+
             HttpContext.Session.SetString("Email", user.Email);
             HttpContext.Session.SetString("Nome", user.Nome);
             HttpContext.Session.SetString("ID", user.IdUsuario.ToString());
-            UserCultureService.ApplyPreference(Response, user.IdiomaPreferido);
+            if (!UserCultureService.HasSavedMode(Request))
+                UserCultureService.FollowBrowser(Response);
             return RedirectToAction("Index", "Home");
         }
 
+        ViewData["LoginError"] = "E-mail ou senha inválidos.";
         return View();
     }
 
@@ -48,10 +71,11 @@ public class AccountController : Controller
         return View();
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
-        UserCultureService.ClearPreference(Response);
         return RedirectToAction("Index", "Account");
     }
 

@@ -1,0 +1,179 @@
+using Empodera.Models;
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    [Trait("Diagnostic", "Known UI contract defect")]
+    public Task CreateScreen_ExposesNoFotoField_AndVisibleValidFormCannotPersist() =>
+        RunInBrowserAsync(nameof(CreateScreen_ExposesNoFotoField_AndVisibleValidFormCannotPersist), async page =>
+        {
+            await LoginAsync(page);
+            var prerequisites = await GetPrerequisitesAsync();
+            var marker = Unique("Diário bloqueado pela UI");
+            var countBefore = await Fixture.QueryAsync(db => db.DiariosCampo.CountAsync());
+
+            await page.GotoAsync("/DiarioCampo/Create");
+            await Assertions.Expect(page.Locator("input[name=Foto]")).ToHaveCountAsync(0);
+            await page.Locator("select[name=FkIdComunidade]").SelectOptionAsync(prerequisites.CommunityId.ToString());
+            await page.Locator("input[name=Data]").FillAsync("2026-08-20");
+            await page.Locator("textarea[name=Descricao]").FillAsync(marker);
+            await page.Locator("input[name=Localizacao]").FillAsync("Rua do Diário, 50");
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+            await page.Locator("form.main-form > .buttons-container button[type=submit]").ClickAsync();
+
+            // The model declares Foto as required, but the view renders no control.
+            // The real browser therefore returns to the form and no row is written.
+            Assert.Equal("/DiarioCampo/Create", new Uri(page.Url).AbsolutePath);
+            Assert.Equal(countBefore, await Fixture.QueryAsync(db => db.DiariosCampo.CountAsync()));
+            Assert.False(await Fixture.QueryAsync(db => db.DiariosCampo.AnyAsync(diary => diary.Descricao == marker)));
+        });
+
+    [Fact]
+    public Task SeededDiary_ListSearchFilterDetailsEditRelationshipsAndDelete_ThroughUi() =>
+        RunInBrowserAsync(nameof(SeededDiary_ListSearchFilterDetailsEditRelationshipsAndDelete_ThroughUi), async page =>
+        {
+            var prerequisites = await GetPrerequisitesAsync();
+            var marker = Unique("Diário UI");
+            var diaryId = await Fixture.QueryAsync(async db =>
+            {
+                var diary = new DiarioCampo
+                {
+                    FkIdComunidade = prerequisites.CommunityId,
+                    Data = new DateTime(2026, 8, 20),
+                    Descricao = marker,
+                    Localizacao = "Rua Inicial, 10",
+                    Foto = "fixture.png",
+                    FkIdUsuario = 1,
+                    DtCriacao = DateTime.UtcNow,
+                    DtModificacao = DateTime.UtcNow
+                };
+                db.DiariosCampo.Add(diary);
+                await db.SaveChangesAsync();
+                db.DiarioEixos.Add(new DiarioEixo
+                {
+                    FkIdDiario = diary.IdDCampo,
+                    FkIdEixo = prerequisites.AxisIds[0]
+                });
+                await db.SaveChangesAsync();
+                return diary.IdDCampo;
+            });
+
+            await LoginAsync(page);
+            await page.GotoAsync("/DiarioCampo");
+            await page.Locator("input[type=search]").FillAsync(marker);
+            var diaryCard = page.Locator(".form-item").Filter(new() { HasText = marker });
+            await Assertions.Expect(diaryCard).ToBeVisibleAsync();
+            await Assertions.Expect(page.Locator(".form-item:visible")).ToHaveCountAsync(1);
+
+            var communityName = await Fixture.QueryAsync(db => db.Comunidades
+                .Where(community => community.Id_Comunidade == prerequisites.CommunityId)
+                .Select(community => community.Nome).SingleAsync());
+            await page.Locator("#comunidadeFilter").SelectOptionAsync(new SelectOptionValue { Label = communityName });
+            await Assertions.Expect(diaryCard).ToBeVisibleAsync();
+            await page.Locator("input[type=search]").FillAsync("diario-inexistente");
+            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeVisibleAsync();
+
+            await page.GotoAsync($"/DiarioCampo/Details/{diaryId}");
+            await Assertions.Expect(page.Locator("textarea[readonly]")).ToContainTextAsync(marker);
+            await page.GetByRole(AriaRole.Link, new() { Name = "Editar" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/DiarioCampo/Edit/{diaryId}");
+
+            var editedMarker = marker + " editado";
+            await page.Locator("input[name=Data]").FillAsync("2026-08-21");
+            await page.Locator("textarea[name=Descricao]").FillAsync(editedMarker);
+            await page.Locator("input[name=Localizacao]").FillAsync("Avenida Atualizada, 20");
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").UncheckAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[1]}']").CheckAsync();
+            await page.Locator("#editForm button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
+
+            var updated = await Fixture.QueryAsync(db => db.DiariosCampo
+                .Where(diary => diary.IdDCampo == diaryId)
+                .Select(diary => new { diary.Descricao, diary.Localizacao, diary.Data, diary.Foto })
+                .SingleAsync());
+            Assert.Equal(editedMarker, updated.Descricao);
+            Assert.Equal("Avenida Atualizada, 20", updated.Localizacao);
+            Assert.Equal("fixture.png", updated.Foto);
+            Assert.Equal([prerequisites.AxisIds[1]], await Fixture.QueryAsync(db => db.DiarioEixos
+                .Where(link => link.FkIdDiario == diaryId)
+                .Select(link => link.FkIdEixo).ToListAsync()));
+
+            await page.GotoAsync($"/DiarioCampo/Edit/{diaryId}");
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
+            await page.Locator("#cancelDeleteBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeHiddenAsync();
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
+
+            Assert.False(await Fixture.QueryAsync(db => db.DiariosCampo.AnyAsync(diary => diary.IdDCampo == diaryId)));
+            Assert.False(await Fixture.QueryAsync(db => db.DiarioEixos.AnyAsync(link => link.FkIdDiario == diaryId)));
+        });
+
+    [Fact]
+    [Trait("Diagnostic", "Known backend persistence gap")]
+    public Task DynamicInstitutionalAction_IsRenderedButNotPersistedByCreateEndpoint() =>
+        RunInBrowserAsync(nameof(DynamicInstitutionalAction_IsRenderedButNotPersistedByCreateEndpoint), async page =>
+        {
+            await LoginAsync(page);
+            var prerequisites = await GetPrerequisitesAsync();
+            var marker = Unique("Diário com ação dinâmica");
+
+            await page.GotoAsync("/DiarioCampo/Create");
+            await page.Locator("select[name=FkIdComunidade]").SelectOptionAsync(prerequisites.CommunityId.ToString());
+            await page.Locator("input[name=Data]").FillAsync("2026-08-22");
+            await page.Locator("textarea[name=Descricao]").FillAsync(marker);
+            await page.Locator("input[name=Localizacao]").FillAsync("Rua da Ação, 30");
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+
+            // Temporary DOM injection isolates the separate Foto defect so this
+            // scenario can verify the dynamic action contract end to end.
+            await page.Locator("form.main-form").EvaluateAsync("""
+                form => {
+                  const foto = document.createElement('input');
+                  foto.type = 'hidden'; foto.name = 'Foto'; foto.value = 'diagnostic.png';
+                  form.appendChild(foto);
+                }
+                """);
+
+            await page.Locator("button.btn-add-circle").ClickAsync();
+            await Assertions.Expect(page.Locator("#modalAcao")).ToBeVisibleAsync();
+            await page.Locator("#nomeAcao").FillAsync("Encaminhamento institucional");
+            await page.Locator("#provedorAcao").FillAsync("Unidade de saúde");
+            await page.Locator("#quantidadeAcao").FillAsync("2");
+            await page.Locator($"input[name=modalEixos][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+            await page.Locator("#modalAcao .btn-confirm").ClickAsync();
+            await Assertions.Expect(page.Locator("#container-institucional .action-list-item"))
+                .ToContainTextAsync("Encaminhamento institucional");
+            await Assertions.Expect(page.Locator("input[name='TempAcoes.Index']")).ToHaveCountAsync(1);
+
+            await page.Locator("form.main-form > .buttons-container button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
+            var diaryId = await Fixture.QueryAsync(db => db.DiariosCampo
+                .Where(diary => diary.Descricao == marker)
+                .Select(diary => diary.IdDCampo).SingleAsync());
+
+            // Diagnostic assertion: the UI posts TempAcoes, but the current action
+            // signature never accepts it, so the related row is lost.
+            Assert.Equal(0, await Fixture.QueryAsync(db => db.DiarioDAcoes
+                .CountAsync(action => action.FkIdDiario == diaryId)));
+        });
+
+    private async Task<DiaryPrerequisites> GetPrerequisitesAsync() =>
+        await Fixture.QueryAsync(async db => new DiaryPrerequisites(
+            await db.Comunidades.Where(community => community.Ativo == "S")
+                .OrderBy(community => community.Id_Comunidade)
+                .Select(community => community.Id_Comunidade).FirstAsync(),
+            await db.Eixos.OrderBy(axis => axis.IdEixo)
+                .Select(axis => axis.IdEixo).Take(2).ToArrayAsync()));
+
+    private sealed record DiaryPrerequisites(int CommunityId, int[] AxisIds);
+}

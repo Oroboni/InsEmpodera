@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Relatório RSC";
+    ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
     // ViewData["DisableMainScroll"] foi REMOVIDO para Corrigir o Scroll
 }
@@ -20,7 +21,7 @@
     <div class="report-content-box">
         <div class="report-filters" style="border-bottom: none; margin-bottom: 0;">
             <form asp-action="Rsc" method="get" id="comunidadeForm" class="form-group">
-                <label for="comunidadeId">Comunidade</label>
+                <label for="ComunidadeId">Comunidade</label>
                 <div class="select-wrapper">
                     <i class="fa-solid fa-city"></i>
                     <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" class="clean-input" required>

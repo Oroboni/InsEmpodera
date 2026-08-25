@@ -31,11 +31,13 @@ public class AccessProfileController : Controller
                 u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis"))
             .FirstOrDefault();
 
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        if (!PodePerfis.CanList("Perfis"))
         {
-            return RedirectToAction("Index", "AccessProfile");
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
 
+        ViewBag.CanDeleteProfiles = PodePerfis.CanDelete("Perfis");
+        ViewBag.LoggedProfileId = PodePerfis!.FkIdPerfil;
         ViewData["DisableMainScroll"] = "true";
 
         var perfis = await _context.Perfis
@@ -62,7 +64,7 @@ public class AccessProfileController : Controller
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodePerfis.CanCreate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
         }
@@ -89,7 +91,7 @@ public class AccessProfileController : Controller
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodePerfis.CanCreate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
         }
@@ -106,8 +108,8 @@ public class AccessProfileController : Controller
         var modulos = new[]
         {
             "Usuarios","Perfis","Atividades","Comunidades","Vulnerabilidades",
-            "Recursos","DiariosCampo","Atores","FichaContato","DiarioPessoal",
-            "Avaliacoes","SER"
+            "Recursos","DiariosCampo","Atores","Ficha1Contato","DiariosProcessoPessoal",
+            "AvaliacoesPessoais","SER"
         };
 
         // Ler dados do form manualmente (os checkboxes nomeados em Permissoes[Modulo][Permissao])
@@ -140,7 +142,7 @@ public class AccessProfileController : Controller
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodePerfis.CanUpdate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
         }
@@ -168,7 +170,7 @@ public class AccessProfileController : Controller
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodePerfis.CanUpdate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
         }
@@ -219,4 +221,57 @@ public class AccessProfileController : Controller
 
         return RedirectToAction("Index", "AccessProfile");
     }
-}
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        if (id == null)
+            return NotFound();
+
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUser = await _context.Usuarios
+            .Include(user => user.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
+        if (!loggedUser.CanDelete("Perfis"))
+            return RedirectToAction(nameof(Index));
+
+        var profile = await _context.Perfis
+            .Include(item => item.Usuarios)
+            .Include(item => item.Permissoes)
+            .FirstOrDefaultAsync(item => item.IdPerfil == id.Value);
+        if (profile == null)
+            return NotFound();
+
+        if (profile.IdPerfil == loggedUser!.FkIdPerfil)
+        {
+            TempData["ErrorMessage"] = "O perfil do usuário conectado não pode ser excluído.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (profile.Usuarios.Count > 0)
+        {
+            TempData["ErrorMessage"] = "Este perfil não pode ser excluído porque possui usuários associados, inclusive inativos.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        await using var transaction = await _context.Database.BeginTransactionAsync(HttpContext.RequestAborted);
+        try
+        {
+            _context.Permissoes.RemoveRange(profile.Permissoes);
+            _context.Perfis.Remove(profile);
+            await _context.SaveChangesAsync(HttpContext.RequestAborted);
+            await transaction.CommitAsync(HttpContext.RequestAborted);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(HttpContext.RequestAborted);
+            throw;
+        }
+
+        return RedirectToAction(nameof(Index));
+    }}

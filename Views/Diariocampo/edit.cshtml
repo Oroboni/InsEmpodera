@@ -20,7 +20,6 @@
     if (ViewBag.Atores != null) {
         try {
             var options = new System.Text.Json.JsonSerializerOptions {
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 WriteIndented = false
             };
             jsonAtores = System.Text.Json.JsonSerializer.Serialize(ViewBag.Atores, options);
@@ -31,7 +30,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -328,155 +327,8 @@
     <script src="~/js/diariocampo.js"></script>
 
     <script>
-        var atoresDisponiveis = @Html.Raw(jsonAtores);
-
-        // Inicializa contadores com o que já veio do banco
-        var countEquipe = @(Model.DiarioAcoes != null ? Model.DiarioAcoes.Count : 0);
-        var countInst = @(Model.DiarioDAcoes != null ? Model.DiarioDAcoes.Count : 0);
-
-        document.addEventListener("DOMContentLoaded", function() {
-            // Atualiza os labels de contagem iniciais
-            document.getElementById('count-equipe').innerText = countEquipe;
-            document.getElementById('count-institucional').innerText = countInst;
-
-            // Inicializa mapa com delay
-            setTimeout(function() {
-                if (typeof initMapSelector === 'function' && document.getElementById('mapa-diario')) {
-                    initMapSelector('mapa-diario', 'rua', {
-                        sourceInputId: 'rua',
-                        manualInputId: 'rua',
-                        showSearchControl: false
-                    });
-                }
-            }, 200);
-
-            // Modal de exclusão
-            const openDeleteModalBtn = document.getElementById('openDeleteModalBtn');
-            const deleteModal = document.getElementById('deleteConfirmationModal');
-            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-
-            if(openDeleteModalBtn) {
-                openDeleteModalBtn.addEventListener('click', function() { deleteModal.style.display = 'flex'; });
-                cancelDeleteBtn.addEventListener('click', function() { deleteModal.style.display = 'none'; });
-                deleteModal.addEventListener('click', function(e) { if (e.target === deleteModal) deleteModal.style.display = 'none'; });
-            }
-        });
-
-        // --- Lógica de Ações e Modal ---
-
-        function abrirModalAcao(tipo) {
-            document.getElementById('tipoAcaoInput').value = tipo;
-            
-            // Limpa campos
-            document.getElementById('nomeAcao').value = '';
-            document.getElementById('eixoAcao').value = '';
-            document.getElementById('provedorAcao').value = '';
-            document.getElementById('atorAcao').value = '';
-            document.getElementById('quantidadeAcao').value = '1';
-
-            document.getElementById('modalAcao').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            window.setTimeout(() => document.getElementById('nomeAcao')?.focus(), 0);
-        }
-
-        function fecharModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        document.getElementById('modalAcao').addEventListener('click', function(e) {
-            if (e.target === this) fecharModal('modalAcao');
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('modalAcao').style.display === 'flex') fecharModal('modalAcao');
-        });
-
-        function salvarAcaoNoGrid() {
-            const tipo = document.getElementById('tipoAcaoInput').value;
-            const nome = document.getElementById('nomeAcao').value;
-            const eixoId = document.getElementById('eixoAcao').value;
-            const provedor = document.getElementById('provedorAcao').value;
-            const qtd = document.getElementById('quantidadeAcao').value;
-
-            if (!nome) { alert("O campo Nome é obrigatório."); return; }
-            if (!provedor) { alert("O campo Provedor Externo é obrigatório."); return; }
-
-            let containerID, emptyID, counterSpanID, badgeClass;
-            
-            if (tipo === 'equipe') {
-                containerID = 'container-equipe';
-                emptyID = 'empty-equipe';
-                counterSpanID = 'count-equipe';
-                badgeClass = 'tag-blue';
-                countEquipe++;
-                document.getElementById(counterSpanID).innerText = countEquipe;
-            } else {
-                containerID = 'container-institucional';
-                emptyID = 'empty-institucional';
-                counterSpanID = 'count-institucional';
-                badgeClass = 'tag-purple';
-                countInst++;
-                document.getElementById(counterSpanID).innerText = countInst;
-            }
-
-            document.getElementById(emptyID).style.display = 'none';
-
-            const container = document.getElementById(containerID);
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'action-list-item';
-            
-            // Estilos inline para garantir visual imediato
-            itemDiv.style.background = '#fff';
-            itemDiv.style.padding = '10px 15px';
-            itemDiv.style.borderRadius = '8px';
-            itemDiv.style.marginBottom = '8px';
-            itemDiv.style.border = '1px solid #e0e0e0';
-            itemDiv.style.display = 'flex';
-            itemDiv.style.justifyContent = 'space-between';
-            itemDiv.style.alignItems = 'center';
-
-            itemDiv.innerHTML = `
-                <div style="flex: 1;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                        <strong style="color: #333;">${nome}</strong>
-                        <span class="tag-item ${badgeClass}" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ${tipo==='equipe'?'#e3f2fd':'#f3e5f5'}; color: ${tipo==='equipe'?'#1565c0':'#7b1fa2'}; border: 1px solid ${tipo==='equipe'?'#90caf9':'#ce93d8'};">
-                            ${tipo === 'equipe' ? 'Equipe' : 'Institucional'}
-                        </span>
-                    </div>
-                    <div style="font-size: 0.8rem; color: #666;">
-                        <i class="fa-solid fa-building"></i> ${provedor} 
-                        ${qtd > 1 ? ` &bull; <strong>${qtd}x</strong>` : ''}
-                    </div>
-                </div>
-                <button type="button" onclick="removerItemGrid(this, '${tipo}')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-                
-                <input type="hidden" name="TempAcoes.Index" value="${Date.now()}" />
-                <input type="hidden" name="TempAcoes[${Date.now()}].Nome" value="${nome}" />
-                <input type="hidden" name="TempAcoes[${Date.now()}].Provedor" value="${provedor}" />
-                <input type="hidden" name="TempAcoes[${Date.now()}].Tipo" value="${tipo}" />
-                <input type="hidden" name="TempAcoes[${Date.now()}].FkIdEixo" value="${eixoId}" />
-                <input type="hidden" name="TempAcoes[${Date.now()}].Quantidade" value="${qtd}" />
-            `;
-
-            container.appendChild(itemDiv);
-            fecharModal('modalAcao');
-        }
-
-        function removerItemGrid(btn, tipo) {
-            btn.closest('.action-list-item').remove();
-
-            if (tipo === 'equipe') {
-                countEquipe--;
-                document.getElementById('count-equipe').innerText = countEquipe;
-                if (countEquipe === 0) document.getElementById('empty-equipe').style.display = 'block';
-            } else {
-                countInst--;
-                document.getElementById('count-institucional').innerText = countInst;
-                if (countInst === 0) document.getElementById('empty-institucional').style.display = 'block';
-            }
-        }
+        window.atoresDisponiveis = @Html.Raw(jsonAtores);
+        window.countEquipe = @(Model.DiarioAcoes != null ? Model.DiarioAcoes.Count : 0);
+        window.countInst = @(Model.DiarioDAcoes != null ? Model.DiarioDAcoes.Count : 0);
     </script>
 }

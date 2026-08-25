@@ -1,0 +1,116 @@
+@{
+    ViewData["PageCSS"] = "configuracoes";
+    Layout = "_Layout";
+
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isEnglish = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase);
+    var isSpanish = currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase);
+    ViewData["Title"] = isEnglish ? "Settings" : isSpanish ? "Configuración" : "Configurações";
+    var languageMode = Context.Request.Cookies[Empodera.Services.UserCultureService.PreferenceModeCookieName];
+    var usesExplicitLanguage = string.Equals(languageMode, "explicit", StringComparison.Ordinal);
+    var currentLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
+        ? "English"
+        : currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase)
+            ? "Español"
+            : "Português";
+    var eyebrow = isEnglish ? "System preferences" : isSpanish ? "Preferencias del sistema" : "Preferências do sistema";
+    var pageDescription = isEnglish ? "Customize the interface in this browser." : isSpanish ? "Personaliza la interfaz de este navegador." : "Personalize a interface deste navegador.";
+    var currentLanguageLabel = isEnglish ? "Current language" : isSpanish ? "Idioma actual" : "Idioma atual";
+    var languageTitle = isEnglish ? "Interface language" : isSpanish ? "Idioma de la interfaz" : "Idioma da interface";
+    var languageDescription = isEnglish ? "Changes apply immediately and remain in this browser." : isSpanish ? "El cambio se aplica inmediatamente y permanece en este navegador." : "A alteração é aplicada imediatamente e permanece neste navegador.";
+    var automaticLabel = isEnglish ? "Automatic" : isSpanish ? "Automático" : "Automático";
+    var automaticDescription = isEnglish ? "Use browser language" : isSpanish ? "Usar el idioma del navegador" : "Usar o idioma do navegador";
+    var loginLanguageNote = isEnglish ? "The language can also be selected before signing in, on the login screen." : isSpanish ? "El idioma también se puede elegir antes de entrar, en la pantalla de inicio de sesión." : "O idioma também pode ser escolhido antes de entrar, na tela de login.";
+    var profilesTitle = isEnglish ? "Profiles and permissions" : isSpanish ? "Perfiles y permisos" : "Perfis e permissões";
+    var profilesDescription = isEnglish ? "Review which actions each profile can perform in the system modules." : isSpanish ? "Consulta qué acciones puede realizar cada perfil en los módulos del sistema." : "Consulte quais ações cada perfil pode realizar nos módulos do sistema.";
+    var profilesAction = isEnglish ? "View access profiles" : isSpanish ? "Ver perfiles de acceso" : "Ver Perfis de Acesso";
+    var logoutTitle = isEnglish ? "End session" : isSpanish ? "Cerrar sesión" : "Encerrar sessão";
+    var logoutDescription = isEnglish ? "Securely end the session in this browser." : isSpanish ? "Finaliza la sesión de forma segura en este navegador." : "Finalize a sessão neste navegador com segurança.";
+    var logoutAction = isEnglish ? "Sign out" : isSpanish ? "Cerrar sesión" : "Fazer logout";
+}
+
+<main class="settings-page" aria-labelledby="settings-title">
+    <header class="settings-hero">
+        <div>
+            <span class="page-eyebrow">@eyebrow</span>
+            <h1 id="settings-title">@ViewData["Title"]</h1>
+            <p>@pageDescription</p>
+        </div>
+        <div class="settings-current-language" aria-label="@currentLanguageLabel: @currentLanguage">
+            <span>@currentLanguageLabel</span>
+            <strong>@currentLanguage</strong>
+        </div>
+    </header>
+
+    <section class="settings-language-panel" aria-labelledby="interface-language-title">
+        <div class="settings-section-heading">
+            <span class="settings-section-icon" aria-hidden="true">
+                <i class="fa-solid fa-language"></i>
+            </span>
+            <div>
+                <h2 id="interface-language-title">@languageTitle</h2>
+                <p>@languageDescription</p>
+            </div>
+        </div>
+
+        <form asp-controller="Language" asp-action="Set" method="post" class="language-options">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="/Configuracoes" />
+
+            @foreach (var language in new[]
+            {
+                (Code: "auto", ShortName: "A", Label: automaticLabel, Description: automaticDescription),
+                (Code: "pt-BR", ShortName: "PT", Label: "Português", Description: "Português do Brasil"),
+                (Code: "en", ShortName: "EN", Label: "English", Description: "English"),
+                (Code: "es", ShortName: "ES", Label: "Español", Description: "Español")
+            })
+            {
+                var isActive = language.Code == "auto"
+                    ? !usesExplicitLanguage
+                    : usesExplicitLanguage
+                      && string.Equals(language.Code, currentCulture, StringComparison.OrdinalIgnoreCase);
+
+                <button type="submit"
+                        name="culture"
+                        value="@language.Code"
+                        class="language-option @(isActive ? "is-active" : null)"
+                        aria-pressed="@(isActive ? "true" : "false")">
+                    <span class="language-code" aria-hidden="true">@language.ShortName</span>
+                    <span class="language-copy">
+                        <strong>@language.Label</strong>
+                        <small>@language.Description</small>
+                    </span>
+                    <span class="language-check" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </span>
+                </button>
+            }
+        </form>
+
+        <div class="settings-language-note">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <span>@loginLanguageNote</span>
+        </div>
+    </section>
+
+    <section class="settings-grid" aria-label="Outras opções">
+        <article class="settings-card">
+            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+            <div>
+                <h2>@profilesTitle</h2>
+                <p>@profilesDescription</p>
+                <a asp-controller="AccessProfile" asp-action="Index">@profilesAction</a>
+            </div>
+        </article>
+        <article class="settings-card settings-card-danger">
+            <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+            <div>
+                <h2>@logoutTitle</h2>
+                <p>@logoutDescription</p>
+                <form asp-controller="Account" asp-action="Logout" method="post" asp-antiforgery="true">
+                    <button type="submit" class="settings-card-action">@logoutAction</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>

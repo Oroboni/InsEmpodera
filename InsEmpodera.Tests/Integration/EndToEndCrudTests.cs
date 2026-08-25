@@ -233,7 +233,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
             return true;
         });
 
-        using var login = await client.GetAsync($"/Account?Email={Uri.EscapeDataString("joao@email.com")}&Password={Uri.EscapeDataString(Password)}");
+        using var login = await AuthenticationTestHelper.LoginAsync(client, "joao@email.com", Password);
         AssertRedirect(login);
         return client;
     }

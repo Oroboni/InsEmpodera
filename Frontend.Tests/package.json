@@ -1,0 +1,18 @@
+{
+  "name": "empodera-frontend-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Testes isolados de DOM e JavaScript da interface do Empodera.",
+  "scripts": {
+    "test": "vitest run",
+    "test:verbose": "vitest run --reporter=verbose",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage.enabled --coverage.provider=v8 --coverage.reporter=text --coverage.reporter=html"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "3.2.7",
+    "jsdom": "26.1.0",
+    "vitest": "3.2.7"
+  }
+}

@@ -28,9 +28,9 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+            if (!PodeDiario.CanList("Ficha1Contato"))
             {
-                return RedirectToAction("Index", "FichaPrimeiroContato");
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             var fichas = _context.FichasPrimeiroContato
@@ -85,7 +85,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+            if (!PodeDiario.CanCreate("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
@@ -131,7 +131,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+            if (!PodeDiario.CanCreate("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
@@ -209,11 +209,11 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "Account");
 
             var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
-            var permission = await _context.Usuarios
-                .Where(user => user.IdUsuario == loggedUserId)
-                .SelectMany(user => user.Perfil.Permissoes)
-                .FirstOrDefaultAsync(item => item.Modulo == "Ficha1Contato");
-            if (permission?.PodeAtualizar != "S")
+            var loggedUser = await _context.Usuarios
+                .Include(user => user.Perfil)
+                .ThenInclude(profile => profile.Permissoes)
+                .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
+            if (!loggedUser.CanUpdate("Ficha1Contato"))
                 return RedirectToAction(nameof(Index));
 
             if (id == null) return NotFound();
@@ -277,7 +277,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            if (!PodeDiario.CanUpdate("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
@@ -420,7 +420,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            if (!PodeDiario.CanUpdate("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
@@ -455,7 +455,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            if (!PodeDiario.CanUpdate("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
@@ -488,7 +488,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+            if (!PodeDiario.CanDelete("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
@@ -518,7 +518,7 @@ namespace Empodera.Controllers
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
-            if (PodeDiario == null || PodeDiario.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+            if (!PodeDiario.CanDelete("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }

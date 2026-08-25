@@ -19,9 +19,9 @@ public class AtividadesController : Controller
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        if (!PodeAtividades.CanList("Atividades"))
         {
-            return RedirectToAction("Index", "Atividades");
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
 
         var atividades = await _context.Atividades
@@ -39,7 +39,7 @@ public class AtividadesController : Controller
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
         }
@@ -70,7 +70,7 @@ public class AtividadesController : Controller
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
         }
@@ -106,7 +106,7 @@ public class AtividadesController : Controller
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
         }
@@ -143,7 +143,7 @@ public class AtividadesController : Controller
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
         }
@@ -205,8 +205,7 @@ public class AtividadesController : Controller
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)
             .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
-        var permission = loggedUser?.Perfil.Permissoes.FirstOrDefault(item => item.Modulo == "Atividades");
-        if (permission?.PodeDeletar != "S")
+        if (!loggedUser.CanDelete("Atividades"))
             return RedirectToAction(nameof(Index));
 
         var activity = await _context.Atividades.FindAsync(id.Value);

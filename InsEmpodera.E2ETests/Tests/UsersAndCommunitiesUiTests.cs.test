@@ -1,0 +1,176 @@
+using Empodera.Models;
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    public Task Users_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi() =>
+        RunInBrowserAsync(nameof(Users_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi), async page =>
+        {
+            await LoginAsync(page);
+            await page.GotoAsync("/Users");
+
+            var name = Unique("Usuário UI");
+            var editedName = name + " editado";
+            var email = $"e2e-{Guid.NewGuid():N}@example.test";
+            var initialTotal = int.Parse((await page.Locator("#totalUsers").InnerTextAsync()).Trim());
+
+            await page.Locator("button.btn-add").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users/Create");
+
+            // HTML5 validation must stop an incomplete form before it reaches the server.
+            Assert.False(await page.Locator("form.main-form").EvaluateAsync<bool>("form => form.checkValidity()"));
+            await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Usuário" }).ClickAsync();
+            Assert.Equal("/Users/Create", new Uri(page.Url).AbsolutePath);
+            Assert.True(await page.Locator("input[name=Nome]").EvaluateAsync<bool>("field => field.matches(':invalid')"));
+
+            await page.Locator("input[name=Nome]").FillAsync(name);
+            await page.Locator("input[name=Email]").FillAsync(email);
+            await page.Locator("input[name=Senha]").FillAsync("NovaSenha@123");
+            await page.Locator("select[name=FkIdPerfil]").SelectOptionAsync("1");
+            await page.Locator("select[name=Genero]").SelectOptionAsync("2");
+            await page.Locator("input[name=Ocupacao]").FillAsync("Qualidade E2E");
+            await page.Locator("select[name=IdiomaPreferido]").SelectOptionAsync("1");
+            await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Usuário" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
+
+            await Assertions.Expect(page.Locator("#totalUsers")).ToHaveTextAsync((initialTotal + 1).ToString());
+            await Assertions.Expect(page.Locator(".user-item").Filter(new() { HasText = email })).ToBeVisibleAsync();
+
+            var id = await Fixture.QueryAsync(db => db.Usuarios
+                .Where(user => user.Email == email)
+                .Select(user => user.IdUsuario)
+                .SingleAsync());
+
+            var search = page.Locator("#searchUsersInput");
+            await search.FillAsync(email);
+            await Assertions.Expect(page.Locator(".user-item:visible")).ToHaveCountAsync(1);
+            await search.FillAsync("registro-que-nao-existe");
+            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeVisibleAsync();
+            await search.PressAsync("Escape");
+            await Assertions.Expect(page.Locator("#usersGrid")).ToBeVisibleAsync();
+
+            await page.GotoAsync($"/Users/Edit/{id}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
+            await page.Locator("input[name=Nome]").FillAsync(editedName);
+            await page.Locator("input[name=Ocupacao]").FillAsync("QA automatizado");
+            await page.Locator("input[name=Senha]").FillAsync("SenhaEditada@123");
+            await page.Locator("select[name=Genero]").SelectOptionAsync("1");
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
+
+            Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Usuarios
+                .Where(user => user.IdUsuario == id)
+                .Select(user => user.Nome)
+                .SingleAsync()));
+
+            await page.GotoAsync($"/Users/Edit/{id}");
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
+            await page.Locator("#cancelDeleteBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeHiddenAsync();
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
+
+            Assert.Equal("N", await Fixture.QueryAsync(db => db.Usuarios
+                .Where(user => user.IdUsuario == id)
+                .Select(user => user.Ativo)
+                .SingleAsync()));
+            await page.Locator("#searchUsersInput").FillAsync(email);
+            await page.Locator("button[data-status=inativos]").ClickAsync();
+            await Assertions.Expect(page.Locator(".user-item").Filter(new() { HasText = email })).ToBeVisibleAsync();
+        });
+
+    [Fact]
+    public Task Communities_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi() =>
+        RunInBrowserAsync(nameof(Communities_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi), async page =>
+        {
+            await LoginAsync(page);
+            var name = Unique("Comunidade UI");
+            var editedName = name + " editada";
+
+            await page.GotoAsync("/Comunidade/ComunidadesDetalhes/0");
+            Assert.False(await page.Locator("form.main-form").EvaluateAsync<bool>("form => form.checkValidity()"));
+            await page.Locator("#edit-save-btn").ClickAsync();
+            Assert.Equal("/Comunidade/ComunidadesDetalhes/0", new Uri(page.Url).AbsolutePath);
+
+            await page.Locator("input[name=Nome]").FillAsync(name);
+            await page.Locator("textarea[name=Local]").FillAsync("Rua dos Testes, 123, Fortaleza");
+            await page.Locator("input[name=Complemento]").FillAsync("Próximo ao laboratório");
+            await page.Locator("textarea[name=Descricao]").FillAsync("Criada por uma jornada real de navegador");
+            await page.Locator("select[name=Status]").SelectOptionAsync("Em processo");
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
+
+            var id = await Fixture.QueryAsync(db => db.Comunidades
+                .Where(community => community.Nome == name)
+                .Select(community => community.Id_Comunidade)
+                .SingleAsync());
+            await Assertions.Expect(page.Locator(".comunidade-item").Filter(new() { HasText = name })).ToBeVisibleAsync();
+
+            await page.Locator("#searchInput").FillAsync(name);
+            await Assertions.Expect(page.Locator(".comunidade-item:visible")).ToHaveCountAsync(1);
+            await page.Locator("#searchInput").FillAsync("comunidade-inexistente");
+            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeVisibleAsync();
+            await page.Locator("#searchInput").PressAsync("Escape");
+
+            await page.GotoAsync($"/Comunidade/ComunidadesDetalhes/{id}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
+            await page.Locator("input[name=Nome]").FillAsync(editedName);
+            await page.Locator("textarea[name=Descricao]").FillAsync("Descrição alterada pelo navegador");
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
+
+            Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Comunidades
+                .Where(community => community.Id_Comunidade == id)
+                .Select(community => community.Nome)
+                .SingleAsync()));
+
+            await page.GotoAsync($"/Comunidade/ComunidadesDetalhes/{id}");
+            var exportLink = page.Locator("a[href*='/Services/ExportComunidade']");
+            await Assertions.Expect(exportLink).ToBeVisibleAsync();
+            var download = await page.RunAndWaitForDownloadAsync(() => exportLink.ClickAsync());
+            Assert.EndsWith(".xlsx", download.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
+            await using (var stream = await download.CreateReadStreamAsync())
+            {
+                Assert.NotNull(stream);
+                var signature = new byte[2];
+                var signatureBytes = await stream!.ReadAsync(signature);
+                Assert.Equal(2, signatureBytes);
+                Assert.Equal((byte)'P', signature[0]);
+                Assert.Equal((byte)'K', signature[1]);
+                long totalBytes = signatureBytes;
+                var buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
+                    totalBytes += bytesRead;
+                Assert.True(totalBytes > 2, "A exportação XLSX foi baixada vazia.");
+            }
+
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
+            await page.Locator("#cancelDeleteBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeHiddenAsync();
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
+
+            Assert.Equal("N", await Fixture.QueryAsync(db => db.Comunidades
+                .Where(community => community.Id_Comunidade == id)
+                .Select(community => community.Ativo)
+                .SingleAsync()));
+            await Assertions.Expect(page.Locator(".comunidade-item").Filter(new() { HasText = editedName }))
+                .ToHaveCountAsync(0);
+        });
+}

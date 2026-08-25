@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Relatório - Fichas de 1º Contato";
+    ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
 
     // Variável auxiliar para verificar se há comunidade selecionada
@@ -27,7 +28,7 @@
             <form asp-action="FirstContact" method="get" id="comunidadeForm"
                   style="margin-bottom: @(temComunidade ? "20px" : "0");">
                 <div class="form-group">
-                    <label for="comunidadeId" style="font-weight: bold; font-size: 1rem;">Comunidade</label>
+                    <label for="ComunidadeId" style="font-weight: bold; font-size: 1rem;">Comunidade</label>
                     <div class="select-wrapper">
                         <i class="fa-solid fa-city"></i>
                         <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades"
@@ -226,7 +227,7 @@
                         <!-- Botão de Filtrar para confirmar a ação -->
                         <div class="form-group" style="justify-content: flex-end;">
                             <label>&nbsp;</label> <!-- Espaço vazio para alinhar -->
-                            <button type="button" class="btn btn-primary" style="height: 42px; width: 100%;">Aplicar
+                            <button type="button" class="btn btn-primary" disabled aria-disabled="true" title="Filtros avançados ainda não estão disponíveis" style="height: 42px; width: 100%;">Aplicar
                                 Filtros</button>
                             </div>
                         </div>

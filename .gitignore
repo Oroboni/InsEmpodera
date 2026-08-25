@@ -56,3 +56,8 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+# Automatic test database and artifacts
+Empodera.testing.db
+Frontend.Tests/coverage/
+Frontend.Tests/vitest-results.json
+InsEmpodera.E2ETests/TestResults/

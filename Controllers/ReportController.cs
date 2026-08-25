@@ -25,11 +25,16 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanCreate("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
         return View();
     }
 
     // POST: /Report/RelatorioComunidade
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RelatorioComunidade(IList<IFormFile> files)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -37,23 +42,71 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanCreate("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
         if (files == null || files.Count == 0)
             return RedirectToAction("Index");
 
-        int userId = int.Parse(HttpContext.Session.GetString("ID"));
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var userId))
+            return RedirectToAction("Index", "Account");
 
-        var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-        Directory.CreateDirectory(uploadFolder);
-
-        foreach (var file in files)
+        const long maxUploadBytes = 20 * 1024 * 1024;
+        foreach (var file in files.Where(file => file is not null && file.Length > 0))
         {
-            if (file == null || file.Length <= 0) continue;
+            var submittedFileName = Path.GetFileName(file.FileName);
+            var extension = Path.GetExtension(submittedFileName);
+            if (file.Length > maxUploadBytes ||
+                (extension.Equals(".xls", StringComparison.OrdinalIgnoreCase) is false &&
+                 extension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase) is false))
+            {
+                return BadRequest("Envie somente uma planilha .xls ou .xlsx de até 20 MB.");
+            }
+        }
 
-            var filepath = Path.Combine(uploadFolder, file.FileName);
-            using (var stream = new FileStream(filepath, FileMode.Create))
-                await file.CopyToAsync(stream);
+        await using var transaction = await _context.Database.BeginTransactionAsync(HttpContext.RequestAborted);
+        try
+        {
+            foreach (var file in files)
+            {
+                if (file == null || file.Length <= 0)
+                    continue;
 
-            await ProcessarExcel(filepath, userId);
+                var submittedFileName = Path.GetFileName(file.FileName);
+                var extension = Path.GetExtension(submittedFileName);
+                var temporaryPath = Path.Combine(
+                    Path.GetTempPath(),
+                    $"empodera-import-{Guid.NewGuid():N}{extension.ToLowerInvariant()}");
+
+                try
+                {
+                    await using (var stream = new FileStream(
+                                     temporaryPath,
+                                     FileMode.CreateNew,
+                                     FileAccess.Write,
+                                     FileShare.None,
+                                     bufferSize: 81920,
+                                     FileOptions.Asynchronous))
+                    {
+                        await file.CopyToAsync(stream, HttpContext.RequestAborted);
+                    }
+
+                    await ProcessarExcel(temporaryPath, userId);
+                }
+                finally
+                {
+                    if (System.IO.File.Exists(temporaryPath))
+                        System.IO.File.Delete(temporaryPath);
+                }
+            }
+
+            await transaction.CommitAsync(HttpContext.RequestAborted);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(HttpContext.RequestAborted);
+            throw;
         }
 
         return RedirectToAction("Index");
@@ -295,7 +348,7 @@ public class ReportController : Controller
         // ─────────────────────────────────────────────────────────────
         // [7] — AVALIAÇÕES PESSOAIS
         // Linha 0 = cabeçalho
-        // Colunas: 0=Ator, 1=Data, 2=Rede primária, 3=Seguridade Social,
+        // Colunas: 0=Ator, 1=Data, 2=Rede primária, 3=Cometimento de crimes,
         //          4=Substâncias, 5=Moradia, 6=Prevenção, 7=Assistência Básica,
         //          8=Educação, 9=Saúde, 10=Ocupação, 11=Lazer
         // ─────────────────────────────────────────────────────────────
@@ -316,15 +369,16 @@ public class ReportController : Controller
                 _context.AvaliacaoPessoal.Add(new AvaliacaoPessoal
                 {
                     FK_id_Atores      = idAtor,
-                    // Rede primária (coluna 2) não possui campo numérico padrão; ignora ou adapte
-                    Substancias   = ParseInt(row[4]?.ToString()),
-                    Moradia       = ParseInt(row[5]?.ToString()),
-                    Prevencao     = ParseInt(row[6]?.ToString()),
-                    AssBasica     = ParseInt(row[7]?.ToString()),
-                    Educacao      = ParseInt(row[8]?.ToString()),
-                    Saude         = ParseInt(row[9]?.ToString()),
-                    Ocupacao      = ParseInt(row[10]?.ToString()),
-                    Lazer         = ParseInt(row[11]?.ToString()),
+                    // Rede primária (coluna 2) não possui campo numérico explícito no modelo.
+                    CCrimes       = PersonalAssessmentScore.ParseImported(row[3]?.ToString(), "Cometimento de crimes"),
+                    Substancias   = PersonalAssessmentScore.ParseImported(row[4]?.ToString(), "Substâncias"),
+                    Moradia       = PersonalAssessmentScore.ParseImported(row[5]?.ToString(), "Moradia"),
+                    Prevencao     = PersonalAssessmentScore.ParseImported(row[6]?.ToString(), "Prevenção"),
+                    AssBasica     = PersonalAssessmentScore.ParseImported(row[7]?.ToString(), "Assistência básica"),
+                    Educacao      = PersonalAssessmentScore.ParseImported(row[8]?.ToString(), "Educação"),
+                    Saude         = PersonalAssessmentScore.ParseImported(row[9]?.ToString(), "Saúde"),
+                    Ocupacao      = PersonalAssessmentScore.ParseImported(row[10]?.ToString(), "Ocupação"),
+                    Lazer         = PersonalAssessmentScore.ParseImported(row[11]?.ToString(), "Lazer"),
                     DtCriacao     = dtAvaliacao == default ? DateTime.Now : dtAvaliacao,
                     DtModificacao = DateTime.Now,
                     FkIdUsuario   = userId
@@ -758,7 +812,7 @@ public class ReportController : Controller
             "en proceso"     => "Em processo",
             "en diagnóstico" => "Em diagnóstico",
             "en diagnostico" => "Em diagnóstico",
-            "diagnosticado"  => "Diagnosticado",
+            "diagnosticado"  => "Em diagnóstico",
             "em diagnóstico" => "Em diagnóstico",
             "em processo"    => "Em processo",
             _                => value.Trim()
@@ -835,7 +889,11 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
 
@@ -845,7 +903,11 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
 
@@ -855,7 +917,11 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.AtorList = new SelectList(await _context.Atores.ToListAsync(), "IdAtores", "Nome", atorId);
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.AtorList = new SelectList(await _context.Atores.Where(actor => actor.Ativo != "N").ToListAsync(), "IdAtores", "Nome", atorId);
         ViewBag.SelectedAtorId = atorId;
         return View();
     }
@@ -866,8 +932,12 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
-        ViewBag.AtorList = new SelectList(await _context.Atores.ToListAsync(), "IdAtores", "Nome", atorId);
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
+        ViewBag.AtorList = new SelectList(await _context.Atores.Where(actor => actor.Ativo != "N").ToListAsync(), "IdAtores", "Nome", atorId);
         return View();
     }
 
@@ -877,8 +947,23 @@ public class ReportController : Controller
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        ViewBag.AtorList = new SelectList(await _context.Atores.ToListAsync(), "IdAtores", "Nome", atorId);
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.AtorList = new SelectList(await _context.Atores.Where(actor => actor.Ativo != "N").ToListAsync(), "IdAtores", "Nome", atorId);
         ViewBag.SelectedAtorId = atorId;
         return View();
     }
-}
+
+    private Task<Usuario?> CurrentUserWithPermissionsAsync()
+    {
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        return _context.Usuarios
+            .AsNoTracking()
+            .Include(user => user.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(
+                user => user.IdUsuario == loggedUserId,
+                HttpContext.RequestAborted);
+    }}

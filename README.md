@@ -20,3 +20,6 @@ Este é o repositório do projeto realizado pelos alunos da fatec para o Institu
 ### Mike Willy Franguelli
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mike-franguelli/)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mkrosz)
+## Testes automáticos
+
+Execute `.\testar.ps1` para validar backend, eventos da interface e jornadas reais no Chromium. A cobertura, os cenários e a solução de falhas estão descritos em [InsEmpodera.E2ETests/README.md](InsEmpodera.E2ETests/README.md).

@@ -8,6 +8,18 @@ namespace Empodera.Services;
 public static class UserCultureService
 {
     public const string FallbackCulture = "pt-BR";
+    public const string PreferenceModeCookieName = ".Empodera.LanguageMode";
+
+    private static readonly IReadOnlyDictionary<string, string> SupportedCultures =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["pt"] = "pt-BR",
+            ["pt-BR"] = "pt-BR",
+            ["en"] = "en",
+            ["en-US"] = "en",
+            ["es"] = "es",
+            ["es-ES"] = "es"
+        };
 
     public static string FromBrowser(StringValues acceptLanguage)
     {
@@ -40,7 +52,7 @@ public static class UserCultureService
     {
         if (preference == IdiomaPreferido.Default)
         {
-            response.Cookies.Delete(CookieRequestCultureProvider.DefaultCookieName);
+            FollowBrowser(response);
             return;
         }
 
@@ -52,19 +64,46 @@ public static class UserCultureService
             _ => FallbackCulture
         };
 
+        ApplyCulture(response, culture);
+    }
+
+    public static bool TryApplyCulture(HttpResponse response, string? requestedCulture)
+    {
+        if (string.IsNullOrWhiteSpace(requestedCulture)
+            || !SupportedCultures.TryGetValue(requestedCulture.Trim(), out var culture))
+            return false;
+
+        ApplyCulture(response, culture);
+        return true;
+    }
+
+    public static void FollowBrowser(HttpResponse response)
+    {
+        response.Cookies.Delete(CookieRequestCultureProvider.DefaultCookieName);
+        AppendModeCookie(response, "browser");
+    }
+
+    public static bool HasSavedMode(HttpRequest request) =>
+        request.Cookies.ContainsKey(PreferenceModeCookieName);
+
+    private static void ApplyCulture(HttpResponse response, string culture)
+    {
         response.Cookies.Append(
             CookieRequestCultureProvider.DefaultCookieName,
             CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-            new CookieOptions
-            {
-                Expires = DateTimeOffset.UtcNow.AddYears(1),
-                HttpOnly = true,
-                IsEssential = true,
-                SameSite = SameSiteMode.Lax,
-                Secure = response.HttpContext.Request.IsHttps
-            });
+            CreateCookieOptions(response));
+        AppendModeCookie(response, "explicit");
     }
 
-    public static void ClearPreference(HttpResponse response) =>
-        response.Cookies.Delete(CookieRequestCultureProvider.DefaultCookieName);
+    private static void AppendModeCookie(HttpResponse response, string mode) =>
+        response.Cookies.Append(PreferenceModeCookieName, mode, CreateCookieOptions(response));
+
+    private static CookieOptions CreateCookieOptions(HttpResponse response) => new()
+    {
+        Expires = DateTimeOffset.UtcNow.AddYears(1),
+        HttpOnly = true,
+        IsEssential = true,
+        SameSite = SameSiteMode.Lax,
+        Secure = response.HttpContext.Request.IsHttps
+    };
 }

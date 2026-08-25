@@ -785,7 +785,7 @@ label:has(input[type="checkbox"]) {
     width: 40px;
     height: 40px;
     border-radius: var(--radius-lg);
-    background-color: var(--color-white);
+    background-color: purple;
     border: 1px solid var(--color-gray-300);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -794,7 +794,7 @@ label:has(input[type="checkbox"]) {
 }
 
 .btn-action:hover {
-    background-color: var(--color-gray-50);
+    background-color: rgb(88, 0, 88);
     transform: scale(1.05);
     box-shadow: var(--shadow-sm);
 }

@@ -9,7 +9,7 @@
 @section Styles {
     
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
 }
 
@@ -139,7 +139,7 @@
                     </div>
 
                     <div class="actions">
-                        <a class="btn-action" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
+                        <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
                             title="Ver detalhes">
                             <i class="fa-solid fa-eye"></i>
                         </a>
@@ -180,6 +180,8 @@
             const noResultsMessage = document.getElementById('noResultsMessage');
             const userItems = document.querySelectorAll('.user-item');
             const filterButtons = document.querySelectorAll('.filter-eixo-btn');
+
+            if (!searchInput || !usersGrid || !noResultsMessage) return;
 
             let currentStatusFilter = 'todos';
 

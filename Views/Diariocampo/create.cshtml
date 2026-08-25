@@ -20,7 +20,6 @@
     if (ViewBag.Atores != null) {
         try { 
             var options = new System.Text.Json.JsonSerializerOptions {
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 WriteIndented = false
             };
             jsonAtores = System.Text.Json.JsonSerializer.Serialize(ViewBag.Atores, options);
@@ -31,7 +30,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -116,7 +115,7 @@
                 <i class="fa-solid fa-align-left"></i>
             </div>
             <div class="input-content">
-                <label asp-for="Descricao">Relato / Descrição</label>
+                <label for="descricaoInput">Relato / Descrição</label>
                 <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use para mencionar atores"></textarea>
                 <ul id="mention-list"></ul>
             </div>
@@ -157,7 +156,7 @@
                 <i class="fa-solid fa-location-dot"></i>
             </div>
             <div class="input-content">
-                <label>Endereço Completo</label>
+                <label for="rua">Endereço Completo</label>
                 <input asp-for="Localizacao" id="rua" class="clean-input" autocomplete="street-address" placeholder="Digite o endereço completo..." />
             </div>
         </div>
@@ -166,7 +165,7 @@
             <div class="input-card">
                 <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
                 <div class="input-content">
-                    <label>CEP</label>
+                    <label for="cep">CEP</label>
                     <input type="text" id="cep" class="clean-input" placeholder="00000-000">
                 </div>
             </div>
@@ -174,7 +173,7 @@
             <div class="input-card">
                 <div class="icon-box purple"><i class="fa-solid fa-hashtag"></i></div>
                 <div class="input-content">
-                    <label>Número</label>
+                    <label for="numero">Número</label>
                     <input type="text" id="numero" class="clean-input" placeholder="Nº">
                 </div>
             </div>
@@ -283,195 +282,8 @@
     <script src="~/js/diariocampo.js"></script>
 
     <script>
-        // 1. Variáveis Globais
-        var atoresDisponiveis = @Html.Raw(jsonAtores);
-        var countEquipe = 0;
-        var countInst = 0;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            // Inicializa mapa com delay e segurança
-            setTimeout(function() {
-                if (typeof initMapSelector === 'function') {
-                    var mapaDiv = document.getElementById('mapa-diario');
-                    if(mapaDiv) {
-                        initMapSelector('mapa-diario', 'rua', {
-                            sourceInputId: 'rua',
-                            manualInputId: 'rua',
-                            showSearchControl: false
-                        });
-                    }
-                }
-            }, 200);
-        });
-
-        // 2. Funções Globais para o Modal
-        function abrirModalAcao(tipo) {
-            var inputTipo = document.getElementById('tipoAcaoInput');
-            if(!inputTipo) {
-                console.error("Erro: Input 'tipoAcaoInput' não encontrado no HTML do Modal.");
-                return;
-            }
-            inputTipo.value = tipo;
-            
-            // Limpa campos
-            if(document.getElementById('nomeAcao')) document.getElementById('nomeAcao').value = '';
-            if(document.getElementById('provedorAcao')) document.getElementById('provedorAcao').value = '';
-            if(document.getElementById('atorAcao')) document.getElementById('atorAcao').value = '';
-            if(document.getElementById('quantidadeAcao')) document.getElementById('quantidadeAcao').value = '1';
-
-            // Desmarca checkboxes
-            const checkboxes = document.querySelectorAll('input[name="modalEixos"]');
-            checkboxes.forEach(cb => cb.checked = false);
-
-            var modal = document.getElementById('modalAcao');
-            if(modal) {
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                window.setTimeout(() => document.getElementById('nomeAcao')?.focus(), 0);
-            }
-        }
-
-        function fecharModal(modalId) {
-            var modal = document.getElementById(modalId);
-            if (modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // Fecha ao clicar fora
-        var modalEl = document.getElementById('modalAcao');
-        if(modalEl) {
-            modalEl.addEventListener('click', function(e) {
-                if (e.target === this) fecharModal('modalAcao');
-            });
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modalEl?.style.display === 'flex') fecharModal('modalAcao');
-        });
-
-        function salvarAcaoNoGrid() {
-            // Captura com segurança
-            const tipoEl = document.getElementById('tipoAcaoInput');
-            const nomeEl = document.getElementById('nomeAcao');
-            const provedorEl = document.getElementById('provedorAcao');
-            const qtdEl = document.getElementById('quantidadeAcao');
-
-            if(!tipoEl || !nomeEl || !provedorEl) {
-                alert("Erro interno: Campos do modal não encontrados.");
-                return;
-            }
-
-            const tipo = tipoEl.value;
-            const nome = nomeEl.value;
-            const provedor = provedorEl.value;
-            const qtd = qtdEl ? qtdEl.value : '1';
-
-            // Captura Checkboxes (Múltiplos)
-            const checkboxesMarcados = document.querySelectorAll('input[name="modalEixos"]:checked');
-            const eixosIds = Array.from(checkboxesMarcados).map(cb => cb.value);
-            const eixosNomes = Array.from(checkboxesMarcados).map(cb => cb.getAttribute('data-nome')).join(', ');
-
-            // Validações
-            if (!nome) { alert("O campo Nome é obrigatório."); return; }
-            if (eixosIds.length === 0) { alert("Selecione pelo menos um Eixo."); return; }
-            if (!provedor) { alert("O campo Provedor Externo é obrigatório."); return; }
-
-            // Define destino
-            let containerID, emptyID, counterSpanID, badgeClass;
-            
-            if (tipo === 'equipe') {
-                containerID = 'container-equipe';
-                emptyID = 'empty-equipe';
-                counterSpanID = 'count-equipe';
-                badgeClass = 'tag-blue';
-                
-                countEquipe++;
-                const counter = document.getElementById(counterSpanID);
-                if(counter) counter.innerText = countEquipe;
-            } else {
-                containerID = 'container-institucional';
-                emptyID = 'empty-institucional';
-                counterSpanID = 'count-institucional';
-                badgeClass = 'tag-purple';
-                
-                countInst++;
-                const counter = document.getElementById(counterSpanID);
-                if(counter) counter.innerText = countInst;
-            }
-
-            // Esconde msg vazia
-            const emptyState = document.getElementById(emptyID);
-            if(emptyState) emptyState.style.display = 'none';
-
-            // Cria o item visual
-            const container = document.getElementById(containerID);
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'action-list-item';
-            
-            itemDiv.style.background = '#fff';
-            itemDiv.style.padding = '10px 15px';
-            itemDiv.style.borderRadius = '8px';
-            itemDiv.style.marginBottom = '8px';
-            itemDiv.style.border = '1px solid #e0e0e0';
-            itemDiv.style.display = 'flex';
-            itemDiv.style.justifyContent = 'space-between';
-            itemDiv.style.alignItems = 'center';
-
-            const eixoDisplay = eixosNomes ? `<span style="font-size:0.75rem; color:#888;">• ${eixosNomes}</span>` : '';
-            const timestamp = Date.now();
-
-            // Gera inputs hidden para CADA eixo selecionado
-            let inputsEixos = '';
-            eixosIds.forEach((id) => {
-                inputsEixos += `<input type="hidden" name="TempAcoes[${timestamp}].FkIdEixo" value="${id}" />`;
-            });
-
-            itemDiv.innerHTML = `
-                <div style="flex: 1;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                        <strong style="color: #333;">${nome}</strong>
-                        <span class="tag-item ${badgeClass}" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ${tipo==='equipe'?'#e3f2fd':'#f3e5f5'}; color: ${tipo==='equipe'?'#1565c0':'#7b1fa2'}; border: 1px solid ${tipo==='equipe'?'#90caf9':'#ce93d8'};">
-                            ${tipo === 'equipe' ? 'Equipe' : 'Institucional'}
-                        </span>
-                    </div>
-                    <div style="font-size: 0.8rem; color: #666;">
-                        <i class="fa-solid fa-building"></i> ${provedor} 
-                        ${eixoDisplay}
-                        ${qtd > 1 ? ` &bull; <strong>${qtd}x</strong>` : ''}
-                    </div>
-                </div>
-                <button type="button" onclick="removerItemGrid(this, '${tipo}')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-                
-                <input type="hidden" name="TempAcoes.Index" value="${timestamp}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Nome" value="${nome}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Provedor" value="${provedor}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Tipo" value="${tipo}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Quantidade" value="${qtd}" />
-                ${inputsEixos}
-            `;
-
-            if(container) container.appendChild(itemDiv);
-            fecharModal('modalAcao');
-        }
-
-        function removerItemGrid(btn, tipo) {
-            btn.closest('.action-list-item').remove();
-
-            if (tipo === 'equipe') {
-                countEquipe--;
-                const counter = document.getElementById('count-equipe');
-                if(counter) counter.innerText = countEquipe;
-                if (countEquipe === 0) document.getElementById('empty-equipe').style.display = 'block';
-            } else {
-                countInst--;
-                const counter = document.getElementById('count-institucional');
-                if(counter) counter.innerText = countInst;
-                if (countInst === 0) document.getElementById('empty-institucional').style.display = 'block';
-            }
-        }
+        window.atoresDisponiveis = @Html.Raw(jsonAtores);
+        window.countEquipe = 0;
+        window.countInst = 0;
     </script>
 }

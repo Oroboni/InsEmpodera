@@ -1,23 +1,9 @@
 @{
     ViewData["Title"] = "Login";
-    Layout = null;
+    Layout = "_LoginLayout";
 }
 
-<!DOCTYPE html>
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/styles.css">
-    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="~/js/localization.js" asp-append-version="true" defer></script>
-</head>
-<body>
-    <div class="background-circles">
+<div class="background-circles">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
         <div class="circle circle-3"></div>
@@ -42,6 +28,11 @@
                 @Html.AntiForgeryToken()
                 
                 <h2>Faça seu Login:</h2>
+
+                @if (ViewData["LoginError"] is string loginError)
+                {
+                    <div class="validation-summary-errors" role="alert">@loginError</div>
+                }
                 
                 <div class="form-group">
                     <input 
@@ -78,6 +69,6 @@
 
     </main>
 
-    <script src="~/js/login.js"></script>
-</body>
-</html>
+@section Scripts {
+    <script src="~/js/login.js" asp-append-version="true"></script>
+}

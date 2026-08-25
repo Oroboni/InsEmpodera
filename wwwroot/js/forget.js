@@ -109,8 +109,9 @@ function showError(message) {
     errorDiv.className = 'error-message';
     errorDiv.innerHTML = `
         <div class="error-icon">⚠</div>
-        <div class="error-text">${message}</div>
+        <div class="error-text"></div>
     `;
+    errorDiv.querySelector('.error-text').textContent = String(message ?? '');
 
     // Insere antes do primeiro form-group
     const firstFormGroup = document.querySelector('.form-group');

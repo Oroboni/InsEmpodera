@@ -1,0 +1,245 @@
+using System.Globalization;
+using System.Net;
+using Empodera.Controllers;
+using Empodera.Data;
+using Empodera.Models;
+using Empodera.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Infrastructure;
+
+public sealed class E2ETestFixture : IAsyncLifetime
+{
+    public const string AdminEmail = "joao@email.com";
+    public const string AdminPassword = "E2E@12345";
+
+    private WebApplication? _application;
+    private IPlaywright? _playwright;
+    private readonly string _databasePath = Path.Combine(
+        Path.GetTempPath(), $"insempodera-e2e-{Guid.NewGuid():N}.db");
+
+    public string ProjectRoot { get; private set; } = string.Empty;
+    public string BaseUrl { get; private set; } = string.Empty;
+    public IBrowser Browser { get; private set; } = null!;
+
+    public async Task InitializeAsync()
+    {
+        ProjectRoot = FindProjectRoot();
+
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+        {
+            ApplicationName = typeof(AccountController).Assembly.FullName,
+            EnvironmentName = Environments.Development,
+            ContentRootPath = ProjectRoot,
+            WebRootPath = Path.Combine(ProjectRoot, "wwwroot")
+        });
+
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
+        builder.Logging.SetMinimumLevel(LogLevel.Warning);
+        builder.WebHost.ConfigureKestrel(options => options.Listen(IPAddress.Loopback, 0));
+
+        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+        builder.Services
+            .AddControllersWithViews()
+            .AddApplicationPart(typeof(AccountController).Assembly)
+            .AddViewLocalization()
+            .AddDataAnnotationsLocalization();
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlite($"Data Source={_databasePath}"));
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddSession(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
+        });
+        builder.Services.AddHttpClient();
+        builder.Services.AddScoped<RelatorioExcelService>();
+
+        _application = builder.Build();
+
+        var supportedCultures = new[]
+        {
+            new CultureInfo("pt-BR"),
+            new CultureInfo("en"),
+            new CultureInfo("es")
+        };
+        var localization = new RequestLocalizationOptions
+        {
+            DefaultRequestCulture = new RequestCulture("pt-BR"),
+            SupportedCultures = supportedCultures,
+            SupportedUICultures = supportedCultures,
+            RequestCultureProviders =
+            [
+                new CookieRequestCultureProvider(),
+                new CustomRequestCultureProvider(context => Task.FromResult<ProviderCultureResult?>(
+                    new ProviderCultureResult(UserCultureService.FromBrowser(
+                        context.Request.Headers.AcceptLanguage))))
+            ]
+        };
+
+        _application.UseRequestLocalization(localization);
+        _application.UseDeveloperExceptionPage();
+        _application.UseStaticFiles();
+        _application.UseRouting();
+        _application.UseMiddleware<LocalizedHtmlMiddleware>();
+        _application.UseSession();
+        _application.UseAuthorization();
+        _application.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        await SeedDatabaseAsync(_application.Services);
+        await _application.StartAsync();
+
+        BaseUrl = _application.Services
+            .GetRequiredService<IServer>()
+            .Features
+            .Get<IServerAddressesFeature>()!
+            .Addresses
+            .Single(address => address.StartsWith("http://", StringComparison.OrdinalIgnoreCase));
+
+        _playwright = await Playwright.CreateAsync();
+        Browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = !string.Equals(
+                Environment.GetEnvironmentVariable("E2E_HEADED"), "true",
+                StringComparison.OrdinalIgnoreCase),
+            SlowMo = int.TryParse(Environment.GetEnvironmentVariable("E2E_SLOWMO"), out var slowMo)
+                ? slowMo
+                : 0
+        });
+    }
+
+    public async Task DisposeAsync()
+    {
+        if (Browser is not null)
+            await Browser.DisposeAsync();
+        _playwright?.Dispose();
+
+        if (_application is not null)
+        {
+            await _application.StopAsync();
+            await _application.DisposeAsync();
+        }
+
+        TryDelete(_databasePath);
+        TryDelete(_databasePath + "-shm");
+        TryDelete(_databasePath + "-wal");
+    }
+
+    public async Task<T> QueryAsync<T>(Func<ApplicationDbContext, Task<T>> operation)
+    {
+        if (_application is null)
+            throw new InvalidOperationException("The E2E application has not started.");
+
+        await using var scope = _application.Services.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await operation(db);
+    }
+
+    public async Task ExecuteAsync(Func<ApplicationDbContext, Task> operation)
+    {
+        await QueryAsync(async db =>
+        {
+            await operation(db);
+            return true;
+        });
+    }
+
+    private static async Task SeedDatabaseAsync(IServiceProvider services)
+    {
+        await using var scope = services.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await db.Database.EnsureDeletedAsync();
+        await db.Database.EnsureCreatedAsync();
+
+        var admin = await db.Usuarios.SingleAsync(user => user.IdUsuario == 1);
+        admin.Senha = new PasswordHasher<Usuario>().HashPassword(admin, AdminPassword);
+        admin.Ativo = "S";
+
+        db.Eixos.AddRange(
+            new Eixo { Nome = "Assistência básica" },
+            new Eixo { Nome = "Educação" },
+            new Eixo { Nome = "Saúde" });
+        await db.SaveChangesAsync();
+
+        var community = new Comunidade
+        {
+            Nome = "Comunidade base E2E",
+            Local = "Rua da Qualidade, 100, Fortaleza",
+            LocalMapa = "Rua da Qualidade, 100, Fortaleza",
+            Status = "Em processo",
+            Ativo = "S",
+            FK_Id_Usuario = admin.IdUsuario,
+            Dt_Criacao = DateTime.UtcNow,
+            Dt_Modificacao = DateTime.UtcNow
+        };
+        db.Comunidades.Add(community);
+        await db.SaveChangesAsync();
+
+        var actor = new Atores
+        {
+            Nome = "Ator base E2E",
+            Genero = 1,
+            Idade = 30,
+            Telefone = "85999990000",
+            Ativo = "S",
+            FkIdUsuario = admin.IdUsuario,
+            DtCriacao = DateTime.UtcNow,
+            DtModificacao = DateTime.UtcNow
+        };
+        db.Atores.Add(actor);
+        await db.SaveChangesAsync();
+        db.AtorComunidades.Add(new AtorComunidade
+        {
+            FK_id_Atores = actor.IdAtores,
+            FkIdComunidade = community.Id_Comunidade
+        });
+        await db.SaveChangesAsync();
+    }
+
+    private static string FindProjectRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "InsEmpodera.csproj")))
+                return directory.FullName;
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException(
+            "Could not find InsEmpodera.csproj starting from the test output directory.");
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+        catch
+        {
+            // A cleanup failure must not hide the actual test outcome.
+        }
+    }
+}
+
+[CollectionDefinition(Name)]
+public sealed class E2ECollection : ICollectionFixture<E2ETestFixture>
+{
+    public const string Name = "Empodera browser E2E";
+}

@@ -15,16 +15,29 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     if (builder.Environment.IsEnvironment("Testing"))
-        options.UseSqlite("Data Source=:memory:");
+        options.UseSqlite(
+            builder.Configuration.GetConnectionString("TestConnection")
+            ?? "Data Source=Empodera.testing.db");
     else
         options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 29)));
 
-    options.EnableSensitiveDataLogging();
+    if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Testing"))
+        options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        || builder.Environment.IsEnvironment("Testing")
+            ? CookieSecurePolicy.SameAsRequest
+            : CookieSecurePolicy.Always;
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
 
 builder.Services.AddHttpClient();
 
@@ -48,12 +61,6 @@ var localizationOptions = new RequestLocalizationOptions
 
 localizationOptions.RequestCultureProviders =
 [
-    // Public account pages always follow the browser, never a previous user's cookie.
-    new CustomRequestCultureProvider(context =>
-        context.Request.Path.StartsWithSegments("/Account", StringComparison.OrdinalIgnoreCase)
-            ? Task.FromResult<ProviderCultureResult?>(new ProviderCultureResult(
-                UserCultureService.FromBrowser(context.Request.Headers.AcceptLanguage)))
-            : Task.FromResult<ProviderCultureResult?>(null)),
     new CookieRequestCultureProvider(),
     new CustomRequestCultureProvider(context => Task.FromResult<ProviderCultureResult?>(
         new ProviderCultureResult(UserCultureService.FromBrowser(context.Request.Headers.AcceptLanguage))))
@@ -65,7 +72,21 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     if (app.Environment.IsEnvironment("Testing"))
+    {
         await db.Database.EnsureCreatedAsync();
+        var testPassword = builder.Configuration["Testing:AdminPassword"];
+        if (!string.IsNullOrWhiteSpace(testPassword))
+        {
+            var testUser = await db.Usuarios.FirstOrDefaultAsync(user => user.IdUsuario == 1);
+            if (testUser is not null)
+            {
+                testUser.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>()
+                    .HashPassword(testUser, testPassword);
+                testUser.Ativo = "S";
+                await db.SaveChangesAsync();
+            }
+        }
+    }
     else
         await db.Database.MigrateAsync();
 }
@@ -77,7 +98,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Testing"))
+    app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -91,7 +113,6 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-Comerce A
 
 app.UseSwagger();
 
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

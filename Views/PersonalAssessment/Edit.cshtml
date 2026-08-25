@@ -1,14 +1,14 @@
 @model Empodera.Models.AvaliacaoPessoal
 @{
     ViewData["Title"] = "Avaliação Pessoal - Editar";
-    ViewData["PageCSS"] = "personal-assessment-form";
+    ViewData["PageCSS"] = "personal-assessment";
     Layout = "_Layout";
 }
 
 @section Styles {
-    
+
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
 }
 
@@ -30,8 +30,8 @@
         <div class="input-card full-width">
             <div class="icon-box"><i class="fa-solid fa-user"></i></div>
             <div class="input-content">
-                <label asp-for="FkIdUsuario">Ator</label>
-                <select asp-for="FkIdUsuario" class="clean-input" asp-items="ViewBag.AtoresList" disabled>
+                <label asp-for="FK_id_Atores">Ator</label>
+                <select asp-for="FK_id_Atores" class="clean-input" asp-items="ViewBag.AtoresList" disabled>
                     <option value="">Selecione um Ator</option>
                 </select>
             </div>
@@ -42,63 +42,63 @@
         <div class="section-label">Dimensões de Avaliação</div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="RedePrimaria">Rede primária 
-                <span class="tooltip-icon" data-tooltip="1. Muitas Relações diversificadas e seguras.&#10;5. Poucas relações diversificadas e seguras.">?</span>
+            <label class="metric-label" for="CCrimes">Cometimento de crimes
+                <span class="tooltip-icon" data-tooltip="1. Não desenvolve atividades ilegais.&#10;5. Desenvolve atividades ilegais.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="CCrimes" min="1" max="5">
         </div>
-        
+
         <div class="metric-form-group">
-            <label class="metric-label" for="SeguridadeSocial">Seguridade Social 
-                <span class="tooltip-icon" data-tooltip="1. Acesso pleno e fácil.&#10;5. Sem acesso ou com muitas barreiras.">?</span>
+            <label class="metric-label" for="Prevencao">Prevenção
+                <span class="tooltip-icon" data-tooltip="1. Tem acesso a ações e informações de prevenção.&#10;5. Não tem acesso a ações e informações de prevenção.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Prevencao" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="Substancias">Substâncias 
+            <label class="metric-label" for="Substancias">Substâncias
                 <span class="tooltip-icon" data-tooltip="1. Uso problemático ou dependência.&#10;5. Nenhum uso ou uso não problemático.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Substancias" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="Moradia">Moradia 
+            <label class="metric-label" for="Moradia">Moradia
                 <span class="tooltip-icon" data-tooltip="1. Moradia segura, estável e adequada.&#10;5. Moradia precária, instável ou inexistente.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Moradia" min="1" max="5">
         </div>
-        
+
         <div class="metric-form-group">
-            <label class="metric-label" for="AssistenciaBasica">Assistência Básica 
+            <label class="metric-label" for="AssBasica">Assistência Básica
                 <span class="tooltip-icon" data-tooltip="1. Necessidades básicas (comida, roupa) atendidas.&#10;5. Necessidades básicas não atendidas.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="AssBasica" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="Educacao">Educação 
+            <label class="metric-label" for="Educacao">Educação
                 <span class="tooltip-icon" data-tooltip="1. Acesso pleno à educação.&#10;5. Fora da escola ou acesso precário.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Educacao" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="Saude">Saúde 
+            <label class="metric-label" for="Saude">Saúde
                 <span class="tooltip-icon" data-tooltip="1. Acesso regular a serviços de saúde (física e mental).&#10;5. Sem acesso ou acesso dificultado.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Saude" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="Ocupacao">Ocupação 
+            <label class="metric-label" for="Ocupacao">Ocupação
                 <span class="tooltip-icon" data-tooltip="1. Trabalho/ocupação estável e satisfatório.&#10;5. Desempregado ou em trabalho precário.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Ocupacao" min="1" max="5">
         </div>
 
         <div class="metric-form-group">
-            <label class="metric-label" for="Lazer">Lazer 
+            <label class="metric-label" for="Lazer">Lazer
                 <span class="tooltip-icon" data-tooltip="1. Acesso regular a atividades de lazer e cultura.&#10;5. Nenhum acesso a lazer.">?</span>
             </label>
             <input type="range" class="metric-slider" asp-for="Lazer" min="1" max="5">
@@ -153,7 +153,7 @@
 
         <!-- Botões de Ação -->
         <div class="buttons-container">
-            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.IdAvaliacao" class="wizard-btn btn-prev">
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </a>
 
@@ -211,7 +211,7 @@
             const form = document.querySelector('.main-form');
             const inputFields = form.querySelectorAll('.clean-input, .metric-slider');
             const editSaveBtn = document.getElementById('edit-save-btn');
-            
+
             let isEditMode = false;
             let isSubmitting = false;
 

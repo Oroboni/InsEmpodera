@@ -41,5 +41,13 @@
     <Content Remove="InsEmpodera.Tests\**" />
     <EmbeddedResource Remove="InsEmpodera.Tests\**" />
     <None Remove="InsEmpodera.Tests\**" />
+    <Compile Remove="InsEmpodera.E2ETests\**\*.cs" />
+    <Content Remove="InsEmpodera.E2ETests\**" />
+    <EmbeddedResource Remove="InsEmpodera.E2ETests\**" />
+    <None Remove="InsEmpodera.E2ETests\**" />
+    <Compile Remove="Frontend.Tests\**\*.cs" />
+    <Content Remove="Frontend.Tests\**" />
+    <EmbeddedResource Remove="Frontend.Tests\**" />
+    <None Remove="Frontend.Tests\**" />
   </ItemGroup>
 </Project>

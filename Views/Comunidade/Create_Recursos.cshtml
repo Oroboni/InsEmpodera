@@ -114,7 +114,7 @@
             const multiselectPanel = document.getElementById('multiselect-panel');
 
             function updateTagView() {
-                tagContainer.innerHTML = '';
+                tagContainer.replaceChildren();
                 const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
 
                 checkboxes.forEach(cb => {
@@ -122,7 +122,14 @@
                     if (cb.checked) {
                         const tag = document.createElement('span');
                         tag.className = `tag-item ${cb.dataset.tagClass || 'tag-default'}`;
-                        tag.innerHTML = `${cb.dataset.tagName} <i class="fa-solid fa-xmark tag-remove-btn" data-id="${cb.id}"></i>`;
+                        tag.appendChild(document.createTextNode(cb.dataset.tagName || ''));
+
+                        const removeButton = document.createElement('i');
+                        removeButton.className = 'fa-solid fa-xmark tag-remove-btn';
+                        removeButton.dataset.id = cb.id;
+                        removeButton.setAttribute('role', 'button');
+                        removeButton.setAttribute('aria-label', `Remover eixo ${cb.dataset.tagName || ''}`);
+                        tag.append(document.createTextNode(' '), removeButton);
                         tagContainer.appendChild(tag);
                         listItem.classList.add('is-selected');
                     } else {

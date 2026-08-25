@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Ajuda";
+    ViewData["PageCSS"] = "ajuda";
+    Layout = "_Layout";
+}
+
+<main class="help-page" aria-labelledby="help-title">
+    <header class="help-hero">
+        <div>
+            <span class="page-eyebrow">Central de orientação</span>
+            <h1 id="help-title">Ajuda</h1>
+            <p>Encontre rapidamente a área certa do sistema e relembre os principais fluxos de trabalho.</p>
+        </div>
+        <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
+    </header>
+
+    <section aria-labelledby="quick-access-title">
+        <h2 id="quick-access-title">Acesso rápido</h2>
+        <div class="help-grid">
+            <a class="help-card" asp-controller="Comunidade" asp-action="Index">
+                <i class="fa-solid fa-city" aria-hidden="true"></i>
+                <span><strong>Comunidades</strong>Cadastre territórios e acompanhe seus vínculos.</span>
+            </a>
+            <a class="help-card" asp-controller="Atores" asp-action="Index">
+                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                <span><strong>Atores</strong>Consulte pessoas, redes e relações comunitárias.</span>
+            </a>
+            <a class="help-card" asp-controller="FichaPrimeiroContato" asp-action="Index">
+                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                <span><strong>Primeiro contato</strong>Registre, atualize e conclua o atendimento inicial.</span>
+            </a>
+            <a class="help-card" asp-controller="DiarioCampo" asp-action="Index">
+                <i class="fa-solid fa-book" aria-hidden="true"></i>
+                <span><strong>Diários de Campo</strong>Documente visitas, eixos e ações realizadas.</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="help-faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Dúvidas frequentes</h2>
+        <details>
+            <summary>Por onde começo um novo acompanhamento?</summary>
+            <p>Confirme a comunidade e o ator. Depois, abra a Ficha de 1º Contato e avance pelas três etapas antes de concluir.</p>
+        </details>
+        <details>
+            <summary>Onde encontro permissões de acesso?</summary>
+            <p>Use Perfis de Acesso para consultar ou ajustar as permissões associadas aos usuários.</p>
+        </details>
+        <details>
+            <summary>O que fazer quando uma opção não aparece?</summary>
+            <p>Verifique se seu perfil possui permissão para a área. Se o problema continuar, informe ao responsável técnico da sua organização a tela e a ação realizadas.</p>
+        </details>
+    </section>
+</main>

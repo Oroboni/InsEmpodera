@@ -371,7 +371,7 @@ function initMapSelector(mapId, inputId, options = {}) {
 
         for (const candidate of queries) {
             const pluginResult = await new Promise((resolve) => {
-                geocoder.options.geocoder.geocode(candidate, function (results) {
+                customGeocoder.geocode(candidate, function (results) {
                     resolve(results && results.length > 0 ? results[0] : null);
                 });
             });

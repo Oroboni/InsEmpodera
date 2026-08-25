@@ -4,16 +4,22 @@
     ViewData["Title"] = "Perfis de Acesso";
     Layout = "_Layout";
     ViewData["PageCSS"] = "homepage";
+    var canDeleteProfiles = ViewBag.CanDeleteProfiles is true;
+    var loggedProfileId = ViewBag.LoggedProfileId is int value ? value : 0;
 }
 
 @section Styles {
 
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/perfisacesso.css" />
 }
 
 <div class="modern-container">
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger" role="alert">@errorMessage</div>
+    }
     <!-- Header -->
     <div class="header-section">
         <h2>
@@ -128,7 +134,23 @@
                         <a class="btn-eye" asp-controller="AccessProfile" asp-action="Edit" asp-route-id="@perfil.IdPerfil"
                             title="Ver detalhes">
                             <i class="fa-solid fa-eye"></i>
-                        </a>
+                        </a>                        
+                        @if (canDeleteProfiles && usuariosCount == 0 && perfil.IdPerfil != loggedProfileId)
+                        {
+                            <form asp-controller="AccessProfile"
+                                  asp-action="Delete"
+                                  asp-route-id="@perfil.IdPerfil"
+                                  method="post"
+                                  asp-antiforgery="true">
+                                <button type="submit"
+                                        class="btn-eye btn-delete"
+                                        title="Excluir perfil"
+                                        aria-label="Excluir perfil @perfil.Nome">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        }
+
                     </div>
                 </div>
             }
@@ -196,6 +218,8 @@
             const profilesGrid = document.getElementById('profilesGrid');
             const noResultsMessage = document.getElementById('noResultsMessage');
             const profileItems = document.querySelectorAll('.profile-item');
+
+            if (!searchInput || !profilesGrid || !noResultsMessage) return;
 
             // Função para filtrar perfis
             function filterProfiles() {

@@ -1,0 +1,153 @@
+using System.Text;
+using Microsoft.Playwright;
+using Xunit.Sdk;
+
+namespace InsEmpodera.E2ETests.Infrastructure;
+
+public abstract class BrowserTestBase(E2ETestFixture fixture)
+{
+    protected E2ETestFixture Fixture { get; } = fixture;
+
+    protected async Task RunInBrowserAsync(
+        string scenario,
+        Func<IPage, Task> body,
+        BrowserNewContextOptions? options = null,
+        bool allowNavigationHttpErrors = false)
+    {
+        options ??= new BrowserNewContextOptions
+        {
+            BaseURL = Fixture.BaseUrl,
+            Locale = "pt-BR",
+            ViewportSize = new ViewportSize { Width = 1440, Height = 1000 },
+            IgnoreHTTPSErrors = true
+        };
+        options.BaseURL ??= Fixture.BaseUrl;
+
+        await using var context = await Fixture.Browser.NewContextAsync(options);
+        // CDN fonts/maps are not part of this application's contract and can make
+        // navigation nondeterministic in CI. First-party requests still travel
+        // through the real Kestrel pipeline.
+        await context.RouteAsync("**/*", async route =>
+        {
+            if (route.Request.Url.StartsWith(Fixture.BaseUrl, StringComparison.OrdinalIgnoreCase))
+                await route.ContinueAsync();
+            else
+                await route.AbortAsync();
+        });
+        await context.AddInitScriptAsync("""
+            (() => {
+              const chain = () => {
+                const value = {
+                  setView() { return value; }, addTo() { return value; }, on() { return value; },
+                  remove() {}, removeLayer() {}, fitBounds() { return value; }, setLatLng() { return value; },
+                  dragging: { disable() {} }, touchZoom: { disable() {} },
+                  doubleClickZoom: { disable() {} }, scrollWheelZoom: { disable() {} }
+                };
+                return value;
+              };
+              const geocoder = options => {
+                const value = chain();
+                value.options = { geocoder: options?.geocoder ?? { geocode(_query, callback) { callback([]); } } };
+                return value;
+              };
+              window.L ??= {
+                map: chain, tileLayer: chain, marker: chain,
+                polygon: () => ({ getBounds: () => ({}) }),
+                latLng: (lat, lng) => ({ lat, lng }), latLngBounds: () => ({}),
+                Control: { geocoder }
+              };
+            })();
+            """);
+
+        await context.Tracing.StartAsync(new TracingStartOptions
+        {
+            Screenshots = true,
+            Snapshots = true,
+            Sources = true
+        });
+
+        var page = await context.NewPageAsync();
+        var pageErrors = new List<string>();
+        var httpErrors = new List<string>();
+        page.PageError += (_, error) => pageErrors.Add(error);
+        page.Response += (_, response) =>
+        {
+            if (!response.Url.StartsWith(Fixture.BaseUrl, StringComparison.OrdinalIgnoreCase)
+                || response.Status < 400)
+                return;
+
+            var isNavigation = response.Request.IsNavigationRequest
+                || response.Request.ResourceType.Equals("document", StringComparison.OrdinalIgnoreCase);
+            if (allowNavigationHttpErrors && isNavigation)
+                return;
+
+            httpErrors.Add(
+                $"{response.Status} {response.Request.Method} {response.Request.ResourceType} {response.Url}");
+        };
+
+        var artifactDirectory = Path.Combine(
+            Fixture.ProjectRoot,
+            "InsEmpodera.E2ETests",
+            "TestResults",
+            "e2e-artifacts");
+        var safeName = string.Concat(scenario.Select(character =>
+            char.IsLetterOrDigit(character) ? character : '-')).Trim('-');
+
+        try
+        {
+            await body(page);
+
+            if (pageErrors.Count > 0 || httpErrors.Count > 0)
+            {
+                var details = new StringBuilder();
+                if (pageErrors.Count > 0)
+                    details.AppendLine("JavaScript errors: " + string.Join(" | ", pageErrors));
+                if (httpErrors.Count > 0)
+                    details.AppendLine("First-party HTTP errors: " + string.Join(" | ", httpErrors));
+                throw new XunitException(details.ToString());
+            }
+
+            await context.Tracing.StopAsync();
+        }
+        catch (Exception exception)
+        {
+            Directory.CreateDirectory(artifactDirectory);
+            var screenshot = Path.Combine(artifactDirectory, safeName + ".png");
+            var trace = Path.Combine(artifactDirectory, safeName + ".zip");
+
+            try
+            {
+                await page.ScreenshotAsync(new PageScreenshotOptions
+                {
+                    Path = screenshot,
+                    FullPage = true
+                });
+                await context.Tracing.StopAsync(new TracingStopOptions { Path = trace });
+            }
+            catch
+            {
+                // Preserve the original assertion/Playwright exception.
+            }
+
+            throw new XunitException(
+                $"{exception.Message}{Environment.NewLine}" +
+                $"Screenshot: {screenshot}{Environment.NewLine}Trace: {trace}");
+        }
+    }
+
+    protected static async Task LoginAsync(IPage page)
+    {
+        await page.GotoAsync("/Account");
+        await page.Locator("input[name=Email]").FillAsync(E2ETestFixture.AdminEmail);
+        await page.Locator("input[name=Password]").FillAsync(E2ETestFixture.AdminPassword);
+        await page.GetByRole(AriaRole.Button, new() { Name = "ENTRAR" }).ClickAsync();
+        await page.WaitForURLAsync(url =>
+        {
+            var path = new Uri(url).AbsolutePath;
+            return path == "/" || path.Equals("/Home/Index", StringComparison.OrdinalIgnoreCase);
+        });
+    }
+
+    protected static string Unique(string prefix) =>
+        $"{prefix} {Guid.NewGuid():N}";
+}

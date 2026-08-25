@@ -81,3 +81,40 @@ DELIMITER ;
 CALL CorrigirDatas();
 
 DROP PROCEDURE CorrigirDatas;
+
+UPDATE Comunidades
+SET Status = CASE
+    WHEN Nome IN (
+        'ASENTAMIENTO HUMANO “NUEVO PUCALLPA”',
+        'Belize City, Belize District',
+        'Comunidade do Estrela',
+        'Comunidade São Francisco',
+        'Fox Hill Community, New Providence, Bahamas',
+        'Hazard',
+        'limon costa rica',
+        'MOURA BRASIL - "OITÃO PRETO"',
+        'Sector 3 de Mayo.',
+        'UNIDAD MOVIL DE ATENCION',
+        'teste isa'
+    ) THEN 'Em processo'
+
+    WHEN Nome IN (
+        'BAJAMAR',
+        'Centro de Corrección y Rehabilitación Baní Mujeres CCR-13',
+        'Falmouth, Trelawny',
+        'Penal'
+    ) THEN 'Diagnosticado'
+
+    WHEN Nome IN (
+        'Centro de Acompañamiento La Otra Esquina',
+        'Dangriga town',
+        'El Porvenir',
+        'Fundacion Procrear',
+        'Orange Walk Town',
+        'PAPICU',
+        'Parque Central -Zona 1',
+        'PUNTA ARENAS Costa Rica'
+    ) THEN 'Em processo'
+
+    ELSE Status
+END;

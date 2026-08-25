@@ -16,11 +16,11 @@ function showStep(step) {
 }
 
 function changeStep(direction) {
-    const next = currentStep + direction;
+    const next = window.currentStep + direction;
     if (next < 1 || next > totalSteps) return;
 
-    currentStep = next;
-    showStep(currentStep);
+    window.currentStep = next;
+    showStep(window.currentStep);
     updateButtonVisibility();
 }
 
@@ -34,7 +34,7 @@ function updateButtonVisibility() {
     btnPrev.style.display = "inline-flex";
     btnNext.style.display = "inline-flex";
 
-    if (currentStep === 1) {
+    if (window.currentStep === 1) {
         btnPrev.innerHTML =
             '<i class="fa-solid fa-arrow-left"></i> Sair da ficha';
         btnPrev.onclick = () => window.history.back();
@@ -43,7 +43,7 @@ function updateButtonVisibility() {
         btnPrev.onclick = () => changeStep(-1);
     }
 
-    if (currentStep === totalSteps) {
+    if (window.currentStep === totalSteps) {
         btnNext.style.display = "none";
         btnSave && (btnSave.style.display = "inline-flex");
     } else {
@@ -54,6 +54,8 @@ function updateButtonVisibility() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    showStep(currentStep);
+    if (totalSteps === 0) return;
+
+    showStep(window.currentStep);
     updateButtonVisibility();
 });

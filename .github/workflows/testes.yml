@@ -1,28 +1,69 @@
-name: Testes automáticos
+name: Testes completos
 
+# main.yml continua responsável apenas pelas branches legadas de importação
+# e pela publicação do aplicativo. Este workflow cobre as demais branches.
 on:
+  workflow_dispatch:
   push:
+    branches-ignore: [import_exel, Import_exel]
   pull_request:
+    branches-ignore: [import_exel, Import_exel]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testes-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   testes:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
+
     steps:
       - name: Baixar o código
         uses: actions/checkout@v4
-      - name: Preparar o .NET
+
+      - name: Preparar o .NET 9
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      - name: Restaurar dependências
-        run: dotnet restore InsEmpodera.sln
-      - name: Compilar
-        run: dotnet build InsEmpodera.sln --configuration Release --no-restore
-      - name: Executar testes
-        run: dotnet test InsEmpodera.sln --configuration Release --no-build --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=testes.trx" --results-directory TestResults
-      - name: Publicar relatório dos testes
+
+      - name: Cache do NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Preparar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: Frontend.Tests/package-lock.json
+
+      - name: Cache do Chromium do Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('InsEmpodera.E2ETests/InsEmpodera.E2ETests.csproj') }}
+
+      - name: Executar backend, frontend e jornadas no navegador
+        shell: pwsh
+        run: ./testar.ps1
+
+      - name: Publicar resultados, cobertura e evidências de falha
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: resultado-dos-testes
-          path: TestResults
+          name: resultados-testes-${{ github.run_attempt }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            TestResults/**
+            Frontend.Tests/coverage/**
+            Frontend.Tests/vitest-results.json
+            InsEmpodera.E2ETests/TestResults/**

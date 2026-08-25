@@ -1,0 +1,274 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    public Task FirstContact_ThreeStepCreateEditChildrenCompleteFilterAndDelete() =>
+        RunInBrowserAsync(nameof(FirstContact_ThreeStepCreateEditChildrenCompleteFilterAndDelete), async page =>
+        {
+            await LoginAsync(page);
+            var prerequisite = await Fixture.QueryAsync(async db => new
+            {
+                CommunityId = await db.Comunidades.Where(c => c.Ativo == "S")
+                    .OrderBy(c => c.Id_Comunidade).Select(c => c.Id_Comunidade).FirstAsync(),
+                ActorId = await db.Atores.Where(a => a.Ativo == "S")
+                    .OrderBy(a => a.IdAtores).Select(a => a.IdAtores).FirstAsync(),
+                ActorName = await db.Atores.Where(a => a.Ativo == "S")
+                    .OrderBy(a => a.IdAtores).Select(a => a.Nome).FirstAsync()
+            });
+            var marker = Unique("Ficha UI");
+            var editedMarker = marker + " editada";
+
+            await page.GotoAsync("/FichaPrimeiroContato/Create");
+            await Assertions.Expect(page.Locator("#step-1")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
+            await Assertions.Expect(page.Locator("#step-2")).Not.ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
+
+            await page.Locator("select[name=FkIdComunidade]").SelectOptionAsync(prerequisite.CommunityId.ToString());
+            await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(prerequisite.ActorId.ToString());
+            await page.Locator("input[name=LContato]").FillAsync("Sede comunitária");
+            await page.Locator("input[name=Telefone]").FillAsync("85999997777");
+            await page.Locator("select[name=Emprego]").SelectOptionAsync("TrabalhoFormal");
+            await page.Locator("input[name=DtContato]").FillAsync("2026-08-20");
+            await page.Locator("input[name=HoraContato]").FillAsync("10:30");
+            await page.Locator("select[name=CEstabeleceu]").SelectOptionAsync("CasaDaPessoa");
+            await page.Locator("input[name=NovoParceiro][value=Sim]").CheckAsync();
+            await page.Locator("input[name=FornecidoParceiro][value=Sim]").CheckAsync();
+
+            await page.Locator("#btn-next").ClickAsync();
+            await Assertions.Expect(page.Locator("#step-2")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
+            await Assertions.Expect(page.Locator("#header-step-2")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
+            await page.Locator("select[name=EstaFamiliar]").SelectOptionAsync("Solteira");
+            await page.Locator("select[name=EstruFamiliar]").SelectOptionAsync("FamiliaNuclear");
+            await page.Locator("input[name=NFIlhos]").FillAsync("1");
+            await page.Locator("input[name=NFilhas]").FillAsync("2");
+            await page.Locator("input[name=AEscolar]").FillAsync("12");
+            await page.Locator("input[name=SLer][value=Sim]").CheckAsync();
+            await page.Locator("input[name=SCalc][value=Sim]").CheckAsync();
+            await page.Locator("input[name=SComp][value=Não]").CheckAsync();
+            await page.Locator("input[name=QReabili]").FillAsync("1");
+            await page.Locator("input[name=LTrat]").FillAsync("Unidade de referência");
+
+            await page.Locator("#btn-next").ClickAsync();
+            await Assertions.Expect(page.Locator("#step-3")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
+            await Assertions.Expect(page.Locator("#btn-next")).ToBeHiddenAsync();
+            await Assertions.Expect(page.Locator("#btn-save")).ToBeVisibleAsync();
+            await page.Locator("input[name=SelectedCondicoes]").First.CheckAsync();
+            await page.Locator("input[name=SelectedPeticoes]").First.CheckAsync();
+            await page.Locator("input[name=SelectedRespostas]").First.CheckAsync();
+            await page.Locator("input[name=SelectedResultados]").First.CheckAsync();
+            await page.Locator("textarea[name=Coment]").FillAsync(marker);
+            await page.Locator("#btn-prev").ClickAsync();
+            await Assertions.Expect(page.Locator("#step-2")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
+            await page.Locator("#btn-next").ClickAsync();
+            await page.Locator("#btn-save").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
+
+            var fichaId = await Fixture.QueryAsync(db => db.FichasPrimeiroContato
+                .Where(ficha => ficha.Coment == marker)
+                .Select(ficha => ficha.IdFicha).SingleAsync());
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaCondicoes.CountAsync(item => item.FkIdFicha == fichaId)));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaPeticoes.CountAsync(item => item.FkIdFicha == fichaId)));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaRespostas.CountAsync(item => item.FkIdFicha == fichaId)));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaResultados.CountAsync(item => item.FkIdFicha == fichaId)));
+
+            await page.Locator("#searchInput").FillAsync(prerequisite.ActorName);
+            await Assertions.Expect(page.Locator(".ficha-item:visible")).ToHaveCountAsync(1);
+            await page.Locator("button[data-status=EmProgresso]").ClickAsync();
+            await Assertions.Expect(page.Locator($".btn-concluir[data-id='{fichaId}']")).ToBeVisibleAsync();
+
+            await page.GotoAsync($"/FichaPrimeiroContato/Edit/{fichaId}");
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores]")).ToBeDisabledAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores]")).ToBeEnabledAsync();
+            await page.Locator("#btn-next").ClickAsync();
+            await page.Locator("#btn-next").ClickAsync();
+            await page.Locator("textarea[name=Coment]").FillAsync(editedMarker);
+            await page.Locator("input[name=SelectedCondicoes]").First.UncheckAsync();
+            await page.Locator("input[name=SelectedCondicoes]").Nth(1).CheckAsync();
+            await page.Locator("input[name=SelectedPeticoes]").First.UncheckAsync();
+            await page.Locator("input[name=SelectedPeticoes]").Nth(1).CheckAsync();
+            await page.Locator("input[name=SelectedRespostas]").First.UncheckAsync();
+            await page.Locator("input[name=SelectedRespostas]").Nth(1).CheckAsync();
+            await page.Locator("input[name=SelectedResultados]").First.UncheckAsync();
+            await page.Locator("input[name=SelectedResultados]").Nth(1).CheckAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
+
+            Assert.Equal(editedMarker, await Fixture.QueryAsync(db => db.FichasPrimeiroContato
+                .Where(ficha => ficha.IdFicha == fichaId).Select(ficha => ficha.Coment).SingleAsync()));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaCondicoes.CountAsync(item => item.FkIdFicha == fichaId)));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaPeticoes.CountAsync(item => item.FkIdFicha == fichaId)));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaRespostas.CountAsync(item => item.FkIdFicha == fichaId)));
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaResultados.CountAsync(item => item.FkIdFicha == fichaId)));
+
+            await page.Locator($".btn-concluir[data-id='{fichaId}']").ClickAsync();
+            await Assertions.Expect(page.Locator("#modalConcluir")).ToBeVisibleAsync();
+            await page.Locator("#modalConcluir .btn-cancel").ClickAsync();
+            await Assertions.Expect(page.Locator("#modalConcluir")).ToBeHiddenAsync();
+            await page.Locator($".btn-concluir[data-id='{fichaId}']").ClickAsync();
+            await page.Locator("#modalConcluir button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
+            Assert.Equal("Concluida", await Fixture.QueryAsync(db => db.FichasPrimeiroContato
+                .Where(ficha => ficha.IdFicha == fichaId).Select(ficha => ficha.Status).SingleAsync()));
+            await page.Locator("button[data-status=Concluida]").ClickAsync();
+            await Assertions.Expect(page.Locator($".ficha-item:has(a[href$='/{fichaId}'])")).ToBeVisibleAsync();
+
+            await page.GotoAsync($"/FichaPrimeiroContato/Edit/{fichaId}");
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
+            await page.Locator("#cancelDeleteBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeHiddenAsync();
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await page.Locator("#confirmDeleteBtn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
+            Assert.False(await Fixture.QueryAsync(db => db.FichasPrimeiroContato.AnyAsync(ficha => ficha.IdFicha == fichaId)));
+            Assert.False(await Fixture.QueryAsync(db => db.FichaCondicoes.AnyAsync(item => item.FkIdFicha == fichaId)));
+        });
+
+    [Fact]
+    public Task PersonalAssessment_SelectActorCreateSliderEventsSearchEditAndDelete() =>
+        RunInBrowserAsync(nameof(PersonalAssessment_SelectActorCreateSliderEventsSearchEditAndDelete), async page =>
+        {
+            await LoginAsync(page);
+            var actor = await Fixture.QueryAsync(db => db.Atores.Where(item => item.Ativo == "S")
+                .OrderBy(item => item.IdAtores)
+                .Select(item => new { item.IdAtores, item.Nome })
+                .FirstAsync());
+            var actorId = actor.IdAtores;
+            var createMetrics = new (string Name, int Value)[]
+            {
+                ("CCrimes", 1), ("Prevencao", 2), ("Substancias", 3),
+                ("Moradia", 4), ("AssBasica", 5), ("Educacao", 1),
+                ("Saude", 2), ("Ocupacao", 3), ("Lazer", 4)
+            };
+
+            await page.GotoAsync("/PersonalAssessment");
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Selecione um Ator" }))
+                .ToBeVisibleAsync();
+            await page.Locator("#atorSelect").SelectOptionAsync(actorId.ToString());
+            await page.WaitForURLAsync(url => new Uri(url).Query.Contains($"atorId={actorId}"));
+            await page.Locator("button.btn-add, button.btn-save").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalAssessment/Create");
+
+            await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(actorId.ToString());
+            var sliders = page.Locator("input.metric-slider");
+            await Assertions.Expect(sliders).ToHaveCountAsync(9);
+            var names = await sliders.EvaluateAllAsync<string[]>(
+                "items => items.map(item => item.getAttribute('name'))");
+            var ids = await sliders.EvaluateAllAsync<string[]>(
+                "items => items.map(item => item.getAttribute('id'))");
+            Assert.Equal(createMetrics.Select(metric => metric.Name).ToArray(), names);
+            Assert.Equal(createMetrics.Select(metric => metric.Name).ToArray(), ids);
+            Assert.Equal(9, names.Distinct(StringComparer.Ordinal).Count());
+            Assert.Equal(9, ids.Distinct(StringComparer.Ordinal).Count());
+            await Assertions.Expect(page.Locator("label[for=CCrimes]"))
+                .ToContainTextAsync("Cometimento de crimes");
+
+            foreach (var metric in createMetrics)
+                await SetRangeAsync(page.Locator($"input[name={metric.Name}]"), metric.Value);
+            await Assertions.Expect(page.Locator("input[name=Saude]")).ToHaveAttributeAsync("data-level", "2");
+            Assert.Contains("25%", await page.Locator("input[name=Saude]").GetAttributeAsync("style") ?? string.Empty);
+            await page.Locator("#create-assessment-btn").ClickAsync();
+            await page.WaitForURLAsync(url =>
+                new Uri(url).AbsolutePath == "/PersonalAssessment" && new Uri(url).Query.Contains($"atorId={actorId}"));
+
+            var assessmentId = await Fixture.QueryAsync(db => db.AvaliacaoPessoal
+                .Where(assessment => assessment.FK_id_Atores == actorId)
+                .OrderByDescending(assessment => assessment.IdAvaliacao)
+                .Select(assessment => assessment.IdAvaliacao).FirstAsync());
+            var createdScores = await Fixture.QueryAsync(db => db.AvaliacaoPessoal
+                .Where(assessment => assessment.IdAvaliacao == assessmentId)
+                .Select(assessment => new
+                {
+                    assessment.CCrimes, assessment.Prevencao, assessment.Substancias,
+                    assessment.Moradia, assessment.AssBasica, assessment.Educacao,
+                    assessment.Saude, assessment.Ocupacao, assessment.Lazer
+                }).SingleAsync());
+            Assert.Equal(1, createdScores.CCrimes);
+            Assert.Equal(2, createdScores.Prevencao);
+            Assert.Equal(3, createdScores.Substancias);
+            Assert.Equal(4, createdScores.Moradia);
+            Assert.Equal(5, createdScores.AssBasica);
+            Assert.Equal(1, createdScores.Educacao);
+            Assert.Equal(2, createdScores.Saude);
+            Assert.Equal(3, createdScores.Ocupacao);
+            Assert.Equal(4, createdScores.Lazer);
+
+            await page.Locator("#searchAssessmentInput").FillAsync("joao");
+            await Assertions.Expect(page.Locator(".assessment-item:visible")).ToHaveCountAsync(1);
+            await page.Locator("#searchAssessmentInput").FillAsync("avaliador-inexistente");
+            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeVisibleAsync();
+            await page.Locator("#searchAssessmentInput").PressAsync("Escape");
+
+            await page.GotoAsync($"/PersonalAssessment/Edit/{assessmentId}");
+            await Assertions.Expect(page.Locator("input.metric-slider")).ToHaveCountAsync(9);
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores]")).ToHaveValueAsync(actorId.ToString());
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores] option:checked"))
+                .ToHaveTextAsync(actor.Nome);
+            Assert.Contains($"atorId={actorId}",
+                await page.GetByRole(AriaRole.Link, new() { Name = "Voltar" }).GetAttributeAsync("href")
+                ?? string.Empty);
+            await Assertions.Expect(page.Locator("input[name=Saude]")).ToBeDisabledAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await Assertions.Expect(page.Locator("input[name=Saude]")).ToBeEnabledAsync();
+            var editMetrics = new (string Name, int Value)[]
+            {
+                ("CCrimes", 5), ("Prevencao", 4), ("Substancias", 3),
+                ("Moradia", 2), ("AssBasica", 1), ("Educacao", 5),
+                ("Saude", 4), ("Ocupacao", 2), ("Lazer", 1)
+            };
+            foreach (var metric in editMetrics)
+                await SetRangeAsync(page.Locator($"input[name={metric.Name}]"), metric.Value);
+            await Assertions.Expect(page.Locator("input[name=Saude]")).ToHaveAttributeAsync("data-level", "4");
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalAssessment"
+                && new Uri(url).Query.Contains($"atorId={actorId}"));
+
+            var scores = await Fixture.QueryAsync(db => db.AvaliacaoPessoal
+                .Where(assessment => assessment.IdAvaliacao == assessmentId)
+                .Select(assessment => new
+                {
+                    assessment.CCrimes, assessment.Prevencao, assessment.Substancias,
+                    assessment.Moradia, assessment.AssBasica, assessment.Educacao,
+                    assessment.Saude, assessment.Ocupacao, assessment.Lazer
+                }).SingleAsync());
+            Assert.Equal(5, scores.CCrimes);
+            Assert.Equal(4, scores.Prevencao);
+            Assert.Equal(3, scores.Substancias);
+            Assert.Equal(2, scores.Moradia);
+            Assert.Equal(1, scores.AssBasica);
+            Assert.Equal(5, scores.Educacao);
+            Assert.Equal(4, scores.Saude);
+            Assert.Equal(2, scores.Ocupacao);
+            Assert.Equal(1, scores.Lazer);
+
+            await page.GotoAsync($"/PersonalAssessment/Edit/{assessmentId}");
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
+            await page.Locator("#cancelDeleteBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeHiddenAsync();
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalAssessment"
+                && new Uri(url).Query.Contains($"atorId={actorId}"));
+            Assert.False(await Fixture.QueryAsync(db => db.AvaliacaoPessoal.AnyAsync(assessment =>
+                assessment.IdAvaliacao == assessmentId)));
+        });
+
+    private static async Task SetRangeAsync(ILocator locator, int value)
+    {
+        await locator.EvaluateAsync("""
+            (element, value) => {
+              element.value = String(value);
+              element.dispatchEvent(new Event('input', { bubbles: true }));
+              element.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            """, value);
+    }
+}

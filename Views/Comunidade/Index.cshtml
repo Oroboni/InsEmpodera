@@ -8,7 +8,7 @@
 @section Styles {
     
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
 }
 
@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <button type="button" class="btn-export" title="Exportar dados">
+        <button type="button" class="btn-export" disabled aria-disabled="true" title="Exportação ainda não disponível nesta tela">
             <i class="fa-solid fa-file-arrow-down"></i>
         </button>
 
@@ -57,28 +57,27 @@
             </div>
 
             @{
-                var emProcesso = Model.Count(c => c.Status == "Diagnosticado");
+                var emProcesso = Model.Count(c => c.Status == "Em processo");
             }
             <div class="action-card stats-card stats-card-green">
                 <span class="card-title">@emProcesso</span>
-                <span class="card-subtitle">Diagnosticado</span>
+                <span class="card-subtitle">Em processo</span>
                 <div class="card-icons">
                     <i class="fas fa-spinner"></i>
                 </div>
             </div>
 
             @{
-                var aguardando = Model.Count(c => c.Status != "Diagnosticado");
+                var emDiagnostico = Model.Count(c => c.Status == "Em diagnóstico");
             }
             <div class="action-card stats-card stats-card-cyan">
-                <span class="card-title">@aguardando</span>
-                <span class="card-subtitle">Aguardando Início</span>
+                <span class="card-title">@emDiagnostico</span>
+                <span class="card-subtitle">Em diagnóstico</span>
                 <div class="card-icons">
                     <i class="fas fa-clock"></i>
                 </div>
             </div>
         </div>
-
         <!-- Lista de Comunidades -->
         <div class="purple-divider"></div>
         <div class="section-label">Todas as Comunidades</div>
@@ -86,7 +85,8 @@
         <div class="forms-list" id="comunidadesGrid">
             @foreach (var comunidade in Model)
             {
-                var isEmProcesso = comunidade.Status == "Diagnosticado";
+                var isEmProcesso = comunidade.Status == "Em processo";
+                var canStartProcess = comunidade.Status == "Em diagnóstico";
                 
                 <div class="form-item comunidade-item" data-nome="@comunidade.Nome?.ToLower()">
                     <div class="form-info">
@@ -102,13 +102,20 @@
                                     {
                                         <span class="tag-item tag-green">
                                             <i class="fas fa-spinner"></i>
-                                            Diagnosticado
+                                            Em processo
+                                        </span>
+                                    }
+                                    else if (canStartProcess)
+                                    {
+                                        <span class="tag-item tag-yellow">
+                                            <i class="fas fa-clock"></i>
+                                            Em diagnóstico
                                         </span>
                                     }
                                     else
                                     {
                                         <span class="tag-item tag-yellow">
-                                            <i class="fas fa-clock"></i>
+                                            <i class="fas fa-circle-exclamation"></i>
                                             @comunidade.Status
                                         </span>
                                     }
@@ -118,25 +125,30 @@
                     </div>
 
                     <div class="actions">
-                        @if (isEmProcesso)
+                        @if (canStartProcess)
                         {
-                            <button class="btn-action btn-disabled" 
-                                    disabled 
-                                    title="Comunidade Diagnosticado">
-                                <i class="fa-solid fa-play" style="color: var(--color-gray-500);"></i>
-                            </button>
+                            <form asp-controller="Comunidade"
+                                  asp-action="Processo"
+                                  asp-route-id="@comunidade.Id"
+                                  method="post"
+                                  asp-antiforgery="true"
+                                  class="process-action-form">
+                                <button type="submit"
+                                        class="btn-action btn-action-green"
+                                        title="Iniciar processo">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                            </form>
                         }
                         else
                         {
-                            <a class="btn-action btn-action-green" 
-                               asp-controller="Comunidade" 
-                               asp-action="Processo" 
-                               asp-route-id="@comunidade.Id"
-                               title="Iniciar Processo">
-                                <i class="fa-solid fa-play"></i>
-                            </a>
+                            <button type="button"
+                                    class="btn-action btn-disabled"
+                                    disabled
+                                    title="Início indisponível para o status @comunidade.Status">
+                                <i class="fa-solid fa-play" style="color: var(--color-gray-500);"></i>
+                            </button>
                         }
-
                         <a class="btn-action" 
                            asp-controller="Comunidade" 
                            asp-action="ComunidadesDetalhes" 

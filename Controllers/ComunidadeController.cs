@@ -28,7 +28,7 @@ public class ComunidadeController : Controller
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        if (!PodeComunidade.CanList("Comunidades"))
         {
             return RedirectToAction("Index", "Home");
         }
@@ -59,11 +59,11 @@ public class ComunidadeController : Controller
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeDetalhar == "N"))
+        if (id > 0 && !PodeComunidade.CanUpdate("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
-        if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N") || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (id <= 0 && !PodeComunidade.CanCreate("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -114,28 +114,12 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     // 1. Verifica se tem o módulo OU se o módulo nega criação/atualização.
     // Usuário SEM o módulo OU com permissões negadas (N) deve ser redirecionado.
-    if (PodeComunidade == null || (comunidade.Id_Comunidade == 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N")) || (comunidade.Id_Comunidade > 0 && PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N")))
+    if ((comunidade.Id_Comunidade == 0 && !PodeComunidade.CanCreate("Comunidades")) || (comunidade.Id_Comunidade > 0 && !PodeComunidade.CanUpdate("Comunidades")))
     {
         return RedirectToAction("Index", "Comunidade");
     }
-    
-    // OBS: O código original tinha duas verificações. Simplificando para a verificação correta do bloco original:
-    /*
-    if (PodeComunidade == null)
-    {
-         return RedirectToAction("Index", "Comunidade");
-    }
-    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N") && comunidade.Id_Comunidade == 0)
-    {
-        return RedirectToAction("Index", "Comunidade");
-    }
-    if (PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N") && comunidade.Id_Comunidade > 0)
-    {
-        return RedirectToAction("Index", "Comunidade");
-    }
-    */
 
-    // Se a Id_Comunidade for 0, é uma nova criação
+// Se a Id_Comunidade for 0, é uma nova criação
     if (comunidade.Id_Comunidade == 0)
     {
         comunidade.LocalMapa = BuildMapSearchAddress(comunidade.LocalMapa, comunidade.Local, comunidade.Nome);
@@ -367,18 +351,15 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     private static string NormalizeCommunityStatus(string? status)
     {
         if (string.IsNullOrWhiteSpace(status))
-        {
-            return "Em processo";
-        }
+            return "Em diagnóstico";
 
-        return status.Trim() switch
+        return status.Trim().ToLowerInvariant() switch
         {
-            "Em Processo" => "Em processo",
-            "Em Diagnóstico" => "Em diagnóstico",
+            "em processo" => "Em processo",
+            "em diagnóstico" or "em diagnostico" or "diagnosticado" => "Em diagnóstico",
             _ => status.Trim()
         };
     }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int? id)
@@ -396,7 +377,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
-        if (PodeComunidade == null ||PodeComunidade.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+        if (!PodeComunidade.CanDelete("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -422,6 +403,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     }
 
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Processo(int? id)
     {
         if (id == null)
@@ -434,7 +417,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeComunidade.CanUpdate("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -449,7 +432,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         if (comunidadebd.Status == "Em diagnóstico")
         {
-            comunidadebd.Status = "Em Processo";
+            comunidadebd.Status = "Em processo";
             _context.Comunidades.Update(comunidadebd);
             await _context.SaveChangesAsync();
         }
@@ -471,7 +454,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeComunidade.CanList("Atores"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -501,7 +484,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeDetalhar == "N"))
+        if (!PodeComunidade.CanList("Recursos"))
         {
             return RedirectToAction("ComunidadesDetalhes", "Comunidade");
         }
@@ -529,7 +512,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        if (!PodeComunidade.CanViewDetails("Recursos"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -568,7 +551,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeRecurso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
-        if (PodeRecurso == null || PodeRecurso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeRecurso.CanCreate("Recursos"))
         {
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
         }
@@ -612,7 +595,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeRecurso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
-        if (PodeRecurso == null || PodeRecurso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeRecurso.CanCreate("Recursos"))
         {
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
         }
@@ -652,7 +635,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeRecurso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
-        if (PodeRecurso == null || PodeRecurso.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeRecurso.CanUpdate("Recursos"))
         {
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
         }
@@ -698,7 +681,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
@@ -731,58 +714,39 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
+        }
+
+        var comunidadeExiste = await _context.Comunidades
+            .AnyAsync(item => item.Id_Comunidade == ComunidadeId && item.Ativo != "N");
+        ModelState.Remove(nameof(Atores.Usuario));
+        if (!ModelState.IsValid || !comunidadeExiste)
+        {
+            if (!comunidadeExiste)
+                ModelState.AddModelError(nameof(ComunidadeId), "A comunidade selecionada não existe ou está inativa.");
+
+            ViewBag.Comunidades = new SelectList(
+                await _context.Comunidades
+                    .Where(item => item.Id_Comunidade == ComunidadeId && item.Ativo != "N")
+                    .ToListAsync(),
+                "Id_Comunidade",
+                "Nome",
+                ComunidadeId);
+            ViewBag.ComunidadeId = ComunidadeId;
+            return View(ator);
         }
 
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
         ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades);
 
         _context.Atores.Add(ator);
         await _context.SaveChangesAsync();
 
-        var relacao = new AtorComunidade
-        {
-            FkIdComunidade = ComunidadeId,
-            FK_id_Atores = ator.IdAtores
-        };
 
-        _context.AtorComunidades.Add(relacao);
-        string[] todosRecursos =
-        {
-            "RedePrimaria",
-            "SeguridadeSocial",
-            "Substancias",
-            "Moradia",
-            "Prevencao",
-            "AssistenciaBasica",
-            "Educacao",
-            "Saude",
-            "Ocupacao",
-            "Lazer"
-        };
-        foreach (var nome in todosRecursos)
-        {
-            _context.RecursosAtores.Add(new RecursosAtores
-            {
-                FK_id_Atores = ator.IdAtores,
-                Nome = nome,
-                Tipo = "Recurso",
-                Pode = recursos?.Contains(nome) == true ? "S" : "N"
-            });
-
-            _context.RecursosAtores.Add(new RecursosAtores
-            {
-                FK_id_Atores = ator.IdAtores,
-                Nome = nome,
-                Tipo = "Vulnerabilidade",
-                Pode = vulnerabilidades?.Contains(nome) == true ? "S" : "N"
-            });
-        }
-
-        await _context.SaveChangesAsync();
 
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = ComunidadeId });
     }
@@ -798,7 +762,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
@@ -834,7 +798,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
@@ -895,7 +859,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
-        if (PodeComunidade == null || PodeComunidade.Perfil.Permissoes.Any(p => p.PodeDeletar == "N"))
+        if (!PodeComunidade.CanDelete("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
@@ -920,7 +884,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        if (!PodeAtividades.CanList("Atividades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -943,7 +907,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
         }
@@ -970,7 +934,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
@@ -1009,7 +973,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
         }
@@ -1041,7 +1005,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
             .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
-        if (PodeAtividades == null || PodeAtividades.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
         }

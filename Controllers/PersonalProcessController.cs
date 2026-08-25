@@ -25,10 +25,10 @@ public class PersonalProcessController : Controller
         }
 
         var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
-        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
+        if (!PodeProcesso.CanList("DiariosProcessoPessoal"))
         {
-            return RedirectToAction("Index", "PersonalProcess");
+            return StatusCode(StatusCodes.Status403Forbidden);
         }
 
         // 1. Carregar lista de Atores
@@ -78,8 +78,8 @@ public class PersonalProcessController : Controller
         }
 
         var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
-        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
+        if (!PodeProcesso.CanCreate("DiariosProcessoPessoal"))
         {
             return RedirectToAction("Index", "PersonalProcess");
         }
@@ -117,8 +117,8 @@ public class PersonalProcessController : Controller
         }
 
         var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
-        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
+        if (!PodeProcesso.CanUpdate("DiariosProcessoPessoal"))
         {
             return RedirectToAction("Index", "PersonalProcess");
         }
@@ -150,8 +150,8 @@ public class PersonalProcessController : Controller
         }
 
         var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
-        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
+        if (!PodeProcesso.CanCreate("DiariosProcessoPessoal"))
         {
             return RedirectToAction("Index", "PersonalProcess");
         }
@@ -219,8 +219,8 @@ public class PersonalProcessController : Controller
         }
 
         var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
-        if (PodeProcesso == null || PodeProcesso.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
+        if (!PodeProcesso.CanUpdate("DiariosProcessoPessoal"))
         {
             return RedirectToAction("Index", "PersonalProcess");
         }

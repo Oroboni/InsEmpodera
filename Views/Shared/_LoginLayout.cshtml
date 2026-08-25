@@ -1,14 +1,74 @@
-@* código de login a ser integrado após entrega da funcionalidade de login *@<!DOCTYPE html>
+@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var currentLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
+        ? "English"
+        : currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase)
+            ? "Español"
+            : "Português";
+    var automaticLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
+        ? "Automatic (browser)"
+        : "Automático (navegador)";
+    var selectLanguageLabel = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
+        ? "Select language"
+        : currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase)
+            ? "Seleccionar idioma"
+            : "Selecionar idioma";
+    var languageReturnUrl = $"{Context.Request.PathBase}{Context.Request.Path}{Context.Request.QueryString}";
+    var languageMode = Context.Request.Cookies[Empodera.Services.UserCultureService.PreferenceModeCookieName];
+}
+<!DOCTYPE html>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="icon" href="~/images/logo-empodera.svg" type="image/x-icon">
-    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="icon" href="~/images/Logo-empodera.svg" type="image/x-icon">
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    @await RenderSectionAsync("Styles", required: false)
     <script src="~/js/localization.js" asp-append-version="true" defer></script>
 </head>
 <body class="login-body">
+    <details class="login-language-switcher" data-current-culture="@currentCulture">
+        <summary aria-label="@selectLanguageLabel">
+            <span aria-hidden="true">🌐</span>
+            <span>@currentLanguage</span>
+            <span aria-hidden="true">▾</span>
+        </summary>
+        <div class="login-language-menu" role="group" aria-label="@selectLanguageLabel">
+            @foreach (var language in new[]
+            {
+                (Code: "auto", Label: automaticLanguage),
+                (Code: "pt-BR", Label: "Português"),
+                (Code: "en", Label: "English"),
+                (Code: "es", Label: "Español")
+            })
+            {
+                var isActive = language.Code == "auto"
+                    ? !string.Equals(languageMode, "explicit", StringComparison.Ordinal)
+                    : string.Equals(languageMode, "explicit", StringComparison.Ordinal)
+                      && string.Equals(language.Code, currentCulture, StringComparison.OrdinalIgnoreCase);
+                <form asp-for="IdiomaPreferido" asp-controller="Language" asp-action="Set" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="culture" value="@language.Code" />
+                    <input type="hidden" name="returnUrl" value="@languageReturnUrl" />
+                    <button type="submit"
+                            class="@(isActive ? "is-active" : null)"
+                            aria-current="@(isActive ? "true" : null)"
+                            lang="@(language.Code == "auto" ? currentCulture : language.Code)">
+                        <span>@language.Label</span>
+                        @if (isActive)
+                        {
+                            <span class="language-selected-mark" aria-hidden="true">✓</span>
+                        }
+                    </button>
+                </form>
+            }
+        </div>
+    </details>
     @RenderBody()
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

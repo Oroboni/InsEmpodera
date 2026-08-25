@@ -308,20 +308,14 @@ namespace Empodera.Controllers
         }
 
         // Auxiliar para verificar permissão
-        private bool PermiteModulo(Usuario usuario, string modulo, string acao)
+        private static bool PermiteModulo(Usuario usuario, string modulo, string acao) => acao switch
         {
-            var permissao = usuario.Perfil?.Permissoes.FirstOrDefault(p => p.Modulo == modulo);
-            if (permissao == null) return false;
-
-            return acao switch
-            {
-                "Listar" => permissao.PodeListar == "S",
-                "Criar" => permissao.PodeCriar == "S",
-                "Atualizar" => permissao.PodeAtualizar == "S",
-                "Detalhar" => permissao.PodeDetalhar == "S",
-                "Deletar" => permissao.PodeDeletar == "S",
-                _ => false
-            };
-        }
+            "Listar" => usuario.CanList(modulo),
+            "Criar" => usuario.CanCreate(modulo),
+            "Atualizar" => usuario.CanUpdate(modulo),
+            "Detalhar" => usuario.CanViewDetails(modulo),
+            "Deletar" => usuario.CanDelete(modulo),
+            _ => false
+        };
     }
 }

@@ -25,7 +25,7 @@
 
         @if (ViewBag.ErrorMessage != null)
         {
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" role="alert">
                 @ViewBag.ErrorMessage
             </div>
         }
@@ -69,8 +69,7 @@
 
 
         <!-- Senha -->
-        <div class="grid-row">
-            <div class="input-card">
+        <div class="input-card full-width">
                 <div class="icon-box">
                     <i class="fa-solid fa-lock"></i>
                 </div>
@@ -78,22 +77,6 @@
                     <label asp-for="Senha">Senha <span class="text-danger">*</span></label>
                     <input asp-for="Senha" type="password" class="clean-input" placeholder="Digite a senha" required />
                 </div>
-            </div>
-
-            <div class="input-card">
-                <div class="icon-box purple">
-                    <i class="fa-solid fa-language"></i>
-                </div>
-                <div class="input-content">
-                    <label asp-for="IdiomaPreferido">Idioma padrão</label>
-                    <select asp-for="IdiomaPreferido" class="clean-input">
-                        <option value="0">Default (idioma do navegador)</option>
-                        <option value="1">Português</option>
-                        <option value="2">English</option>
-                        <option value="3">Español</option>
-                    </select>
-                </div>
-            </div>
         </div>
 
 

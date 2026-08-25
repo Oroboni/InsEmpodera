@@ -1,0 +1,71 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class AuthenticationAndNavigationTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    public Task ProtectedPage_RedirectsToLogin_AndValidLoginCreatesSession() =>
+        RunInBrowserAsync(nameof(ProtectedPage_RedirectsToLogin_AndValidLoginCreatesSession), async page =>
+        {
+            await page.GotoAsync("/Users");
+            Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Faça seu Login:" }))
+                .ToBeVisibleAsync();
+
+            await page.Locator("input[name=Email]").FillAsync(E2ETestFixture.AdminEmail);
+            await page.Locator("input[name=Password]").FillAsync("senha-incorreta");
+            await page.GetByRole(AriaRole.Button, new() { Name = "ENTRAR" }).ClickAsync();
+            Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
+
+            await page.Locator("input[name=Email]").FillAsync(E2ETestFixture.AdminEmail);
+            await page.Locator("input[name=Password]").FillAsync(E2ETestFixture.AdminPassword);
+            await page.GetByRole(AriaRole.Button, new() { Name = "ENTRAR" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/");
+            await Assertions.Expect(page.Locator("#sidebar")).ToContainTextAsync("Olá, joao");
+
+            await page.GotoAsync("/Users");
+            await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Usuários" }))
+                .ToBeVisibleAsync();
+
+            var logoutRequest = await page.RunAndWaitForRequestAsync(
+                () => page.Locator("#sidebar li[data-page=logout] button[type=submit]").ClickAsync(),
+                request => new Uri(request.Url).AbsolutePath == "/Account/Logout");
+            Assert.Equal("POST", logoutRequest.Method);
+            Assert.Contains("__RequestVerificationToken=", logoutRequest.PostData ?? string.Empty);
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account");
+            await page.GotoAsync("/Users");
+            Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
+        });
+
+    [Fact]
+    public Task LoginInteractions_ShowPassword_ForgotLink_AndBrowserLocaleWork() =>
+        RunInBrowserAsync(
+            nameof(LoginInteractions_ShowPassword_ForgotLink_AndBrowserLocaleWork),
+            async page =>
+            {
+                await page.GotoAsync("/Account");
+                Assert.Equal("es", await page.Locator("html").GetAttributeAsync("lang"));
+
+                var password = page.Locator("#passwordInput");
+                await password.FillAsync("segredo");
+                Assert.Equal("password", await password.GetAttributeAsync("type"));
+                await page.Locator("#showPassword").CheckAsync();
+                Assert.Equal("text", await password.GetAttributeAsync("type"));
+                await page.Locator("#showPassword").UncheckAsync();
+                Assert.Equal("password", await password.GetAttributeAsync("type"));
+
+                await page.Locator("a.forgot-password").ClickAsync();
+                await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account/Forgot");
+                await Assertions.Expect(page.Locator("body")).Not.ToBeEmptyAsync();
+            },
+            new BrowserNewContextOptions
+            {
+                BaseURL = Fixture.BaseUrl,
+                Locale = "es-ES",
+                ViewportSize = new ViewportSize { Width = 1280, Height = 900 }
+            });
+}

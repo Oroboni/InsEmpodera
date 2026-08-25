@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
     <link rel="stylesheet" href="~/css/pages/activity-index.css" />
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 }
 
 <div class="atores-content-area">
@@ -29,7 +29,7 @@
             <input type="search" class="search-input" placeholder="Buscar..." name="q" />
         </form>
 
-        <button type="button" class="atores-export-button" title="Exportar dados">
+        <button type="button" class="atores-export-button" disabled aria-disabled="true" title="Exportação ainda não disponível nesta tela">
             <i class="fa-solid fa-file-arrow-down"></i>
         </button>
         <a asp-controller="Comunidade" asp-action="Create_Recursos" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>

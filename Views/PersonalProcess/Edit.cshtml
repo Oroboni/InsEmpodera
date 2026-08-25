@@ -18,6 +18,7 @@
     </div>
 
     <form method="post">
+        @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdDCampo" />
 
         <div class="form-group">
@@ -111,7 +112,7 @@
         </details>
         
         <div class="form-buttons">
-            <button type="button" class="btn btn-delete">DELETAR</button>
+            <button type="button" class="btn btn-delete" disabled aria-disabled="true" title="Exclusão ainda não disponível">DELETAR</button>
             <a asp-action="Index" class="btn btn-secondary">VOLTAR</a>
             <button type="submit" class="btn btn-primary">EDITAR</button>
         </div>

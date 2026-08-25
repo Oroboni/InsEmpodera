@@ -1,0 +1,159 @@
+using System.Text.RegularExpressions;
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    public Task CreateSearchEditPermissions_AndVerifyPersistence() =>
+        RunInBrowserAsync(nameof(CreateSearchEditPermissions_AndVerifyPersistence), async page =>
+        {
+            await LoginAsync(page);
+            var profileName = Unique("Perfil E2E");
+            var editedName = profileName + " atualizado";
+
+            await page.GotoAsync("/AccessProfile/Create");
+            var nameInput = page.Locator("input[name=Nome]");
+            await nameInput.FocusAsync();
+            await nameInput.BlurAsync();
+            await Assertions.Expect(page.Locator(".input-card")).ToHaveClassAsync(new Regex("invalid"));
+
+            await nameInput.FillAsync(profileName);
+            page.Dialog += async (_, dialog) =>
+            {
+                Assert.Contains("selecione pelo menos uma permissão", dialog.Message,
+                    StringComparison.OrdinalIgnoreCase);
+                await dialog.AcceptAsync();
+            };
+            await page.Locator("#create-btn").ClickAsync();
+            Assert.Equal("/AccessProfile/Create", new Uri(page.Url).AbsolutePath);
+
+            var permissions = page.Locator(".permission-table input[type=checkbox]");
+            await page.GetByRole(AriaRole.Button, new() { Name = "Marcar Todas", Exact = true }).ClickAsync();
+            Assert.Equal(await permissions.CountAsync(), await permissions.EvaluateAllAsync<int>(
+                "items => items.filter(item => item.checked).length"));
+            await page.GetByRole(AriaRole.Button, new() { Name = "Desmarcar Todas", Exact = true }).ClickAsync();
+            Assert.Equal(0, await permissions.EvaluateAllAsync<int>(
+                "items => items.filter(item => item.checked).length"));
+
+            await permissions.First.Locator("xpath=..").ClickAsync();
+            await permissions.Nth(2).Locator("xpath=..").ClickAsync();
+            await permissions.Nth(4).Locator("xpath=..").ClickAsync();
+            await page.Locator("#create-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+
+            var profileId = await Fixture.QueryAsync(db => db.Perfis
+                .Where(profile => profile.Nome == profileName)
+                .Select(profile => profile.IdPerfil)
+                .SingleAsync());
+            var createdPermissions = await Fixture.QueryAsync(db => db.Permissoes
+                .Where(permission => permission.FkIdPerfil == profileId)
+                .OrderBy(permission => permission.Modulo)
+                .ToListAsync());
+            Assert.Equal(12, createdPermissions.Count);
+            var usersPermission = createdPermissions.Single(permission => permission.Modulo == "Usuarios");
+            Assert.Equal("S", usersPermission.PodeListar);
+            Assert.Equal("S", usersPermission.PodeCriar);
+            Assert.Equal("S", usersPermission.PodeDeletar);
+            Assert.Equal("N", usersPermission.PodeDetalhar);
+            Assert.Equal("N", usersPermission.PodeAtualizar);
+
+            await page.Locator("#searchProfilesInput").FillAsync(profileName);
+            await Assertions.Expect(page.Locator(".profile-item:visible")).ToHaveCountAsync(1);
+            await Assertions.Expect(page.Locator(".profile-item:visible")).ToContainTextAsync(profileName);
+            await page.Locator("#searchProfilesInput").FillAsync("perfil-inexistente-e2e");
+            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeVisibleAsync();
+            await page.Locator("#searchProfilesInput").PressAsync("Escape");
+            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeHiddenAsync();
+
+            await page.GotoAsync($"/AccessProfile/Edit/{profileId}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator(".permission-table input[type=checkbox]").First)
+                .ToBeDisabledAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
+            await page.Locator("input[name=Nome]").FillAsync(editedName);
+
+            var editPermissions = page.Locator(".permission-table input[type=checkbox]");
+            await editPermissions.First.Locator("xpath=..").ClickAsync();
+            await editPermissions.Nth(1).Locator("xpath=..").ClickAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+
+            Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Perfis
+                .Where(profile => profile.IdPerfil == profileId)
+                .Select(profile => profile.Nome)
+                .SingleAsync()));
+            var editedPermission = await Fixture.QueryAsync(db => db.Permissoes
+                .Where(permission => permission.FkIdPerfil == profileId && permission.Modulo == "Usuarios")
+                .SingleAsync());
+            Assert.Equal("N", editedPermission.PodeListar);
+            Assert.Equal("S", editedPermission.PodeDetalhar);
+        });
+
+    [Fact]
+    public Task Profile_CreateEditDeleteUnused_AndHideDeleteForProfileInUse() =>
+        RunInBrowserAsync(nameof(Profile_CreateEditDeleteUnused_AndHideDeleteForProfileInUse), async page =>
+        {
+            await LoginAsync(page);
+            var name = Unique("Perfil removível");
+            var editedName = name + " editado";
+
+            await page.GotoAsync("/AccessProfile/Create");
+            await page.Locator("input[name=Nome]").FillAsync(name);
+            await page.Locator(".permission-table input[type=checkbox]").First
+                .Locator("xpath=..").ClickAsync();
+            await page.Locator("#create-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+            var profileId = await Fixture.QueryAsync(db => db.Perfis
+                .Where(profile => profile.Nome == name)
+                .Select(profile => profile.IdPerfil)
+                .SingleAsync());
+
+            await page.GotoAsync($"/AccessProfile/Edit/{profileId}");
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.Locator("input[name=Nome]").FillAsync(editedName);
+            var permissions = page.Locator(".permission-table input[type=checkbox]");
+            await permissions.First.Locator("xpath=..").ClickAsync();
+            await permissions.Nth(1).Locator("xpath=..").ClickAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+            Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Perfis
+                .Where(profile => profile.IdPerfil == profileId)
+                .Select(profile => profile.Nome)
+                .SingleAsync()));
+
+            var card = page.Locator(".profile-item").Filter(new() { HasText = editedName });
+            await Assertions.Expect(card).ToBeVisibleAsync();
+            var deleteButton = card.GetByRole(AriaRole.Button,
+                new() { Name = $"Excluir perfil {editedName}", Exact = true });
+            await Assertions.Expect(deleteButton).ToBeVisibleAsync();
+            await deleteButton.ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+            Assert.False(await Fixture.QueryAsync(db => db.Perfis.AnyAsync(profile =>
+                profile.IdPerfil == profileId)));
+            Assert.False(await Fixture.QueryAsync(db => db.Permissoes.AnyAsync(permission =>
+                permission.FkIdPerfil == profileId)));
+            await Assertions.Expect(page.Locator(".profile-item").Filter(new() { HasText = editedName }))
+                .ToHaveCountAsync(0);
+
+            var inUse = await Fixture.QueryAsync(db => db.Perfis
+                .Where(profile => profile.Usuarios.Any())
+                .OrderBy(profile => profile.IdPerfil)
+                .Select(profile => new { profile.IdPerfil, profile.Nome, Users = profile.Usuarios.Count })
+                .FirstAsync());
+            Assert.True(inUse.Users > 0);
+            var inUseCard = page.Locator(".profile-item").Filter(new() { HasText = inUse.Nome });
+            await Assertions.Expect(inUseCard).ToBeVisibleAsync();
+            await Assertions.Expect(inUseCard.GetByRole(AriaRole.Button,
+                new() { Name = $"Excluir perfil {inUse.Nome}", Exact = true })).ToHaveCountAsync(0);
+            Assert.True(await Fixture.QueryAsync(db => db.Perfis.AnyAsync(profile =>
+                profile.IdPerfil == inUse.IdPerfil)));
+        });
+
+}

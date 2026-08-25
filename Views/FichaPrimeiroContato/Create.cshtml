@@ -73,7 +73,7 @@
             <div class="grid-row">
                 <div class="input-card">
                     <div class="input-content">
-                        <label asp-for="Telefone">Número de Telefone</label>
+                        <label for="inputTelefone">Número de Telefone</label>
                         <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input" maxlength="15"
                             placeholder="(DDD) 99999-9999" />
                     </div>
@@ -139,11 +139,11 @@
                         <label asp-for="NovoParceiro">É um parceiro? <span class="text-danger">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="NovoParceiro" value="Sim" required />
+                                <input type="radio" asp-for="NovoParceiro" id="NovoParceiro" value="Sim" required />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="NovoParceiro" value="Não" required />
+                                <input type="radio" asp-for="NovoParceiro" id="NovoParceiroNao" value="Não" required />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>
@@ -158,11 +158,11 @@
                                 class="text-danger">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="FornecidoParceiro" value="Sim" required />
+                                <input type="radio" asp-for="FornecidoParceiro" id="FornecidoParceiro" value="Sim" required />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="FornecidoParceiro" value="Não" required />
+                                <input type="radio" asp-for="FornecidoParceiro" id="FornecidoParceiroNao" value="Não" required />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>
@@ -242,11 +242,11 @@
                         <label asp-for="SLer">Sabe Ler?</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="SLer" value="Sim" />
+                                <input type="radio" asp-for="SLer" id="SLer" value="Sim" />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="SLer" value="Não" />
+                                <input type="radio" asp-for="SLer" id="SLerNao" value="Não" />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>
@@ -260,11 +260,11 @@
                         <label asp-for="SCalc">Sabe Calcular?</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="SCalc" value="Sim" />
+                                <input type="radio" asp-for="SCalc" id="SCalc" value="Sim" />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="SCalc" value="Não" />
+                                <input type="radio" asp-for="SCalc" id="SCalcNao" value="Não" />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>
@@ -276,11 +276,11 @@
                         <label asp-for="SComp">Sabe usar Computador?</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" asp-for="SComp" value="Sim" />
+                                <input type="radio" asp-for="SComp" id="SComp" value="Sim" />
                                 <span class="radio-label">Sim</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" asp-for="SComp" value="Não" />
+                                <input type="radio" asp-for="SComp" id="SCompNao" value="Não" />
                                 <span class="radio-label">Não</span>
                             </label>
                         </div>

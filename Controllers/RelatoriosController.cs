@@ -1,103 +1,100 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Empodera.Models;
 using Empodera.Data;
-using Microsoft.EntityFrameworkCore;
+using Empodera.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
-namespace Empodera.Controllers
+namespace Empodera.Controllers;
+
+public class RelatoriosController : BaseController
 {
-    public class RelatoriosController : BaseController
+    private readonly ApplicationDbContext _context;
+
+    public RelatoriosController(ILogger<AtoresController> logger, ApplicationDbContext context)
     {
+        _context = context;
+    }
 
-        private readonly ILogger<AtoresController> _logger;
-        private readonly ApplicationDbContext _context;
+    public async Task<IActionResult> Index()
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanList("SER"));
+        return denied ?? View();
+    }
 
-        public RelatoriosController(ILogger<AtoresController> logger, ApplicationDbContext context)
-        {
-            _logger = logger;
-            _context = context;
-        }
-        public async Task<IActionResult> Index()
-        {
-            if (HttpContext.Session.GetString("Email") == null) 
-            { 
-                return RedirectToAction("Index", "Account"); 
-            }
-            return View();
-        }
+    public async Task<IActionResult> Rsc()
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
+        if (denied is not null)
+            return denied;
 
-        public async Task<IActionResult> Rsc()
-        {
-            if (HttpContext.Session.GetString("Email") == null) 
-            { 
-                return RedirectToAction("Index", "Account"); 
-            }
+        await PopulateActiveCommunitiesAsync();
+        return View();
+    }
 
-            ViewBag.Comunidades = new SelectList(
-                await _context.Comunidades.ToListAsync(),
-                "Id_Comunidade",
-                "Nome"
-            );
+    public async Task<IActionResult> PrimaryNetwork()
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
+        if (denied is not null)
+            return denied;
 
-            return View();
-        }
+        await PopulateActiveCommunitiesAsync();
+        return View();
+    }
 
-        public async Task<IActionResult> PrimaryNetwork()
-        {
-            if (HttpContext.Session.GetString("Email") == null) 
-            { 
-                return RedirectToAction("Index", "Account"); 
-            }
+    public async Task<IActionResult> PersonalAssessment()
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
+        return denied ?? View();
+    }
 
-            ViewBag.Comunidades = new SelectList(
-                await _context.Comunidades.ToListAsync(),
-                "Id_Comunidade",
-                "Nome"
-            );
+    public async Task<IActionResult> FirstContact()
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
+        if (denied is not null)
+            return denied;
 
-            return View();
-        }
+        await PopulateActiveCommunitiesAsync();
+        return View();
+    }
 
-        public async Task<IActionResult> PersonalAssessment()
-        {
-            if (HttpContext.Session.GetString("Email") == null) 
-            { 
-                return RedirectToAction("Index", "Account"); 
-            }
-            return View();
-        }
+    public async Task<IActionResult> Actions()
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
+        if (denied is not null)
+            return denied;
 
-        public async Task<IActionResult> FirstContact()
-        {
-            if (HttpContext.Session.GetString("Email") == null) 
-            { 
-                return RedirectToAction("Index", "Account"); 
-            }
+        await PopulateActiveCommunitiesAsync();
+        return View();
+    }
 
-            ViewBag.Comunidades = new SelectList(
-                await _context.Comunidades.ToListAsync(),
-                "Id_Comunidade",
-                "Nome"
-            );
-            
-            return View();
-        }
+    private async Task<IActionResult?> RequireSerPermissionAsync(Func<Usuario?, bool> permission)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
 
-        public async Task<IActionResult> Actions()
-        {
-            if (HttpContext.Session.GetString("Email") == null) 
-            { 
-                return RedirectToAction("Index", "Account"); 
-            }
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUser = await _context.Usuarios
+            .AsNoTracking()
+            .Include(user => user.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(
+                user => user.IdUsuario == loggedUserId,
+                HttpContext.RequestAborted);
 
-            ViewBag.Comunidades = new SelectList(
-                await _context.Comunidades.ToListAsync(),
-                "Id_Comunidade",
-                "Nome"
-            );
+        return permission(loggedUser)
+            ? null
+            : RedirectToAction("Index", "Home");
+    }
 
-            return View();
-        }
+    private async Task PopulateActiveCommunitiesAsync()
+    {
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades
+                .AsNoTracking()
+                .Where(community => community.Ativo != "N")
+                .OrderBy(community => community.Nome)
+                .ToListAsync(HttpContext.RequestAborted),
+            "Id_Comunidade",
+            "Nome");
     }
 }

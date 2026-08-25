@@ -51,29 +51,30 @@ function initMentions() {
 
         function showMentions(query, atIndex) {
             // Filtra atores
-            const matches = atoresDisponiveis.filter(a => a.Text.toLowerCase().includes(query.toLowerCase()));
+            const matches = atoresDisponiveis.filter(a => (a?.Text ?? a?.Nome ?? "").toLowerCase().includes(query.toLowerCase()));
             
             if (matches.length === 0) {
                 hideMentions();
                 return;
             }
 
-            listContainer.innerHTML = '';
+            listContainer.replaceChildren();
             listContainer.style.display = 'block';
 
             matches.forEach(ator => {
+                const nome = String(ator.Text ?? ator.Nome ?? '');
                 const li = document.createElement('li');
                 li.className = 'mention-item';
-                li.innerHTML = `<i class="fa-solid fa-user"></i> ${ator.Text}`;
-                
-                li.onclick = function() {
-                    insertMention(ator.Text, atIndex, query.length);
-                };
-                
+
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-user';
+                li.append(icon, document.createTextNode(` ${nome}`));
+                li.addEventListener('click', function () {
+                    insertMention(nome, atIndex, query.length);
+                });
                 listContainer.appendChild(li);
             });
         }
-
         function hideMentions() {
             listContainer.style.display = 'none';
         }
@@ -84,12 +85,13 @@ function initMentions() {
             const after = text.substring(atIndex + 1 + queryLength);
             
             // Insere o nome e foca
-            textarea.value = before + '@' + name + ' ' + after;
+            const separator = after.startsWith(' ') ? '' : ' ';
+            textarea.value = before + '@' + name + separator + after;
             hideMentions();
             textarea.focus();
             
             // Ajusta cursor para depois do nome
-            const newCursorPos = atIndex + 1 + name.length + 1;
+            const newCursorPos = atIndex + 1 + name.length + separator.length;
             textarea.setSelectionRange(newCursorPos, newCursorPos);
         }
     }
@@ -180,30 +182,42 @@ window.salvarAcao = function() {
     const item = document.createElement('div');
     item.className = 'action-list-item';
     
-    // Badges visuais
-    const badge = (tipo === 'equipe') 
-        ? `<span class="tag-item tag-blue" style="font-size:0.75rem"><i class="fa-solid fa-users"></i> Equipe</span>`
-        : `<span class="tag-item tag-purple" style="font-size:0.75rem"><i class="fa-solid fa-building"></i> Institucional</span>`;
-
-    const provedorHtml = provedor ? `<br><small class="text-muted"><i class="fa-solid fa-building"></i> ${provedor}</small>` : '';
-    const qtdHtml = (quantidade > 1) ? `<em style="margin-left:5px; color:#666">(${quantidade}x)</em>` : '';
-
+    const isTeam = tipo === 'equipe';
+    const index = Date.now();
     item.innerHTML = `
-        <div style="flex: 1;">
+        <div data-action-content style="flex: 1;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <strong>${nome}</strong>
-                ${badge}
-                ${qtdHtml}
+                <strong data-action-name></strong>
+                <span data-action-badge class="tag-item" style="font-size:0.75rem"><i></i><span></span></span>
+                <em data-action-quantity style="margin-left:5px; color:#666"></em>
             </div>
-            ${provedorHtml}
-            <input type="hidden" name="Acoes[${Date.now()}].Nome" value="${nome}" />
-            <input type="hidden" name="Acoes[${Date.now()}].Tipo" value="${tipo}" />
+            <small data-action-provider class="text-muted"><i class="fa-solid fa-building"></i><span></span></small>
         </div>
-        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()" title="Remover">
+        <button type="button" class="btn-action btn-delete" title="Remover" aria-label="Remover ação">
             <i class="fa-solid fa-trash"></i>
-        </button>
-    `;
+        </button>`;
 
+    item.querySelector('[data-action-name]').textContent = nome;
+    const badge = item.querySelector('[data-action-badge]');
+    badge.classList.add(isTeam ? 'tag-blue' : 'tag-purple');
+    badge.querySelector('i').className = isTeam ? 'fa-solid fa-users' : 'fa-solid fa-building';
+    badge.querySelector('span').textContent = isTeam ? ' Equipe' : ' Institucional';
+    item.querySelector('[data-action-quantity]').textContent = Number(quantidade) > 1 ? `(${quantidade}x)` : '';
+
+    const provider = item.querySelector('[data-action-provider]');
+    provider.style.display = provedor ? '' : 'none';
+    provider.querySelector('span').textContent = ` ${provedor}`;
+    item.querySelector('.btn-delete').addEventListener('click', () => item.remove());
+
+    function appendHiddenInput(name, value) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = String(value ?? '');
+        item.querySelector('[data-action-content]').appendChild(input);
+    }
+    appendHiddenInput(`Acoes[${index}].Nome`, nome);
+    appendHiddenInput(`Acoes[${index}].Tipo`, tipo);
     // 6. Adiciona e fecha
     container.appendChild(item);
     fecharModal('modalAcao');

@@ -1,0 +1,256 @@
+using System.Text.RegularExpressions;
+using Empodera.Models;
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    private static readonly string[] ExpectedSidebarPaths =
+    [
+        "/", "/Comunidade", "/Atores", "/FichaPrimeiroContato", "/Diariocampo",
+        "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users", "/AccessProfile",
+        "/Report", "/Ajuda", "/Configuracoes"
+    ];
+
+    private static readonly string[] ImplementedSidebarPaths =
+    [
+        "/", "/Comunidade", "/Atores", "/FichaPrimeiroContato", "/Diariocampo",
+        "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users", "/AccessProfile",
+        "/Report"
+    ];
+
+    [Fact]
+    public Task EveryImplementedVisibleSidebarLink_ClicksToSuccessfulPage_AndBecomesActive() =>
+        RunInBrowserAsync(
+            nameof(EveryImplementedVisibleSidebarLink_ClicksToSuccessfulPage_AndBecomesActive),
+            async page =>
+            {
+                await LoginAsync(page);
+                await AssertSidebarContractAsync(page);
+
+                foreach (var path in ImplementedSidebarPaths)
+                {
+                    if (new Uri(page.Url).AbsolutePath != "/")
+                        await page.GotoAsync("/");
+
+                    var link = page.Locator($"#sidebar a[href='{path}']");
+                    await Assertions.Expect(link).ToBeVisibleAsync();
+                    var response = await ClickAndWaitForDocumentAsync(page, link, path);
+                    Assert.NotNull(response);
+                    Assert.InRange(response!.Status, 200, 399);
+                    Assert.Equal(path, new Uri(page.Url).AbsolutePath, ignoreCase: true);
+                    await Assertions.Expect(page.Locator($"#sidebar li:has(a[href='{path}'])"))
+                        .ToHaveClassAsync(new Regex("(^|\\s)active(\\s|$)"));
+                    Assert.True(await HasNoHorizontalOverflowAsync(page),
+                        $"A rota {path} criou rolagem horizontal no viewport desktop.");
+                }
+
+                await page.GotoAsync("/");
+                await SubmitLogoutAsync(page);
+                Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
+            });
+
+    [Fact]
+    public Task HelpSidebarLink_LoadsGuidance_AndQuickAccessWorks() =>
+        RunInBrowserAsync(
+            nameof(HelpSidebarLink_LoadsGuidance_AndQuickAccessWorks),
+            async page =>
+            {
+                await LoginAsync(page);
+                await AssertSidebarContractAsync(page);
+                var link = page.Locator("#sidebar a[href='/Ajuda']");
+                await Assertions.Expect(link).ToBeVisibleAsync();
+                var response = await ClickAndWaitForDocumentAsync(page, link, "/Ajuda");
+                Assert.NotNull(response);
+                Assert.InRange(response!.Status, 200, 299);
+                Assert.Equal("/Ajuda", new Uri(page.Url).AbsolutePath);
+                await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Ajuda", Exact = true }))
+                    .ToBeVisibleAsync();
+                var firstQuestion = page.Locator(".help-faq details").First;
+                await firstQuestion.Locator("summary").ClickAsync();
+                Assert.True(await firstQuestion.EvaluateAsync<bool>("element => element.open"));
+                var communities = page.Locator(".help-card[href='/Comunidade']");
+                await Assertions.Expect(communities).ToContainTextAsync("Comunidades");
+                await communities.ClickAsync();
+                await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
+            });
+
+    [Fact]
+    public Task SettingsSidebarLink_LoadsAvailableOptions_WithoutFakeSaveForm() =>
+        RunInBrowserAsync(
+            nameof(SettingsSidebarLink_LoadsAvailableOptions_WithoutFakeSaveForm),
+            async page =>
+            {
+                await LoginAsync(page);
+                await AssertSidebarContractAsync(page);
+                var link = page.Locator("#sidebar a[href='/Configuracoes']");
+                await Assertions.Expect(link).ToBeVisibleAsync();
+                var response = await ClickAndWaitForDocumentAsync(page, link, "/Configuracoes");
+                Assert.NotNull(response);
+                Assert.InRange(response!.Status, 200, 299);
+                Assert.Equal("/Configuracoes", new Uri(page.Url).AbsolutePath);
+                await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Configurações", Exact = true }))
+                    .ToBeVisibleAsync();
+                await Assertions.Expect(page.Locator("main form, main button[type=submit]")).ToHaveCountAsync(0);
+                await page.GetByRole(AriaRole.Link, new() { Name = "Ver Perfis de Acesso" }).ClickAsync();
+                await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+            });
+    [Fact]
+    public Task MobileSidebar_ToggleEscapeBackdropAndNavigation_AreKeyboardAndTouchUsable() =>
+        RunInBrowserAsync(
+            nameof(MobileSidebar_ToggleEscapeBackdropAndNavigation_AreKeyboardAndTouchUsable),
+            async page =>
+            {
+                await LoginAsync(page);
+                Assert.True(await HasNoHorizontalOverflowAsync(page));
+
+                var sidebar = page.Locator("#sidebar");
+                var toggle = page.Locator("#sidebarToggle");
+                var backdrop = page.Locator("#sidebarBackdrop");
+                await Assertions.Expect(toggle).ToBeVisibleAsync();
+                await Assertions.Expect(sidebar).Not.ToHaveClassAsync(new Regex("(^|\\s)open(\\s|$)"));
+
+                await toggle.ClickAsync();
+                await Assertions.Expect(sidebar).ToHaveClassAsync(new Regex("(^|\\s)open(\\s|$)"));
+                await Assertions.Expect(toggle).ToHaveAttributeAsync("aria-expanded", "true");
+                await Assertions.Expect(toggle).ToHaveAttributeAsync("aria-label", "Fechar Menu");
+                await Assertions.Expect(backdrop).ToHaveClassAsync(new Regex("(^|\\s)show(\\s|$)"));
+
+                await page.Keyboard.PressAsync("Escape");
+                await Assertions.Expect(sidebar).Not.ToHaveClassAsync(new Regex("(^|\\s)open(\\s|$)"));
+                await Assertions.Expect(toggle).ToHaveAttributeAsync("aria-expanded", "false");
+
+                await toggle.ClickAsync();
+                await backdrop.ClickAsync(new LocatorClickOptions { Position = new Position { X = 380, Y = 20 } });
+                await Assertions.Expect(sidebar).Not.ToHaveClassAsync(new Regex("(^|\\s)open(\\s|$)"));
+
+                await toggle.ClickAsync();
+                var communities = page.Locator("#sidebar a[href='/Comunidade']");
+                var response = await ClickAndWaitForDocumentAsync(page, communities, "/Comunidade");
+                Assert.NotNull(response);
+                Assert.InRange(response!.Status, 200, 399);
+                Assert.Equal("/Comunidade", new Uri(page.Url).AbsolutePath);
+                Assert.True(await HasNoHorizontalOverflowAsync(page));
+            },
+            new BrowserNewContextOptions
+            {
+                BaseURL = Fixture.BaseUrl,
+                Locale = "pt-BR",
+                ViewportSize = new ViewportSize { Width = 390, Height = 844 },
+                IsMobile = true,
+                HasTouch = true
+            });
+
+    [Fact]
+    public Task LoginLanguageSelector_ControlsWholeSession_AndAutomaticFollowsBrowser() =>
+        RunInBrowserAsync(
+            nameof(LoginLanguageSelector_ControlsWholeSession_AndAutomaticFollowsBrowser),
+            async page =>
+            {
+                await Fixture.ExecuteAsync(async db =>
+                {
+                    var admin = await db.Usuarios.SingleAsync(user => user.IdUsuario == 1);
+                    admin.IdiomaPreferido = IdiomaPreferido.Portugues;
+                    await db.SaveChangesAsync();
+                });
+
+                try
+                {
+                    await page.GotoAsync("/Account");
+                    Assert.Equal("en", await page.Locator("html").GetAttributeAsync("lang"));
+
+                    await page.Locator(".login-language-switcher summary").ClickAsync();
+                    await page.GetByRole(AriaRole.Button, new() { Name = "Español", Exact = true }).ClickAsync();
+                    await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account");
+                    Assert.Equal("es", await page.Locator("html").GetAttributeAsync("lang"));
+
+                    await LoginAsync(page);
+                    Assert.Equal("es", await page.Locator("html").GetAttributeAsync("lang"));
+                    var cultureCookie = (await page.Context.CookiesAsync())
+                        .Single(cookie => cookie.Name == ".AspNetCore.Culture");
+                    Assert.Contains("c=es", Uri.UnescapeDataString(cultureCookie.Value));
+                    Assert.Contains("uic=es", Uri.UnescapeDataString(cultureCookie.Value));
+
+                    await SubmitLogoutAsync(page);
+                    Assert.Equal("es", await page.Locator("html").GetAttributeAsync("lang"));
+                    Assert.Contains(await page.Context.CookiesAsync(),
+                        cookie => cookie.Name == ".AspNetCore.Culture");
+
+                    await page.Locator(".login-language-switcher summary").ClickAsync();
+                    await page.GetByRole(AriaRole.Button, new() { Name = "Automático (navegador)", Exact = true })
+                        .ClickAsync();
+                    await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account");
+                    Assert.Equal("en", await page.Locator("html").GetAttributeAsync("lang"));
+                    var browserModeCookies = await page.Context.CookiesAsync();
+                    Assert.DoesNotContain(browserModeCookies, cookie => cookie.Name == ".AspNetCore.Culture");
+                    Assert.Contains(browserModeCookies,
+                        cookie => cookie.Name == ".Empodera.LanguageMode" && cookie.Value == "browser");
+                }
+                finally
+                {
+                    await Fixture.ExecuteAsync(async db =>
+                    {
+                        var admin = await db.Usuarios.SingleAsync(user => user.IdUsuario == 1);
+                        admin.IdiomaPreferido = IdiomaPreferido.Default;
+                        await db.SaveChangesAsync();
+                    });
+                }
+            },
+            new BrowserNewContextOptions
+            {
+                BaseURL = Fixture.BaseUrl,
+                Locale = "en-US"
+            });
+
+    private static async Task SubmitLogoutAsync(IPage page)
+    {
+        var form = page.Locator("#sidebar li[data-page=logout] form");
+        await Assertions.Expect(form).ToBeVisibleAsync();
+        await Assertions.Expect(form).ToHaveAttributeAsync("method", "post");
+        var action = await form.GetAttributeAsync("action");
+        Assert.NotNull(action);
+        Assert.Equal("/Account/Logout", new Uri(new Uri(page.Url), action).AbsolutePath);
+        await Assertions.Expect(form.Locator("input[name=__RequestVerificationToken]")).ToHaveCountAsync(1);
+
+        var request = await page.RunAndWaitForRequestAsync(
+            () => form.GetByRole(AriaRole.Button, new() { Name = "Logout", Exact = true }).ClickAsync(),
+            candidate => new Uri(candidate.Url).AbsolutePath.Equals(
+                "/Account/Logout", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal("POST", request.Method);
+        Assert.Contains("__RequestVerificationToken=", request.PostData ?? string.Empty);
+        await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account");
+    }
+
+    private static async Task<IResponse> ClickAndWaitForDocumentAsync(
+        IPage page,
+        ILocator link,
+        string expectedPath)
+    {
+        var response = await page.RunAndWaitForResponseAsync(
+            () => link.ClickAsync(),
+            candidate => candidate.Request.IsNavigationRequest
+                && new Uri(candidate.Url).AbsolutePath.Equals(expectedPath, StringComparison.OrdinalIgnoreCase));
+        await page.WaitForURLAsync(url =>
+            new Uri(url).AbsolutePath.Equals(expectedPath, StringComparison.OrdinalIgnoreCase));
+        return response;
+    }
+    private static async Task AssertSidebarContractAsync(IPage page)
+    {
+        var actualPaths = await page.Locator("#sidebar a:visible").EvaluateAllAsync<string[]>(
+            "links => links.map(link => new URL(link.href).pathname)");
+        Assert.Equal(ExpectedSidebarPaths, actualPaths);
+        await Assertions.Expect(page.Locator("#sidebar li[data-page=logout] form[method=post] input[name=__RequestVerificationToken]"))
+            .ToHaveCountAsync(1);
+        await Assertions.Expect(page.Locator("#sidebar li[data-page=logout] button[type=submit]"))
+            .ToBeVisibleAsync();
+    }
+
+    private static async Task<bool> HasNoHorizontalOverflowAsync(IPage page) =>
+        await page.EvaluateAsync<bool>(
+            "() => document.documentElement.scrollWidth <= window.innerWidth + 1");
+}

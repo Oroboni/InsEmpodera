@@ -8,7 +8,7 @@
 @section Styles {
 
   <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-  <link rel="stylesheet" href="~/css/pages/site.css" />
+  <link rel="stylesheet" href="~/css/site.css" />
 }
 
 <form asp-controller="Comunidade" asp-action="ComunidadesDetalhes" method="post" class="main-form">
@@ -45,7 +45,7 @@
     <div class="input-card full-width">
       <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
       <div class="input-content">
-        <label asp-for="Local">Endereço original <span class="text-danger">*</span></label>
+        <label for="input-endereco">Endereço original <span class="text-danger">*</span></label>
         <textarea asp-for="Local" class="clean-input address-input" id="input-endereco"
                   rows="2"
                   placeholder="Digite o endereço ou use a lupa no mapa..." required></textarea>
@@ -81,7 +81,7 @@
       <div class="input-content no-icon">
         <label asp-for="Status">Status <span class="text-danger">*</span></label>
         @{
-          var currentStatus = Model.Id_Comunidade > 0 && !string.IsNullOrWhiteSpace(Model.Status) ? Model.Status : "Em processo";
+          var currentStatus = Model.Id_Comunidade > 0 && !string.IsNullOrWhiteSpace(Model.Status) ? Model.Status : "Em diagnóstico";
         }
         <select asp-for="Status" class="clean-input" required>
           <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>

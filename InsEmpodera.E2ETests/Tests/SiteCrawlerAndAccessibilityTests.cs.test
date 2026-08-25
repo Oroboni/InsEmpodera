@@ -1,0 +1,274 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.Playwright;
+using System.Text.RegularExpressions;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    public Task AuthenticatedGetCrawler_VisitsEveryRenderedInternalLinkWithoutHttpOrPageErrors() =>
+        RunInBrowserAsync(
+            nameof(AuthenticatedGetCrawler_VisitsEveryRenderedInternalLinkWithoutHttpOrPageErrors),
+            async page =>
+            {
+                await LoginAsync(page);
+                var origin = new Uri(Fixture.BaseUrl);
+                var pending = new Queue<string>(
+                [
+                    "/", "/Comunidade", "/Atores", "/FichaPrimeiroContato", "/Diariocampo",
+                    "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users",
+                    "/AccessProfile", "/Report", "/Ajuda", "/Configuracoes"
+                ]);
+                var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                while (pending.Count > 0)
+                {
+                    var relativeUrl = pending.Dequeue();
+                    if (!visited.Add(relativeUrl))
+                        continue;
+                    Assert.True(visited.Count <= 150,
+                        "O crawler encontrou mais de 150 URLs internas; revise ciclos ou parâmetros não canônicos.");
+
+                    var response = await page.GotoAsync(relativeUrl,
+                        new PageGotoOptions { WaitUntil = WaitUntilState.DOMContentLoaded });
+                    Assert.NotNull(response);
+                    Assert.InRange(response!.Status, 200, 399);
+                    var finalUri = new Uri(page.Url);
+                    Assert.Equal(origin.Scheme, finalUri.Scheme);
+                    Assert.Equal(origin.Host, finalUri.Host);
+                    Assert.Equal(origin.Port, finalUri.Port);
+                    Assert.NotEqual("/Account", finalUri.AbsolutePath);
+                    Assert.False(string.IsNullOrWhiteSpace(await page.TitleAsync()),
+                        $"A página {relativeUrl} não possui título.");
+                    Assert.True(await page.Locator("h1:visible, h2:visible").CountAsync() > 0,
+                        $"A página {relativeUrl} não possui heading visível.");
+
+                    var renderedLinks = await page.Locator("a[href]").EvaluateAllAsync<string[]>("""
+                        links => links
+                          .filter(link => {
+                            const style = getComputedStyle(link);
+                            return style.display !== 'none' && style.visibility !== 'hidden'
+                              && link.getClientRects().length > 0 && !link.hasAttribute('download');
+                          })
+                          .map(link => link.href)
+                        """);
+
+                    foreach (var rawLink in renderedLinks)
+                    {
+                        if (!Uri.TryCreate(rawLink, UriKind.Absolute, out var candidate)
+                            || candidate.Scheme != origin.Scheme
+                            || candidate.Host != origin.Host
+                            || candidate.Port != origin.Port
+                            || ShouldSkipGet(candidate))
+                            continue;
+
+                        var canonical = candidate.AbsolutePath + candidate.Query;
+                        if (!visited.Contains(canonical))
+                            pending.Enqueue(canonical);
+                    }
+                }
+
+                Assert.True(visited.Count >= 13,
+                    $"O crawler visitou apenas {visited.Count} páginas e não cobriu o menu principal.");
+            });
+
+    [Fact]
+    public Task KeyScreens_HaveUniqueIdsLabelsAccessibleActionsAndImageAlternatives() =>
+        RunInBrowserAsync(
+            nameof(KeyScreens_HaveUniqueIdsLabelsAccessibleActionsAndImageAlternatives),
+            async page =>
+            {
+                await LoginAsync(page);
+                var paths = new[]
+                {
+                    "/", "/Users/Create", "/AccessProfile/Create", "/Comunidade/ComunidadesDetalhes/0",
+                    "/Atores/Create", "/Atividades/Create", "/DiarioCampo/Create",
+                    "/FichaPrimeiroContato/Create", "/PersonalAssessment/Create",
+                    "/Ajuda", "/Configuracoes"
+                };
+                var violations = new List<string>();
+
+                foreach (var path in paths)
+                {
+                    var response = await page.GotoAsync(path);
+                    if (response is null || response.Status >= 400)
+                    {
+                        violations.Add($"{path}: HTTP {response?.Status.ToString() ?? "sem resposta"}");
+                        continue;
+                    }
+
+                    var audit = await page.EvaluateAsync<AccessibilityAudit>("""
+                        () => {
+                          const visible = element => {
+                            const style = getComputedStyle(element);
+                            return style.display !== 'none' && style.visibility !== 'hidden'
+                              && element.getClientRects().length > 0;
+                          };
+                          const descriptor = element => {
+                            const id = element.id ? `#${element.id}` : '';
+                            const name = element.getAttribute('name');
+                            return `${element.tagName.toLowerCase()}${id}${name ? `[name="${name}"]` : ''}`;
+                          };
+                          const hasName = element => {
+                            if ((element.getAttribute('aria-label') || '').trim()) return true;
+                            if ((element.getAttribute('aria-labelledby') || '').trim()) return true;
+                            if ((element.getAttribute('title') || '').trim()) return true;
+                            if ((element.innerText || '').trim()) return true;
+                            const image = element.querySelector('img[alt]');
+                            return !!image && !!(image.getAttribute('alt') || '').trim();
+                          };
+                          const ids = [...document.querySelectorAll('[id]')].map(element => element.id);
+                          const duplicateIds = [...new Set(ids.filter((id, index) => id && ids.indexOf(id) !== index))];
+                          const controls = [...document.querySelectorAll('input, select, textarea')]
+                            .filter(element => visible(element) && !element.disabled && !element.readOnly
+                              && !['hidden', 'button', 'submit', 'reset', 'image'].includes(element.type));
+                          const unlabeledControls = controls
+                            .filter(element => !(element.labels && element.labels.length)
+                              && !(element.getAttribute('aria-label') || '').trim()
+                              && !(element.getAttribute('aria-labelledby') || '').trim()
+                              && !(element.getAttribute('title') || '').trim())
+                            .map(descriptor);
+                          const unnamedActions = [...document.querySelectorAll('button, a[href]')]
+                            .filter(element => visible(element) && !hasName(element))
+                            .map(descriptor);
+                          const imagesWithoutAlt = [...document.querySelectorAll('img')]
+                            .filter(element => visible(element) && !element.hasAttribute('alt'))
+                            .map(descriptor);
+                          return {
+                            DuplicateIds: duplicateIds,
+                            UnlabeledControls: unlabeledControls,
+                            UnnamedActions: unnamedActions,
+                            ImagesWithoutAlt: imagesWithoutAlt,
+                            HtmlLanguage: document.documentElement.lang
+                          };
+                        }
+                        """);
+
+                    if (audit is null)
+                    {
+                        violations.Add($"{path}: auditoria não retornou resultado");
+                        continue;
+                    }
+                    AddViolations(violations, path, "IDs duplicados", audit.DuplicateIds);
+                    AddViolations(violations, path, "campos sem label", audit.UnlabeledControls);
+                    AddViolations(violations, path, "ações sem nome acessível", audit.UnnamedActions);
+                    AddViolations(violations, path, "imagens sem alt", audit.ImagesWithoutAlt);
+                    if (string.IsNullOrWhiteSpace(audit.HtmlLanguage))
+                        violations.Add($"{path}: elemento html sem atributo lang");
+                }
+
+                Assert.True(violations.Count == 0,
+                    "Falhas de acessibilidade pragmática:" + Environment.NewLine
+                    + string.Join(Environment.NewLine, violations));
+            });
+
+    [Fact]
+    public Task ValidationScripts_LoadLocalJQueryBeforeValidationPlugins() =>
+        RunInBrowserAsync(nameof(ValidationScripts_LoadLocalJQueryBeforeValidationPlugins), async page =>
+        {
+            await LoginAsync(page);
+            await page.GotoAsync("/AccessProfile/Create");
+            var sources = await page.Locator("script[src]").EvaluateAllAsync<string[]>(
+                "scripts => scripts.map(script => new URL(script.src).pathname)");
+            var jquery = Array.IndexOf(sources, "/lib/jquery/dist/jquery.min.js");
+            var validate = Array.IndexOf(sources, "/lib/jquery-validation/dist/jquery.validate.min.js");
+            var unobtrusive = Array.IndexOf(sources,
+                "/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js");
+            Assert.True(jquery >= 0, "A página não carregou o jQuery local.");
+            Assert.True(validate > jquery, "jquery.validate foi carregado antes do jQuery.");
+            Assert.True(unobtrusive > validate,
+                "jquery.validate.unobtrusive foi carregado antes de jquery.validate.");
+            Assert.True(await page.EvaluateAsync<bool>(
+                "() => !!window.jQuery && !!window.jQuery.validator"));
+        });
+
+    [Fact]
+    public void EveryExplicitPageCss_ResolvesToARealAsset()
+    {
+        var viewsRoot = Path.Combine(Fixture.ProjectRoot, "Views");
+        var cssRoot = Path.Combine(Fixture.ProjectRoot, "wwwroot", "css", "pages");
+        var declarations = Directory.EnumerateFiles(viewsRoot, "*.cshtml", SearchOption.AllDirectories)
+            .SelectMany(file => Regex.Matches(
+                    File.ReadAllText(file),
+                    "ViewData\\[\"PageCSS\"\\]\\s*=\\s*\"([^\"]+)\"")
+                .Select(match => new { View = file, Name = match.Groups[1].Value }))
+            .ToArray();
+        Assert.NotEmpty(declarations);
+
+        foreach (var declaration in declarations)
+        {
+            var expectedName = declaration.Name + ".css";
+            var exactMatch = Directory.EnumerateFiles(cssRoot, "*.css", SearchOption.TopDirectoryOnly)
+                .Any(file => Path.GetFileName(file).Equals(expectedName, StringComparison.Ordinal));
+            Assert.True(exactMatch,
+                $"{declaration.View} declara PageCSS '{declaration.Name}', mas {expectedName} não existe com a mesma capitalização.");
+        }
+    }
+    [Fact]
+    public Task MobileNavigation_IsFocusableAndOperableWithKeyboard_WithoutHorizontalOverflow() =>
+        RunInBrowserAsync(
+            nameof(MobileNavigation_IsFocusableAndOperableWithKeyboard_WithoutHorizontalOverflow),
+            async page =>
+            {
+                await LoginAsync(page);
+                var toggle = page.Locator("#sidebarToggle");
+                await toggle.FocusAsync();
+                Assert.True(await toggle.EvaluateAsync<bool>("element => document.activeElement === element"));
+                await page.Keyboard.PressAsync("Enter");
+                await Assertions.Expect(page.Locator("#sidebar"))
+                    .ToHaveClassAsync(new System.Text.RegularExpressions.Regex("(^|\\s)open(\\s|$)"));
+                await page.Keyboard.PressAsync("Escape");
+                await Assertions.Expect(page.Locator("#sidebar"))
+                    .Not.ToHaveClassAsync(new System.Text.RegularExpressions.Regex("(^|\\s)open(\\s|$)"));
+                Assert.True(await page.EvaluateAsync<bool>(
+                    "() => document.documentElement.scrollWidth <= window.innerWidth + 1"));
+
+                await page.Keyboard.PressAsync("Tab");
+                Assert.False(await page.EvaluateAsync<bool>(
+                    "() => document.activeElement === document.body"));
+            },
+            new BrowserNewContextOptions
+            {
+                BaseURL = Fixture.BaseUrl,
+                Locale = "pt-BR",
+                ViewportSize = new ViewportSize { Width = 390, Height = 844 },
+                IsMobile = true,
+                HasTouch = true
+            });
+
+    private static bool ShouldSkipGet(Uri uri)
+    {
+        var path = uri.AbsolutePath;
+        return path.Equals("/Account/Logout", StringComparison.OrdinalIgnoreCase)
+            || path.Contains("/Delete", StringComparison.OrdinalIgnoreCase)
+            || path.Contains("/Concluir", StringComparison.OrdinalIgnoreCase)
+            || path.Contains("/Export", StringComparison.OrdinalIgnoreCase)
+            || path.Contains("/Download", StringComparison.OrdinalIgnoreCase)
+            || path.Contains("/Gerar", StringComparison.OrdinalIgnoreCase)
+            || path.Contains("/Services", StringComparison.OrdinalIgnoreCase)
+            || Path.HasExtension(path);
+    }
+
+    private static void AddViolations(
+        ICollection<string> target,
+        string path,
+        string category,
+        IEnumerable<string> items)
+    {
+        var values = items.ToArray();
+        if (values.Length > 0)
+            target.Add($"{path}: {category}: {string.Join(", ", values)}");
+    }
+
+    private sealed class AccessibilityAudit
+    {
+        public string[] DuplicateIds { get; init; } = [];
+        public string[] UnlabeledControls { get; init; } = [];
+        public string[] UnnamedActions { get; init; } = [];
+        public string[] ImagesWithoutAlt { get; init; } = [];
+        public string HtmlLanguage { get; init; } = string.Empty;
+    }
+}

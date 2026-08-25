@@ -12,12 +12,41 @@
             document.getElementById('atorAcao').value = '';
             document.getElementById('quantidadeAcao').value = '1';
 
-            // Limpa os Checkboxes do Modal (desmarca todos)
+            // Create usa checkboxes múltiplos; Edit usa um select simples.
             const checkboxes = document.querySelectorAll('input[name="modalEixos"]');
             checkboxes.forEach(cb => cb.checked = false);
+            const eixoSelect = document.getElementById('eixoAcao');
+            if (eixoSelect) eixoSelect.value = '';
 
-            document.getElementById('modalAcao').style.display = 'flex';
+            const modal = document.getElementById('modalAcao');
+            modal.style.display = 'flex';
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('nomeAcao')?.focus(), 0);
+        }
+
+        function fecharModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function removerItemGrid(btn, tipo) {
+            const item = btn?.closest?.('.action-list-item');
+            if (!item) return;
+            item.remove();
+
+            const isEquipe = tipo === 'equipe';
+            const countKey = isEquipe ? 'countEquipe' : 'countInst';
+            const counterId = isEquipe ? 'count-equipe' : 'count-institucional';
+            const emptyId = isEquipe ? 'empty-equipe' : 'empty-institucional';
+            window[countKey] = Math.max(0, Number(window[countKey] || 0) - 1);
+            const counter = document.getElementById(counterId);
+            if (counter) counter.innerText = window[countKey];
+            const empty = document.getElementById(emptyId);
+            if (empty && window[countKey] === 0) empty.style.display = 'block';
         }
 
         function salvarAcaoNoGrid() {
@@ -26,14 +55,19 @@
             const nome = document.getElementById('nomeAcao').value;
             const provedor = document.getElementById('provedorAcao').value;
             const qtd = document.getElementById('quantidadeAcao').value;
+            const atorId = document.getElementById('atorAcao')?.value ?? '';
 
             // 2. Capturar Eixos dos Checkboxes Marcados
             const checkboxesMarcados = document.querySelectorAll('input[name="modalEixos"]:checked');
-            
-            // Cria arrays de IDs e Nomes
-            const eixosIds = Array.from(checkboxesMarcados).map(cb => cb.value);
-            const eixosNomes = Array.from(checkboxesMarcados).map(cb => cb.getAttribute('data-nome')).join(', ');
+            let eixosIds = Array.from(checkboxesMarcados).map(cb => cb.value);
+            let eixosNomes = Array.from(checkboxesMarcados).map(cb => cb.getAttribute('data-nome') || '');
 
+            const eixoSelect = document.getElementById('eixoAcao');
+            if (eixosIds.length === 0 && eixoSelect?.value) {
+                eixosIds = [eixoSelect.value];
+                eixosNomes = [eixoSelect.options[eixoSelect.selectedIndex]?.textContent?.trim() || ''];
+            }
+            eixosNomes = eixosNomes.filter(Boolean).join(', ');
             // 3. Validações
             if (!nome) { alert("O campo Nome é obrigatório."); return; }
             if (eixosIds.length === 0) { alert("Selecione pelo menos um Eixo."); return; }
@@ -47,19 +81,22 @@
                 emptyID = 'empty-equipe';
                 counterSpanID = 'count-equipe';
                 badgeClass = 'tag-blue';
-                countEquipe++;
-                document.getElementById(counterSpanID).innerText = countEquipe;
+                window.countEquipe = Number(window.countEquipe || 0) + 1;
+                const counter = document.getElementById(counterSpanID);
+                if (counter) counter.innerText = window.countEquipe;
             } else {
                 containerID = 'container-institucional';
                 emptyID = 'empty-institucional';
                 counterSpanID = 'count-institucional';
                 badgeClass = 'tag-purple';
-                countInst++;
-                document.getElementById(counterSpanID).innerText = countInst;
+                window.countInst = Number(window.countInst || 0) + 1;
+                const counter = document.getElementById(counterSpanID);
+                if (counter) counter.innerText = window.countInst;
             }
 
             // 5. Esconder msg vazia
-            document.getElementById(emptyID).style.display = 'none';
+            const emptyState = document.getElementById(emptyID);
+            if (emptyState) emptyState.style.display = 'none';
 
             // 6. Criar HTML do Item
             const container = document.getElementById(containerID);
@@ -76,41 +113,55 @@
             itemDiv.style.justifyContent = 'space-between';
             itemDiv.style.alignItems = 'center';
 
-            const eixoDisplay = eixosNomes ? `<span style="font-size:0.75rem; color:#888;">• ${eixosNomes}</span>` : '';
             const timestamp = Date.now();
-
-            // Gera os inputs ocultos para cada eixo marcado (Backend receberá uma lista)
-            let inputsEixos = '';
-            eixosIds.forEach((id) => {
-                inputsEixos += `<input type="hidden" name="TempAcoes[${timestamp}].FkIdEixo" value="${id}" />`;
-            });
-
             itemDiv.innerHTML = `
                 <div style="flex: 1;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                        <strong style="color: #333;">${nome}</strong>
-                        <span class="tag-item ${badgeClass}" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ${tipo==='equipe'?'#e3f2fd':'#f3e5f5'}; color: ${tipo==='equipe'?'#1565c0':'#7b1fa2'}; border: 1px solid ${tipo==='equipe'?'#90caf9':'#ce93d8'};">
-                            ${tipo === 'equipe' ? 'Equipe' : 'Institucional'}
-                        </span>
+                    <div data-action-heading style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <strong data-action-name style="color: #333;"></strong>
+                        <span data-action-type class="tag-item" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;"></span>
                     </div>
-                    <div style="font-size: 0.8rem; color: #666;">
-                        <i class="fa-solid fa-building"></i> ${provedor} 
-                        ${eixoDisplay}
-                        ${qtd > 1 ? ` &bull; <strong>${qtd}x</strong>` : ''}
+                    <div data-action-details style="font-size: 0.8rem; color: #666;">
+                        <i class="fa-solid fa-building"></i>
+                        <span data-action-provider></span>
+                        <span data-action-axes style="font-size:0.75rem; color:#888;"></span>
+                        <span data-action-quantity></span>
                     </div>
                 </div>
-                <button type="button" onclick="removerItemGrid(this, '${tipo}')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
+                <button type="button" data-action-remove style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
                     <i class="fa-solid fa-trash"></i>
-                </button>
-                
-                <input type="hidden" name="TempAcoes.Index" value="${timestamp}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Nome" value="${nome}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Provedor" value="${provedor}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Tipo" value="${tipo}" />
-                <input type="hidden" name="TempAcoes[${timestamp}].Quantidade" value="${qtd}" />
-                ${inputsEixos}
-            `;
+                </button>`;
 
+            itemDiv.querySelector('[data-action-name]').textContent = nome;
+            itemDiv.querySelector('[data-action-provider]').textContent = ` ${provedor}`;
+            itemDiv.querySelector('[data-action-axes]').textContent = eixosNomes ? ` • ${eixosNomes}` : '';
+            itemDiv.querySelector('[data-action-quantity]').textContent = Number(qtd) > 1 ? ` • ${qtd}x` : '';
+
+            const badge = itemDiv.querySelector('[data-action-type]');
+            badge.classList.add(badgeClass);
+            badge.textContent = tipo === 'equipe' ? 'Equipe' : 'Institucional';
+            badge.style.background = tipo === 'equipe' ? '#e3f2fd' : '#f3e5f5';
+            badge.style.color = tipo === 'equipe' ? '#1565c0' : '#7b1fa2';
+            badge.style.border = `1px solid ${tipo === 'equipe' ? '#90caf9' : '#ce93d8'}`;
+
+            const removeButton = itemDiv.querySelector('[data-action-remove]');
+            removeButton.setAttribute('aria-label', `Remover ação ${nome}`);
+            removeButton.addEventListener('click', () => removerItemGrid(removeButton, tipo));
+
+            function appendHiddenInput(name, value) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = String(value ?? '');
+                itemDiv.appendChild(input);
+            }
+
+            appendHiddenInput('TempAcoes.Index', timestamp);
+            appendHiddenInput(`TempAcoes[${timestamp}].Nome`, nome);
+            appendHiddenInput(`TempAcoes[${timestamp}].Provedor`, provedor);
+            appendHiddenInput(`TempAcoes[${timestamp}].Tipo`, tipo);
+            appendHiddenInput(`TempAcoes[${timestamp}].Quantidade`, qtd);
+            appendHiddenInput(`TempAcoes[${timestamp}].FkIdAtor`, atorId);
+            eixosIds.forEach(id => appendHiddenInput(`TempAcoes[${timestamp}].FkIdEixo`, id));
             container.appendChild(itemDiv);
             fecharModal('modalAcao');
         }
@@ -118,6 +169,10 @@
 // LÓGICA APÓS CARREGAMENTO DA PÁGINA
 // =========================================================
 document.addEventListener("DOMContentLoaded", function () {
+    const countEquipeElement = document.getElementById('count-equipe');
+    if (countEquipeElement) countEquipeElement.innerText = Number(window.countEquipe || 0);
+    const countInstElement = document.getElementById('count-institucional');
+    if (countInstElement) countInstElement.innerText = Number(window.countInst || 0);
     
     // --- 1. LÓGICA DE MENÇÃO (@) ---
     const textarea = document.getElementById('descricaoInput');
@@ -157,15 +212,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            mentionList.innerHTML = matches.map(actor => {
-                const nome = actor.Nome || actor.Text || "Ator";
-                return `
-                    <li class="mention-item" data-name="${nome}">
-                        <i class="fa-solid fa-user" style="margin-right:8px; color:#aaa;"></i>
-                        <span>${nome}</span>
-                    </li>`;
-            }).join('');
+            mentionList.replaceChildren();
+            matches.forEach(actor => {
+                const nome = String(actor.Nome || actor.Text || "Ator");
+                const item = document.createElement('li');
+                item.className = 'mention-item';
+                item.dataset.name = nome;
 
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-user';
+                icon.style.marginRight = '8px';
+                icon.style.color = '#aaa';
+
+                const label = document.createElement('span');
+                label.textContent = nome;
+                item.append(icon, label);
+                mentionList.appendChild(item);
+            });
             mentionList.style.display = 'block';
             mentionList.style.width = textarea.offsetWidth + "px";
         }
@@ -181,7 +244,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const before = text.substring(0, lastAtPos);
                 const after = text.substring(cursorPosition);
                 
-                textarea.value = before + AT_SYMBOL + name + ' ' + after;
+                const separator = after.startsWith(' ') ? '' : ' ';
+                textarea.value = before + AT_SYMBOL + name + separator + after;
                 mentionList.style.display = 'none';
                 textarea.focus();
             }
@@ -196,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // --- 2. MAPA ---
-    if (typeof initMapSelector === 'function') {
+    if (typeof initMapSelector === 'function' && document.getElementById('mapa-diario')) {
         initMapSelector('mapa-diario', 'rua', {
             sourceInputId: 'rua',
             manualInputId: 'rua',
@@ -247,12 +311,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // --- 4. FECHAR MODAIS AO CLICAR FORA ---
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', function (e) {
-            if (e.target === this) fecharModal(this.id);
+    // --- 4. FECHAR MODAL DE AÇÃO ---
+    const actionModal = document.getElementById('modalAcao');
+    if (actionModal) {
+        actionModal.addEventListener('click', function (e) {
+            if (e.target === this) fecharModal('modalAcao');
         });
-    });
+    }
 
     // --- 5. MODAL DE EXCLUSÃO ---
     const deleteModal = document.getElementById('deleteConfirmationModal');
@@ -276,4 +341,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (actionModal?.style.display === 'flex') fecharModal('modalAcao');
+        if (deleteModal?.classList.contains('active')) {
+            deleteModal.classList.remove('active');
+            setTimeout(() => deleteModal.style.display = 'none', 300);
+        }
+    });
 });

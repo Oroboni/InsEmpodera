@@ -4,18 +4,12 @@
     ViewData["DisableMainScroll"] = "true";
 }
 
-<!DOCTYPE html>
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Ator</title>
-    <link rel="stylesheet" href="~/css/pages/indexAtores.css">
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/indexAtores.css" />
     <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/pages/site.css" />
-    <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
-</head>
-<body>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+}
 <div class="atores-content-area">
 
     <div class="atores-header">
@@ -32,18 +26,20 @@
         <div class="search-input-group">
             <div class="search-wrapper" method="get">
                 <input type="search" class="search-input" placeholder="Busque por atores..." name="q" value="@(ViewData["CurrentFilter"])" />
-                <button type="button" class="btn-search">
+                <button type="button" class="btn-search" aria-label="Buscar atores">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
         </div>
-        <button type="button" class="atores-export-button" title="Exportar dados">
-            <i class="fa-solid fa-file-arrow-down"></i>
+        <button type="button" class="atores-export-button" disabled aria-disabled="true"
+                title="Exportação indisponível nesta tela">
+            <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+            <span class="visually-hidden">Exportação ainda não disponível</span>
         </button>
-        <a asp-controller="Comunidade" asp-action="Create_Atores" asp-route-id="@ViewData["id"]" class="atores-add-button">+</a>
+        <a asp-controller="Comunidade" asp-action="Create_Atores" asp-route-id="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
     </div>
 
-    <div class="forms-list">
+    <div class="forms-list" id="atoresVinculadosList">
         
         @foreach (var ator in Model)
         {
@@ -59,18 +55,33 @@
     </div>
 </div>
 
-</body>
+@section Scripts {
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.querySelector(".search-input");
-        const cards = document.querySelectorAll(".ator-card");
+        const searchButton = document.querySelector(".btn-search");
+        const cards = document.querySelectorAll(".form-item");
+        if (!searchInput || cards.length === 0) return;
 
-        searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
+        function filterActors() {
+            const query = searchInput.value.toLocaleLowerCase('pt-BR').trim();
             cards.forEach(card => {
-                const name = card.querySelector(".ator-name").textContent.toLowerCase();
+                const name = card.querySelector(".item-name")?.textContent?.toLocaleLowerCase('pt-BR') ?? '';
                 card.style.display = name.includes(query) ? "flex" : "none";
             });
+        }
+
+        searchInput.addEventListener("input", filterActors);
+        searchInput.addEventListener("keydown", function (event) {
+            if (event.key === 'Escape') {
+                searchInput.value = '';
+                filterActors();
+            }
+        });
+        searchButton?.addEventListener("click", function () {
+            filterActors();
+            searchInput.focus();
         });
     });
 </script>
+}

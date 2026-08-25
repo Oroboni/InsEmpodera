@@ -5,7 +5,6 @@ using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
 using Microsoft.AspNetCore.Identity;
-using Empodera.Services;
 
 
 namespace InsEmpodera.Controllers;
@@ -29,10 +28,10 @@ public class UsersController : Controller
     }
 
     var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-    if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeListar == "N"))
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+    if (!PodePerfis.CanList("Usuarios"))
     {
-        return RedirectToAction("Index", "Users");
+        return StatusCode(StatusCodes.Status403Forbidden);
     }
 
     var users = await _context.Usuarios.ToListAsync();
@@ -51,8 +50,8 @@ public class UsersController : Controller
         }
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+        if (!PodePerfis.CanCreate("Usuarios"))
         {
             return RedirectToAction("Index", "Users");
         }
@@ -78,8 +77,8 @@ public class UsersController : Controller
         }
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeCriar == "N"))
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+        if (!PodePerfis.CanCreate("Usuarios"))
         {
             return RedirectToAction("Index", "Users");
         }
@@ -89,7 +88,12 @@ public class UsersController : Controller
         if (user != null)
         {
             ViewBag.ErrorMessage = "Email já cadastrado.";
-            return View();
+            ViewBag.PerfilLista = new SelectList(
+                await _context.Perfis.OrderBy(profile => profile.Nome).ToListAsync(),
+                "IdPerfil",
+                "Nome",
+                usuario.FkIdPerfil);
+            return View(usuario);
         }
 
         var hasher = new PasswordHasher<Usuario>();
@@ -98,6 +102,7 @@ public class UsersController : Controller
         usuario.DtCriacao = DateTime.Now;
         usuario.DtAtualizacao = DateTime.Now;
         usuario.Ativo = "S";
+        usuario.IdiomaPreferido = IdiomaPreferido.Default;
 
         _context.Add(usuario);
         await _context.SaveChangesAsync();
@@ -118,8 +123,8 @@ public class UsersController : Controller
             return NotFound();
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+        if (!PodePerfis.CanUpdate("Usuarios"))
         {
             return RedirectToAction("Index", "Users");
         }
@@ -151,8 +156,8 @@ public class UsersController : Controller
             return RedirectToAction("Index", "Account");
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
-        if (PodePerfis == null || PodePerfis.Perfil.Permissoes.Any(p => p.PodeAtualizar == "N"))
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+        if (!PodePerfis.CanUpdate("Usuarios"))
         {
             return RedirectToAction("Index", "Users");
         }
@@ -181,7 +186,6 @@ public class UsersController : Controller
         usuariobd.Ativo = usuario.Ativo;
         usuariobd.Ocupacao = usuario.Ocupacao;
         usuariobd.Genero = usuario.Genero;
-        usuariobd.IdiomaPreferido = usuario.IdiomaPreferido;
         usuariobd.DtAtualizacao = DateTime.Now;
 
         if (!string.IsNullOrWhiteSpace(usuario.Senha))
@@ -191,9 +195,6 @@ public class UsersController : Controller
         }
 
         await _context.SaveChangesAsync();
-
-        if (HttpContext.Session.GetString("ID") == id.ToString())
-            UserCultureService.ApplyPreference(Response, usuariobd.IdiomaPreferido);
 
         return RedirectToAction("index", "Users");
     }
@@ -214,8 +215,7 @@ public class UsersController : Controller
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)
             .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
-        var permission = loggedUser?.Perfil.Permissoes.FirstOrDefault(item => item.Modulo == "Usuarios");
-        if (permission?.PodeDeletar != "S")
+        if (!loggedUser.CanDelete("Usuarios"))
             return RedirectToAction("Index", "Users");
 
         if (id.Value == loggedUserId)

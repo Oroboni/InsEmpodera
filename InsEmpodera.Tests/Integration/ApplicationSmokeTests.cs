@@ -42,7 +42,7 @@ public sealed class ApplicationSmokeTests : IClassFixture<EmpoderaWebApplication
     {
         await SetKnownPasswordAsync();
         using var client = CreateClient();
-        using var login = await client.GetAsync($"/Account?Email={Uri.EscapeDataString("joao@email.com")}&Password={Uri.EscapeDataString(TestPassword)}");
+        using var login = await AuthenticationTestHelper.LoginAsync(client, "joao@email.com", TestPassword);
         Assert.Equal(HttpStatusCode.Redirect, login.StatusCode);
         Assert.Equal("/", login.Headers.Location?.OriginalString);
 
