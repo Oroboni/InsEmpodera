@@ -23,6 +23,14 @@ public class ServicesController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> ExportComunidades()
+    {
+        var user = await AuthorizedUserAsync("Comunidades");
+        if (user.Result != null) return user.Result;
+        return Spreadsheet(await _exports.ExportCommunitiesAsync(HttpContext.RequestAborted), "comunidades-empodera.xlsx");
+    }
+
+    [HttpGet]
     public async Task<IActionResult> ExportComunidadeCompleta(int id)
     {
         var user = await AuthorizedUserAsync("Comunidades");
@@ -54,6 +62,17 @@ public class ServicesController : Controller
             return NotFound();
         var community = await _context.Comunidades.AsNoTracking().FirstOrDefaultAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted);
         return Spreadsheet(await _exports.ExportCommunityActivitiesAsync(id, HttpContext.RequestAborted), $"{community?.Nome}-atividades.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportRecursosComunidade(int id)
+    {
+        var user = await AuthorizedUserAsync("Recursos");
+        if (user.Result != null) return user.Result;
+        if (!await _context.Comunidades.AnyAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted))
+            return NotFound();
+        var community = await _context.Comunidades.AsNoTracking().FirstOrDefaultAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted);
+        return Spreadsheet(await _exports.ExportCommunityResourcesAsync(id, HttpContext.RequestAborted), $"{community?.Nome}-recursos.xlsx");
     }
 
     [HttpGet]

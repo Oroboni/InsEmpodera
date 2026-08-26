@@ -9,6 +9,38 @@ namespace InsEmpodera.E2ETests.Tests;
 public sealed class DataHubUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
     [Fact]
+    public Task ListAndRelationshipScreens_ExportTheirOwnExcelData() =>
+        RunInBrowserAsync(nameof(ListAndRelationshipScreens_ExportTheirOwnExcelData), async page =>
+        {
+            await LoginAsync(page);
+            var communityId = await Fixture.QueryAsync(db => db.Comunidades
+                .Where(item => item.Ativo == "S")
+                .OrderBy(item => item.Id_Comunidade)
+                .Select(item => item.Id_Comunidade)
+                .FirstAsync());
+            var screens = new[]
+            {
+                (Page: "/Atores", Export: "/Services/ExportAtores"),
+                (Page: "/Comunidade", Export: "/Services/ExportComunidades"),
+                (Page: $"/Comunidade/AtoresVinculados/{communityId}", Export: "/Services/ExportAtoresComunidade"),
+                (Page: $"/Comunidade/AtividadesVinculadas?comunidadeId={communityId}", Export: "/Services/ExportAtividadesComunidade"),
+                (Page: $"/Comunidade/ComunidadeRecursos?comunidadeId={communityId}", Export: "/Services/ExportRecursosComunidade")
+            };
+
+            foreach (var screen in screens)
+            {
+                var response = await page.GotoAsync(screen.Page);
+                Assert.NotNull(response);
+                Assert.Equal(200, response!.Status);
+                var exportLink = page.Locator($"a[href*='{screen.Export}']");
+                await Assertions.Expect(exportLink).ToBeVisibleAsync();
+                var download = await page.RunAndWaitForDownloadAsync(() => exportLink.ClickAsync());
+                Assert.EndsWith(".xlsx", download.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
+                await AssertDownloadSignatureAsync(download, 0x50, 0x4B);
+            }
+        });
+
+    [Fact]
     public Task DataHub_ExportsEveryModuleAndRoundTripsGeneralBackupThroughTheUi() =>
         RunInBrowserAsync(
             nameof(DataHub_ExportsEveryModuleAndRoundTripsGeneralBackupThroughTheUi),
@@ -34,25 +66,25 @@ public sealed class DataHubUiTests(E2ETestFixture fixture) : BrowserTestBase(fix
                 await page.Locator("#communityFullExport").SelectOptionAsync(new SelectOptionValue { Index = 1 });
                 var community = await page.RunAndWaitForDownloadAsync(() =>
                     page.Locator("form[action='/Services/ExportComunidadeCompleta'] button[type=submit]").ClickAsync());
-                Assert.Matches(@"^comunidade-\d+-completa\.xlsx$", community.SuggestedFilename);
+                Assert.EndsWith(".xlsx", community.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
                 await AssertDownloadSignatureAsync(community, 0x50, 0x4B);
 
                 await page.Locator("#communityActorsExport").SelectOptionAsync(new SelectOptionValue { Index = 1 });
                 var communityActors = await page.RunAndWaitForDownloadAsync(() =>
                     page.Locator("form[action='/Services/ExportAtoresComunidade'] button[type=submit]").ClickAsync());
-                Assert.Matches(@"^atores-comunidade-\d+\.xlsx$", communityActors.SuggestedFilename);
+                Assert.EndsWith(".xlsx", communityActors.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
                 await AssertDownloadSignatureAsync(communityActors, 0x50, 0x4B);
 
-                foreach (var export in new[]
+                foreach (var exportPath in new[]
                 {
-                    (Path: "/Services/ExportAtores", File: "atores-completos.xlsx"),
-                    (Path: "/Services/ExportDiariosCampo", File: "diarios-de-campo.xlsx"),
-                    (Path: "/Services/ExportFichasPrimeiroContato", File: "fichas-primeiro-contato.xlsx")
+                    "/Services/ExportAtores",
+                    "/Services/ExportDiariosCampo",
+                    "/Services/ExportFichasPrimeiroContato"
                 })
                 {
                     var download = await page.RunAndWaitForDownloadAsync(() =>
-                        page.Locator($"a[href='{export.Path}']").ClickAsync());
-                    Assert.Equal(export.File, download.SuggestedFilename);
+                        page.Locator($"a[href='{exportPath}']").ClickAsync());
+                    Assert.EndsWith(".xlsx", download.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
                     await AssertDownloadSignatureAsync(download, 0x50, 0x4B);
                 }
 

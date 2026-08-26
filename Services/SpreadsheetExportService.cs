@@ -9,6 +9,16 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
+    public async Task<byte[]> ExportCommunitiesAsync(CancellationToken cancellationToken)
+    {
+        using var workbook = NewWorkbook("Comunidades");
+        AddSheet(workbook, "Comunidades", await _context.Comunidades.AsNoTracking()
+            .Where(item => item.Ativo != "N")
+            .OrderBy(item => item.Nome)
+            .ToListAsync(cancellationToken));
+        return Save(workbook);
+    }
+
     public async Task<byte[]> ExportCommunityAsync(int communityId, CancellationToken cancellationToken)
     {
         var community = await _context.Comunidades.AsNoTracking()
@@ -105,12 +115,47 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
             .Where(item => item.FkIdComunidade == communityId)
             .ToListAsync(cancellationToken);
         var activityIds = activities.Select(item => item.IdAtividade).ToArray();
+        var actions = await _context.Acoes.AsNoTracking()
+            .Where(item => activityIds.Contains(item.FkIdAtividade))
+            .ToListAsync(cancellationToken);
+        var actionIds = actions.Select(item => item.IdAcoes).ToArray();
+        var actionActors = await _context.AcoesAtores.AsNoTracking()
+            .Where(item => actionIds.Contains(item.FkIdAcoes))
+            .ToListAsync(cancellationToken);
+        var actorIds = actionActors.Select(item => item.FK_id_Atores).Distinct().ToArray();
 
         using var workbook = NewWorkbook("Atividades da comunidade");
         AddSheet(workbook, "Atividades", activities);
         AddSheet(workbook, "AtividadesEixos", await _context.AtividadesEixo.AsNoTracking()
             .Where(item => activityIds.Contains(item.FkIdAtividade))
             .ToListAsync(cancellationToken));
+        AddSheet(workbook, "Acoes", actions);
+        AddSheet(workbook, "AcoesAtores", actionActors);
+        AddSheet(workbook, "Atores", await _context.Atores.AsNoTracking()
+            .Where(item => actorIds.Contains(item.IdAtores))
+            .ToListAsync(cancellationToken));
+        AddSheet(workbook, "Eixos", await _context.Eixos.AsNoTracking().ToListAsync(cancellationToken));
+        return Save(workbook);
+    }
+
+    public async Task<byte[]> ExportCommunityResourcesAsync(int communityId, CancellationToken cancellationToken)
+    {
+        var resources = await _context.RedeRecursos.AsNoTracking()
+            .Where(item => item.FkIdComunidade == communityId)
+            .ToListAsync(cancellationToken);
+        var resourceIds = resources.Select(item => item.Id_Rede).ToArray();
+        var actorIds = resources.Where(item => item.FK_id_Atores.HasValue)
+            .Select(item => item.FK_id_Atores!.Value).Distinct().ToArray();
+
+        using var workbook = NewWorkbook("Recursos da comunidade");
+        AddSheet(workbook, "Recursos", resources);
+        AddSheet(workbook, "RecursosEixos", await _context.RedeEixos.AsNoTracking()
+            .Where(item => resourceIds.Contains(item.FkIdRede))
+            .ToListAsync(cancellationToken));
+        AddSheet(workbook, "Atores", await _context.Atores.AsNoTracking()
+            .Where(item => actorIds.Contains(item.IdAtores))
+            .ToListAsync(cancellationToken));
+        AddSheet(workbook, "Eixos", await _context.Eixos.AsNoTracking().ToListAsync(cancellationToken));
         return Save(workbook);
     }
 

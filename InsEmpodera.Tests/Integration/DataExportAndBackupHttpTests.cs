@@ -83,6 +83,32 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
     }
 
     [Fact]
+    public async Task ScreenExports_DownloadTheVisibleModuleWithItsDependencies()
+    {
+        var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+        var communityId = await SeedCommunityAsync();
+        using var client = await AuthenticatedClientAsync(admin);
+        var exports = new[]
+        {
+            (Path: "/Services/ExportComunidades", Sheets: new[] { "Comunidades" }),
+            (Path: $"/Services/ExportAtividadesComunidade?id={communityId}", Sheets: new[] { "Atividades", "AtividadesEixos", "Acoes", "AcoesAtores", "Atores", "Eixos" }),
+            (Path: $"/Services/ExportRecursosComunidade?id={communityId}", Sheets: new[] { "Recursos", "RecursosEixos", "Atores", "Eixos" })
+        };
+
+        foreach (var export in exports)
+        {
+            using var response = await client.GetAsync(export.Path);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(SpreadsheetMediaType, response.Content.Headers.ContentType?.MediaType);
+            Assert.EndsWith(".xlsx", response.Content.Headers.ContentDisposition?.FileNameStar, StringComparison.OrdinalIgnoreCase);
+            await using var stream = await response.Content.ReadAsStreamAsync();
+            using var workbook = new XLWorkbook(stream);
+            Assert.Equal(export.Sheets, workbook.Worksheets.Select(sheet => sheet.Name));
+            Assert.All(workbook.Worksheets, sheet => Assert.True(sheet.Row(1).CellCount() > 0));
+        }
+    }
+
+    [Fact]
     public async Task GeneralBackup_ContainsAllMappedTablesAndCanBeImportedBackWithoutChangingExistingRows()
     {
         var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);

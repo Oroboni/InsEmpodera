@@ -771,6 +771,7 @@ label:has(input[type="checkbox"]) {
     flex-shrink: 0;
     padding: 0;
     box-shadow: 0 4px 10px rgba(37, 168, 74, 0.22);
+    text-decoration: none;
 }
 
 .btn-export:hover {
@@ -947,6 +948,7 @@ label:has(input[type="checkbox"]) {
     transition: background-color 0.2s, transform 0.2s;
     box-shadow: 0 4px 10px rgba(37, 168, 74, 0.22);
     overflow: hidden;
+    text-decoration: none;
 }
 
 .atores-export-button:hover {
