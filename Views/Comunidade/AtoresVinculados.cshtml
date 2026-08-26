@@ -31,11 +31,10 @@
                 </button>
             </div>
         </div>
-        <button type="button" class="atores-export-button" disabled aria-disabled="true"
-                title="Exportação indisponível nesta tela">
-            <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
-            <span class="visually-hidden">Exportação ainda não disponível</span>
-        </button>
+        <a asp-controller="Services" asp-action="ExportAtoresComunidade" asp-route-id="@ViewBag.ComunidadeId"
+           class="btn-export" aria-label="Exportar atores da comunidade">
+            <i class="fa-solid fa-file-arrow-down"></i>
+        </a>
         <a asp-controller="Comunidade" asp-action="Create_Atores" asp-route-id="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
     </div>
 

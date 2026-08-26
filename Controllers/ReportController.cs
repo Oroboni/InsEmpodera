@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Data;
 using Empodera.Models;
+using Empodera.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ExcelDataReader;
@@ -12,10 +13,12 @@ namespace Empodera.Controllers;
 public class ReportController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ExcelBackupService _backup;
 
-    public ReportController(ApplicationDbContext context)
+    public ReportController(ApplicationDbContext context, ExcelBackupService? backup = null)
     {
         _context = context;
+        _backup = backup ?? new ExcelBackupService(context);
     }
 
     // GET: /Report/
@@ -26,9 +29,13 @@ public class ReportController : Controller
             return RedirectToAction("Index", "Account");
 
         var loggedUser = await CurrentUserWithPermissionsAsync();
-        if (!loggedUser.CanCreate("SER"))
+        if (loggedUser == null || !loggedUser.CanCreate("SER"))
             return RedirectToAction("Index", "Relatorios");
 
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.AsNoTracking().Where(item => item.Ativo != "N").OrderBy(item => item.Nome).ToListAsync(),
+            "Id_Comunidade", "Nome");
+        ViewBag.IsAdmin = string.Equals(loggedUser.Perfil?.Nome, "Admin", StringComparison.OrdinalIgnoreCase);
         return View();
     }
 
@@ -112,6 +119,40 @@ public class ReportController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ImportarBackup(IFormFile? backupFile)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+        var user = await CurrentUserWithPermissionsAsync();
+        if (user == null || !string.Equals(user.Perfil?.Nome, "Admin", StringComparison.OrdinalIgnoreCase))
+            return StatusCode(StatusCodes.Status403Forbidden);
+        if (backupFile == null || backupFile.Length == 0)
+        {
+            TempData["ImportError"] = "Selecione o backup geral em Excel (.xlsx) para importar.";
+            return RedirectToAction(nameof(Index));
+        }
+        if (!Path.GetExtension(Path.GetFileName(backupFile.FileName)).Equals(".xlsx", StringComparison.OrdinalIgnoreCase)
+            || backupFile.Length > ExcelBackupService.MaxBackupBytes)
+        {
+            TempData["ImportError"] = "Envie o backup geral .xlsx gerado pelo InsEmpodera, com até 100 MB.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        try
+        {
+            await using var stream = backupFile.OpenReadStream();
+            var result = await _backup.ImportMissingAsync(stream, HttpContext.RequestAborted);
+            TempData["ImportSuccess"] = $"Backup validado: {result.InsertedRows} registros novos importados em {result.TableCount} tabelas. Registros existentes foram preservados.";
+        }
+        catch (InvalidDataException exception)
+        {
+            TempData["ImportError"] = exception.Message;
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     private async Task ProcessarExcel(string filepath, int userId)
     {
         var conf = new ExcelDataSetConfiguration
@@ -134,8 +175,11 @@ public class ReportController : Controller
         {
             var sheet = dataSet.Tables[0];
             var localOriginal = sheet.Rows[1][1]?.ToString()?.Trim();
+            var nomeComunidade = sheet.Rows[0][1]?.ToString()?.Trim();
+            if (string.IsNullOrWhiteSpace(nomeComunidade))
+                throw new InvalidDataException("A planilha não informa o nome da comunidade.");
 
-            comunidade.Nome                    = sheet.Rows[0][1]?.ToString()?.Trim();
+            comunidade.Nome                    = nomeComunidade;
             comunidade.Local                   = localOriginal;
             comunidade.LocalMapa               = BuildMapSearchAddress(localOriginal, comunidade.Nome);
             comunidade.Descricao               = sheet.Rows[2][1]?.ToString()?.Trim();

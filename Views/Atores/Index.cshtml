@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <button type="button" class="btn-export" disabled aria-disabled="true" title="Exportação ainda não disponível nesta tela">
+        <button type="button" class="btn-export" aria-disabled="true" title="Exportação ainda não disponível nesta tela">
             <i class="fa-solid fa-file-arrow-down"></i>
         </button>
 
@@ -80,7 +80,7 @@
                     });
             }
             <div class="action-card stats-card stats-card-cyan">
-                <span class="card-title">@string.Join(", ", generos)</span>
+                <span class="card-title">@ViewBag.qgenero.Count</span>
                 <span class="card-subtitle">Gêneros</span>
                 <div class="card-icons">
                     <i class="fas fa-venus-mars"></i>

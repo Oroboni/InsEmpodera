@@ -1,36 +1,101 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @{
-    ViewData["Title"] = "Relatórios";
+    ViewData["Title"] = "Dados e Backup";
     ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
+    var communities = ViewBag.Comunidades as SelectList;
+    var isAdmin = ViewBag.IsAdmin is true;
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/pages/reports.css" />
-}
+@section Styles { <link rel="stylesheet" href="~/css/pages/reports.css" /> }
 
-<div class="report-page-container">
-    <div class="report-breadcrumb">
-        <h2 class="page-title">Relatórios</h2>
-    </div>
-
-    <div class="report-menu-group">
-        <div class="report-card-grid">
-            <form asp-action="RelatorioComunidade" method="post" enctype="multipart/form-data">
-                <div class="report-card-content">
-                    <h3>Selecione os arquivos</h3>
-
-                    <input 
-                        type="file" 
-                        name="files" 
-                        class="report-card-input"
-                        accept=".xlsx,.xls"
-                        multiple />
-                </div>
-
-                <button type="submit" class="report-card-button">
-                    Importar Relatórios
-                </button>
-            </form>
+<main class="data-hub" aria-labelledby="data-hub-title">
+    <header class="data-hub-hero">
+        <div class="data-hub-hero-copy">
+            <span class="data-hub-eyebrow"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Central segura de dados</span>
+            <h1 id="data-hub-title">Exportações e backup</h1>
+            <p>Baixe planilhas completas para análise ou gere um backup geral para transportar dados entre instalações do InsEmpodera.</p>
         </div>
-    </div>
-</div>
+        <div class="data-hub-hero-badge" aria-label="Formato atual do backup: Excel"><span>BACKUP</span><strong>XLSX</strong></div>
+    </header>
+
+    @if (TempData["ImportSuccess"] is string success)
+    { <div class="data-alert data-alert-success" role="status"><i class="fa-solid fa-circle-check"></i><span>@success</span></div> }
+    @if (TempData["ImportError"] is string error)
+    { <div class="data-alert data-alert-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i><span>@error</span></div> }
+
+    <section class="data-section" aria-labelledby="exports-title">
+        <div class="data-section-heading">
+            <div><span class="data-section-number">01</span><h2 id="exports-title">Planilhas por módulo</h2></div>
+            <p>Arquivos XLSX com IDs, chaves e tabelas de relacionamento.</p>
+        </div>
+        <div class="export-grid">
+            <article class="export-card export-card-wide">
+                <div class="export-icon export-icon-community"><i class="fa-solid fa-people-roof"></i></div>
+                <div class="export-card-copy"><span class="export-kicker">COMUNIDADE</span><h3>Comunidade e dependências</h3><p>Inclui atores, atividades, recursos, vulnerabilidades, diários, fichas e todas as tabelas de vínculo.</p></div>
+                <form asp-controller="Services" asp-action="ExportComunidadeCompleta" method="get" class="export-filter-form">
+                    <label for="communityFullExport">Comunidade</label>
+                    <select id="communityFullExport" name="id" asp-items="communities" required><option value="">Selecione</option></select>
+                    <button type="submit"><i class="fa-solid fa-download"></i> Exportar completo</button>
+                </form>
+            </article>
+            <article class="export-card export-card-wide">
+                <div class="export-icon export-icon-actors"><i class="fa-solid fa-users"></i></div>
+                <div class="export-card-copy"><span class="export-kicker">RECORTE</span><h3>Atores da comunidade</h3><p>Dados dos atores vinculados, recursos agregados, avaliações e vínculos com a comunidade.</p></div>
+                <form asp-controller="Services" asp-action="ExportAtoresComunidade" method="get" class="export-filter-form">
+                    <label for="communityActorsExport">Comunidade</label>
+                    <select id="communityActorsExport" name="id" asp-items="communities" required><option value="">Selecione</option></select>
+                    <button type="submit"><i class="fa-solid fa-download"></i> Exportar atores</button>
+                </form>
+            </article>
+            <a asp-controller="Services" asp-action="ExportAtores" class="export-card export-card-link">
+                <div class="export-icon export-icon-actors"><i class="fa-solid fa-user-group"></i></div><span class="export-kicker">GERAL</span><h3>Todos os atores</h3><p>Cadastro, comunidades, recursos, avaliações e redes primárias.</p><span class="export-action">Baixar XLSX <i class="fa-solid fa-arrow-down"></i></span>
+            </a>
+            <a asp-controller="Services" asp-action="ExportDiariosCampo" class="export-card export-card-link">
+                <div class="export-icon export-icon-diary"><i class="fa-solid fa-book-open"></i></div><span class="export-kicker">GERAL</span><h3>Diários de campo</h3><p>Registros, eixos, ações, atores das ações e anexos.</p><span class="export-action">Baixar XLSX <i class="fa-solid fa-arrow-down"></i></span>
+            </a>
+            <a asp-controller="Services" asp-action="ExportFichasPrimeiroContato" class="export-card export-card-link">
+                <div class="export-icon export-icon-contact"><i class="fa-solid fa-file-signature"></i></div><span class="export-kicker">GERAL</span><h3>Fichas de primeiro contato</h3><p>Fichas e registros de condições, petições, respostas e resultados.</p><span class="export-action">Baixar XLSX <i class="fa-solid fa-arrow-down"></i></span>
+            </a>
+        </div>
+    </section>
+
+    <section class="backup-panel" aria-labelledby="backup-title">
+        <div class="backup-summary">
+            <span class="data-section-number">02</span><div class="backup-icon"><i class="fa-solid fa-database"></i></div>
+            <div><span class="export-kicker">FORMATO OFICIAL</span><h2 id="backup-title">Backup geral do sistema</h2><p>Preserva todas as tabelas, IDs, chaves estrangeiras, usuários, permissões e relacionamentos do banco.</p>
+                <ul><li><i class="fa-solid fa-check"></i> Estrutura versionada e validada</li><li><i class="fa-solid fa-check"></i> Importação transacional e aditiva</li><li><i class="fa-solid fa-check"></i> Nunca remove nem sobrescreve registros existentes</li></ul>
+            </div>
+            @if (isAdmin) { <a asp-controller="Services" asp-action="ExportBackupGeral" class="backup-download"><i class="fa-solid fa-download"></i><span>Gerar backup geral</span><small>Planilha Excel .xlsx</small></a> }
+            else { <span class="backup-admin-note"><i class="fa-solid fa-lock"></i> Disponível somente para administradores</span> }
+        </div>
+        @if (isAdmin)
+        {
+            <div class="backup-import">
+                <div><span class="export-kicker">IMPORTAR EXCEL</span><h3>Adicionar dados de um backup</h3><p>Use a planilha de backup geral gerada acima. Registros com IDs já existentes serão preservados.</p></div>
+                <form asp-action="ImportarBackup" method="post" enctype="multipart/form-data" id="backupImportForm">
+                    <label for="backupFile" class="backup-dropzone" id="backupDropzone"><i class="fa-solid fa-file-excel"></i><strong id="backupFileLabel">Escolha o backup geral .xlsx</strong><span>Planilha Excel • máximo de 100 MB</span><input type="file" id="backupFile" name="backupFile" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required /></label>
+                    <button type="submit" id="backupImportButton" disabled><i class="fa-solid fa-file-import"></i> Validar e importar</button>
+                </form>
+            </div>
+        }
+    </section>
+</main>
+
+@section Scripts {
+    <script>
+        (() => {
+            const input = document.getElementById('backupFile');
+            const label = document.getElementById('backupFileLabel');
+            const button = document.getElementById('backupImportButton');
+            const dropzone = document.getElementById('backupDropzone');
+            if (!input || !label || !button || !dropzone) return;
+            input.addEventListener('change', () => {
+                const file = input.files?.[0];
+                label.textContent = file?.name || 'Escolha o backup geral .xlsx';
+                button.disabled = !file;
+                dropzone.classList.toggle('has-file', Boolean(file));
+            });
+        })();
+    </script>
+}

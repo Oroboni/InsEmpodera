@@ -65,8 +65,8 @@ try {
             --results-directory (Join-Path $resultsDirectory "backend")
     }
 
-    Invoke-Checked "Testar eventos e DOM do frontend com cobertura" {
-        npm run coverage --prefix $frontendDirectory -- `
+    Invoke-Checked "Testar eventos e contratos do DOM do frontend" {
+        npm test --prefix $frontendDirectory -- `
             --reporter=default --reporter=json --outputFile=vitest-results.json
     }
 

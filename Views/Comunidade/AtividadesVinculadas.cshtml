@@ -18,7 +18,8 @@
         <h1>
             <span><a asp-controller="Comunidade" asp-action="Index">Comunidades</a></span>
             <i class="fas fa-chevron-right fa-icon"></i>
-            <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes" asp-route-id="@ViewBag.ComunidadeId">Detalhes da Comunidade</a>
+            <a asp-controller="Comunidade" asp-action="ComunidadesDetalhes"
+               asp-route-id="@ViewBag.ComunidadeId">Detalhes da Comunidade</a>
             <i class="fas fa-chevron-right fa-icon"></i>
             <strong>Atividades</strong>
         </h1>
@@ -26,16 +27,19 @@
 
     <div class="search-container">
         <div class="search-wrapper" method="get">
-            <input type="search" class="search-input" placeholder="Buscar..." name="q" value="@(ViewData["CurrentFilter"])" />
+            <input type="search" class="search-input" placeholder="Buscar..." name="q"
+                   value="@(ViewData["CurrentFilter"])" />
             <button type="button" class="btn-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
         </div>
 
-        <button type="button" class="atores-export-button" disabled aria-disabled="true" title="Exportação ainda não disponível nesta tela">
+        <a asp-controller="Services" asp-action="ExportAtividadesComunidade" asp-route-id="@ViewBag.ComunidadeId"
+           class="btn-export" aria-label="Exportar atividades da comunidade">
             <i class="fa-solid fa-file-arrow-down"></i>
-        </button>
-        <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId" class="atores-add-button">+</a>
+        </a>
+        <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId"
+           class="atores-add-button">+</a>
     </div>
 
     <div class="forms-list">
@@ -64,13 +68,14 @@
                         }
                     </div>
                 </div>
-                <a class="btn-action" asp-controller="Comunidade" asp-action="Edit_Atividades" asp-route-id="@atividade.IdAtividade" asp-route-comunidadeId="@ViewBag.ComunidadeId">
+                <a class="btn-action" asp-controller="Comunidade" asp-action="Edit_Atividades"
+                   asp-route-id="@atividade.IdAtividade" asp-route-comunidadeId="@ViewBag.ComunidadeId">
                     <i class="fa-solid fa-eye"></i>
                 </a>
             </div>
         }
-        
-        </div>
+
+    </div>
 </div>
 
 <script>

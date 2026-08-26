@@ -32,6 +32,8 @@ public class AtoresController : Controller
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 
+        ViewBag.qgenero = _context.Atores.Select(a => a.Genero).Distinct().ToList();
+
         var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
         return View(Atores);
     }

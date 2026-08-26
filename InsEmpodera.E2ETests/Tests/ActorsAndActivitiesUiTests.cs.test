@@ -24,14 +24,14 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.GotoAsync("/Atores/Create");
             var actorForm = page.Locator("form").Filter(new()
             {
-                Has = page.GetByRole(AriaRole.Button, new() { Name = "Salvar Ator" })
+                Has = page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Ator", Exact = true })
             });
 
             Assert.False(await actorForm.EvaluateAsync<bool>(
                 "form => form.checkValidity()"
             ));
 
-            await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Ator" }).ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Ator", Exact = true }).ClickAsync();
             Assert.Equal("/Atores/Create", new Uri(page.Url).AbsolutePath);
 
             await page.Locator("#ComunidadeId").SelectOptionAsync(communityId.ToString());
@@ -40,9 +40,9 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("#papelSocial1").FillAsync("Mobilizadora comunitária");
             await page.Locator("#papelSocial2").FillAsync("Educação e saúde");
             await page.Locator("#inputTelefone").FillAsync("85999998888");
-            await page.Locator("input[name=recursos][value=Educacao]").CheckAsync();
-            await page.Locator("input[name=vulnerabilidades][value=Moradia]").CheckAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Ator" }).ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=recursos][value=Educacao])").ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Ator", Exact = true }).ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atores");
 
             var actorId = await Fixture.QueryAsync(db => db.Atores
@@ -127,7 +127,9 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("textarea[name=Descricao]").FillAsync("Atividade criada integralmente pela UI");
 
             var firstAxis = page.Locator($"input[name=EixosSelecionados][value='{prerequisites.Axes[0].IdEixo}']");
-            await firstAxis.CheckAsync();
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"label[for='eixo-{prerequisites.Axes[0].IdEixo}']").ClickAsync();
+            await Assertions.Expect(firstAxis).ToBeCheckedAsync();
             await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[0].Nome);
             await page.Locator("#create-activity-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atividades");
@@ -153,8 +155,9 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
             await page.Locator("textarea[name=Descricao]").FillAsync("Descrição atualizada pela UI");
-            await firstAxis.UncheckAsync();
-            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.Axes[1].IdEixo}']").CheckAsync();
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"label[for='eixo-{prerequisites.Axes[0].IdEixo}']").ClickAsync();
+            await page.Locator($"label[for='eixo-{prerequisites.Axes[1].IdEixo}']").ClickAsync();
             await Assertions.Expect(page.Locator("#tag-container")).Not.ToContainTextAsync(prerequisites.Axes[0].Nome);
             await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[1].Nome);
             await page.Locator("#edit-save-btn").ClickAsync();

@@ -9,11 +9,105 @@ namespace Empodera.Controllers;
 public class ServicesController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly SpreadsheetExportService _exports;
+    private readonly ExcelBackupService _backup;
 
-    public ServicesController(ApplicationDbContext context)
+    public ServicesController(
+        ApplicationDbContext context,
+        SpreadsheetExportService? exports = null,
+        ExcelBackupService? backup = null)
     {
         _context = context;
+        _exports = exports ?? new SpreadsheetExportService(context);
+        _backup = backup ?? new ExcelBackupService(context);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportComunidadeCompleta(int id)
+    {
+        var user = await AuthorizedUserAsync("Comunidades");
+        if (user.Result != null) return user.Result;
+        if (!await _context.Comunidades.AnyAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted))
+            return NotFound();
+        var content = await _exports.ExportCommunityAsync(id, HttpContext.RequestAborted);
+        var community = await _context.Comunidades.AsNoTracking().FirstOrDefaultAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted);
+        return Spreadsheet(content, $"{community?.Nome}.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportAtoresComunidade(int id)
+    {
+        var user = await AuthorizedUserAsync("Atores");
+        if (user.Result != null) return user.Result;
+        if (!await _context.Comunidades.AnyAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted))
+            return NotFound();
+        var community = await _context.Comunidades.AsNoTracking().FirstOrDefaultAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted);
+        return Spreadsheet(await _exports.ExportCommunityActorsAsync(id, HttpContext.RequestAborted), $"{community?.Nome}-atores.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportAtividadesComunidade(int id)
+    {
+        var user = await AuthorizedUserAsync("Atividades");
+        if (user.Result != null) return user.Result;
+        if (!await _context.Comunidades.AnyAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted))
+            return NotFound();
+        var community = await _context.Comunidades.AsNoTracking().FirstOrDefaultAsync(item => item.Id_Comunidade == id, HttpContext.RequestAborted);
+        return Spreadsheet(await _exports.ExportCommunityActivitiesAsync(id, HttpContext.RequestAborted), $"{community?.Nome}-atividades.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportAtores()
+    {
+        var user = await AuthorizedUserAsync("Atores");
+        if (user.Result != null) return user.Result;
+        return Spreadsheet(await _exports.ExportActorsAsync(HttpContext.RequestAborted), "atores-empodera.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportDiariosCampo()
+    {
+        var user = await AuthorizedUserAsync("DiariosCampo");
+        if (user.Result != null) return user.Result;
+        return Spreadsheet(await _exports.ExportFieldDiariesAsync(HttpContext.RequestAborted), "diarios-de-campo.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportFichasPrimeiroContato()
+    {
+        var user = await AuthorizedUserAsync("Ficha1Contato");
+        if (user.Result != null) return user.Result;
+        return Spreadsheet(await _exports.ExportFirstContactsAsync(HttpContext.RequestAborted), "fichas-primeiro-contato.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportBackupGeral()
+    {
+        var user = await AuthorizedUserAsync("SER", adminOnly: true);
+        if (user.Result != null) return user.Result;
+        var content = await _backup.ExportAsync(HttpContext.RequestAborted);
+        return File(
+            content,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            $"insempodera-backup-geral-{DateTime.UtcNow:yyyyMMdd-HHmmss}.xlsx");
+    }
+
+    private async Task<(Usuario? User, IActionResult? Result)> AuthorizedUserAsync(string module, bool adminOnly = false)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return (null, RedirectToAction("Index", "Account"));
+        var id = int.TryParse(HttpContext.Session.GetString("ID"), out var parsed) ? parsed : 0;
+        var user = await _context.Usuarios.AsNoTracking().Include(item => item.Perfil)
+            .ThenInclude(item => item.Permissoes).FirstOrDefaultAsync(item => item.IdUsuario == id, HttpContext.RequestAborted);
+        if (user == null || !user.CanViewDetails(module) || adminOnly && !string.Equals(user.Perfil?.Nome, "Admin", StringComparison.OrdinalIgnoreCase))
+            return (user, StatusCode(StatusCodes.Status403Forbidden));
+        return (user, null);
+    }
+
+    private FileContentResult Spreadsheet(byte[] content, string fileName) => File(
+        content,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        fileName);
 
     [HttpGet]
     public async Task<IActionResult> ExportComunidade(int id)
@@ -61,13 +155,13 @@ public class ServicesController : Controller
         return File(
             content,
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            SafeDownloadFileName(community.Nome, community.Id_Comunidade));
+            SafeDownloadFileName(community.Nome));
     }
 
-    private static string SafeDownloadFileName(string? communityName, int communityId)
+    private static string SafeDownloadFileName(string? communityName)
     {
         var source = string.IsNullOrWhiteSpace(communityName)
-            ? $"comunidade-{communityId}"
+            ? $"comunidade-{communityName}"
             : communityName.Trim();
         var invalidCharacters = Path.GetInvalidFileNameChars()
             .Concat(new[] { '<', '>', ':', (char)34, '/', (char)92, '|', '?', '*' })
@@ -83,8 +177,6 @@ public class ServicesController : Controller
         while (safeName.Contains("..", StringComparison.Ordinal))
             safeName = safeName.Replace("..", "_", StringComparison.Ordinal);
 
-        if (string.IsNullOrWhiteSpace(safeName))
-            safeName = $"comunidade-{communityId}";
         if (safeName.Length > 80)
             safeName = safeName[..80].TrimEnd();
 

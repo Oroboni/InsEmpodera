@@ -13,7 +13,7 @@ namespace Empodera.Models
         public string Localizacao { get; set; } = null!;
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
-        public string Foto { get; set; } = null!;
+        public string? Foto { get; set; }
         public int FkIdUsuario { get; set; }     
 
         public Comunidade Comunidade { get; set; } = null!;

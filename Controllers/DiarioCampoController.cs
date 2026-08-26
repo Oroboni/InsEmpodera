@@ -69,7 +69,10 @@ namespace Empodera.Controllers
         // ==========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DiarioCampo diarioCampo, int[] EixosSelecionados)
+        public async Task<IActionResult> Create(
+            DiarioCampo diarioCampo,
+            int[] EixosSelecionados,
+            List<DiarioAcaoInput>? TempAcoes = null)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -86,20 +89,20 @@ namespace Empodera.Controllers
             ModelState.Remove("Comunidade");
             ModelState.Remove("Usuario");
 
+            await ValidarAcoesTemporariasAsync(TempAcoes);
+
             if (ModelState.IsValid)
             {
+                foreach (var eixoId in EixosSelecionados.Distinct())
+                {
+                    diarioCampo.DiarioEixos.Add(new DiarioEixo { FkIdEixo = eixoId });
+                }
+
+                foreach (var acao in TempAcoes ?? [])
+                    diarioCampo.DiarioDAcoes.Add(CriarAcaoInstitucional(acao));
+
                 _context.Add(diarioCampo);
                 await _context.SaveChangesAsync();
-
-                // Salvar Eixos
-                if (EixosSelecionados != null)
-                {
-                    foreach (var eixoId in EixosSelecionados)
-                    {
-                        _context.DiarioEixos.Add(new DiarioEixo { FkIdDiario = diarioCampo.IdDCampo, FkIdEixo = eixoId });
-                    }
-                    await _context.SaveChangesAsync();
-                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -123,6 +126,7 @@ namespace Empodera.Controllers
 
             var diarioCampo = await _context.DiariosCampo
                 .Include(d => d.DiarioEixos)
+                .Include(d => d.DiarioDAcoes)
                 .FirstOrDefaultAsync(d => d.IdDCampo == id);
 
             if (diarioCampo == null) return NotFound();
@@ -136,7 +140,12 @@ namespace Empodera.Controllers
         // ==========================================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DiarioCampo diarioCampo, int[] EixosSelecionados)
+        public async Task<IActionResult> Edit(
+            int id,
+            DiarioCampo diarioCampo,
+            int[] EixosSelecionados,
+            int[]? DAcoesExistentes = null,
+            List<DiarioAcaoInput>? TempAcoes = null)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -150,11 +159,15 @@ namespace Empodera.Controllers
             ModelState.Remove("Comunidade");
             ModelState.Remove("Usuario");
 
+            await ValidarAcoesTemporariasAsync(TempAcoes);
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var diarioDb = await _context.DiariosCampo.FindAsync(id);
+                    var diarioDb = await _context.DiariosCampo
+                        .Include(d => d.DiarioDAcoes)
+                        .FirstOrDefaultAsync(d => d.IdDCampo == id);
                     if (diarioDb == null) return NotFound();
 
                     // Atualiza campos
@@ -178,6 +191,16 @@ namespace Empodera.Controllers
                             _context.DiarioEixos.Add(new DiarioEixo { FkIdDiario = id, FkIdEixo = eixoId });
                         }
                     }
+
+                    var idsMantidos = (DAcoesExistentes ?? []).ToHashSet();
+                    var acoesRemovidas = diarioDb.DiarioDAcoes
+                        .Where(acao => !idsMantidos.Contains(acao.IdDAcoes))
+                        .ToList();
+                    _context.DiarioDAcoes.RemoveRange(acoesRemovidas);
+
+                    foreach (var acao in TempAcoes ?? [])
+                        diarioDb.DiarioDAcoes.Add(CriarAcaoInstitucional(acao));
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -188,6 +211,16 @@ namespace Empodera.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            var persisted = await _context.DiariosCampo
+                .AsNoTracking()
+                .Include(d => d.DiarioEixos)
+                .Include(d => d.DiarioDAcoes)
+                .FirstOrDefaultAsync(d => d.IdDCampo == id);
+            if (persisted != null)
+            {
+                diarioCampo.DiarioEixos = persisted.DiarioEixos;
+                diarioCampo.DiarioDAcoes = persisted.DiarioDAcoes;
+            }
             await PreencherViewBagsDoBanco();
             return View(diarioCampo);
         }
@@ -207,6 +240,10 @@ namespace Empodera.Controllers
             var diarioCampo = await _context.DiariosCampo
                 .Include(d => d.Comunidade)
                 .Include(d => d.DiarioEixos).ThenInclude(de => de.Eixo)
+                .Include(d => d.DiarioDAcoes).ThenInclude(acao => acao.Detalhes)
+                    .ThenInclude(detalhe => detalhe.DetalhesEixos).ThenInclude(eixo => eixo.Eixo)
+                .Include(d => d.DiarioDAcoes).ThenInclude(acao => acao.DAtores)
+                    .ThenInclude(vinculo => vinculo.Ator)
                 .FirstOrDefaultAsync(m => m.IdDCampo == id);
 
             if (diarioCampo == null) return NotFound();
@@ -262,6 +299,62 @@ namespace Empodera.Controllers
         private bool DiarioCampoExists(int id)
         {
             return _context.DiariosCampo.Any(e => e.IdDCampo == id);
+        }
+
+        private async Task ValidarAcoesTemporariasAsync(List<DiarioAcaoInput>? acoes)
+        {
+            if (acoes == null || acoes.Count == 0)
+                return;
+
+            var idsEixos = acoes.SelectMany(acao => acao.FkIdEixo).Distinct().ToArray();
+            var eixosValidos = await _context.Eixos
+                .Where(eixo => idsEixos.Contains(eixo.IdEixo))
+                .Select(eixo => eixo.IdEixo)
+                .ToHashSetAsync();
+
+            var idsAtores = acoes.Where(acao => acao.FkIdAtor.HasValue)
+                .Select(acao => acao.FkIdAtor!.Value).Distinct().ToArray();
+            var atoresValidos = await _context.Atores
+                .Where(ator => idsAtores.Contains(ator.IdAtores) && ator.Ativo == "S")
+                .Select(ator => ator.IdAtores)
+                .ToHashSetAsync();
+
+            for (var index = 0; index < acoes.Count; index++)
+            {
+                var acao = acoes[index];
+                if (!string.Equals(acao.Tipo, "institucional", StringComparison.OrdinalIgnoreCase))
+                    ModelState.AddModelError($"TempAcoes[{index}].Tipo", "Tipo de ação inválido.");
+                if (string.IsNullOrWhiteSpace(acao.Nome))
+                    ModelState.AddModelError($"TempAcoes[{index}].Nome", "Informe o nome da ação.");
+                if (string.IsNullOrWhiteSpace(acao.Provedor))
+                    ModelState.AddModelError($"TempAcoes[{index}].Provedor", "Informe o provedor externo.");
+                if (acao.Quantidade < 1)
+                    ModelState.AddModelError($"TempAcoes[{index}].Quantidade", "A quantidade deve ser maior que zero.");
+                if (acao.FkIdEixo.Length == 0 || acao.FkIdEixo.Any(id => !eixosValidos.Contains(id)))
+                    ModelState.AddModelError($"TempAcoes[{index}].FkIdEixo", "Selecione eixos válidos.");
+                if (acao.FkIdAtor.HasValue && !atoresValidos.Contains(acao.FkIdAtor.Value))
+                    ModelState.AddModelError($"TempAcoes[{index}].FkIdAtor", "Selecione um ator ativo.");
+            }
+        }
+
+        private static DiarioDAcoes CriarAcaoInstitucional(DiarioAcaoInput entrada)
+        {
+            var acao = new DiarioDAcoes
+            {
+                Nome = entrada.Nome.Trim(),
+                PeovedorEx = entrada.Provedor.Trim(),
+                Quantidade = entrada.Quantidade
+            };
+
+            var detalhe = new DetalhesDAcoes { Nome = entrada.Nome.Trim() };
+            foreach (var eixoId in entrada.FkIdEixo.Distinct())
+                detalhe.DetalhesEixos.Add(new DetalhesEixos { FkIdEixo = eixoId });
+            acao.Detalhes.Add(detalhe);
+
+            if (entrada.FkIdAtor.HasValue)
+                acao.DAtores.Add(new DAAtores { FK_id_Atores = entrada.FkIdAtor.Value });
+
+            return acao;
         }
 
         // Método para preencher ViewBags com DADOS REAIS do Banco

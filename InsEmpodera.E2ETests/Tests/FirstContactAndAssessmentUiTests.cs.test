@@ -37,8 +37,8 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await page.Locator("input[name=DtContato]").FillAsync("2026-08-20");
             await page.Locator("input[name=HoraContato]").FillAsync("10:30");
             await page.Locator("select[name=CEstabeleceu]").SelectOptionAsync("CasaDaPessoa");
-            await page.Locator("input[name=NovoParceiro][value=Sim]").CheckAsync();
-            await page.Locator("input[name=FornecidoParceiro][value=Sim]").CheckAsync();
+            await page.Locator("label.radio-option:has(input[name=NovoParceiro][value=Sim])").ClickAsync();
+            await page.Locator("label.radio-option:has(input[name=FornecidoParceiro][value=Sim])").ClickAsync();
 
             await page.Locator("#btn-next").ClickAsync();
             await Assertions.Expect(page.Locator("#step-2")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
@@ -48,9 +48,9 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await page.Locator("input[name=NFIlhos]").FillAsync("1");
             await page.Locator("input[name=NFilhas]").FillAsync("2");
             await page.Locator("input[name=AEscolar]").FillAsync("12");
-            await page.Locator("input[name=SLer][value=Sim]").CheckAsync();
-            await page.Locator("input[name=SCalc][value=Sim]").CheckAsync();
-            await page.Locator("input[name=SComp][value=Não]").CheckAsync();
+            await page.Locator("label.radio-option:has(input[name=SLer][value=Sim])").ClickAsync();
+            await page.Locator("label.radio-option:has(input[name=SCalc][value=Sim])").ClickAsync();
+            await page.Locator("label.radio-option:has(input[name=SComp][value='Não'])").ClickAsync();
             await page.Locator("input[name=QReabili]").FillAsync("1");
             await page.Locator("input[name=LTrat]").FillAsync("Unidade de referência");
 
@@ -58,10 +58,10 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await Assertions.Expect(page.Locator("#step-3")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
             await Assertions.Expect(page.Locator("#btn-next")).ToBeHiddenAsync();
             await Assertions.Expect(page.Locator("#btn-save")).ToBeVisibleAsync();
-            await page.Locator("input[name=SelectedCondicoes]").First.CheckAsync();
-            await page.Locator("input[name=SelectedPeticoes]").First.CheckAsync();
-            await page.Locator("input[name=SelectedRespostas]").First.CheckAsync();
-            await page.Locator("input[name=SelectedResultados]").First.CheckAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedCondicoes])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedPeticoes])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedRespostas])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedResultados])").First.ClickAsync();
             await page.Locator("textarea[name=Coment]").FillAsync(marker);
             await page.Locator("#btn-prev").ClickAsync();
             await Assertions.Expect(page.Locator("#step-2")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
@@ -89,14 +89,14 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await page.Locator("#btn-next").ClickAsync();
             await page.Locator("#btn-next").ClickAsync();
             await page.Locator("textarea[name=Coment]").FillAsync(editedMarker);
-            await page.Locator("input[name=SelectedCondicoes]").First.UncheckAsync();
-            await page.Locator("input[name=SelectedCondicoes]").Nth(1).CheckAsync();
-            await page.Locator("input[name=SelectedPeticoes]").First.UncheckAsync();
-            await page.Locator("input[name=SelectedPeticoes]").Nth(1).CheckAsync();
-            await page.Locator("input[name=SelectedRespostas]").First.UncheckAsync();
-            await page.Locator("input[name=SelectedRespostas]").Nth(1).CheckAsync();
-            await page.Locator("input[name=SelectedResultados]").First.UncheckAsync();
-            await page.Locator("input[name=SelectedResultados]").Nth(1).CheckAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedCondicoes])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedCondicoes])").Nth(1).ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedPeticoes])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedPeticoes])").Nth(1).ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedRespostas])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedRespostas])").Nth(1).ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedResultados])").First.ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=SelectedResultados])").Nth(1).ClickAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
 
@@ -153,7 +153,8 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
                 .ToBeVisibleAsync();
             await page.Locator("#atorSelect").SelectOptionAsync(actorId.ToString());
             await page.WaitForURLAsync(url => new Uri(url).Query.Contains($"atorId={actorId}"));
-            await page.Locator("button.btn-add, button.btn-save").ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Primeira Avaliação", Exact = true })
+                .ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalAssessment/Create");
 
             await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(actorId.ToString());

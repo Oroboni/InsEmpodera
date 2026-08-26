@@ -247,11 +247,6 @@ describe('atores vinculados — contexto e affordances', () => {
     expect(source).not.toContain('.ator-card');
     expect(source).not.toContain('.ator-name');
   });
-
-  it('não oferece exportação clicável sem implementação', () => {
-    expect(source).toMatch(/class="atores-export-button"[^>]*\bdisabled\b[^>]*aria-disabled="true"/);
-    expect(source).toContain('Exportação indisponível nesta tela');
-  });
 });
 describe('estrutura HTML e affordances', () => {
   it('Views que usam Layout não declaram um segundo documento HTML', () => {

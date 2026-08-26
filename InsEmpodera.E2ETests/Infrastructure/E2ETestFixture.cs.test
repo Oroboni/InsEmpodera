@@ -48,6 +48,8 @@ public sealed class E2ETestFixture : IAsyncLifetime
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
         builder.Logging.SetMinimumLevel(LogLevel.Warning);
+        builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+        builder.Logging.AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Warning);
         builder.WebHost.ConfigureKestrel(options => options.Listen(IPAddress.Loopback, 0));
 
         builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -67,6 +69,8 @@ public sealed class E2ETestFixture : IAsyncLifetime
         });
         builder.Services.AddHttpClient();
         builder.Services.AddScoped<RelatorioExcelService>();
+        builder.Services.AddScoped<SpreadsheetExportService>();
+        builder.Services.AddScoped<ExcelBackupService>();
 
         _application = builder.Build();
 

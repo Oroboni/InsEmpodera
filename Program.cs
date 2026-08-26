@@ -42,6 +42,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<RelatorioExcelService>();
+builder.Services.AddScoped<SpreadsheetExportService>();
+builder.Services.AddScoped<ExcelBackupService>();
 
 var app = builder.Build();
 

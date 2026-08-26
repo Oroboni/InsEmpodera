@@ -4,16 +4,8 @@
     ViewData["Title"] = "Novo Diário de Campo";
     Layout = "_Layout";
     
-    // Configuração dos Eixos
-    var listaEixosCorretos = new List<dynamic> {
-        new { IdEixo = 1, Nome = "Prevenção" },
-        new { IdEixo = 2, Nome = "Ocupação" },
-        new { IdEixo = 3, Nome = "Lazer" },
-        new { IdEixo = 4, Nome = "Segurança Social" },
-        new { IdEixo = 5, Nome = "Educação" },
-        new { IdEixo = 6, Nome = "Saúde" },
-        new { IdEixo = 7, Nome = "Assistência Básica" }
-    };
+    var listaEixos = ViewBag.EixosList as IEnumerable<Empodera.Models.Eixo>
+        ?? Enumerable.Empty<Empodera.Models.Eixo>();
 
     // Configuração dos Atores (JSON para o JS)
     string jsonAtores = "[]";
@@ -58,6 +50,7 @@
 
     <form asp-action="Create" method="post" enctype="multipart/form-data" class="main-form">
         @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
 
         <div class="section-label">Informações Básicas</div>
 
@@ -95,7 +88,7 @@
             <div class="input-content">
                 <label>Eixos Selecionados</label>
                 <div class="eixos-options-grid">
-                    @foreach (dynamic eixo in listaEixosCorretos) {
+                    @foreach (var eixo in listaEixos) {
                         <label class="checkbox-card-label">
                             <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo">
                             <span data-i18n-text>@eixo.Nome</span>
@@ -220,7 +213,7 @@
                     <label>Eixos (Selecione um ou mais)</label>
                     
                     <div class="eixos-grid-modal">
-                        @foreach (dynamic eixo in listaEixosCorretos) {
+                        @foreach (var eixo in listaEixos) {
                             <label class="checkbox-card-label">
                                 <input type="checkbox" 
                                        name="modalEixos" 

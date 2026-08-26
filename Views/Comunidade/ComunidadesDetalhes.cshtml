@@ -46,8 +46,7 @@
       <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
       <div class="input-content">
         <label for="input-endereco">Endereço original <span class="text-danger">*</span></label>
-        <textarea asp-for="Local" class="clean-input address-input" id="input-endereco"
-                  rows="2"
+        <textarea asp-for="Local" class="clean-input address-input" id="input-endereco" rows="2"
                   placeholder="Digite o endereço ou use a lupa no mapa..." required></textarea>
         <span asp-validation-for="Local" class="text-danger"></span>
       </div>
@@ -182,8 +181,9 @@
       <div class="action-buttons-group">
         @if (Model.Id_Comunidade > 0)
         {
-          <a href="@Url.Action("ExportComunidade", "Services", new { id = Model.Id_Comunidade })"
-             class="atores-export-button" title="Exportar dados">
+          <a asp-controller="Services" asp-action="ExportComunidadeCompleta"
+             asp-route-id="@Model.Id_Comunidade" class="btn-export"
+             aria-label="Exportar atores da comunidade">
             <i class="fa-solid fa-file-arrow-down"></i>
           </a>
         }

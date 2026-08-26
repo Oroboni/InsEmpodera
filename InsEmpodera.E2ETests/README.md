@@ -10,7 +10,7 @@ Na raiz do repositório, execute:
 .\testar.ps1
 ```
 
-O runner restaura .NET e Node, compila em `Release`, instala de forma idempotente o Chromium compatível, executa os testes de backend, os testes de eventos/DOM com cobertura e, por fim, as jornadas no navegador.
+O runner restaura .NET e Node, compila em `Release`, instala de forma idempotente o Chromium compatível, executa os testes de backend com cobertura, os testes de eventos/contratos do DOM e, por fim, as jornadas no navegador.
 
 Para acompanhar o navegador localmente:
 
@@ -35,34 +35,27 @@ Pré-requisitos: .NET SDK 9, Node.js/npm e PowerShell 7. O teste não exige MySQ
 - Cada cenário cria dados com GUID e a coleção xUnit é serial, evitando colisões entre CRUDs.
 - Requisições externas são bloqueadas. Qualquer erro JavaScript ou resposta local 4xx/5xx — inclusive CSS, scripts, imagens e fontes — reprova o cenário.
 - Em falhas, a suíte salva screenshot e trace reproduzível em `InsEmpodera.E2ETests/TestResults/e2e-artifacts`.
-- Resultados TRX e cobertura ficam em `TestResults`; o frontend grava HTML em `Frontend.Tests/coverage`.
+- Resultados TRX e a cobertura do backend ficam em `TestResults`; o frontend grava o resultado estruturado em `Frontend.Tests/vitest-results.json`.
 
 ## Cobertura do navegador
 
 - autenticação inválida/válida, sessão, logout e proteção de rotas;
-- idioma do navegador e preferência autenticada do usuário;
+- idioma automático do navegador e seleção explícita no login ou em Configurações;
 - password reveal e validação visual da recuperação de senha;
 - todos os links visíveis da sidebar, estado ativo e HTTP final;
 - menu mobile por toque, Escape e backdrop, além de overflow desktop/mobile;
 - usuários e perfis de acesso: validação, criação, busca, edição, permissões e persistência;
 - comunidades, atores e atividades: criação, filtros, relações, edição e exclusão lógica/física;
-- Diário de Campo: lista, detalhes, busca, filtro, edição, eixos e exclusão;
+- Diário de Campo: criação sem foto obrigatória, lista, detalhes, busca, filtro, edição, eixos,
+  ações institucionais com vínculos de ator/eixo e exclusão;
 - Ficha de 1º Contato: wizard de três etapas, seleções filhas, edição, conclusão, filtros e exclusão em cascata;
 - Avaliação Pessoal: seleção do ator, eventos dos sliders, criação, busca, edição e exclusão.
 
 Os testes de CRUD sempre conferem o banco após os eventos visíveis, inclusive tabelas de relacionamento. Seletores priorizam nomes, labels e atributos estáveis; não dependem de coordenadas, ordem aleatória ou dados externos.
 
-## Diagnósticos conhecidos
+## Limite conhecido
 
-Alguns cenários têm o trait `Diagnostic`. Eles registram precisamente lacunas existentes e passam enquanto o comportamento diagnosticado continuar igual; quando a aplicação for corrigida, o teste deve ser convertido para o novo fluxo esperado.
-
-- `Ajuda` aparece na sidebar, mas não existe controller/view e retorna 404.
-- `Configurações` chama uma view `Index` inexistente e retorna 500.
-- perfis de acesso não expõem exclusão nem endpoint `Delete`, portanto o CRUD ainda não é completo.
-- a criação do Diário de Campo não oferece o campo obrigatório `Foto`.
-- ações institucionais dinâmicas são montadas na UI como `TempAcoes`, mas não são persistidas pelo endpoint atual.
-
-A recuperação de senha é somente uma simulação visual em `wwwroot/js/forget.js`: o formulário usa `preventDefault`, não chama backend, não envia email e não possui action `ForgotPassword`. O E2E valida apenas navegação e estados visuais dessa tela.
+A recuperação de senha ainda é somente uma simulação visual em `wwwroot/js/forget.js`: o formulário usa `preventDefault`, não chama backend e não envia email. O E2E valida apenas a navegação e os estados visuais dessa tela; ele não afirma que houve recuperação real.
 
 ## CI
 

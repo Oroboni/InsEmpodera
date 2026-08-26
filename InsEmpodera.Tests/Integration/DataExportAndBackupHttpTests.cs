@@ -1,0 +1,227 @@
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using ClosedXML.Excel;
+using Empodera.Models;
+using InsEmpodera.Tests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
+
+namespace InsEmpodera.Tests.Integration;
+
+public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebApplicationFactory>
+{
+    private const string SpreadsheetMediaType =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private readonly EmpoderaWebApplicationFactory _factory;
+
+    public DataExportAndBackupHttpTests(EmpoderaWebApplicationFactory factory) => _factory = factory;
+
+    [Fact]
+    public async Task CompleteCommunityExport_ContainsEveryDependencyGroupAndPrimaryKeyHeaders()
+    {
+        var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+        var communityId = await SeedCommunityAsync();
+        using var client = await AuthenticatedClientAsync(admin);
+
+        using var response = await client.GetAsync($"/Services/ExportComunidadeCompleta?id={communityId}");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(SpreadsheetMediaType, response.Content.Headers.ContentType?.MediaType);
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        using var workbook = new XLWorkbook(stream);
+        var expectedSheets = new[]
+        {
+            "Comunidades", "Atores", "AtorComunidades", "RecursosAtores", "AvaliacoesPessoais",
+            "RedesPrimarias", "Atividades", "AtividadesEixos", "Acoes", "AcoesAtores", "Recursos",
+            "RecursosEixos", "Vulnerabilidades", "VulnerabilidadesEixos", "DiariosCampo", "DiariosEixos",
+            "AcoesInstitucionais", "DetalhesAcoes", "EixosDasAcoes", "AtoresDasAcoes", "AcoesDaEquipe",
+            "AnexosDiario", "FichasPrimeiroContato", "FontesInformacao", "Condicoes", "Peticoes",
+            "Respostas", "Resultados", "Eixos"
+        };
+        Assert.Equal(expectedSheets, workbook.Worksheets.Select(sheet => sheet.Name));
+        Assert.Equal(nameof(Comunidade.Id_Comunidade), workbook.Worksheet("Comunidades").Cell(1, 1).GetString());
+        Assert.Equal(communityId, workbook.Worksheet("Comunidades").Cell(2, 1).GetValue<int>());
+    }
+
+    [Theory]
+    [InlineData("/Services/ExportAtores", "Atores", "RedesPrimarias")]
+    [InlineData("/Services/ExportDiariosCampo", "DiariosCampo", "AnexosDiario")]
+    [InlineData("/Services/ExportFichasPrimeiroContato", "FichasPrimeiroContato", "Resultados")]
+    public async Task ModuleExports_DownloadValidSpreadsheets(string path, string firstSheet, string dependencySheet)
+    {
+        var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+        using var client = await AuthenticatedClientAsync(admin);
+
+        using var response = await client.GetAsync(path);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(SpreadsheetMediaType, response.Content.Headers.ContentType?.MediaType);
+        Assert.EndsWith(".xlsx", response.Content.Headers.ContentDisposition?.FileNameStar, StringComparison.OrdinalIgnoreCase);
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        using var workbook = new XLWorkbook(stream);
+        Assert.Contains(workbook.Worksheets, sheet => sheet.Name == firstSheet);
+        Assert.Contains(workbook.Worksheets, sheet => sheet.Name == dependencySheet);
+        Assert.All(workbook.Worksheets, sheet => Assert.True(sheet.Row(1).CellCount() > 0));
+    }
+
+    [Fact]
+    public async Task CommunityActorExport_ContainsCommunityActorsAndTheirRelationships()
+    {
+        var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+        var communityId = await SeedCommunityAsync();
+        using var client = await AuthenticatedClientAsync(admin);
+
+        using var response = await client.GetAsync($"/Services/ExportAtoresComunidade?id={communityId}");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        using var workbook = new XLWorkbook(stream);
+        Assert.Equal(
+            new[] { "Atores", "AtoresRelacionados", "VinculosComunidade", "RecursosAtores", "AvaliacoesPessoais", "RedesPrimarias" },
+            workbook.Worksheets.Select(sheet => sheet.Name));
+    }
+
+    [Fact]
+    public async Task GeneralBackup_ContainsAllMappedTablesAndCanBeImportedBackWithoutChangingExistingRows()
+    {
+        var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+        var restoredActorId = await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+        {
+            var actor = new Atores
+            {
+                Nome = $"Ator booleano {Guid.NewGuid():N}",
+                DaEquipe = true,
+                Rope = false,
+                Lopiniao = true,
+                Mcomunidade = false,
+                Ativo = "S",
+                FkIdUsuario = admin.IdUsuario,
+                DtCriacao = DateTime.UtcNow,
+                DtModificacao = DateTime.UtcNow
+            };
+            db.Atores.Add(actor);
+            await db.SaveChangesAsync();
+            return actor.IdAtores;
+        });
+        using var client = await AuthenticatedClientAsync(admin);
+        var countsBefore = await GetTableCountsAsync();
+
+        using var download = await client.GetAsync("/Services/ExportBackupGeral");
+
+        Assert.Equal(HttpStatusCode.OK, download.StatusCode);
+        Assert.Equal(SpreadsheetMediaType, download.Content.Headers.ContentType?.MediaType);
+        Assert.EndsWith(".xlsx", download.Content.Headers.ContentDisposition?.FileNameStar, StringComparison.OrdinalIgnoreCase);
+        var bytes = await download.Content.ReadAsByteArrayAsync();
+        using (var stream = new MemoryStream(bytes))
+        using (var workbook = new XLWorkbook(stream))
+        {
+            var manifest = workbook.Worksheet("_Backup");
+            Assert.Equal("InsEmpodera", manifest.Cell("B3").GetString());
+            Assert.Equal(2, manifest.Cell("B4").GetValue<int>());
+            Assert.NotEmpty(manifest.Cell("B5").GetString());
+            var tableNames = new List<string>();
+            for (var row = 9; !manifest.Cell(row, 1).IsEmpty(); row++)
+                tableNames.Add(manifest.Cell(row, 1).GetString());
+            Assert.Equal(countsBefore.Count, tableNames.Count);
+            Assert.Equal(countsBefore.Keys.Order(), tableNames.Order());
+            Assert.All(tableNames, table => Assert.True(workbook.TryGetWorksheet(table, out _)));
+            Assert.Equal(XLWorksheetVisibility.VeryHidden, workbook.Worksheet("_Nulos").Visibility);
+            Assert.Equal(XLWorksheetVisibility.VeryHidden, workbook.Worksheet("_TextosLongos").Visibility);
+        }
+
+        await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+        {
+            db.Atores.Remove(await db.Atores.SingleAsync(actor => actor.IdAtores == restoredActorId));
+            await db.SaveChangesAsync();
+        });
+
+        using var import = await ImportBackupAsync(client, bytes);
+        HttpFlowTestSupport.AssertRedirect(import, "/Report");
+        using var resultPage = await client.GetAsync("/Report");
+        var html = await resultPage.Content.ReadAsStringAsync();
+        Assert.Contains("1 registros novos importados", html, StringComparison.Ordinal);
+        Assert.Equal(countsBefore, await GetTableCountsAsync());
+
+        using var secondImport = await ImportBackupAsync(client, bytes);
+        HttpFlowTestSupport.AssertRedirect(secondImport, "/Report");
+        using var secondResultPage = await client.GetAsync("/Report");
+        Assert.Contains(
+            "0 registros novos importados",
+            await secondResultPage.Content.ReadAsStringAsync(),
+            StringComparison.Ordinal);
+        Assert.Equal(countsBefore, await GetTableCountsAsync());
+    }
+
+    [Fact]
+    public async Task BackupEndpoints_RequireAdministratorAndRejectInvalidFilesWithoutDatabaseChanges()
+    {
+        var viewer = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 4, active: "S");
+        using var client = await AuthenticatedClientAsync(viewer);
+        var countsBefore = await GetTableCountsAsync();
+
+        using var download = await client.GetAsync("/Services/ExportBackupGeral");
+        Assert.Equal(HttpStatusCode.Forbidden, download.StatusCode);
+
+        var token = await HttpFlowTestSupport.GetAntiforgeryTokenAsync(client, "/Account");
+        using var form = new MultipartFormDataContent();
+        form.Add(new StringContent(token), "__RequestVerificationToken");
+        form.Add(new ByteArrayContent(Encoding.UTF8.GetBytes("not an Excel backup")), "backupFile", "invalid.xlsx");
+        using var import = await client.PostAsync("/Report/ImportarBackup", form);
+        Assert.Equal(HttpStatusCode.Forbidden, import.StatusCode);
+        Assert.Equal(countsBefore, await GetTableCountsAsync());
+    }
+
+    private async Task<HttpClient> AuthenticatedClientAsync(Usuario user)
+    {
+        var client = HttpFlowTestSupport.CreateClient(_factory);
+        using var login = await HttpFlowTestSupport.LoginUsingFormAsync(client, user.Email, HttpFlowTestSupport.ValidPassword);
+        HttpFlowTestSupport.AssertRedirect(login, "/");
+        return client;
+    }
+
+    private static async Task<HttpResponseMessage> ImportBackupAsync(HttpClient client, byte[] bytes)
+    {
+        var token = await HttpFlowTestSupport.GetAntiforgeryTokenAsync(client, "/Report");
+        var form = new MultipartFormDataContent();
+        form.Add(new StringContent(token), "__RequestVerificationToken");
+        var file = new ByteArrayContent(bytes);
+        file.Headers.ContentType = new MediaTypeHeaderValue(SpreadsheetMediaType);
+        form.Add(file, "backupFile", "roundtrip.xlsx");
+        return await client.PostAsync("/Report/ImportarBackup", form);
+    }
+
+    private Task<Dictionary<string, int>> GetTableCountsAsync() =>
+        HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+        {
+            var result = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var connection = db.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open) await connection.OpenAsync();
+            foreach (var table in db.Model.GetEntityTypes().Select(entity => entity.GetTableName()).Where(name => name != null).Distinct()!)
+            {
+                await using var command = connection.CreateCommand();
+                command.CommandText = $"SELECT COUNT(*) FROM `{table!.Replace("`", "``", StringComparison.Ordinal)}`";
+                result[table] = Convert.ToInt32(await command.ExecuteScalarAsync());
+            }
+            return result;
+        });
+
+    private Task<int> SeedCommunityAsync() =>
+        HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+        {
+            var community = new Comunidade
+            {
+                Nome = $"Comunidade exportável {Guid.NewGuid():N}",
+                Local = "Rua da Integração, 10",
+                LocalMapa = "Rua da Integração, 10",
+                Status = "Em processo",
+                Ativo = "S",
+                FK_Id_Usuario = 1,
+                Dt_Criacao = DateTime.UtcNow,
+                Dt_Modificacao = DateTime.UtcNow
+            };
+            db.Comunidades.Add(community);
+            await db.SaveChangesAsync();
+            return community.Id_Comunidade;
+        });
+}

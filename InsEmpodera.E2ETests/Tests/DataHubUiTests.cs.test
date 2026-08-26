@@ -1,0 +1,140 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class DataHubUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact]
+    public Task DataHub_ExportsEveryModuleAndRoundTripsGeneralBackupThroughTheUi() =>
+        RunInBrowserAsync(
+            nameof(DataHub_ExportsEveryModuleAndRoundTripsGeneralBackupThroughTheUi),
+            async page =>
+            {
+                await LoginAsync(page);
+                var countsBefore = await Fixture.QueryAsync(async db => new[]
+                {
+                    await db.Usuarios.CountAsync(),
+                    await db.Comunidades.CountAsync(),
+                    await db.Atores.CountAsync(),
+                    await db.AtorComunidades.CountAsync()
+                });
+
+                var response = await page.GotoAsync("/Report");
+                Assert.NotNull(response);
+                Assert.Equal(200, response!.Status);
+                await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Exportações e backup", Exact = true }))
+                    .ToBeVisibleAsync();
+                await Assertions.Expect(page.Locator(".export-card")).ToHaveCountAsync(5);
+                await Assertions.Expect(page.Locator(".backup-panel")).ToBeVisibleAsync();
+
+                await page.Locator("#communityFullExport").SelectOptionAsync(new SelectOptionValue { Index = 1 });
+                var community = await page.RunAndWaitForDownloadAsync(() =>
+                    page.Locator("form[action='/Services/ExportComunidadeCompleta'] button[type=submit]").ClickAsync());
+                Assert.Matches(@"^comunidade-\d+-completa\.xlsx$", community.SuggestedFilename);
+                await AssertDownloadSignatureAsync(community, 0x50, 0x4B);
+
+                await page.Locator("#communityActorsExport").SelectOptionAsync(new SelectOptionValue { Index = 1 });
+                var communityActors = await page.RunAndWaitForDownloadAsync(() =>
+                    page.Locator("form[action='/Services/ExportAtoresComunidade'] button[type=submit]").ClickAsync());
+                Assert.Matches(@"^atores-comunidade-\d+\.xlsx$", communityActors.SuggestedFilename);
+                await AssertDownloadSignatureAsync(communityActors, 0x50, 0x4B);
+
+                foreach (var export in new[]
+                {
+                    (Path: "/Services/ExportAtores", File: "atores-completos.xlsx"),
+                    (Path: "/Services/ExportDiariosCampo", File: "diarios-de-campo.xlsx"),
+                    (Path: "/Services/ExportFichasPrimeiroContato", File: "fichas-primeiro-contato.xlsx")
+                })
+                {
+                    var download = await page.RunAndWaitForDownloadAsync(() =>
+                        page.Locator($"a[href='{export.Path}']").ClickAsync());
+                    Assert.Equal(export.File, download.SuggestedFilename);
+                    await AssertDownloadSignatureAsync(download, 0x50, 0x4B);
+                }
+
+                var backup = await page.RunAndWaitForDownloadAsync(() =>
+                    page.GetByRole(AriaRole.Link, new() { Name = "Gerar backup geral" }).ClickAsync());
+                Assert.EndsWith(".xlsx", backup.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
+                var backupPath = await backup.PathAsync();
+                Assert.NotNull(backupPath);
+                var backupBytes = await File.ReadAllBytesAsync(backupPath!);
+                Assert.True(backupBytes.Length > 2);
+                Assert.Equal(0x50, backupBytes[0]);
+                Assert.Equal(0x4B, backupBytes[1]);
+
+                var importButton = page.Locator("#backupImportButton");
+                await Assertions.Expect(importButton).ToBeDisabledAsync();
+                await page.Locator("#backupFile").SetInputFilesAsync(new FilePayload
+                {
+                    Name = backup.SuggestedFilename,
+                    MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    Buffer = backupBytes
+                });
+                await Assertions.Expect(page.Locator("#backupFileLabel")).ToContainTextAsync(".xlsx");
+                await Assertions.Expect(importButton).ToBeEnabledAsync();
+                var importResponse = await page.RunAndWaitForResponseAsync(
+                    () => importButton.ClickAsync(),
+                    candidate => new Uri(candidate.Url).AbsolutePath.Equals("/Report/ImportarBackup", StringComparison.OrdinalIgnoreCase));
+                Assert.InRange(importResponse.Status, 300, 399);
+                await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Report");
+                await Assertions.Expect(page.Locator(".data-alert-success"))
+                    .ToContainTextAsync("0 registros novos importados");
+
+                var countsAfter = await Fixture.QueryAsync(async db => new[]
+                {
+                    await db.Usuarios.CountAsync(),
+                    await db.Comunidades.CountAsync(),
+                    await db.Atores.CountAsync(),
+                    await db.AtorComunidades.CountAsync()
+                });
+                Assert.Equal(countsBefore, countsAfter);
+                Assert.True(await HasNoHorizontalOverflowAsync(page));
+            });
+
+    [Fact]
+    public Task DataHub_RemainsReadableAndOperableOnMobile() =>
+        RunInBrowserAsync(
+            nameof(DataHub_RemainsReadableAndOperableOnMobile),
+            async page =>
+            {
+                await LoginAsync(page);
+                await page.GotoAsync("/Report");
+                await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Exportações e backup", Exact = true }))
+                    .ToBeVisibleAsync();
+                await Assertions.Expect(page.Locator("#communityFullExport")).ToBeVisibleAsync();
+                await Assertions.Expect(page.Locator("#backupFile")).ToBeAttachedAsync();
+                Assert.True(await HasNoHorizontalOverflowAsync(page));
+                var cards = page.Locator(".export-card");
+                for (var index = 0; index < await cards.CountAsync(); index++)
+                {
+                    var box = await cards.Nth(index).BoundingBoxAsync();
+                    Assert.NotNull(box);
+                    Assert.InRange(box!.Width, 250, 360);
+                }
+            },
+            new BrowserNewContextOptions
+            {
+                BaseURL = Fixture.BaseUrl,
+                Locale = "pt-BR",
+                ViewportSize = new ViewportSize { Width = 390, Height = 844 },
+                IsMobile = true,
+                HasTouch = true
+            });
+
+    private static async Task AssertDownloadSignatureAsync(IDownload download, byte first, byte second)
+    {
+        var path = await download.PathAsync();
+        Assert.NotNull(path);
+        var bytes = await File.ReadAllBytesAsync(path!);
+        Assert.True(bytes.Length > 2);
+        Assert.Equal(first, bytes[0]);
+        Assert.Equal(second, bytes[1]);
+    }
+
+    private static async Task<bool> HasNoHorizontalOverflowAsync(IPage page) =>
+        await page.EvaluateAsync<bool>("() => document.documentElement.scrollWidth <= window.innerWidth + 1");
+}

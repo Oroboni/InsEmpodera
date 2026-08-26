@@ -81,9 +81,9 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
             });
 
     [Fact]
-    public Task SettingsSidebarLink_LoadsAvailableOptions_WithoutFakeSaveForm() =>
+    public Task SettingsSidebarLink_ChangesInterfaceLanguage_AndLoadsAvailableOptions() =>
         RunInBrowserAsync(
-            nameof(SettingsSidebarLink_LoadsAvailableOptions_WithoutFakeSaveForm),
+            nameof(SettingsSidebarLink_ChangesInterfaceLanguage_AndLoadsAvailableOptions),
             async page =>
             {
                 await LoginAsync(page);
@@ -96,8 +96,19 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
                 Assert.Equal("/Configuracoes", new Uri(page.Url).AbsolutePath);
                 await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Configurações", Exact = true }))
                     .ToBeVisibleAsync();
-                await Assertions.Expect(page.Locator("main form, main button[type=submit]")).ToHaveCountAsync(0);
-                await page.GetByRole(AriaRole.Link, new() { Name = "Ver Perfis de Acesso" }).ClickAsync();
+                var english = page.Locator("button.language-option[value=en]");
+                await Assertions.Expect(english).ToHaveAttributeAsync("aria-pressed", "false");
+                await english.ClickAsync();
+                await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Configuracoes");
+                Assert.Equal("en", await page.Locator("html").GetAttributeAsync("lang"));
+                await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Settings", Exact = true }))
+                    .ToBeVisibleAsync();
+                await Assertions.Expect(page.Locator("button.language-option[value=en]"))
+                    .ToHaveAttributeAsync("aria-pressed", "true");
+                var cultureCookie = (await page.Context.CookiesAsync())
+                    .Single(cookie => cookie.Name == ".AspNetCore.Culture");
+                Assert.Contains("c=en", Uri.UnescapeDataString(cultureCookie.Value));
+                await page.GetByRole(AriaRole.Link, new() { Name = "View access profiles" }).ClickAsync();
                 await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
             });
     [Fact]

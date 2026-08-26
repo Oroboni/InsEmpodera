@@ -10,13 +10,12 @@ namespace InsEmpodera.E2ETests.Tests;
 public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
     [Fact]
-    [Trait("Diagnostic", "Known UI contract defect")]
-    public Task CreateScreen_ExposesNoFotoField_AndVisibleValidFormCannotPersist() =>
-        RunInBrowserAsync(nameof(CreateScreen_ExposesNoFotoField_AndVisibleValidFormCannotPersist), async page =>
+    public Task CreateScreen_ValidVisibleFormPersistsWithoutObsoleteFotoField() =>
+        RunInBrowserAsync(nameof(CreateScreen_ValidVisibleFormPersistsWithoutObsoleteFotoField), async page =>
         {
             await LoginAsync(page);
             var prerequisites = await GetPrerequisitesAsync();
-            var marker = Unique("Diário bloqueado pela UI");
+            var marker = Unique("Diário criado pela UI");
             var countBefore = await Fixture.QueryAsync(db => db.DiariosCampo.CountAsync());
 
             await page.GotoAsync("/DiarioCampo/Create");
@@ -25,14 +24,17 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("input[name=Data]").FillAsync("2026-08-20");
             await page.Locator("textarea[name=Descricao]").FillAsync(marker);
             await page.Locator("input[name=Localizacao]").FillAsync("Rua do Diário, 50");
-            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+            await page.Locator($"label.checkbox-card-label:has(input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}'])").ClickAsync();
             await page.Locator("form.main-form > .buttons-container button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
 
-            // The model declares Foto as required, but the view renders no control.
-            // The real browser therefore returns to the form and no row is written.
-            Assert.Equal("/DiarioCampo/Create", new Uri(page.Url).AbsolutePath);
-            Assert.Equal(countBefore, await Fixture.QueryAsync(db => db.DiariosCampo.CountAsync()));
-            Assert.False(await Fixture.QueryAsync(db => db.DiariosCampo.AnyAsync(diary => diary.Descricao == marker)));
+            Assert.Equal(countBefore + 1, await Fixture.QueryAsync(db => db.DiariosCampo.CountAsync()));
+            var created = await Fixture.QueryAsync(db => db.DiariosCampo
+                .Where(diary => diary.Descricao == marker)
+                .Select(diary => new { diary.Foto, diary.Localizacao })
+                .SingleAsync());
+            Assert.Null(created.Foto);
+            Assert.Equal("Rua do Diário, 50", created.Localizacao);
         });
 
     [Fact]
@@ -67,18 +69,17 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
 
             await LoginAsync(page);
             await page.GotoAsync("/DiarioCampo");
-            await page.Locator("input[type=search]").FillAsync(marker);
-            var diaryCard = page.Locator(".form-item").Filter(new() { HasText = marker });
-            await Assertions.Expect(diaryCard).ToBeVisibleAsync();
-            await Assertions.Expect(page.Locator(".form-item:visible")).ToHaveCountAsync(1);
-
             var communityName = await Fixture.QueryAsync(db => db.Comunidades
                 .Where(community => community.Id_Comunidade == prerequisites.CommunityId)
                 .Select(community => community.Nome).SingleAsync());
             await page.Locator("#comunidadeFilter").SelectOptionAsync(new SelectOptionValue { Label = communityName });
+            await Assertions.Expect(page.Locator("input[type=search]")).ToBeEnabledAsync();
+            await page.Locator("input[type=search]").FillAsync(marker);
+            var diaryCard = page.Locator(".form-item").Filter(new() { HasText = marker });
             await Assertions.Expect(diaryCard).ToBeVisibleAsync();
+            await Assertions.Expect(page.Locator(".form-item:visible")).ToHaveCountAsync(1);
             await page.Locator("input[type=search]").FillAsync("diario-inexistente");
-            await Assertions.Expect(page.Locator("#noResultsMessage")).ToBeVisibleAsync();
+            await Assertions.Expect(page.Locator("#noRecordsMessage")).ToBeVisibleAsync();
 
             await page.GotoAsync($"/DiarioCampo/Details/{diaryId}");
             await Assertions.Expect(page.Locator("textarea[readonly]")).ToContainTextAsync(marker);
@@ -119,9 +120,8 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
         });
 
     [Fact]
-    [Trait("Diagnostic", "Known backend persistence gap")]
-    public Task DynamicInstitutionalAction_IsRenderedButNotPersistedByCreateEndpoint() =>
-        RunInBrowserAsync(nameof(DynamicInstitutionalAction_IsRenderedButNotPersistedByCreateEndpoint), async page =>
+    public Task DynamicInstitutionalAction_PersistsActionAxisAndActorRelationships() =>
+        RunInBrowserAsync(nameof(DynamicInstitutionalAction_PersistsActionAxisAndActorRelationships), async page =>
         {
             await LoginAsync(page);
             var prerequisites = await GetPrerequisitesAsync();
@@ -132,24 +132,15 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("input[name=Data]").FillAsync("2026-08-22");
             await page.Locator("textarea[name=Descricao]").FillAsync(marker);
             await page.Locator("input[name=Localizacao]").FillAsync("Rua da Ação, 30");
-            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
-
-            // Temporary DOM injection isolates the separate Foto defect so this
-            // scenario can verify the dynamic action contract end to end.
-            await page.Locator("form.main-form").EvaluateAsync("""
-                form => {
-                  const foto = document.createElement('input');
-                  foto.type = 'hidden'; foto.name = 'Foto'; foto.value = 'diagnostic.png';
-                  form.appendChild(foto);
-                }
-                """);
+            await page.Locator($"label.checkbox-card-label:has(input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}'])").ClickAsync();
 
             await page.Locator("button.btn-add-circle").ClickAsync();
             await Assertions.Expect(page.Locator("#modalAcao")).ToBeVisibleAsync();
             await page.Locator("#nomeAcao").FillAsync("Encaminhamento institucional");
             await page.Locator("#provedorAcao").FillAsync("Unidade de saúde");
             await page.Locator("#quantidadeAcao").FillAsync("2");
-            await page.Locator($"input[name=modalEixos][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+            await page.Locator("#atorAcao").SelectOptionAsync(prerequisites.ActorId.ToString());
+            await page.Locator($"label.checkbox-card-label:has(input[name=modalEixos][value='{prerequisites.AxisIds[0]}'])").ClickAsync();
             await page.Locator("#modalAcao .btn-confirm").ClickAsync();
             await Assertions.Expect(page.Locator("#container-institucional .action-list-item"))
                 .ToContainTextAsync("Encaminhamento institucional");
@@ -161,10 +152,19 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
                 .Where(diary => diary.Descricao == marker)
                 .Select(diary => diary.IdDCampo).SingleAsync());
 
-            // Diagnostic assertion: the UI posts TempAcoes, but the current action
-            // signature never accepts it, so the related row is lost.
-            Assert.Equal(0, await Fixture.QueryAsync(db => db.DiarioDAcoes
-                .CountAsync(action => action.FkIdDiario == diaryId)));
+            var action = await Fixture.QueryAsync(db => db.DiarioDAcoes
+                .Where(item => item.FkIdDiario == diaryId)
+                .Select(item => new { item.IdDAcoes, item.Nome, item.PeovedorEx, item.Quantidade })
+                .SingleAsync());
+            Assert.Equal("Encaminhamento institucional", action.Nome);
+            Assert.Equal("Unidade de saúde", action.PeovedorEx);
+            Assert.Equal(2, action.Quantidade);
+            Assert.True(await Fixture.QueryAsync(db => db.DetalhesEixos.AnyAsync(link =>
+                link.Detalhes.FkIdDDacoes == action.IdDAcoes
+                && link.FkIdEixo == prerequisites.AxisIds[0])));
+            Assert.True(await Fixture.QueryAsync(db => db.DAAtores.AnyAsync(link =>
+                link.FkIdDDacoes == action.IdDAcoes
+                && link.FK_id_Atores == prerequisites.ActorId)));
         });
 
     private async Task<DiaryPrerequisites> GetPrerequisitesAsync() =>
@@ -173,7 +173,9 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
                 .OrderBy(community => community.Id_Comunidade)
                 .Select(community => community.Id_Comunidade).FirstAsync(),
             await db.Eixos.OrderBy(axis => axis.IdEixo)
-                .Select(axis => axis.IdEixo).Take(2).ToArrayAsync()));
+                .Select(axis => axis.IdEixo).Take(2).ToArrayAsync(),
+            await db.Atores.Where(actor => actor.Ativo == "S")
+                .OrderBy(actor => actor.IdAtores).Select(actor => actor.IdAtores).FirstAsync()));
 
-    private sealed record DiaryPrerequisites(int CommunityId, int[] AxisIds);
+    private sealed record DiaryPrerequisites(int CommunityId, int[] AxisIds, int ActorId);
 }

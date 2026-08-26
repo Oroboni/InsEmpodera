@@ -36,7 +36,7 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("select[name=FkIdPerfil]").SelectOptionAsync("1");
             await page.Locator("select[name=Genero]").SelectOptionAsync("2");
             await page.Locator("input[name=Ocupacao]").FillAsync("Qualidade E2E");
-            await page.Locator("select[name=IdiomaPreferido]").SelectOptionAsync("1");
+            await Assertions.Expect(page.Locator("[name=IdiomaPreferido]")).ToHaveCountAsync(0);
             await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Usuário" }).ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
 
@@ -47,6 +47,10 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
                 .Where(user => user.Email == email)
                 .Select(user => user.IdUsuario)
                 .SingleAsync());
+            Assert.Equal(IdiomaPreferido.Default, await Fixture.QueryAsync(db => db.Usuarios
+                .Where(user => user.IdUsuario == id)
+                .Select(user => user.IdiomaPreferido)
+                .SingleAsync()));
 
             var search = page.Locator("#searchUsersInput");
             await search.FillAsync(email);
@@ -109,12 +113,16 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("textarea[name=Descricao]").FillAsync("Criada por uma jornada real de navegador");
             await page.Locator("select[name=Status]").SelectOptionAsync("Em processo");
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath.StartsWith(
+                "/Comunidade/ComunidadesDetalhes/", StringComparison.OrdinalIgnoreCase));
 
             var id = await Fixture.QueryAsync(db => db.Comunidades
                 .Where(community => community.Nome == name)
                 .Select(community => community.Id_Comunidade)
                 .SingleAsync());
+            Assert.Equal($"/Comunidade/ComunidadesDetalhes/{id}", new Uri(page.Url).AbsolutePath,
+                ignoreCase: true);
+            await page.GotoAsync("/Comunidade");
             await Assertions.Expect(page.Locator(".comunidade-item").Filter(new() { HasText = name })).ToBeVisibleAsync();
 
             await page.Locator("#searchInput").FillAsync(name);
@@ -130,7 +138,7 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("input[name=Nome]").FillAsync(editedName);
             await page.Locator("textarea[name=Descricao]").FillAsync("Descrição alterada pelo navegador");
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/ComunidadesDetalhes/{id}");
 
             Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Comunidades
                 .Where(community => community.Id_Comunidade == id)
