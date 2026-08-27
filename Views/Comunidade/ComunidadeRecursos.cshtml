@@ -30,7 +30,8 @@
         </form>
 
         <a asp-controller="Services" asp-action="ExportRecursosComunidade" asp-route-id="@ViewBag.ComunidadeId"
-           class="atores-export-button" aria-label="Exportar recursos da comunidade para Excel"
+           class="atores-export-button" data-testid="exportar-recursos-comunidade"
+           aria-label="Exportar recursos da comunidade para Excel"
            title="Exportar recursos da comunidade para Excel">
             <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
         </a>

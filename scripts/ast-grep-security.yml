@@ -1,0 +1,47 @@
+id: csharp-dynamic-command-text
+language: CSharp
+severity: warning
+message: Revise SQL dinâmico e confirme que identificadores usam lista permitida e valores usam parâmetros.
+rule:
+  kind: assignment_expression
+  regex: '\.CommandText\s*='
+---
+id: csharp-raw-sql
+language: CSharp
+severity: error
+message: SQL bruto pode permitir injeção; prefira consulta parametrizada.
+rule:
+  kind: invocation_expression
+  regex: '\.(FromSqlRaw|ExecuteSqlRaw)\s*\('
+---
+id: csharp-process-start
+language: CSharp
+severity: error
+message: Execução de processo exige validação rigorosa de comando e argumentos.
+rule:
+  kind: invocation_expression
+  regex: '\bProcess\.Start\s*\('
+---
+id: csharp-binary-formatter
+language: CSharp
+severity: error
+message: BinaryFormatter permite desserialização insegura e não deve ser usado.
+rule:
+  kind: object_creation_expression
+  regex: '\bBinaryFormatter\s*\('
+---
+id: csharp-unvalidated-redirect
+language: CSharp
+severity: warning
+message: Confirme que o destino foi validado com IsLocalUrl ou use LocalRedirect.
+rule:
+  kind: invocation_expression
+  regex: '\bRedirect\s*\('
+---
+id: csharp-sensitive-data-logging
+language: CSharp
+severity: warning
+message: SensitiveDataLogging deve ficar restrito a ambientes locais e de teste.
+rule:
+  kind: invocation_expression
+  regex: '\.EnableSensitiveDataLogging\s*\('

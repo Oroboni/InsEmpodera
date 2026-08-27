@@ -1,4 +1,5 @@
 using System.Text;
+using InsEmpodera.E2ETests.Pages;
 using Microsoft.Playwright;
 using Xunit.Sdk;
 
@@ -14,6 +15,10 @@ public abstract class BrowserTestBase(E2ETestFixture fixture)
         BrowserNewContextOptions? options = null,
         bool allowNavigationHttpErrors = false)
     {
+        // Cada jornada começa com os mesmos dados conhecidos. Alterações feitas
+        // por um cenário não podem influenciar o resultado do cenário seguinte.
+        await Fixture.ResetDatabaseAsync();
+
         options ??= new BrowserNewContextOptions
         {
             BaseURL = Fixture.BaseUrl,
@@ -89,7 +94,7 @@ public abstract class BrowserTestBase(E2ETestFixture fixture)
             Fixture.ProjectRoot,
             "InsEmpodera.E2ETests",
             "TestResults",
-            "e2e-artifacts");
+            "evidencias-falhas");
         var safeName = string.Concat(scenario.Select(character =>
             char.IsLetterOrDigit(character) ? character : '-')).Trim('-');
 
@@ -101,9 +106,9 @@ public abstract class BrowserTestBase(E2ETestFixture fixture)
             {
                 var details = new StringBuilder();
                 if (pageErrors.Count > 0)
-                    details.AppendLine("JavaScript errors: " + string.Join(" | ", pageErrors));
+                    details.AppendLine("Erros de JavaScript: " + string.Join(" | ", pageErrors));
                 if (httpErrors.Count > 0)
-                    details.AppendLine("First-party HTTP errors: " + string.Join(" | ", httpErrors));
+                    details.AppendLine("Respostas HTTP com erro: " + string.Join(" | ", httpErrors));
                 throw new XunitException(details.ToString());
             }
 
@@ -126,28 +131,26 @@ public abstract class BrowserTestBase(E2ETestFixture fixture)
             }
             catch
             {
-                // Preserve the original assertion/Playwright exception.
+                // A falha ao gerar evidências não deve esconder a causa original.
             }
 
             throw new XunitException(
-                $"{exception.Message}{Environment.NewLine}" +
-                $"Screenshot: {screenshot}{Environment.NewLine}Trace: {trace}");
+                $"Jornada: {FriendlyScenarioName(scenario)}{Environment.NewLine}" +
+                $"Causa: {exception.Message}{Environment.NewLine}" +
+                $"Captura da tela: {screenshot}{Environment.NewLine}" +
+                $"Rastreamento do navegador: {trace}");
         }
     }
 
     protected static async Task LoginAsync(IPage page)
-    {
-        await page.GotoAsync("/Account");
-        await page.Locator("input[name=Email]").FillAsync(E2ETestFixture.AdminEmail);
-        await page.Locator("input[name=Password]").FillAsync(E2ETestFixture.AdminPassword);
-        await page.GetByRole(AriaRole.Button, new() { Name = "ENTRAR" }).ClickAsync();
-        await page.WaitForURLAsync(url =>
-        {
-            var path = new Uri(url).AbsolutePath;
-            return path == "/" || path.Equals("/Home/Index", StringComparison.OrdinalIgnoreCase);
-        });
-    }
+        => await new LoginPage(page).EntrarComoAdministradorAsync();
 
     protected static string Unique(string prefix) =>
         $"{prefix} {Guid.NewGuid():N}";
+
+    private static string FriendlyScenarioName(string scenario) =>
+        System.Text.RegularExpressions.Regex.Replace(
+            scenario.Replace('_', ' '),
+            "(?<=[a-z0-9])(?=[A-Z])",
+            " ");
 }

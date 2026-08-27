@@ -23,15 +23,15 @@ jobs:
 
     steps:
       - name: Baixar o código
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Preparar o .NET 9
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
         with:
           dotnet-version: 9.0.x
 
       - name: Cache do NuGet
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
@@ -39,14 +39,14 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Preparar o Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22.x
           cache: npm
           cache-dependency-path: Frontend.Tests/package-lock.json
 
       - name: Cache do Chromium do Playwright
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('InsEmpodera.E2ETests/InsEmpodera.E2ETests.csproj') }}
@@ -57,7 +57,7 @@ jobs:
 
       - name: Publicar resultados, cobertura e evidências de falha
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: resultados-testes-${{ github.run_attempt }}
           if-no-files-found: ignore
@@ -67,3 +67,48 @@ jobs:
             Frontend.Tests/coverage/**
             Frontend.Tests/vitest-results.json
             InsEmpodera.E2ETests/TestResults/**
+
+  banco-mysql:
+    name: Compatibilidade com MySQL 8
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testes_empodera
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Preparar o .NET 9
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Executar integrações no mesmo banco usado em produção
+        env:
+          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
+        run: >-
+          dotnet test InsEmpodera.Tests/InsEmpodera.Tests.csproj
+          --configuration Release
+          --logger "console;verbosity=normal"
+          --logger "trx;LogFileName=resultado-compatibilidade-mysql.trx"
+          --results-directory TestResults/04-mysql
+
+      - name: Publicar resultado do banco MySQL
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: resultado-compatibilidade-mysql-${{ github.run_attempt }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: TestResults/04-mysql/**

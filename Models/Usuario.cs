@@ -20,6 +20,22 @@ namespace Empodera.Models
         [EnumDataType(typeof(IdiomaPreferido))]
         public IdiomaPreferido IdiomaPreferido { get; set; } = IdiomaPreferido.Default;
         public int FkIdPerfil { get; set; }
+
+        // Campos mantidos pelo ASP.NET Core Identity através do EmpoderaUserStore.
+        // Os dados de domínio e o perfil existente continuam sendo a fonte das
+        // permissões funcionais do sistema.
+        public string UserName { get; set; } = null!;
+        public string NormalizedUserName { get; set; } = null!;
+        public string NormalizedEmail { get; set; } = null!;
+        public bool EmailConfirmed { get; set; }
+        public string SecurityStamp { get; set; } = Guid.NewGuid().ToString("N");
+        public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString("N");
+        public string? PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
+        public bool TwoFactorEnabled { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
+        public bool LockoutEnabled { get; set; } = true;
+        public int AccessFailedCount { get; set; }
         
         public Perfil Perfil { get; set; } = null!;
         public List<Comunidade> Comunidades { get; set; } = new();

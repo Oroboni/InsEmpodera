@@ -8,7 +8,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Rastreador — visitar todos os links internos sem erros de página ou HTTP")]
     public Task AuthenticatedGetCrawler_VisitsEveryRenderedInternalLinkWithoutHttpOrPageErrors() =>
         RunInBrowserAsync(
             nameof(AuthenticatedGetCrawler_VisitsEveryRenderedInternalLinkWithoutHttpOrPageErrors),
@@ -75,7 +75,7 @@ public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : B
                     $"O crawler visitou apenas {visited.Count} páginas e não cobriu o menu principal.");
             });
 
-    [Fact]
+    [Fact(DisplayName = "Acessibilidade — telas principais têm IDs, rótulos, ações e imagens válidos")]
     public Task KeyScreens_HaveUniqueIdsLabelsAccessibleActionsAndImageAlternatives() =>
         RunInBrowserAsync(
             nameof(KeyScreens_HaveUniqueIdsLabelsAccessibleActionsAndImageAlternatives),
@@ -165,7 +165,7 @@ public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : B
                     + string.Join(Environment.NewLine, violations));
             });
 
-    [Fact]
+    [Fact(DisplayName = "Scripts — carregar jQuery local antes dos validadores")]
     public Task ValidationScripts_LoadLocalJQueryBeforeValidationPlugins() =>
         RunInBrowserAsync(nameof(ValidationScripts_LoadLocalJQueryBeforeValidationPlugins), async page =>
         {
@@ -185,7 +185,7 @@ public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : B
                 "() => !!window.jQuery && !!window.jQuery.validator"));
         });
 
-    [Fact]
+    [Fact(DisplayName = "CSS das páginas — toda declaração aponta para um arquivo com a capitalização correta")]
     public void EveryExplicitPageCss_ResolvesToARealAsset()
     {
         var viewsRoot = Path.Combine(Fixture.ProjectRoot, "Views");
@@ -207,7 +207,7 @@ public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : B
                 $"{declaration.View} declara PageCSS '{declaration.Name}', mas {expectedName} não existe com a mesma capitalização.");
         }
     }
-    [Fact]
+    [Fact(DisplayName = "Acessibilidade móvel — navegação por teclado sem rolagem horizontal")]
     public Task MobileNavigation_IsFocusableAndOperableWithKeyboard_WithoutHorizontalOverflow() =>
         RunInBrowserAsync(
             nameof(MobileNavigation_IsFocusableAndOperableWithKeyboard_WithoutHorizontalOverflow),

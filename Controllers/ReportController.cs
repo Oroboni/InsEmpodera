@@ -42,6 +42,7 @@ public class ReportController : Controller
     // POST: /Report/RelatorioComunidade
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequestSizeLimit((20 * 1024 * 1024) + (1024 * 1024))]
     public async Task<IActionResult> RelatorioComunidade(IList<IFormFile> files)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -60,6 +61,9 @@ public class ReportController : Controller
             return RedirectToAction("Index", "Account");
 
         const long maxUploadBytes = 20 * 1024 * 1024;
+        if (files.Count > 5 || files.Where(file => file is not null).Sum(file => file.Length) > maxUploadBytes)
+            return BadRequest("Envie no máximo 5 planilhas, totalizando até 20 MB.");
+
         foreach (var file in files.Where(file => file is not null && file.Length > 0))
         {
             var submittedFileName = Path.GetFileName(file.FileName);
@@ -121,6 +125,7 @@ public class ReportController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequestSizeLimit(101 * 1024 * 1024)]
     public async Task<IActionResult> ImportarBackup(IFormFile? backupFile)
     {
         if (HttpContext.Session.GetString("Email") == null)

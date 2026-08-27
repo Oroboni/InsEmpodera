@@ -5,9 +5,12 @@ namespace InsEmpodera.Tests.Architecture;
 public sealed class SessionSecurityConfigurationTests
 {
     [Fact]
-    public void SessionCookie_IsExplicitlyHardenedAndProductionForcesSecureTransport()
+    public void IdentityCookie_IsExplicitlyHardenedAndProductionForcesSecureTransport()
     {
-        var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "Program.cs"));
+        var root = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(root, "Program.cs")) +
+                     File.ReadAllText(Path.Combine(
+                         root, "Services", "Identity", "IdentityServiceCollectionExtensions.cs"));
 
         Assert.Contains("options.Cookie.HttpOnly = true", source, StringComparison.Ordinal);
         Assert.Contains("options.Cookie.SameSite = SameSiteMode.Lax", source, StringComparison.Ordinal);
@@ -15,7 +18,8 @@ public sealed class SessionSecurityConfigurationTests
         Assert.Contains("CookieSecurePolicy.Always", source, StringComparison.Ordinal);
         Assert.Contains("builder.Environment.IsDevelopment()", source, StringComparison.Ordinal);
         Assert.Contains("builder.Environment.IsEnvironment(\"Testing\")", source, StringComparison.Ordinal);
-        Assert.Contains("options.IdleTimeout = TimeSpan.FromMinutes(30)", source, StringComparison.Ordinal);
+        Assert.Contains("options.ExpireTimeSpan = TimeSpan.FromMinutes(30)", source, StringComparison.Ordinal);
+        Assert.Contains("options.SlidingExpiration = true", source, StringComparison.Ordinal);
     }
 
     private static string FindRepositoryRoot()

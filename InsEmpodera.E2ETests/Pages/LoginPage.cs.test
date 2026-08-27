@@ -1,0 +1,28 @@
+using Microsoft.Playwright;
+
+namespace InsEmpodera.E2ETests.Pages;
+
+public sealed class LoginPage(IPage page)
+{
+    public async Task AbrirAsync() => await page.GotoAsync("/Account");
+
+    public async Task EntrarAsync(string email, string senha)
+    {
+        await page.GetByTestId("login-email").FillAsync(email);
+        await page.GetByTestId("login-senha").FillAsync(senha);
+        await page.GetByTestId("login-entrar").ClickAsync();
+    }
+
+    public async Task EntrarComoAdministradorAsync()
+    {
+        await AbrirAsync();
+        await EntrarAsync(
+            Infrastructure.E2ETestFixture.AdminEmail,
+            Infrastructure.E2ETestFixture.AdminPassword);
+        await page.WaitForURLAsync(url =>
+        {
+            var path = new Uri(url).AbsolutePath;
+            return path == "/" || path.Equals("/Home/Index", StringComparison.OrdinalIgnoreCase);
+        });
+    }
+}

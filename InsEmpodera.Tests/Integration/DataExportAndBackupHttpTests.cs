@@ -17,6 +17,26 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
 
     public DataExportAndBackupHttpTests(EmpoderaWebApplicationFactory factory) => _factory = factory;
 
+    [Theory(DisplayName = "Exportações protegidas redirecionam visitantes para o login")]
+    [InlineData("/Services/ExportComunidades")]
+    [InlineData("/Services/ExportComunidadeCompleta?id=1")]
+    [InlineData("/Services/ExportAtoresComunidade?id=1")]
+    [InlineData("/Services/ExportAtividadesComunidade?id=1")]
+    [InlineData("/Services/ExportRecursosComunidade?id=1")]
+    [InlineData("/Services/ExportAtores")]
+    [InlineData("/Services/ExportDiariosCampo")]
+    [InlineData("/Services/ExportFichasPrimeiroContato")]
+    [InlineData("/Services/ExportBackupGeral")]
+    public async Task ExportEndpoints_AnonymousAccessAlwaysRedirectsToLogin(string path)
+    {
+        using var client = HttpFlowTestSupport.CreateClient(_factory);
+        using var response = await client.GetAsync(path);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/Account", response.Headers.Location?.OriginalString);
+        Assert.NotEqual(SpreadsheetMediaType, response.Content.Headers.ContentType?.MediaType);
+    }
+
     [Fact]
     public async Task CompleteCommunityExport_ContainsEveryDependencyGroupAndPrimaryKeyHeaders()
     {
@@ -112,11 +132,16 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
     public async Task GeneralBackup_ContainsAllMappedTablesAndCanBeImportedBackWithoutChangingExistingRows()
     {
         var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+        var actorName = $"Ator João — inclusão 🌎 {Guid.NewGuid():N}";
+        var longDescription = string.Concat(Enumerable.Repeat("Informação comunitária com acentos. ", 1_200));
         var restoredActorId = await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var actor = new Atores
             {
-                Nome = $"Ator booleano {Guid.NewGuid():N}",
+                Nome = actorName,
+                PapelSocial1 = longDescription,
+                PapelSocial2 = null,
+                Telefone = string.Empty,
                 DaEquipe = true,
                 Rope = false,
                 Lopiniao = true,
@@ -132,6 +157,19 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
         });
         using var client = await AuthenticatedClientAsync(admin);
         var countsBefore = await GetTableCountsAsync();
+
+        using (var actorExport = await client.GetAsync("/Services/ExportAtores"))
+        {
+            Assert.Equal(HttpStatusCode.OK, actorExport.StatusCode);
+            await using var actorStream = await actorExport.Content.ReadAsStreamAsync();
+            using var actorWorkbook = new XLWorkbook(actorStream);
+            var longTexts = actorWorkbook.Worksheet("TextosLongos");
+            var reconstructed = string.Concat(longTexts.RowsUsed().Skip(1)
+                .Where(row => row.Cell(1).GetString() == "Atores" && row.Cell(3).GetString() == nameof(Atores.PapelSocial1))
+                .OrderBy(row => row.Cell(4).GetValue<int>())
+                .Select(row => row.Cell(5).GetString()));
+            Assert.Equal(longDescription, reconstructed);
+        }
 
         using var download = await client.GetAsync("/Services/ExportBackupGeral");
 
@@ -168,6 +206,17 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
         var html = await resultPage.Content.ReadAsStringAsync();
         Assert.Contains("1 registros novos importados", html, StringComparison.Ordinal);
         Assert.Equal(countsBefore, await GetTableCountsAsync());
+        var restoredActor = await HttpFlowTestSupport.InDatabaseAsync(_factory, db => db.Atores
+            .AsNoTracking()
+            .SingleAsync(actor => actor.IdAtores == restoredActorId));
+        Assert.Equal(actorName, restoredActor.Nome);
+        Assert.Equal(longDescription, restoredActor.PapelSocial1);
+        Assert.Null(restoredActor.PapelSocial2);
+        Assert.Equal(string.Empty, restoredActor.Telefone);
+        Assert.True(restoredActor.DaEquipe);
+        Assert.False(restoredActor.Rope);
+        Assert.True(restoredActor.Lopiniao);
+        Assert.False(restoredActor.Mcomunidade);
 
         using var secondImport = await ImportBackupAsync(client, bytes);
         HttpFlowTestSupport.AssertRedirect(secondImport, "/Report");

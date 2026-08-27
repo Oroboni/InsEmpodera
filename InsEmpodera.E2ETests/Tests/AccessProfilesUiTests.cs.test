@@ -9,7 +9,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Perfis de acesso — criar, pesquisar, editar permissões e confirmar persistência")]
     public Task CreateSearchEditPermissions_AndVerifyPersistence() =>
         RunInBrowserAsync(nameof(CreateSearchEditPermissions_AndVerifyPersistence), async page =>
         {
@@ -34,10 +34,10 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             Assert.Equal("/AccessProfile/Create", new Uri(page.Url).AbsolutePath);
 
             var permissions = page.Locator(".permission-table input[type=checkbox]");
-            await page.GetByRole(AriaRole.Button, new() { Name = "Marcar Todas", Exact = true }).ClickAsync();
+            await page.GetByTestId("permissions-select-all").ClickAsync();
             Assert.Equal(await permissions.CountAsync(), await permissions.EvaluateAllAsync<int>(
                 "items => items.filter(item => item.checked).length"));
-            await page.GetByRole(AriaRole.Button, new() { Name = "Desmarcar Todas", Exact = true }).ClickAsync();
+            await page.GetByTestId("permissions-clear-all").ClickAsync();
             Assert.Equal(0, await permissions.EvaluateAllAsync<int>(
                 "items => items.filter(item => item.checked).length"));
 
@@ -96,7 +96,7 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             Assert.Equal("S", editedPermission.PodeDetalhar);
         });
 
-    [Fact]
+    [Fact(DisplayName = "Perfis de acesso — excluir perfil livre e proteger perfil usado")]
     public Task Profile_CreateEditDeleteUnused_AndHideDeleteForProfileInUse() =>
         RunInBrowserAsync(nameof(Profile_CreateEditDeleteUnused_AndHideDeleteForProfileInUse), async page =>
         {

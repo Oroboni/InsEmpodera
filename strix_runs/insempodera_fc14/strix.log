@@ -1,0 +1,1370 @@
+2026-08-27 01:08:11.042 INFO    insempodera_fc14 - strix.core.runner: Starting Strix scan insempodera_fc14 (image=ghcr.io/usestrix/strix-sandbox:1.3.0, max_turns=500, interactive=True, run_dir=/mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14)
+2026-08-27 01:08:11.043 INFO    insempodera_fc14 - strix.core.runner: LLM model resolved: gemini/gemini-3.1-flash-lite
+2026-08-27 01:08:11.045 INFO    insempodera_fc14 - strix.core.runner: Bringing up sandbox session for scan insempodera_fc14
+2026-08-27 01:08:11.045 DEBUG   insempodera_fc14 - strix.runtime.backends: Selected sandbox backend: docker
+2026-08-27 01:08:11.050 INFO    insempodera_fc14 - strix.runtime.session_manager: Creating sandbox session for scan insempodera_fc14 (backend=docker, image=ghcr.io/usestrix/strix-sandbox:1.3.0)
+2026-08-27 01:08:11.190 DEBUG   insempodera_fc14 - strix.runtime.docker_client: Creating sandbox container: image=ghcr.io/usestrix/strix-sandbox:1.3.0 caps=['NET_ADMIN', 'NET_RAW'] exposed_ports=[48080]
+2026-08-27 01:08:11.378 INFO    insempodera_fc14 - strix.runtime.docker_client: Sandbox container created: id=67745310a47b image=ghcr.io/usestrix/strix-sandbox:1.3.0
+2026-08-27 01:08:12.297 DEBUG   insempodera_fc14 - strix.runtime.session_manager: Caido host endpoint resolved: http://127.0.0.1:62154
+2026-08-27 01:08:12.297 INFO    insempodera_fc14 - strix.runtime.caido_bootstrap: Bootstrapping Caido client (host=http://127.0.0.1:62154, container=http://127.0.0.1:48080)
+2026-08-27 01:08:12.536 INFO    insempodera_fc14 - strix.runtime.caido_bootstrap: Caido project selected: c58fb169-4955-45ee-9098-4f0c1b29e613
+2026-08-27 01:08:12.537 INFO    insempodera_fc14 - strix.runtime.session_manager: Sandbox session for scan insempodera_fc14 ready and cached
+2026-08-27 01:08:12.538 INFO    insempodera_fc14 - strix.core.runner: Sandbox ready for scan insempodera_fc14
+2026-08-27 01:08:12.541 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: scan_modes/deep -> deep
+2026-08-27 01:08:12.544 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/agent_browser -> agent_browser
+2026-08-27 01:08:12.547 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/python -> python
+2026-08-27 01:08:12.550 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: coordination/root_agent -> root_agent
+2026-08-27 01:08:12.552 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: coordination/source_aware_whitebox -> source_aware_whitebox
+2026-08-27 01:08:12.556 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: custom/source_aware_sast -> source_aware_sast
+2026-08-27 01:08:12.558 DEBUG   insempodera_fc14 - strix.skills: load_skills: 6 skill(s) resolved
+2026-08-27 01:08:12.586 DEBUG   insempodera_fc14 - strix.agents.prompt: render_system_prompt: scan_mode=deep root=True whitebox=True skills=6 prompt_len=86405
+2026-08-27 01:08:12.587 INFO    insempodera_fc14 - strix.agents.factory: Built root agent 'Root Agent' (skills=0, tools=31, scan_mode=deep, whitebox=True)
+2026-08-27 01:08:12.588 INFO    insempodera_fc14 - strix.core.agents: agent.register ecfad5b9 (Root Agent) parent=-
+2026-08-27 01:08:12.803 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating trace
+2026-08-27 01:08:12.805 DEBUG   insempodera_fc14 - openai.agents: Setting current trace: no-op
+2026-08-27 01:08:12.805 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:12.847 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:12.848 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Root Agent
+2026-08-27 01:08:12.848 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:12.850 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:08:12.850 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:12.853 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:13.023 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:08:13.032 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:08:13.033 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:08:13.045 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:08:13.050 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:08:13.051 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:08:13.679 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:08:13.681 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:08:13.685 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:08:13.688 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:08:13.687 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:08:13.686 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:08:27.373 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:08:27.381 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:08:27.382 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:08:27.384 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:27.385 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:08:27.386 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:08:27.387 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:08:27.444 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Root Agent
+2026-08-27 01:08:27.445 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:27.447 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:08:27.448 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:27.449 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:31.080 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:08:31.088 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:08:31.089 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:08:31.090 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:35.329 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:08:35.402 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Root Agent
+2026-08-27 01:08:35.402 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:35.404 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:08:35.404 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:35.406 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:38.970 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:08:38.978 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:08:38.979 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:08:38.979 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:38.980 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:08:38.981 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:08:38.981 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:08:39.032 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Root Agent
+2026-08-27 01:08:39.033 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:39.034 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:08:39.035 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:39.037 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:42.589 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:08:42.596 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:08:42.597 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:08:42.598 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:42.599 DEBUG   insempodera_fc14 - openai.agents: Invoking tool create_note
+2026-08-27 01:08:42.607 DEBUG   insempodera_fc14 - openai.agents: Tool create_note completed.
+2026-08-27 01:08:42.609 DEBUG   insempodera_fc14 - openai.agents: Turn 4 complete, next_step type=NextStepRunAgain
+2026-08-27 01:08:42.664 DEBUG   insempodera_fc14 - openai.agents: Starting turn 5, current_agent=Root Agent
+2026-08-27 01:08:42.665 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:42.666 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:08:42.667 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:42.669 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:43.428 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:08:45.430 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:45.432 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:46.155 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:08:50.157 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:50.159 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:50.877 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:08:58.877 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:08:58.879 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:08:59.609 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:09:15.611 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:15.613 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:19.045 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:09:19.053 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:09:19.054 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:09:19.055 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.055 DEBUG   insempodera_fc14 - openai.agents: Invoking tool create_agent
+2026-08-27 01:09:19.059 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: source_aware_sast -> source_aware_sast
+2026-08-27 01:09:19.062 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: frameworks/django -> django
+2026-08-27 01:09:19.064 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: scan_modes/deep -> deep
+2026-08-27 01:09:19.067 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/agent_browser -> agent_browser
+2026-08-27 01:09:19.069 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/python -> python
+2026-08-27 01:09:19.071 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: coordination/source_aware_whitebox -> source_aware_whitebox
+2026-08-27 01:09:19.074 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: custom/source_aware_sast -> source_aware_sast
+2026-08-27 01:09:19.076 DEBUG   insempodera_fc14 - strix.skills: load_skills: 6 skill(s) resolved
+2026-08-27 01:09:19.089 DEBUG   insempodera_fc14 - strix.agents.prompt: render_system_prompt: scan_mode=deep root=False whitebox=True skills=6 prompt_len=91028
+2026-08-27 01:09:19.090 INFO    insempodera_fc14 - strix.agents.factory: Built child agent 'Code Analysis Agent' (skills=2, tools=31, scan_mode=deep, whitebox=True)
+2026-08-27 01:09:19.091 INFO    insempodera_fc14 - strix.core.agents: agent.register 58b783da (Code Analysis Agent) parent=ecfad5b9
+2026-08-27 01:09:19.122 INFO    insempodera_fc14 - strix.tools.agents_graph.tools: create_agent: spawned 58b783da (Code Analysis Agent) parent=ecfad5b9 skills=2 task_len=345
+2026-08-27 01:09:19.122 DEBUG   insempodera_fc14 - openai.agents: Tool create_agent completed.
+2026-08-27 01:09:19.125 DEBUG   insempodera_fc14 - openai.agents: Turn 5 complete, next_step type=NextStepRunAgain
+2026-08-27 01:09:19.197 DEBUG   insempodera_fc14 - openai.agents: Starting turn 6, current_agent=Root Agent
+2026-08-27 01:09:19.197 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.199 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:09:19.200 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.202 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:19.310 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.349 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.350 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Code Analysis Agent
+2026-08-27 01:09:19.351 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.352 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:09:19.352 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:19.354 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:19.534 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:19.535 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:19.536 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:19.537 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:19.538 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:19.559 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:19.560 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:09:20.179 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:20.180 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:20.182 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:20.183 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:20.197 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:20.209 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:20.210 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:09:21.451 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:09:21.459 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:09:21.460 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:09:21.461 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:21.462 DEBUG   insempodera_fc14 - openai.agents: Invoking tool view_agent_graph
+2026-08-27 01:09:21.462 DEBUG   insempodera_fc14 - openai.agents: Tool view_agent_graph completed.
+2026-08-27 01:09:21.463 DEBUG   insempodera_fc14 - openai.agents: Turn 6 complete, next_step type=NextStepRunAgain
+2026-08-27 01:09:21.522 DEBUG   insempodera_fc14 - openai.agents: Starting turn 7, current_agent=Root Agent
+2026-08-27 01:09:21.523 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:21.525 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:09:21.525 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:21.527 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:22.272 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:09:22.283 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:09:22.284 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:09:22.285 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:24.870 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:09:24.884 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:09:24.885 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:09:24.886 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:24.887 DEBUG   insempodera_fc14 - openai.agents: Invoking tool wait_for_agents
+2026-08-27 01:09:24.888 INFO    insempodera_fc14 - strix.core.agents: agent.status ecfad5b9=waiting
+2026-08-27 01:09:24.899 DEBUG   insempodera_fc14 - openai.agents: Tool wait_for_agents completed.
+2026-08-27 01:09:24.900 DEBUG   insempodera_fc14 - openai.agents: Turn 7 complete, next_step type=NextStepFinalOutput
+2026-08-27 01:09:24.948 DEBUG   insempodera_fc14 - openai.agents: Resetting current trace
+2026-08-27 01:09:26.053 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:09:26.123 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Code Analysis Agent
+2026-08-27 01:09:26.124 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:26.125 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:09:26.126 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:26.128 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:26.858 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:09:28.860 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:28.862 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:29.586 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:09:33.589 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:33.591 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:34.303 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:09:42.304 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:42.306 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:43.038 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:09:59.039 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:09:59.041 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:09:59.766 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:10:31.767 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:10:31.769 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:10:46.990 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:10:46.998 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:10:46.998 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:10:46.999 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:10:47.124 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:10:47.178 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Code Analysis Agent
+2026-08-27 01:10:47.179 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:10:47.181 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:10:47.182 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:10:47.183 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:11:00.125 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:11:00.134 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:11:00.135 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:11:00.136 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:11:05.197 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:11:05.271 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Code Analysis Agent
+2026-08-27 01:11:05.272 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:11:05.274 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:11:05.274 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:11:05.276 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:11:19.881 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:11:19.894 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:11:19.895 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:11:19.896 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:11:29.914 DEBUG   insempodera_fc14 - openai.agents: Turn 4 complete, next_step type=NextStepRunAgain
+2026-08-27 01:11:29.971 DEBUG   insempodera_fc14 - openai.agents: Starting turn 5, current_agent=Code Analysis Agent
+2026-08-27 01:11:29.971 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:11:29.973 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:11:29.973 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:11:29.975 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:08.764 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:12:08.775 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:12:08.776 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:12:08.778 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:18.809 DEBUG   insempodera_fc14 - openai.agents: Turn 5 complete, next_step type=NextStepRunAgain
+2026-08-27 01:12:18.940 DEBUG   insempodera_fc14 - openai.agents: Starting turn 6, current_agent=Code Analysis Agent
+2026-08-27 01:12:18.941 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:18.944 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:12:18.946 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:18.950 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:24.517 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:12:24.530 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:12:24.531 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:12:24.532 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:24.678 DEBUG   insempodera_fc14 - openai.agents: Turn 6 complete, next_step type=NextStepRunAgain
+2026-08-27 01:12:24.747 DEBUG   insempodera_fc14 - openai.agents: Starting turn 7, current_agent=Code Analysis Agent
+2026-08-27 01:12:24.748 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:24.749 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:12:24.750 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:24.752 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:29.760 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:12:29.772 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:12:29.774 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:12:29.776 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:30.007 DEBUG   insempodera_fc14 - openai.agents: Turn 7 complete, next_step type=NextStepRunAgain
+2026-08-27 01:12:30.089 DEBUG   insempodera_fc14 - openai.agents: Starting turn 8, current_agent=Code Analysis Agent
+2026-08-27 01:12:30.090 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:30.093 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:12:30.094 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:30.098 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:34.963 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:12:34.975 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:12:34.977 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:12:34.982 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:35.152 DEBUG   insempodera_fc14 - openai.agents: Turn 8 complete, next_step type=NextStepRunAgain
+2026-08-27 01:12:35.219 DEBUG   insempodera_fc14 - openai.agents: Starting turn 9, current_agent=Code Analysis Agent
+2026-08-27 01:12:35.220 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:35.222 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:12:35.223 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:35.226 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:49.243 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:12:49.255 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:12:49.256 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:12:49.259 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:49.423 DEBUG   insempodera_fc14 - openai.agents: Turn 9 complete, next_step type=NextStepRunAgain
+2026-08-27 01:12:49.507 DEBUG   insempodera_fc14 - openai.agents: Starting turn 10, current_agent=Code Analysis Agent
+2026-08-27 01:12:49.508 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:49.511 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:12:49.513 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:49.515 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:50.286 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:12:52.288 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:52.290 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:53.054 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:12:57.053 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:12:57.056 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:12:57.815 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:13:05.817 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:05.820 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:13:06.598 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:13:22.599 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:22.601 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:13:27.457 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:13:27.467 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:13:27.471 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:13:27.471 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=message class=ResponseOutputMessage
+2026-08-27 01:13:27.473 DEBUG   insempodera_fc14 - openai.agents: Turn 10 complete, next_step type=NextStepFinalOutput
+2026-08-27 01:13:27.539 WARNING insempodera_fc14 - strix.core.execution: agent 58b783da ended a turn without a lifecycle tool call (interactive=True); forcing tool continuation (1/3): I have performed a comprehensive static analysis of the `/workspace/InsEmpodera` repository.  ### **Application Overview** This is an ASP.NET Core MVC application. It uses Entity Framework Core for data access, configured with both SQLite (for testing) and MySQL (for production). The application fol
+2026-08-27 01:13:27.711 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:27.761 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:27.762 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Code Analysis Agent
+2026-08-27 01:13:27.763 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:27.767 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:13:27.768 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:27.770 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:13:39.122 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:13:39.137 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:13:39.141 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:13:39.142 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:13:39.143 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:39.144 DEBUG   insempodera_fc14 - openai.agents: Invoking tool agent_finish
+2026-08-27 01:13:39.157 INFO    insempodera_fc14 - strix.core.agents: agent.status 58b783da=completed
+2026-08-27 01:13:39.167 INFO    insempodera_fc14 - strix.tools.agents_graph.tools: agent_finish: 58b783da success=True findings=3 parent_notified=True
+2026-08-27 01:13:39.168 DEBUG   insempodera_fc14 - openai.agents: Tool agent_finish completed.
+2026-08-27 01:13:39.170 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepFinalOutput
+2026-08-27 01:13:39.361 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating trace
+2026-08-27 01:13:39.364 DEBUG   insempodera_fc14 - openai.agents: Setting current trace: no-op
+2026-08-27 01:13:39.365 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:39.409 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:39.410 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Root Agent
+2026-08-27 01:13:39.410 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:39.412 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:13:39.412 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:39.414 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:13:50.862 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:13:50.872 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:13:50.874 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:13:50.875 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:50.876 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:13:50.877 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:13:50.878 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:13:50.938 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Root Agent
+2026-08-27 01:13:50.938 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:50.941 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:13:50.941 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:50.945 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:13:59.760 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:13:59.769 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:13:59.770 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:13:59.771 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:59.772 DEBUG   insempodera_fc14 - openai.agents: Invoking tool create_todo
+2026-08-27 01:13:59.782 DEBUG   insempodera_fc14 - openai.agents: Tool create_todo completed.
+2026-08-27 01:13:59.783 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:13:59.846 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Root Agent
+2026-08-27 01:13:59.846 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:59.850 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:13:59.850 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:13:59.852 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:00.584 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:14:02.585 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:02.588 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:03.027 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:14:07.028 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:07.030 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:08.046 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:14:16.048 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:16.051 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:24.913 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:14:24.927 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:14:24.928 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:14:24.929 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:24.930 DEBUG   insempodera_fc14 - openai.agents: Invoking tool create_agent
+2026-08-27 01:14:24.936 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/authentication_jwt -> authentication_jwt
+2026-08-27 01:14:24.941 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/broken_function_level_authorization -> broken_function_level_authorization
+2026-08-27 01:14:24.944 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: scan_modes/deep -> deep
+2026-08-27 01:14:24.947 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/agent_browser -> agent_browser
+2026-08-27 01:14:24.950 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/python -> python
+2026-08-27 01:14:24.953 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: coordination/source_aware_whitebox -> source_aware_whitebox
+2026-08-27 01:14:24.956 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: custom/source_aware_sast -> source_aware_sast
+2026-08-27 01:14:24.957 DEBUG   insempodera_fc14 - strix.skills: load_skills: 7 skill(s) resolved
+2026-08-27 01:14:24.978 DEBUG   insempodera_fc14 - strix.agents.prompt: render_system_prompt: scan_mode=deep root=False whitebox=True skills=7 prompt_len=96582
+2026-08-27 01:14:24.979 INFO    insempodera_fc14 - strix.agents.factory: Built child agent 'Auth Analysis Agent' (skills=2, tools=31, scan_mode=deep, whitebox=True)
+2026-08-27 01:14:24.979 INFO    insempodera_fc14 - strix.core.agents: agent.register 35bdaed3 (Auth Analysis Agent) parent=ecfad5b9
+2026-08-27 01:14:25.012 INFO    insempodera_fc14 - strix.tools.agents_graph.tools: create_agent: spawned 35bdaed3 (Auth Analysis Agent) parent=ecfad5b9 skills=2 task_len=213
+2026-08-27 01:14:25.012 DEBUG   insempodera_fc14 - openai.agents: Tool create_agent completed.
+2026-08-27 01:14:25.017 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:14:25.091 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Root Agent
+2026-08-27 01:14:25.092 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:25.094 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:14:25.095 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:25.097 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:25.235 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:25.276 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:25.277 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Analysis Agent
+2026-08-27 01:14:25.278 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:25.279 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:14:25.279 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:25.282 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:25.440 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:25.441 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:25.442 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:25.443 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:25.444 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:25.445 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:25.449 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:26.017 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:14:26.485 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:26.487 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:26.487 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:26.492 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:26.492 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:26.524 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:26.525 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:28.020 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:28.022 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:33.248 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:14:33.257 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:14:33.258 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:14:33.259 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.260 DEBUG   insempodera_fc14 - openai.agents: Invoking tool create_agent
+2026-08-27 01:14:33.263 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/insecure_file_uploads -> insecure_file_uploads
+2026-08-27 01:14:33.265 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/path_traversal_lfi_rfi -> path_traversal_lfi_rfi
+2026-08-27 01:14:33.268 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/business_logic -> business_logic
+2026-08-27 01:14:33.271 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: scan_modes/deep -> deep
+2026-08-27 01:14:33.273 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/agent_browser -> agent_browser
+2026-08-27 01:14:33.275 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/python -> python
+2026-08-27 01:14:33.278 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: coordination/source_aware_whitebox -> source_aware_whitebox
+2026-08-27 01:14:33.280 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: custom/source_aware_sast -> source_aware_sast
+2026-08-27 01:14:33.282 DEBUG   insempodera_fc14 - strix.skills: load_skills: 8 skill(s) resolved
+2026-08-27 01:14:33.297 DEBUG   insempodera_fc14 - strix.agents.prompt: render_system_prompt: scan_mode=deep root=False whitebox=True skills=8 prompt_len=107112
+2026-08-27 01:14:33.298 INFO    insempodera_fc14 - strix.agents.factory: Built child agent 'File & Logic Agent' (skills=3, tools=31, scan_mode=deep, whitebox=True)
+2026-08-27 01:14:33.298 INFO    insempodera_fc14 - strix.core.agents: agent.register cb72668f (File & Logic Agent) parent=ecfad5b9
+2026-08-27 01:14:33.330 INFO    insempodera_fc14 - strix.tools.agents_graph.tools: create_agent: spawned cb72668f (File & Logic Agent) parent=ecfad5b9 skills=3 task_len=262
+2026-08-27 01:14:33.331 DEBUG   insempodera_fc14 - openai.agents: Tool create_agent completed.
+2026-08-27 01:14:33.336 DEBUG   insempodera_fc14 - openai.agents: Turn 4 complete, next_step type=NextStepRunAgain
+2026-08-27 01:14:33.411 DEBUG   insempodera_fc14 - openai.agents: Starting turn 5, current_agent=Root Agent
+2026-08-27 01:14:33.412 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.414 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:14:33.414 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.416 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:33.561 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.608 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.609 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=File & Logic Agent
+2026-08-27 01:14:33.610 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.614 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:14:33.615 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:33.617 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:33.756 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.759 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.760 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.760 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.761 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.758 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.764 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:33.769 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:14:34.161 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:14:34.389 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.390 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.395 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.402 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.404 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.403 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.407 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:34.406 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:14:35.161 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:14:36.163 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:36.165 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:36.730 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:14:36.742 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:14:36.746 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:14:36.746 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:14:36.747 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:36.891 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:14:36.915 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:14:36.964 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Auth Analysis Agent
+2026-08-27 01:14:36.965 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:36.967 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:14:36.968 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:36.969 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:37.163 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:37.166 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:37.602 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:14:37.733 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:14:39.735 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:39.737 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:40.459 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:14:40.917 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:40.919 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:41.581 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:14:41.603 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:41.605 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:42.337 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:14:44.460 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:44.463 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:45.221 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:14:49.583 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:49.586 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:49.989 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:14:50.340 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:50.342 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:51.086 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:14:53.223 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:14:53.225 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:14:53.967 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:15:05.989 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:05.991 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:06.603 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:15:07.088 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:07.090 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:07.826 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:15:09.968 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:09.970 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:22.020 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:15:22.029 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:15:22.034 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:15:22.034 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:15:22.035 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:22.161 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:15:22.229 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Auth Analysis Agent
+2026-08-27 01:15:22.230 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:22.231 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:15:22.232 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:22.234 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:34.260 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:15:34.270 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:15:34.274 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:15:34.277 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:15:34.278 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:34.412 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:15:34.484 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Auth Analysis Agent
+2026-08-27 01:15:34.485 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:34.487 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:15:34.488 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:34.490 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:38.603 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:38.605 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:39.350 DEBUG   insempodera_fc14 - openai.agents: Resetting current trace
+2026-08-27 01:15:39.351 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for ecfad5b9; replaying turn (attempt 1/5, backoff 2.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 13.370918149s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "13s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 13.370918149s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "13s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:15:39.826 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:39.828 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:40.563 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for cb72668f; replaying turn (attempt 1/5, backoff 2.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 12.155523797s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "12s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 12.155523797s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "12s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:15:41.451 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating trace
+2026-08-27 01:15:41.452 DEBUG   insempodera_fc14 - openai.agents: Setting current trace: no-op
+2026-08-27 01:15:41.453 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:41.499 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:41.500 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Root Agent
+2026-08-27 01:15:41.500 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:41.502 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:15:41.502 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:41.504 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:42.250 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:15:42.664 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:42.725 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:42.726 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=File & Logic Agent
+2026-08-27 01:15:42.726 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:42.729 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:15:42.731 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:42.733 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:43.289 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:15:43.303 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:15:43.308 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:15:43.309 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:15:43.310 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.311 DEBUG   insempodera_fc14 - openai.agents: Invoking tool create_agent
+2026-08-27 01:15:43.316 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/broken_function_level_authorization -> broken_function_level_authorization
+2026-08-27 01:15:43.319 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: vulnerabilities/idor -> idor
+2026-08-27 01:15:43.322 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: scan_modes/deep -> deep
+2026-08-27 01:15:43.324 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/agent_browser -> agent_browser
+2026-08-27 01:15:43.327 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: tooling/python -> python
+2026-08-27 01:15:43.330 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: coordination/source_aware_whitebox -> source_aware_whitebox
+2026-08-27 01:15:43.334 DEBUG   insempodera_fc14 - strix.skills: Loaded skill: custom/source_aware_sast -> source_aware_sast
+2026-08-27 01:15:43.335 DEBUG   insempodera_fc14 - strix.skills: load_skills: 7 skill(s) resolved
+2026-08-27 01:15:43.356 DEBUG   insempodera_fc14 - strix.agents.prompt: render_system_prompt: scan_mode=deep root=False whitebox=True skills=7 prompt_len=98524
+2026-08-27 01:15:43.357 INFO    insempodera_fc14 - strix.agents.factory: Built child agent 'Auth Validation Agent' (skills=2, tools=31, scan_mode=deep, whitebox=True)
+2026-08-27 01:15:43.358 INFO    insempodera_fc14 - strix.core.agents: agent.register c0079086 (Auth Validation Agent) parent=35bdaed3
+2026-08-27 01:15:43.395 INFO    insempodera_fc14 - strix.tools.agents_graph.tools: create_agent: spawned c0079086 (Auth Validation Agent) parent=35bdaed3 skills=2 task_len=211
+2026-08-27 01:15:43.396 DEBUG   insempodera_fc14 - openai.agents: Tool create_agent completed.
+2026-08-27 01:15:43.399 DEBUG   insempodera_fc14 - openai.agents: Turn 4 complete, next_step type=NextStepRunAgain
+2026-08-27 01:15:43.474 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:15:43.488 DEBUG   insempodera_fc14 - openai.agents: Starting turn 5, current_agent=Auth Analysis Agent
+2026-08-27 01:15:43.489 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.491 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:15:43.491 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.495 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:43.653 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.701 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.702 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Validation Agent
+2026-08-27 01:15:43.702 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.706 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:15:43.707 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:43.708 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:43.804 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:43.805 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:43.813 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:43.816 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:43.818 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:43.818 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:43.824 DEBUG   - - strix.telemetry.posthog: posthog event sent: skill_loaded
+2026-08-27 01:15:44.253 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:44.255 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:44.274 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:15:44.433 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.444 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:15:44.457 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.458 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.463 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.464 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.468 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.488 DEBUG   - - strix.telemetry.scarf: scarf event sent: skill_loaded
+2026-08-27 01:15:44.979 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:15:45.476 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:45.478 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:46.222 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:15:46.276 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:46.278 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:46.446 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:46.448 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:46.839 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:15:47.057 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:15:48.982 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:48.984 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:49.700 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:15:50.224 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:50.226 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:50.840 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:50.842 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:50.859 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:15:51.058 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:51.061 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:51.559 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:15:51.858 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:15:57.700 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:57.703 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:58.378 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:15:58.859 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:58.862 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:59.560 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:59.562 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:15:59.603 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:15:59.858 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:15:59.861 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:00.331 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:16:00.605 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:16:14.380 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:14.382 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:15.605 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:15.607 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:16.333 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:16.335 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:16.608 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:16.610 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:16.674 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:16:16.687 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:16:16.688 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:16:16.689 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:16.690 DEBUG   insempodera_fc14 - openai.agents: Invoking tool view_agent_graph
+2026-08-27 01:16:16.691 DEBUG   insempodera_fc14 - openai.agents: Tool view_agent_graph completed.
+2026-08-27 01:16:16.692 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:16:16.715 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:16:16.771 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Root Agent
+2026-08-27 01:16:16.772 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:16.775 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:16:16.776 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:16.779 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:17.515 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:16:19.184 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:16:19.194 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:16:19.195 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:16:19.196 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:19.197 DEBUG   insempodera_fc14 - openai.agents: Invoking tool wait_for_agents
+2026-08-27 01:16:19.198 INFO    insempodera_fc14 - strix.core.agents: agent.status ecfad5b9=waiting
+2026-08-27 01:16:19.208 DEBUG   insempodera_fc14 - openai.agents: Tool wait_for_agents completed.
+2026-08-27 01:16:19.209 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepFinalOutput
+2026-08-27 01:16:19.268 DEBUG   insempodera_fc14 - openai.agents: Resetting current trace
+2026-08-27 01:16:19.936 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:16:19.946 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:16:19.951 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:16:19.952 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:16:19.954 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:19.955 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:16:19.955 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:16:19.956 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:16:20.022 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Auth Validation Agent
+2026-08-27 01:16:20.023 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:20.024 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:16:20.025 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:20.028 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:20.780 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:16:22.782 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:22.784 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:23.520 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:16:27.522 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:27.525 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:28.270 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:16:36.272 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:36.274 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:36.968 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:16:48.716 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:48.719 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:49.462 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for cb72668f; replaying turn (attempt 2/5, backoff 4.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 3.259858752s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "3s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 3.259858752s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "3s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:16:49.516 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:49.519 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:50.285 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for 35bdaed3; replaying turn (attempt 1/5, backoff 2.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 2.437496178s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "2s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 2.437496178s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "2s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:16:52.399 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:52.448 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:52.449 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Analysis Agent
+2026-08-27 01:16:52.449 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:52.453 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:16:52.454 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:52.456 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:52.970 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:52.972 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:53.255 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:16:53.546 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:53.628 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:53.628 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=File & Logic Agent
+2026-08-27 01:16:53.629 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:53.631 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:16:53.631 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:53.633 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:53.649 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:16:54.379 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:16:55.253 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:55.256 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:56.054 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:16:56.381 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:16:56.383 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:16:57.109 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:17:00.056 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:00.058 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:00.793 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:17:01.111 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:01.113 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:01.861 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:17:08.795 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:08.797 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:09.862 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:09.864 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:10.921 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:17:10.931 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:17:10.932 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:17:10.933 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:10.934 DEBUG   insempodera_fc14 - openai.agents: Invoking tool wait_for_agents
+2026-08-27 01:17:10.934 INFO    insempodera_fc14 - strix.core.agents: agent.status 35bdaed3=waiting
+2026-08-27 01:17:10.944 DEBUG   insempodera_fc14 - openai.agents: Tool wait_for_agents completed.
+2026-08-27 01:17:10.945 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepFinalOutput
+2026-08-27 01:17:12.083 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:17:12.093 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:17:12.094 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:17:12.095 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:12.096 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:17:12.096 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:17:12.097 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:17:12.156 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=File & Logic Agent
+2026-08-27 01:17:12.157 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:12.158 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:17:12.159 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:12.160 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:13.679 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:17:13.691 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:17:13.692 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:17:13.693 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:14.156 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:17:14.231 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=File & Logic Agent
+2026-08-27 01:17:14.232 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:14.234 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:17:14.234 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:14.236 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:15.023 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:17:17.024 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:17.026 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:17.792 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:17:21.794 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:21.796 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:22.574 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:17:25.648 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:25.650 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:26.262 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for c0079086; replaying turn (attempt 1/5, backoff 2.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 26.459223699s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "26s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 26.459223699s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "26s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:17:28.348 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:28.395 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:28.395 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Validation Agent
+2026-08-27 01:17:28.396 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:28.397 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:17:28.398 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:28.400 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:29.153 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:17:30.575 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:30.577 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:31.155 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:31.157 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:31.333 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:17:31.884 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:17:35.886 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:35.888 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:36.508 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:17:44.510 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:44.512 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:45.248 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:17:47.335 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:17:47.337 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:17:48.097 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:18:01.248 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:01.250 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:01.973 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:18:20.097 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:20.099 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:22.174 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:18:22.185 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:18:22.186 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:18:22.187 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:22.189 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:18:22.190 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:18:22.191 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:18:22.260 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=File & Logic Agent
+2026-08-27 01:18:22.261 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:22.262 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:18:22.263 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:22.265 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:23.883 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:18:23.893 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:18:23.895 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:18:23.896 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:24.033 DEBUG   insempodera_fc14 - openai.agents: Turn 4 complete, next_step type=NextStepRunAgain
+2026-08-27 01:18:24.103 DEBUG   insempodera_fc14 - openai.agents: Starting turn 5, current_agent=File & Logic Agent
+2026-08-27 01:18:24.103 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:24.105 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:18:24.105 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:24.107 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:27.949 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:18:27.965 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:18:27.966 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:18:27.967 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:27.967 DEBUG   insempodera_fc14 - openai.agents: Invoking tool think
+2026-08-27 01:18:27.968 DEBUG   insempodera_fc14 - openai.agents: Tool think completed.
+2026-08-27 01:18:27.969 DEBUG   insempodera_fc14 - openai.agents: Turn 5 complete, next_step type=NextStepRunAgain
+2026-08-27 01:18:28.034 DEBUG   insempodera_fc14 - openai.agents: Starting turn 6, current_agent=File & Logic Agent
+2026-08-27 01:18:28.035 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:28.037 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:18:28.038 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:28.040 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:28.830 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:18:30.832 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:30.834 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:31.584 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:18:33.973 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:33.975 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:34.722 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for c0079086; replaying turn (attempt 2/5, backoff 4.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 17.999318233s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "17s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 17.999318233s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "17s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:18:35.586 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:35.588 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:36.400 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:18:38.805 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:38.874 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:38.875 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Validation Agent
+2026-08-27 01:18:38.875 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:38.877 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:18:38.877 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:38.879 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:39.614 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:18:41.616 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:41.618 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:42.276 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:18:44.402 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:44.404 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:45.177 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:18:46.277 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:46.314 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:47.053 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:18:55.053 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:18:55.055 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:18:55.765 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:19:01.177 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:01.180 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:02.289 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:19:11.767 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:11.769 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:13.818 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:19:13.829 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:19:13.830 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:19:13.831 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:13.986 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:19:14.060 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Auth Validation Agent
+2026-08-27 01:19:14.061 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:14.062 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:19:14.063 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:14.065 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:24.277 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:19:24.287 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:19:24.288 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=reasoning class=ResponseReasoningItem
+2026-08-27 01:19:24.289 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:19:24.290 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:24.420 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:19:24.479 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Auth Validation Agent
+2026-08-27 01:19:24.480 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:24.482 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:19:24.483 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:24.485 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:26.213 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:19:26.224 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:19:26.225 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:19:26.226 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:26.357 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:19:26.423 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Auth Validation Agent
+2026-08-27 01:19:26.423 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:26.425 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:19:26.426 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:26.428 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:27.124 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:19:29.125 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:29.127 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:29.890 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:19:33.892 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:33.894 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:34.289 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:34.291 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:34.625 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:19:35.111 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for cb72668f; replaying turn (attempt 3/5, backoff 8.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 17.613902187s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "17s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 17.613902187s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "17s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:19:42.629 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:42.631 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:43.223 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:43.271 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:43.271 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=File & Logic Agent
+2026-08-27 01:19:43.272 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:43.274 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:19:43.274 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:43.276 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:43.332 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:19:44.078 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:19:46.080 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:46.082 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:46.872 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:19:50.874 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:50.876 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:51.654 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:19:59.333 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:59.335 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:19:59.655 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:19:59.657 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:00.039 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:20:00.426 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:20:16.427 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:16.429 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:18.182 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:20:18.193 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:20:18.194 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:20:18.195 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:18.332 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:20:18.398 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=File & Logic Agent
+2026-08-27 01:20:18.398 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:18.400 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:20:18.401 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:18.402 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:20.000 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:20:20.011 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:20:20.012 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:20:20.013 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:20.158 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:20:20.237 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=File & Logic Agent
+2026-08-27 01:20:20.238 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:20.240 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:20:20.240 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:20.242 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:21.025 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:20:23.027 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:23.029 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:23.833 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:20:27.834 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:27.836 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:28.657 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:20:32.039 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:32.042 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:33.660 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:20:33.676 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:20:33.677 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:20:33.678 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:33.811 DEBUG   insempodera_fc14 - openai.agents: Turn 4 complete, next_step type=NextStepRunAgain
+2026-08-27 01:20:33.871 DEBUG   insempodera_fc14 - openai.agents: Starting turn 5, current_agent=Auth Validation Agent
+2026-08-27 01:20:33.872 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:33.873 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:20:33.874 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:33.876 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:34.534 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:20:36.536 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:36.538 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:36.659 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:36.661 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:37.309 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:20:37.469 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:20:41.311 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:41.313 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:42.649 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:20:50.651 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:50.653 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:51.293 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:20:53.471 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:20:53.473 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:20:54.272 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:21:07.294 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:07.296 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:08.044 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:21:19.266 INFO    insempodera_fc14 - strix.core.execution: agent ecfad5b9 reached its waiting timeout; auto-resuming
+2026-08-27 01:21:19.426 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating trace
+2026-08-27 01:21:19.429 DEBUG   insempodera_fc14 - openai.agents: Setting current trace: no-op
+2026-08-27 01:21:19.429 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:19.478 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:19.479 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Root Agent
+2026-08-27 01:21:19.479 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:19.481 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:19.482 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:19.484 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:21.080 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:21:21.091 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:21:21.092 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:21:21.093 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:21.094 DEBUG   insempodera_fc14 - openai.agents: Invoking tool view_agent_graph
+2026-08-27 01:21:21.095 DEBUG   insempodera_fc14 - openai.agents: Tool view_agent_graph completed.
+2026-08-27 01:21:21.096 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:21:21.156 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Root Agent
+2026-08-27 01:21:21.157 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:21.159 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:21.159 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:21.162 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:22.580 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:21:22.591 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:21:22.592 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:21:22.593 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.594 DEBUG   insempodera_fc14 - openai.agents: Invoking tool send_message_to_agent
+2026-08-27 01:21:22.606 DEBUG   insempodera_fc14 - openai.agents: Tool send_message_to_agent completed.
+2026-08-27 01:21:22.607 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:21:22.730 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Root Agent
+2026-08-27 01:21:22.731 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.733 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:22.734 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.737 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:22.854 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.924 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.925 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Analysis Agent
+2026-08-27 01:21:22.926 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.932 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:22.934 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:22.937 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:24.380 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:21:24.391 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:21:24.392 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:21:24.393 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.394 DEBUG   insempodera_fc14 - openai.agents: Invoking tool send_message_to_agent
+2026-08-27 01:21:24.404 DEBUG   insempodera_fc14 - openai.agents: Tool send_message_to_agent completed.
+2026-08-27 01:21:24.415 WARNING insempodera_fc14 - strix.core.execution: agent cb72668f ended a turn without a lifecycle tool call (interactive=True); forcing tool continuation (1/3): <none>
+2026-08-27 01:21:24.421 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:21:24.526 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Root Agent
+2026-08-27 01:21:24.527 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.530 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:24.531 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.533 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:24.632 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.682 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.683 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=File & Logic Agent
+2026-08-27 01:21:24.684 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.702 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:21:24.714 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:21:24.715 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:21:24.716 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:24.716 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.718 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:24.720 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.726 DEBUG   insempodera_fc14 - openai.agents: Invoking tool view_agent_graph
+2026-08-27 01:21:24.727 DEBUG   insempodera_fc14 - openai.agents: Tool view_agent_graph completed.
+2026-08-27 01:21:24.732 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:21:24.790 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Auth Analysis Agent
+2026-08-27 01:21:24.791 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.794 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:24.795 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:24.798 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:25.262 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:21:25.594 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:21:25.744 ERROR   insempodera_fc14 - strix.core.execution: agent run failed for cb72668f; marking failed
+Traceback (most recent call last):
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/vertex_ai/gemini/vertex_and_google_ai_studio_gemini.py", line 2572, in make_call
+    response: Final = await client.post(api_base, headers=headers, data=data, stream=True, logging_obj=logging_obj)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result: Final = await func(*args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/custom_httpx/http_handler.py", line 721, in post
+    await _raise_masked_async_error(e, stream)
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/custom_httpx/http_handler.py", line 480, in _raise_masked_async_error
+    raise MaskedHTTPStatusError(e, message=_body, text=_body) from None
+litellm.llms.custom_httpx.http_handler.MaskedHTTPStatusError: Client error '429 Too Many Requests' for url 'https://generativelanguage.googleapis.com/v1alpha/models/gemini-3.1-flash-lite:streamGenerateContent?alt=sse'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2026, in __anext__
+    await self.fetch_stream()
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2010, in fetch_stream
+    self.completion_stream = await self.make_call(client=litellm.module_level_aclient)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/vertex_ai/gemini/vertex_and_google_ai_studio_gemini.py", line 2576, in make_call
+    raise VertexAIError(
+    ...<3 lines>...
+    )
+litellm.llms.vertex_ai.common_utils.VertexAIError: b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 27.285769403s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "27s"\n      }\n    ]\n  }\n}\n'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/strix/core/execution.py", line 676, in _run_cycle
+    async for event in stream.stream_events():
+    ...<4 lines>...
+                logger.exception("stream event sink failed for %s", agent_id)
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/result.py", line 931, in stream_events
+    raise self._stored_exception
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/result.py", line 1021, in _await_task_safely
+    await task
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/result.py", line 695, in _await_run_and_cleanup
+    result = await original_task
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/run_internal/run_loop.py", line 1226, in start_streaming
+    turn_result = await run_single_turn_streamed(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<15 lines>...
+    )
+    ^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/run_internal/run_loop.py", line 1712, in run_single_turn_streamed
+    async for event in model_run_context_stream(retry_stream, tool_use_tracker):
+    ...<142 lines>...
+                    )
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/models/_run_context.py", line 31, in model_run_context_stream
+    async for item in stream:
+        yield item
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/run_internal/model_retry.py", line 560, in stream_response_with_retry
+    event = await stream.__anext__()
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/strix/config/models.py", line 354, in stream_response
+    async for event in _with_idle_timeout(stream, self._stream_idle_timeout):
+    ...<2 lines>...
+            yield guarded
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/strix/config/models.py", line 378, in _with_idle_timeout
+    event = await asyncio.wait_for(iterator.__anext__(), timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/asyncio/tasks.py", line 488, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/extensions/models/litellm_model.py", line 421, in stream_response
+    async for chunk in ChatCmplStreamHandler.handle_stream(
+    ...<6 lines>...
+        yield chunk
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/models/chatcmpl_stream_handler.py", line 603, in handle_stream
+    async for chunk in stream:
+    ...<451 lines>...
+                    )
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2136, in __anext__
+    self._log_stream_failure_and_raise(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2248, in _log_stream_failure_and_raise
+    self._handle_stream_fallback_error(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2336, in _handle_stream_fallback_error
+    raise mapped_exception
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2299, in _handle_stream_fallback_error
+    mapped_exception = exception_type(
+        model=self.model,
+    ...<3 lines>...
+        extra_kwargs={},
+    )
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2343, in exception_type
+    _map_vertex_exception(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        model=model,
+        ^^^^^^^^^^^^
+    ...<5 lines>...
+        extra_information=extra_information,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 1131, in _map_vertex_exception
+    raise BadRequestError(
+    ...<11 lines>...
+    )
+litellm.exceptions.BadRequestError: litellm.BadRequestError: Vertex_ai_betaException BadRequestError - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 27.285769403s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "model": "gemini-3.1-flash-lite",\n              "location": "global"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "27s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:21:25.757 INFO    insempodera_fc14 - strix.core.agents: agent.status cb72668f=failed
+2026-08-27 01:21:27.264 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:27.267 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:27.595 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:27.597 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:27.996 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:21:28.370 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:21:31.998 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:32.000 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:32.372 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:32.374 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:32.627 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:21:33.134 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:21:40.045 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:40.047 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:40.628 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:40.630 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:40.777 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for c0079086; replaying turn (attempt 3/5, backoff 8.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 11.946306832s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "11s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 11.946306832s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "11s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:21:41.135 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:41.138 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:41.362 DEBUG   insempodera_fc14 - openai.agents: Resetting current trace
+2026-08-27 01:21:41.573 ERROR   insempodera_fc14 - strix.core.execution: agent run failed for ecfad5b9; marking failed
+Traceback (most recent call last):
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/vertex_ai/gemini/vertex_and_google_ai_studio_gemini.py", line 2572, in make_call
+    response: Final = await client.post(api_base, headers=headers, data=data, stream=True, logging_obj=logging_obj)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result: Final = await func(*args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/custom_httpx/http_handler.py", line 721, in post
+    await _raise_masked_async_error(e, stream)
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/custom_httpx/http_handler.py", line 480, in _raise_masked_async_error
+    raise MaskedHTTPStatusError(e, message=_body, text=_body) from None
+litellm.llms.custom_httpx.http_handler.MaskedHTTPStatusError: Client error '429 Too Many Requests' for url 'https://generativelanguage.googleapis.com/v1alpha/models/gemini-3.1-flash-lite:streamGenerateContent?alt=sse'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2026, in __anext__
+    await self.fetch_stream()
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2010, in fetch_stream
+    self.completion_stream = await self.make_call(client=litellm.module_level_aclient)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/llms/vertex_ai/gemini/vertex_and_google_ai_studio_gemini.py", line 2576, in make_call
+    raise VertexAIError(
+    ...<3 lines>...
+    )
+litellm.llms.vertex_ai.common_utils.VertexAIError: b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 11.362240388s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "11s"\n      }\n    ]\n  }\n}\n'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/strix/core/execution.py", line 676, in _run_cycle
+    async for event in stream.stream_events():
+    ...<4 lines>...
+                logger.exception("stream event sink failed for %s", agent_id)
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/result.py", line 931, in stream_events
+    raise self._stored_exception
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/result.py", line 1021, in _await_task_safely
+    await task
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/result.py", line 695, in _await_run_and_cleanup
+    result = await original_task
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/run_internal/run_loop.py", line 1226, in start_streaming
+    turn_result = await run_single_turn_streamed(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<15 lines>...
+    )
+    ^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/run_internal/run_loop.py", line 1712, in run_single_turn_streamed
+    async for event in model_run_context_stream(retry_stream, tool_use_tracker):
+    ...<142 lines>...
+                    )
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/models/_run_context.py", line 31, in model_run_context_stream
+    async for item in stream:
+        yield item
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/run_internal/model_retry.py", line 560, in stream_response_with_retry
+    event = await stream.__anext__()
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/strix/config/models.py", line 354, in stream_response
+    async for event in _with_idle_timeout(stream, self._stream_idle_timeout):
+    ...<2 lines>...
+            yield guarded
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/strix/config/models.py", line 378, in _with_idle_timeout
+    event = await asyncio.wait_for(iterator.__anext__(), timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/asyncio/tasks.py", line 488, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/extensions/models/litellm_model.py", line 421, in stream_response
+    async for chunk in ChatCmplStreamHandler.handle_stream(
+    ...<6 lines>...
+        yield chunk
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/agents/models/chatcmpl_stream_handler.py", line 603, in handle_stream
+    async for chunk in stream:
+    ...<451 lines>...
+                    )
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2136, in __anext__
+    self._log_stream_failure_and_raise(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2248, in _log_stream_failure_and_raise
+    self._handle_stream_fallback_error(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2336, in _handle_stream_fallback_error
+    raise mapped_exception
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/streaming_handler.py", line 2299, in _handle_stream_fallback_error
+    mapped_exception = exception_type(
+        model=self.model,
+    ...<3 lines>...
+        extra_kwargs={},
+    )
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2343, in exception_type
+    _map_vertex_exception(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        model=model,
+        ^^^^^^^^^^^^
+    ...<5 lines>...
+        extra_information=extra_information,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/melio/.local/share/pipx/venvs/strix-agent/lib/python3.14/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 1131, in _map_vertex_exception
+    raise BadRequestError(
+    ...<11 lines>...
+    )
+litellm.exceptions.BadRequestError: litellm.BadRequestError: Vertex_ai_betaException BadRequestError - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 11.362240388s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "11s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:21:41.582 INFO    insempodera_fc14 - strix.core.agents: agent.status ecfad5b9=failed
+2026-08-27 01:21:41.862 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:21:48.875 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:48.916 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:48.917 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Validation Agent
+2026-08-27 01:21:48.918 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:48.919 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:21:48.920 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:48.921 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:49.667 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:21:51.669 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:51.671 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:52.411 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:21:56.412 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:56.414 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:57.168 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:21:57.862 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:21:57.864 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:21:58.526 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 32.0s (attempt 5/5).
+2026-08-27 01:22:05.170 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:05.172 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:05.914 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 16.0s (attempt 4/5).
+2026-08-27 01:22:21.916 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:21.919 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:23.685 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:22:23.699 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:22:23.700 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:22:23.700 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:23.865 DEBUG   insempodera_fc14 - openai.agents: Turn 1 complete, next_step type=NextStepRunAgain
+2026-08-27 01:22:23.940 DEBUG   insempodera_fc14 - openai.agents: Starting turn 2, current_agent=Auth Validation Agent
+2026-08-27 01:22:23.941 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:23.943 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:22:23.943 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:23.945 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:25.499 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:22:25.512 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:22:25.513 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:22:25.514 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:25.699 DEBUG   insempodera_fc14 - openai.agents: Turn 2 complete, next_step type=NextStepRunAgain
+2026-08-27 01:22:25.773 DEBUG   insempodera_fc14 - openai.agents: Starting turn 3, current_agent=Auth Validation Agent
+2026-08-27 01:22:25.774 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:25.776 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:22:25.777 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:25.780 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:27.365 INFO    insempodera_fc14 - strix.report.sarif: Wrote SARIF 2.1.0 report: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14/findings.sarif (0 results)
+2026-08-27 01:22:27.392 INFO    insempodera_fc14 - strix.report.state: Essential scan data saved to: /mnt/c/Users/melio/Downloads/InsEmpodera/strix_runs/insempodera_fc14
+2026-08-27 01:22:27.404 DEBUG   insempodera_fc14 - openai.agents: Processing output item type=function_call class=ResponseFunctionToolCall
+2026-08-27 01:22:27.407 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:27.863 DEBUG   insempodera_fc14 - openai.agents: Turn 3 complete, next_step type=NextStepRunAgain
+2026-08-27 01:22:27.954 DEBUG   insempodera_fc14 - openai.agents: Starting turn 4, current_agent=Auth Validation Agent
+2026-08-27 01:22:27.955 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:27.957 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:22:27.958 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:27.961 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:28.724 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:22:30.527 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:30.532 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:30.726 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:30.729 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:31.331 WARNING insempodera_fc14 - strix.core.execution: transient model/provider error for 35bdaed3; replaying turn (attempt 1/5, backoff 2.0s): litellm.MidStreamFallbackError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 21.397370621s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "21s"\n      }\n    ]\n  }\n}\n' Original exception: RateLimitError: litellm.RateLimitError: litellm.RateLimitError: vertex_ai_betaException - b'{\n  "error": {\n    "code": 429,\n    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.1-flash-lite\\nPlease retry in 21.397370621s.",\n    "status": "RESOURCE_EXHAUSTED",\n    "details": [\n      {\n        "@type": "type.googleapis.com/google.rpc.Help",\n        "links": [\n          {\n            "description": "Learn more about Gemini API quotas",\n            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n        "violations": [\n          {\n            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n            "quotaDimensions": {\n              "location": "global",\n              "model": "gemini-3.1-flash-lite"\n            },\n            "quotaValue": "250000"\n          }\n        ]\n      },\n      {\n        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n        "retryDelay": "21s"\n      }\n    ]\n  }\n}\n'
+2026-08-27 01:22:31.472 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).
+2026-08-27 01:22:33.445 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:33.492 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:33.493 DEBUG   insempodera_fc14 - openai.agents: Starting turn 1, current_agent=Auth Analysis Agent
+2026-08-27 01:22:33.494 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:33.495 DEBUG   insempodera_fc14 - openai.agents: No conversation_id available for request
+2026-08-27 01:22:33.496 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:33.498 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:34.229 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 2.0s (attempt 1/5).
+2026-08-27 01:22:35.474 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:35.477 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:36.235 DEBUG   insempodera_fc14 - openai.agents: Tracing is disabled. Not creating span
+2026-08-27 01:22:36.238 DEBUG   insempodera_fc14 - openai.agents: Calling LLM
+2026-08-27 01:22:36.240 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 8.0s (attempt 3/5).
+2026-08-27 01:22:37.010 DEBUG   insempodera_fc14 - openai.agents: Retrying failed streamed model request in 4.0s (attempt 2/5).

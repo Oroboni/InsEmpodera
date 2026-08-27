@@ -277,3 +277,187 @@ select {
         padding: var(--space-3);
     }
 }
+
+/* ===== DETALHES E DESATIVAÇÃO DE USUÁRIO ===== */
+.user-details-page .header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.user-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+}
+
+.user-status-pill.is-active {
+    color: #176b3a;
+    background: #dff5e8;
+}
+
+.user-status-pill.is-inactive {
+    color: #9d2020;
+    background: #fde4e4;
+}
+
+.user-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-6) 0;
+}
+
+.user-detail-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+    padding: var(--space-4);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-lg);
+    background: var(--color-white);
+    box-shadow: var(--shadow-sm);
+}
+
+.user-detail-card > i {
+    display: grid;
+    place-items: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    background: var(--color-primary-100);
+}
+
+.user-detail-card div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.user-detail-card span {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+}
+
+.user-detail-card strong {
+    overflow-wrap: anywhere;
+    color: var(--color-primary-900);
+}
+
+.crud-feedback {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.crud-feedback.is-success {
+    color: #176b3a;
+    border: 1px solid #95d9ae;
+    background: #eaf8ef;
+}
+
+.crud-feedback.is-info {
+    color: var(--color-primary-900);
+    border: 1px solid var(--color-primary-200);
+    background: var(--color-primary-100);
+}
+
+.user-detail-actions form,
+.user-delete-page form {
+    margin: 0;
+}
+
+.btn-reactivate {
+    color: var(--color-white);
+    border: 0;
+    background: #248a50;
+}
+
+.btn-reactivate:hover {
+    background: #176b3a;
+}
+
+.deactivation-card {
+    padding: clamp(var(--space-5), 5vw, var(--space-8));
+    text-align: center;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-xl);
+    background: var(--color-white);
+    box-shadow: var(--shadow-md);
+}
+
+.deactivation-icon {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto var(--space-4);
+    border-radius: 50%;
+    color: var(--color-error);
+    background: #fde4e4;
+    font-size: var(--font-size-3xl);
+}
+
+.deactivation-card > p {
+    max-width: 650px;
+    margin: 0 auto var(--space-5);
+    color: var(--color-gray-600);
+}
+
+.deactivation-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin: var(--space-5) 0;
+    text-align: left;
+}
+
+.deactivation-summary div {
+    min-width: 0;
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-gray-200);
+}
+
+.deactivation-summary dt {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+}
+
+.deactivation-summary dd {
+    margin: var(--space-1) 0 0;
+    overflow-wrap: anywhere;
+    font-weight: var(--font-weight-bold);
+}
+
+@media (max-width: 640px) {
+    .user-details-grid,
+    .deactivation-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .user-detail-actions,
+    .user-detail-actions .action-buttons-group,
+    .user-delete-page .buttons-container {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .user-detail-actions .wizard-btn,
+    .user-delete-page .wizard-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

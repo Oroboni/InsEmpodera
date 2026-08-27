@@ -12,7 +12,7 @@ public sealed class AuthenticationSessionFlowTests : IClassFixture<EmpoderaWebAp
     public AuthenticationSessionFlowTests(EmpoderaWebApplicationFactory factory) => _factory = factory;
 
     [Fact]
-    public async Task LoginForm_WithValidCredentials_EstablishesSessionAndUsesBrowserCulture()
+    public async Task LoginForm_WithValidCredentials_EstablishesIdentityAndUsesBrowserCulture()
     {
         var user = await HttpFlowTestSupport.SeedUserAsync(
             _factory, profileId: 1, preferredLanguage: IdiomaPreferido.Ingles);
@@ -24,7 +24,7 @@ public sealed class AuthenticationSessionFlowTests : IClassFixture<EmpoderaWebAp
 
         HttpFlowTestSupport.AssertRedirect(login, "/");
         Assert.Contains(login.Headers.GetValues("Set-Cookie"), value =>
-            value.StartsWith(".AspNetCore.Session=", StringComparison.Ordinal));
+            value.StartsWith(".Empodera.Identity=", StringComparison.Ordinal));
         Assert.Contains(login.Headers.GetValues("Set-Cookie"), value =>
             value.StartsWith(".Empodera.LanguageMode=browser", StringComparison.Ordinal));
 

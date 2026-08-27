@@ -1,4 +1,5 @@
 using InsEmpodera.E2ETests.Infrastructure;
+using InsEmpodera.E2ETests.Pages;
 using Microsoft.Playwright;
 using Xunit;
 
@@ -7,7 +8,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class AuthenticationAndNavigationTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Autenticação — proteger páginas, validar credenciais, criar e encerrar sessão")]
     public Task ProtectedPage_RedirectsToLogin_AndValidLoginCreatesSession() =>
         RunInBrowserAsync(nameof(ProtectedPage_RedirectsToLogin_AndValidLoginCreatesSession), async page =>
         {
@@ -16,14 +17,11 @@ public sealed class AuthenticationAndNavigationTests(E2ETestFixture fixture) : B
             await Assertions.Expect(page.GetByRole(AriaRole.Heading, new() { Name = "Faça seu Login:" }))
                 .ToBeVisibleAsync();
 
-            await page.Locator("input[name=Email]").FillAsync(E2ETestFixture.AdminEmail);
-            await page.Locator("input[name=Password]").FillAsync("senha-incorreta");
-            await page.GetByRole(AriaRole.Button, new() { Name = "ENTRAR" }).ClickAsync();
+            var login = new LoginPage(page);
+            await login.EntrarAsync(E2ETestFixture.AdminEmail, "senha-incorreta");
             Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
 
-            await page.Locator("input[name=Email]").FillAsync(E2ETestFixture.AdminEmail);
-            await page.Locator("input[name=Password]").FillAsync(E2ETestFixture.AdminPassword);
-            await page.GetByRole(AriaRole.Button, new() { Name = "ENTRAR" }).ClickAsync();
+            await login.EntrarAsync(E2ETestFixture.AdminEmail, E2ETestFixture.AdminPassword);
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/");
             await Assertions.Expect(page.Locator("#sidebar")).ToContainTextAsync("Olá, joao");
 
@@ -41,16 +39,21 @@ public sealed class AuthenticationAndNavigationTests(E2ETestFixture fixture) : B
             Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
         });
 
-    [Fact]
-    public Task LoginInteractions_ShowPassword_ForgotLink_AndBrowserLocaleWork() =>
+    [Theory(DisplayName = "Login — senha, recuperação e idioma acompanham o navegador")]
+    [InlineData("pt-BR", "pt-BR")]
+    [InlineData("en-US", "en")]
+    [InlineData("es-ES", "es")]
+    public Task LoginInteractions_ShowPassword_ForgotLink_AndBrowserLocaleWork(
+        string browserLocale,
+        string expectedHtmlLanguage) =>
         RunInBrowserAsync(
-            nameof(LoginInteractions_ShowPassword_ForgotLink_AndBrowserLocaleWork),
+            $"{nameof(LoginInteractions_ShowPassword_ForgotLink_AndBrowserLocaleWork)}-{expectedHtmlLanguage}",
             async page =>
             {
                 await page.GotoAsync("/Account");
-                Assert.Equal("es", await page.Locator("html").GetAttributeAsync("lang"));
+                Assert.Equal(expectedHtmlLanguage, await page.Locator("html").GetAttributeAsync("lang"));
 
-                var password = page.Locator("#passwordInput");
+                var password = page.GetByTestId("login-senha");
                 await password.FillAsync("segredo");
                 Assert.Equal("password", await password.GetAttributeAsync("type"));
                 await page.Locator("#showPassword").CheckAsync();
@@ -60,12 +63,14 @@ public sealed class AuthenticationAndNavigationTests(E2ETestFixture fixture) : B
 
                 await page.Locator("a.forgot-password").ClickAsync();
                 await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account/Forgot");
-                await Assertions.Expect(page.Locator("body")).Not.ToBeEmptyAsync();
+                await page.GetByTestId("recovery-email").FillAsync($"missing-{Guid.NewGuid():N}@example.org");
+                await page.GetByTestId("recovery-submit").ClickAsync();
+                await Assertions.Expect(page.GetByTestId("recovery-submitted")).ToBeVisibleAsync();
             },
             new BrowserNewContextOptions
             {
                 BaseURL = Fixture.BaseUrl,
-                Locale = "es-ES",
+                Locale = browserLocale,
                 ViewportSize = new ViewportSize { Width = 1280, Height = 900 }
             });
 }

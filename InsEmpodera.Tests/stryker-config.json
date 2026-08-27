@@ -1,0 +1,24 @@
+{
+  "stryker-config": {
+    "solution": "../InsEmpodera.sln",
+    "project": "InsEmpodera.csproj",
+    "mutation-level": "Standard",
+    "mutate": [
+      "**/SpreadsheetExportService.cs",
+      "**/ExcelBackupService.cs",
+      "**/UserCultureService.cs",
+      "**/Usuario.cs"
+    ],
+    "reporters": [
+      "progress",
+      "html",
+      "json"
+    ],
+    "report-file-name": "qualidade-real-dos-testes",
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 55
+    }
+  }
+}

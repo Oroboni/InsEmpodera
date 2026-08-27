@@ -1,74 +1,71 @@
+@model Empodera.Models.ForgotPasswordViewModel
 @{
     ViewData["Title"] = "Recuperar Senha";
     Layout = "_LoginLayout";
+    var submitted = ViewData["RecoverySubmitted"] as bool? == true;
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/forget.css" />
+    <link rel="stylesheet" href="~/css/forget.css" asp-append-version="true" />
 }
 
-<div class="background-circles">
-        <div class="circle circle-1"></div>
-        <div class="circle circle-2"></div>
-        <div class="circle circle-3"></div>
-        <div class="circle circle-4"></div>
-        <div class="circle circle-5"></div>
-        <div class="circle circle-6"></div>
-    </div>
+<div class="background-circles" aria-hidden="true">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+    <div class="circle circle-4"></div>
+    <div class="circle circle-5"></div>
+    <div class="circle circle-6"></div>
+</div>
 
-    <main class="container-geral">
-        <!-- PAINEL ESQUERDO - FORMULÁRIO (INVERTIDO) -->
-        <section class="painel-recovery">
-            <div class="logo">
-                <img src="@Url.Content("~/images/Logo-empodera.svg")" alt="Logo">
-            </div>
+<main class="container-geral @(submitted ? "recovery-submitted" : "")">
+    <section class="painel-recovery">
+        <div class="logo">
+            <img src="@Url.Content("~/images/Logo-empodera.svg")" alt="Empodera">
+        </div>
 
-            <form class="recovery-form" method="post" asp-action="ForgotPassword" asp-controller="Account">
-                @Html.AntiForgeryToken()
-                
-                <h2>Esqueci minha senha</h2>
-                <p class="recovery-description">
-                    Informe o e-mail associado à sua conta e enviaremos um link para redefinir sua senha.
-                </p>
+        <form class="recovery-form" method="post" asp-action="ForgotPassword" asp-controller="Account">
+            @Html.AntiForgeryToken()
+            <h2>Esqueci minha senha</h2>
+            <p class="recovery-description">
+                Informe o e-mail associado à sua conta. Se a conta existir, enviaremos um link seguro para redefinir sua senha.
+            </p>
 
-                <div class="success-message" id="successMessage">
-                    <div class="success-icon">✓</div>
+            @if (submitted)
+            {
+                <div class="success-message show" id="successMessage" role="status" data-testid="recovery-submitted">
+                    <div class="success-icon" aria-hidden="true">✓</div>
                     <div class="success-text">
-                        E-mail enviado com sucesso! Verifique sua caixa de entrada.
+                        Se existir uma conta associada ao e-mail informado, as instruções serão enviadas em instantes.
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <input 
-                        type="email" 
-                        class="form-input" 
-                        placeholder="Digite seu e-mail"
-                        name="Email"
-                        id="emailInput"
-                        required
-                    >
-                </div>
+            }
 
-                <button type="submit" class="recovery-button" id="recoveryBtn">
-                    ENVIAR LINK
-                </button>
-                
-                <button type="button" class="cancel-button" onclick="goBackToLogin()">
-                    CANCELAR
-                </button>
-            </form>
-        </section>
+            <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="input-label">E-mail</label>
+                <input asp-for="Email" id="emailInput" type="email" class="form-input" placeholder="Digite seu e-mail"
+                       autocomplete="email" data-testid="recovery-email">
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
 
-        <!-- PAINEL DIREITO - INFORMAÇÕES (INVERTIDO) -->
-        <section class="painel-info">
-            <h1>Recuperar Senha</h1>
-            <p>Digite seu e-mail para receber as instruções de recuperação de senha.</p>
-            <a href="Index" class="back-to-login" onclick="goBackToLogin()">
-                <span class="back-arrow">←</span>
-                Voltar ao Login
-            </a>
-        </section>
-    </main>
+            <button type="submit" class="recovery-button" id="recoveryBtn" data-testid="recovery-submit">
+                Enviar link
+            </button>
+            <a asp-action="Index" asp-controller="Account" class="cancel-button">Cancelar</a>
+        </form>
+    </section>
+
+    <section class="painel-info">
+        <h1>Recuperar senha</h1>
+        <p>O link expira em 30 minutos. O Empodera nunca solicitará sua senha por e-mail.</p>
+        <a asp-action="Index" asp-controller="Account" class="back-to-login">
+            <span class="back-arrow" aria-hidden="true">←</span>
+            Voltar ao login
+        </a>
+    </section>
+</main>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script src="~/js/forget.js"></script>
 }

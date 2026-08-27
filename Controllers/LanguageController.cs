@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Services;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Empodera.Controllers;
 
+[AllowAnonymous]
 public sealed class LanguageController : Controller
 {
     [HttpGet]

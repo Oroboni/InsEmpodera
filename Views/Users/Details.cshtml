@@ -1,0 +1,122 @@
+@model Empodera.Models.Usuario
+@{
+    ViewData["Title"] = "Detalhes do Usuário";
+    ViewData["PageCSS"] = "usuarios-edit";
+    Layout = "_Layout";
+    var canUpdate = (ViewBag.CanUpdateUsers as bool?) == true;
+    var canDelete = (ViewBag.CanDeleteUsers as bool?) == true;
+    var canManageIdentity = (ViewBag.CanManageIdentity as bool?) == true;
+    var isCurrentUser = (ViewBag.IsCurrentUser as bool?) == true;
+    var isLastActiveAdmin = (ViewBag.IsLastActiveAdmin as bool?) == true;
+    var gender = Model.Genero switch
+    {
+        1 => "Masculino",
+        2 => "Feminino",
+        3 => "Transgênero",
+        _ => "Não declarado"
+    };
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css" asp-append-version="true" />
+}
+
+<div class="modern-container user-details-page" data-testid="user-details">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Usuários</a>
+            <span class="separator">&gt;</span>
+            <strong class="text-muted">Detalhes</strong>
+        </h2>
+        <span class="user-status-pill @(Model.Ativo == "S" ? "is-active" : "is-inactive")">
+            <i class="fa-solid @(Model.Ativo == "S" ? "fa-circle-check" : "fa-circle-xmark")"></i>
+            @(Model.Ativo == "S" ? "Ativo" : "Inativo")
+        </span>
+    </div>
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="crud-feedback is-success" role="status">@successMessage</div>
+    }
+
+    <div class="user-details-grid">
+        <article class="user-detail-card">
+            <i class="fa-solid fa-user"></i>
+            <div><span>Nome</span><strong>@Model.Nome</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-envelope"></i>
+            <div><span>E-mail</span><strong>@Model.Email</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-id-badge"></i>
+            <div><span>Perfil de acesso</span><strong>@Model.Perfil?.Nome</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-briefcase"></i>
+            <div><span>Ocupação</span><strong>@Model.Ocupacao</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-venus-mars"></i>
+            <div><span>Gênero</span><strong>@gender</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-cake-candles"></i>
+            <div><span>Data de nascimento</span><strong>@Model.DtNascimento.ToString("dd/MM/yyyy")</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-calendar-plus"></i>
+            <div><span>Criado em</span><strong>@Model.DtCriacao.ToString("dd/MM/yyyy 'às' HH:mm")</strong></div>
+        </article>
+        <article class="user-detail-card">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <div>
+                <span>Última atualização</span>
+                <strong>@(Model.DtAtualizacao?.ToString("dd/MM/yyyy 'às' HH:mm") ?? "Ainda não atualizado")</strong>
+            </div>
+        </article>
+    </div>
+
+    @if (isCurrentUser)
+    {
+        <div class="crud-feedback is-info">
+            <i class="fa-solid fa-shield-halved"></i>
+            Esta é sua conta. O próprio perfil e o status não podem ser alterados.
+        </div>
+    }
+    else if (isLastActiveAdmin)
+    {
+        <div class="crud-feedback is-info">
+            <i class="fa-solid fa-shield-halved"></i>
+            Este é o último administrador ativo e não pode ser desativado ou rebaixado.
+        </div>
+    }
+
+    <div class="buttons-container user-detail-actions">
+        <a asp-action="Index" class="wizard-btn btn-prev">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+        <div class="action-buttons-group">
+            @if (canUpdate)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.IdUsuario" class="wizard-btn btn-next" data-testid="user-edit">
+                    <i class="fa-solid fa-pen"></i> Editar
+                </a>
+            }
+            @if (Model.Ativo == "N" && canUpdate && canManageIdentity)
+            {
+                <form asp-action="Reactivate" asp-route-id="@Model.IdUsuario" method="post">
+                    <button type="submit" class="wizard-btn btn-reactivate" data-testid="user-reactivate">
+                        <i class="fa-solid fa-user-check"></i> Reativar
+                    </button>
+                </form>
+            }
+            else if (Model.Ativo == "S" && canDelete && !isCurrentUser && !isLastActiveAdmin)
+            {
+                <a asp-action="Delete" asp-route-id="@Model.IdUsuario" class="wizard-btn btn-delete" data-testid="user-deactivate">
+                    <i class="fa-solid fa-user-slash"></i> Desativar
+                </a>
+            }
+        </div>
+    </div>
+</div>

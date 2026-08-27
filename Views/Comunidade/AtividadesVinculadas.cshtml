@@ -35,7 +35,7 @@
         </div>
 
         <a asp-controller="Services" asp-action="ExportAtividadesComunidade" asp-route-id="@ViewBag.ComunidadeId"
-           class="btn-export" aria-label="Exportar atividades da comunidade">
+           class="btn-export" data-testid="exportar-atividades-comunidade" aria-label="Exportar atividades da comunidade">
             <i class="fa-solid fa-file-arrow-down"></i>
         </a>
         <a asp-controller="Comunidade" asp-action="Create_Atividades" asp-route-comunidadeId="@ViewBag.ComunidadeId"

@@ -1,31 +1,6 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Tempo de geração: 25/08/2026 às 05:17
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.0.30
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Banco de dados: `empodera`
---
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `acoes`
---
+drop DATABASE IF EXISTS empodera;
+CREATE DATABASE empodera;
+use empodera;
 
 CREATE TABLE `acoes` (
   `IdAcoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
@@ -1847,7 +1822,7 @@ CREATE TABLE `usuarios` (
   `Nome` longtext NOT NULL,
   `Senha` longtext NOT NULL,
   `Foto` longtext DEFAULT NULL,
-  `Email` longtext NOT NULL,
+  `Email` varchar(256) NOT NULL,
   `Ocupacao` longtext NOT NULL,
   `Genero` int(11) DEFAULT NULL,
   `DtNascimento` datetime(6) NOT NULL,
@@ -1855,19 +1830,31 @@ CREATE TABLE `usuarios` (
   `DtAtualizacao` datetime(6) DEFAULT NULL,
   `Ativo` longtext NOT NULL,
   `IdiomaPreferido` int(11) NOT NULL,
-  `FkIdPerfil` int(11) NOT NULL
+  `FkIdPerfil` int(11) NOT NULL,
+  `UserName` varchar(256) NOT NULL,
+  `NormalizedUserName` varchar(256) NOT NULL,
+  `NormalizedEmail` varchar(256) NOT NULL,
+  `EmailConfirmed` tinyint(1) NOT NULL DEFAULT 0,
+  `SecurityStamp` varchar(64) NOT NULL,
+  `ConcurrencyStamp` varchar(64) NOT NULL,
+  `PhoneNumber` varchar(32) DEFAULT NULL,
+  `PhoneNumberConfirmed` tinyint(1) NOT NULL DEFAULT 0,
+  `TwoFactorEnabled` tinyint(1) NOT NULL DEFAULT 0,
+  `LockoutEnd` datetime(6) DEFAULT NULL,
+  `LockoutEnabled` tinyint(1) NOT NULL DEFAULT 1,
+  `AccessFailedCount` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`IdUsuario`, `Nome`, `Senha`, `Foto`, `Email`, `Ocupacao`, `Genero`, `DtNascimento`, `DtCriacao`, `DtAtualizacao`, `Ativo`, `IdiomaPreferido`, `FkIdPerfil`) VALUES
-(1, 'joao', 'AQAAAAIAAYagAAAAEFndUDme08kyhnThNq/L3f9s23DmIPp5NQm1fyFOVK/+4hzwj8FEfsVYIxcZ64/Qkg==', 'foto1.jpg', 'joao@email.com', 'Coordenador', NULL, '1990-01-01 00:00:00.000000', '2024-01-01 00:00:00.000000', '2026-08-17 19:03:23.912107', 'S', 2, 1),
-(2, 'Usuario Dois', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto2.jpg', 'u2@example.com', 'Pesquisador', 2, '1985-02-02 00:00:00.000000', '2024-02-01 00:00:00.000000', '2025-02-01 00:00:00.000000', 'S', 0, 2),
-(3, 'Usuario Tres', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto3.jpg', 'u3@example.com', 'Voluntario', 1, '1995-03-03 00:00:00.000000', '2024-03-01 00:00:00.000000', '2025-03-01 00:00:00.000000', 'S', 0, 3),
-(4, 'Usuario Quatro', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto4.jpg', 'u4@example.com', 'Analista', 2, '1992-04-04 00:00:00.000000', '2024-04-01 00:00:00.000000', '2025-04-01 00:00:00.000000', 'N', 0, 4),
-(5, 'Usuario Cinco', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto5.jpg', 'u5@example.com', 'Gerente', 1, '1988-05-05 00:00:00.000000', '2024-05-01 00:00:00.000000', '2025-05-01 00:00:00.000000', 'N', 0, 5);
+INSERT INTO `usuarios` (`IdUsuario`, `Nome`, `Senha`, `Foto`, `Email`, `Ocupacao`, `Genero`, `DtNascimento`, `DtCriacao`, `DtAtualizacao`, `Ativo`, `IdiomaPreferido`, `FkIdPerfil`, `UserName`, `NormalizedUserName`, `NormalizedEmail`, `EmailConfirmed`, `SecurityStamp`, `ConcurrencyStamp`, `PhoneNumber`, `PhoneNumberConfirmed`, `TwoFactorEnabled`, `LockoutEnd`, `LockoutEnabled`, `AccessFailedCount`) VALUES
+(1, 'joao', 'AQAAAAIAAYagAAAAEFndUDme08kyhnThNq/L3f9s23DmIPp5NQm1fyFOVK/+4hzwj8FEfsVYIxcZ64/Qkg==', 'foto1.jpg', 'joao@email.com', 'Coordenador', NULL, '1990-01-01 00:00:00.000000', '2024-01-01 00:00:00.000000', '2026-08-17 19:03:23.912107', 'S', 2, 1, 'joao@email.com', 'JOAO@EMAIL.COM', 'JOAO@EMAIL.COM', 1, 'seed-security-stamp-1', 'seed-concurrency-stamp-1', NULL, 0, 0, NULL, 1, 0),
+(2, 'Usuario Dois', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto2.jpg', 'u2@example.com', 'Pesquisador', 2, '1985-02-02 00:00:00.000000', '2024-02-01 00:00:00.000000', '2025-02-01 00:00:00.000000', 'S', 0, 2, 'u2@example.com', 'U2@EXAMPLE.COM', 'U2@EXAMPLE.COM', 1, 'seed-security-stamp-2', 'seed-concurrency-stamp-2', NULL, 0, 0, NULL, 1, 0),
+(3, 'Usuario Tres', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto3.jpg', 'u3@example.com', 'Voluntario', 1, '1995-03-03 00:00:00.000000', '2024-03-01 00:00:00.000000', '2025-03-01 00:00:00.000000', 'S', 0, 3, 'u3@example.com', 'U3@EXAMPLE.COM', 'U3@EXAMPLE.COM', 1, 'seed-security-stamp-3', 'seed-concurrency-stamp-3', NULL, 0, 0, NULL, 1, 0),
+(4, 'Usuario Quatro', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto4.jpg', 'u4@example.com', 'Analista', 2, '1992-04-04 00:00:00.000000', '2024-04-01 00:00:00.000000', '2025-04-01 00:00:00.000000', 'N', 0, 4, 'u4@example.com', 'U4@EXAMPLE.COM', 'U4@EXAMPLE.COM', 1, 'seed-security-stamp-4', 'seed-concurrency-stamp-4', NULL, 0, 0, NULL, 1, 0),
+(5, 'Usuario Cinco', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto5.jpg', 'u5@example.com', 'Gerente', 1, '1988-05-05 00:00:00.000000', '2024-05-01 00:00:00.000000', '2025-05-01 00:00:00.000000', 'N', 0, 5, 'u5@example.com', 'U5@EXAMPLE.COM', 'U5@EXAMPLE.COM', 1, 'seed-security-stamp-5', 'seed-concurrency-stamp-5', NULL, 0, 0, NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2209,6 +2196,8 @@ ALTER TABLE `redesprimarias`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`IdUsuario`),
+  ADD UNIQUE KEY `IX_Usuarios_NormalizedUserName` (`NormalizedUserName`),
+  ADD UNIQUE KEY `IX_Usuarios_NormalizedEmail` (`NormalizedEmail`),
   ADD KEY `IX_Usuarios_FkIdPerfil` (`FkIdPerfil`);
 
 --
@@ -2437,7 +2426,3 @@ ALTER TABLE `vulnerabilidadeseixo`
   ADD CONSTRAINT `FK_VulnerabilidadesEixo_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `eixos` (`IdEixo`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_VulnerabilidadesEixo_Vulnerabilidades_FkIdVulnerabilidade` FOREIGN KEY (`FkIdVulnerabilidade`) REFERENCES `vulnerabilidades` (`IdVulnerabilidade`) ON DELETE CASCADE;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

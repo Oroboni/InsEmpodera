@@ -71,23 +71,18 @@ function handleInputBlur(event) {
 
 // Manipula o envio do formulário de recuperação
 function handleRecoverySubmit(event) {
-    event.preventDefault();
-    
     const email = document.getElementById('emailInput').value;
     const button = document.getElementById('recoveryBtn');
-    const successMessage = document.getElementById('successMessage');
     
-    // Validação básica
     if (!validateEmail(email)) {
+        event.preventDefault();
         showError('Por favor, digite um e-mail válido.');
         return;
     }
 
-    // Inicia animação de carregamento
+    // O formulário segue para o servidor. O botão apenas comunica que o
+    // processamento real começou e evita envios duplicados.
     startLoadingAnimation(button);
-    
-    // Simula o envio do email (substitua pela chamada real da API)
-    simulateEmailSending(email, button, successMessage);
 }
 
 // Valida formato do e-mail
@@ -179,83 +174,6 @@ function startLoadingAnimation(button) {
     }
 }
 
-// Simula o envio do e-mail
-function simulateEmailSending(email, button, successMessage) {
-    // Simula tempo de processamento
-    setTimeout(() => {
-        // Remove animação de loading
-        button.classList.remove('loading');
-        
-        // Mostra sucesso
-        showSuccessState(button, successMessage);
-        
-        // Reset após 3 segundos
-        setTimeout(() => {
-            resetFormState(button, successMessage);
-        }, 3000);
-        
-    }, 2000); // 2 segundos de simulação
-}
-
-// Mostra estado de sucesso
-function showSuccessState(button, successMessage) {
-    // Atualiza botão
-    button.textContent = 'ENVIADO ✓';
-    button.style.backgroundColor = 'var(--cor-sucesso)';
-    button.style.transform = 'scale(1.02)';
-    
-    // Mostra mensagem de sucesso
-    successMessage.classList.add('show');
-    
-    // Adiciona vibração sutil se suportado
-    if (navigator.vibrate) {
-        navigator.vibrate([100, 50, 100]);
-    }
-}
-
-// Reseta o estado do formulário
-function resetFormState(button, successMessage) {
-    // Reset do botão
-    button.textContent = 'ENVIAR LINK';
-    button.disabled = false;
-    button.style.cursor = 'pointer';
-    button.style.backgroundColor = '';
-    button.style.transform = '';
-    
-    // Limpa o input
-    document.getElementById('emailInput').value = '';
-    
-    // Remove mensagem de sucesso
-    successMessage.classList.remove('show');
-    
-    // Remove possíveis mensagens de erro
-    const errorMessage = document.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.remove();
-    }
-}
-
-// Volta para a página de login com transição
-function goBackToLogin() {
-    // Adiciona classe de transição de saída
-    document.body.classList.add('page-exit');
-    
-    // Aguarda animação e redireciona
-    setTimeout(() => {
-        window.location.href = 'Index';
-    }, 500);
-}
-
-// Função alternativa para navegação (ASP.NET)
-function goBackToLoginMVC() {
-    document.body.classList.add('page-exit');
-    
-    setTimeout(() => {
-        // Use esta função se estiver usando ASP.NET MVC
-        window.location.href = '@Url.Action("Index", "Account")';
-    }, 500);
-}
-
 // Adiciona estilos CSS dinamicamente para animações de erro
 function addErrorAnimationStyles() {
     if (!document.querySelector('#error-styles')) {
@@ -299,14 +217,6 @@ function addErrorAnimationStyles() {
 // Inicializa estilos de erro
 addErrorAnimationStyles();
 
-// Adiciona listener para tecla Enter no campo de e-mail
-document.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter' && event.target.id === 'emailInput') {
-        event.preventDefault();
-        handleRecoverySubmit(event);
-    }
-});
-
 // Função para lidar com erros de rede (para uso futuro com API real)
 function handleNetworkError(error) {
     console.error('Erro de rede:', error);
@@ -320,7 +230,3 @@ function handleNetworkError(error) {
         button.classList.remove('loading');
     }
 }
-
-// Exporta funções para uso global (se necessário)
-window.goBackToLogin = goBackToLogin;
-window.goBackToLoginMVC = goBackToLoginMVC;

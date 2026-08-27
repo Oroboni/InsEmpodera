@@ -1,0 +1,42 @@
+name: Qualidade periódica dos testes
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  mutacoes:
+    name: Testar se a suíte detecta defeitos introduzidos
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Preparar .NET 9 e runtime da ferramenta
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            9.0.x
+            10.0.x
+
+      - name: Restaurar ferramenta fixada no projeto
+        run: dotnet tool restore
+
+      - name: Medir se os testes detectam alterações defeituosas
+        working-directory: InsEmpodera.Tests
+        run: dotnet stryker
+
+      - name: Gerar resumo em português
+        if: always()
+        shell: pwsh
+        run: |
+          ./scripts/Gerar-ResumoMutacoes.ps1 `
+            -PastaStryker ./InsEmpodera.Tests/StrykerOutput `
+            -Saida ./TestResults/RELATORIO-QUALIDADE-DOS-TESTES.md
+          Get-Content ./TestResults/RELATORIO-QUALIDADE-DOS-TESTES.md -Raw | Add-Content $env:GITHUB_STEP_SUMMARY

@@ -73,7 +73,7 @@ public sealed class AuthenticationBoundaryHttpTests : IClassFixture<EmpoderaWebA
     }
 
     [Fact]
-    public async Task SessionCookie_UsesExplicitSecurityFlags()
+    public async Task IdentityCookie_UsesExplicitSecurityFlags()
     {
         var user = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
         using var client = HttpFlowTestSupport.CreateClient(_factory);
@@ -82,11 +82,11 @@ public sealed class AuthenticationBoundaryHttpTests : IClassFixture<EmpoderaWebA
             client, user.Email, HttpFlowTestSupport.ValidPassword);
 
         HttpFlowTestSupport.AssertRedirect(login, "/");
-        var sessionCookie = Assert.Single(login.Headers.GetValues("Set-Cookie"), value =>
-            value.StartsWith(".AspNetCore.Session=", StringComparison.Ordinal));
-        Assert.Contains("httponly", sessionCookie, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("samesite=lax", sessionCookie, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("secure", sessionCookie, StringComparison.OrdinalIgnoreCase);
+        var identityCookie = Assert.Single(login.Headers.GetValues("Set-Cookie"), value =>
+            value.StartsWith(".Empodera.Identity=", StringComparison.Ordinal));
+        Assert.Contains("httponly", identityCookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("samesite=lax", identityCookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("secure", identityCookie, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

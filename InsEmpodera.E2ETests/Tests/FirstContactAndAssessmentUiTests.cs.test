@@ -8,7 +8,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Primeiro contato — criar em três etapas, editar, concluir, filtrar e excluir")]
     public Task FirstContact_ThreeStepCreateEditChildrenCompleteFilterAndDelete() =>
         RunInBrowserAsync(nameof(FirstContact_ThreeStepCreateEditChildrenCompleteFilterAndDelete), async page =>
         {
@@ -131,7 +131,7 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             Assert.False(await Fixture.QueryAsync(db => db.FichaCondicoes.AnyAsync(item => item.FkIdFicha == fichaId)));
         });
 
-    [Fact]
+    [Fact(DisplayName = "Avaliação pessoal — criar, usar indicadores, pesquisar, editar e excluir")]
     public Task PersonalAssessment_SelectActorCreateSliderEventsSearchEditAndDelete() =>
         RunInBrowserAsync(nameof(PersonalAssessment_SelectActorCreateSliderEventsSearchEditAndDelete), async page =>
         {
@@ -153,8 +153,7 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
                 .ToBeVisibleAsync();
             await page.Locator("#atorSelect").SelectOptionAsync(actorId.ToString());
             await page.WaitForURLAsync(url => new Uri(url).Query.Contains($"atorId={actorId}"));
-            await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Primeira Avaliação", Exact = true })
-                .ClickAsync();
+            await page.GetByTestId("assessment-create-first").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalAssessment/Create");
 
             await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(actorId.ToString());

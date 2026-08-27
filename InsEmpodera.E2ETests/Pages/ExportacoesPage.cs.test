@@ -1,0 +1,29 @@
+using Microsoft.Playwright;
+
+namespace InsEmpodera.E2ETests.Pages;
+
+public sealed class ExportacoesPage(IPage page)
+{
+    public sealed record TelaExportavel(string Pagina, string Identificador);
+
+    public static IReadOnlyList<TelaExportavel> TelasDaComunidade(int comunidadeId) =>
+    [
+        new("/Atores", "exportar-atores"),
+        new("/Comunidade", "exportar-comunidades"),
+        new($"/Comunidade/AtoresVinculados/{comunidadeId}", "exportar-atores-comunidade"),
+        new($"/Comunidade/AtividadesVinculadas?comunidadeId={comunidadeId}", "exportar-atividades-comunidade"),
+        new($"/Comunidade/ComunidadeRecursos?comunidadeId={comunidadeId}", "exportar-recursos-comunidade")
+    ];
+
+    public async Task<IDownload> ExportarAsync(TelaExportavel tela)
+    {
+        var response = await page.GotoAsync(tela.Pagina);
+        if (response is null || response.Status != 200)
+            throw new InvalidOperationException(
+                $"Não foi possível abrir '{tela.Pagina}'. Status recebido: {response?.Status.ToString() ?? "sem resposta"}.");
+
+        var link = page.GetByTestId(tela.Identificador);
+        await Assertions.Expect(link).ToBeVisibleAsync();
+        return await page.RunAndWaitForDownloadAsync(() => link.ClickAsync());
+    }
+}

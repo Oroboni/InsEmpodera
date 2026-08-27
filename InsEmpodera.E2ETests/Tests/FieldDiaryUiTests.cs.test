@@ -9,7 +9,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Diário de campo — formulário visível cria registro sem campo obsoleto")]
     public Task CreateScreen_ValidVisibleFormPersistsWithoutObsoleteFotoField() =>
         RunInBrowserAsync(nameof(CreateScreen_ValidVisibleFormPersistsWithoutObsoleteFotoField), async page =>
         {
@@ -37,7 +37,7 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             Assert.Equal("Rua do Diário, 50", created.Localizacao);
         });
 
-    [Fact]
+    [Fact(DisplayName = "Diário de campo — listar, pesquisar, editar vínculos e excluir")]
     public Task SeededDiary_ListSearchFilterDetailsEditRelationshipsAndDelete_ThroughUi() =>
         RunInBrowserAsync(nameof(SeededDiary_ListSearchFilterDetailsEditRelationshipsAndDelete_ThroughUi), async page =>
         {
@@ -119,7 +119,7 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             Assert.False(await Fixture.QueryAsync(db => db.DiarioEixos.AnyAsync(link => link.FkIdDiario == diaryId)));
         });
 
-    [Fact]
+    [Fact(DisplayName = "Diário de campo — ação institucional preserva ação, eixo e ator")]
     public Task DynamicInstitutionalAction_PersistsActionAxisAndActorRelationships() =>
         RunInBrowserAsync(nameof(DynamicInstitutionalAction_PersistsActionAxisAndActorRelationships), async page =>
         {

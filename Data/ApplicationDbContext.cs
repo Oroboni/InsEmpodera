@@ -7,6 +7,20 @@ namespace Empodera.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            PrepareIdentityFields();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
+        {
+            PrepareIdentityFields();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
         public DbSet<Usuario> Usuarios { get; set; } = null!;
         public DbSet<Perfil> Perfis { get; set; } = null!;
         public DbSet<Permissoes> Permissoes { get; set; } = null!;
@@ -43,6 +57,9 @@ namespace Empodera.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
+            modelBuilder.Entity<Usuario>().Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
+            modelBuilder.Entity<Usuario>().HasIndex(u => u.NormalizedUserName).IsUnique();
+            modelBuilder.Entity<Usuario>().HasIndex(u => u.NormalizedEmail).IsUnique();
             modelBuilder.Entity<Perfil>().HasKey(p => p.IdPerfil);
             modelBuilder.Entity<Permissoes>().HasKey(p => p.IdPermissoes);
             modelBuilder.Entity<Comunidade>().HasKey(c => c.Id_Comunidade);
@@ -385,14 +402,12 @@ namespace Empodera.Data
                 .HasForeignKey(ra => ra.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { IdUsuario = 1, Nome = "joao", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto1.jpg", Email = "joao@email.com", Ocupacao = "Coordenador", Genero = 1, DtNascimento = new DateTime(1990, 1, 1), DtCriacao = new DateTime(2024, 1, 1), DtAtualizacao = new DateTime(2025, 1, 1), FkIdPerfil = 1, Ativo = "S" },
-                new Usuario { IdUsuario = 2, Nome = "Usuario Dois", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto2.jpg", Email = "u2@example.com", Ocupacao = "Pesquisador", Genero = 2, DtNascimento = new DateTime(1985, 2, 2), DtCriacao = new DateTime(2024, 2, 1), DtAtualizacao = new DateTime(2025, 2, 1), FkIdPerfil = 2, Ativo = "S" },
-                new Usuario { IdUsuario = 3, Nome = "Usuario Tres", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto3.jpg", Email = "u3@example.com", Ocupacao = "Voluntario", Genero = 1, DtNascimento = new DateTime(1995, 3, 3), DtCriacao = new DateTime(2024, 3, 1), DtAtualizacao = new DateTime(2025, 3, 1), FkIdPerfil = 3, Ativo = "S" },
-                new Usuario { IdUsuario = 4, Nome = "Usuario Quatro", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto4.jpg", Email = "u4@example.com", Ocupacao = "Analista", Genero = 2, DtNascimento = new DateTime(1992, 4, 4), DtCriacao = new DateTime(2024, 4, 1), DtAtualizacao = new DateTime(2025, 4, 1), FkIdPerfil = 4, Ativo = "N" },
-                new Usuario { IdUsuario = 5, Nome = "Usuario Cinco", Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==", Foto = "foto5.jpg", Email = "u5@example.com", Ocupacao = "Gerente", Genero = 1, DtNascimento = new DateTime(1988, 5, 5), DtCriacao = new DateTime(2024, 5, 1), DtAtualizacao = new DateTime(2025, 5, 1), FkIdPerfil = 5, Ativo = "N" }
+                IdentitySeed(1, "joao", "joao@email.com", "Coordenador", 1, 1, "S", "foto1.jpg", new DateTime(1990, 1, 1)),
+                IdentitySeed(2, "Usuario Dois", "u2@example.com", "Pesquisador", 2, 2, "S", "foto2.jpg", new DateTime(1985, 2, 2)),
+                IdentitySeed(3, "Usuario Tres", "u3@example.com", "Voluntario", 1, 3, "S", "foto3.jpg", new DateTime(1995, 3, 3)),
+                IdentitySeed(4, "Usuario Quatro", "u4@example.com", "Analista", 2, 4, "N", "foto4.jpg", new DateTime(1992, 4, 4)),
+                IdentitySeed(5, "Usuario Cinco", "u5@example.com", "Gerente", 1, 5, "N", "foto5.jpg", new DateTime(1988, 5, 5))
             );
 
             // Perfis
@@ -476,6 +491,62 @@ namespace Empodera.Data
                 new Permissoes { IdPermissoes = 59, FkIdPerfil = 5, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
                 new Permissoes { IdPermissoes = 60, FkIdPerfil = 5, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" }
             );
+        }
+
+        private static Usuario IdentitySeed(
+            int id,
+            string name,
+            string email,
+            string occupation,
+            int? gender,
+            int profileId,
+            string active,
+            string photo,
+            DateTime birthDate)
+        {
+            var normalizedEmail = email.ToUpperInvariant();
+            return new Usuario
+            {
+                IdUsuario = id,
+                UserName = email,
+                NormalizedUserName = normalizedEmail,
+                Email = email,
+                NormalizedEmail = normalizedEmail,
+                EmailConfirmed = true,
+                Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==",
+                SecurityStamp = $"seed-security-stamp-{id}",
+                ConcurrencyStamp = $"seed-concurrency-stamp-{id}",
+                LockoutEnabled = true,
+                Nome = name,
+                Foto = photo,
+                Ocupacao = occupation,
+                Genero = gender,
+                DtNascimento = birthDate,
+                DtCriacao = new DateTime(2024, Math.Min(id, 12), 1),
+                DtAtualizacao = new DateTime(2025, Math.Min(id, 12), 1),
+                FkIdPerfil = profileId,
+                Ativo = active,
+                IdiomaPreferido = IdiomaPreferido.Default
+            };
+        }
+
+        private void PrepareIdentityFields()
+        {
+            foreach (var entry in ChangeTracker.Entries<Usuario>()
+                         .Where(entry => entry.State is EntityState.Added or EntityState.Modified))
+            {
+                var user = entry.Entity;
+                user.Email = user.Email.Trim();
+                user.UserName = string.IsNullOrWhiteSpace(user.UserName) ? user.Email : user.UserName.Trim();
+                user.NormalizedEmail = user.Email.ToUpperInvariant();
+                user.NormalizedUserName = user.UserName.ToUpperInvariant();
+                user.SecurityStamp = string.IsNullOrWhiteSpace(user.SecurityStamp)
+                    ? Guid.NewGuid().ToString("N")
+                    : user.SecurityStamp;
+                user.ConcurrencyStamp = string.IsNullOrWhiteSpace(user.ConcurrencyStamp)
+                    ? Guid.NewGuid().ToString("N")
+                    : user.ConcurrencyStamp;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using InsEmpodera.E2ETests.Infrastructure;
+using InsEmpodera.E2ETests.Pages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Playwright;
 using Xunit;
@@ -8,7 +9,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class DataHubUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Exportações — cada tela baixa seu próprio arquivo Excel")]
     public Task ListAndRelationshipScreens_ExportTheirOwnExcelData() =>
         RunInBrowserAsync(nameof(ListAndRelationshipScreens_ExportTheirOwnExcelData), async page =>
         {
@@ -18,29 +19,17 @@ public sealed class DataHubUiTests(E2ETestFixture fixture) : BrowserTestBase(fix
                 .OrderBy(item => item.Id_Comunidade)
                 .Select(item => item.Id_Comunidade)
                 .FirstAsync());
-            var screens = new[]
-            {
-                (Page: "/Atores", Export: "/Services/ExportAtores"),
-                (Page: "/Comunidade", Export: "/Services/ExportComunidades"),
-                (Page: $"/Comunidade/AtoresVinculados/{communityId}", Export: "/Services/ExportAtoresComunidade"),
-                (Page: $"/Comunidade/AtividadesVinculadas?comunidadeId={communityId}", Export: "/Services/ExportAtividadesComunidade"),
-                (Page: $"/Comunidade/ComunidadeRecursos?comunidadeId={communityId}", Export: "/Services/ExportRecursosComunidade")
-            };
+            var exportacoes = new ExportacoesPage(page);
 
-            foreach (var screen in screens)
+            foreach (var screen in ExportacoesPage.TelasDaComunidade(communityId))
             {
-                var response = await page.GotoAsync(screen.Page);
-                Assert.NotNull(response);
-                Assert.Equal(200, response!.Status);
-                var exportLink = page.Locator($"a[href*='{screen.Export}']");
-                await Assertions.Expect(exportLink).ToBeVisibleAsync();
-                var download = await page.RunAndWaitForDownloadAsync(() => exportLink.ClickAsync());
+                var download = await exportacoes.ExportarAsync(screen);
                 Assert.EndsWith(".xlsx", download.SuggestedFilename, StringComparison.OrdinalIgnoreCase);
                 await AssertDownloadSignatureAsync(download, 0x50, 0x4B);
             }
         });
 
-    [Fact]
+    [Fact(DisplayName = "Central de dados — exportar módulos e restaurar o backup geral")]
     public Task DataHub_ExportsEveryModuleAndRoundTripsGeneralBackupThroughTheUi() =>
         RunInBrowserAsync(
             nameof(DataHub_ExportsEveryModuleAndRoundTripsGeneralBackupThroughTheUi),
@@ -127,7 +116,7 @@ public sealed class DataHubUiTests(E2ETestFixture fixture) : BrowserTestBase(fix
                 Assert.True(await HasNoHorizontalOverflowAsync(page));
             });
 
-    [Fact]
+    [Fact(DisplayName = "Central de dados — permanecer legível e operável no celular")]
     public Task DataHub_RemainsReadableAndOperableOnMobile() =>
         RunInBrowserAsync(
             nameof(DataHub_RemainsReadableAndOperableOnMobile),

@@ -1,0 +1,64 @@
+@model Empodera.Models.Usuario
+@{
+    ViewData["Title"] = "Desativar Usuário";
+    ViewData["PageCSS"] = "usuarios-edit";
+    Layout = "_Layout";
+    var isCurrentUser = (ViewBag.IsCurrentUser as bool?) == true;
+    var isLastActiveAdmin = (ViewBag.IsLastActiveAdmin as bool?) == true;
+    var blocked = isCurrentUser || isLastActiveAdmin || Model.Ativo != "S";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css" asp-append-version="true" />
+}
+
+<div class="modern-container user-delete-page" data-testid="user-delete-confirmation">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Usuários</a>
+            <span class="separator">&gt;</span>
+            <strong class="text-muted">Desativar Usuário</strong>
+        </h2>
+    </div>
+
+    <section class="deactivation-card">
+        <div class="deactivation-icon"><i class="fa-solid fa-user-slash"></i></div>
+        <h3>Desativar @Model.Nome?</h3>
+        <p>
+            O usuário não poderá mais entrar no Empodera. Seus registros e históricos serão preservados
+            e a conta poderá ser reativada posteriormente.
+        </p>
+        <dl class="deactivation-summary">
+            <div><dt>E-mail</dt><dd>@Model.Email</dd></div>
+            <div><dt>Perfil</dt><dd>@Model.Perfil?.Nome</dd></div>
+            <div><dt>Status atual</dt><dd>@(Model.Ativo == "S" ? "Ativo" : "Inativo")</dd></div>
+        </dl>
+
+        @if (isCurrentUser)
+        {
+            <div class="crud-feedback is-info">Você não pode desativar a própria conta.</div>
+        }
+        else if (isLastActiveAdmin)
+        {
+            <div class="crud-feedback is-info">O último administrador ativo não pode ser desativado.</div>
+        }
+        else if (Model.Ativo != "S")
+        {
+            <div class="crud-feedback is-info">Esta conta já está inativa.</div>
+        }
+
+        <div class="buttons-container">
+            <a asp-action="Details" asp-route-id="@Model.IdUsuario" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Cancelar
+            </a>
+            @if (!blocked)
+            {
+                <form asp-action="Delete" asp-route-id="@Model.IdUsuario" method="post">
+                    <button type="submit" class="wizard-btn btn-delete" data-testid="confirm-user-deactivation">
+                        <i class="fa-solid fa-user-slash"></i> Confirmar desativação
+                    </button>
+                </form>
+            }
+        </div>
+    </section>
+</div>

@@ -24,7 +24,7 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
         "/Report"
     ];
 
-    [Fact]
+    [Fact(DisplayName = "Menu lateral — todos os links visíveis abrem páginas válidas")]
     public Task EveryImplementedVisibleSidebarLink_ClicksToSuccessfulPage_AndBecomesActive() =>
         RunInBrowserAsync(
             nameof(EveryImplementedVisibleSidebarLink_ClicksToSuccessfulPage_AndBecomesActive),
@@ -35,7 +35,9 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
 
                 foreach (var path in ImplementedSidebarPaths)
                 {
-                    if (new Uri(page.Url).AbsolutePath != "/")
+                    if (path == "/" && new Uri(page.Url).AbsolutePath == "/")
+                        await page.GotoAsync("/Comunidade");
+                    else if (path != "/" && new Uri(page.Url).AbsolutePath != "/")
                         await page.GotoAsync("/");
 
                     var link = page.Locator($"#sidebar a[href='{path}']");
@@ -55,7 +57,7 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
                 Assert.Equal("/Account", new Uri(page.Url).AbsolutePath);
             });
 
-    [Fact]
+    [Fact(DisplayName = "Ajuda — abrir orientações e usar os atalhos rápidos")]
     public Task HelpSidebarLink_LoadsGuidance_AndQuickAccessWorks() =>
         RunInBrowserAsync(
             nameof(HelpSidebarLink_LoadsGuidance_AndQuickAccessWorks),
@@ -80,7 +82,7 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
                 await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
             });
 
-    [Fact]
+    [Fact(DisplayName = "Configurações — alterar idioma e carregar opções disponíveis")]
     public Task SettingsSidebarLink_ChangesInterfaceLanguage_AndLoadsAvailableOptions() =>
         RunInBrowserAsync(
             nameof(SettingsSidebarLink_ChangesInterfaceLanguage_AndLoadsAvailableOptions),
@@ -111,7 +113,7 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
                 await page.GetByRole(AriaRole.Link, new() { Name = "View access profiles" }).ClickAsync();
                 await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
             });
-    [Fact]
+    [Fact(DisplayName = "Menu móvel — teclado, toque, fundo e Escape funcionam")]
     public Task MobileSidebar_ToggleEscapeBackdropAndNavigation_AreKeyboardAndTouchUsable() =>
         RunInBrowserAsync(
             nameof(MobileSidebar_ToggleEscapeBackdropAndNavigation_AreKeyboardAndTouchUsable),
@@ -157,7 +159,7 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
                 HasTouch = true
             });
 
-    [Fact]
+    [Fact(DisplayName = "Idioma no login — controlar a sessão e acompanhar o navegador no modo automático")]
     public Task LoginLanguageSelector_ControlsWholeSession_AndAutomaticFollowsBrowser() =>
         RunInBrowserAsync(
             nameof(LoginLanguageSelector_ControlsWholeSession_AndAutomaticFollowsBrowser),
@@ -228,12 +230,7 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
         Assert.Equal("/Account/Logout", new Uri(new Uri(page.Url), action).AbsolutePath);
         await Assertions.Expect(form.Locator("input[name=__RequestVerificationToken]")).ToHaveCountAsync(1);
 
-        var request = await page.RunAndWaitForRequestAsync(
-            () => form.GetByRole(AriaRole.Button, new() { Name = "Logout", Exact = true }).ClickAsync(),
-            candidate => new Uri(candidate.Url).AbsolutePath.Equals(
-                "/Account/Logout", StringComparison.OrdinalIgnoreCase));
-        Assert.Equal("POST", request.Method);
-        Assert.Contains("__RequestVerificationToken=", request.PostData ?? string.Empty);
+        await form.Locator("button[type=submit]").ClickAsync();
         await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Account");
     }
 

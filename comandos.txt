@@ -1,3 +1,4 @@
 git clone -b Online --single-branch https://github.com/Oroboni/InsEmpodera.git
 dotnet run --urls="http://0.0.0.0:5000"
 .\testar.ps1
+dotnet run --launch-profile https

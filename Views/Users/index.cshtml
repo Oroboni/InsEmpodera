@@ -21,6 +21,11 @@
         </h2>
     </div>
 
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="crud-feedback is-success" role="status">@successMessage</div>
+    }
+
     <!-- Barra de Busca -->
     <div class="search-container">
         <div class="search-input-group">
@@ -33,10 +38,13 @@
             </div>
         </div>
 
-        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create", "Users")'"
-            title="Adicionar Novo Usuário">
-            <i class="fa-solid fa-plus"></i>
-        </button>
+        @if ((ViewBag.CanCreateUsers as bool?) == true)
+        {
+            <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create", "Users")'"
+                title="Adicionar Novo Usuário" data-testid="user-create">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        }
     </div>
 
     <!-- Estatísticas -->
@@ -120,6 +128,10 @@
                             </p>
                             
                             <div class="tag-list">
+                                <span class="tag-item">
+                                    <i class="fas fa-id-badge"></i>
+                                    @(user.Perfil?.Nome ?? "Sem perfil")
+                                </span>
                                 @if (isAtivo)
                                 {
                                     <span class="tag-item tag-green">
@@ -139,10 +151,20 @@
                     </div>
 
                     <div class="actions">
-                        <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
-                            title="Ver detalhes">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
+                        @if ((ViewBag.CanViewUsers as bool?) == true)
+                        {
+                            <a class="btn-eye" asp-controller="Users" asp-action="Details" asp-route-id="@user.IdUsuario"
+                                title="Ver detalhes" data-testid="user-details-@user.IdUsuario">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        }
+                        @if ((ViewBag.CanUpdateUsers as bool?) == true)
+                        {
+                            <a class="btn-eye" asp-controller="Users" asp-action="Edit" asp-route-id="@user.IdUsuario"
+                                title="Editar usuário" data-testid="user-edit-@user.IdUsuario">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                        }
                     </div>
                 </div>
             }

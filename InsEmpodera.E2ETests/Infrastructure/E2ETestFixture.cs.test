@@ -4,6 +4,8 @@ using Empodera.Controllers;
 using Empodera.Data;
 using Empodera.Models;
 using Empodera.Services;
+using Empodera.Services.Email;
+using Empodera.Services.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -26,6 +28,7 @@ public sealed class E2ETestFixture : IAsyncLifetime
 
     private WebApplication? _application;
     private IPlaywright? _playwright;
+    private readonly SemaphoreSlim _databaseResetLock = new(1, 1);
     private readonly string _databasePath = Path.Combine(
         Path.GetTempPath(), $"insempodera-e2e-{Guid.NewGuid():N}.db");
 
@@ -48,7 +51,7 @@ public sealed class E2ETestFixture : IAsyncLifetime
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
         builder.Logging.SetMinimumLevel(LogLevel.Warning);
-        builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+        builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
         builder.Logging.AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Warning);
         builder.WebHost.ConfigureKestrel(options => options.Listen(IPAddress.Loopback, 0));
 
@@ -60,6 +63,8 @@ public sealed class E2ETestFixture : IAsyncLifetime
             .AddDataAnnotationsLocalization();
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite($"Data Source={_databasePath}"));
+        builder.Services.AddEmpoderaIdentity(builder.Environment);
+        builder.Services.AddGmailPasswordRecovery(builder.Configuration, builder.Environment);
         builder.Services.AddDistributedMemoryCache();
         builder.Services.AddSession(options =>
         {
@@ -100,12 +105,14 @@ public sealed class E2ETestFixture : IAsyncLifetime
         _application.UseRouting();
         _application.UseMiddleware<LocalizedHtmlMiddleware>();
         _application.UseSession();
+        _application.UseAuthentication();
+        _application.UseMiddleware<IdentitySessionBridgeMiddleware>();
         _application.UseAuthorization();
         _application.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
-        await SeedDatabaseAsync(_application.Services);
+        await ResetDatabaseAsync();
         await _application.StartAsync();
 
         BaseUrl = _application.Services
@@ -161,6 +168,22 @@ public sealed class E2ETestFixture : IAsyncLifetime
             await operation(db);
             return true;
         });
+    }
+
+    public async Task ResetDatabaseAsync()
+    {
+        if (_application is null)
+            throw new InvalidOperationException("A aplicação E2E ainda não foi preparada.");
+
+        await _databaseResetLock.WaitAsync();
+        try
+        {
+            await SeedDatabaseAsync(_application.Services);
+        }
+        finally
+        {
+            _databaseResetLock.Release();
+        }
     }
 
     private static async Task SeedDatabaseAsync(IServiceProvider services)

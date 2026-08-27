@@ -69,6 +69,22 @@ describe('integridade dos assets first-party', () => {
     }
     expect(missing, missing.join('\n')).toEqual([]);
   });
+
+  it('Font Awesome é servido localmente e todas as fontes referenciadas existem', () => {
+    const layout = readProjectFile('Views/Shared/_Layout.cshtml');
+    const stylesheetPath = 'lib/fontawesome/css/all.min.css';
+    const stylesheet = readProjectFile(`wwwroot/${stylesheetPath}`);
+
+    expect(layout).toContain(`href="~/${stylesheetPath}"`);
+    expect(layout).not.toMatch(/cdnjs\.cloudflare\.com\/.*font-awesome/i);
+
+    const missingFonts = [];
+    for (const match of stylesheet.matchAll(/url\(\.\.\/(?<font>webfonts\/[^)?#"']+)/g)) {
+      const asset = `lib/fontawesome/${match.groups.font}`;
+      if (!firstPartyAssets.has(asset)) missingFonts.push(asset);
+    }
+    expect(missingFonts, missingFonts.join('\n')).toEqual([]);
+  });
 });
 
 describe('contratos de seletores das Views', () => {
@@ -120,6 +136,28 @@ describe('contratos de seletores das Views', () => {
       }
     }
     expect(orphanLabels, orphanLabels.join('\n')).toEqual([]);
+  });
+
+  it('identificadores data-testid são únicos em cada View e preservam os fluxos críticos', () => {
+    const duplicates = [];
+    const rendered = new Set();
+    for (const viewFile of viewFiles) {
+      const source = withoutRazorComments(readFileSync(viewFile, 'utf8'));
+      const identifiers = [...source.matchAll(/\bdata-testid\s*=\s*["'](?<id>[^"'@<>]+)["']/gi)]
+        .map(match => match.groups.id);
+      const counts = identifiers.reduce((map, id) => map.set(id, (map.get(id) ?? 0) + 1), new Map());
+      for (const [id, count] of counts) {
+        rendered.add(id);
+        if (count > 1) duplicates.push(`${normalizedProjectPath(viewFile)} -> ${id} (${count}x)`);
+      }
+    }
+    expect(duplicates, duplicates.join('\n')).toEqual([]);
+    for (const required of [
+      'login-email', 'login-senha', 'login-entrar', 'exportar-atores', 'exportar-comunidades',
+      'exportar-atores-comunidade', 'exportar-atividades-comunidade', 'exportar-recursos-comunidade'
+    ]) {
+      expect(rendered.has(required), `data-testid ausente: ${required}`).toBe(true);
+    }
   });
 });
 

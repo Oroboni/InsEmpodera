@@ -130,31 +130,22 @@ describe('recuperação de senha', () => {
     expect(document.querySelector('.error-message')).toBeNull();
   });
 
-  it('executa o fluxo completo de carregamento, sucesso e restauração', () => {
+  it('permite o envio real ao servidor e mantém o estado de processamento', () => {
     const input = document.getElementById('emailInput');
     const form = document.querySelector('form');
     const button = document.getElementById('recoveryBtn');
-    const message = document.getElementById('successMessage');
     input.value = 'pessoa@example.org';
 
-    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    const event = new Event('submit', { bubbles: true, cancelable: true });
+    form.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
     expect(button.disabled).toBe(true);
     expect(button.classList.contains('loading')).toBe(true);
     expect(document.querySelectorAll('#loading-styles')).toHaveLength(1);
-
-    vi.advanceTimersByTime(2_000);
-    expect(button.textContent).toBe('ENVIADO ✓');
-    expect(message.classList.contains('show')).toBe(true);
-    expect(window.navigator.vibrate).toHaveBeenCalledWith([100, 50, 100]);
-
-    vi.advanceTimersByTime(3_000);
-    expect(button.textContent).toBe('ENVIAR LINK');
-    expect(button.disabled).toBe(false);
-    expect(input.value).toBe('');
-    expect(message.classList.contains('show')).toBe(false);
+    expect(button.textContent).toBe('ENVIANDO...');
   });
 
-  it('trata Enter no campo como envio e impede a ação nativa', () => {
+  it('não intercepta o Enter e deixa o navegador enviar o formulário nativamente', () => {
     const input = document.getElementById('emailInput');
     input.value = 'pessoa@example.org';
     const event = new KeyboardEvent('keypress', {
@@ -162,8 +153,8 @@ describe('recuperação de senha', () => {
     });
 
     input.dispatchEvent(event);
-    expect(event.defaultPrevented).toBe(true);
-    expect(document.getElementById('recoveryBtn').disabled).toBe(true);
+    expect(event.defaultPrevented).toBe(false);
+    expect(document.getElementById('recoveryBtn').disabled).toBe(false);
   });
 
   it('recupera o botão de um erro de rede', () => {

@@ -10,7 +10,7 @@
 }
 
 <div class="modern-container">
-    <form asp-action="Create" method="post" class="main-form">
+    <form asp-action="Create" method="post" class="main-form" data-testid="user-create-form">
         @Html.AntiForgeryToken()
 
 
@@ -37,7 +37,7 @@
             </div>
             <div class="input-content">
                 <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
-                <input asp-for="Nome" class="clean-input" placeholder="Digite o nome do usuário" required />
+                <input asp-for="Nome" class="clean-input" placeholder="Digite o nome do usuário" required maxlength="255" autocomplete="name" />
             </div>
         </div>
 
@@ -50,7 +50,7 @@
                 </div>
                 <div class="input-content">
                     <label asp-for="Email">E-mail <span class="text-danger">*</span></label>
-                    <input asp-for="Email" type="email" class="clean-input" placeholder="Digite o e-mail" required />
+                    <input asp-for="Email" type="email" class="clean-input" placeholder="Digite o e-mail" required maxlength="256" autocomplete="email" />
                 </div>
             </div>
 
@@ -75,7 +75,8 @@
                 </div>
                 <div class="input-content">
                     <label asp-for="Senha">Senha <span class="text-danger">*</span></label>
-                    <input asp-for="Senha" type="password" class="clean-input" placeholder="Digite a senha" required />
+                    <input asp-for="Senha" type="password" class="clean-input" placeholder="Digite a senha" required minlength="8" maxlength="100" autocomplete="new-password" />
+                    <small class="text-muted">Use pelo menos 8 caracteres, com maiúscula, minúscula, número e símbolo.</small>
                 </div>
         </div>
 
@@ -103,9 +104,19 @@
                     <i class="fa-solid fa-briefcase"></i>
                 </div>
                 <div class="input-content">
-                    <label asp-for="Ocupacao">Ocupação</label>
-                    <input asp-for="Ocupacao" class="clean-input" placeholder="Ex: Assistente social" />
+                    <label asp-for="Ocupacao">Ocupação <span class="text-danger">*</span></label>
+                    <input asp-for="Ocupacao" class="clean-input" placeholder="Ex: Assistente social" required maxlength="255" />
                 </div>
+            </div>
+        </div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple">
+                <i class="fa-solid fa-cake-candles"></i>
+            </div>
+            <div class="input-content">
+                <label asp-for="DtNascimento">Data de nascimento <span class="text-danger">*</span></label>
+                <input asp-for="DtNascimento" type="date" class="clean-input" required min="1900-01-01" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
             </div>
         </div>
 
@@ -115,7 +126,7 @@
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </a>
 
-            <button type="submit" class="wizard-btn btn-next">
+            <button type="submit" class="wizard-btn btn-next" data-testid="user-create-submit">
                 <i class="fa-solid fa-check"></i> Salvar Usuário
             </button>
         </div>

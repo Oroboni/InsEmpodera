@@ -17,7 +17,7 @@
         </h2>
     </div>
 
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" data-testid="actor-create-form">
         <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
         <div class="section-label">Informações Básicas</div>
 
@@ -233,7 +233,7 @@
             <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Cancelar
             </a>
-            <button type="submit" class="wizard-btn btn-next">
+            <button type="submit" class="wizard-btn btn-next" data-testid="actor-create-submit">
                 <i class="fa-solid fa-check"></i> Adicionar Ator
             </button>
         </div>

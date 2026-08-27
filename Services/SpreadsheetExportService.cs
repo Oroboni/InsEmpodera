@@ -7,6 +7,8 @@ namespace Empodera.Services;
 
 public sealed class SpreadsheetExportService(ApplicationDbContext context)
 {
+    private const int ExcelCellTextLimit = 32_767;
+    private const string LongTextSheetName = "TextosLongos";
     private readonly ApplicationDbContext _context = context;
 
     public async Task<byte[]> ExportCommunitiesAsync(CancellationToken cancellationToken)
@@ -226,7 +228,13 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
 
         for (var row = 0; row < rows.Count; row++)
         for (var column = 0; column < properties.Length; column++)
-            SetCellValue(worksheet.Cell(row + 2, column + 1), properties[column].PropertyInfo!.GetValue(rows[row]));
+            SetCellValue(
+                workbook,
+                worksheet,
+                worksheet.Cell(row + 2, column + 1),
+                row + 2,
+                properties[column].Name,
+                properties[column].PropertyInfo!.GetValue(rows[row]));
 
         var header = worksheet.Range(1, 1, 1, Math.Max(1, properties.Length));
         header.Style.Font.Bold = true;
@@ -246,9 +254,21 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         return workbook;
     }
 
-    private static void SetCellValue(IXLCell cell, object? value)
+    private static void SetCellValue(
+        XLWorkbook workbook,
+        IXLWorksheet sourceSheet,
+        IXLCell cell,
+        int sourceRow,
+        string propertyName,
+        object? value)
     {
         if (value == null) return;
+        if (value is string text && text.Length > ExcelCellTextLimit)
+        {
+            cell.Value = $"{text[..240]}… [conteúdo completo na planilha {LongTextSheetName}]";
+            AddLongText(workbook, sourceSheet.Name, sourceRow, propertyName, text);
+            return;
+        }
         cell.Value = value switch
         {
             DateTime date => date,
@@ -260,6 +280,43 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
             float number => number,
             _ => value.ToString() ?? string.Empty
         };
+    }
+
+    private static void AddLongText(
+        XLWorkbook workbook,
+        string sourceSheet,
+        int sourceRow,
+        string propertyName,
+        string text)
+    {
+        var worksheet = workbook.Worksheets.FirstOrDefault(sheet => sheet.Name == LongTextSheetName);
+        if (worksheet == null)
+        {
+            worksheet = workbook.Worksheets.Add(LongTextSheetName);
+            var headers = new[] { "Planilha", "Linha", "Campo", "Parte", "Conteudo" };
+            for (var column = 0; column < headers.Length; column++)
+                worksheet.Cell(1, column + 1).Value = headers[column];
+            var header = worksheet.Range(1, 1, 1, headers.Length);
+            header.Style.Font.Bold = true;
+            header.Style.Font.FontColor = XLColor.White;
+            header.Style.Fill.BackgroundColor = XLColor.FromHtml("#722B7C");
+            header.SetAutoFilter();
+            worksheet.SheetView.FreezeRows(1);
+        }
+
+        var part = 1;
+        for (var offset = 0; offset < text.Length; offset += ExcelCellTextLimit)
+        {
+            var targetRow = worksheet.LastRowUsed()?.RowNumber() + 1 ?? 2;
+            worksheet.Cell(targetRow, 1).Value = sourceSheet;
+            worksheet.Cell(targetRow, 2).Value = sourceRow;
+            worksheet.Cell(targetRow, 3).Value = propertyName;
+            worksheet.Cell(targetRow, 4).Value = part++;
+            worksheet.Cell(targetRow, 5).Value = text.Substring(offset, Math.Min(ExcelCellTextLimit, text.Length - offset));
+        }
+
+        worksheet.Columns(1, 4).AdjustToContents(8, 45);
+        worksheet.Column(5).Width = 70;
     }
 
     private static byte[] Save(XLWorkbook workbook)

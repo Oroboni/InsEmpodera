@@ -3,6 +3,9 @@
     ViewData["Title"] = "Editar Usuário";
     ViewData["PageCSS"] = "usuarios-edit";
     Layout = "_Layout";
+    var canManageIdentity = (ViewBag.CanManageIdentity as bool?) == true;
+    var canDelete = (ViewBag.CanDeleteUsers as bool?) == true;
+    var isCurrentUser = (ViewBag.IsCurrentUser as bool?) == true;
 }
 
 @section Styles {
@@ -10,7 +13,7 @@
 }
 
 <div class="modern-container">
-    <form asp-action="Edit" method="post" class="main-form">
+    <form asp-action="Edit" method="post" class="main-form" data-testid="user-edit-form">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdUsuario" />
 
@@ -26,7 +29,7 @@
 
         @if (ViewBag.ErrorMessage != null)
         {
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" role="alert">
                 @ViewBag.ErrorMessage
             </div>
         }
@@ -50,10 +53,8 @@
                 </div>
                 <div class="input-content">
                     <label asp-for="Email">E-mail <span class="text-danger">*</span></label>
-                    <input asp-for="Email" type="email" class="clean-input" placeholder="exemplo@email.com" required
-                        readonly>
-
-                    <input type="hidden" asp-for="Email" />
+                    <input asp-for="Email" type="email" class="clean-input" placeholder="exemplo@email.com"
+                        required maxlength="256" autocomplete="email" disabled>
                 </div>
             </div>
 
@@ -64,9 +65,13 @@
                 <div class="input-content">
                     <label asp-for="FkIdPerfil">Perfil de Acesso <span class="text-danger">*</span></label>
                     <select asp-for="FkIdPerfil" asp-items="ViewBag.PerfilLista" class="clean-input simple-select"
-                        required disabled>
+                        required disabled data-locked="@((!canManageIdentity || isCurrentUser).ToString().ToLowerInvariant())">
                         <option value="">Selecione</option>
                     </select>
+                    @if (!canManageIdentity || isCurrentUser)
+                    {
+                        <input type="hidden" name="FkIdPerfil" value="@Model.FkIdPerfil" />
+                    }
                     <i class="fa-solid fa-chevron-down dropdown-icon"></i>
                 </div>
             </div>
@@ -78,10 +83,11 @@
                 <i class="fa-solid fa-lock"></i>
             </div>
             <div class="input-content">
-                <label asp-for="Senha">Senha <span class="text-danger">*</span></label>
-                <input asp-for="Senha" type="password" class="clean-input" placeholder="••••••••" required disabled>
-                <small class="text-muted" style="margin-top: 4px; display: block;">Digite uma nova senha para
-                    alterar</small>
+                <label asp-for="Senha">Nova senha <span class="text-muted">(opcional)</span></label>
+                <input asp-for="Senha" type="password" class="clean-input" placeholder="Deixe vazio para manter a atual"
+                    minlength="8" maxlength="100" autocomplete="new-password" disabled
+                    data-locked="@((!canManageIdentity).ToString().ToLowerInvariant())">
+                <small class="text-muted" style="margin-top: 4px; display: block;">Preencha somente quando quiser trocar a senha.</small>
             </div>
         </div>
 
@@ -109,9 +115,20 @@
                     <i class="fa-solid fa-briefcase"></i>
                 </div>
                 <div class="input-content">
-                    <label asp-for="Ocupacao">Ocupação</label>
-                    <input asp-for="Ocupacao" class="clean-input" placeholder="Ex: Assistente social" disabled>
+                    <label asp-for="Ocupacao">Ocupação <span class="text-danger">*</span></label>
+                    <input asp-for="Ocupacao" class="clean-input" placeholder="Ex: Assistente social" required maxlength="255" disabled>
                 </div>
+            </div>
+        </div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple">
+                <i class="fa-solid fa-cake-candles"></i>
+            </div>
+            <div class="input-content">
+                <label asp-for="DtNascimento">Data de nascimento <span class="text-danger">*</span></label>
+                <input asp-for="DtNascimento" type="date" class="clean-input" required min="1900-01-01"
+                    max="@DateTime.Today.ToString("yyyy-MM-dd")" disabled>
             </div>
         </div>
 
@@ -122,10 +139,15 @@
                 </div>
                 <div class="input-content">
                     <label asp-for="Ativo">Status</label>
-                    <select asp-for="Ativo" class="clean-input simple-select" disabled>
+                    <select asp-for="Ativo" class="clean-input simple-select" disabled
+                        data-locked="@((!canManageIdentity || isCurrentUser).ToString().ToLowerInvariant())">
                         <option value="S">Ativo</option>
                         <option value="N">Inativo</option>
                     </select>
+                    @if (!canManageIdentity || isCurrentUser)
+                    {
+                        <input type="hidden" name="Ativo" value="@Model.Ativo" />
+                    }
                     <i class="fa-solid fa-chevron-down dropdown-icon"></i>
                 </div>
         </div>
@@ -137,13 +159,16 @@
             </a>
 
             <div class="action-buttons-group">
-                <button type="button" class="wizard-btn btn-next" id="edit-save-btn" data-i18n-text>
+                <button type="button" class="wizard-btn btn-next" id="edit-save-btn" data-testid="user-edit-submit" data-i18n-text>
                     <i class="fa-solid fa-edit"></i> Editar
                 </button>
 
-                <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
-                    <i class="fa-solid fa-trash"></i> Deletar
-                </button>
+                @if (canDelete && !isCurrentUser && Model.Ativo == "S")
+                {
+                    <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                        <i class="fa-solid fa-user-slash"></i> Desativar
+                    </button>
+                }
             </div>
         </div>
     </form>
@@ -156,11 +181,11 @@
             <i class="fas fa-exclamation-triangle"></i>
         </div>
 
-        <h3 class="modal-title">Confirmar Exclusão</h3>
+        <h3 class="modal-title">Confirmar desativação</h3>
 
         <p class="modal-text">
-            Você tem certeza que deseja deletar o usuário <strong>@Model.Nome</strong>?<br>
-            Essa ação não pode ser desfeita.
+            Deseja desativar o usuário <strong>@Model.Nome</strong>?<br>
+            A conta perderá o acesso, mas os históricos serão preservados e ela poderá ser reativada.
         </p>
 
         <div class="button-container">
@@ -172,7 +197,7 @@
                 <form asp-controller="Users" asp-action="Delete" method="post" asp-route-id="@Model.IdUsuario">
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn-modal-confirm wizard-btn btn-next">
-                        Sim, Deletar
+                        Sim, desativar
                     </button>
                 </form>
             </div>
@@ -199,8 +224,8 @@
                 if (isEditMode) {
                     // Modo edição ativo
                     inputFields.forEach(field => {
-                        // Não habilitar campos readonly (como email)
-                        if (!field.hasAttribute('readonly')) {
+                        // Perfil, status e senha podem permanecer bloqueados conforme a permissão.
+                        if (field.dataset.locked !== 'true') {
                             field.disabled = false;
                         }
                     });

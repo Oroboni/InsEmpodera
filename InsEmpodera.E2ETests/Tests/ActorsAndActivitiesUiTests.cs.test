@@ -8,7 +8,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Atores — criar, validar, pesquisar, editar, vincular e desativar")]
     public Task Actors_CreateValidateSearchEditAndSoftDelete_WithCommunityRelationship() =>
         RunInBrowserAsync(nameof(Actors_CreateValidateSearchEditAndSoftDelete_WithCommunityRelationship), async page =>
         {
@@ -22,16 +22,13 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             var editedName = name + " editado";
 
             await page.GotoAsync("/Atores/Create");
-            var actorForm = page.Locator("form").Filter(new()
-            {
-                Has = page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Ator", Exact = true })
-            });
+            var actorForm = page.GetByTestId("actor-create-form");
 
             Assert.False(await actorForm.EvaluateAsync<bool>(
                 "form => form.checkValidity()"
             ));
 
-            await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Ator", Exact = true }).ClickAsync();
+            await page.GetByTestId("actor-create-submit").ClickAsync();
             Assert.Equal("/Atores/Create", new Uri(page.Url).AbsolutePath);
 
             await page.Locator("#ComunidadeId").SelectOptionAsync(communityId.ToString());
@@ -42,7 +39,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("#inputTelefone").FillAsync("85999998888");
             await page.Locator("label.checkbox-option:has(input[name=recursos][value=Educacao])").ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
-            await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar Ator", Exact = true }).ClickAsync();
+            await page.GetByTestId("actor-create-submit").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atores");
 
             var actorId = await Fixture.QueryAsync(db => db.Atores
@@ -104,7 +101,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 .ToHaveCountAsync(0);
         });
 
-    [Fact]
+    [Fact(DisplayName = "Atividades — criar, filtrar, editar vínculos e excluir")]
     public Task Activities_CreateDynamicTagsSearchFilterEditRelationshipsAndDelete() =>
         RunInBrowserAsync(nameof(Activities_CreateDynamicTagsSearchFilterEditRelationshipsAndDelete), async page =>
         {

@@ -9,7 +9,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact]
+    [Fact(DisplayName = "Usuários — criar, validar, pesquisar, editar e desativar pela interface")]
     public Task Users_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi() =>
         RunInBrowserAsync(nameof(Users_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi), async page =>
         {
@@ -94,7 +94,7 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await Assertions.Expect(page.Locator(".user-item").Filter(new() { HasText = email })).ToBeVisibleAsync();
         });
 
-    [Fact]
+    [Fact(DisplayName = "Comunidades — criar, validar, pesquisar, editar e desativar pela interface")]
     public Task Communities_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi() =>
         RunInBrowserAsync(nameof(Communities_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi), async page =>
         {

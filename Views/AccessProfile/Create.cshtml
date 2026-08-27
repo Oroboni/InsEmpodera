@@ -105,10 +105,10 @@
 
         <!-- Ações Rápidas -->
         <div class="quick-actions" style="display: flex; gap: var(--space-3); margin-top: var(--space-4); justify-content: flex-end;">
-            <button type="button" class="wizard-btn btn-prev" onclick="toggleAllPermissions(false)">
+            <button type="button" class="wizard-btn btn-prev" data-testid="permissions-clear-all" onclick="toggleAllPermissions(false)">
                 <i class="fa-solid fa-ban"></i> Desmarcar Todas
             </button>
-            <button type="button" class="wizard-btn btn-next" onclick="toggleAllPermissions(true)">
+            <button type="button" class="wizard-btn btn-next" data-testid="permissions-select-all" onclick="toggleAllPermissions(true)">
                 <i class="fa-solid fa-check-double"></i> Marcar Todas
             </button>
         </div>

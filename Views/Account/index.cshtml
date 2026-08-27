@@ -40,6 +40,7 @@
                         class="form-input" 
                         placeholder="Digite seu e-mail"
                         name="Email"
+                        data-testid="login-email"
                         required
                     >
                 </div>
@@ -51,6 +52,7 @@
                         class="form-input" 
                         placeholder="Digite sua senha"
                         name="Password"
+                        data-testid="login-senha"
                         required
                     >
                 </div>
@@ -63,7 +65,7 @@
                     <a asp-action="Forgot" asp-controller="Account" class="forgot-password">Esqueceu a senha?</a>
                 </div>
 
-                <button type="submit" class="login-button">ENTRAR</button>
+                <button type="submit" class="login-button" data-testid="login-entrar">ENTRAR</button>
             </form>
         </section>
 
