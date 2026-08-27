@@ -46,7 +46,6 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
         {
             services.RemoveAll<IPasswordResetEmailSender>();
             services.AddSingleton<IPasswordResetEmailSender>(PasswordResetEmailSender);
-            services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
             if (_mysqlConnectionString is not null)
             {
                 services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
