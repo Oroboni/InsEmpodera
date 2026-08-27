@@ -47,23 +47,46 @@ builder.Services.AddRateLimiter(options =>
         }));
 });
 
+var databaseProvider =
+    builder.Configuration["DatabaseProvider"]
+    ?? (builder.Environment.IsEnvironment("Testing") ? "Sqlite" : "MySql");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    if (builder.Environment.IsEnvironment("Testing"))
-        options.UseSqlite(
-            builder.Configuration.GetConnectionString("TestConnection")
-            ?? "Data Source=Empodera.testing.db");
-    else
+    if (databaseProvider.Equals("Sqlite", StringComparison.OrdinalIgnoreCase))
     {
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        var connectionString =
+            builder.Configuration.GetConnectionString("TestConnection")
+            ?? "Data Source=Empodera.testing.db";
+
+        options.UseSqlite(connectionString);
+    }
+    else if (databaseProvider.Equals("MySql", StringComparison.OrdinalIgnoreCase))
+    {
+        var connectionString =
+            builder.Configuration.GetConnectionString("DefaultConnection");
+
         if (string.IsNullOrWhiteSpace(connectionString))
+        {
             throw new InvalidOperationException(
                 "Defina ConnectionStrings__DefaultConnection por variável de ambiente ou cofre de segredos.");
-        options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 29)));
+        }
+
+        options.UseMySql(
+            connectionString,
+            new MySqlServerVersion(new Version(8, 0, 29)));
+    }
+    else
+    {
+        throw new InvalidOperationException(
+            $"DatabaseProvider inválido: '{databaseProvider}'. Use 'Sqlite' ou 'MySql'.");
     }
 
-    if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Testing"))
+    if (builder.Environment.IsDevelopment() ||
+        builder.Environment.IsEnvironment("Testing"))
+    {
         options.EnableSensitiveDataLogging();
+    }
 });
 
 builder.Services.AddEmpoderaIdentity(builder.Environment);
