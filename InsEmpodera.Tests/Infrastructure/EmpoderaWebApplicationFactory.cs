@@ -22,7 +22,10 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
         var mysqlServer = Environment.GetEnvironmentVariable("TEST_MYSQL_CONNECTION");
         if (string.IsNullOrWhiteSpace(mysqlServer))
         {
-            _sqliteConnection = new SqliteConnection("Data Source=:memory:");
+            var sqliteDatabaseName = $"insempodera_tests_{Guid.NewGuid():N}";
+            _sqliteConnection = new SqliteConnection(
+                $"Data Source={sqliteDatabaseName};Mode=Memory;Cache=Shared");
+            _sqliteConnection.Open();
             return;
         }
 
@@ -33,6 +36,17 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
+        if (_mysqlConnectionString is not null)
+        {
+            builder.UseSetting("DatabaseProvider", "MySql");
+            builder.UseSetting("ConnectionStrings:DefaultConnection", _mysqlConnectionString);
+        }
+        else
+        {
+            builder.UseSetting("DatabaseProvider", "Sqlite");
+            builder.UseSetting("ConnectionStrings:TestConnection", _sqliteConnection!.ConnectionString);
+        }
+
         builder.ConfigureLogging(logging =>
         {
             logging.ClearProviders();
@@ -46,22 +60,25 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
         {
             services.RemoveAll<IPasswordResetEmailSender>();
             services.AddSingleton<IPasswordResetEmailSender>(PasswordResetEmailSender);
-            if (_mysqlConnectionString is not null)
-            {
-                services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
-                    _mysqlConnectionString,
-                    new MySqlServerVersion(new Version(8, 0, 29))));
-            }
-            else
-            {
-                _sqliteConnection!.Open();
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(_sqliteConnection));
-            }
         });
     }
 
     protected override void Dispose(bool disposing)
     {
+        if (disposing && _mysqlConnectionString is not null)
+        {
+            try
+            {
+                using var scope = Services.CreateScope();
+                var database = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                database.Database.EnsureDeleted();
+            }
+            catch (InvalidOperationException)
+            {
+                // A inicialização pode ter falhado antes da criação do banco temporário.
+            }
+        }
+
         base.Dispose(disposing);
         if (disposing)
             _sqliteConnection?.Dispose();

@@ -66,6 +66,13 @@ public sealed class AuthenticationBoundaryHttpTests : IClassFixture<EmpoderaWebA
         await Assert.ThrowsAsync<DbUpdateException>(() =>
             HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
             {
+                if (db.Database.IsMySql())
+                {
+                    await db.Database.OpenConnectionAsync();
+                    await db.Database.ExecuteSqlRawAsync(
+                        "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'");
+                }
+
                 var persisted = await db.Usuarios.SingleAsync(candidate => candidate.IdUsuario == user.IdUsuario);
                 persisted.Ativo = null!;
                 await db.SaveChangesAsync();
