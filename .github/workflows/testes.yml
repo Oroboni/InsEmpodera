@@ -95,14 +95,46 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Executar integrações no mesmo banco usado em produção
+        id: testes_mysql
+        continue-on-error: true
+        shell: pwsh
         env:
           TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
         run: >-
           dotnet test InsEmpodera.Tests/InsEmpodera.Tests.csproj
           --configuration Release
-          --logger "console;verbosity=normal"
+          --logger "console;verbosity=minimal"
           --logger "trx;LogFileName=resultado-compatibilidade-mysql.trx"
           --results-directory TestResults/04-mysql
+
+      - name: Gerar diagnóstico preciso do MySQL
+        if: always()
+        shell: pwsh
+        run: |
+          ./scripts/Gerar-RelatorioTestes.ps1 `
+            -MySqlTrx "TestResults/04-mysql/resultado-compatibilidade-mysql.trx" `
+            -Saida "TestResults/04-mysql/RELATORIO-COMPATIBILIDADE-MYSQL.md" `
+            -SaidaJson "TestResults/04-mysql/DIAGNOSTICO-COMPATIBILIDADE-MYSQL.json"
+
+          if ($env:GITHUB_STEP_SUMMARY) {
+            Get-Content "TestResults/04-mysql/RELATORIO-COMPATIBILIDADE-MYSQL.md" -Raw |
+              Add-Content -LiteralPath $env:GITHUB_STEP_SUMMARY -Encoding utf8
+          }
+
+          if (-not (Select-String `
+              -LiteralPath "TestResults/04-mysql/RELATORIO-COMPATIBILIDADE-MYSQL.md" `
+              -SimpleMatch '**Resultado geral:** APROVADO' `
+              -Quiet)) {
+            Write-Error "O diagnóstico MySQL identificou falha ou resultado ausente."
+            exit 1
+          }
+
+      - name: Confirmar resultado da compatibilidade MySQL
+        if: steps.testes_mysql.outcome == 'failure'
+        shell: pwsh
+        run: |
+          Write-Error "Os testes com MySQL falharam. Consulte as anotações e o diagnóstico acima."
+          exit 1
 
       - name: Publicar resultado do banco MySQL
         if: always()
