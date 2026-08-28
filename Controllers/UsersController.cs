@@ -4,6 +4,7 @@ using Empodera.Models;
 using Empodera.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering; 
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -185,6 +186,7 @@ public class UsersController : Controller
             return View(usuario);
         }
 
+        SetSuccessMessage($"Usuário {usuario.Nome} criado com sucesso.");
         return RedirectToAction(nameof(Index));
     }
 
@@ -330,6 +332,7 @@ public class UsersController : Controller
             return View(usuario);
         }
 
+        SetSuccessMessage($"Usuário {usuariobd.Nome} atualizado com sucesso.");
         return RedirectToAction("index", "Users");
     }
 
@@ -403,6 +406,7 @@ public class UsersController : Controller
             user.SecurityStamp = Guid.NewGuid().ToString("N");
             await _context.SaveChangesAsync();
         }
+        SetSuccessMessage($"Usuário {user.Nome} desativado com sucesso.");
         return RedirectToAction(nameof(Index));
     }
 
@@ -443,7 +447,7 @@ public class UsersController : Controller
             }
         }
 
-        TempData["SuccessMessage"] = $"Usuário {user.Nome} reativado com sucesso.";
+        SetSuccessMessage($"Usuário {user.Nome} reativado com sucesso.");
         return RedirectToAction(nameof(Details), new { id });
     }
 
@@ -456,6 +460,15 @@ public class UsersController : Controller
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)
             .FirstOrDefaultAsync(user => user.IdUsuario == loggedUserId);
+    }
+
+    private void SetSuccessMessage(string message)
+    {
+        if (HttpContext.RequestServices is not IServiceProvider services)
+            return;
+        var factory = services.GetService<ITempDataDictionaryFactory>();
+        if (factory is not null)
+            factory.GetTempData(HttpContext)["SuccessMessage"] = message;
     }
 
     private async Task<string?> ValidateEditableFieldsAsync(Usuario user, bool requirePassword)

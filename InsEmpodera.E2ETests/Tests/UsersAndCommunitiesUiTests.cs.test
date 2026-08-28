@@ -9,7 +9,7 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
-    [Fact(DisplayName = "Usuários — criar, validar, pesquisar, editar e desativar pela interface")]
+    [Fact(DisplayName = "Usuários — criar, detalhar, pesquisar, editar, desativar e reativar pela interface")]
     public Task Users_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi() =>
         RunInBrowserAsync(nameof(Users_CreateValidateSearchEditAndSoftDelete_ThroughVisibleUi), async page =>
         {
@@ -52,6 +52,14 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
                 .Select(user => user.IdiomaPreferido)
                 .SingleAsync()));
 
+            await page.GetByTestId($"user-details-{id}").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Users/Details/{id}");
+            await Assertions.Expect(page.GetByTestId("user-details")).ToContainTextAsync(name);
+            await Assertions.Expect(page.GetByTestId("user-details")).ToContainTextAsync(email);
+            await page.GetByTestId("user-edit").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Users/Edit/{id}");
+            await page.GotoAsync("/Users");
+
             var search = page.Locator("#searchUsersInput");
             await search.FillAsync(email);
             await Assertions.Expect(page.Locator(".user-item:visible")).ToHaveCountAsync(1);
@@ -76,13 +84,14 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
                 .Select(user => user.Nome)
                 .SingleAsync()));
 
-            await page.GotoAsync($"/Users/Edit/{id}");
-            await page.Locator("#openDeleteModalBtn").ClickAsync();
-            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
-            await page.Locator("#cancelDeleteBtn").ClickAsync();
-            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeHiddenAsync();
-            await page.Locator("#openDeleteModalBtn").ClickAsync();
-            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.GotoAsync($"/Users/Details/{id}");
+            await page.GetByTestId("user-deactivate").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Users/Delete/{id}");
+            await Assertions.Expect(page.GetByTestId("user-delete-confirmation")).ToContainTextAsync(editedName);
+            await page.GetByTestId("user-deactivation-cancel").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Users/Details/{id}");
+            await page.GetByTestId("user-deactivate").ClickAsync();
+            await page.GetByTestId("confirm-user-deactivation").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
 
             Assert.Equal("N", await Fixture.QueryAsync(db => db.Usuarios
@@ -92,6 +101,15 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("#searchUsersInput").FillAsync(email);
             await page.Locator("button[data-status=inativos]").ClickAsync();
             await Assertions.Expect(page.Locator(".user-item").Filter(new() { HasText = email })).ToBeVisibleAsync();
+
+            await page.GetByTestId($"user-details-{id}").ClickAsync();
+            await page.GetByTestId("user-reactivate").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Users/Details/{id}");
+            await Assertions.Expect(page.GetByTestId("user-details")).ToContainTextAsync("Ativo");
+            Assert.Equal("S", await Fixture.QueryAsync(db => db.Usuarios
+                .Where(user => user.IdUsuario == id)
+                .Select(user => user.Ativo)
+                .SingleAsync()));
         });
 
     [Fact(DisplayName = "Comunidades — criar, validar, pesquisar, editar e desativar pela interface")]

@@ -127,7 +127,7 @@
             </div>
             <div class="input-content">
                 <label asp-for="DtNascimento">Data de nascimento <span class="text-danger">*</span></label>
-                <input asp-for="DtNascimento" type="date" class="clean-input" required min="1900-01-01"
+                <input asp-for="DtNascimento" asp-format="{0:yyyy-MM-dd}" type="date" class="clean-input" required min="1900-01-01"
                     max="@DateTime.Today.ToString("yyyy-MM-dd")" disabled>
             </div>
         </div>

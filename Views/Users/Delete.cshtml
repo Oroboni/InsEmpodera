@@ -48,7 +48,7 @@
         }
 
         <div class="buttons-container">
-            <a asp-action="Details" asp-route-id="@Model.IdUsuario" class="wizard-btn btn-prev">
+            <a asp-action="Details" asp-route-id="@Model.IdUsuario" class="wizard-btn btn-prev" data-testid="user-deactivation-cancel">
                 <i class="fa-solid fa-arrow-left"></i> Cancelar
             </a>
             @if (!blocked)

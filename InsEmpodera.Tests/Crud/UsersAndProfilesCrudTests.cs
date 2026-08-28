@@ -101,6 +101,51 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     }
 
     [Fact]
+    public async Task Users_Details_ReturnsUserWithProfile()
+    {
+        var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
+
+        var result = await controller.Details(2);
+
+        var view = Assert.IsType<ViewResult>(result);
+        var user = Assert.IsType<Usuario>(view.Model);
+        Assert.Equal(2, user.IdUsuario);
+        Assert.NotNull(user.Perfil);
+    }
+
+    [Fact]
+    public async Task Users_DeleteConfirmation_ExplainsSoftDeleteTarget()
+    {
+        var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
+
+        var result = await controller.DeleteConfirmation(2);
+
+        var view = Assert.IsType<ViewResult>(result);
+        Assert.Equal(2, Assert.IsType<Usuario>(view.Model).IdUsuario);
+    }
+
+    [Fact]
+    public async Task Users_Reactivate_EnablesAccountAndClearsLockout()
+    {
+        var user = NewUser("reactivate@test.local");
+        user.Ativo = "N";
+        user.AccessFailedCount = 4;
+        user.LockoutEnd = DateTimeOffset.UtcNow.AddHours(1);
+        user.Senha = new PasswordHasher<Usuario>().HashPassword(user, user.Senha);
+        Db.Usuarios.Add(user);
+        await Db.SaveChangesAsync();
+        var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
+
+        var result = await controller.Reactivate(user.IdUsuario);
+
+        Assert.IsType<RedirectToActionResult>(result);
+        var saved = await Db.Usuarios.FindAsync(user.IdUsuario);
+        Assert.Equal("S", saved!.Ativo);
+        Assert.Equal(0, saved.AccessFailedCount);
+        Assert.Null(saved.LockoutEnd);
+    }
+
+    [Fact]
     public async Task Profiles_Create_PersistsAllModulesAndCheckboxPermissions()
     {
         var values = new Dictionary<string, StringValues>

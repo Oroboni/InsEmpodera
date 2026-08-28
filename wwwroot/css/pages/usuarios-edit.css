@@ -349,7 +349,7 @@ select {
 
 .user-detail-card strong {
     overflow-wrap: anywhere;
-    color: var(--color-primary-900);
+    color: var(--color-primary-800);
 }
 
 .crud-feedback {
@@ -369,7 +369,7 @@ select {
 }
 
 .crud-feedback.is-info {
-    color: var(--color-primary-900);
+    color: var(--color-primary-800);
     border: 1px solid var(--color-primary-200);
     background: var(--color-primary-100);
 }
