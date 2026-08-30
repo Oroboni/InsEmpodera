@@ -745,6 +745,8 @@ CREATE TABLE `comunidades` (
   `Nome` longtext NOT NULL,
   `Local` longtext DEFAULT NULL,
   `LocalMapa` longtext DEFAULT NULL,
+  `LocalSecundario` longtext DEFAULT NULL,
+  `LocalMapaSecundario` longtext DEFAULT NULL,
   `Status` longtext NOT NULL,
   `Complemento` longtext DEFAULT NULL,
   `Descricao` longtext DEFAULT NULL,

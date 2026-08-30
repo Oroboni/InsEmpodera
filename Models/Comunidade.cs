@@ -10,6 +10,8 @@ namespace Empodera.Models
         public string Nome { get; set; } = string.Empty;
         public string? Local { get; set; } = string.Empty;
         public string? LocalMapa { get; set; } = string.Empty;
+        public string? LocalSecundario { get; set; } = string.Empty;
+        public string? LocalMapaSecundario { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string? Complemento { get; set; } = string.Empty;
         public string? Descricao { get; set; } = string.Empty;

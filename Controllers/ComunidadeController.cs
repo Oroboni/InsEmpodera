@@ -123,6 +123,10 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     if (comunidade.Id_Comunidade == 0)
     {
         comunidade.LocalMapa = BuildMapSearchAddress(comunidade.LocalMapa, comunidade.Local, comunidade.Nome);
+        comunidade.LocalSecundario = NormalizeOptionalAddress(comunidade.LocalSecundario);
+        comunidade.LocalMapaSecundario = BuildOptionalMapSearchAddress(
+            comunidade.LocalMapaSecundario,
+            comunidade.LocalSecundario);
         comunidade.Status = NormalizeCommunityStatus(comunidade.Status);
 
         if (string.IsNullOrWhiteSpace(comunidade.Local))
@@ -165,6 +169,10 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             existingComunidade.LocalMapa = string.IsNullOrWhiteSpace(comunidade.LocalMapa)
                 ? comunidade.Local
                 : comunidade.LocalMapa;
+            existingComunidade.LocalSecundario = NormalizeOptionalAddress(comunidade.LocalSecundario);
+            existingComunidade.LocalMapaSecundario = BuildOptionalMapSearchAddress(
+                comunidade.LocalMapaSecundario,
+                existingComunidade.LocalSecundario);
             existingComunidade.Status = comunidade.Status;
             existingComunidade.Complemento = comunidade.Complemento;
             existingComunidade.Descricao = comunidade.Descricao;
@@ -227,6 +235,22 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         return NormalizeMapAddress(communityName);
+    }
+
+    private static string? NormalizeOptionalAddress(string? address)
+    {
+        var normalized = NormalizeMapAddress(address);
+        return string.IsNullOrWhiteSpace(normalized) ? null : normalized;
+    }
+
+    private static string? BuildOptionalMapSearchAddress(string? mapAddress, string? address)
+    {
+        if (string.IsNullOrWhiteSpace(address))
+        {
+            return null;
+        }
+
+        return BuildMapSearchAddress(mapAddress, address, null);
     }
 
     private static string NormalizeMapAddress(string? value)

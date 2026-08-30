@@ -18,6 +18,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         {
             Nome = "Comunidade CRUD",
             Local = "Centro Social, Rua Um, 10, Fortaleza",
+            LocalSecundario = "Anexo Comunitário, Rua Dois, 20, Fortaleza",
             Status = "Em Processo",
             Ativo = "S"
         };
@@ -30,6 +31,8 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         Assert.Equal("Em processo", saved.Status);
         Assert.Equal(1, saved.FK_Id_Usuario);
         Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapa));
+        Assert.Equal("Anexo Comunitário, Rua Dois, 20, Fortaleza", saved.LocalSecundario);
+        Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapaSecundario));
         Assert.NotEqual(default, saved.Dt_Criacao);
     }
 
@@ -57,6 +60,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
             Id_Comunidade = original.Id_Comunidade,
             Nome = "Depois",
             Local = "Avenida Nova, 200, Recife",
+            LocalSecundario = "Polo Comunitário, Avenida Sul, 50, Recife",
             Status = "Em Diagnóstico",
             Complemento = "Complemento atualizado",
             Descricao = "Descrição atualizada",
@@ -69,6 +73,8 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var saved = await Db.Comunidades.AsNoTracking().SingleAsync(item => item.Id_Comunidade == original.Id_Comunidade);
         Assert.Equal("Depois", saved.Nome);
         Assert.Equal("Em diagnóstico", saved.Status);
+        Assert.Equal("Polo Comunitário, Avenida Sul, 50, Recife", saved.LocalSecundario);
+        Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapaSecundario));
         Assert.Equal(createdAt, saved.Dt_Criacao);
         Assert.Equal("S", saved.Ativo);
         Assert.Equal(1, saved.FK_Id_UsuarioM);
