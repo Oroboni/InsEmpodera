@@ -75,18 +75,23 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         var create = await PostFormAsync(client, "/Comunidade/ComunidadesDetalhes/0", "/Comunidade/ComunidadesDetalhes?id=0", new()
         {
             ["Id_Comunidade"] = "0", ["Nome"] = name,
-            ["Local"] = "Rua HTTP, 10, São Paulo", ["Status"] = "Em Processo", ["Ativo"] = "S"
+            ["Local"] = "Rua HTTP, 10, São Paulo",
+            ["LocalSecundario"] = "Rua HTTP Dois, 20, São Paulo",
+            ["Status"] = "Em Processo", ["Ativo"] = "S"
         });
         AssertRedirect(create);
         var id = await QueryAsync(db => db.Comunidades.Where(item => item.Nome == name).Select(item => item.Id_Comunidade).SingleAsync());
+        Assert.Equal("Rua HTTP Dois, 20, São Paulo", await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.LocalSecundario).SingleAsync()));
 
         var edit = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{id}", $"/Comunidade/ComunidadesDetalhes?id={id}", new()
         {
             ["Id_Comunidade"] = id.ToString(), ["Nome"] = name + " editada",
-            ["Local"] = "Avenida HTTP, 20, Recife", ["Status"] = "Em Diagnóstico", ["Ativo"] = "S"
+            ["Local"] = "Avenida HTTP, 20, Recife", ["LocalSecundario"] = string.Empty,
+            ["Status"] = "Em Diagnóstico", ["Ativo"] = "S"
         });
         AssertRedirect(edit);
         Assert.Equal("Em diagnóstico", await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.Status).SingleAsync()));
+        Assert.Null(await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.LocalSecundario).SingleAsync()));
 
         var delete = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{id}", $"/Comunidade/Delete/{id}", new());
         AssertRedirect(delete);

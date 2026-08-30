@@ -39,7 +39,13 @@
     </div>
 
     <!-- Mapa e Localização -->
-    <div class="section-label">Localização</div>
+    <div class="location-section-heading">
+      <div class="section-label">Localização</div>
+      <button type="button" id="add-secondary-address" class="btn-add-address"
+              aria-label="Adicionar segundo endereço" title="Adicionar segundo endereço">
+        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+      </button>
+    </div>
     <div id="mapa-principal" class="default-map-container"></div>
 
     <div class="input-card full-width">
@@ -53,6 +59,28 @@
     </div>
     <input type="hidden" asp-for="LocalMapa" id="input-endereco-mapa"
            value="@(Model.Id_Comunidade > 0 ? (Model.LocalMapa ?? Model.Local) : string.Empty)" />
+
+    <div id="secondary-address-section"
+         class="secondary-address-section @(string.IsNullOrWhiteSpace(Model.LocalSecundario) ? "is-hidden" : string.Empty)">
+      <div class="secondary-address-heading">
+        <div class="section-label">Segundo endereço</div>
+        <button type="button" id="remove-secondary-address" class="btn-remove-address"
+                aria-label="Remover segundo endereço" title="Remover segundo endereço">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="mapa-secundario" class="default-map-container"></div>
+      <div class="input-card full-width">
+        <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
+        <div class="input-content">
+          <label for="input-endereco-secundario">Endereço adicional</label>
+          <textarea asp-for="LocalSecundario" class="clean-input address-input"
+                    id="input-endereco-secundario" rows="2"
+                    placeholder="Digite o segundo endereço ou use a lupa no mapa..."></textarea>
+        </div>
+      </div>
+      <input type="hidden" asp-for="LocalMapaSecundario" id="input-endereco-mapa-secundario" />
+    </div>
 
     <!-- Complemento -->
     <div class="input-card full-width">
@@ -241,6 +269,12 @@
     const form = document.querySelector('.main-form');
     const inputFields = form.querySelectorAll('.clean-input, textarea.clean-input');
     const editSaveBtn = document.getElementById('edit-save-btn');
+    const addSecondaryAddressBtn = document.getElementById('add-secondary-address');
+    const removeSecondaryAddressBtn = document.getElementById('remove-secondary-address');
+    const secondaryAddressSection = document.getElementById('secondary-address-section');
+    const secondaryAddressInput = document.getElementById('input-endereco-secundario');
+    const secondaryMapInput = document.getElementById('input-endereco-mapa-secundario');
+    let secondaryMapInitialized = false;
 
     // Inicializar mapa
     if (typeof initMapSelector === 'function') {
@@ -251,6 +285,39 @@
       });
     } else {
       console.error("ERRO: A função initMapSelector não foi encontrada. Verifique se importou o app-maps.js");
+    }
+
+    function initializeSecondaryMap() {
+      if (secondaryMapInitialized || typeof initMapSelector !== 'function') return;
+
+      initMapSelector('mapa-secundario', 'input-endereco-mapa-secundario', {
+        sourceInputId: 'input-endereco-mapa-secundario',
+        mirrorInputId: 'input-endereco-secundario',
+        manualInputId: 'input-endereco-secundario'
+      });
+      secondaryMapInitialized = true;
+    }
+
+    function showSecondaryAddress() {
+      secondaryAddressSection.classList.remove('is-hidden');
+      addSecondaryAddressBtn.classList.add('is-hidden');
+      initializeSecondaryMap();
+      secondaryAddressInput.focus();
+    }
+
+    function removeSecondaryAddress() {
+      secondaryAddressInput.value = '';
+      secondaryMapInput.value = '';
+      secondaryAddressSection.classList.add('is-hidden');
+      addSecondaryAddressBtn.classList.remove('is-hidden');
+    }
+
+    addSecondaryAddressBtn.addEventListener('click', showSecondaryAddress);
+    removeSecondaryAddressBtn.addEventListener('click', removeSecondaryAddress);
+
+    if (!secondaryAddressSection.classList.contains('is-hidden')) {
+      addSecondaryAddressBtn.classList.add('is-hidden');
+      initializeSecondaryMap();
     }
 
     // Configurar modo da página
@@ -284,6 +351,9 @@
           editSaveBtn.classList.remove('btn-save-final');
         }
       }
+
+      addSecondaryAddressBtn.disabled = !isEditMode;
+      removeSecondaryAddressBtn.disabled = !isEditMode;
     }
 
     // Inicializar estado

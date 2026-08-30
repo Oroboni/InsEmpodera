@@ -79,6 +79,8 @@ CREATE TABLE `Comunidades` (
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Local` longtext CHARACTER SET utf8mb4 NULL,
     `LocalMapa` longtext CHARACTER SET utf8mb4 NULL,
+    `LocalSecundario` longtext CHARACTER SET utf8mb4 NULL,
+    `LocalMapaSecundario` longtext CHARACTER SET utf8mb4 NULL,
     `Status` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Complemento` longtext CHARACTER SET utf8mb4 NULL,
     `Descricao` longtext CHARACTER SET utf8mb4 NULL,
@@ -652,5 +654,4 @@ CREATE INDEX `IX_VulnerabilidadesEixo_FkIdEixo` ON `VulnerabilidadesEixo` (`FkId
 
 
 CREATE INDEX `IX_VulnerabilidadesEixo_FkIdVulnerabilidade` ON `VulnerabilidadesEixo` (`FkIdVulnerabilidade`);
-
 
