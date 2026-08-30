@@ -8,6 +8,13 @@ namespace Empodera.Controllers;
 
 public class AccessProfileController : Controller
 {
+    private static readonly string[] ModuleOrder =
+    [
+        "Usuarios", "Perfis", "Atividades", "Comunidades", "Vulnerabilidades",
+        "Recursos", "DiariosCampo", "Atores", "Ficha1Contato", "DiariosProcessoPessoal",
+        "AvaliacoesPessoais", "SER"
+    ];
+
     private readonly ApplicationDbContext _context;
 
     public AccessProfileController(ApplicationDbContext context)
@@ -105,15 +112,8 @@ public class AccessProfileController : Controller
         };
 
         // Lista de módulos definidos na view
-        var modulos = new[]
-        {
-            "Usuarios","Perfis","Atividades","Comunidades","Vulnerabilidades",
-            "Recursos","DiariosCampo","Atores","Ficha1Contato","DiariosProcessoPessoal",
-            "AvaliacoesPessoais","SER"
-        };
-
         // Ler dados do form manualmente (os checkboxes nomeados em Permissoes[Modulo][Permissao])
-        foreach (var modulo in modulos)
+        foreach (var modulo in ModuleOrder)
         {
             var permissao = new Permissoes
             {
@@ -156,6 +156,11 @@ public class AccessProfileController : Controller
 
         if (perfil == null)
             return NotFound();
+
+        perfil.Permissoes = perfil.Permissoes
+            .OrderBy(permission => Array.IndexOf(ModuleOrder, permission.Modulo))
+            .ThenBy(permission => permission.Modulo)
+            .ToList();
 
         return View(perfil);
     }

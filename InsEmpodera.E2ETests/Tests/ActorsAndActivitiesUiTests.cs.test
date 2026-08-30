@@ -8,6 +8,96 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
+    [Fact(DisplayName = "Atores da comunidade — criar, editar e desativar pela interface específica")]
+    public Task CommunityActors_CreateEditAndSoftDelete_ThroughCommunityScreens() =>
+        RunInBrowserAsync(nameof(CommunityActors_CreateEditAndSoftDelete_ThroughCommunityScreens), async page =>
+        {
+            await LoginAsync(page);
+            var communityId = await Fixture.QueryAsync(db => db.Comunidades
+                .Where(community => community.Ativo == "S")
+                .OrderBy(community => community.Id_Comunidade)
+                .Select(community => community.Id_Comunidade)
+                .FirstAsync());
+            var listPath = $"/Comunidade/AtoresVinculados/{communityId}";
+            var name = Unique("Ator da comunidade UI");
+            var editedName = name + " editado";
+
+            await page.GotoAsync(listPath);
+            await page.Locator("a.atores-add-button").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/Create_Atores/{communityId}");
+            await page.Locator("input[name=Nome]").FillAsync(name);
+            await page.Locator("select[name=Genero]").SelectOptionAsync("2");
+            await page.Locator("input[name=Idade]").FillAsync("36");
+            await page.Locator("#inputTelefone").FillAsync("11988887777");
+            await page.Locator("label.checkbox-option:has(input[name=recursos][value=Saude])").ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
+            await page.Locator(".modern-container form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == listPath);
+
+            var created = await Fixture.QueryAsync(db => db.Atores
+                .Where(actor => actor.Nome == name)
+                .Select(actor => new
+                {
+                    actor.IdAtores,
+                    LinkIds = actor.Comunidades.Select(link => link.IdAtorComunidade).ToList(),
+                    ResourceIds = actor.RecursosAtores.Select(resource => resource.Id_Recursos_Atores).ToList()
+                })
+                .SingleAsync());
+            Assert.InRange(created.IdAtores, 100000, 999999);
+            Assert.Single(created.LinkIds);
+            Assert.InRange(created.LinkIds[0], 100000, 999999);
+            Assert.Equal(20, created.ResourceIds.Count);
+            Assert.Equal(20, created.ResourceIds.Distinct().Count());
+            Assert.All(created.ResourceIds, id => Assert.InRange(id, 100000, 999999));
+
+            var row = page.Locator(".form-item").Filter(new() { HasText = name });
+            await Assertions.Expect(row).ToBeVisibleAsync();
+            await row.Locator("a.btn-action").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/Edit_Atores/{created.IdAtores}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
+            await page.Locator("input[name=Nome]").FillAsync(editedName);
+            await page.Locator("input[name=Telefone]").FillAsync("11977776666");
+            await page.Locator("label.checkbox-option:has(input[name=recursos][value=Saude])").ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=recursos][value=Lazer])").ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
+            await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Prevencao])").ClickAsync();
+            await page.Locator("#edit-save-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == listPath);
+
+            var edited = await Fixture.QueryAsync(db => db.Atores
+                .Where(actor => actor.IdAtores == created.IdAtores)
+                .Select(actor => new
+                {
+                    actor.Nome,
+                    actor.Telefone,
+                    Resources = actor.RecursosAtores
+                        .Where(resource => resource.Pode == "S")
+                        .Select(resource => resource.Tipo + ":" + resource.Nome)
+                        .ToList()
+                })
+                .SingleAsync());
+            Assert.Equal(editedName, edited.Nome);
+            Assert.Equal("11977776666", edited.Telefone);
+            Assert.Contains("Recurso:Lazer", edited.Resources);
+            Assert.DoesNotContain("Recurso:Saude", edited.Resources);
+            Assert.Contains("Vulnerabilidade:Prevencao", edited.Resources);
+            Assert.DoesNotContain("Vulnerabilidade:Moradia", edited.Resources);
+
+            await page.Locator(".form-item").Filter(new() { HasText = editedName }).Locator("a.btn-action").ClickAsync();
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
+            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == listPath);
+            Assert.Equal("N", await Fixture.QueryAsync(db => db.Atores
+                .Where(actor => actor.IdAtores == created.IdAtores)
+                .Select(actor => actor.Ativo)
+                .SingleAsync()));
+            await Assertions.Expect(page.Locator(".form-item").Filter(new() { HasText = editedName }))
+                .ToHaveCountAsync(0);
+        });
+
     [Fact(DisplayName = "Atores — criar, validar, pesquisar, editar, vincular e desativar")]
     public Task Actors_CreateValidateSearchEditAndSoftDelete_WithCommunityRelationship() =>
         RunInBrowserAsync(nameof(Actors_CreateValidateSearchEditAndSoftDelete_WithCommunityRelationship), async page =>

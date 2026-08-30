@@ -1,4 +1,9 @@
+using System.Data;
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
 using Empodera.Models;
 
 namespace Empodera.Data
@@ -10,15 +15,17 @@ namespace Empodera.Data
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             PrepareIdentityFields();
+            PrepareRandomPrimaryKeys();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        public override Task<int> SaveChangesAsync(
+        public override async Task<int> SaveChangesAsync(
             bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = default)
         {
             PrepareIdentityFields();
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            await PrepareRandomPrimaryKeysAsync(cancellationToken);
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         public DbSet<Usuario> Usuarios { get; set; } = null!;
@@ -547,6 +554,190 @@ namespace Empodera.Data
                     ? Guid.NewGuid().ToString("N")
                     : user.ConcurrencyStamp;
             }
+        }
+
+        private void PrepareRandomPrimaryKeys()
+        {
+            var targets = GetRandomKeyTargets();
+            if (targets.Count == 0)
+                return;
+
+            var reservedKeys = GetReservedKeys(targets);
+            var connection = Database.GetDbConnection();
+            var shouldClose = connection.State != ConnectionState.Open;
+
+            if (shouldClose)
+                connection.Open();
+
+            try
+            {
+                foreach (var target in targets.Where(target => target.NeedsGeneration))
+                {
+                    var key = GenerateAvailableKey(target, reservedKeys);
+                    var propertyEntry = target.Entry.Property(target.PropertyName);
+                    propertyEntry.CurrentValue = key;
+                    propertyEntry.IsTemporary = false;
+                    reservedKeys.Add(target.ReservationKey(key));
+                }
+            }
+            finally
+            {
+                if (shouldClose)
+                    connection.Close();
+            }
+
+            ChangeTracker.DetectChanges();
+        }
+
+        private async Task PrepareRandomPrimaryKeysAsync(CancellationToken cancellationToken)
+        {
+            var targets = GetRandomKeyTargets();
+            if (targets.Count == 0)
+                return;
+
+            var reservedKeys = GetReservedKeys(targets);
+            var connection = Database.GetDbConnection();
+            var shouldClose = connection.State != ConnectionState.Open;
+
+            if (shouldClose)
+                await connection.OpenAsync(cancellationToken);
+
+            try
+            {
+                foreach (var target in targets.Where(target => target.NeedsGeneration))
+                {
+                    var key = await GenerateAvailableKeyAsync(target, reservedKeys, cancellationToken);
+                    var propertyEntry = target.Entry.Property(target.PropertyName);
+                    propertyEntry.CurrentValue = key;
+                    propertyEntry.IsTemporary = false;
+                    reservedKeys.Add(target.ReservationKey(key));
+                }
+            }
+            finally
+            {
+                if (shouldClose)
+                    await connection.CloseAsync();
+            }
+
+            ChangeTracker.DetectChanges();
+        }
+
+        private List<RandomKeyTarget> GetRandomKeyTargets()
+        {
+            ChangeTracker.DetectChanges();
+            var targets = new List<RandomKeyTarget>();
+
+            foreach (var entry in ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added))
+            {
+                var primaryKey = entry.Metadata.FindPrimaryKey();
+                if (primaryKey?.Properties.Count != 1 || primaryKey.Properties[0].ClrType != typeof(int))
+                    continue;
+
+                var property = primaryKey.Properties[0];
+                var tableName = entry.Metadata.GetTableName();
+                if (tableName is null)
+                    continue;
+
+                var schema = entry.Metadata.GetSchema();
+                var storeObject = StoreObjectIdentifier.Table(tableName, schema);
+                var columnName = property.GetColumnName(storeObject) ?? property.Name;
+                var propertyEntry = entry.Property(property.Name);
+                var currentValue = (int)(propertyEntry.CurrentValue ?? 0);
+                targets.Add(new RandomKeyTarget(
+                    entry,
+                    property.Name,
+                    tableName,
+                    schema,
+                    columnName,
+                    currentValue,
+                    propertyEntry.IsTemporary || currentValue == 0));
+            }
+
+            return targets;
+        }
+
+        private static HashSet<string> GetReservedKeys(IEnumerable<RandomKeyTarget> targets) =>
+            targets
+                .Where(target => !target.NeedsGeneration)
+                .Select(target => target.ReservationKey(target.CurrentValue))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        private int GenerateAvailableKey(RandomKeyTarget target, ISet<string> reservedKeys)
+        {
+            for (var attempt = 0; attempt < 128; attempt++)
+            {
+                var candidate = RandomNumberGenerator.GetInt32(100000, 1000000);
+                if (reservedKeys.Contains(target.ReservationKey(candidate)) || KeyExists(target, candidate))
+                    continue;
+
+                return candidate;
+            }
+
+            throw new InvalidOperationException($"Não foi possível gerar uma chave aleatória livre para {target.TableName}.");
+        }
+
+        private async Task<int> GenerateAvailableKeyAsync(
+            RandomKeyTarget target,
+            ISet<string> reservedKeys,
+            CancellationToken cancellationToken)
+        {
+            for (var attempt = 0; attempt < 128; attempt++)
+            {
+                var candidate = RandomNumberGenerator.GetInt32(100000, 1000000);
+                if (reservedKeys.Contains(target.ReservationKey(candidate)) ||
+                    await KeyExistsAsync(target, candidate, cancellationToken))
+                    continue;
+
+                return candidate;
+            }
+
+            throw new InvalidOperationException($"Não foi possível gerar uma chave aleatória livre para {target.TableName}.");
+        }
+
+        private bool KeyExists(RandomKeyTarget target, int candidate)
+        {
+            using var command = CreateKeyLookupCommand(target, candidate);
+            return command.ExecuteScalar() is not null;
+        }
+
+        private async Task<bool> KeyExistsAsync(
+            RandomKeyTarget target,
+            int candidate,
+            CancellationToken cancellationToken)
+        {
+            await using var command = CreateKeyLookupCommand(target, candidate);
+            return await command.ExecuteScalarAsync(cancellationToken) is not null;
+        }
+
+        private System.Data.Common.DbCommand CreateKeyLookupCommand(RandomKeyTarget target, int candidate)
+        {
+            var command = Database.GetDbConnection().CreateCommand();
+            var qualifiedTable = string.IsNullOrWhiteSpace(target.Schema)
+                ? QuoteIdentifier(target.TableName)
+                : $"{QuoteIdentifier(target.Schema)}.{QuoteIdentifier(target.TableName)}";
+            command.CommandText =
+                $"SELECT 1 FROM {qualifiedTable} WHERE {QuoteIdentifier(target.ColumnName)} = @id LIMIT 1";
+            command.Transaction = Database.CurrentTransaction?.GetDbTransaction();
+
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "@id";
+            parameter.Value = candidate;
+            command.Parameters.Add(parameter);
+            return command;
+        }
+
+        private static string QuoteIdentifier(string identifier) => $"`{identifier.Replace("`", "``")}`";
+
+        private sealed record RandomKeyTarget(
+            EntityEntry Entry,
+            string PropertyName,
+            string TableName,
+            string? Schema,
+            string ColumnName,
+            int CurrentValue,
+            bool NeedsGeneration)
+        {
+            public string ReservationKey(int value) => $"{Schema}.{TableName}.{ColumnName}:{value}";
         }
     }
 }

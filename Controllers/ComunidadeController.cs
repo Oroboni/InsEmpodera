@@ -767,7 +767,11 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
 
-        var ator = await _context.Atores.Include(c => c.RecursosAtores).Where(a => a.IdAtores == id).FirstOrDefaultAsync();
+        var ator = await _context.Atores
+            .Include(c => c.RecursosAtores)
+            .FirstOrDefaultAsync(a =>
+                a.IdAtores == id &&
+                a.Comunidades.Any(link => link.FkIdComunidade == comunidadeId));
         if (ator == null)
         {
             return NotFound();
@@ -803,7 +807,10 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
 
-        var atorDb = await _context.Atores.FindAsync(ator.IdAtores);
+        var atorDb = await _context.Atores
+            .FirstOrDefaultAsync(item =>
+                item.IdAtores == ator.IdAtores &&
+                item.Comunidades.Any(link => link.FkIdComunidade == ComunidadeId));
         if (atorDb == null)
             return NotFound();
 
@@ -864,16 +871,17 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("AtoresVinculados", "Comunidade");
         }
         
-        var ator = await _context.Atores.FindAsync(id);
-        if (ator != null)
-        {
-            ator.Ativo = "N";
-            _context.Atores.Update(ator);
-            await _context.SaveChangesAsync();
-        }
         var atorCom = await _context.AtorComunidades
             .FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
-            
+        var ator = await _context.Atores.FindAsync(id);
+        if (ator == null || atorCom == null)
+            return NotFound();
+
+        ator.Ativo = "N";
+        ator.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        ator.DtModificacao = DateTime.Now;
+        await _context.SaveChangesAsync();
+
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = atorCom?.FkIdComunidade });
     }
 

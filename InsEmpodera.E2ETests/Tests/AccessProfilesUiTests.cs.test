@@ -41,9 +41,12 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             Assert.Equal(0, await permissions.EvaluateAllAsync<int>(
                 "items => items.filter(item => item.checked).length"));
 
-            await permissions.First.Locator("xpath=..").ClickAsync();
-            await permissions.Nth(2).Locator("xpath=..").ClickAsync();
-            await permissions.Nth(4).Locator("xpath=..").ClickAsync();
+            var usersCreatePermissions = page.Locator(".permission-table tbody tr")
+                .Filter(new() { HasText = "Usuários" })
+                .Locator("input[type=checkbox]");
+            await usersCreatePermissions.Nth(0).Locator("xpath=..").ClickAsync();
+            await usersCreatePermissions.Nth(2).Locator("xpath=..").ClickAsync();
+            await usersCreatePermissions.Nth(4).Locator("xpath=..").ClickAsync();
             await page.Locator("#create-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
 
@@ -79,9 +82,11 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
 
-            var editPermissions = page.Locator(".permission-table input[type=checkbox]");
-            await editPermissions.First.Locator("xpath=..").ClickAsync();
-            await editPermissions.Nth(1).Locator("xpath=..").ClickAsync();
+            var usersEditPermissions = page.Locator(".permission-table tbody tr")
+                .Filter(new() { HasText = "Usuarios" })
+                .Locator("input[type=checkbox]");
+            await usersEditPermissions.Nth(0).Locator("xpath=..").ClickAsync();
+            await usersEditPermissions.Nth(1).Locator("xpath=..").ClickAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
 
