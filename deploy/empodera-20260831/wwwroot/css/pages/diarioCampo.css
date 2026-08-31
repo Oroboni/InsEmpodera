@@ -1,0 +1,978 @@
+/* INDEX */
+
+/* ==============================================
+   LISTAGEM DE DIÁRIOS DE CAMPO
+   Tema Clean + Bordas arredondadas + Hover suave
+============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+    --primary: #590082;
+    --primary-dark: #7000cc;
+    --bg-light: #f8f8f8;
+    --text-dark: #333;
+    --border: #e5e5e5;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #fafafa;
+    color: var(--text-dark);
+}
+
+/* ───────────────────────────── FORM DE BUSCA ───────────────────────────── */
+
+form {
+    gap: 10px;
+    margin: 20px 0 30px;
+}
+
+form input[type="text"] {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    font-size: 14px;
+}
+
+form button {
+    padding: 12px 20px;
+    background: var(--primary);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+
+form button:hover {
+    background: var(--primary-dark);
+}
+
+/* ───────────────────────────── BOTÃO NOVO DIÁRIO ───────────────────────────── */
+
+p a {
+    display: inline-block;
+    padding: 10px 18px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: .2s;
+}
+
+p a:hover {
+    background: var(--primary-dark);
+}
+
+/* ───────────────────────────── TABELA ───────────────────────────── */
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* espaçamento entre as linhas */
+}
+
+.table thead th {
+    text-align: left;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--primary);
+}
+
+.table tbody tr {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: .2s;
+}
+
+.table tbody tr:hover {
+    transform: scale(1.01);
+}
+
+.table tbody td {
+    padding: 12px;
+    font-size: 14px;
+    border-top: 1px solid var(--border);
+}
+
+.table tbody td:first-child {
+    border-left: 1px solid var(--border);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.table tbody td:last-child {
+    border-right: 1px solid var(--border);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* ───────────────────────────── LINKS DE AÇÃO ───────────────────────────── */
+
+.table a {
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--primary);
+    transition: .2s;
+}
+
+.table a:hover {
+    color: var(--primary-dark);
+}
+
+/* CREATE */
+
+/* ================================
+   Layout Geral do Formulário
+=================================== */
+
+.formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* divide em 2 partes */
+    gap: 30px;
+    /* AUMENTEI O GAP ENTRE OS CAMPOS */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* O título ocupa toda a largura */
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    grid-column: span 2;
+}
+
+/* ================================
+   Form Groups
+=================================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    /* mais espaçamento */
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    /* espaçamento maior */
+    color: #333;
+}
+
+/* Tamanhos específicos para inputs maiores */
+.form-group.large input,
+.form-group.large select,
+.form-group.large textarea {
+    padding: 14px 16px;
+    /* inputs maiores */
+    font-size: 16px;
+}
+
+/* ================================
+   Inputs / Selects / Textarea
+=================================== */
+
+.input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    font-size: 15.5px;
+    transition: border-color .2s, background .2s;
+    background: #fafafa;
+}
+
+.input:focus,
+select:focus,
+textarea:focus {
+    border-color: #0077ff;
+    outline: none;
+    background: #fff;
+}
+
+/* Ajuste opcional para textareas maiores */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* ================================
+   Campo Localização — ocupa 100%
+=================================== */
+
+.form-group.full-width,
+.full-width {
+    grid-column: span 2;
+    /* pega as duas colunas */
+}
+
+/* ================================
+   Ajustes Específicos — Localização
+=================================== */
+
+.localizacao-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 2 colunas */
+    gap: 40px;
+    width: 95%;
+}
+
+.localizacao-group .col {
+    display: flex;
+    flex-direction: column;
+}
+
+.localizacao-group input {
+    width: 100%;
+}
+
+/* ================================
+   Tamanhos individuais dos campos
+=================================== */
+
+.localizacao-wrapper {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mapa-wrapper {
+    grid-column: 2;
+    /* joga o mapa para a coluna direita */
+    display: flex;
+    justify-content: center;
+}
+
+/* CEP - pequeno */
+.local-cep {
+    grid-column: span 1;
+    max-width: 180px;
+}
+
+/* Número - pequeno */
+.local-numero {
+    grid-column: span 1;
+    max-width: 140px;
+}
+
+/* Rua - grande */
+.local-rua {
+    grid-column: span 2;
+    /* ocupa linha inteira */
+    max-width: 700px;
+}
+
+/* Complemento - médio */
+.local-complemento {
+    grid-column: span 1;
+    max-width: 350px;
+}
+
+/* Bairro - médio */
+.local-bairro {
+    grid-column: span 1;
+    max-width: 350px;
+}
+
+/* Cidade - médio */
+.local-cidade {
+    grid-column: span 1;
+    max-width: 350px;
+}
+
+/* Estado – médio */
+.local-estado {
+    grid-column: span 1;
+    max-width: 350px;
+}
+
+/* ================================
+   Row e Columns
+=================================== */
+
+.row {
+    display: flex;
+    gap: 25px;
+    /* mais espaçamento */
+    margin-bottom: 15px;
+}
+
+.col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================================
+   Lista
+=================================== */
+
+.itens-lista {
+    padding: 12px;
+    background: #f6f6f6;
+    border-radius: 8px;
+    min-height: 55px;
+    /* Altura mínima maior */
+    margin-bottom: 10px;
+    border: 1px dashed #ccc;
+}
+
+.itens-lista div {
+    background: #fff;
+    padding: 10px 14px;
+    /* mais confortável */
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+}
+
+/* ================================
+   Botões
+=================================== */
+
+.buttons {
+    grid-column: span 2;
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    /* mais espaçamento */
+}
+
+button,
+.btn-primary,
+.btn-secondary,
+a.btn-secondary {
+    padding: 12px 20px;
+    /* maior */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15.5px;
+    border: none;
+    outline: none;
+    transition: .2s;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #0077ff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #005fcc;
+}
+
+.btn-secondary {
+    background: #e6e6e6;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #d4d4d4;
+}
+
+/* ================================
+   Modais
+=================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    z-index: 200;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #ffffff;
+    padding: 22px 52px;
+    width: min(380px, 92%);
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    animation: modalFade .25s ease-out;
+    border: 1px solid #e8e8e8;
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* Campos internos de formulários no modal */
+.modal-content .form-group {
+    width: 100%;
+}
+
+.modal-content .form-group input,
+.modal-content .form-group select,
+.modal-content .form-group textarea {
+    max-width: 100% !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modal-content .row {
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 25px;
+}
+
+/* Botões específicos para modais */
+.modal-btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    transition: .2s;
+}
+
+.modal-btn.cancel {
+    background: #f2f2f2;
+    color: #555;
+}
+
+.modal-btn.cancel:hover {
+    background: #e5e5e5;
+}
+
+.modal-btn.confirm {
+    background: #0077ff;
+    color: white;
+}
+
+.modal-btn.confirm:hover {
+    background: #005fcc;
+}
+
+/* ================================
+   Campos Fixos dos Modais
+=================================== */
+
+/* Nome - grande */
+.modal-nome {
+    max-width: 350px;
+    width: 100%;
+}
+
+/* Provedor Externo - médio */
+.modal-provedor {
+    max-width: 350px;
+    width: 100%;
+}
+
+/* Quantidade - pequeno */
+.modal-quantidade {
+    max-width: 350px;
+    width: 100%;
+}
+
+/* Animação suave */
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ================================
+   Menções
+=================================== */
+
+.mention-box {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 20;
+    width: 100%;
+    display: none;
+    margin-top: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.mention-box div:hover {
+    background: #0077ff;
+    color: white;
+}
+
+/* ================================
+   Mapa
+=================================== */
+
+#mapaContainer {
+    width: 100%;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* ================================
+   Upload
+=================================== */
+
+input[type="file"] {
+    background: #fff;
+    padding: 10px;
+}
+
+/* ================================
+   Responsividade
+=================================== */
+
+@media (max-width: 900px) {
+    .formulario {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .buttons {
+        grid-column: span 1;
+        justify-content: center;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+
+    .localizacao-group {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   FIX DEFINITIVO — Inputs dentro do modal
+============================================ */
+
+.modal-content .form-group,
+.modal-content .row,
+.modal-content .col {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+}
+
+.modal-content .form-group input,
+.modal-content .form-group select,
+.modal-content .form-group textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.modal-content .row {
+    display: block !important;
+    margin-bottom: 16px;
+}
+
+.modal-content .col {
+    display: block !important;
+}
+
+.modal-content {
+    overflow-x: hidden !important;
+}
+
+/* Modal de ação do diário de campo */
+#modalAcao.action-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(33, 13, 39, 0.16);
+    backdrop-filter: none;
+}
+
+#modalAcao .action-modal-content {
+    width: 980px !important;
+    max-width: calc(100vw - 80px) !important;
+    max-height: none;
+    overflow: visible !important;
+    padding: 0;
+    border: 0;
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgba(31, 18, 35, 0.28);
+}
+
+#modalAcao .action-modal-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0;
+    padding: 18px 28px 15px;
+    background: linear-gradient(135deg, #fbf7fc 0%, #fff 70%);
+    border-bottom: 1px solid #eee8f0;
+}
+
+#modalAcao .action-modal-header .modal-title {
+    margin: 0 0 4px;
+    color: var(--color-primary, #42134a);
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    line-height: 1.2;
+}
+
+#modalAcao .action-modal-header p {
+    margin: 0;
+    color: #6b6470;
+    font-size: 0.92rem;
+}
+
+#modalAcao .btn-close-modal {
+    display: inline-grid;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #f4f0f5;
+    color: #544b57;
+    cursor: pointer;
+    transition: background-color .2s ease, transform .2s ease;
+}
+
+#modalAcao .btn-close-modal:hover {
+    background: #ebe1ed;
+    transform: rotate(4deg);
+}
+
+#modalAcao .action-modal-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+        "name provider"
+        "axes axes"
+        "actors quantity"
+        "actions actions";
+    gap: 12px 18px;
+    padding: 18px 28px 22px;
+}
+
+#modalAcao .action-modal-field {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+#modalAcao .action-modal-field-wide,
+#modalAcao .action-modal-actions {
+    grid-column: 1 / -1;
+}
+
+#modalAcao .action-modal-name { grid-area: name; grid-column: auto; }
+#modalAcao .action-modal-provider { grid-area: provider; grid-column: auto; }
+#modalAcao .action-modal-axes,
+#modalAcao .action-modal-axis-select { grid-area: axes; }
+#modalAcao .action-modal-actors { grid-area: actors; }
+#modalAcao .action-modal-quantity { grid-area: quantity; }
+#modalAcao .action-modal-actions { grid-area: actions; }
+
+#modalAcao .action-modal-field label {
+    display: block;
+    margin: 0 0 8px;
+    color: #443d47;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-align: left;
+    text-transform: none;
+}
+
+#modalAcao .action-modal-field .clean-input {
+    width: 100%;
+    min-height: 50px;
+    padding: 11px 14px;
+    border: 1px solid #ddd5e0;
+    border-radius: 12px;
+    background: #fcfbfc;
+    color: #302a32;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+#modalAcao .action-modal-field .clean-input:focus {
+    border-color: var(--color-primary, #42134a);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(66, 19, 74, .1);
+}
+
+#modalAcao .action-modal-field .clean-input::placeholder {
+    color: #9a90a0;
+    font-weight: 400;
+}
+
+#modalAcao .action-modal-axes {
+    padding: 12px 14px;
+    border: 1px solid #ece4ee;
+    border-radius: 14px;
+    background: #faf7fb;
+}
+
+#modalAcao .action-modal-axes .eixos-grid-modal {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100%;
+}
+
+#modalAcao .action-modal-axes .checkbox-card-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid #e4dce6;
+    border-radius: 12px;
+    background: #fff;
+    color: #42134a;
+    font-size: .84rem;
+    font-weight: 650;
+    line-height: 1.2;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+#modalAcao .action-modal-axes .checkbox-card-label:has(input:checked) {
+    border-color: var(--color-primary, #42134a);
+    background: #f4eaf6;
+}
+
+#modalAcao .action-modal-axes input[type="checkbox"] {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--color-primary, #42134a);
+}
+
+#modalAcao .action-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 2px -28px -22px;
+    padding: 12px 28px;
+    border-top: 1px solid #eee8f0;
+    background: #fcfafc;
+}
+
+#modalAcao .action-modal-actions .wizard-btn {
+    width: auto;
+    min-height: 48px;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 12px;
+}
+
+#modalAcao .action-modal-cancel {
+    border: 1px solid #d9d1dc;
+    background: #fff;
+    color: #514956;
+}
+
+#modalAcao .action-modal-cancel:hover {
+    border-color: #bfb3c3;
+    background: #f7f3f8;
+}
+
+#modalAcao .action-modal-quantity { max-width: none; }
+
+@media (max-width: 900px) {
+    #modalAcao .action-modal-content {
+        width: 760px !important;
+        max-width: calc(100vw - 40px) !important;
+        max-height: calc(100dvh - 40px);
+        overflow-y: auto !important;
+    }
+
+    #modalAcao .action-modal-axes .eixos-grid-modal {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    #modalAcao.action-modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    #modalAcao .action-modal-content {
+        width: 100%;
+        max-width: 100% !important;
+        max-height: calc(100dvh - 24px);
+        padding: 0;
+        border-radius: 20px 20px 0 0;
+    }
+
+    #modalAcao .action-modal-header {
+        top: 0;
+        padding: 20px 18px 16px;
+    }
+
+    #modalAcao .action-modal-form {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "name"
+            "axes"
+            "provider"
+            "actors"
+            "quantity"
+            "actions";
+        padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+    }
+
+    #modalAcao .action-modal-axes .eixos-grid-modal {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    #modalAcao .action-modal-actions {
+        position: sticky;
+        bottom: calc(-20px - env(safe-area-inset-bottom));
+        margin: 2px -18px calc(-20px - env(safe-area-inset-bottom));
+        padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+        background: #fff;
+        box-shadow: 0 -8px 20px rgba(31, 18, 35, .08);
+    }
+
+    #modalAcao .action-modal-actions .wizard-btn {
+        flex: 1;
+        padding-inline: 12px;
+    }
+
+    #modalAcao .action-modal-quantity {
+        max-width: none;
+    }
+}
+
+@media (max-width: 390px) {
+    #modalAcao .action-modal-axes .eixos-grid-modal {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Excluir */
+
+/* ===== POPUP ===== */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 450px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.popup-content h3 {
+    margin-bottom: 15px;
+}
+
+.popup-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-excluir {
+    background: #e00000;
+    color: #fff;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-cancelar {
+    background: #bbb;
+    color: #000;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.delete-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}

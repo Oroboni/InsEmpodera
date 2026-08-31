@@ -1,0 +1,355 @@
+
+.atores-content-area {
+
+    padding: 24px 32px;
+
+    height: calc(100vh - 70px);
+    /* Ocupa a altura da tela (ajuste 70px se seu header tiver altura diferente) */
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+    /* Espaço entre o título, a busca e a lista */
+
+}
+
+
+
+/* Título "Atores" */
+
+.atores-header h2 {
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 2rem;
+    /* Tamanho do "Atores" (32px) */
+
+    font-weight: 700;
+
+    margin: 0;
+
+}
+
+
+
+/* Contêiner para a barra de busca e o botão "+" */
+
+.atores-search-container {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+    /* Espaço entre a busca e o botão */
+
+}
+
+
+
+/* Barra de busca */
+
+.atores-search-bar {
+
+    flex-grow: 1;
+    /* Faz a barra ocupar o máximo de espaço */
+
+    position: relative;
+
+}
+
+
+
+.atores-search-bar input {
+
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 50px 0 24px;
+    /* Espaço para o ícone à direita e texto à esquerda */
+
+    border: 1px solid #DCDAE1;
+    /* Borda roxa bem clara */
+
+    background-color: #fff;
+
+    border-radius: 99px;
+    /* Totalmente arredondado */
+
+    font-size: 1rem;
+
+    font-weight: 500;
+
+    color: #333;
+
+    transition: border-color 0.2s;
+
+}
+
+
+
+.atores-search-bar input::placeholder {
+
+    color: #9D9C9F;
+    /* Cor do placeholder "Busque por atores..." */
+
+    font-weight: 400;
+
+    font-style: italic;
+
+}
+
+
+
+.atores-search-bar input:focus {
+
+    outline: none;
+
+    border-color: #6a0dad;
+    /* Roxo principal ao focar */
+
+    box-shadow: 0 0 0 2px rgba(106, 29, 173, 0.2);
+
+}
+
+
+
+/* Ícone de lupa dentro da barra de busca */
+
+.atores-search-bar .search-icon {
+
+    position: absolute;
+
+    right: 20px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #6a0dad;
+    /* Roxo principal */
+
+    width: 20px;
+
+    height: 20px;
+
+}
+
+
+
+/* Botão "+" (Adicionar) */
+
+.atores-add-button {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px;
+
+    height: 48px;
+
+    flex-shrink: 0;
+
+    background-color: #7A3188;
+    /* Roxo principal */
+
+    border-radius: 50%;
+
+    color: white;
+
+    font-size: 2.5rem;
+    /* Tamanho do "+" */
+
+    line-height: 1;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s;
+
+}
+
+
+
+.atores-add-button:hover {
+
+    background-color: #5e1a75;
+    /* Roxo mais escuro no hover */
+
+}
+
+.search-container .atores-export-button {
+
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px;
+    min-height: 48px;
+    flex-shrink: 0;
+    padding: 0 !important;
+    background-color: #25a84a !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(37, 168, 74, 0.22);
+    overflow: hidden;
+}
+
+.search-container .atores-export-button:hover {
+
+    background-color: #1e873d !important;
+    transform: translateY(-1px);
+
+}
+
+.search-container .atores-export-button i {
+
+    color: #fff !important;
+    font-size: 1.25rem;
+    line-height: 1;
+
+}
+
+
+
+/* Lista de atores (contêiner com scroll) */
+
+.atores-list-container {
+
+    flex-grow: 1;
+    /* Ocupa todo o espaço restante */
+
+    overflow-y: auto;
+    /* Adiciona scroll vertical */
+
+    margin-right: -10px;
+    /* Esconde a barra de rolagem padrão */
+
+    padding-right: 14px;
+    /* Adiciona espaço para a barra de rolagem customizada */
+
+}
+
+
+
+/* Card de cada ator */
+
+.ator-card {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background-color: #fff;
+
+    padding: 20px 24px;
+
+    border-radius: 8px;
+
+    margin-bottom: 12px;
+    /* Espaço entre os cards */
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Sombra bem sutil */
+
+}
+
+
+
+.ator-card .ator-name {
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 1.1rem;
+    /* 18px */
+
+    font-weight: 600;
+    /* Mais destacado, como na imagem */
+
+    color: #2b2b2b;
+
+}
+
+
+
+/* Ícone de "olho" */
+
+.ator-card .details-icon {
+
+    color: #6a0dad;
+    /* Roxo principal */
+
+    width: 22px;
+
+    height: 22px;
+
+    transition: transform 0.2s;
+
+}
+
+
+
+.ator-card .details-icon:hover {
+
+    transform: scale(1.1);
+
+}
+
+
+
+/* Barra de rolagem customizada (roxo) */
+
+.atores-list-container::-webkit-scrollbar {
+
+    width: 8px;
+
+}
+
+.atores-list-container::-webkit-scrollbar-track {
+
+    background: transparent;
+    /* Fundo transparente */
+
+}
+
+.atores-list-container::-webkit-scrollbar-thumb {
+
+    background-color: #6a0dad;
+    /* Roxo principal */
+
+    border-radius: 4px;
+
+}
+
+.atores-list-container::-webkit-scrollbar-thumb:hover {
+
+    background-color: #5e1a75;
+
+}
+
+/* Para Firefox */
+
+.atores-list-container {
+
+    scrollbar-width: thin;
+
+    scrollbar-color: #6a0dad transparent;
+
+}

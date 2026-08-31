@@ -2,3 +2,30 @@ git clone -b Online --single-branch https://github.com/Oroboni/InsEmpodera.git
 dotnet run --urls="http://0.0.0.0:5000"
 .\testar.ps1
 dotnet run --launch-profile https
+sudo systemctl start empodera
+sudo systemctl start nginx
+sudo systemctl stop empodera
+sudo systemctl stop nginx
+sudo systemctl restart empodera
+sudo systemctl status empodera
+
+sudo systemctl start empodera
+sudo systemctl start nginx
+sudo bash -c '
+set -a
+source /etc/empodera/empodera.env
+set +a
+
+export ASPNETCORE_ENVIRONMENT=Testing
+export DatabaseProvider=MySql
+export ASPNETCORE_URLS=http://127.0.0.1:5001
+
+cd /home/ec2-user/empodera-current
+
+exec runuser \
+  -u ec2-user \
+  --preserve-environment \
+  -- \
+  /usr/bin/dotnet \
+  /home/ec2-user/empodera-current/InsEmpodera.dll
+'
