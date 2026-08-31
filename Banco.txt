@@ -2380,8 +2380,8 @@ ALTER TABLE `diariosprocessopessoal`
 -- Restrições para tabelas `diariosprocessoeixos`
 --
 ALTER TABLE `diariosprocessoeixos`
-  ADD CONSTRAINT `FK_DiariosProcessoEixos_DiariosProcessoPessoal_FkIdDiarioProcesso` FOREIGN KEY (`FkIdDiarioProcesso`) REFERENCES `diariosprocessopessoal` (`IdDiarioProcesso`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_DiariosProcessoEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `eixos` (`IdEixo`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_DE_DPP_FkIdDiarioProcesso` FOREIGN KEY (`FkIdDiarioProcesso`) REFERENCES `diariosprocessopessoal` (`IdDiarioProcesso`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_DE_E_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `eixos` (`IdEixo`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `diarioeixos`

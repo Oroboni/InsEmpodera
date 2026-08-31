@@ -7,6 +7,9 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
     <link rel="stylesheet" href="~/css/pages/personal-assessment.css" asp-append-version="true" />
     <style>
         .process-tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem; }
@@ -21,15 +24,18 @@
         <div class="assessment-title"><h2>Diário de Processo Pessoal</h2></div>
 
         <form asp-action="Index" method="get" id="atorSelectForm">
-            <div class="form-group">
-                <label for="atorId">Ator</label>
-                <div class="select-wrapper">
+            <div class="input-card full-width">
+                <div class="icon-box">
                     <i class="fa-solid fa-user"></i>
-                    <select id="atorId" name="atorId" class="form-control" asp-items="ViewBag.AtorList"
-                            onchange="this.form.submit()">
+                </div>
+
+                <div class="input-content">
+                    <label for="atorId">Ator</label>
+
+                    <select id="atorId" name="atorId" class="clean-input"
+                            asp-items="ViewBag.AtorList" onchange="this.form.submit()">
                         <option value="">Selecione um ator</option>
                     </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
         </form>
