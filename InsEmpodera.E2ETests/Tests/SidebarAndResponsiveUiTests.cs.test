@@ -13,14 +13,14 @@ public sealed class SidebarAndResponsiveUiTests(E2ETestFixture fixture) : Browse
     private static readonly string[] ExpectedSidebarPaths =
     [
         "/", "/Comunidade", "/Atores", "/FichaPrimeiroContato", "/Diariocampo",
-        "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users", "/AccessProfile",
+        "/PersonalProcess", "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users", "/AccessProfile",
         "/Report", "/Ajuda", "/Configuracoes"
     ];
 
     private static readonly string[] ImplementedSidebarPaths =
     [
         "/", "/Comunidade", "/Atores", "/FichaPrimeiroContato", "/Diariocampo",
-        "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users", "/AccessProfile",
+        "/PersonalProcess", "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users", "/AccessProfile",
         "/Report"
     ];
 

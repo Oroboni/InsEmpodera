@@ -1,64 +1,65 @@
-@model Empodera.Models.DiarioCampo
+@model Empodera.Models.DiarioProcessoPessoal
+@using Empodera.Models
 @{
-    ViewData["Title"] = "Adicionar Diário";
+    ViewData["Title"] = "Adicionar Diário Pessoal";
     Layout = "_Layout";
+    var selectedEixos = (HashSet<int>)(ViewBag.SelectedEixos ?? new HashSet<int>());
 }
+
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
-    <link rel="stylesheet" href="~/css/pages/personal-process.css" />
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/personal-process.css" asp-append-version="true" />
 }
 
 <div class="container">
     <div class="breadcrumb">
-        <h1>Diário de Processo Pessoal > <strong>Adicionar Diário</strong></h1>
+        <h1><a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores">Diário de Processo Pessoal</a> &gt; <strong>Adicionar</strong></h1>
     </div>
 
-    <form method="post">
+    <form asp-action="Create" method="post">
         @Html.AntiForgeryToken()
-        
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
         <div class="form-group">
-            <label>Ator <span style="color:red">*</span></label>
+            <label asp-for="FK_id_Atores">Ator <span class="text-danger">*</span></label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <select name="SelectedAtorId" class="form-control" asp-items="ViewBag.AtorList" required>
-                    <option value="">Selecione um Ator...</option>
+                <select asp-for="FK_id_Atores" class="form-control" asp-items="ViewBag.AtorList" required>
+                    <option value="">Selecione um ator</option>
                 </select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
+            <span asp-validation-for="FK_id_Atores" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label>Data <span style="color:red">*</span></label>
+            <label asp-for="Data">Data <span class="text-danger">*</span></label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-calendar-day"></i>
-                <input asp-for="Data" type="date" required>
+                <input asp-for="Data" type="date" required />
             </div>
+            <span asp-validation-for="Data" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Eixos</label>
-            
-            <div class="eixos-tag-container" id="tag-container">
-                </div>
-
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
                         <i class="fa-solid fa-tags"></i>
-                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <span>Selecione os eixos</span>
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
+                <div class="multiselect-panel">
                     <ul>
-                        @if (ViewBag.EixosList != null) {
-                             foreach (var eixo in (SelectList)ViewBag.EixosList) {
-                                <li>
-                                    <input type="checkbox" name="eixosIds" value="@eixo.Value" id="eixo-@eixo.Value"
-                                           data-tag-name="@eixo.Text" data-tag-class="tag-purple">
-                                    <label for="eixo-@eixo.Value">@eixo.Text</label>
-                                </li>
-                            }
+                        @foreach (var eixo in (IEnumerable<Eixo>)ViewBag.EixosList)
+                        {
+                            <li>
+                                <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                                       checked="@selectedEixos.Contains(eixo.IdEixo)" />
+                                <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -66,98 +67,17 @@
         </div>
 
         <div class="form-group">
-            <label>Descrição <span style="color:red">*</span></label>
+            <label asp-for="Descricao">Descrição <span class="text-danger">*</span></label>
             <div class="input-wrapper">
-                <i class="fa-solid fa-align-left" style="top: 15px; transform: none;"></i>
-                <textarea asp-for="Descricao" placeholder="Descreva o processo detalhadamente..." required></textarea>
+                <i class="fa-solid fa-align-left" style="top:15px;transform:none"></i>
+                <textarea asp-for="Descricao" maxlength="4000" placeholder="Descreva o processo detalhadamente..." required></textarea>
             </div>
+            <span asp-validation-for="Descricao" class="text-danger"></span>
         </div>
 
-        <details class="accordion-wrapper">
-            <summary>
-                <span>Ações da Rede do Parceiro (0 itens)</span>
-                <div class="btn-plus-circle"><i class="fa-solid fa-plus" style="color: #6a0dad;"></i></div>
-            </summary>
-            <div style="padding: 20px; text-align: center; border-top: 1px solid #eee;">
-                <p style="color: #666;">Nenhuma ação vinculada.</p>
-            </div>
-        </details>
-
-        <div class="form-group">
-            <label>Anexos</label>
-            <div class="anexos-area">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <span>Salve para adicionar anexos</span>
-            </div>
+        <div class="form-buttons">
+            <a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="btn btn-secondary">CANCELAR</a>
+            <button type="submit" class="btn-full-width">ADICIONAR DIÁRIO</button>
         </div>
-
-        <div class="form-buttons" style="margin-top: 40px;">
-             <button type="submit" class="btn-full-width">ADICIONAR DIÁRIO</button>
-        </div>
-        
     </form>
 </div>
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Lógica copiada e adaptada de Activity/Create
-            const tagContainer = document.getElementById('tag-container');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-
-            function updateTagView() {
-                tagContainer.innerHTML = '';
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-                    if (cb.checked) {
-                        // Cria a Tag visual
-                        const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass; // ex: tag-purple
-                        
-                        const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
-                        tag.textContent = tagName;
-                        
-                        // Botão de remover (X)
-                        const removeBtn = document.createElement('i');
-                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.style.marginLeft = '8px';
-                        removeBtn.dataset.checkboxId = cb.id;
-                        
-                        tag.appendChild(removeBtn);
-                        tagContainer.appendChild(tag);
-                        
-                        // Esconde da lista
-                        listItem.classList.add('is-selected');
-                    } else {
-                        // Mostra na lista
-                        listItem.classList.remove('is-selected');
-                    }
-                });
-            }
-
-            // Evento ao marcar checkbox na lista
-            multiselectPanel.addEventListener('change', function(e) {
-                if (e.target.type === 'checkbox') {
-                    updateTagView();
-                }
-            });
-
-            // Evento ao clicar no X da tag
-            tagContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const checkboxId = e.target.dataset.checkboxId;
-                    const checkboxToUncheck = document.getElementById(checkboxId);
-                    if (checkboxToUncheck) {
-                        checkboxToUncheck.checked = false;
-                        updateTagView();
-                    }
-                }
-            });
-
-            // Inicializa
-            updateTagView();
-        });
-    </script>
-}

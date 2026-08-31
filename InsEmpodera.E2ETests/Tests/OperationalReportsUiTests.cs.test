@@ -1,0 +1,84 @@
+using Empodera.Models;
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class OperationalReportsUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact(DisplayName = "Relatórios operacionais — filtros de fichas e ações alteram dados reais")]
+    public Task FirstContactAndActions_FiltersQueryRealDatabaseData() =>
+        RunInBrowserAsync(nameof(FirstContactAndActions_FiltersQueryRealDatabaseData), async page =>
+        {
+            var data = await Fixture.QueryAsync(async db =>
+            {
+                var community = await db.Comunidades.Where(c => c.Ativo == "S").OrderBy(c => c.Id_Comunidade).FirstAsync();
+                var axis = await db.Eixos.OrderBy(e => e.IdEixo).FirstAsync();
+                var male = new Atores { Nome = Unique("Ator masculino relatório"), Genero = 1, Ativo = "S", FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow };
+                var female = new Atores { Nome = Unique("Atora feminina relatório"), Genero = 2, Ativo = "S", FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow };
+                db.Atores.AddRange(male, female);
+                await db.SaveChangesAsync();
+                db.AtorComunidades.AddRange(
+                    new AtorComunidade { FK_id_Atores = male.IdAtores, FkIdComunidade = community.Id_Comunidade },
+                    new AtorComunidade { FK_id_Atores = female.IdAtores, FkIdComunidade = community.Id_Comunidade });
+                var maleForm = NewForm(male.IdAtores, community.Id_Comunidade, "EmProgresso", new TimeSpan(9, 0, 0));
+                var femaleForm = NewForm(female.IdAtores, community.Id_Comunidade, "Concluida", new TimeSpan(15, 0, 0));
+                db.FichasPrimeiroContato.AddRange(maleForm, femaleForm);
+                await db.SaveChangesAsync();
+                db.FichaCondicoes.Add(new FichaCondicoes { FkIdFicha = maleForm.IdFicha, Cond = "Problemas de saúde" });
+
+                var diary = new DiarioCampo
+                {
+                    FkIdComunidade = community.Id_Comunidade, Data = new DateTime(2026, 8, 20),
+                    Descricao = "Diário para relatório", Localizacao = "Rua do relatório", FkIdUsuario = 1,
+                    DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+                };
+                db.DiariosCampo.Add(diary);
+                await db.SaveChangesAsync();
+                var action = new DiarioDAcoes { FkIdDiario = diary.IdDCampo, Nome = "Encaminhamento", PeovedorEx = "Unidade", Quantidade = 3 };
+                db.DiarioDAcoes.Add(action);
+                await db.SaveChangesAsync();
+                var detail = new DetalhesDAcoes { FkIdDDacoes = action.IdDAcoes, Nome = "Detalhe" };
+                db.DetalhesDAcoes.Add(detail);
+                db.DAAtores.Add(new DAAtores { FkIdDDacoes = action.IdDAcoes, FK_id_Atores = male.IdAtores });
+                await db.SaveChangesAsync();
+                db.DetalhesEixos.Add(new DetalhesEixos { FkIdDetalhes = detail.Id, FkIdEixo = axis.IdEixo });
+                await db.SaveChangesAsync();
+                return new { CommunityId = community.Id_Comunidade, MaleId = male.IdAtores, AxisName = axis.Nome };
+            });
+
+            await LoginAsync(page);
+            await page.GotoAsync($"/Relatorios/FirstContact?comunidadeId={data.CommunityId}");
+            await Assertions.Expect(page.Locator(".report-total")).ToContainTextAsync("2 ficha(s)");
+            await page.Locator("#genero").SelectOptionAsync("1");
+            await page.GetByRole(AriaRole.Button, new() { Name = "APLICAR FILTROS" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).Query.Contains("genero=1"));
+            await Assertions.Expect(page.Locator(".report-total")).ToContainTextAsync("1 ficha(s)");
+
+            await page.GotoAsync($"/Relatorios/Actions?comunidadeId={data.CommunityId}&atorId={data.MaleId}");
+            var row = page.Locator(".matrix-table tbody tr").Filter(new() { HasText = data.AxisName });
+            await Assertions.Expect(row).ToBeVisibleAsync();
+            await Assertions.Expect(row).ToContainTextAsync("3");
+            await page.Locator("#dataDe").FillAsync("2026-09-01");
+            await page.GetByRole(AriaRole.Button, new() { Name = "APLICAR FILTROS" }).ClickAsync();
+            await Assertions.Expect(page.GetByText("Nenhuma ação corresponde aos filtros escolhidos.")).ToBeVisibleAsync();
+        });
+
+    private static FichaPrimeiroContato NewForm(int actorId, int communityId, string status, TimeSpan time) => new()
+    {
+        FK_id_Atores = actorId,
+        FkIdComunidade = communityId,
+        FkIdUsuario = 1,
+        CEstabeleceu = "NaRua",
+        NovoParceiro = "Não",
+        FornecidoParceiro = "Não",
+        Status = status,
+        DtContato = new DateTime(2026, 8, 20),
+        HoraContato = time,
+        DtCriacao = DateTime.UtcNow,
+        DtModificacao = DateTime.UtcNow
+    };
+}

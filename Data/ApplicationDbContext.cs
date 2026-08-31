@@ -60,6 +60,8 @@ namespace Empodera.Data
         public DbSet<Atividades> Atividades { get; set; } = null!;
         public DbSet<AtividadesEixo> AtividadesEixo { get; set; } = null!;
         public DbSet<RecursosAtores> RecursosAtores { get; set; } = null!;
+        public DbSet<DiarioProcessoPessoal> DiariosProcessoPessoal { get; set; } = null!;
+        public DbSet<DiarioProcessoEixo> DiariosProcessoEixos { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +100,14 @@ namespace Empodera.Data
             modelBuilder.Entity<Atividades>().HasKey(at => at.IdAtividade);
             modelBuilder.Entity<AtividadesEixo>().HasKey(ae => ae.IdAEixo);
             modelBuilder.Entity<RecursosAtores>().HasKey(ra => ra.Id_Recursos_Atores);
+            modelBuilder.Entity<DiarioProcessoPessoal>().HasKey(d => d.IdDiarioProcesso);
+            modelBuilder.Entity<DiarioProcessoEixo>().HasKey(d => d.IdDiarioProcessoEixo);
+
+            modelBuilder.Entity<DiarioProcessoPessoal>().ToTable("diariosprocessopessoal");
+            modelBuilder.Entity<DiarioProcessoEixo>().ToTable("diariosprocessoeixos");
+            modelBuilder.Entity<DiarioProcessoEixo>()
+                .HasIndex(d => new { d.FkIdDiarioProcesso, d.FkIdEixo })
+                .IsUnique();
 
             // Perfil -> Usuario (many Perfis belong to one Usuario)
             modelBuilder.Entity<Usuario>()
@@ -321,6 +331,36 @@ namespace Empodera.Data
                 .HasOne(ap => ap.Usuario)
                 .WithMany(u => u.Avaliacoes)
                 .HasForeignKey(ap => ap.FkIdUsuario)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DiarioProcessoPessoal>()
+                .HasOne(d => d.Ator)
+                .WithMany(a => a.DiariosProcessoPessoal)
+                .HasForeignKey(d => d.FK_id_Atores)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DiarioProcessoPessoal>()
+                .HasOne(d => d.Usuario)
+                .WithMany(u => u.DiariosProcessoPessoal)
+                .HasForeignKey(d => d.FkIdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DiarioProcessoPessoal>()
+                .HasOne(d => d.UsuarioModificacao)
+                .WithMany()
+                .HasForeignKey(d => d.FkIdUsuarioM)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DiarioProcessoEixo>()
+                .HasOne(d => d.DiarioProcesso)
+                .WithMany(d => d.Eixos)
+                .HasForeignKey(d => d.FkIdDiarioProcesso)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DiarioProcessoEixo>()
+                .HasOne(d => d.Eixo)
+                .WithMany(e => e.DiariosProcessoEixos)
+                .HasForeignKey(d => d.FkIdEixo)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FichaPrimeiroContato>()

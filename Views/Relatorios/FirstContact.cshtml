@@ -1,289 +1,169 @@
+@model Empodera.Models.FirstContactReportViewModel
 @{
     ViewData["Title"] = "Relatório - Fichas de 1º Contato";
     ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
-
-    // Variável auxiliar para verificar se há comunidade selecionada
-    bool temComunidade = !string.IsNullOrEmpty(Context.Request.Query["comunidadeId"]);
+    string DateValue(DateTime? value) => value?.ToString("yyyy-MM-dd") ?? "";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/reports.css" />
-
+    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
+    <style>
+        .report-summary { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
+        .report-total { background:#f1eafa; color:#582192; padding:.6rem 1rem; border-radius:999px; font-weight:700; }
+        .report-series { width:100%; display:grid; gap:.9rem; }
+        .series-row { display:grid; grid-template-columns:minmax(150px, 240px) 1fr 92px; gap:1rem; align-items:center; }
+        .series-track { height:24px; background:#eeeaf1; border-radius:999px; overflow:hidden; }
+        .series-bar { height:100%; min-width:3px; background:linear-gradient(90deg,#6a2a94,#bd4c92); border-radius:inherit; }
+        .series-value { text-align:right; font-weight:700; }
+        .filter-actions { display:flex; gap:.75rem; align-items:end; }
+        @@media (max-width:760px) { .series-row { grid-template-columns:1fr; gap:.35rem; } .series-value { text-align:left; } }
+    </style>
 }
 
 <div class="report-page-container">
     <div class="report-breadcrumb">
-        <h1>
-            <a asp-controller="Report" asp-action="index">Relatórios</a>
-            >
-            <strong>Fichas de 1º Contato</strong>
-        </h1>
+        <h1><a asp-action="Index">Relatórios</a> &gt; <strong>Fichas de 1º Contato</strong></h1>
     </div>
 
     <div class="report-content-box">
-        <div class="report-filters">
-
-            <!-- Seleção Principal de Comunidade (SEMPRE VISÍVEL) -->
-            <form asp-action="FirstContact" method="get" id="comunidadeForm"
-                  style="margin-bottom: @(temComunidade ? "20px" : "0");">
-                <div class="form-group">
-                    <label for="ComunidadeId" style="font-weight: bold; font-size: 1rem;">Comunidade</label>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-city"></i>
-                        <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades"
-                                onchange="this.form.submit()" style="border-color: #4f46e5; border-width: 2px;">
-                            <option value="">Selecione uma comunidade...</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
+        <form asp-action="FirstContact" method="get" class="report-filters" id="firstContactFilters">
+            <div class="form-group">
+                <label for="comunidadeId">Comunidade</label>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-city"></i>
+                    <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                        <option value="">Selecione uma comunidade</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
-            </form>
+            </div>
 
-            <!-- SÓ MOSTRA OS OUTROS FILTROS SE TIVER COMUNIDADE SELECIONADA -->
-            @if (temComunidade)
+            @if (Model.ComunidadeId.HasValue)
             {
-                <!-- Filtros Avançados (Começa FECHADO - sem o atributo 'open') -->
-                <details class="filter-box">
-                    <summary>
-                        <span><i class="fa-solid fa-filter" style="margin-right: 8px;"></i> Filtros Avançados</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </summary>
-
+                <details class="filter-box" open>
+                    <summary><span><i class="fa-solid fa-filter"></i> Filtros avançados</span><i class="fa-solid fa-chevron-down"></i></summary>
                     <div class="filter-grid">
                         <div class="form-group">
-                            <label>Gênero</label>
-                            <div class="select-wrapper">
-                                <select name="genero" id="genero">
-                                    <option value="" selected disabled>Todos</option>
-                                    <option value="2">Feminino</option>
-                                    <option value="1">Masculino</option>
-                                    <option value="">Não declarado</option>
-                                    <option value="3">Transgênero</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="genero">Gênero</label>
+                            <select id="genero" name="genero">
+                                <option value="">Todos</option>
+                                <option value="2" selected="@(Model.Genero == 2)">Feminino</option>
+                                <option value="1" selected="@(Model.Genero == 1)">Masculino</option>
+                                <option value="3" selected="@(Model.Genero == 3)">Transgênero</option>
+                                <option value="0" selected="@(Model.Genero == 0)">Não declarado</option>
+                            </select>
                         </div>
-
                         <div class="form-group">
-                            <label>Estrutura familiar</label>
-                            <div class="select-wrapper">
-                                <select name="estrutura_familiar" id="estrutura_familiar">
-                                    <option value="" selected disabled>Todas</option>
-                                    <option value="companheiro_sem_matrimonio">Companheiro/a sem matrimônio</option>
-                                    <option value="familia_nuclear">Família nuclear</option>
-                                    <option value="familia_sem_matrimonio_formal">Família sem matrimônio formal</option>
-                                    <option value="mora_com_filhos">Mora com filhos/as</option>
-                                    <option value="mora_sozinho">Mora sozinho</option>
-                                    <option value="outro">Outro</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="estruturaFamiliar">Estrutura familiar</label>
+                            <select id="estruturaFamiliar" name="estruturaFamiliar">
+                                <option value="">Todas</option>
+                                <option value="SemMatrimonio" selected="@(Model.EstruturaFamiliar == "SemMatrimonio")">Companheiro/a sem matrimônio</option>
+                                <option value="FamiliaNuclear" selected="@(Model.EstruturaFamiliar == "FamiliaNuclear")">Família nuclear</option>
+                                <option value="SemMatrimonioF" selected="@(Model.EstruturaFamiliar == "SemMatrimonioF")">Família sem matrimônio formal</option>
+                                <option value="MoraCFilhos" selected="@(Model.EstruturaFamiliar == "MoraCFilhos")">Mora com filhos/as</option>
+                                <option value="MoraSozinho" selected="@(Model.EstruturaFamiliar == "MoraSozinho")">Mora sozinho</option>
+                                <option value="Outro" selected="@(Model.EstruturaFamiliar == "Outro")">Outro</option>
+                            </select>
                         </div>
-
                         <div class="form-group">
-                            <label>Condições 1º contato</label>
-                            <div class="select-wrapper">
-                                <select name="condicoes_primeiro_contato" id="condicoes_primeiro_contato">
-                                    <option value="" selected disabled>Todas</option>
-                                    <option value="analfabetismo">Analfabetismo</option>
-                                    <option value="apoio_economico">Apoio econômico</option>
-                                    <option value="capacitacao_formacao">Capacitação e formação</option>
-                                    <option value="comportamental">Comportamental</option>
-                                    <option value="condutas_antissociais">Condutas antissociais</option>
-                                    <option value="crise_psicologica">Crise psicológica</option>
-                                    <option value="deslocamento">Deslocamento</option>
-                                    <option value="drogas_intravenosas">Drogas intravenosas</option>
-                                    <option value="escolares">Escolares</option>
-                                    <option value="estigma_identidade_sexual">Estigma por identidade sexual</option>
-                                    <option value="exclusao_grave">Exclusão grave</option>
-                                    <option value="gravidez_parto">Gravidez/parto</option>
-                                    <option value="hiv_aids">HIV/AIDS</option>
-                                    <option value="hepatite">Hepatite</option>
-                                    <option value="ist">IST</option>
-                                    <option value="incapacidade">Incapacidade</option>
-                                    <option value="legal">Legal</option>
-                                    <option value="migracao_imigracao">Migração/Imigração</option>
-                                    <option value="organizacao_planejamento">Organização e planejamento</option>
-                                    <option value="outras_dependencias">Outras dependências</option>
-                                    <option value="pobreza_extrema">Pobreza extrema</option>
-                                    <option value="problemas_saude">Problemas de saúde</option>
-                                    <option value="problemas_familiares">Problemas familiares</option>
-                                    <option value="problemas_sexuais">Problemas sexuais</option>
-                                    <option value="psiquiatricas">Psiquiátricas</option>
-                                    <option value="redes_interinstitucionais">Redes interinstitucionais</option>
-                                    <option value="relacionais">Relacionais</option>
-                                    <option value="sem_trabalho">Sem trabalho</option>
-                                    <option value="substancias_alcool">Substâncias/álcool</option>
-                                    <option value="trabalho_sexual">Trabalho sexual</option>
-                                    <option value="transtorno_estresse_pos_traumatico">Transtorno estresse pós traumático
-                                    </option>
-                                    <option value="trafico_pessoas">Tráfico de pessoas</option>
-                                    <option value="tuberculoso">Tuberculoso</option>
-                                    <option value="vida_rua">Vida de rua</option>
-                                    <option value="violacao_adulto">Violação de adulto</option>
-                                    <option value="violacao_criancas">Violação de crianças</option>
-                                    <option value="violencia_intracomunitaria">Violência intracomunitária</option>
-                                    <option value="violencia_intrafamiliar">Violência intrafamiliar</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="condicao">Condição</label>
+                            <input id="condicao" name="condicao" value="@Model.Condicao" placeholder="Ex.: Problemas de saúde" />
                         </div>
-
                         <div class="form-group">
-                            <label>Resultados</label>
-                            <div class="select-wrapper">
-                                <select name="resultados" id="resultados">
-                                    <option value="" selected disabled>Todos</option>
-                                    <option value="inclusao_atividades">Inclusão em atividades</option>
-                                    <option value="inicia_programa">Inicia um programa</option>
-                                    <option value="interrompeu_contato">Interrompeu contato</option>
-                                    <option value="seguiu_contato">Seguiu contato</option>
-                                    <option value="veio_ao_encontro">Veio ao encontro</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="resultado">Resultado</label>
+                            <input id="resultado" name="resultado" value="@Model.Resultado" placeholder="Ex.: Seguiu contato" />
                         </div>
-
                         <div class="form-group">
-                            <label>Respostas</label>
-                            <div class="select-wrapper">
-                                <select name="respostas" id="respostas">
-                                    <option value="" selected disabled>Todas</option>
-                                    <option value="acolhida_dia_noite">Acolhida (dia ou noite)</option>
-                                    <option value="acompanhamento">Acompanhamento</option>
-                                    <option value="conselho_orientacao">Conselho/Orientação</option>
-                                    <option value="cuidados_medicos">Cuidados médicos</option>
-                                    <option value="da_se_informacao">Dá-se uma informação</option>
-                                    <option value="encaminhamento">Encaminhamento</option>
-                                    <option value="escuta_imediata_manejo_crise">Escuta imediata/manejo de crise</option>
-                                    <option value="higiene_roupa_limpa">Higiene/Roupa limpa</option>
-                                    <option value="indicacoes_sugestoes">Indicações, sugestões</option>
-                                    <option value="marca_se_encontro">Marca-se um encontro</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="resposta">Resposta</label>
+                            <input id="resposta" name="resposta" value="@Model.Resposta" placeholder="Ex.: Encaminhamento" />
                         </div>
-
                         <div class="form-group">
-                            <label>Hora do 1º contato</label>
-                            <div class="select-wrapper">
-                                <select name="hora_primeiro_contato" id="hora_primeiro_contato">
-                                    <option value="" selected disabled>Qualquer horário</option>
-                                    <option value="06_12">Das 06:00 às 12:00</option>
-                                    <option value="12_20">Das 12:01 às 20:00</option>
-                                    <option value="20_06">Das 20:01 às 05:59</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="horario">Horário</label>
+                            <select id="horario" name="horario">
+                                <option value="">Qualquer horário</option>
+                                <option value="06_12" selected="@(Model.Horario == "06_12")">06:00 às 12:00</option>
+                                <option value="12_20" selected="@(Model.Horario == "12_20")">12:01 às 20:00</option>
+                                <option value="20_06" selected="@(Model.Horario == "20_06")">20:01 às 05:59</option>
+                            </select>
                         </div>
-
                         <div class="form-group">
-                            <label>Como se estabeleceu</label>
-                            <div class="select-wrapper">
-                                <select name="como_estabeleceu_contato" id="como_estabeleceu_contato">
-                                    <option value="" selected disabled>Todos</option>
-                                    <option value="outras_instituicoes">Em outras instituições</option>
-                                    <option value="casa_pessoa">Na casa da pessoa</option>
-                                    <option value="estrutura_organizacao">Na estrutura da organização</option>
-                                    <option value="na_rua">Na rua</option>
-                                    <option value="outro">Outro</option>
-                                    <option value="por_telefone">Por telefone</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="comoEstabeleceu">Como se estabeleceu</label>
+                            <select id="comoEstabeleceu" name="comoEstabeleceu">
+                                <option value="">Todos</option>
+                                <option value="OutrasInstituicoes" selected="@(Model.ComoEstabeleceu == "OutrasInstituicoes")">Em outras instituições</option>
+                                <option value="CasaDaPessoa" selected="@(Model.ComoEstabeleceu == "CasaDaPessoa")">Na casa da pessoa</option>
+                                <option value="EstruturaOrganizacao" selected="@(Model.ComoEstabeleceu == "EstruturaOrganizacao")">Na estrutura da organização</option>
+                                <option value="NaRua" selected="@(Model.ComoEstabeleceu == "NaRua")">Na rua</option>
+                                <option value="Outro" selected="@(Model.ComoEstabeleceu == "Outro")">Outro</option>
+                                <option value="PorTelefone" selected="@(Model.ComoEstabeleceu == "PorTelefone")">Por telefone</option>
+                            </select>
                         </div>
-
                         <div class="form-group">
-                            <label>Escolaridade</label>
-                            <div class="select-wrapper">
-                                <select name="escolaridade" id="escolaridade">
-                                    <option value="" selected disabled>Todas</option>
-                                    <option value="sabe_calcular">Sabe calcular</option>
-                                    <option value="sabe_ler_escrever">Sabe ler e escrever</option>
-                                    <option value="sabe_usar_computador">Sabe usar o computador</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
+                            <label for="escolaridade">Escolaridade</label>
+                            <select id="escolaridade" name="escolaridade">
+                                <option value="">Todas</option>
+                                <option value="sabe_calcular" selected="@(Model.Escolaridade == "sabe_calcular")">Sabe calcular</option>
+                                <option value="sabe_ler_escrever" selected="@(Model.Escolaridade == "sabe_ler_escrever")">Sabe ler e escrever</option>
+                                <option value="sabe_usar_computador" selected="@(Model.Escolaridade == "sabe_usar_computador")">Sabe usar computador</option>
+                            </select>
                         </div>
-
-                        <!-- Campos de Data -->
-                        <div class="form-group">
-                            <label>De (data)</label>
-                            <div class="input-wrapper">
-                                <input type="date" />
-                                <i class="fa-solid fa-calendar"></i>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Até (data)</label>
-                            <div class="input-wrapper">
-                                <input type="date" />
-                                <i class="fa-solid fa-calendar"></i>
-                            </div>
-                        </div>
-
-                        <!-- Botão de Filtrar para confirmar a ação -->
-                        <div class="form-group" style="justify-content: flex-end;">
-                            <label>&nbsp;</label> <!-- Espaço vazio para alinhar -->
-                            <button type="button" class="btn btn-primary" disabled aria-disabled="true" title="Filtros avançados ainda não estão disponíveis" style="height: 42px; width: 100%;">Aplicar
-                                Filtros</button>
-                            </div>
-                        </div>
-                    </details>
-
-                    <!-- Configurações de Visualização (fora do sanfona) -->
-                    <div class="report-type-filters">
-                        <div class="form-group" style="flex: 1;">
-                            <label>Tipo de Visualização</label>
-                            <div class="select-wrapper">
-                                <select name="tipo" id="tipo">
-                                    <option value="por_categoria">Por categoria</option>
-                                    <option value="por_tabela">Por tabela</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
-                        </div>
-                        <div class="form-group" style="flex: 1;">
-                            <label>Campo Principal *</label>
-                            <div class="select-wrapper">
-                                <select name="campo" id="campo">
-                                    <option value="" selected disabled>Selecione...</option>
-                                    <option value="como_estabeleceu_contato">Como se estabeleceu o primeiro contato</option>
-                                    <option value="emprego">Emprego</option>
-                                    <option value="estado">Estado</option>
-                                    <option value="estado_familiar">Estado familiar</option>
-                                    <option value="estrutura_familiar">Estrutura familiar</option>
-                                    <option value="genero">Gênero</option>
-                                    <option value="hora_primeiro_contato">Hora do primeiro contato</option>
-                                    <option value="local_tratamento">Local de tratamento</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down select-arrow"></i>
-                            </div>
-                        </div>
+                        <div class="form-group"><label for="dataDe">De</label><input id="dataDe" type="date" name="dataDe" value="@DateValue(Model.DataDe)" /></div>
+                        <div class="form-group"><label for="dataAte">Até</label><input id="dataAte" type="date" name="dataAte" value="@DateValue(Model.DataAte)" /></div>
                     </div>
-                }
-            </div>
+                </details>
 
-            <div class="report-body">
-                @if (!temComunidade)
-                {
-                    <div class="report-empty-state">
-                        <img src="~/images/MulherPlaceholder.webp" alt="Selecione uma comunidade" />
-                        <p>Primeiro selecione uma comunidade.</p>
+                <div class="report-type-filters">
+                    <div class="form-group">
+                        <label for="campo">Agrupar por</label>
+                        <select id="campo" name="campo">
+                            <option value="status" selected="@(Model.Campo == "status")">Situação da ficha</option>
+                            <option value="como_estabeleceu_contato" selected="@(Model.Campo == "como_estabeleceu_contato")">Como se estabeleceu o contato</option>
+                            <option value="emprego" selected="@(Model.Campo == "emprego")">Emprego</option>
+                            <option value="estado_familiar" selected="@(Model.Campo == "estado_familiar")">Estado familiar</option>
+                            <option value="estrutura_familiar" selected="@(Model.Campo == "estrutura_familiar")">Estrutura familiar</option>
+                            <option value="genero" selected="@(Model.Campo == "genero")">Gênero</option>
+                            <option value="hora_primeiro_contato" selected="@(Model.Campo == "hora_primeiro_contato")">Hora do contato</option>
+                            <option value="local_tratamento" selected="@(Model.Campo == "local_tratamento")">Local de tratamento</option>
+                        </select>
                     </div>
-                }
-                else
-                {
-                    <div class="chart-container">
-                        <canvas id="firstContactPieChart"></canvas>
+                    <div class="filter-actions">
+                        <a asp-action="FirstContact" asp-route-comunidadeId="@Model.ComunidadeId" class="btn btn-secondary">LIMPAR</a>
+                        <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
                     </div>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary">CARREGAR RELATÓRIO</button>
+            }
+        </form>
+
+        <div class="report-body">
+            @if (!Model.ComunidadeId.HasValue)
+            {
+                <div class="report-empty-state"><i class="fa-solid fa-chart-pie" style="font-size:4rem;color:#9c75ca"></i><p>Primeiro selecione uma comunidade.</p></div>
+            }
+            else if (Model.Total == 0)
+            {
+                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:#9c75ca"></i><p>Nenhuma ficha corresponde aos filtros escolhidos.</p></div>
+            }
+            else
+            {
+                <div class="report-summary"><h2>Distribuição das fichas</h2><span class="report-total">@Model.Total ficha(s)</span></div>
+                <div class="report-series">
+                    @foreach (var item in Model.Series)
+                    {
+                        <div class="series-row">
+                            <strong>@item.Label</strong>
+                            <div class="series-track" role="img" aria-label="@item.Label: @item.Value ficha(s), @item.Percentage%">
+                                <div class="series-bar" style="width:@item.Percentage.ToString(System.Globalization.CultureInfo.InvariantCulture)%"></div>
+                            </div>
+                            <span class="series-value">@item.Value (@item.Percentage%)</span>
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
-
-    @section Scripts {
-        <script src="~/js/reports.js"></script>
-    }
+</div>

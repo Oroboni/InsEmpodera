@@ -1960,6 +1960,35 @@ CREATE TABLE `vulnerabilidadeseixo` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `diariosprocessopessoal`
+--
+
+CREATE TABLE `diariosprocessopessoal` (
+  `IdDiarioProcesso` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
+  `FK_id_Atores` int(11) NOT NULL,
+  `Data` datetime(6) NOT NULL,
+  `Descricao` varchar(4000) NOT NULL,
+  `DtCriacao` datetime(6) NOT NULL,
+  `DtModificacao` datetime(6) NOT NULL,
+  `FkIdUsuario` int(11) NOT NULL,
+  `FkIdUsuarioM` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `diariosprocessoeixos`
+--
+
+CREATE TABLE `diariosprocessoeixos` (
+  `IdDiarioProcessoEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
+  `FkIdDiarioProcesso` int(11) NOT NULL,
+  `FkIdEixo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `__efmigrationshistory`
 --
 
@@ -2218,6 +2247,23 @@ ALTER TABLE `vulnerabilidadeseixo`
   ADD KEY `IX_VulnerabilidadesEixo_FkIdVulnerabilidade` (`FkIdVulnerabilidade`);
 
 --
+-- Índices de tabela `diariosprocessopessoal`
+--
+ALTER TABLE `diariosprocessopessoal`
+  ADD PRIMARY KEY (`IdDiarioProcesso`),
+  ADD KEY `IX_DiariosProcessoPessoal_FK_id_Atores` (`FK_id_Atores`),
+  ADD KEY `IX_DiariosProcessoPessoal_FkIdUsuario` (`FkIdUsuario`),
+  ADD KEY `IX_DiariosProcessoPessoal_FkIdUsuarioM` (`FkIdUsuarioM`);
+
+--
+-- Índices de tabela `diariosprocessoeixos`
+--
+ALTER TABLE `diariosprocessoeixos`
+  ADD PRIMARY KEY (`IdDiarioProcessoEixo`),
+  ADD UNIQUE KEY `IX_DiariosProcessoEixos_Diario_Eixo` (`FkIdDiarioProcesso`,`FkIdEixo`),
+  ADD KEY `IX_DiariosProcessoEixos_FkIdEixo` (`FkIdEixo`);
+
+--
 -- Índices de tabela `__efmigrationshistory`
 --
 ALTER TABLE `__efmigrationshistory`
@@ -2321,6 +2367,21 @@ ALTER TABLE `diarioacoes`
 --
 ALTER TABLE `diariodacoes`
   ADD CONSTRAINT `FK_DiarioDAcoes_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `diarioscampo` (`IdDCampo`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `diariosprocessopessoal`
+--
+ALTER TABLE `diariosprocessopessoal`
+  ADD CONSTRAINT `FK_DiariosProcessoPessoal_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `atores` (`IdAtores`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_DiariosProcessoPessoal_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `usuarios` (`IdUsuario`),
+  ADD CONSTRAINT `FK_DiariosProcessoPessoal_Usuarios_FkIdUsuarioM` FOREIGN KEY (`FkIdUsuarioM`) REFERENCES `usuarios` (`IdUsuario`);
+
+--
+-- Restrições para tabelas `diariosprocessoeixos`
+--
+ALTER TABLE `diariosprocessoeixos`
+  ADD CONSTRAINT `FK_DiariosProcessoEixos_DiariosProcessoPessoal_FkIdDiarioProcesso` FOREIGN KEY (`FkIdDiarioProcesso`) REFERENCES `diariosprocessopessoal` (`IdDiarioProcesso`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_DiariosProcessoEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `eixos` (`IdEixo`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `diarioeixos`

@@ -19,7 +19,7 @@ public sealed class SiteCrawlerAndAccessibilityTests(E2ETestFixture fixture) : B
                 var pending = new Queue<string>(
                 [
                     "/", "/Comunidade", "/Atores", "/FichaPrimeiroContato", "/Diariocampo",
-                    "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users",
+                    "/PersonalProcess", "/PersonalAssessment", "/Relatorios", "/Atividades", "/Users",
                     "/AccessProfile", "/Report", "/Ajuda", "/Configuracoes"
                 ]);
                 var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

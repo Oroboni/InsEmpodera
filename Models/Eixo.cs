@@ -14,5 +14,6 @@ namespace Empodera.Models
         public List<DiarioEixo> DiarioEixos { get; set; } = new();
         public List<VulnerabilidadesEixo> VulnerabilidadesEixos { get; set; } = new();
         public List<AtividadesEixo> AtividadesEixo { get; set; } = new();
+        public List<DiarioProcessoEixo> DiariosProcessoEixos { get; set; } = new();
     }
 }

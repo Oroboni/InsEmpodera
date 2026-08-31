@@ -8,9 +8,9 @@
     <link rel="icon" href="~/images/Logo-empodera.svg" type="image/x-icon">
 
     <!-- CSS Base -->
-    <link rel="stylesheet" href="~/css/_variaveis.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="~/css/_variaveis.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sidebar/sidebar.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
     <script src="~/js/localization.js" asp-append-version="true" defer></script>
 
@@ -73,9 +73,14 @@
                             <p><i class="fas fa-book"></i> Diários de Campo</p>
                         </a>
                     </li>
+                    <li data-page="PersonalProcess" class="@IsActive("PersonalProcess")">
+                        <a asp-controller="PersonalProcess" asp-action="Index">
+                            <p><i class="fas fa-book-open"></i> Diário Pessoal</p>
+                        </a>
+                    </li>
                     <li data-page="PersonalAssessment" class="@IsActive("PersonalAssessment")">
                         <a asp-controller="PersonalAssessment" asp-action="Index">
-                            <p><i class="fas fa-book-open"></i> Diário Pessoal</p>
+                            <p><i class="fas fa-chart-line"></i> Avaliações Pessoais</p>
                         </a>
                     </li>
                     <li data-page="Relatorios" class="@IsActive("Relatorios")">

@@ -1,66 +1,65 @@
-@model Empodera.Models.DiarioCampo
+@model Empodera.Models.DiarioProcessoPessoal
+@using Empodera.Models
 @{
-    ViewData["Title"] = "Detalhes do Diário";
+    ViewData["Title"] = "Editar Diário Pessoal";
     Layout = "_Layout";
+    var selectedEixos = (HashSet<int>)(ViewBag.SelectedEixos ?? new HashSet<int>());
+    bool canDelete = ViewBag.CanDelete == true;
 }
+
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" />
-    <link rel="stylesheet" href="~/css/pages/atores.css" /> 
-    <link rel="stylesheet" href="~/css/pages/personal-process.css" />
-    <style>
-        .btn-success { background-color: var(--color-success) !important; color: white !important; }
-    </style>
+    <link rel="stylesheet" href="~/css/pages/activity-form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/personal-process.css" asp-append-version="true" />
 }
 
 <div class="container">
     <div class="breadcrumb">
-        <h1>Diário de Processo Pessoal > <strong>Detalhes de Diário de Processo Pessoal</strong></h1>
+        <h1><a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores">Diário de Processo Pessoal</a> &gt; <strong>Editar</strong></h1>
     </div>
 
-    <form method="post">
+    <form asp-action="Edit" asp-route-id="@Model.IdDiarioProcesso" method="post">
         @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="IdDCampo" />
+        <input type="hidden" asp-for="IdDiarioProcesso" />
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
         <div class="form-group">
-            <label>Ator *</label>
+            <label asp-for="FK_id_Atores">Ator <span class="text-danger">*</span></label>
             <div class="select-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <!-- [CORREÇÃO] 'name' em vez de 'asp-for' -->
-                <select name="SelectedAtorId" class="form-control" asp-items="ViewBag.AtorList" required>
-                </select>
+                <select asp-for="FK_id_Atores" class="form-control" asp-items="ViewBag.AtorList" required></select>
                 <i class="fa-solid fa-chevron-down select-arrow"></i>
             </div>
+            <span asp-validation-for="FK_id_Atores" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label>Data *</label>
+            <label asp-for="Data">Data <span class="text-danger">*</span></label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-calendar-day"></i>
-                <input asp-for="Data" type="date" required>
+                <input asp-for="Data" type="date" required />
             </div>
+            <span asp-validation-for="Data" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Eixos</label>
-            <div class="eixos-tag-container" id="tag-container"></div>
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
                         <i class="fa-solid fa-tags"></i>
-                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <span>Selecione os eixos</span>
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
+                <div class="multiselect-panel">
                     <ul>
-                        @if (ViewBag.EixosList != null) {
-                            foreach (var eixo in (SelectList)ViewBag.EixosList) {
-                                <li>
-                                    <input type="checkbox" name="eixosIds" value="@eixo.Value" id="eixo-edit-@eixo.Value"
-                                           data-tag-name="@eixo.Text" data-tag-class="tag-purple">
-                                    <label for="eixo-edit-@eixo.Value">@eixo.Text</label>
-                                </li>
-                            }
+                        @foreach (var eixo in (IEnumerable<Eixo>)ViewBag.EixosList)
+                        {
+                            <li>
+                                <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                                       checked="@selectedEixos.Contains(eixo.IdEixo)" />
+                                <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -68,193 +67,34 @@
         </div>
 
         <div class="form-group">
-            <label>Descrição *</label>
+            <label asp-for="Descricao">Descrição <span class="text-danger">*</span></label>
             <div class="input-wrapper">
-                <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Descricao"></textarea>
+                <i class="fa-solid fa-align-left" style="top:15px;transform:none"></i>
+                <textarea asp-for="Descricao" maxlength="4000" required></textarea>
             </div>
+            <span asp-validation-for="Descricao" class="text-danger"></span>
         </div>
 
-        <details class="accordion-wrapper">
-            <summary>
-                <span>Ações da Rede do Parceiro (0 itens)</span>
-                <i class="fa-solid fa-circle-plus" style="color: var(--color-primary); font-size: 1.2rem;"></i>
-            </summary>
-            <div style="padding: 16px;">
-                <p style="color: #888; font-size: 0.9rem;">Nenhuma ação vinculada.</p>
-            </div>
-        </details>
-
-        <div class="form-group">
-            <label>Anexos</label>
-            <div class="anexos-list">
-                <div class="anexo-item">
-                    <span class="anexo-name">DOCUMENTO_SCAN.PDF</span>
-                    <i class="fa-solid fa-trash-can anexo-remove"></i>
-                </div>
-                <div style="margin-top: 10px; text-align: right;">
-                    <a href="#" style="color: var(--color-primary); font-weight: 600; font-size: 0.85rem;">ADICIONAR</a>
-                </div>
-            </div>
+        <div class="form-footer">
+            <span>Criado em <strong>@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</strong></span>
+            <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</strong></span>
         </div>
 
-        <details class="form-footer" open>
-            <summary>
-                <div class="footer-text">
-                    <span>Criação <strong>@Model.DtCriacao.ToString("dd/MM/yyyy")</strong></span>
-                </div>
-                <i class="fa-solid fa-chevron-down"></i>
-            </summary>
-            <div class="metadata-content">
-                 <div class="form-group"><label>Criado por</label><div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" value="[Sistema]" readonly></div></div>
-                 <div class="form-group"><label>Atualizado por</label><div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" value="[Sistema]" readonly></div></div>
-            </div>
-        </details>
-        
         <div class="form-buttons">
-            <button type="button" class="btn btn-delete" disabled aria-disabled="true" title="Exclusão ainda não disponível">DELETAR</button>
-            <a asp-action="Index" class="btn btn-secondary">VOLTAR</a>
-            <button type="submit" class="btn btn-primary">EDITAR</button>
+            @if (canDelete)
+            {
+                <button type="submit" form="deletePersonalProcessForm" class="btn btn-delete">DELETAR</button>
+            }
+            <a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="btn btn-secondary">VOLTAR</a>
+            <button type="submit" class="btn btn-primary">SALVAR ALTERAÇÕES</button>
         </div>
     </form>
+
+    @if (canDelete)
+    {
+        <form id="deletePersonalProcessForm" asp-action="Delete" asp-route-id="@Model.IdDiarioProcesso" method="post"
+              onsubmit="return confirm('Deseja realmente excluir este registro?');">
+            @Html.AntiForgeryToken()
+        </form>
+    }
 </div>
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. Elementos Principais ---
-            const btnEditar = document.querySelector('.btn-primary');
-            const inputs = document.querySelectorAll('input:not([type="hidden"]), select, textarea');
-            
-            // Elementos das Tags (Eixos)
-            const tagContainer = document.getElementById('tag-container');
-            const eixosWrapper = document.querySelector('.multiselect-wrapper');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-
-            let modoEdicao = false;
-
-            // --- 2. Lógica de Tags (Visualização em Tempo Real) ---
-            function updateTagView() {
-                tagContainer.innerHTML = ''; // Limpa as tags atuais
-                
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-                    
-                    if (cb.checked) {
-                        // Se estiver marcado, cria a tag visual
-                        const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass || 'tag-purple'; // Padrão roxo
-                        
-                        const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
-                        tag.textContent = tagName;
-                        
-                        // Botão de remover (X)
-                        const removeBtn = document.createElement('i');
-                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.style.marginLeft = '8px';
-                        removeBtn.dataset.checkboxId = cb.id;
-                        
-                        tag.appendChild(removeBtn);
-                        tagContainer.appendChild(tag);
-                        
-                        // Esconde o item da lista para não duplicar visualmente
-                        listItem.classList.add('is-selected');
-                    } else {
-                        // Se desmarcado, mostra na lista novamente
-                        listItem.classList.remove('is-selected');
-                    }
-                });
-            }
-
-            // Evento: Alterou checkbox na lista -> Atualiza tags
-            multiselectPanel.addEventListener('change', function(e) {
-                if (e.target.type === 'checkbox') {
-                    updateTagView();
-                }
-            });
-
-            // Evento: Clicou no X da tag -> Desmarca checkbox
-            tagContainer.addEventListener('click', function(e) {
-                // Só permite remover se estiver em modo de edição
-                if (!modoEdicao) return; 
-
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const checkboxId = e.target.dataset.checkboxId;
-                    const checkboxToUncheck = document.getElementById(checkboxId);
-                    
-                    if (checkboxToUncheck) {
-                        checkboxToUncheck.checked = false;
-                        updateTagView();
-                    }
-                }
-            });
-
-            // --- 3. Lógica de Bloqueio/Desbloqueio (Modo Editar) ---
-            function toggleCampos(disabled) {
-                // Inputs normais
-                inputs.forEach(el => {
-                    if(disabled) {
-                        el.setAttribute('readonly', 'readonly');
-                        el.style.backgroundColor = 'var(--color-bg-secondary)';
-                        if(el.tagName === 'SELECT') el.setAttribute('disabled', 'disabled');
-                    } else {
-                        el.removeAttribute('readonly');
-                        el.removeAttribute('disabled');
-                        el.style.backgroundColor = 'var(--color-bg-primary)';
-                    }
-                });
-
-                // Bloqueia interação com Eixos
-                if(eixosWrapper) {
-                    eixosWrapper.style.pointerEvents = disabled ? 'none' : 'auto';
-                    eixosWrapper.style.opacity = disabled ? '0.8' : '1';
-                }
-                
-                // Bloqueia interação com Tags (remover)
-                if(tagContainer) {
-                    tagContainer.style.pointerEvents = disabled ? 'none' : 'auto';
-                }
-            }
-
-            // --- 4. Inicialização ---
-            
-            // Renderiza as tags iniciais (vindo do banco)
-            updateTagView();
-            
-            // Começa bloqueado
-            toggleCampos(true);
-
-            // Evento do Botão Editar
-            if (btnEditar) {
-                btnEditar.addEventListener('click', function(e) {
-                    if (!modoEdicao) {
-                        e.preventDefault(); // Não envia o form ainda
-                        modoEdicao = true;
-                        
-                        toggleCampos(false); // Libera os campos
-                        
-                        // Muda visual do botão
-                        btnEditar.innerHTML = 'SALVAR';
-                        btnEditar.classList.add('btn-success');
-                        
-                        // Cria botão Cancelar se não existir
-                        if (!document.querySelector('.btn-cancel-edit')) {
-                            const btnCancelar = document.createElement('button');
-                            btnCancelar.type = 'button';
-                            btnCancelar.className = 'btn btn-secondary btn-cancel btn-cancel-edit';
-                            btnCancelar.textContent = 'CANCELAR';
-                            btnCancelar.style.marginRight = '10px';
-                            btnCancelar.onclick = () => location.reload();
-                            
-                            btnEditar.parentElement.insertBefore(btnCancelar, btnEditar);
-                        }
-                    } else {
-                        // Se já estava editando, agora deixa enviar (Submit)
-                        return true;
-                    }
-                });
-            }
-        });
-    </script>
-}

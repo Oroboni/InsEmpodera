@@ -1,258 +1,190 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using Empodera.Data;
 using Empodera.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Empodera.Controllers;
 
 public class PersonalProcessController : Controller
 {
+    private const string Module = "DiariosProcessoPessoal";
     private readonly ApplicationDbContext _context;
 
-    public PersonalProcessController(ApplicationDbContext context)
+    public PersonalProcessController(ApplicationDbContext context) => _context = context;
+
+    public async Task<IActionResult> Index(int? atorId, string? searchQuery)
     {
-        _context = context;
-    }
+        var user = await GetLoggedUserAsync();
+        if (user is null) return RedirectToAction("Index", "Account");
+        if (!HasCanonicalPermission(user) || !user.CanList(Module)) return StatusCode(StatusCodes.Status403Forbidden);
 
-    // GET: /PersonalProcess/Index
-    public async Task<IActionResult> Index(int? atorId, string searchQuery)
-    {
-        if (HttpContext.Session.GetString("Email") == null)
-        {
-            return RedirectToAction("Index", "Account");
-        }
-
-        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
-        if (!PodeProcesso.CanList("DiariosProcessoPessoal"))
-        {
-            return StatusCode(StatusCodes.Status403Forbidden);
-        }
-
-        // 1. Carregar lista de Atores
-        ViewBag.AtorList = new SelectList(
-            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(),
-            "IdAtores",
-            "Nome",
-            atorId 
-        );
-        
+        await PopulateListsAsync(atorId);
         ViewBag.SelectedAtorId = atorId;
         ViewBag.SearchQuery = searchQuery;
 
-        // 2. Prepara a consulta
-        var query = _context.DiariosCampo.AsQueryable();
+        if (!atorId.HasValue)
+            return View(new List<DiarioProcessoPessoal>());
 
-        // 3. Filtra por Ator (Agora usando o campo novo AtorId)
-        if (atorId.HasValue)
-        {
-            // Filtra onde AtorId é igual ao selecionado
-            query = query.Where(d => d.FkIdUsuario == atorId.Value);
-        }
-        else 
-        {
-            // Se não selecionou ator, retorna lista vazia (Estado inicial)
-            return View(new List<DiarioCampo>());
-        }
+        var query = _context.DiariosProcessoPessoal
+            .AsNoTracking()
+            .Include(d => d.Eixos)
+            .ThenInclude(link => link.Eixo)
+            .Where(d => d.FK_id_Atores == atorId.Value);
 
-        // 4. Busca por texto (opcional)
-        if (!string.IsNullOrEmpty(searchQuery))
-        {
-            query = query.Where(d => d.Descricao.Contains(searchQuery));
-        }
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+            query = query.Where(d => d.Descricao.Contains(searchQuery.Trim()));
 
-        // 5. Ordena e Executa
-        var diarios = await query.OrderByDescending(d => d.Data).ToListAsync();
-
-        return View(diarios);
+        return View(await query.OrderByDescending(d => d.Data).ThenByDescending(d => d.DtCriacao).ToListAsync());
     }
 
-    // GET: /PersonalProcess/Create
-    public async Task<IActionResult> Create(int atorId)
+    public async Task<IActionResult> Create(int? atorId)
     {
-        if (HttpContext.Session.GetString("Email") == null) 
-        { 
-            return RedirectToAction("Index", "Account"); 
-        }
+        var user = await GetLoggedUserAsync();
+        if (user is null) return RedirectToAction("Index", "Account");
+        if (!HasCanonicalPermission(user) || !user.CanCreate(Module)) return StatusCode(StatusCodes.Status403Forbidden);
 
-        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
-        if (!PodeProcesso.CanCreate("DiariosProcessoPessoal"))
-        {
-            return RedirectToAction("Index", "PersonalProcess");
-        }
-        
-        ViewBag.AtorList = new SelectList(
-            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), 
-            "IdAtores", 
-            "Nome", 
-            atorId
-        );
-        
-        ViewBag.EixosList = new SelectList(
-            await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), 
-            "IdEixo", 
-            "Nome"
-        );
-
-        var model = new DiarioCampo 
-        { 
-            Data = DateTime.Now,
-            DtCriacao = DateTime.Now,
-            DtModificacao = DateTime.Now,
-            FkIdUsuario = atorId 
-        };
-
-        return View(model);
+        await PopulateListsAsync(atorId);
+        return View(new DiarioProcessoPessoal { FK_id_Atores = atorId ?? 0, Data = DateTime.Today });
     }
 
-    // GET: /PersonalProcess/Edit/5
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (HttpContext.Session.GetString("Email") == null) 
-        { 
-            return RedirectToAction("Index", "Account"); 
-        }
-
-        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
-        if (!PodeProcesso.CanUpdate("DiariosProcessoPessoal"))
-        {
-            return RedirectToAction("Index", "PersonalProcess");
-        }
-
-        if (id == null) return NotFound();
-
-        var diario = await _context.DiariosCampo.FindAsync(id);
-        if (diario == null) return NotFound();
-        
-        ViewBag.AtorList = new SelectList(
-            await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), 
-            "IdAtores", 
-            "Nome", 
-            diario.FkIdUsuario // Seleciona o ator salvo
-        );
-        
-        ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
-
-        return View(diario);
-    }
-    
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(DiarioCampo diario, int SelectedAtorId, int[] eixosIds)
+    public async Task<IActionResult> Create(DiarioProcessoPessoal diario, int[]? eixosIds)
     {
-        if (HttpContext.Session.GetString("Email") == null) 
-        { 
-            return RedirectToAction("Index", "Account"); 
-        }
+        var user = await GetLoggedUserAsync();
+        if (user is null) return RedirectToAction("Index", "Account");
+        if (!HasCanonicalPermission(user) || !user.CanCreate(Module)) return StatusCode(StatusCodes.Status403Forbidden);
 
-        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
-        if (!PodeProcesso.CanCreate("DiariosProcessoPessoal"))
+        RemoveNavigationValidation();
+        await ValidateReferencesAsync(diario.FK_id_Atores, eixosIds);
+        if (!ModelState.IsValid)
         {
-            return RedirectToAction("Index", "PersonalProcess");
-        }
-
-        try 
-        {
-            // 1. Vincula o ID do Ator vindo do select (HTML) ao objeto Diario
-            if (SelectedAtorId > 0)
-            {
-                diario.FkIdUsuario = SelectedAtorId;
-            }
-            else
-            {
-                // Se não selecionou ator, força erro para não salvar órfão
-                ModelState.AddModelError("AtorId", "Selecione um ator.");
-                throw new Exception("Ator obrigatório");
-            }
-
-            // 2. Preenche as datas automáticas
-            diario.DtCriacao = DateTime.Now;
-            diario.DtModificacao = DateTime.Now;
-
-            // 3. Salva o Diário no Banco (Isso gera o ID do diário)
-            _context.Add(diario);
-            await _context.SaveChangesAsync();
-
-            // 4. Salva os Eixos selecionados (Tags) na tabela de ligação
-            if (eixosIds != null && eixosIds.Length > 0)
-            {
-                foreach (var eixoId in eixosIds)
-                {
-                    var vinculo = new DiarioEixo
-                    {
-                        FkIdDiario = diario.IdDCampo, // ID gerado acima
-                        FkIdEixo = eixoId
-                    };
-                    _context.Add(vinculo);
-                }
-                // Salva os vínculos dos eixos
-                await _context.SaveChangesAsync();
-            }
-
-            // 5. Redireciona para o Index (filtrando pelo ator que acabamos de criar)
-            return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
-        }
-        catch (Exception)
-        {
-            // Se der erro, recarrega os dropdowns para a tela não quebrar
-            ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", SelectedAtorId);
-            ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
-            
+            await PopulateListsAsync(diario.FK_id_Atores, eixosIds);
             return View(diario);
         }
+
+        var now = DateTime.Now;
+        diario.Descricao = diario.Descricao.Trim();
+        diario.DtCriacao = now;
+        diario.DtModificacao = now;
+        diario.FkIdUsuario = user.IdUsuario;
+        diario.FkIdUsuarioM = user.IdUsuario;
+        diario.Eixos = DistinctEixos(eixosIds)
+            .Select(id => new DiarioProcessoEixo { FkIdEixo = id })
+            .ToList();
+        _context.DiariosProcessoPessoal.Add(diario);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index), new { atorId = diario.FK_id_Atores });
     }
-    
-    // POST: /PersonalProcess/Edit/5
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        var user = await GetLoggedUserAsync();
+        if (user is null) return RedirectToAction("Index", "Account");
+        if (!HasCanonicalPermission(user) || !user.CanUpdate(Module)) return StatusCode(StatusCodes.Status403Forbidden);
+        if (!id.HasValue) return NotFound();
+
+        var diario = await _context.DiariosProcessoPessoal
+            .AsNoTracking()
+            .Include(d => d.Eixos)
+            .FirstOrDefaultAsync(d => d.IdDiarioProcesso == id.Value);
+        if (diario is null) return NotFound();
+
+        await PopulateListsAsync(diario.FK_id_Atores, diario.Eixos.Select(e => e.FkIdEixo));
+        ViewBag.CanDelete = user.CanDelete(Module);
+        return View(diario);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, DiarioCampo diario)
+    public async Task<IActionResult> Edit(int id, DiarioProcessoPessoal diario, int[]? eixosIds)
     {
+        var user = await GetLoggedUserAsync();
+        if (user is null) return RedirectToAction("Index", "Account");
+        if (!HasCanonicalPermission(user) || !user.CanUpdate(Module)) return StatusCode(StatusCodes.Status403Forbidden);
+        if (id != diario.IdDiarioProcesso) return NotFound();
 
-        if (HttpContext.Session.GetString("Email") == null) 
-        { 
-            return RedirectToAction("Index", "Account"); 
-        }
+        var persisted = await _context.DiariosProcessoPessoal
+            .Include(d => d.Eixos)
+            .FirstOrDefaultAsync(d => d.IdDiarioProcesso == id);
+        if (persisted is null) return NotFound();
 
-        var PodeProcesso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "DiariosProcessoPessoal")).FirstOrDefault();
-        if (!PodeProcesso.CanUpdate("DiariosProcessoPessoal"))
+        RemoveNavigationValidation();
+        await ValidateReferencesAsync(diario.FK_id_Atores, eixosIds);
+        if (!ModelState.IsValid)
         {
-            return RedirectToAction("Index", "PersonalProcess");
+            diario.DtCriacao = persisted.DtCriacao;
+            diario.DtModificacao = persisted.DtModificacao;
+            await PopulateListsAsync(diario.FK_id_Atores, eixosIds);
+            ViewBag.CanDelete = user.CanDelete(Module);
+            return View(diario);
         }
-         if (id != diario.IdDCampo) return NotFound();
 
-         if (ModelState.IsValid)
-         {
-             try
-             {
-                 var diarioExistente = await _context.DiariosCampo.FindAsync(id);
-                 if(diarioExistente == null) return NotFound();
-
-                 // Atualiza os campos
-                 diarioExistente.FkIdUsuario = diario.FkIdUsuario;
-                 diarioExistente.Data = diario.Data;
-                 diarioExistente.Descricao = diario.Descricao;
-                 diarioExistente.DtModificacao = DateTime.Now;
-
-                 _context.Update(diarioExistente);
-                 await _context.SaveChangesAsync();
-             }
-             catch (DbUpdateConcurrencyException)
-             {
-                 if (!_context.DiariosCampo.Any(e => e.IdDCampo == id)) return NotFound();
-                 else throw;
-             }
-             return RedirectToAction(nameof(Index), new { atorId = diario.FkIdUsuario });
-         }
-         
-         ViewBag.AtorList = new SelectList(await _context.Atores.OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", diario.FkIdUsuario);
-         ViewBag.EixosList = new SelectList(await _context.Eixos.OrderBy(e => e.Nome).ToListAsync(), "IdEixo", "Nome");
-         
-         return View(diario);
+        persisted.FK_id_Atores = diario.FK_id_Atores;
+        persisted.Data = diario.Data;
+        persisted.Descricao = diario.Descricao.Trim();
+        persisted.DtModificacao = DateTime.Now;
+        persisted.FkIdUsuarioM = user.IdUsuario;
+        _context.DiariosProcessoEixos.RemoveRange(persisted.Eixos);
+        persisted.Eixos = DistinctEixos(eixosIds)
+            .Select(eixoId => new DiarioProcessoEixo { FkIdDiarioProcesso = id, FkIdEixo = eixoId })
+            .ToList();
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index), new { atorId = persisted.FK_id_Atores });
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var user = await GetLoggedUserAsync();
+        if (user is null) return RedirectToAction("Index", "Account");
+        if (!HasCanonicalPermission(user) || !user.CanDelete(Module)) return StatusCode(StatusCodes.Status403Forbidden);
+
+        var diario = await _context.DiariosProcessoPessoal.FindAsync(id);
+        if (diario is null) return NotFound();
+        var actorId = diario.FK_id_Atores;
+        _context.DiariosProcessoPessoal.Remove(diario);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index), new { atorId = actorId });
+    }
+
+    private async Task<Usuario?> GetLoggedUserAsync()
+    {
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var userId)) return null;
+        return await _context.Usuarios.Include(u => u.Perfil).ThenInclude(p => p.Permissoes)
+            .FirstOrDefaultAsync(u => u.IdUsuario == userId && u.Ativo == "S");
+    }
+
+    private async Task PopulateListsAsync(int? actorId, IEnumerable<int>? selectedEixos = null)
+    {
+        ViewBag.AtorList = new SelectList(await _context.Atores.AsNoTracking().Where(a => a.Ativo == "S")
+            .OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", actorId);
+        ViewBag.EixosList = await _context.Eixos.AsNoTracking().OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.SelectedEixos = selectedEixos?.ToHashSet() ?? new HashSet<int>();
+    }
+
+    private async Task ValidateReferencesAsync(int actorId, int[]? eixosIds)
+    {
+        if (!await _context.Atores.AnyAsync(a => a.IdAtores == actorId && a.Ativo == "S"))
+            ModelState.AddModelError(nameof(DiarioProcessoPessoal.FK_id_Atores), "Selecione um ator ativo.");
+        var ids = DistinctEixos(eixosIds).ToArray();
+        if (ids.Length > 0 && await _context.Eixos.CountAsync(e => ids.Contains(e.IdEixo)) != ids.Length)
+            ModelState.AddModelError("eixosIds", "Um ou mais eixos selecionados não existem.");
+    }
+
+    private void RemoveNavigationValidation()
+    {
+        ModelState.Remove(nameof(DiarioProcessoPessoal.Ator));
+        ModelState.Remove(nameof(DiarioProcessoPessoal.Usuario));
+        ModelState.Remove(nameof(DiarioProcessoPessoal.UsuarioModificacao));
+        ModelState.Remove(nameof(DiarioProcessoPessoal.Eixos));
+    }
+
+    private static IEnumerable<int> DistinctEixos(int[]? values) =>
+        (values ?? Array.Empty<int>()).Where(id => id > 0).Distinct();
+
+    private static bool HasCanonicalPermission(Usuario? user) =>
+        user?.Perfil?.Permissoes?.Any(p => p.Modulo == "DiariosProcessoPessoal") == true;
 }

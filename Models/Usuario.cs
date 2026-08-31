@@ -45,5 +45,6 @@ namespace Empodera.Models
         public List<AvaliacaoPessoal> Avaliacoes { get; set; } = new();
         public List<FichaPrimeiroContato> FichasPrimeiroContato { get; set; } = new();
         public List<Atividades> Atividades { get; set; } = new();
+        public List<DiarioProcessoPessoal> DiariosProcessoPessoal { get; set; } = new();
     }
 }

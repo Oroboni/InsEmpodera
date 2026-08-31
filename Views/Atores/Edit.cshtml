@@ -113,35 +113,20 @@
         <div class="section-label">Ações Relacionadas</div>
 
         <div class="actions-grid">
-            <button type="button" class="action-card" disabled aria-disabled="true" title="Integração ainda não disponível">
-                <span class="card-title">Rede Primária</span>
-                <span class="card-subtitle">Adicionar Ator</span>
-                <div class="card-icons">
-                    <i class="fa-solid fa-plus"></i>
-                    <i class="fa-solid fa-eye"></i>
-                </div>
-            </button>
-            <button type="button" class="action-card" disabled aria-disabled="true" title="Integração ainda não disponível">
-                <span class="card-title">Adjacência</span>
-                <span class="card-subtitle">da RPP</span>
-                <div class="card-icons">
-                    <i class="fa-solid fa-eye"></i>
-                </div>
-            </button>
-            <button type="button" class="action-card" disabled aria-disabled="true" title="Integração ainda não disponível">
+            <a asp-controller="PersonalAssessment" asp-action="Index" asp-route-atorId="@Model.IdAtores" class="action-card">
                 <span class="card-title">Avaliações</span>
                 <span class="card-subtitle">Pessoais</span>
                 <div class="card-icons">
                     <i class="fa-solid fa-pen"></i>
                 </div>
-            </button>
-            <button type="button" class="action-card" disabled aria-disabled="true" title="Integração ainda não disponível">
+            </a>
+            <a asp-controller="PersonalProcess" asp-action="Index" asp-route-atorId="@Model.IdAtores" class="action-card">
                 <span class="card-title">Diário de</span>
                 <span class="card-subtitle">Processos Pessoal</span>
                 <div class="card-icons">
                     <i class="fa-solid fa-book"></i>
                 </div>
-            </button>
+            </a>
         </div>
 
         <div class="purple-divider"></div>

@@ -1,97 +1,78 @@
+@model Empodera.Models.ActionsReportViewModel
 @{
     ViewData["Title"] = "Relatório - Ações";
     ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
-    // A linha "DisableMainScroll" FOI REMOVIDA daqui para CORRIGIR a rolagem.
+    string DateValue(DateTime? value) => value?.ToString("yyyy-MM-dd") ?? "";
 }
+
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/reports.css" />
-    
+    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
     <style>
-        /* CSS Local para alinhar as datas lado a lado */
-        .date-row {
-            display: flex;
-            gap: 15px; /* Espaço entre os campos */
-            width: 100%; /* Garante que o grupo ocupe a largura disponível */
-        }
-        
-        /* Faz com que cada campo de data ocupe 50% do espaço */
-        .date-row .form-group {
-            flex: 1;
-            margin-bottom: 0; /* Remove margem extra se houver */
-        }
+        .date-row { display:flex; gap:15px; width:100%; }
+        .date-row .form-group { flex:1; margin-bottom:0; }
+        .report-totals { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
+        .report-total { background:#f1eafa; color:#582192; padding:.6rem 1rem; border-radius:999px; font-weight:700; }
     </style>
 }
 
 <div class="report-page-container">
-    <div class="report-breadcrumb">
-    <h1>
-        <a asp-controller="Report" asp-action="index">Relatórios</a> 
-        > 
-        <strong>Ações</strong>
-    </h1>
-</div>
-
+    <div class="report-breadcrumb"><h1><a asp-action="Index">Relatórios</a> &gt; <strong>Ações</strong></h1></div>
     <div class="report-content-box">
-        <div class="report-filters">
+        <form asp-action="Actions" method="get" class="report-filters">
             <div class="form-group">
-                <label>Comunidade</label>
+                <label for="comunidadeId">Comunidade</label>
                 <div class="select-wrapper">
                     <i class="fa-solid fa-city"></i>
-                    <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades">
-                        <option value="">Selecione...</option>
+                    <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
+                        <option value="">Selecione uma comunidade</option>
                     </select>
                     <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
             <div class="form-group">
-                <label>Ator</label>
+                <label for="atorId">Ator envolvido</label>
                 <div class="select-wrapper">
                     <i class="fa-solid fa-user"></i>
-                    <select asp-items="ViewBag.AtorList"><option value="">Selecione...</option></select>
+                    <select id="atorId" name="atorId" asp-items="ViewBag.AtorList"><option value="">Todos</option></select>
                     <i class="fa-solid fa-chevron-down select-arrow"></i>
                 </div>
             </div>
-            
-            <!-- Agrupamento das Datas na mesma linha -->
             <div class="date-row">
-                <div class="form-group">
-                    <label>De (data)</label>
-                    <div class="input-wrapper"><input type="date" /></div>
-                </div>
-                <div class="form-group">
-                    <label>Até (data)</label>
-                    <div class="input-wrapper"><input type="date" /></div>
-                </div>
+                <div class="form-group"><label for="dataDe">De</label><input id="dataDe" type="date" name="dataDe" value="@DateValue(Model.DataDe)" /></div>
+                <div class="form-group"><label for="dataAte">Até</label><input id="dataAte" type="date" name="dataAte" value="@DateValue(Model.DataAte)" /></div>
             </div>
-
-        </div>
+            <div style="display:flex;gap:.75rem">
+                <a asp-action="Actions" class="btn btn-secondary">LIMPAR</a>
+                <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
+            </div>
+        </form>
 
         <div class="report-body">
-            <table class="matrix-table">
-                <thead>
-                    <tr>
-                        <th>Eixos</th>
-                        <th>Parceiro (0)</th>
-                        <th>Equipe (0)</th>
-                        <th>Instituído (0)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr> <td>Prevenção (0)</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>Assistência Básica (0)</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>Educação (0)</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>Saúde (0)</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>Ocupação (0)</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>Lazer (0)</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>(Exemplo) Cultura</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                    <tr> <td>(Exemplo) Moradia</td> <td>0</td> <td>0</td> <td>0</td> </tr>
-                </tbody>
-            </table>
+            @if (!Model.ComunidadeId.HasValue)
+            {
+                <div class="report-empty-state"><i class="fa-solid fa-list-check" style="font-size:4rem;color:#9c75ca"></i><p>Selecione uma comunidade para consultar as ações registradas.</p></div>
+            }
+            else if (Model.Rows.Count == 0)
+            {
+                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:#9c75ca"></i><p>Nenhuma ação corresponde aos filtros escolhidos.</p></div>
+            }
+            else
+            {
+                <div class="report-totals">
+                    <span class="report-total">@Model.TotalActions ação(ões)</span>
+                    <span class="report-total">@Model.TotalQuantity atendimento(s)</span>
+                </div>
+                <table class="matrix-table">
+                    <thead><tr><th>Eixo</th><th>Ações distintas</th><th>Quantidade atendida</th><th>Atores envolvidos</th></tr></thead>
+                    <tbody>
+                        @foreach (var row in Model.Rows)
+                        {
+                            <tr><td>@row.Axis</td><td>@row.Actions</td><td>@row.Quantity</td><td>@row.Actors</td></tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script src="~/js/reports.js"></script>
-}

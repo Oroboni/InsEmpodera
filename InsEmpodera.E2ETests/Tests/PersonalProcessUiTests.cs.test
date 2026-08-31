@@ -1,0 +1,60 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class PersonalProcessUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact(DisplayName = "Diário pessoal — criar, pesquisar, editar e excluir com ator e eixos corretos")]
+    public Task PersonalProcess_CreateSearchEditAndDelete_ThroughUi() =>
+        RunInBrowserAsync(nameof(PersonalProcess_CreateSearchEditAndDelete_ThroughUi), async page =>
+        {
+            var prerequisites = await Fixture.QueryAsync(async db => new
+            {
+                ActorId = await db.Atores.Where(a => a.Ativo == "S").OrderBy(a => a.IdAtores)
+                    .Select(a => a.IdAtores).FirstAsync(),
+                AxisIds = await db.Eixos.OrderBy(e => e.IdEixo).Select(e => e.IdEixo).Take(2).ToArrayAsync()
+            });
+            var marker = Unique("Processo pessoal UI");
+            await LoginAsync(page);
+
+            await page.GotoAsync($"/PersonalProcess/Create?atorId={prerequisites.ActorId}");
+            await page.Locator("input[name=Data]").FillAsync("2026-08-31");
+            await page.Locator("textarea[name=Descricao]").FillAsync(marker);
+            await page.Locator("details.multiselect-wrapper > summary").ClickAsync();
+            await page.Locator($"input[name=eixosIds][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "ADICIONAR DIÁRIO" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
+            await Assertions.Expect(page.Locator(".assessment-card").Filter(new() { HasText = marker })).ToBeVisibleAsync();
+
+            await page.Locator("input[name=searchQuery]").FillAsync(marker);
+            await page.GetByRole(AriaRole.Button, new() { Name = "Pesquisar diário" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
+            await Assertions.Expect(page.Locator(".assessment-card")).ToHaveCountAsync(1);
+
+            var diaryId = await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
+                .Where(d => d.Descricao == marker).Select(d => d.IdDiarioProcesso).SingleAsync());
+            await page.GotoAsync($"/PersonalProcess/Edit/{diaryId}");
+            var edited = marker + " atualizado";
+            await page.Locator("textarea[name=Descricao]").FillAsync(edited);
+            await page.Locator("details.multiselect-wrapper > summary").ClickAsync();
+            await page.Locator($"input[name=eixosIds][value='{prerequisites.AxisIds[0]}']").UncheckAsync();
+            await page.Locator($"input[name=eixosIds][value='{prerequisites.AxisIds[1]}']").CheckAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "SALVAR ALTERAÇÕES" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
+
+            Assert.Equal(edited, await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
+                .Where(d => d.IdDiarioProcesso == diaryId).Select(d => d.Descricao).SingleAsync()));
+            Assert.Equal([prerequisites.AxisIds[1]], await Fixture.QueryAsync(db => db.DiariosProcessoEixos
+                .Where(e => e.FkIdDiarioProcesso == diaryId).Select(e => e.FkIdEixo).ToArrayAsync()));
+
+            await page.GotoAsync($"/PersonalProcess/Edit/{diaryId}");
+            page.Dialog += (_, dialog) => dialog.AcceptAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "DELETAR" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
+            Assert.False(await Fixture.QueryAsync(db => db.DiariosProcessoPessoal.AnyAsync(d => d.IdDiarioProcesso == diaryId)));
+        });
+}
