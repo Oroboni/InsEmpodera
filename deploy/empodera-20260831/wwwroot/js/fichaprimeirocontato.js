@@ -1,7 +1,4 @@
 window.pageInit = function () {
-    // Telefone
-    initTelefoneMask("inputTelefone");
-
     // Data de contato
     initDateMaxToday("DtContato");
 
