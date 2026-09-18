@@ -22,7 +22,8 @@ public static class ActorAggregateExtensions
         this Atores actor,
         int communityId,
         IEnumerable<string>? resources,
-        IEnumerable<string>? vulnerabilities)
+        IEnumerable<string>? vulnerabilities,
+        int? tipoRelacionamento = null)
     {
         ArgumentNullException.ThrowIfNull(actor);
 
@@ -36,7 +37,8 @@ public static class ActorAggregateExtensions
         actor.Comunidades.Add(new AtorComunidade
         {
             Ator = actor,
-            FkIdComunidade = communityId
+            FkIdComunidade = communityId,
+            TipoRelacionamento = tipoRelacionamento
         });
 
         foreach (var name in ResourceNames)

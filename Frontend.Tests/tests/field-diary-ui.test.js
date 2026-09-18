@@ -194,7 +194,9 @@ describe('diário de campo — fluxo padrão', () => {
 function currentDiaryFixture() {
   document.body.innerHTML = `
     <textarea id="descricaoInput" class="clean-input"></textarea><ul id="mention-list"></ul>
-    <input id="tipoAcaoInput"><input id="nomeAcao"><input id="provedorAcao"><input id="atorAcao"><input id="quantidadeAcao" value="1">
+    <input id="tipoAcaoInput"><input id="nomeAcao"><input id="provedorAcao">
+    <select id="atorAcao"><option value="">Selecione</option><option value="77">Maria</option><option value="88">João</option></select>
+    <ul id="atoresSelecionadosAcao"></ul><input id="quantidadeAcao" value="1">
     <label><input type="checkbox" name="modalEixos" value="11" data-nome="Saúde"></label>
     <label><input type="checkbox" name="modalEixos" value="22" data-nome="Educação"></label>
     <div id="modalAcao" class="modal-overlay" style="display:none"></div>
@@ -234,8 +236,7 @@ describe('diário de campo — fluxo atual', () => {
 
   it.each([
     ['', true, 'Parceiro', 'O campo Nome é obrigatório.'],
-    ['Ação', false, 'Parceiro', 'Selecione pelo menos um Eixo.'],
-    ['Ação', true, '', 'O campo Provedor Externo é obrigatório.']
+    ['Ação', false, 'Parceiro', 'Selecione pelo menos um Eixo.']
   ])('valida os dados antes de criar a ação', (nome, eixo, provedor, message) => {
     document.getElementById('tipoAcaoInput').value = 'equipe';
     document.getElementById('nomeAcao').value = nome;
@@ -265,6 +266,25 @@ describe('diário de campo — fluxo atual', () => {
     expect(document.getElementById('count-equipe').innerText).toBe(1);
     expect(document.getElementById('empty-equipe').style.display).toBe('none');
     expect(window.fecharModal).toHaveBeenCalledWith('modalAcao');
+  });
+
+  it('aceita provedor opcional e vários participantes sem duplicar o mesmo ator', () => {
+    document.getElementById('tipoAcaoInput').value = 'institucional';
+    document.getElementById('nomeAcao').value = 'Visita';
+    document.querySelector('[name="modalEixos"]').checked = true;
+    document.getElementById('atorAcao').value = '77';
+    window.adicionarAtorAcao();
+    document.getElementById('atorAcao').value = '77';
+    window.adicionarAtorAcao();
+    document.getElementById('atorAcao').value = '88';
+    window.adicionarAtorAcao();
+    expect(document.querySelectorAll('#atoresSelecionadosAcao li')).toHaveLength(2);
+    expect(document.getElementById('quantidadeAcao').value).toBe('2');
+
+    window.salvarAcaoNoGrid();
+    const item = document.querySelector('#container-institucional .action-list-item');
+    expect(item.querySelector('[name$=".Provedor"]').value).toBe('');
+    expect([...item.querySelectorAll('[name$=".FkIdAtores"]')].map(input => input.value)).toEqual(['77', '88']);
   });
 
   it('filtra e insere menção usando Nome ou Text', () => {
@@ -359,7 +379,7 @@ describe('diário de campo — fluxo atual', () => {
     expect(boundInputs.every(input => input.name.startsWith(`TempAcoes[${index}].`))).toBe(true);
     expect(item.querySelector('[name$=".Nome"]').value).toBe(nameAttack);
     expect(item.querySelector('[name$=".Provedor"]').value).toBe(providerAttack);
-    expect(item.querySelector('[name$=".FkIdAtor"]').value).toBe('77');
+    expect(item.querySelector('[name$=".FkIdAtores"]').value).toBe('77');
     expect([...item.querySelectorAll('[name$=".FkIdEixo"]')].map(input => input.value)).toEqual(['11', '22']);
     expect(window.__currentActionXss).toBeUndefined();
     expect(window.__currentProviderXss).toBeUndefined();

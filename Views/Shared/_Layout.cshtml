@@ -15,8 +15,8 @@
     <script src="~/js/localization.js" asp-append-version="true" defer></script>
 
     <!-- CSS do global do Mapa (LEAFLET) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/leaflet-control-geocoder/Control.Geocoder.css" asp-append-version="true" />
 
     @{
         var cssName = ViewData["PageCSS"] as string;
@@ -32,8 +32,8 @@
 
 <body>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="~/lib/leaflet/leaflet.js" asp-append-version="true"></script>
+    <script src="~/lib/leaflet-control-geocoder/Control.Geocoder.js" asp-append-version="true"></script>
     <script src="~/js/app-maps.js" asp-append-version="true"></script>
 
     <div class="body-page">

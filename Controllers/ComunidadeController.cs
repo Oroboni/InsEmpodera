@@ -157,8 +157,6 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
                 comunidade.Nome,
                 existingComunidade.LocalMapa
             );
-            comunidade.Status = NormalizeCommunityStatus(comunidade.Status);
-
             if (string.IsNullOrWhiteSpace(comunidade.Local))
             {
                 comunidade.Local = comunidade.LocalMapa;
@@ -173,7 +171,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             existingComunidade.LocalMapaSecundario = BuildOptionalMapSearchAddress(
                 comunidade.LocalMapaSecundario,
                 existingComunidade.LocalSecundario);
-            existingComunidade.Status = comunidade.Status;
+            // O status fica bloqueado na tela de edição e não é enviado pelo formulário.
+            // Preserve o valor gravado; a transição de status tem ação própria.
             existingComunidade.Complemento = comunidade.Complemento;
             existingComunidade.Descricao = comunidade.Descricao;
             existingComunidade.Descricao_Acessibilidade = comunidade.Descricao_Acessibilidade;
@@ -560,7 +559,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .ToListAsync();
         ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome", recurso.FK_id_Atores);
 
-        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
         
         // Informações de auditoria
        ViewBag.UsuarioOriginal = _context.Usuarios.FirstOrDefault(z => z.IdUsuario == recurso.FkIdUsuario);
@@ -596,7 +595,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         ViewBag.Atores = new SelectList(atores, "IdAtores", "Nome");
         
         // Carrega lista de Eixos
-        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
 
         return View();
     }
@@ -689,6 +688,32 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return RedirectToAction("ComunidadeRecursos", new { comunidadeId = recursoDb.FkIdComunidade });
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete_Recursos(int id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var userId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var user = await _context.Usuarios.Include(item => item.Perfil)
+            .ThenInclude(profile => profile.Permissoes)
+            .FirstOrDefaultAsync(item => item.IdUsuario == userId);
+        if (!user.CanDelete("Recursos"))
+            return RedirectToAction("Index", "Comunidade");
+
+        var existing = await _context.RedeRecursos
+            .Include(item => item.RedeEixos)
+            .FirstOrDefaultAsync(item => item.Id_Rede == id);
+        if (existing == null)
+            return NotFound();
+
+        _context.RedeEixos.RemoveRange(existing.RedeEixos);
+        _context.RedeRecursos.Remove(existing);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("ComunidadeRecursos", new { comunidadeId = existing.FkIdComunidade });
+    }
+
     // GET: /Actor/Create
     [HttpGet]
     public async Task<IActionResult> Create_Atores(int? id)
@@ -729,7 +754,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create_Atores(Atores ator, List<string>? recursos, List<string>? vulnerabilidades, int ComunidadeId)
+    public async Task<IActionResult> Create_Atores(Atores ator, List<string>? recursos, List<string>? vulnerabilidades, int ComunidadeId, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -765,7 +790,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
         ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
-        ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades);
+        ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades, tipoRelacionamento);
 
         _context.Atores.Add(ator);
         await _context.SaveChangesAsync();
@@ -811,6 +836,10 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         );
 
         ViewBag.ComunidadeId = comunidadeId;
+        ViewBag.TipoRelacionamento = await _context.AtorComunidades
+            .Where(link => link.FK_id_Atores == id && link.FkIdComunidade == comunidadeId)
+            .Select(link => link.TipoRelacionamento)
+            .FirstOrDefaultAsync();
 
         return View(ator);
     }
@@ -819,7 +848,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit_Atores(Atores ator, int ComunidadeId, List<string>? recursos, List<string>? vulnerabilidades)
+    public async Task<IActionResult> Edit_Atores(Atores ator, int ComunidadeId, List<string>? recursos, List<string>? vulnerabilidades, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -850,6 +879,9 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         atorDb.Rope = ator.Rope;
         atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
+        var actorCommunity = await _context.AtorComunidades.FirstAsync(link =>
+            link.FK_id_Atores == ator.IdAtores && link.FkIdComunidade == ComunidadeId);
+        actorCommunity.TipoRelacionamento = tipoRelacionamento;
 
         var recursosAtores = await _context.RecursosAtores
             .Where(r => r.FK_id_Atores == ator.IdAtores)
@@ -944,7 +976,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
         }
 
-        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
 
         ViewBag.comunidadeId = comunidadeId;
 
@@ -971,7 +1003,6 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("Index", "Comunidade");
         }
 
-        Console.WriteLine("é o " + comunidadeId);
         atividade.DtCriacao = DateTime.Now;
         atividade.DtModificacao = DateTime.Now;
         atividade.FkIdComunidade = comunidadeId;
@@ -1021,7 +1052,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuario).FirstOrDefault();
         ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuarioM).FirstOrDefault();
 
-        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
 
         return View(atividade);
     }

@@ -44,20 +44,20 @@
             </div>
         </div>
 
-        @* <div class="input-card full-width">
+        <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
             <div class="input-content">
                 <label for="tipoRelacionamento">Tipo de relacionamento</label>
                 <select id="tipoRelacionamento" name="tipoRelacionamento" class="clean-input" disabled>
                     <option value="">Selecione um tipo</option>
-                    <option value="1">Amigo</option>
-                    <option value="2">Colega de trabalho</option>
-                    <option value="3">Conhecido</option>
-                    <option value="4">Familiar</option>
-                    <option value="5">Vizinho</option>
+                    <option value="1" selected="@(ViewBag.TipoRelacionamento == 1)">Amigo</option>
+                    <option value="2" selected="@(ViewBag.TipoRelacionamento == 2)">Colega de trabalho</option>
+                    <option value="3" selected="@(ViewBag.TipoRelacionamento == 3)">Conhecido</option>
+                    <option value="4" selected="@(ViewBag.TipoRelacionamento == 4)">Familiar</option>
+                    <option value="5" selected="@(ViewBag.TipoRelacionamento == 5)">Vizinho</option>
                 </select>
             </div>
-        </div> *@
+        </div>
 
         <div class="purple-divider"></div>
         <div class="section-label">Recursos e Vulnerabilidades</div>
@@ -184,7 +184,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
                 <div class="input-content">
                     <label for="Idade">Idade</label>
-                    <input asp-for="Idade" type="number" class="clean-input" disabled />
+                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" disabled />
                 </div>
             </div>
         </div>
@@ -250,7 +250,7 @@
             <div class="input-content">
                 <label for="Telefone">Telefone</label>
                 <input asp-for="Telefone" type="tel" class="clean-input"
-                    placeholder="(00) 00000-0000" disabled />
+                    maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" disabled />
             </div>
         </div>
 

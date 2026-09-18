@@ -121,3 +121,40 @@ select {
     gap: 10px;
     color: #64748b;
 }
+
+.actor-mention-list {
+    position: absolute;
+    z-index: 50;
+    left: 1rem;
+    right: 1rem;
+    margin: .25rem 0 0;
+    padding: .35rem;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #d6c4ee;
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(44, 21, 68, .15);
+}
+.form-group:has([data-actor-mentions]) { position: relative; }
+.actor-mention-list[hidden] { display: none; }
+.actor-mention-option {
+    display: block;
+    width: 100%;
+    padding: .6rem .75rem;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #48236c;
+    text-align: left;
+    cursor: pointer;
+}
+.actor-mention-option:hover, .actor-mention-option:focus { background: #f1e9fb; }
+.actor-mention {
+    color: #58259a;
+    background: #efe5fb;
+    border-radius: 4px;
+    padding: 0 .2rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+.actor-mention:hover, .actor-mention:focus { text-decoration: underline; }

@@ -26,13 +26,14 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             var editedMarker = marker + " editada";
 
             await page.GotoAsync("/FichaPrimeiroContato/Create");
+            await Assertions.Expect(page.Locator("#mapa-principal.leaflet-container")).ToBeVisibleAsync();
             await Assertions.Expect(page.Locator("#step-1")).ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
             await Assertions.Expect(page.Locator("#step-2")).Not.ToHaveClassAsync(new System.Text.RegularExpressions.Regex("active"));
 
             await page.Locator("select[name=FkIdComunidade]").SelectOptionAsync(prerequisite.CommunityId.ToString());
             await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(prerequisite.ActorId.ToString());
             await page.Locator("input[name=LContato]").FillAsync("Sede comunitária");
-            await page.Locator("input[name=Telefone]").FillAsync("85999997777");
+            await page.Locator("input[name=Telefone]").FillAsync("+52 55 1234 5678");
             await page.Locator("select[name=Emprego]").SelectOptionAsync("TrabalhoFormal");
             await page.Locator("input[name=DtContato]").FillAsync("2026-08-20");
             await page.Locator("input[name=HoraContato]").FillAsync("10:30");
@@ -69,9 +70,38 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await page.Locator("#btn-save").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
 
-            var fichaId = await Fixture.QueryAsync(db => db.FichasPrimeiroContato
+            var fichaCreated = await Fixture.QueryAsync(db => db.FichasPrimeiroContato
                 .Where(ficha => ficha.Coment == marker)
-                .Select(ficha => ficha.IdFicha).SingleAsync());
+                .Select(ficha => new
+                {
+                    ficha.IdFicha, ficha.FkIdComunidade, ficha.FK_id_Atores,
+                    ficha.LContato, ficha.Telefone, ficha.Emprego, ficha.DtContato,
+                    ficha.HoraContato, ficha.CEstabeleceu, ficha.NovoParceiro,
+                    ficha.FornecidoParceiro, ficha.EstaFamiliar, ficha.EstruFamiliar,
+                    ficha.NFIlhos, ficha.NFilhas, ficha.AEscolar, ficha.SLer,
+                    ficha.SCalc, ficha.SComp, ficha.QReabili, ficha.LTrat, ficha.Coment
+                }).SingleAsync());
+            var fichaId = fichaCreated.IdFicha;
+            Assert.Equal(prerequisite.CommunityId, fichaCreated.FkIdComunidade);
+            Assert.Equal(prerequisite.ActorId, fichaCreated.FK_id_Atores);
+            Assert.Equal("Sede comunitária", fichaCreated.LContato);
+            Assert.Equal("+52 55 1234 5678", fichaCreated.Telefone);
+            Assert.Equal("TrabalhoFormal", fichaCreated.Emprego);
+            Assert.Equal(new DateTime(2026, 8, 20), fichaCreated.DtContato.Date);
+            Assert.Equal(new TimeSpan(10, 30, 0), fichaCreated.HoraContato);
+            Assert.Equal("CasaDaPessoa", fichaCreated.CEstabeleceu);
+            Assert.Equal("Sim", fichaCreated.NovoParceiro);
+            Assert.Equal("Sim", fichaCreated.FornecidoParceiro);
+            Assert.Equal("Solteira", fichaCreated.EstaFamiliar);
+            Assert.Equal("FamiliaNuclear", fichaCreated.EstruFamiliar);
+            Assert.Equal(1, fichaCreated.NFIlhos);
+            Assert.Equal(2, fichaCreated.NFilhas);
+            Assert.Equal(12, fichaCreated.AEscolar);
+            Assert.Equal("Sim", fichaCreated.SLer);
+            Assert.Equal("Sim", fichaCreated.SCalc);
+            Assert.Equal("Não", fichaCreated.SComp);
+            Assert.Equal(1, fichaCreated.QReabili);
+            Assert.Equal("Unidade de referência", fichaCreated.LTrat);
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaCondicoes.CountAsync(item => item.FkIdFicha == fichaId)));
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaPeticoes.CountAsync(item => item.FkIdFicha == fichaId)));
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaRespostas.CountAsync(item => item.FkIdFicha == fichaId)));
@@ -83,10 +113,31 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await Assertions.Expect(page.Locator($".btn-concluir[data-id='{fichaId}']")).ToBeVisibleAsync();
 
             await page.GotoAsync($"/FichaPrimeiroContato/Edit/{fichaId}");
+            await Assertions.Expect(page.Locator("#mapa-principal.leaflet-container")).ToBeVisibleAsync();
             await Assertions.Expect(page.Locator("select[name=FK_id_Atores]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator("input[name=Telefone]")).ToHaveValueAsync("+52 55 1234 5678");
+            await Assertions.Expect(page.Locator("input[name=LContato]")).ToHaveValueAsync("Sede comunitária");
             await page.Locator("#edit-save-btn").ClickAsync();
             await Assertions.Expect(page.Locator("select[name=FK_id_Atores]")).ToBeEnabledAsync();
+            await page.Locator("input[name=LContato]").FillAsync("Centro de atendimento");
+            await page.Locator("input[name=Telefone]").FillAsync("+44 20 7946 0958");
+            await page.Locator("select[name=Emprego]").SelectOptionAsync("Estudante");
+            await page.Locator("input[name=DtContato]").FillAsync("2026-08-22");
+            await page.Locator("input[name=HoraContato]").FillAsync("14:45");
+            await page.Locator("select[name=CEstabeleceu]").SelectOptionAsync("PorTelefone");
+            await page.Locator("label.radio-option:has(input[name=NovoParceiro][value='Não'])").ClickAsync();
+            await page.Locator("label.radio-option:has(input[name=FornecidoParceiro][value='Não'])").ClickAsync();
             await page.Locator("#btn-next").ClickAsync();
+            await page.Locator("input[name=EstaFamiliar]").FillAsync("Casada");
+            await page.Locator("input[name=EstruFamiliar]").FillAsync("FamiliaExtensa");
+            await page.Locator("input[name=NFIlhos]").FillAsync("3");
+            await page.Locator("input[name=NFilhas]").FillAsync("4");
+            await page.Locator("input[name=AEscolar]").FillAsync("16");
+            await page.Locator("label.radio-option:has(input[name=SLer][value='Não'])").ClickAsync();
+            await page.Locator("label.radio-option:has(input[name=SCalc][value='Não'])").ClickAsync();
+            await page.Locator("label.radio-option:has(input[name=SComp][value=Sim])").ClickAsync();
+            await page.Locator("input[name=QReabili]").FillAsync("2");
+            await page.Locator("input[name=LTrat]").FillAsync("Centro atualizado");
             await page.Locator("#btn-next").ClickAsync();
             await page.Locator("textarea[name=Coment]").FillAsync(editedMarker);
             await page.Locator("label.checkbox-option:has(input[name=SelectedCondicoes])").First.ClickAsync();
@@ -100,8 +151,35 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
 
-            Assert.Equal(editedMarker, await Fixture.QueryAsync(db => db.FichasPrimeiroContato
-                .Where(ficha => ficha.IdFicha == fichaId).Select(ficha => ficha.Coment).SingleAsync()));
+            var fichaEdited = await Fixture.QueryAsync(db => db.FichasPrimeiroContato
+                .Where(ficha => ficha.IdFicha == fichaId)
+                .Select(ficha => new
+                {
+                    ficha.Coment, ficha.LContato, ficha.Telefone, ficha.Emprego,
+                    ficha.DtContato, ficha.HoraContato, ficha.CEstabeleceu,
+                    ficha.NovoParceiro, ficha.FornecidoParceiro, ficha.EstaFamiliar,
+                    ficha.EstruFamiliar, ficha.NFIlhos, ficha.NFilhas, ficha.AEscolar,
+                    ficha.SLer, ficha.SCalc, ficha.SComp, ficha.QReabili, ficha.LTrat
+                }).SingleAsync());
+            Assert.Equal(editedMarker, fichaEdited.Coment);
+            Assert.Equal("Centro de atendimento", fichaEdited.LContato);
+            Assert.Equal("+44 20 7946 0958", fichaEdited.Telefone);
+            Assert.Equal("Estudante", fichaEdited.Emprego);
+            Assert.Equal(new DateTime(2026, 8, 22), fichaEdited.DtContato.Date);
+            Assert.Equal(new TimeSpan(14, 45, 0), fichaEdited.HoraContato);
+            Assert.Equal("PorTelefone", fichaEdited.CEstabeleceu);
+            Assert.Equal("Não", fichaEdited.NovoParceiro);
+            Assert.Equal("Não", fichaEdited.FornecidoParceiro);
+            Assert.Equal("Casada", fichaEdited.EstaFamiliar);
+            Assert.Equal("FamiliaExtensa", fichaEdited.EstruFamiliar);
+            Assert.Equal(3, fichaEdited.NFIlhos);
+            Assert.Equal(4, fichaEdited.NFilhas);
+            Assert.Equal(16, fichaEdited.AEscolar);
+            Assert.Equal("Não", fichaEdited.SLer);
+            Assert.Equal("Não", fichaEdited.SCalc);
+            Assert.Equal("Sim", fichaEdited.SComp);
+            Assert.Equal(2, fichaEdited.QReabili);
+            Assert.Equal("Centro atualizado", fichaEdited.LTrat);
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaCondicoes.CountAsync(item => item.FkIdFicha == fichaId)));
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaPeticoes.CountAsync(item => item.FkIdFicha == fichaId)));
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaRespostas.CountAsync(item => item.FkIdFicha == fichaId)));
@@ -208,6 +286,8 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
 
             await page.GotoAsync($"/PersonalAssessment/Edit/{assessmentId}");
             await Assertions.Expect(page.Locator("input.metric-slider")).ToHaveCountAsync(9);
+            foreach (var metric in createMetrics)
+                await Assertions.Expect(page.Locator($"input[name={metric.Name}]")).ToHaveValueAsync(metric.Value.ToString());
             await Assertions.Expect(page.Locator("select[name=FK_id_Atores]")).ToHaveValueAsync(actorId.ToString());
             await Assertions.Expect(page.Locator("select[name=FK_id_Atores] option:checked"))
                 .ToHaveTextAsync(actor.Nome);
@@ -249,6 +329,8 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             Assert.Equal(1, scores.Lazer);
 
             await page.GotoAsync($"/PersonalAssessment/Edit/{assessmentId}");
+            foreach (var metric in editMetrics)
+                await Assertions.Expect(page.Locator($"input[name={metric.Name}]")).ToHaveValueAsync(metric.Value.ToString());
             await page.Locator("#openDeleteModalBtn").ClickAsync();
             await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
             await page.Locator("#cancelDeleteBtn").ClickAsync();

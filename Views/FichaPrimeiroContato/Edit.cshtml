@@ -79,8 +79,8 @@
                 <div class="input-card">
                     <div class="input-content">
                         <label for="inputTelefone">Número de Telefone</label>
-                        <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input" maxlength="15"
-                            placeholder="(DDD) 99999-9999" />
+                        <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input" maxlength="40"
+                            placeholder="Ex.: +1 202 555 0199" autocomplete="tel" />
                     </div>
                 </div>
                 <div class="input-card">
@@ -495,4 +495,7 @@
     <script src="~/js/ficha/edit-mode.js"></script>
     <script src="~/js/ficha/delete-modal.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/form-utils.js" asp-append-version="true"></script>
+    <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+    <script src="~/js/page-init.js" asp-append-version="true"></script>
 }

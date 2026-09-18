@@ -21,7 +21,7 @@
     font-weight: var(--font-weight-semibold);
 }
 
-form {
+.main-form, .container > form {
     background-color: var(--color-bg-primary);
     padding: var(--space-8);
     border-radius: var(--radius-2xl);

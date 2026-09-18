@@ -8,7 +8,7 @@ namespace Empodera.Models
     {
         public int IdAtividade { get; set; }     
         public string Nome { get; set; } = null!;
-        public string Descricao { get; set; } = null!;
+        public string? Descricao { get; set; }
         public string? Foto { get; set; } = null!;
         public int FkIdComunidade { get; set; } 
         public DateTime DtCriacao { get; set; }

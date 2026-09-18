@@ -20,6 +20,9 @@ public class PersonalProcessController : Controller
         if (!HasCanonicalPermission(user) || !user.CanList(Module)) return StatusCode(StatusCodes.Status403Forbidden);
 
         await PopulateListsAsync(atorId);
+        ViewBag.MentionActors = await _context.Atores.AsNoTracking()
+            .Where(a => a.Ativo != "N")
+            .ToDictionaryAsync(a => a.IdAtores, a => a.Nome);
         ViewBag.SelectedAtorId = atorId;
         ViewBag.SearchQuery = searchQuery;
 
@@ -159,15 +162,19 @@ public class PersonalProcessController : Controller
 
     private async Task PopulateListsAsync(int? actorId, IEnumerable<int>? selectedEixos = null)
     {
-        ViewBag.AtorList = new SelectList(await _context.Atores.AsNoTracking().Where(a => a.Ativo == "S")
+        ViewBag.AtorList = new SelectList(await _context.Atores.AsNoTracking().Where(a => a.Ativo != "N")
             .OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", actorId);
-        ViewBag.EixosList = await _context.Eixos.AsNoTracking().OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.MentionActors = await _context.Atores.AsNoTracking().Where(a => a.Ativo != "N")
+            .OrderBy(a => a.Nome)
+            .Select(a => new { id = a.IdAtores, nome = a.Nome })
+            .ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
         ViewBag.SelectedEixos = selectedEixos?.ToHashSet() ?? new HashSet<int>();
     }
 
     private async Task ValidateReferencesAsync(int actorId, int[]? eixosIds)
     {
-        if (!await _context.Atores.AnyAsync(a => a.IdAtores == actorId && a.Ativo == "S"))
+        if (!await _context.Atores.AnyAsync(a => a.IdAtores == actorId && a.Ativo != "N"))
             ModelState.AddModelError(nameof(DiarioProcessoPessoal.FK_id_Atores), "Selecione um ator ativo.");
         var ids = DistinctEixos(eixosIds).ToArray();
         if (ids.Length > 0 && await _context.Eixos.CountAsync(e => ids.Contains(e.IdEixo)) != ids.Length)

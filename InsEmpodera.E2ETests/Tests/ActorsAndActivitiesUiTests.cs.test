@@ -25,10 +25,14 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.GotoAsync(listPath);
             await page.Locator("a.atores-add-button").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/Create_Atores/{communityId}");
+            await Assertions.Expect(page.Locator("input[name=Idade]")).ToBeVisibleAsync();
+            await Assertions.Expect(page.Locator("input[name=DataNascimento], input[name=DtNascimento]"))
+                .ToHaveCountAsync(0);
             await page.Locator("input[name=Nome]").FillAsync(name);
             await page.Locator("select[name=Genero]").SelectOptionAsync("2");
             await page.Locator("input[name=Idade]").FillAsync("36");
-            await page.Locator("#inputTelefone").FillAsync("11988887777");
+            await page.Locator("select[name=tipoRelacionamento]").SelectOptionAsync("5");
+            await page.Locator("#inputTelefone").FillAsync("+1 202 555 0199 ext. 45");
             await page.Locator("label.checkbox-option:has(input[name=recursos][value=Saude])").ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
             await page.Locator(".modern-container form button[type=submit]").ClickAsync();
@@ -39,13 +43,18 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 .Select(actor => new
                 {
                     actor.IdAtores,
-                    LinkIds = actor.Comunidades.Select(link => link.IdAtorComunidade).ToList(),
+                    actor.Idade,
+                    actor.Telefone,
+                    Links = actor.Comunidades.Select(link => new { link.IdAtorComunidade, link.TipoRelacionamento }).ToList(),
                     ResourceIds = actor.RecursosAtores.Select(resource => resource.Id_Recursos_Atores).ToList()
                 })
                 .SingleAsync());
             Assert.InRange(created.IdAtores, 100000, 999999);
-            Assert.Single(created.LinkIds);
-            Assert.InRange(created.LinkIds[0], 100000, 999999);
+            Assert.Equal(36, created.Idade);
+            Assert.Equal("+1 202 555 0199 ext. 45", created.Telefone);
+            Assert.Single(created.Links);
+            Assert.InRange(created.Links[0].IdAtorComunidade, 100000, 999999);
+            Assert.Equal(5, created.Links[0].TipoRelacionamento);
             Assert.Equal(20, created.ResourceIds.Count);
             Assert.Equal(20, created.ResourceIds.Distinct().Count());
             Assert.All(created.ResourceIds, id => Assert.InRange(id, 100000, 999999));
@@ -54,11 +63,16 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await Assertions.Expect(row).ToBeVisibleAsync();
             await row.Locator("a.btn-action").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/Edit_Atores/{created.IdAtores}");
+            await Assertions.Expect(page.Locator("input[name=DataNascimento], input[name=DtNascimento]"))
+                .ToHaveCountAsync(0);
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator("select[name=tipoRelacionamento]")).ToHaveValueAsync("5");
             await page.Locator("#edit-save-btn").ClickAsync();
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
-            await page.Locator("input[name=Telefone]").FillAsync("11977776666");
+            await page.Locator("input[name=Idade]").FillAsync("37");
+            await page.Locator("input[name=Telefone]").FillAsync("+44 20 7946 0958");
+            await page.Locator("select[name=tipoRelacionamento]").SelectOptionAsync("1");
             await page.Locator("label.checkbox-option:has(input[name=recursos][value=Saude])").ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=recursos][value=Lazer])").ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
@@ -71,6 +85,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 .Select(actor => new
                 {
                     actor.Nome,
+                    actor.Idade,
                     actor.Telefone,
                     Resources = actor.RecursosAtores
                         .Where(resource => resource.Pode == "S")
@@ -79,13 +94,19 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 })
                 .SingleAsync());
             Assert.Equal(editedName, edited.Nome);
-            Assert.Equal("11977776666", edited.Telefone);
+            Assert.Equal(37, edited.Idade);
+            Assert.Equal("+44 20 7946 0958", edited.Telefone);
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.AtorComunidades
+                .Where(link => link.FK_id_Atores == created.IdAtores)
+                .Select(link => link.TipoRelacionamento).SingleAsync()));
             Assert.Contains("Recurso:Lazer", edited.Resources);
             Assert.DoesNotContain("Recurso:Saude", edited.Resources);
             Assert.Contains("Vulnerabilidade:Prevencao", edited.Resources);
             Assert.DoesNotContain("Vulnerabilidade:Moradia", edited.Resources);
 
             await page.Locator(".form-item").Filter(new() { HasText = editedName }).Locator("a.btn-action").ClickAsync();
+            await Assertions.Expect(page.Locator("input[name=Idade]")).ToHaveValueAsync("37");
+            await Assertions.Expect(page.Locator("select[name=tipoRelacionamento]")).ToHaveValueAsync("1");
             await page.Locator("#openDeleteModalBtn").ClickAsync();
             await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
             await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
@@ -113,6 +134,9 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
 
             await page.GotoAsync("/Atores/Create");
             var actorForm = page.GetByTestId("actor-create-form");
+            await Assertions.Expect(actorForm.Locator("input[name=Idade]")).ToBeVisibleAsync();
+            await Assertions.Expect(actorForm.Locator("input[name=DataNascimento], input[name=DtNascimento]"))
+                .ToHaveCountAsync(0);
 
             Assert.False(await actorForm.EvaluateAsync<bool>(
                 "form => form.checkValidity()"
@@ -123,21 +147,35 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
 
             await page.Locator("#ComunidadeId").SelectOptionAsync(communityId.ToString());
             await page.Locator("#nome").FillAsync(name);
+            await page.Locator("#tipoRelacionamento").SelectOptionAsync("5");
             await page.Locator("#genero").SelectOptionAsync("2");
+            await page.Locator("#Idade").FillAsync("31");
+            await page.Locator("#daEquipeCheckbox").CheckAsync();
             await page.Locator("#papelSocial1").FillAsync("Mobilizadora comunitária");
             await page.Locator("#papelSocial2").FillAsync("Educação e saúde");
-            await page.Locator("#inputTelefone").FillAsync("85999998888");
+            await page.Locator("#inputTelefone").FillAsync("+1 202 555 0199");
             await page.Locator("label.checkbox-option:has(input[name=recursos][value=Educacao])").ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
             await page.GetByTestId("actor-create-submit").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atores");
 
-            var actorId = await Fixture.QueryAsync(db => db.Atores
+            var actorCreated = await Fixture.QueryAsync(db => db.Atores
                 .Where(actor => actor.Nome == name)
-                .Select(actor => actor.IdAtores)
+                .Select(actor => new
+                {
+                    actor.IdAtores, actor.Nome, actor.Genero, actor.Idade,
+                    actor.DaEquipe, actor.PapelSocial1, actor.PapelSocial2, actor.Telefone
+                })
                 .SingleAsync());
+            var actorId = actorCreated.IdAtores;
+            Assert.Equal("+1 202 555 0199", actorCreated.Telefone);
+            Assert.Equal(2, actorCreated.Genero);
+            Assert.Equal(31, actorCreated.Idade);
+            Assert.True(actorCreated.DaEquipe);
+            Assert.Equal("Mobilizadora comunitária", actorCreated.PapelSocial1);
+            Assert.Equal("Educação e saúde", actorCreated.PapelSocial2);
             Assert.True(await Fixture.QueryAsync(db => db.AtorComunidades.AnyAsync(link =>
-                link.FK_id_Atores == actorId && link.FkIdComunidade == communityId)));
+                link.FK_id_Atores == actorId && link.FkIdComunidade == communityId && link.TipoRelacionamento == 5)));
             Assert.True(await Fixture.QueryAsync(db => db.RecursosAtores.AnyAsync(resource =>
                 resource.FK_id_Atores == actorId
                 && resource.Tipo == "Recurso"
@@ -157,24 +195,47 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("#searchInput").PressAsync("Escape");
 
             await page.GotoAsync($"/Atores/Edit/{actorId}");
+            await Assertions.Expect(page.Locator("input[name=DataNascimento], input[name=DtNascimento]"))
+                .ToHaveCountAsync(0);
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator("input[name=Idade]")).ToHaveValueAsync("31");
+            await Assertions.Expect(page.Locator("select[name=tipoRelacionamento]")).ToHaveValueAsync("5");
+            await Assertions.Expect(page.Locator("input[type=checkbox][name=DaEquipe]")).ToBeCheckedAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
             await page.Locator("select[name=Genero]").SelectOptionAsync("1");
+            await page.Locator("input[name=Idade]").FillAsync("32");
+            await page.Locator("select[name=tipoRelacionamento]").SelectOptionAsync("1");
+            await page.Locator("input[type=checkbox][name=DaEquipe]").UncheckAsync();
             await page.Locator("input[name=PapelSocial1]").FillAsync("Articulador social");
-            await page.Locator("#inputTelefone").FillAsync("85988887777");
+            await page.Locator("input[name=PapelSocial2]").FillAsync("Mediação e cultura");
+            await page.Locator("#inputTelefone").FillAsync("+351 21 555 0199");
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atores");
 
             var actorState = await Fixture.QueryAsync(db => db.Atores
                 .Where(actor => actor.IdAtores == actorId)
-                .Select(actor => new { actor.Nome, actor.Genero, actor.PapelSocial1, actor.Telefone })
+                .Select(actor => new
+                {
+                    actor.Nome, actor.Genero, actor.Idade, actor.DaEquipe,
+                    actor.PapelSocial1, actor.PapelSocial2, actor.Telefone
+                })
                 .SingleAsync());
             Assert.Equal(editedName, actorState.Nome);
             Assert.Equal(1, actorState.Genero);
+            Assert.Equal(32, actorState.Idade);
+            Assert.False(actorState.DaEquipe);
             Assert.Equal("Articulador social", actorState.PapelSocial1);
+            Assert.Equal("Mediação e cultura", actorState.PapelSocial2);
+            Assert.Equal("+351 21 555 0199", actorState.Telefone);
+            Assert.Equal(1, await Fixture.QueryAsync(db => db.AtorComunidades
+                .Where(link => link.FK_id_Atores == actorId)
+                .Select(link => link.TipoRelacionamento).SingleAsync()));
 
             await page.GotoAsync($"/Atores/Edit/{actorId}");
+            await Assertions.Expect(page.Locator("input[name=Idade]")).ToHaveValueAsync("32");
+            await Assertions.Expect(page.Locator("select[name=tipoRelacionamento]")).ToHaveValueAsync("1");
+            await Assertions.Expect(page.Locator("input[name=PapelSocial2]")).ToHaveValueAsync("Mediação e cultura");
             await page.Locator("#openDeleteModalBtn").ClickAsync();
             await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
             await page.Locator("#cancelDeleteBtn").ClickAsync();
@@ -208,6 +269,9 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             var editedName = name + " editada";
 
             await page.GotoAsync("/Atividades/Create");
+            Assert.Equal(1, await page.Locator("link[href*='/css/pages/activity-form.css']").CountAsync());
+            Assert.Equal("0px", await page.Locator(".sidebar-logout-form")
+                .EvaluateAsync<string>("element => getComputedStyle(element).paddingTop"));
             Assert.False(await page.Locator("form.main-form").EvaluateAsync<bool>("form => form.checkValidity()"));
             await page.Locator("#ComunidadeId").SelectOptionAsync(prerequisites.CommunityId.ToString());
             await page.Locator("input[name=Nome]").FillAsync(name);
@@ -225,6 +289,13 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 .Where(activity => activity.Nome == name)
                 .Select(activity => activity.IdAtividade)
                 .SingleAsync());
+            var createdActivity = await Fixture.QueryAsync(db => db.Atividades
+                .Where(activity => activity.IdAtividade == activityId)
+                .Select(activity => new { activity.Nome, activity.Descricao, activity.FkIdComunidade })
+                .SingleAsync());
+            Assert.Equal(name, createdActivity.Nome);
+            Assert.Equal("Atividade criada integralmente pela UI", createdActivity.Descricao);
+            Assert.Equal(prerequisites.CommunityId, createdActivity.FkIdComunidade);
             Assert.True(await Fixture.QueryAsync(db => db.AtividadesEixo.AnyAsync(link =>
                 link.FkIdAtividade == activityId && link.FkIdEixo == prerequisites.Axes[0].IdEixo)));
 
@@ -238,6 +309,9 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
 
             await page.GotoAsync($"/Atividades/Edit/{activityId}");
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(name);
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync("Atividade criada integralmente pela UI");
+            await Assertions.Expect(page.Locator("select[name=ComunidadeId]")).ToHaveValueAsync(prerequisites.CommunityId.ToString());
             await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[0].Nome);
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
@@ -259,8 +333,14 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 .Where(activity => activity.IdAtividade == activityId)
                 .Select(activity => activity.Nome)
                 .SingleAsync()));
+            Assert.Equal("Descrição atualizada pela UI", await Fixture.QueryAsync(db => db.Atividades
+                .Where(activity => activity.IdAtividade == activityId)
+                .Select(activity => activity.Descricao).SingleAsync()));
 
             await page.GotoAsync($"/Atividades/Edit/{activityId}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(editedName);
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync("Descrição atualizada pela UI");
+            await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[1].Nome);
             await page.Locator("#openDeleteModalBtn").ClickAsync();
             await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
             await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
@@ -269,5 +349,31 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
                 activity.IdAtividade == activityId)));
             Assert.False(await Fixture.QueryAsync(db => db.AtividadesEixo.AnyAsync(link =>
                 link.FkIdAtividade == activityId)));
+        });
+
+    [Fact(DisplayName = "Atividades — descrição opcional não derruba a listagem após criar")]
+    public Task Activity_WithoutDescriptionReturnsToListWithoutServerError() =>
+        RunInBrowserAsync(nameof(Activity_WithoutDescriptionReturnsToListWithoutServerError), async page =>
+        {
+            await LoginAsync(page);
+            var communityId = await Fixture.QueryAsync(db => db.Comunidades
+                .OrderBy(c => c.Id_Comunidade).Select(c => c.Id_Comunidade).FirstAsync());
+            var axisId = await Fixture.QueryAsync(db => db.Eixos
+                .OrderBy(e => e.IdEixo).Select(e => e.IdEixo).FirstAsync());
+            var name = Unique("Atividade sem descrição");
+
+            await page.GotoAsync("/Atividades/Create");
+            await page.Locator("#ComunidadeId").SelectOptionAsync(communityId.ToString());
+            await page.Locator("input[name=Nome]").FillAsync(name);
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{axisId}']").CheckAsync();
+            await page.Locator("#create-activity-btn").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atividades");
+
+            await Assertions.Expect(page.Locator(".activity-item").Filter(new() { HasText = name }))
+                .ToBeVisibleAsync();
+            Assert.Null(await Fixture.QueryAsync(db => db.Atividades
+                .Where(activity => activity.Nome == name)
+                .Select(activity => activity.Descricao).SingleAsync()));
         });
 }

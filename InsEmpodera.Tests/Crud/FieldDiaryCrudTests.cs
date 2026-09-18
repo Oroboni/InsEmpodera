@@ -27,6 +27,42 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
         Assert.Equal(2, await Db.DiarioEixos.CountAsync(item => item.FkIdDiario == saved.IdDCampo));
     }
 
+    [Fact(DisplayName = "Diário de campo — ação aceita localização e provedor vazios e salva vários participantes")]
+    public async Task Create_ActionPersistsMultipleParticipants()
+    {
+        var community = await CreateCommunityAsync();
+        var axis = await CreateAxisAsync();
+        var firstActor = await CreateActorAsync(community);
+        var secondActor = await CreateActorAsync(community);
+        var controller = Attach(new DiarioCampoController(Db));
+        var diary = NewDiary(community.Id_Comunidade, "Ação com participantes");
+        diary.Localizacao = null!;
+
+        var result = await controller.Create(diary, [axis.IdEixo],
+        [
+            new DiarioAcaoInput
+            {
+                Tipo = "institucional",
+                Nome = "Visita",
+                Provedor = "",
+                Quantidade = 2,
+                FkIdEixo = [axis.IdEixo],
+                FkIdAtores = [firstActor.IdAtores, secondActor.IdAtores]
+            }
+        ]);
+
+        Assert.IsType<RedirectToActionResult>(result);
+        var saved = await Db.DiariosCampo.Include(d => d.DiarioDAcoes)
+            .ThenInclude(a => a.DAtores)
+            .SingleAsync(d => d.Descricao == "Ação com participantes");
+        Assert.Equal(string.Empty, saved.Localizacao);
+        var action = Assert.Single(saved.DiarioDAcoes);
+        Assert.Equal(string.Empty, action.PeovedorEx);
+        Assert.Equal(2, action.Quantidade);
+        Assert.Equal(new[] { firstActor.IdAtores, secondActor.IdAtores }.OrderBy(id => id),
+            action.DAtores.Select(a => a.FK_id_Atores).OrderBy(id => id).ToArray());
+    }
+
     [Fact]
     public async Task Create_InvalidModelDoesNotPersist()
     {
@@ -39,6 +75,31 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
 
         Assert.IsType<ViewResult>(result);
         Assert.Equal(before, await Db.DiariosCampo.CountAsync());
+    }
+
+    [Fact(DisplayName = "Diário de campo — comunidade inexistente retorna formulário sem erro de banco")]
+    public async Task Create_InvalidCommunityShowsValidationWithoutPersisting()
+    {
+        var controller = Attach(new DiarioCampoController(Db));
+        var result = await controller.Create(NewDiary(999_999, "Comunidade inválida"), []);
+
+        Assert.IsType<ViewResult>(result);
+        Assert.Contains(controller.ModelState[nameof(DiarioCampo.FkIdComunidade)]!.Errors,
+            error => error.ErrorMessage.Contains("comunidade válida"));
+        Assert.False(await Db.DiariosCampo.AnyAsync());
+    }
+
+    [Fact(DisplayName = "Diário de campo — eixo inexistente retorna formulário sem erro de banco")]
+    public async Task Create_InvalidAxisShowsValidationWithoutPersisting()
+    {
+        var community = await CreateCommunityAsync();
+        var controller = Attach(new DiarioCampoController(Db));
+        var result = await controller.Create(NewDiary(community.Id_Comunidade, "Eixo inválido"), [999_999]);
+
+        Assert.IsType<ViewResult>(result);
+        Assert.Contains(controller.ModelState["eixosSelecionados"]!.Errors,
+            error => error.ErrorMessage.Contains("eixos válidos"));
+        Assert.False(await Db.DiariosCampo.AnyAsync());
     }
 
     [Fact]

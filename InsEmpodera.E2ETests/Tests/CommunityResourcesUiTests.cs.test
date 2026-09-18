@@ -1,0 +1,118 @@
+using Empodera.Models;
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class CommunityResourcesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact(DisplayName = "Recursos da comunidade — preencher, salvar, consultar, reabrir, editar e excluir")]
+    public Task Resource_AllEditableFieldsRoundTripAndDelete() =>
+        RunInBrowserAsync(nameof(Resource_AllEditableFieldsRoundTripAndDelete), async page =>
+        {
+            var setup = await Fixture.QueryAsync(async db =>
+            {
+                var communityId = await db.Comunidades.Where(item => item.Ativo == "S")
+                    .OrderBy(item => item.Id_Comunidade)
+                    .Select(item => item.Id_Comunidade).FirstAsync();
+                var firstActorId = await db.AtorComunidades
+                    .Where(link => link.FkIdComunidade == communityId)
+                    .Select(link => link.FK_id_Atores).FirstAsync();
+                var secondActor = new Atores
+                {
+                    Nome = Unique("Responsável alternativo"), Ativo = "S", FkIdUsuario = 1,
+                    DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+                };
+                db.Atores.Add(secondActor);
+                await db.SaveChangesAsync();
+                db.AtorComunidades.Add(new AtorComunidade
+                {
+                    FK_id_Atores = secondActor.IdAtores, FkIdComunidade = communityId
+                });
+                await db.SaveChangesAsync();
+                var axisIds = await db.Eixos.OrderBy(item => item.IdEixo)
+                    .Select(item => item.IdEixo).Take(2).ToArrayAsync();
+                return new { communityId, firstActorId, secondActor.IdAtores, axisIds };
+            });
+            Assert.Equal(2, setup.axisIds.Length);
+            await LoginAsync(page);
+
+            await page.GotoAsync($"/Comunidade/Create_Recursos?comunidadeId={setup.communityId}");
+            await page.Locator("input[name=Tipo]").FillAsync("Internet comunitária");
+            await page.Locator("input[name=Dispositivo]").FillAsync("Roteador de auditoria");
+            await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(setup.firstActorId.ToString());
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{setup.axisIds[0]}']").CheckAsync();
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator("textarea[name=Servicos]").FillAsync("Acesso público à rede");
+            await page.GetByRole(AriaRole.Button, new() { Name = "Criar recurso" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/ComunidadeRecursos");
+
+            var created = await Fixture.QueryAsync(db => db.RedeRecursos
+                .Where(item => item.Tipo == "Internet comunitária")
+                .Select(item => new
+                {
+                    item.Id_Rede, item.FkIdComunidade, item.FK_id_Atores,
+                    item.Tipo, item.Dispositivo, item.Servicos
+                }).SingleAsync());
+            Assert.Equal(setup.communityId, created.FkIdComunidade);
+            Assert.Equal(setup.firstActorId, created.FK_id_Atores);
+            Assert.Equal("Roteador de auditoria", created.Dispositivo);
+            Assert.Equal("Acesso público à rede", created.Servicos);
+            Assert.Equal([setup.axisIds[0]], await Fixture.QueryAsync(db => db.RedeEixos
+                .Where(link => link.FkIdRede == created.Id_Rede)
+                .Select(link => link.FkIdEixo).ToArrayAsync()));
+
+            await page.GotoAsync($"/Comunidade/ComunidadeDetalhesRecursos/{created.Id_Rede}");
+            await Assertions.Expect(page.Locator("input[name=Tipo]")).ToHaveValueAsync("Internet comunitária");
+            await Assertions.Expect(page.Locator("input[name=Dispositivo]")).ToHaveValueAsync("Roteador de auditoria");
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores]"))
+                .ToHaveValueAsync(setup.firstActorId.ToString());
+            await Assertions.Expect(page.Locator("textarea[name=Servicos]")).ToHaveValueAsync("Acesso público à rede");
+            await Assertions.Expect(page.Locator($"input[name=EixosSelecionados][value='{setup.axisIds[0]}']"))
+                .ToBeCheckedAsync();
+
+            await page.Locator("input[name=Tipo]").FillAsync("Computadores comunitários");
+            await page.Locator("input[name=Dispositivo]").FillAsync("Estação de trabalho");
+            await page.Locator("select[name=FK_id_Atores]").SelectOptionAsync(setup.IdAtores.ToString());
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{setup.axisIds[0]}']").UncheckAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{setup.axisIds[1]}']").CheckAsync();
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator("textarea[name=Servicos]").FillAsync("Oficinas de informática");
+            await page.GetByRole(AriaRole.Button, new() { Name = "SALVAR ALTERAÇÕES" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/ComunidadeRecursos");
+
+            var edited = await Fixture.QueryAsync(db => db.RedeRecursos
+                .Where(item => item.Id_Rede == created.Id_Rede)
+                .Select(item => new { item.Tipo, item.Dispositivo, item.Servicos, item.FK_id_Atores })
+                .SingleAsync());
+            Assert.Equal("Computadores comunitários", edited.Tipo);
+            Assert.Equal("Estação de trabalho", edited.Dispositivo);
+            Assert.Equal("Oficinas de informática", edited.Servicos);
+            Assert.Equal(setup.IdAtores, edited.FK_id_Atores);
+            Assert.Equal([setup.axisIds[1]], await Fixture.QueryAsync(db => db.RedeEixos
+                .Where(link => link.FkIdRede == created.Id_Rede)
+                .Select(link => link.FkIdEixo).ToArrayAsync()));
+
+            await page.GotoAsync($"/Comunidade/ComunidadeDetalhesRecursos/{created.Id_Rede}");
+            await Assertions.Expect(page.Locator("input[name=Tipo]")).ToHaveValueAsync("Computadores comunitários");
+            await Assertions.Expect(page.Locator("input[name=Dispositivo]")).ToHaveValueAsync("Estação de trabalho");
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores]"))
+                .ToHaveValueAsync(setup.IdAtores.ToString());
+            await Assertions.Expect(page.Locator("textarea[name=Servicos]")).ToHaveValueAsync("Oficinas de informática");
+            await Assertions.Expect(page.Locator($"input[name=EixosSelecionados][value='{setup.axisIds[1]}']"))
+                .ToBeCheckedAsync();
+
+            page.Dialog += (_, dialog) => dialog.AcceptAsync();
+            await page.GetByTestId("delete-community-resource").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/ComunidadeRecursos");
+            Assert.False(await Fixture.QueryAsync(db => db.RedeRecursos
+                .AnyAsync(item => item.Id_Rede == created.Id_Rede)));
+            Assert.False(await Fixture.QueryAsync(db => db.RedeEixos
+                .AnyAsync(link => link.FkIdRede == created.Id_Rede)));
+        });
+}

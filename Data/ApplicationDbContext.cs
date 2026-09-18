@@ -102,7 +102,6 @@ namespace Empodera.Data
             modelBuilder.Entity<RecursosAtores>().HasKey(ra => ra.Id_Recursos_Atores);
             modelBuilder.Entity<DiarioProcessoPessoal>().HasKey(d => d.IdDiarioProcesso);
             modelBuilder.Entity<DiarioProcessoEixo>().HasKey(d => d.IdDiarioProcessoEixo);
-
             modelBuilder.Entity<DiarioProcessoPessoal>().ToTable("diariosprocessopessoal");
             modelBuilder.Entity<DiarioProcessoEixo>().ToTable("diariosprocessoeixos");
             modelBuilder.Entity<DiarioProcessoEixo>()

@@ -36,6 +36,21 @@
         </div>
 
         <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
+            <div class="input-content">
+                <label for="tipoRelacionamento">Tipo de relacionamento</label>
+                <select id="tipoRelacionamento" name="tipoRelacionamento" class="clean-input simple-select" disabled>
+                    <option value="">Selecione um tipo</option>
+                    <option value="1" selected="@(ViewBag.TipoRelacionamento == 1)">Amigo</option>
+                    <option value="2" selected="@(ViewBag.TipoRelacionamento == 2)">Colega de trabalho</option>
+                    <option value="3" selected="@(ViewBag.TipoRelacionamento == 3)">Conhecido</option>
+                    <option value="4" selected="@(ViewBag.TipoRelacionamento == 4)">Familiar</option>
+                    <option value="5" selected="@(ViewBag.TipoRelacionamento == 5)">Vizinho</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
             <div class="input-content">
                 <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
@@ -51,7 +66,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
                 <div class="input-content">
                     <label for="Idade">Idade</label>
-                    <input asp-for="Idade" type="number" class="clean-input" disabled>
+                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" disabled>
                 </div>
             </div>
 
@@ -74,7 +89,7 @@
         <div class="input-card full-width checkbox-card">
             <div class="input-content">
                 <label for="da-equipe" class="checkbox-inline-label">
-                    <input type="checkbox" id="da-equipe" name="da-equipe" asp-for="DaEquipe" disabled>
+                    <input type="checkbox" id="da-equipe" asp-for="DaEquipe" disabled>
                     Da Equipe
                 </label>
             </div>
@@ -105,7 +120,7 @@
             <div class="input-content">
                 <label asp-for="Telefone">Telefone</label>
                 <input asp-for="Telefone" id="inputTelefone" name="telefone" type="tel" class="clean-input"
-                    placeholder="(00) 00000-0000" disabled>
+                    maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" disabled>
             </div>
         </div>
 

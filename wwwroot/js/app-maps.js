@@ -123,7 +123,9 @@ function initMapSelector(mapId, inputId, options = {}) {
         }
 
         ensureMarker().setLatLng(geocode.center);
-        updateInputValue(geocode.name || "", syncMirror, syncManual);
+        if (syncManual || manualInputId !== inputId) {
+            updateInputValue(geocode.name || "", syncMirror, syncManual);
+        }
     };
 
     const createFallbackQueries = (query) => {
@@ -464,7 +466,7 @@ function initMapSelector(mapId, inputId, options = {}) {
             clearMarker();
             map.setView([defaultLatitude, defaultLongitude], startZoom);
             const hiddenInput = document.getElementById(inputId);
-            if (hiddenInput) {
+            if (hiddenInput && hiddenInput !== manualInput) {
                 setFieldValue(hiddenInput, "");
             }
             return false;
@@ -473,7 +475,7 @@ function initMapSelector(mapId, inputId, options = {}) {
         const resolved = await geocodeInitialAddress(trimmedQuery);
         if (!resolved) {
             const hiddenInput = document.getElementById(inputId);
-            if (hiddenInput) {
+            if (hiddenInput && hiddenInput !== manualInput) {
                 setFieldValue(hiddenInput, trimmedQuery);
             }
         }
@@ -621,7 +623,7 @@ function initMapSelector(mapId, inputId, options = {}) {
             }
 
             const typedValue = manualInput.value.trim();
-            if (targetInput) {
+            if (targetInput && targetInput !== manualInput) {
                 setFieldValue(targetInput, typedValue);
             }
 
@@ -654,7 +656,7 @@ function initMapSelector(mapId, inputId, options = {}) {
             }
 
             const typedValue = manualInput.value.trim();
-            if (targetInput) {
+            if (targetInput && targetInput !== manualInput) {
                 setFieldValue(targetInput, typedValue);
             }
             hideSuggestions(suggestionsList);
@@ -670,7 +672,7 @@ function initMapSelector(mapId, inputId, options = {}) {
                 }
 
                 const typedValue = manualInput.value.trim();
-                if (targetInput) {
+                if (targetInput && targetInput !== manualInput) {
                     setFieldValue(targetInput, typedValue);
                 }
                 hideSuggestions(suggestionsList);

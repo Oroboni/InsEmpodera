@@ -44,7 +44,7 @@ public class AtividadesController : Controller
             return RedirectToAction("Index", "Atividades");
         }
 
-        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
@@ -127,7 +127,7 @@ public class AtividadesController : Controller
 
         if (atividade == null) return NotFound();
 
-        ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
         ViewBag.UsuarioOriginal = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuario).FirstOrDefault();
         ViewBag.UsuarioNovo = _context.Usuarios.Where(z => z.IdUsuario == atividade.FkIdUsuarioM).FirstOrDefault();
 

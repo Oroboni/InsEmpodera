@@ -1016,6 +1016,12 @@ label:has(input[type="checkbox"]) {
     width: 100%;
 }
 
+/* O painel de eixos precisa sair dos limites do cartão quando é aberto. */
+.input-card:has(.multiselect-wrapper) {
+    overflow: visible;
+    z-index: 30;
+}
+
 .input-content {
     min-width: 0;
     flex-grow: 1;

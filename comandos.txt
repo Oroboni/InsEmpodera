@@ -29,3 +29,4 @@ exec runuser \
   /usr/bin/dotnet \
   /home/ec2-user/empodera-current/InsEmpodera.dll
 '
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=127.0.0.1;Port=3306;Database=empodera;User=root;"

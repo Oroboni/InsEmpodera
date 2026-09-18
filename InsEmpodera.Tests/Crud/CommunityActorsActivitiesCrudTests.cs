@@ -72,10 +72,10 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Comunidades.AsNoTracking().SingleAsync(item => item.Id_Comunidade == original.Id_Comunidade);
         Assert.Equal("Depois", saved.Nome);
-        Assert.Equal("Em diagnóstico", saved.Status);
+        Assert.Equal("Em processo", saved.Status);
         Assert.Equal("Polo Comunitário, Avenida Sul, 50, Recife", saved.LocalSecundario);
         Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapaSecundario));
-        Assert.Equal(createdAt, saved.Dt_Criacao);
+        Assert.InRange((saved.Dt_Criacao - createdAt).Duration(), TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
         Assert.Equal("S", saved.Ativo);
         Assert.Equal(1, saved.FK_Id_UsuarioM);
     }

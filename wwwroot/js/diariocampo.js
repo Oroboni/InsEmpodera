@@ -3,6 +3,36 @@
 // =========================================================
 /* --- Lógica Atualizada para Checkboxes no Modal --- */
         
+        let atoresDaAcao = new Map();
+
+        function adicionarAtorAcao() {
+            const select = document.getElementById('atorAcao');
+            const lista = document.getElementById('atoresSelecionadosAcao');
+            if (!select?.value || !lista || atoresDaAcao.has(select.value)) return;
+
+            const id = select.value;
+            const nome = select.selectedOptions[0].textContent.trim();
+            atoresDaAcao.set(id, nome);
+            const item = document.createElement('li');
+            item.dataset.actorId = id;
+            const rotulo = document.createElement('span');
+            rotulo.textContent = nome;
+            const remover = document.createElement('button');
+            remover.type = 'button';
+            remover.textContent = 'Remover';
+            remover.setAttribute('aria-label', `Remover participante ${nome}`);
+            remover.addEventListener('click', () => {
+                atoresDaAcao.delete(id);
+                item.remove();
+            });
+            item.append(rotulo, remover);
+            lista.appendChild(item);
+            select.value = '';
+            const quantidade = document.getElementById('quantidadeAcao');
+            if (quantidade && Number(quantidade.value) < atoresDaAcao.size)
+                quantidade.value = String(atoresDaAcao.size);
+        }
+
         function abrirModalAcao(tipo) {
             document.getElementById('tipoAcaoInput').value = tipo;
             
@@ -10,6 +40,8 @@
             document.getElementById('nomeAcao').value = '';
             document.getElementById('provedorAcao').value = '';
             document.getElementById('atorAcao').value = '';
+            atoresDaAcao = new Map();
+            document.getElementById('atoresSelecionadosAcao')?.replaceChildren();
             document.getElementById('quantidadeAcao').value = '1';
 
             // Create usa checkboxes múltiplos; Edit usa um select simples.
@@ -55,7 +87,8 @@
             const nome = document.getElementById('nomeAcao').value;
             const provedor = document.getElementById('provedorAcao').value;
             const qtd = document.getElementById('quantidadeAcao').value;
-            const atorId = document.getElementById('atorAcao')?.value ?? '';
+            adicionarAtorAcao();
+            const atorIds = Array.from(atoresDaAcao.keys());
 
             // 2. Capturar Eixos dos Checkboxes Marcados
             const checkboxesMarcados = document.querySelectorAll('input[name="modalEixos"]:checked');
@@ -71,7 +104,7 @@
             // 3. Validações
             if (!nome) { alert("O campo Nome é obrigatório."); return; }
             if (eixosIds.length === 0) { alert("Selecione pelo menos um Eixo."); return; }
-            if (!provedor) { alert("O campo Provedor Externo é obrigatório."); return; }
+            if (Number(qtd) < atorIds.length) { alert("A quantidade não pode ser menor que o número de participantes selecionados."); return; }
 
             // 4. Definir destino
             let containerID, emptyID, counterSpanID, badgeClass;
@@ -125,6 +158,7 @@
                         <span data-action-provider></span>
                         <span data-action-axes style="font-size:0.75rem; color:#888;"></span>
                         <span data-action-quantity></span>
+                        <span data-action-actors></span>
                     </div>
                 </div>
                 <button type="button" data-action-remove style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
@@ -135,6 +169,8 @@
             itemDiv.querySelector('[data-action-provider]').textContent = ` ${provedor}`;
             itemDiv.querySelector('[data-action-axes]').textContent = eixosNomes ? ` • ${eixosNomes}` : '';
             itemDiv.querySelector('[data-action-quantity]').textContent = Number(qtd) > 1 ? ` • ${qtd}x` : '';
+            itemDiv.querySelector('[data-action-actors]').textContent = atorIds.length
+                ? ` • ${Array.from(atoresDaAcao.values()).join(', ')}` : '';
 
             const badge = itemDiv.querySelector('[data-action-type]');
             badge.classList.add(badgeClass);
@@ -160,7 +196,7 @@
             appendHiddenInput(`TempAcoes[${timestamp}].Provedor`, provedor);
             appendHiddenInput(`TempAcoes[${timestamp}].Tipo`, tipo);
             appendHiddenInput(`TempAcoes[${timestamp}].Quantidade`, qtd);
-            appendHiddenInput(`TempAcoes[${timestamp}].FkIdAtor`, atorId);
+            atorIds.forEach(id => appendHiddenInput(`TempAcoes[${timestamp}].FkIdAtores`, id));
             eixosIds.forEach(id => appendHiddenInput(`TempAcoes[${timestamp}].FkIdEixo`, id));
             container.appendChild(itemDiv);
             fecharModal('modalAcao');
@@ -270,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- 3. LÓGICA DE VIEW vs EDIT (Apenas para tela de Edição) ---
     const editSaveBtn = document.getElementById('edit-save-btn');
-    const inputFields = document.querySelectorAll('.clean-input, select.clean-input, textarea, input[type="file"]');
+    const inputFields = document.querySelectorAll('.clean-input, select.clean-input, textarea, input[type="file"], input[name="EixosSelecionados"]');
     const editOnlyBtns = document.querySelectorAll('.edit-only-btn');
     let isEditMode = false;
 

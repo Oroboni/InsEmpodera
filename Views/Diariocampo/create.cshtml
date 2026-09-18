@@ -24,7 +24,6 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         /* Estilos específicos para a listagem estilo Teia */
         .action-group-container { margin-bottom: 25px; }
@@ -81,22 +80,25 @@
             </div>
         </div>
 
-        <div class="input-card full-width" style="display: block;">
-            <div class="icon-box purple" style="float: left; margin-right: 15px;">
-                <i class="fa-solid fa-layer-group"></i>
-            </div>
+        <div class="input-card full-width" data-axis-picker>
+            <div class="icon-box purple"><i class="fa-solid fa-tags"></i></div>
             <div class="input-content">
                 <label>Eixos Selecionados</label>
-                <div class="eixos-options-grid">
-                    @foreach (var eixo in listaEixos) {
-                        <label class="checkbox-card-label">
-                            <input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo">
-                            <span data-i18n-text>@eixo.Nome</span>
-                        </label>
-                    }
-                </div>
+                <div class="eixos-tag-container" data-axis-tags></div>
+                <details class="multiselect-wrapper">
+                    <summary><div class="select-wrapper">
+                        <i class="fa-solid fa-tags"></i>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
+                        <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    </div></summary>
+                    <div class="multiselect-panel"><ul>
+                        @foreach (var eixo in listaEixos) {
+                            <li><input type="checkbox" name="EixosSelecionados" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo" data-tag-name="@eixo.Nome" />
+                                <label for="eixo-@eixo.IdEixo">@eixo.Nome</label></li>
+                        }
+                    </ul></div>
+                </details>
             </div>
-            <div style="clear: both;"></div>
         </div>
 
         <div class="purple-divider"></div>
@@ -228,22 +230,24 @@
 
             <div class="input-card action-modal-field action-modal-field-wide action-modal-provider">
                 <div class="input-content no-icon">
-                    <label>Provedor externo <span class="text-danger">*</span></label>
-                    <input type="text" id="provedorAcao" class="clean-input" required placeholder="Ex: UBS, Escola, Associação..." />
+                    <label>Provedor externo (opcional)</label>
+                    <input type="text" id="provedorAcao" class="clean-input" placeholder="Ex: UBS, Escola, Associação..." />
                 </div>
             </div>
 
             <div class="input-card action-modal-field action-modal-actors">
                 <div class="input-content no-icon">
-                    <label>Atores</label>
+                    <label for="atorAcao">Participantes</label>
                     <select id="atorAcao" class="clean-input">
-                        <option value="">Selecione os atores</option>
+                        <option value="">Selecione um ator</option>
                         @if (ViewBag.Atores != null) {
                              foreach (dynamic ator in ViewBag.Atores) {
                                  <option value="@ator.Id">@ator.Nome</option>
                              }
                         }
                     </select>
+                    <button type="button" class="wizard-btn btn-prev" onclick="adicionarAtorAcao()" aria-label="Adicionar participante">+ Adicionar ator</button>
+                    <ul id="atoresSelecionadosAcao" class="selected-actors" aria-live="polite"></ul>
                 </div>
             </div>
 
@@ -269,10 +273,8 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder@4.0.0/dist/Control.Geocoder.js"></script>
-    <script src="~/js/app-maps.js"></script>
     <script src="~/js/diariocampo.js"></script>
+    <script src="~/js/axis-picker.js" asp-append-version="true"></script>
 
     <script>
         window.atoresDisponiveis = @Html.Raw(jsonAtores);

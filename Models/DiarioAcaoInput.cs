@@ -6,9 +6,9 @@ namespace Empodera.Models;
 public sealed class DiarioAcaoInput
 {
     public string Nome { get; set; } = string.Empty;
-    public string Provedor { get; set; } = string.Empty;
+    public string? Provedor { get; set; }
     public string Tipo { get; set; } = string.Empty;
     public int Quantidade { get; set; } = 1;
-    public int? FkIdAtor { get; set; }
+    public int[] FkIdAtores { get; set; } = [];
     public int[] FkIdEixo { get; set; } = [];
 }

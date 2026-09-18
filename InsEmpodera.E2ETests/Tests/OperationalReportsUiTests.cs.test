@@ -9,6 +9,38 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class OperationalReportsUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
+    [Fact(DisplayName = "Relatórios — avaliações e rede primária carregam atores reais")]
+    public Task AssessmentAndNetwork_LoadActorsAndAssessmentValues() =>
+        RunInBrowserAsync(nameof(AssessmentAndNetwork_LoadActorsAndAssessmentValues), async page =>
+        {
+            var actorId = await Fixture.QueryAsync(async db =>
+            {
+                var actor = await db.Atores.Where(a => a.Ativo == "S").FirstAsync();
+                db.AvaliacaoPessoal.Add(new AvaliacaoPessoal
+                {
+                    FK_id_Atores = actor.IdAtores,
+                    FkIdUsuario = 1,
+                    CCrimes = 1, Substancias = 2, Moradia = 3, Prevencao = 4,
+                    AssBasica = 5, Educacao = 1, Saude = 2, Ocupacao = 3, Lazer = 4,
+                    DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+                });
+                await db.SaveChangesAsync();
+                return actor.IdAtores;
+            });
+            await LoginAsync(page);
+            await page.GotoAsync("/Relatorios/PersonalAssessment");
+            await Assertions.Expect(page.Locator($"select[name=atorId] option[value='{actorId}']"))
+                .ToHaveCountAsync(1);
+            await page.Locator("select[name=atorId]").SelectOptionAsync(actorId.ToString());
+            await Assertions.Expect(page.Locator("#assessmentRadarChart")).ToBeVisibleAsync();
+            Assert.Equal("[1,2,3,4,5,1,2,3,4]",
+                await page.Locator("#assessmentRadarChart").GetAttributeAsync("data-points"));
+
+            await page.GotoAsync("/Relatorios/PrimaryNetwork");
+            await Assertions.Expect(page.Locator($"select[name=atorId] option[value='{actorId}']"))
+                .ToHaveCountAsync(1);
+        });
+
     [Fact(DisplayName = "Relatórios operacionais — filtros de fichas e ações alteram dados reais")]
     public Task FirstContactAndActions_FiltersQueryRealDatabaseData() =>
         RunInBrowserAsync(nameof(FirstContactAndActions_FiltersQueryRealDatabaseData), async page =>

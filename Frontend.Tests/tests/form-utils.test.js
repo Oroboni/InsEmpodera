@@ -7,20 +7,20 @@ describe('utilitários globais de formulário', () => {
     vi.setSystemTime(new Date('2026-08-24T12:00:00.000Z'));
   });
 
-  it('normaliza o telefone existente e reage à digitação', () => {
+  it('preserva o telefone informado, inclusive códigos internacionais e ramais', () => {
     document.body.innerHTML = '<input id="telefone" value="85999998888">';
     runPublicScript('form-utils.js');
 
     window.initTelefoneMask('telefone');
     const input = document.getElementById('telefone');
-    expect(input.value).toBe('(85) 99999-8888');
+    expect(input.value).toBe('85999998888');
 
     input.value = '+55 (85) 3232-1234 ramal 99';
     input.dispatchEvent(new Event('input', { bubbles: true }));
-    expect(input.value).toBe('(55) 85323-2123');
+    expect(input.value).toBe('+55 (85) 3232-1234 ramal 99');
   });
 
-  it('limita o telefone a onze dígitos e ignora elemento ausente', () => {
+  it('não limita o telefone a onze dígitos e ignora elemento ausente', () => {
     runPublicScript('form-utils.js');
     expect(() => window.initTelefoneMask('inexistente')).not.toThrow();
 
@@ -29,7 +29,7 @@ describe('utilitários globais de formulário', () => {
     const input = document.getElementById('telefone');
     input.value = '123456789012345';
     input.dispatchEvent(new Event('input'));
-    expect(input.value.replace(/\D/g, '')).toBe('12345678901');
+    expect(input.value).toBe('123456789012345');
   });
 
   it('define hoje como limite e rejeita datas futuras com texto localizado', () => {
@@ -90,19 +90,32 @@ describe('utilitários globais de formulário', () => {
   });
 });
 
-describe('máscara de telefone legada', () => {
-  it('formata o valor inicial e novos eventos sem falhar em páginas sem telefone', () => {
+describe('campo de telefone compartilhado', () => {
+  it('não altera o valor inicial nem o digitado e tolera páginas sem telefone', () => {
     document.body.innerHTML = '<input id="inputTelefone" value="85987654321">';
     runPublicScript('site.js');
     const input = document.getElementById('inputTelefone');
-    expect(input.value).toBe('(85) 98765-4321');
+    expect(input.value).toBe('85987654321');
 
     input.value = '85 3333 2222';
     input.dispatchEvent(new Event('input'));
-    expect(input.value).toBe('(85) 3333-2222');
+    expect(input.value).toBe('85 3333 2222');
 
     document.body.innerHTML = '';
     expect(() => runPublicScript('site.js')).not.toThrow();
+  });
+});
+
+describe('telefone internacional de atores', () => {
+  it('não presume país e preserva um código explícito', () => {
+    document.body.innerHTML = '<input id="inputTelefone" value="85987654321">';
+    runPublicScript('site.js');
+    const input = document.getElementById('inputTelefone');
+    expect(input.value).toBe('85987654321');
+
+    input.value = '+(1) 2025550199';
+    input.dispatchEvent(new Event('input'));
+    expect(input.value).toBe('+(1) 2025550199');
   });
 });
 

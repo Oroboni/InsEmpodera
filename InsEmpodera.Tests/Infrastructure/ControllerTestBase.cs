@@ -2,34 +2,40 @@ using Empodera.Data;
 using Empodera.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using Xunit;
 
 namespace InsEmpodera.Tests.Infrastructure;
 
 public abstract class ControllerTestBase : IAsyncLifetime
 {
-    private SqliteConnection _connection = null!;
+    private readonly string _databaseName = $"insempodera_unit_{Guid.NewGuid():N}";
 
     protected ApplicationDbContext Db { get; private set; } = null!;
 
     public async Task InitializeAsync()
     {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        await _connection.OpenAsync();
+        var mysqlServer = Environment.GetEnvironmentVariable("TEST_MYSQL_CONNECTION");
+        if (string.IsNullOrWhiteSpace(mysqlServer))
+            throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar os testes de banco em MySQL.");
+        var serverVersion = ServerVersion.AutoDetect(mysqlServer);
+        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer) { Database = _databaseName };
         Db = new ApplicationDbContext(
             new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(_connection)
-                .EnableSensitiveDataLogging()
+                .UseMySql(connectionBuilder.ConnectionString, serverVersion)
                 .Options);
         await Db.Database.EnsureCreatedAsync();
     }
 
     public async Task DisposeAsync()
     {
-        await Db.DisposeAsync();
-        await _connection.DisposeAsync();
+        if (Db is not null)
+        {
+            if (_databaseName.StartsWith("insempodera_unit_", StringComparison.Ordinal))
+                await Db.Database.EnsureDeletedAsync();
+            await Db.DisposeAsync();
+        }
     }
 
     protected T Attach<T>(T controller, int? userId = 1, IFormCollection? form = null)

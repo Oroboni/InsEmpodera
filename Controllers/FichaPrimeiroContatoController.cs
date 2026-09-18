@@ -296,20 +296,17 @@ namespace Empodera.Controllers
                 // Update only fields editable by the form. Identity and audit data are preserved.
                 fichaExistente.FK_id_Atores = ficha.FK_id_Atores;
                 fichaExistente.Endereco = ficha.Endereco;
-                fichaExistente.Complemento = ficha.Complemento;
                 fichaExistente.Emprego = ficha.Emprego;
                 fichaExistente.CEstabeleceu = ficha.CEstabeleceu;
                 fichaExistente.NovoParceiro = ficha.NovoParceiro;
                 fichaExistente.FornecidoParceiro = ficha.FornecidoParceiro;
                 fichaExistente.Telefone = ficha.Telefone;
                 fichaExistente.LContato = ficha.LContato;
-                fichaExistente.FonteDados = ficha.FonteDados;
                 fichaExistente.EstaFamiliar = ficha.EstaFamiliar;
                 fichaExistente.EstruFamiliar = ficha.EstruFamiliar;
                 fichaExistente.NFIlhos = ficha.NFIlhos;
                 fichaExistente.NFilhas = ficha.NFilhas;
                 fichaExistente.AEscolar = ficha.AEscolar;
-                fichaExistente.Status = ficha.Status;
                 fichaExistente.SLer = ficha.SLer;
                 fichaExistente.SCalc = ficha.SCalc;
                 fichaExistente.SComp = ficha.SComp;

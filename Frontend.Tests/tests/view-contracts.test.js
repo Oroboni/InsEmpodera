@@ -261,7 +261,7 @@ describe('segurança dos templates DOM do diário', () => {
 
   it('o script compartilhado preserva o contrato completo e uma chave reutilizada de TempAcoes', () => {
     const source = readProjectFile('wwwroot/js/diariocampo.js');
-    for (const field of ['Nome', 'Provedor', 'Tipo', 'Quantidade', 'FkIdAtor', 'FkIdEixo']) {
+    for (const field of ['Nome', 'Provedor', 'Tipo', 'Quantidade', 'FkIdAtores', 'FkIdEixo']) {
       expect(source).toContain(`].${field}`);
     }
     expect(source).toContain("appendHiddenInput('TempAcoes.Index', timestamp)");

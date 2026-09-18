@@ -10,7 +10,7 @@ namespace Empodera.Models
         public int FkIdComunidade { get; set; }  
         public DateTime Data { get; set; }
         public string Descricao { get; set; } = null!;
-        public string Localizacao { get; set; } = null!;
+        public string? Localizacao { get; set; }
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
         public string? Foto { get; set; }

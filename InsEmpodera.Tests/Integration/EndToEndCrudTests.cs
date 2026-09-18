@@ -90,7 +90,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
             ["Status"] = "Em Diagnóstico", ["Ativo"] = "S"
         });
         AssertRedirect(edit);
-        Assert.Equal("Em diagnóstico", await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.Status).SingleAsync()));
+        Assert.Equal("Em processo", await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.Status).SingleAsync()));
         Assert.Null(await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.LocalSecundario).SingleAsync()));
 
         var delete = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{id}", $"/Comunidade/Delete/{id}", new());

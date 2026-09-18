@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'radar',
             data: {
                 labels: [
-                    'Rede primária', 'Seguridade Social', 'Substâncias', 'Moradia',
-                    'Prevenção', 'Assistência Básica', 'Educação', 'Saúde', 'Ocupação', 'Lazer'
+                    'Condições de crimes', 'Substâncias', 'Moradia', 'Prevenção',
+                    'Assistência Básica', 'Educação', 'Saúde', 'Ocupação', 'Lazer'
                 ],
                 datasets: [{
-                    label: '02/09/25',
-                    data: [3, 4, 2, 3, 5, 4, 3, 2, 4, 5], // Dados fictícios (1-5)
+                    label: radarChartCtx.dataset.label,
+                    data: JSON.parse(radarChartCtx.dataset.points),
                     fill: true,
                     backgroundColor: 'rgba(122, 49, 136, 0.2)',
                     borderColor: 'rgb(122, 49, 136)',

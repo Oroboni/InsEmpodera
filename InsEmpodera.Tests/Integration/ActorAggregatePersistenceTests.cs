@@ -153,10 +153,9 @@ public sealed class ActorAggregatePersistenceTests : ControllerTestBase
         await Db.Database.ExecuteSqlRawAsync(
             """
             CREATE TRIGGER fail_actor_resource_insert
-            BEFORE INSERT ON RecursosAtores
-            BEGIN
-                SELECT RAISE(ABORT, 'forced actor resource failure');
-            END;
+            BEFORE INSERT ON `RecursosAtores`
+            FOR EACH ROW SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'forced actor resource failure';
             """);
     }
 

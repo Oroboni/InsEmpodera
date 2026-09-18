@@ -31,20 +31,33 @@ public class RelatoriosController : BaseController
         return View();
     }
 
-    public async Task<IActionResult> PrimaryNetwork()
+    public async Task<IActionResult> PrimaryNetwork(int? atorId)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null)
             return denied;
 
-        await PopulateActiveCommunitiesAsync();
+        await PopulateActiveActorsAsync(atorId);
         return View();
     }
 
-    public async Task<IActionResult> PersonalAssessment()
+    public async Task<IActionResult> PersonalAssessment(int? atorId, int? avaliacaoId)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
-        return denied ?? View();
+        if (denied is not null) return denied;
+
+        await PopulateActiveActorsAsync(atorId);
+        var avaliacoes = atorId.HasValue
+            ? await _context.AvaliacaoPessoal.AsNoTracking()
+                .Where(a => a.FK_id_Atores == atorId.Value)
+                .OrderByDescending(a => a.DtCriacao)
+                .ToListAsync(HttpContext.RequestAborted)
+            : [];
+        var selecionada = avaliacoes.FirstOrDefault(a => a.IdAvaliacao == avaliacaoId)
+            ?? avaliacoes.FirstOrDefault();
+        ViewBag.Avaliacoes = avaliacoes;
+        ViewBag.AvaliacaoSelecionada = selecionada;
+        return View();
     }
 
     public async Task<IActionResult> FirstContact(
@@ -199,6 +212,15 @@ public class RelatoriosController : BaseController
             "Id_Comunidade",
             "Nome",
             selectedId);
+    }
+
+    private async Task PopulateActiveActorsAsync(int? selectedId = null)
+    {
+        ViewBag.AtorList = new SelectList(
+            await _context.Atores.AsNoTracking().Where(a => a.Ativo == "S")
+                .OrderBy(a => a.Nome).ToListAsync(HttpContext.RequestAborted),
+            "IdAtores", "Nome", selectedId);
+        ViewBag.SelectedAtorId = selectedId;
     }
 
     private static bool MatchesTime(TimeSpan time, string? period) => period switch

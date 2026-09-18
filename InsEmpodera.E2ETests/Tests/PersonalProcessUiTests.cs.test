@@ -1,3 +1,4 @@
+using Empodera.Models;
 using InsEmpodera.E2ETests.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Playwright;
@@ -8,6 +9,42 @@ namespace InsEmpodera.E2ETests.Tests;
 [Collection(E2ECollection.Name)]
 public sealed class PersonalProcessUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
 {
+    [Fact(DisplayName = "Diário pessoal — menção selecionada vira link para dados básicos do ator")]
+    public Task PersonalProcess_MentionLinksToActorSummary_ThroughUi() =>
+        RunInBrowserAsync(nameof(PersonalProcess_MentionLinksToActorSummary_ThroughUi), async page =>
+        {
+            var actor = await Fixture.QueryAsync(async db =>
+            {
+                var imported = new Atores
+                {
+                    Nome = Unique("Ator importado"), Ativo = "",
+                    FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+                };
+                db.Atores.Add(imported);
+                await db.SaveChangesAsync();
+                return new { imported.IdAtores, imported.Nome };
+            });
+            await LoginAsync(page);
+            await page.GotoAsync($"/PersonalProcess/Create?atorId={actor.IdAtores}");
+            Assert.Equal("0px", await page.Locator(".sidebar-logout-form")
+                .EvaluateAsync<string>("element => getComputedStyle(element).paddingTop"));
+
+            var descricao = page.Locator("textarea[name=Descricao]");
+            await descricao.FillAsync($"Conversei com @{actor.Nome}");
+            await Assertions.Expect(page.Locator("#actor-mention-list button")).ToHaveCountAsync(1);
+            await page.Locator("#actor-mention-list button").ClickAsync();
+            await Assertions.Expect(descricao).ToHaveValueAsync(new System.Text.RegularExpressions.Regex(
+                $@"@\[{System.Text.RegularExpressions.Regex.Escape(actor.Nome)}\]\(ator:{actor.IdAtores}\)"));
+
+            await page.GetByRole(AriaRole.Button, new() { Name = "ADICIONAR DIÁRIO" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
+            var link = page.Locator($"a.actor-mention[href='/Atores/Resumo/{actor.IdAtores}']");
+            await Assertions.Expect(link).ToContainTextAsync(actor.Nome);
+            await link.ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Atores/Resumo/{actor.IdAtores}");
+            await Assertions.Expect(page.Locator(".actor-summary-page")).ToContainTextAsync(actor.Nome);
+        });
+
     [Fact(DisplayName = "Diário pessoal — criar, pesquisar, editar e excluir com ator e eixos corretos")]
     public Task PersonalProcess_CreateSearchEditAndDelete_ThroughUi() =>
         RunInBrowserAsync(nameof(PersonalProcess_CreateSearchEditAndDelete_ThroughUi), async page =>
@@ -37,21 +74,38 @@ public sealed class PersonalProcessUiTests(E2ETestFixture fixture) : BrowserTest
 
             var diaryId = await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
                 .Where(d => d.Descricao == marker).Select(d => d.IdDiarioProcesso).SingleAsync());
+            var createdDiary = await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
+                .Where(d => d.IdDiarioProcesso == diaryId)
+                .Select(d => new { d.FK_id_Atores, d.Data, d.Descricao }).SingleAsync());
+            Assert.Equal(prerequisites.ActorId, createdDiary.FK_id_Atores);
+            Assert.Equal(new DateTime(2026, 8, 31), createdDiary.Data.Date);
+            Assert.Equal(marker, createdDiary.Descricao);
+            Assert.Equal([prerequisites.AxisIds[0]], await Fixture.QueryAsync(db => db.DiariosProcessoEixos
+                .Where(e => e.FkIdDiarioProcesso == diaryId).Select(e => e.FkIdEixo).ToArrayAsync()));
             await page.GotoAsync($"/PersonalProcess/Edit/{diaryId}");
+            await Assertions.Expect(page.Locator("select[name=FK_id_Atores]"))
+                .ToHaveValueAsync(prerequisites.ActorId.ToString());
+            await Assertions.Expect(page.Locator("input[name=Data]")).ToHaveValueAsync("2026-08-31");
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync(marker);
             var edited = marker + " atualizado";
+            await page.Locator("input[name=Data]").FillAsync("2026-09-01");
             await page.Locator("textarea[name=Descricao]").FillAsync(edited);
             await page.Locator("details.multiselect-wrapper > summary").ClickAsync();
-            await page.Locator($"input[name=eixosIds][value='{prerequisites.AxisIds[0]}']").UncheckAsync();
+            await page.Locator("[data-axis-picker] .tag-remove-btn").ClickAsync();
             await page.Locator($"input[name=eixosIds][value='{prerequisites.AxisIds[1]}']").CheckAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "SALVAR ALTERAÇÕES" }).ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
 
             Assert.Equal(edited, await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
                 .Where(d => d.IdDiarioProcesso == diaryId).Select(d => d.Descricao).SingleAsync()));
+            Assert.Equal(new DateTime(2026, 9, 1), await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
+                .Where(d => d.IdDiarioProcesso == diaryId).Select(d => d.Data).SingleAsync()));
             Assert.Equal([prerequisites.AxisIds[1]], await Fixture.QueryAsync(db => db.DiariosProcessoEixos
                 .Where(e => e.FkIdDiarioProcesso == diaryId).Select(e => e.FkIdEixo).ToArrayAsync()));
 
             await page.GotoAsync($"/PersonalProcess/Edit/{diaryId}");
+            await Assertions.Expect(page.Locator("input[name=Data]")).ToHaveValueAsync("2026-09-01");
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync(edited);
             page.Dialog += (_, dialog) => dialog.AcceptAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "DELETAR" }).ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");

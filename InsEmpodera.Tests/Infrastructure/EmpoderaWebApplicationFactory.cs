@@ -3,49 +3,34 @@ using Empodera.Services.Email;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using MySqlConnector;
 
 namespace InsEmpodera.Tests.Infrastructure;
 
 public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly SqliteConnection? _sqliteConnection;
-    private readonly string? _mysqlConnectionString;
+    private readonly string _mysqlConnectionString;
+    private readonly string _databaseName = $"insempodera_http_{Guid.NewGuid():N}";
     public CapturingPasswordResetEmailSender PasswordResetEmailSender { get; } = new();
 
     public EmpoderaWebApplicationFactory()
     {
         var mysqlServer = Environment.GetEnvironmentVariable("TEST_MYSQL_CONNECTION");
         if (string.IsNullOrWhiteSpace(mysqlServer))
-        {
-            var sqliteDatabaseName = $"insempodera_tests_{Guid.NewGuid():N}";
-            _sqliteConnection = new SqliteConnection(
-                $"Data Source={sqliteDatabaseName};Mode=Memory;Cache=Shared");
-            _sqliteConnection.Open();
-            return;
-        }
-
-        var databaseName = $"insempodera_tests_{Guid.NewGuid():N}";
-        _mysqlConnectionString = $"{mysqlServer.Trim().TrimEnd(';')};Database={databaseName}";
+            throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar integrações HTTP em MySQL.");
+        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer) { Database = _databaseName };
+        _mysqlConnectionString = connectionBuilder.ConnectionString;
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
-        if (_mysqlConnectionString is not null)
-        {
-            builder.UseSetting("DatabaseProvider", "MySql");
-            builder.UseSetting("ConnectionStrings:DefaultConnection", _mysqlConnectionString);
-        }
-        else
-        {
-            builder.UseSetting("DatabaseProvider", "Sqlite");
-            builder.UseSetting("ConnectionStrings:TestConnection", _sqliteConnection!.ConnectionString);
-        }
+        builder.UseSetting("DatabaseProvider", "MySql");
+        builder.UseSetting("ConnectionStrings:DefaultConnection", _mysqlConnectionString);
 
         builder.ConfigureLogging(logging =>
         {
@@ -65,7 +50,7 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing && _mysqlConnectionString is not null)
+        if (disposing && _databaseName.StartsWith("insempodera_http_", StringComparison.Ordinal))
         {
             try
             {
@@ -80,8 +65,6 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
         }
 
         base.Dispose(disposing);
-        if (disposing)
-            _sqliteConnection?.Dispose();
     }
 }
 

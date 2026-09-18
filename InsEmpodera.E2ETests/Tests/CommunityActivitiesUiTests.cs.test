@@ -1,0 +1,92 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class CommunityActivitiesUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact(DisplayName = "Atividades da comunidade — todos os campos de criar e editar persistem até a exclusão")]
+    public Task CommunityActivity_CreateReopenEditReopenDelete() =>
+        RunInBrowserAsync(nameof(CommunityActivity_CreateReopenEditReopenDelete), async page =>
+        {
+            var prerequisites = await Fixture.QueryAsync(async db => new
+            {
+                CommunityId = await db.Comunidades.Where(item => item.Ativo == "S")
+                    .OrderBy(item => item.Id_Comunidade)
+                    .Select(item => item.Id_Comunidade).FirstAsync(),
+                AxisIds = await db.Eixos.OrderBy(item => item.IdEixo)
+                    .Select(item => item.IdEixo).Take(2).ToArrayAsync()
+            });
+            Assert.Equal(2, prerequisites.AxisIds.Length);
+            var marker = Unique("Atividade vinculada");
+            await LoginAsync(page);
+
+            await page.GotoAsync($"/Comunidade/Create_Atividades?comunidadeId={prerequisites.CommunityId}");
+            await page.Locator("input[name=Nome]").FillAsync(marker);
+            await page.Locator("textarea[name=Descricao]").FillAsync("Descrição da atividade vinculada");
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "ADICIONAR ATIVIDADE" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/AtividadesVinculadas");
+
+            var created = await Fixture.QueryAsync(db => db.Atividades
+                .Where(item => item.Nome == marker)
+                .Select(item => new
+                {
+                    item.IdAtividade, item.Nome, item.Descricao, item.FkIdComunidade
+                }).SingleAsync());
+            Assert.Equal(marker, created.Nome);
+            Assert.Equal("Descrição da atividade vinculada", created.Descricao);
+            Assert.Equal(prerequisites.CommunityId, created.FkIdComunidade);
+            Assert.Equal([prerequisites.AxisIds[0]], await Fixture.QueryAsync(db => db.AtividadesEixo
+                .Where(link => link.FkIdAtividade == created.IdAtividade)
+                .Select(link => link.FkIdEixo).ToArrayAsync()));
+
+            var editUrl = $"/Comunidade/Edit_Atividades/{created.IdAtividade}?comunidadeId={prerequisites.CommunityId}";
+            await page.GotoAsync(editUrl);
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(marker);
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]"))
+                .ToHaveValueAsync("Descrição da atividade vinculada");
+            await Assertions.Expect(page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']"))
+                .ToBeCheckedAsync();
+
+            await page.Locator("input[name=Nome]").FillAsync(marker + " editada");
+            await page.Locator("textarea[name=Descricao]").FillAsync("Descrição revisada");
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").UncheckAsync();
+            await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[1]}']").CheckAsync();
+            await page.Locator("details.multiselect-wrapper summary").ClickAsync();
+            await page.GetByRole(AriaRole.Button, new() { Name = "EDITAR ATIVIDADE" }).ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/AtividadesVinculadas");
+
+            var edited = await Fixture.QueryAsync(db => db.Atividades
+                .Where(item => item.IdAtividade == created.IdAtividade)
+                .Select(item => new { item.Nome, item.Descricao, item.FkIdComunidade })
+                .SingleAsync());
+            Assert.Equal(marker + " editada", edited.Nome);
+            Assert.Equal("Descrição revisada", edited.Descricao);
+            Assert.Equal(prerequisites.CommunityId, edited.FkIdComunidade);
+            Assert.Equal([prerequisites.AxisIds[1]], await Fixture.QueryAsync(db => db.AtividadesEixo
+                .Where(link => link.FkIdAtividade == created.IdAtividade)
+                .Select(link => link.FkIdEixo).ToArrayAsync()));
+
+            await page.GotoAsync(editUrl);
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(marker + " editada");
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync("Descrição revisada");
+            await Assertions.Expect(page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[1]}']"))
+                .ToBeCheckedAsync();
+
+            await page.GotoAsync($"/Atividades/Edit/{created.IdAtividade}");
+            await page.Locator("#openDeleteModalBtn").ClickAsync();
+            await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atividades");
+            Assert.False(await Fixture.QueryAsync(db => db.Atividades
+                .AnyAsync(item => item.IdAtividade == created.IdAtividade)));
+            Assert.False(await Fixture.QueryAsync(db => db.AtividadesEixo
+                .AnyAsync(link => link.FkIdAtividade == created.IdAtividade)));
+        });
+}

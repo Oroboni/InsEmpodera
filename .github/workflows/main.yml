@@ -10,6 +10,18 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.4.32
+        env:
+          MYSQL_ROOT_PASSWORD: testes_empodera
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
     - name: Checkout
@@ -27,6 +39,8 @@ jobs:
       run: dotnet build --no-restore --configuration Release
 
     - name: Test
+      env:
+        TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
       run: dotnet test --no-build --configuration Release
 
     - name: Publish

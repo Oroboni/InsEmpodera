@@ -85,7 +85,7 @@
             <div class="input-content">
                 <label asp-for="Senha">Nova senha <span class="text-muted">(opcional)</span></label>
                 <input asp-for="Senha" type="password" class="clean-input" placeholder="Deixe vazio para manter a atual"
-                    minlength="8" maxlength="100" autocomplete="new-password" disabled
+                    minlength="6" maxlength="100" autocomplete="new-password" disabled
                     data-locked="@((!canManageIdentity).ToString().ToLowerInvariant())">
                 <small class="text-muted" style="margin-top: 4px; display: block;">Preencha somente quando quiser trocar a senha.</small>
             </div>

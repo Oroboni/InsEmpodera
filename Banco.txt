@@ -4,10 +4,10 @@
 
   CREATE TABLE `acoes` (
     `IdAcoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Quantidade` int(11) NOT NULL,
+    `Quantidade` int(11) NULL,
     `FkIdAtividade` int(11) NOT NULL,
-    `Nome` longtext NOT NULL,
-    `Provedor` longtext NOT NULL
+    `Nome` longtext NULL,
+    `Provedor` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -31,7 +31,7 @@
   CREATE TABLE `anexosdiario` (
     `IdAnexos` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdDiario` int(11) NOT NULL,
-    `Caminho` longtext NOT NULL
+    `Caminho` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -42,12 +42,12 @@
 
   CREATE TABLE `atividades` (
     `IdAtividade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL,
-    `Descricao` longtext NOT NULL,
+    `Nome` longtext NULL,
+    `Descricao` longtext NULL,
     `Foto` longtext DEFAULT NULL,
     `FkIdComunidade` int(11) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
     `FkIdUsuario` int(11) NOT NULL,
     `FkIdUsuarioM` int(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -105,7 +105,8 @@
   CREATE TABLE `atorcomunidades` (
     `IdAtorComunidade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdComunidade` int(11) NOT NULL,
-    `FK_id_Atores` int(11) NOT NULL
+    `FK_id_Atores` int(11) NOT NULL,
+    `TipoRelacionamento` int(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -405,19 +406,19 @@
 
   CREATE TABLE `atores` (
     `IdAtores` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL,
+    `Nome` longtext NULL,
     `Genero` int(11) DEFAULT NULL,
     `Idade` int(11) DEFAULT NULL,
     `PapelSocial1` longtext DEFAULT NULL,
     `PapelSocial2` longtext DEFAULT NULL,
     `Telefone` longtext DEFAULT NULL,
-    `DaEquipe` tinyint(1) NOT NULL,
-    `Rope` tinyint(1) NOT NULL,
-    `Lopiniao` tinyint(1) NOT NULL,
-    `Mcomunidade` tinyint(1) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `Ativo` longtext NOT NULL,
+    `DaEquipe` tinyint(1) NULL,
+    `Rope` tinyint(1) NULL,
+    `Lopiniao` tinyint(1) NULL,
+    `Mcomunidade` tinyint(1) NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
+    `Ativo` longtext NULL,
     `FkIdUsuario` int(11) NOT NULL,
     `FkIdUsuarioM` int(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -720,17 +721,17 @@
   CREATE TABLE `avaliacaopessoal` (
     `IdAvaliacao` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FK_id_Atores` int(11) NOT NULL,
-    `CCrimes` int(11) NOT NULL,
-    `Substancias` int(11) NOT NULL,
-    `Moradia` int(11) NOT NULL,
-    `Prevencao` int(11) NOT NULL,
-    `AssBasica` int(11) NOT NULL,
-    `Educacao` int(11) NOT NULL,
-    `Saude` int(11) NOT NULL,
-    `Ocupacao` int(11) NOT NULL,
-    `Lazer` int(11) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
+    `CCrimes` int(11) NULL,
+    `Substancias` int(11) NULL,
+    `Moradia` int(11) NULL,
+    `Prevencao` int(11) NULL,
+    `AssBasica` int(11) NULL,
+    `Educacao` int(11) NULL,
+    `Saude` int(11) NULL,
+    `Ocupacao` int(11) NULL,
+    `Lazer` int(11) NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
     `FkIdUsuario` int(11) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -742,20 +743,20 @@
 
   CREATE TABLE `comunidades` (
     `Id_Comunidade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL,
+    `Nome` longtext NULL,
     `Local` longtext DEFAULT NULL,
     `LocalMapa` longtext DEFAULT NULL,
     `LocalSecundario` longtext DEFAULT NULL,
     `LocalMapaSecundario` longtext DEFAULT NULL,
-    `Status` longtext NOT NULL,
+    `Status` longtext NULL,
     `Complemento` longtext DEFAULT NULL,
     `Descricao` longtext DEFAULT NULL,
     `Descricao_Acessibilidade` longtext DEFAULT NULL,
-    `Dt_Criacao` datetime(6) NOT NULL,
-    `Dt_Modificacao` datetime(6) NOT NULL,
+    `Dt_Criacao` datetime(6) NULL,
+    `Dt_Modificacao` datetime(6) NULL,
     `FK_Id_Usuario` int(11) NOT NULL,
     `FK_Id_UsuarioM` int(11) DEFAULT NULL,
-    `Ativo` longtext NOT NULL
+    `Ativo` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -808,7 +809,7 @@
 
   CREATE TABLE `detalhesdacoes` (
     `Id` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL,
+    `Nome` longtext NULL,
     `FkIdDDacoes` int(11) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -845,9 +846,9 @@
   CREATE TABLE `diariodacoes` (
     `IdDAcoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdDiario` int(11) NOT NULL,
-    `Nome` longtext NOT NULL,
-    `PeovedorEx` longtext NOT NULL,
-    `Quantidade` int(11) NOT NULL
+    `Nome` longtext NULL,
+    `PeovedorEx` longtext NULL,
+    `Quantidade` int(11) NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -870,14 +871,14 @@
 
   CREATE TABLE `diarioscampo` (
     `IdDCampo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdComunidade` int(11) NOT NULL,
-    `Data` datetime(6) NOT NULL,
-    `Descricao` longtext NOT NULL,
-    `Localizacao` longtext NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `Foto` longtext NOT NULL,
-    `FkIdUsuario` int(11) NOT NULL
+    `FkIdComunidade` int(11) NULL,
+    `Data` datetime(6) NULL,
+    `Descricao` longtext NULL,
+    `Localizacao` longtext NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
+    `Foto` longtext NULL,
+    `FkIdUsuario` int(11) NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -926,8 +927,20 @@
 
   CREATE TABLE `eixos` (
     `IdEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL
+    `Nome` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+  INSERT INTO `eixos` (`Nome`) VALUES
+  ('REDES'),
+  ('SEGURIDADE SOCIAL'),
+  ('SUBSTÂNCIAS'),
+  ('MORADIA'),
+  ('PREVENÇÃO'),
+  ('ASSISTÊNCIA BÁSICA E REDUÇÃO DE DANOS'),
+  ('EDUCAÇÃO'),
+  ('SAÚDE FÍSICA E PSICOLÓGICA'),
+  ('OCUPAÇÃO/TRABALHO'),
+  ('LAZER/CULTURA');
 
   -- --------------------------------------------------------
 
@@ -938,7 +951,7 @@
   CREATE TABLE `fichacondicoes` (
     `IdCondicoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdFicha` int(11) NOT NULL,
-    `Cond` longtext NOT NULL
+    `Cond` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1090,7 +1103,7 @@
   CREATE TABLE `fichapeticoes` (
     `IdPeticoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdFicha` int(11) NOT NULL,
-    `Pet` longtext NOT NULL
+    `Pet` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1192,7 +1205,7 @@
   CREATE TABLE `ficharespostas` (
     `IdCondicoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdFicha` int(11) NOT NULL,
-    `Resp` longtext NOT NULL
+    `Resp` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1288,7 +1301,7 @@
   CREATE TABLE `ficharesultados` (
     `IdCondicoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdFicha` int(11) NOT NULL,
-    `Result` longtext NOT NULL
+    `Result` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1425,10 +1438,10 @@
     `QReabili` int(11) DEFAULT NULL,
     `LTrat` longtext DEFAULT NULL,
     `Coment` longtext DEFAULT NULL,
-    `DtContato` datetime(6) NOT NULL,
-    `HoraContato` time(6) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
+    `DtContato` datetime(6) NULL,
+    `HoraContato` time(6) NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
     `FkIdComunidade` int(11) DEFAULT NULL,
     `FkIdUsuario` int(11) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1492,13 +1505,13 @@
   CREATE TABLE `fontesinfo` (
     `IdFonte` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdFicha` int(11) NOT NULL,
-    `Nome` longtext NOT NULL,
+    `Nome` longtext NULL,
     `Genero` int(11) DEFAULT NULL,
-    `Idade` int(11) NOT NULL,
-    `PapelSocial1` longtext NOT NULL,
-    `PapelSocial2` longtext NOT NULL,
-    `Telefone` longtext NOT NULL,
-    `Extra` longtext NOT NULL,
+    `Idade` int(11) NULL,
+    `PapelSocial1` longtext NULL,
+    `PapelSocial2` longtext NULL,
+    `Telefone` longtext NULL,
+    `Extra` longtext NULL,
     `Fk_Id_Ator` int(11) NOT NULL,
     `AtorIdAtores` int(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1512,9 +1525,9 @@
   CREATE TABLE `perfis` (
     `IdPerfil` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdUsuario` int(11) NOT NULL,
-    `Nome` longtext NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL
+    `Nome` longtext NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1537,12 +1550,12 @@
   CREATE TABLE `permissoes` (
     `IdPermissoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdPerfil` int(11) NOT NULL,
-    `Modulo` longtext NOT NULL,
-    `PodeListar` longtext NOT NULL,
-    `PodeDetalhar` longtext NOT NULL,
-    `PodeCriar` longtext NOT NULL,
-    `PodeAtualizar` longtext NOT NULL,
-    `PodeDeletar` longtext NOT NULL
+    `Modulo` longtext NULL,
+    `PodeListar` longtext NULL,
+    `PodeDetalhar` longtext NULL,
+    `PodeCriar` longtext NULL,
+    `PodeAtualizar` longtext NULL,
+    `PodeDeletar` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1620,8 +1633,8 @@
   CREATE TABLE `recursosatores` (
     `Id_Recursos_Atores` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FK_id_Atores` int(11) NOT NULL,
-    `Tipo` longtext NOT NULL,
-    `Nome` longtext NOT NULL,
+    `Tipo` longtext NULL,
+    `Nome` longtext NULL,
     `Pode` longtext DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1674,12 +1687,12 @@
     `FK_id_Atores` int(11) DEFAULT NULL,
     `FkIdComunidade` int(11) NOT NULL,
     `Nome` longtext DEFAULT NULL,
-    `Tipo` longtext NOT NULL,
+    `Tipo` longtext NULL,
     `Dispositivo` longtext DEFAULT NULL,
     `Localizacao` longtext DEFAULT NULL,
     `Servicos` longtext DEFAULT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
     `FkIdUsuario` int(11) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1810,7 +1823,7 @@
     `IdRedePrimaria` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdAtorPrincipal` int(11) NOT NULL,
     `FkIdAtorRelacionados` int(11) NOT NULL,
-    `TipoRelacao` longtext NOT NULL
+    `TipoRelacao` longtext NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -1821,30 +1834,30 @@
 
   CREATE TABLE `usuarios` (
     `IdUsuario` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL,
-    `Senha` longtext NOT NULL,
+    `Nome` longtext NULL,
+    `Senha` longtext NULL,
     `Foto` longtext DEFAULT NULL,
-    `Email` varchar(256) NOT NULL,
-    `Ocupacao` longtext NOT NULL,
+    `Email` varchar(256) NULL,
+    `Ocupacao` longtext NULL,
     `Genero` int(11) DEFAULT NULL,
-    `DtNascimento` datetime(6) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
+    `DtNascimento` datetime(6) NULL,
+    `DtCriacao` datetime(6) NULL,
     `DtAtualizacao` datetime(6) DEFAULT NULL,
-    `Ativo` longtext NOT NULL,
-    `IdiomaPreferido` int(11) NOT NULL,
+    `Ativo` longtext NULL,
+    `IdiomaPreferido` int(11) NULL,
     `FkIdPerfil` int(11) NOT NULL,
-    `UserName` varchar(256) NOT NULL,
-    `NormalizedUserName` varchar(256) NOT NULL,
-    `NormalizedEmail` varchar(256) NOT NULL,
-    `EmailConfirmed` tinyint(1) NOT NULL DEFAULT 0,
-    `SecurityStamp` varchar(64) NOT NULL,
-    `ConcurrencyStamp` varchar(64) NOT NULL,
+    `UserName` varchar(256) NULL,
+    `NormalizedUserName` varchar(256) NULL,
+    `NormalizedEmail` varchar(256) NULL,
+    `EmailConfirmed` tinyint(1) NULL DEFAULT 0,
+    `SecurityStamp` varchar(64) NULL,
+    `ConcurrencyStamp` varchar(64) NULL,
     `PhoneNumber` varchar(32) DEFAULT NULL,
-    `PhoneNumberConfirmed` tinyint(1) NOT NULL DEFAULT 0,
-    `TwoFactorEnabled` tinyint(1) NOT NULL DEFAULT 0,
+    `PhoneNumberConfirmed` tinyint(1) NULL DEFAULT 0,
+    `TwoFactorEnabled` tinyint(1) NULL DEFAULT 0,
     `LockoutEnd` datetime(6) DEFAULT NULL,
-    `LockoutEnabled` tinyint(1) NOT NULL DEFAULT 1,
-    `AccessFailedCount` int(11) NOT NULL DEFAULT 0
+    `LockoutEnabled` tinyint(1) NULL DEFAULT 1,
+    `AccessFailedCount` int(11) NULL DEFAULT 0
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1866,9 +1879,9 @@
 
   CREATE TABLE `vulnerabilidades` (
     `IdVulnerabilidade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NOT NULL,
-    `Localizacao` longtext NOT NULL,
-    `Servicos` longtext NOT NULL,
+    `Nome` longtext NULL,
+    `Localizacao` longtext NULL,
+    `Servicos` longtext NULL,
     `FkIdComunidade` int(11) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1966,10 +1979,10 @@
   CREATE TABLE `diariosprocessopessoal` (
     `IdDiarioProcesso` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FK_id_Atores` int(11) NOT NULL,
-    `Data` datetime(6) NOT NULL,
-    `Descricao` varchar(4000) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
+    `Data` datetime(6) NULL,
+    `Descricao` varchar(4000) NULL,
+    `DtCriacao` datetime(6) NULL,
+    `DtModificacao` datetime(6) NULL,
     `FkIdUsuario` int(11) NOT NULL,
     `FkIdUsuarioM` int(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1984,17 +1997,6 @@
     `IdDiarioProcessoEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
     `FkIdDiarioProcesso` int(11) NOT NULL,
     `FkIdEixo` int(11) NOT NULL
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-  -- --------------------------------------------------------
-
-  --
-  -- Estrutura para tabela `__efmigrationshistory`
-  --
-
-  CREATE TABLE `__efmigrationshistory` (
-    `MigrationId` varchar(150) NOT NULL,
-    `ProductVersion` varchar(32) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -2264,12 +2266,6 @@
     ADD KEY `IX_DiariosProcessoEixos_FkIdEixo` (`FkIdEixo`);
 
   --
-  -- Índices de tabela `__efmigrationshistory`
-  --
-  ALTER TABLE `__efmigrationshistory`
-    ADD PRIMARY KEY (`MigrationId`);
-
-  --
   -- Restrições para tabelas despejadas
   --
 
@@ -2489,3 +2485,17 @@
     ADD CONSTRAINT `FK_VulnerabilidadesEixo_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `eixos` (`IdEixo`) ON DELETE CASCADE,
     ADD CONSTRAINT `FK_VulnerabilidadesEixo_Vulnerabilidades_FkIdVulnerabilidade` FOREIGN KEY (`FkIdVulnerabilidade`) REFERENCES `vulnerabilidades` (`IdVulnerabilidade`) ON DELETE CASCADE;
   COMMIT;
+
+-- perfis.FkIdUsuario -> usuarios.IdUsuario
+ALTER TABLE `perfis`
+ADD CONSTRAINT `FK_Perfis_Usuarios_FkIdUsuario`
+FOREIGN KEY (`FkIdUsuario`)
+REFERENCES `usuarios` (`IdUsuario`);
+
+
+-- fontesinfo.Fk_Id_Ator -> atores.IdAtores
+ALTER TABLE `fontesinfo`
+ADD CONSTRAINT `FK_FontesInfo_Atores_Fk_Id_Ator`
+FOREIGN KEY (`Fk_Id_Ator`)
+REFERENCES `atores` (`IdAtores`)
+ON DELETE CASCADE;

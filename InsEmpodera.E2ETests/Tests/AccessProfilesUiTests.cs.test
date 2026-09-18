@@ -65,6 +65,14 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             Assert.Equal("S", usersPermission.PodeDeletar);
             Assert.Equal("N", usersPermission.PodeDetalhar);
             Assert.Equal("N", usersPermission.PodeAtualizar);
+            Assert.All(createdPermissions.Where(permission => permission.Modulo != "Usuarios"), permission =>
+            {
+                Assert.Equal("N", permission.PodeListar);
+                Assert.Equal("N", permission.PodeDetalhar);
+                Assert.Equal("N", permission.PodeCriar);
+                Assert.Equal("N", permission.PodeAtualizar);
+                Assert.Equal("N", permission.PodeDeletar);
+            });
 
             await page.Locator("#searchProfilesInput").FillAsync(profileName);
             await Assertions.Expect(page.Locator(".profile-item:visible")).ToHaveCountAsync(1);
@@ -99,6 +107,37 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
                 .SingleAsync());
             Assert.Equal("N", editedPermission.PodeListar);
             Assert.Equal("S", editedPermission.PodeDetalhar);
+            Assert.Equal("S", editedPermission.PodeCriar);
+            Assert.Equal("N", editedPermission.PodeAtualizar);
+            Assert.Equal("S", editedPermission.PodeDeletar);
+            var allEditedPermissions = await Fixture.QueryAsync(db => db.Permissoes
+                .Where(permission => permission.FkIdPerfil == profileId).ToListAsync());
+            Assert.Equal(12, allEditedPermissions.Count);
+            Assert.All(allEditedPermissions.Where(permission => permission.Modulo != "Usuarios"), permission =>
+            {
+                Assert.Equal("N", permission.PodeListar);
+                Assert.Equal("N", permission.PodeDetalhar);
+                Assert.Equal("N", permission.PodeCriar);
+                Assert.Equal("N", permission.PodeAtualizar);
+                Assert.Equal("N", permission.PodeDeletar);
+            });
+
+            await page.GotoAsync($"/AccessProfile/Edit/{profileId}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(editedName);
+            var reopenedPermissions = page.Locator(".permission-table tbody tr")
+                .Filter(new() { HasText = "Usuarios" }).Locator("input[type=checkbox]");
+            await Assertions.Expect(reopenedPermissions.Nth(0)).Not.ToBeCheckedAsync();
+            await Assertions.Expect(reopenedPermissions.Nth(1)).ToBeCheckedAsync();
+            await Assertions.Expect(reopenedPermissions.Nth(2)).ToBeCheckedAsync();
+            await Assertions.Expect(reopenedPermissions.Nth(3)).Not.ToBeCheckedAsync();
+            await Assertions.Expect(reopenedPermissions.Nth(4)).ToBeCheckedAsync();
+
+            await page.GotoAsync("/AccessProfile");
+            var editedCard = page.Locator(".profile-item").Filter(new() { HasText = editedName });
+            await editedCard.GetByRole(AriaRole.Button,
+                new() { Name = $"Excluir perfil {editedName}", Exact = true }).ClickAsync();
+            Assert.False(await Fixture.QueryAsync(db => db.Perfis.AnyAsync(profile => profile.IdPerfil == profileId)));
+            Assert.False(await Fixture.QueryAsync(db => db.Permissoes.AnyAsync(permission => permission.FkIdPerfil == profileId)));
         });
 
     [Fact(DisplayName = "Perfis de acesso — excluir perfil livre e proteger perfil usado")]

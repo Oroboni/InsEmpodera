@@ -74,7 +74,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
         options.UseMySql(
             connectionString,
-            new MySqlServerVersion(new Version(8, 0, 29)));
+            ServerVersion.AutoDetect(connectionString));
     }
     else
     {
@@ -179,7 +179,10 @@ using (var scope = app.Services.CreateScope())
         }
     }
     else
+    {
         await db.Database.MigrateAsync();
+        await EixoCatalogo.EnsureCreatedAsync(db);
+    }
 }
 
 // Configure the HTTP request pipeline.

@@ -30,7 +30,7 @@
                     {
                         foreach (dynamic item in ViewBag.Comunidades)
                         {
-                            <option value="@item.Nome">@item.Nome</option>
+                            <option value="@item.Id">@item.Nome</option>
                         }
                     }
                 </select>
@@ -55,7 +55,7 @@
 
         <button type="button" 
                 class="btn-add" 
-                onclick="window.location.href='@Url.Action("Create")'" 
+                data-create-url="@Url.Action("Create")"
                 title="Novo Diário de Campo">
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -89,7 +89,7 @@
 
                     <div class="form-item diario-item" 
                          style="display: none;" 
-                         data-comunidade="@comunidadeNome" 
+                         data-comunidade="@item.FkIdComunidade"
                          data-search="@(item.Descricao?.ToLower()) @(item.Localizacao?.ToLower()) @dataFormatada">
                         
                         <div class="item-header">
@@ -150,6 +150,12 @@
             const noRecordsMessage = document.getElementById('noRecordsMessage');
             const visibleCountSpan = document.getElementById('visibleCount');
             const items = document.querySelectorAll('.diario-item');
+            const addButton = document.querySelector('.btn-add[data-create-url]');
+            addButton?.addEventListener('click', () => {
+                const url = new URL(addButton.dataset.createUrl, window.location.origin);
+                if (comunidadeFilter.value) url.searchParams.set('comunidadeId', comunidadeFilter.value);
+                window.location.assign(url);
+            });
 
             function updateView() {
                 const selectedComunidade = comunidadeFilter.value;

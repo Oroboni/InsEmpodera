@@ -1,3 +1,4 @@
+@model Empodera.Models.Atores
 @{
     ViewData["Title"] = "Adicionar Novo Ator";
     Layout = "_Layout";
@@ -179,8 +180,8 @@
             <div class="input-card">
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
                 <div class="input-content">
-                    <label for="dataNascimento">Data de Nascimento</label>
-                    <input id="dataNascimento" name="dataNascimento" type="date" class="clean-input" />
+                    <label for="Idade">Idade</label>
+                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" />
                 </div>
             </div>
         </div>
@@ -188,7 +189,7 @@
         <div class="input-card full-width checkbox-card">
             <div class="input-content">
                 <label for="daEquipeCheckbox" class="checkbox-inline-label">
-                    <input id="daEquipeCheckbox" name="daEquipe" type="checkbox" />
+                    <input id="daEquipeCheckbox" asp-for="DaEquipe" type="checkbox" />
                     Da Equipe
                 </label>
             </div>
@@ -219,7 +220,7 @@
             <div class="input-content">
                 <label for="inputTelefone">Telefone</label>
                 <input id="inputTelefone" name="telefone" type="tel" class="clean-input"
-                    placeholder="(00) 00000-0000" />
+                    maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" />
             </div>
         </div>
 

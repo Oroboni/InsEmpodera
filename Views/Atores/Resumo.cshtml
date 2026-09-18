@@ -1,0 +1,28 @@
+@model Empodera.Models.Atores
+@{
+    ViewData["Title"] = "Dados básicos do ator";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
+}
+
+<div class="modern-container actor-summary-page">
+    <div class="header-section">
+        <h2>Dados básicos do ator</h2>
+    </div>
+    <section class="input-card full-width" aria-label="Dados de @Model.Nome">
+        <div class="input-content">
+            <h3>@Model.Nome</h3>
+            @if (Model.Idade.HasValue) { <p><strong>Idade:</strong> @Model.Idade anos</p> }
+            @if (!string.IsNullOrWhiteSpace(Model.PapelSocial1)) { <p><strong>Papel social:</strong> @Model.PapelSocial1</p> }
+            @if (!string.IsNullOrWhiteSpace(Model.PapelSocial2)) { <p><strong>Segundo papel social:</strong> @Model.PapelSocial2</p> }
+            @if (!string.IsNullOrWhiteSpace(Model.Telefone)) { <p><strong>Telefone:</strong> @Model.Telefone</p> }
+            @if (Model.Comunidades.Count > 0)
+            {
+                <p><strong>Comunidades:</strong> @string.Join(", ", Model.Comunidades.Select(c => c.Comunidade.Nome))</p>
+            }
+        </div>
+    </section>
+    <a asp-action="Index" class="wizard-btn btn-prev">Voltar à lista de atores</a>
+</div>

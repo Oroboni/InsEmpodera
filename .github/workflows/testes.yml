@@ -20,6 +20,18 @@ jobs:
   testes:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    services:
+      mariadb:
+        image: mariadb:10.4.32
+        env:
+          MYSQL_ROOT_PASSWORD: testes_empodera
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - name: Baixar o código
@@ -53,6 +65,8 @@ jobs:
 
       - name: Executar backend, frontend e jornadas no navegador
         shell: pwsh
+        env:
+          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
         run: ./testar.ps1
 
       - name: Publicar resultados, cobertura e evidências de falha
@@ -68,13 +82,13 @@ jobs:
             Frontend.Tests/vitest-results.json
             InsEmpodera.E2ETests/TestResults/**
 
-  banco-mysql:
-    name: Compatibilidade com MySQL 8
+  banco-mariadb:
+    name: Compatibilidade com MariaDB 10.4.32
     runs-on: ubuntu-latest
     timeout-minutes: 25
     services:
-      mysql:
-        image: mysql:8.0
+      mariadb:
+        image: mariadb:10.4.32
         env:
           MYSQL_ROOT_PASSWORD: testes_empodera
         ports:

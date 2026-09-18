@@ -64,8 +64,8 @@
                 <div class="input-card">
                     <div class="input-content">
                         <label for="inputTelefone">Número de Telefone</label>
-                        <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input" maxlength="15"
-                            placeholder="(DDD) 99999-9999" />
+                        <input asp-for="Telefone" id="inputTelefone" type="tel" class="clean-input" maxlength="40"
+                            placeholder="Ex.: +1 202 555 0199" autocomplete="tel" />
                     </div>
                 </div>
                 <div class="input-card">
@@ -425,5 +425,10 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     
-    <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initMapSelector === 'function')
+                initMapSelector('mapa-principal', 'input-endereco', { readOnly: true, showSearchControl: false });
+        });
+    </script>
 }

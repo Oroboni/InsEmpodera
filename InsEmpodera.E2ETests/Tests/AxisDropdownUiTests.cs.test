@@ -1,0 +1,22 @@
+using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.Playwright;
+using Xunit;
+
+namespace InsEmpodera.E2ETests.Tests;
+
+[Collection(E2ECollection.Name)]
+public sealed class AxisDropdownUiTests(E2ETestFixture fixture) : BrowserTestBase(fixture)
+{
+    [Fact(DisplayName = "Atividades — lista de eixos abre e não é cortada pelo cartão")]
+    public Task ActivityAxisDropdown_IsVisibleBeyondCard_ThroughUi() =>
+        RunInBrowserAsync(nameof(ActivityAxisDropdown_IsVisibleBeyondCard_ThroughUi), async page =>
+        {
+            await LoginAsync(page);
+            await page.GotoAsync("/Atividades/Create");
+            var card = page.Locator(".input-card:has(.multiselect-wrapper)");
+            await card.Locator("summary").ClickAsync();
+            await Assertions.Expect(card.Locator(".multiselect-panel")).ToBeVisibleAsync();
+            Assert.True(await card.Locator("input[name=EixosSelecionados]").CountAsync() > 0);
+            Assert.Equal("visible", await card.EvaluateAsync<string>("element => getComputedStyle(element).overflow"));
+        });
+}

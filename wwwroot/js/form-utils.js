@@ -15,21 +15,9 @@ function validateDateField(input) {
 function initTelefoneMask(inputId) {
     const campo = document.getElementById(inputId);
     if (!campo) return;
-
-    const aplicarMascara = (valor) => {
-        valor = valor.replace(/\D/g, "").substring(0, 11);
-        valor = valor.replace(/^(\d{2})(\d)/, "($1) $2");
-        valor = valor.replace(/(\d)(\d{4})$/, "$1-$2");
-        return valor;
-    };
-
-    campo.addEventListener("input", (e) => {
-        e.target.value = aplicarMascara(e.target.value);
-    });
-
-    if (campo.value) {
-        campo.value = aplicarMascara(campo.value);
-    }
+    // Nome legado da função: nunca force um plano de numeração nacional.
+    campo.setAttribute("autocomplete", "tel");
+    campo.setAttribute("inputmode", "tel");
 }
 
 const dataContatoInput = document.getElementById("DtContato");

@@ -42,7 +42,7 @@ namespace Empodera.Controllers
             // Pegamos apenas comunidades que existem no banco
             ViewBag.Comunidades = await _context.Comunidades
                 .OrderBy(c => c.Nome)
-                .Select(c => new { c.Nome }) 
+                .Select(c => new { Id = c.Id_Comunidade, c.Nome })
                 .Distinct()
                 .ToListAsync();
 
@@ -52,7 +52,7 @@ namespace Empodera.Controllers
         // ==========================================================
         // CREATE (GET)
         // ==========================================================
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? comunidadeId = null)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -61,7 +61,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index");
 
             await PreencherViewBagsDoBanco(); // Usa dados REAIS
-            return View();
+            return View(new DiarioCampo { FkIdComunidade = comunidadeId ?? 0, Data = DateTime.Today });
         }
 
         // ==========================================================
@@ -84,11 +84,14 @@ namespace Empodera.Controllers
             diarioCampo.DtCriacao = DateTime.Now;
             diarioCampo.DtModificacao = DateTime.Now;
             diarioCampo.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+            diarioCampo.Localizacao ??= string.Empty;
 
             // Remove validações de navegação que podem dar erro
             ModelState.Remove("Comunidade");
             ModelState.Remove("Usuario");
+            ModelState.Remove(nameof(DiarioCampo.Localizacao));
 
+            await ValidarReferenciasAsync(diarioCampo.FkIdComunidade, EixosSelecionados);
             await ValidarAcoesTemporariasAsync(TempAcoes);
 
             if (ModelState.IsValid)
@@ -158,7 +161,10 @@ namespace Empodera.Controllers
             // Remove validações de navegação
             ModelState.Remove("Comunidade");
             ModelState.Remove("Usuario");
+            ModelState.Remove(nameof(DiarioCampo.Localizacao));
+            diarioCampo.Localizacao ??= string.Empty;
 
+            await ValidarReferenciasAsync(diarioCampo.FkIdComunidade, EixosSelecionados);
             await ValidarAcoesTemporariasAsync(TempAcoes);
 
             if (ModelState.IsValid)
@@ -301,6 +307,20 @@ namespace Empodera.Controllers
             return _context.DiariosCampo.Any(e => e.IdDCampo == id);
         }
 
+        private async Task ValidarReferenciasAsync(int comunidadeId, int[] eixosSelecionados)
+        {
+            if (!await _context.Comunidades.AnyAsync(c => c.Id_Comunidade == comunidadeId))
+                ModelState.AddModelError(nameof(DiarioCampo.FkIdComunidade), "Selecione uma comunidade válida.");
+
+            var ids = eixosSelecionados.Distinct().ToArray();
+            if (ids.Length == 0)
+                return;
+
+            var encontrados = await _context.Eixos.CountAsync(e => ids.Contains(e.IdEixo));
+            if (encontrados != ids.Length)
+                ModelState.AddModelError(nameof(eixosSelecionados), "Selecione somente eixos válidos.");
+        }
+
         private async Task ValidarAcoesTemporariasAsync(List<DiarioAcaoInput>? acoes)
         {
             if (acoes == null || acoes.Count == 0)
@@ -312,8 +332,8 @@ namespace Empodera.Controllers
                 .Select(eixo => eixo.IdEixo)
                 .ToHashSetAsync();
 
-            var idsAtores = acoes.Where(acao => acao.FkIdAtor.HasValue)
-                .Select(acao => acao.FkIdAtor!.Value).Distinct().ToArray();
+            var idsAtores = acoes.SelectMany(acao => acao.FkIdAtores ?? [])
+                .Distinct().ToArray();
             var atoresValidos = await _context.Atores
                 .Where(ator => idsAtores.Contains(ator.IdAtores) && ator.Ativo == "S")
                 .Select(ator => ator.IdAtores)
@@ -326,14 +346,14 @@ namespace Empodera.Controllers
                     ModelState.AddModelError($"TempAcoes[{index}].Tipo", "Tipo de ação inválido.");
                 if (string.IsNullOrWhiteSpace(acao.Nome))
                     ModelState.AddModelError($"TempAcoes[{index}].Nome", "Informe o nome da ação.");
-                if (string.IsNullOrWhiteSpace(acao.Provedor))
-                    ModelState.AddModelError($"TempAcoes[{index}].Provedor", "Informe o provedor externo.");
                 if (acao.Quantidade < 1)
                     ModelState.AddModelError($"TempAcoes[{index}].Quantidade", "A quantidade deve ser maior que zero.");
+                if (acao.Quantidade < (acao.FkIdAtores ?? []).Distinct().Count())
+                    ModelState.AddModelError($"TempAcoes[{index}].Quantidade", "A quantidade não pode ser menor que o número de participantes.");
                 if (acao.FkIdEixo.Length == 0 || acao.FkIdEixo.Any(id => !eixosValidos.Contains(id)))
                     ModelState.AddModelError($"TempAcoes[{index}].FkIdEixo", "Selecione eixos válidos.");
-                if (acao.FkIdAtor.HasValue && !atoresValidos.Contains(acao.FkIdAtor.Value))
-                    ModelState.AddModelError($"TempAcoes[{index}].FkIdAtor", "Selecione um ator ativo.");
+                if ((acao.FkIdAtores ?? []).Any(id => !atoresValidos.Contains(id)))
+                    ModelState.AddModelError($"TempAcoes[{index}].FkIdAtores", "Selecione somente atores ativos.");
             }
         }
 
@@ -342,7 +362,7 @@ namespace Empodera.Controllers
             var acao = new DiarioDAcoes
             {
                 Nome = entrada.Nome.Trim(),
-                PeovedorEx = entrada.Provedor.Trim(),
+                PeovedorEx = entrada.Provedor?.Trim() ?? string.Empty,
                 Quantidade = entrada.Quantidade
             };
 
@@ -351,8 +371,8 @@ namespace Empodera.Controllers
                 detalhe.DetalhesEixos.Add(new DetalhesEixos { FkIdEixo = eixoId });
             acao.Detalhes.Add(detalhe);
 
-            if (entrada.FkIdAtor.HasValue)
-                acao.DAtores.Add(new DAAtores { FK_id_Atores = entrada.FkIdAtor.Value });
+            foreach (var atorId in (entrada.FkIdAtores ?? []).Distinct())
+                acao.DAtores.Add(new DAAtores { FK_id_Atores = atorId });
 
             return acao;
         }
@@ -364,7 +384,7 @@ namespace Empodera.Controllers
             ViewBag.Comunidades = new SelectList(await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "Id_Comunidade", "Nome");
 
             // 2. Eixos (Para o select múltiplo)
-            ViewBag.EixosList = await _context.Eixos.OrderBy(e => e.Nome).ToListAsync();
+            ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
 
             // 3. Atores ativos (para menções e para o modal de ações).
             // Mantemos os dois formatos de propriedades para compatibilidade com

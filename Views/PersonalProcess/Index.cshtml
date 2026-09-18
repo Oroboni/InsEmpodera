@@ -1,8 +1,11 @@
 @model IReadOnlyList<Empodera.Models.DiarioProcessoPessoal>
+@using Empodera.Services
 @{
     ViewData["Title"] = "Diário Pessoal";
     Layout = "_Layout";
     int? selectedAtorId = ViewBag.SelectedAtorId;
+    var mentionActors = ViewBag.MentionActors as IReadOnlyDictionary<int, string>
+        ?? new Dictionary<int, string>();
 }
 
 @section Styles {
@@ -82,7 +85,8 @@
                     <div class="assessment-card">
                         <div class="assessment-card-info">
                             <h3>@item.Data.ToString("dd/MM/yyyy")</h3>
-                            <p>@item.Descricao</p>
+                            <p>@AtorMentions.Render(item.Descricao, mentionActors,
+                                id => Url.Action("Resumo", "Atores", new { id }) ?? "#")</p>
                             @if (item.Eixos.Count > 0)
                             {
                                 <div class="process-tags">

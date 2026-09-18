@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Playwright;
+using MySqlConnector;
 using Xunit;
 
 namespace InsEmpodera.E2ETests.Infrastructure;
@@ -29,8 +30,8 @@ public sealed class E2ETestFixture : IAsyncLifetime
     private WebApplication? _application;
     private IPlaywright? _playwright;
     private readonly SemaphoreSlim _databaseResetLock = new(1, 1);
-    private readonly string _databasePath = Path.Combine(
-        Path.GetTempPath(), $"insempodera-e2e-{Guid.NewGuid():N}.db");
+    private readonly string _databaseName = $"insempodera_e2e_{Guid.NewGuid():N}";
+    private string _connectionString = string.Empty;
 
     public string ProjectRoot { get; private set; } = string.Empty;
     public string BaseUrl { get; private set; } = string.Empty;
@@ -39,6 +40,12 @@ public sealed class E2ETestFixture : IAsyncLifetime
     public async Task InitializeAsync()
     {
         ProjectRoot = FindProjectRoot();
+        var mysqlServer = Environment.GetEnvironmentVariable("TEST_MYSQL_CONNECTION");
+        if (string.IsNullOrWhiteSpace(mysqlServer))
+            throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar as jornadas E2E em MySQL.");
+        var serverVersion = ServerVersion.AutoDetect(mysqlServer);
+        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer) { Database = _databaseName };
+        _connectionString = connectionBuilder.ConnectionString;
 
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -62,7 +69,7 @@ public sealed class E2ETestFixture : IAsyncLifetime
             .AddViewLocalization()
             .AddDataAnnotationsLocalization();
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite($"Data Source={_databasePath}"));
+            options.UseMySql(_connectionString, serverVersion));
         builder.Services.AddEmpoderaIdentity(builder.Environment);
         builder.Services.AddGmailPasswordRecovery(builder.Configuration, builder.Environment);
         builder.Services.AddDistributedMemoryCache();
@@ -143,12 +150,14 @@ public sealed class E2ETestFixture : IAsyncLifetime
         if (_application is not null)
         {
             await _application.StopAsync();
+            if (!string.IsNullOrEmpty(_connectionString) && _databaseName.StartsWith("insempodera_e2e_", StringComparison.Ordinal))
+            {
+                await using var scope = _application.Services.CreateAsyncScope();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                await db.Database.EnsureDeletedAsync();
+            }
             await _application.DisposeAsync();
         }
-
-        TryDelete(_databasePath);
-        TryDelete(_databasePath + "-shm");
-        TryDelete(_databasePath + "-wal");
     }
 
     public async Task<T> QueryAsync<T>(Func<ApplicationDbContext, Task<T>> operation)
@@ -197,10 +206,7 @@ public sealed class E2ETestFixture : IAsyncLifetime
         admin.Senha = new PasswordHasher<Usuario>().HashPassword(admin, AdminPassword);
         admin.Ativo = "S";
 
-        db.Eixos.AddRange(
-            new Eixo { Nome = "Assistência básica" },
-            new Eixo { Nome = "Educação" },
-            new Eixo { Nome = "Saúde" });
+        db.Eixos.AddRange(EixoCatalogo.Nomes.Select(nome => new Eixo { Nome = nome }));
         await db.SaveChangesAsync();
 
         var community = new Comunidade
@@ -252,17 +258,6 @@ public sealed class E2ETestFixture : IAsyncLifetime
             "Could not find InsEmpodera.csproj starting from the test output directory.");
     }
 
-    private static void TryDelete(string path)
-    {
-        try
-        {
-            if (File.Exists(path)) File.Delete(path);
-        }
-        catch
-        {
-            // A cleanup failure must not hide the actual test outcome.
-        }
-    }
 }
 
 [CollectionDefinition(Name)]

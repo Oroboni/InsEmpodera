@@ -18,6 +18,24 @@ public class AtoresController : Controller
         _context = context;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Resumo(int id)
+    {
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
+            return RedirectToAction("Index", "Account");
+
+        var usuario = await _context.Usuarios
+            .Include(u => u.Perfil).ThenInclude(p => p.Permissoes)
+            .FirstOrDefaultAsync(u => u.IdUsuario == usuarioId && u.Ativo == "S");
+        if (usuario is null || !usuario.CanViewDetails("Atores"))
+            return StatusCode(StatusCodes.Status403Forbidden);
+
+        var ator = await _context.Atores.AsNoTracking()
+            .Include(a => a.Comunidades).ThenInclude(c => c.Comunidade)
+            .FirstOrDefaultAsync(a => a.IdAtores == id && a.Ativo != "N");
+        return ator is null ? NotFound() : View(ator);
+    }
+
     public IActionResult Index()
     {
         if (HttpContext.Session.GetString("Email") == null)
@@ -71,7 +89,7 @@ public class AtoresController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Atores ator, int ComunidadeId, List<string>? recursos = null, List<string>? vulnerabilidades = null)
+    public async Task<IActionResult> Create(Atores ator, int ComunidadeId, List<string>? recursos = null, List<string>? vulnerabilidades = null, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -101,7 +119,7 @@ public class AtoresController : Controller
         ator.DtModificacao = DateTime.Now;
         ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
-        ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades);
+        ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades, tipoRelacionamento);
         _context.Atores.Add(ator);
         await _context.SaveChangesAsync();
 
@@ -138,6 +156,7 @@ public class AtoresController : Controller
 
         var atorCom = await _context.AtorComunidades
             .FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
+        ViewBag.TipoRelacionamento = atorCom?.TipoRelacionamento;
 
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
@@ -152,7 +171,7 @@ public class AtoresController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Atores atorFormulario, int id, int ComunidadeId)
+    public async Task<IActionResult> Edit(Atores atorFormulario, int id, int ComunidadeId, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("ID") == null)
         {
@@ -194,13 +213,15 @@ public class AtoresController : Controller
             atorCom = new AtorComunidade
             {
                 FK_id_Atores = id,
-                FkIdComunidade = ComunidadeId
+                FkIdComunidade = ComunidadeId,
+                TipoRelacionamento = tipoRelacionamento
             };
             _context.AtorComunidades.Add(atorCom);
         }
         else
         {
             atorCom.FkIdComunidade = ComunidadeId;
+            atorCom.TipoRelacionamento = tipoRelacionamento;
         }
 
         await _context.SaveChangesAsync();

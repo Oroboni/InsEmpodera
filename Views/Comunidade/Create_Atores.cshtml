@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        @* <div class="input-card full-width">
+        <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
             <div class="input-content">
                 <label for="tipoRelacionamento">Tipo de relacionamento</label>
@@ -55,7 +55,7 @@
                     <option value="5">Vizinho</option>
                 </select>
             </div>
-        </div> *@
+        </div>
 
         <div class="purple-divider"></div>
         <div class="section-label">Recursos e Vulnerabilidades</div>
@@ -182,7 +182,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
                 <div class="input-content">
                     <label for="Idade">Idade</label>
-                    <input id="Idade" name="Idade" asp-for="Idade" type="number" class="clean-input" />
+                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" />
                 </div>
             </div>
         </div>
@@ -248,7 +248,7 @@
             <div class="input-content">
                 <label for="inputTelefone">Telefone</label>
                 <input id="inputTelefone" name="telefone" type="tel" class="clean-input"
-                    placeholder="(00) 00000-0000" />
+                    maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" />
             </div>
         </div>
 

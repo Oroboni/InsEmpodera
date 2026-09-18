@@ -28,6 +28,7 @@ $diagnosticSelfTest = Join-Path $projectRoot "scripts/Testar-DiagnosticoPipeline
 $failedStages = [System.Collections.Generic.List[string]]::new()
 $pipelineFailure = $null
 $reportFailure = $null
+$injectedTestConnection = $false
 
 function Invoke-Checked {
     param(
@@ -62,6 +63,18 @@ function Invoke-TestStage {
 
 Push-Location $projectRoot
 try {
+    if ([string]::IsNullOrWhiteSpace($env:TEST_MYSQL_CONNECTION)) {
+        $secretPrefix = 'ConnectionStrings:DefaultConnection = '
+        $secretLine = & dotnet user-secrets list --project (Join-Path $projectRoot 'InsEmpodera.csproj') 2>$null |
+            Where-Object { $_.StartsWith($secretPrefix, [StringComparison]::Ordinal) } |
+            Select-Object -First 1
+        if (-not $secretLine) {
+            throw 'Defina TEST_MYSQL_CONNECTION ou ConnectionStrings:DefaultConnection no cofre local para executar os testes em MySQL.'
+        }
+        $env:TEST_MYSQL_CONNECTION = $secretLine.Substring($secretPrefix.Length)
+        $injectedTestConnection = $true
+    }
+
     New-Item -ItemType Directory -Path $buildDirectory -Force | Out-Null
     foreach ($currentResult in @($buildLog, $buildBinaryLog, $backendResult, $frontendResult, $e2eResult, $friendlyReport, $diagnosticJson)) {
         if (Test-Path -LiteralPath $currentResult) {
@@ -168,6 +181,9 @@ finally {
         )
         [IO.File]::WriteAllLines($friendlyReport, $fallbackLines, [Text.UTF8Encoding]::new($false))
         Write-Host "O gerador de diagnóstico falhou; um relatório mínimo de emergência foi criado." -ForegroundColor Red
+    }
+    if ($injectedTestConnection) {
+        Remove-Item Env:TEST_MYSQL_CONNECTION -ErrorAction SilentlyContinue
     }
     Pop-Location
 }

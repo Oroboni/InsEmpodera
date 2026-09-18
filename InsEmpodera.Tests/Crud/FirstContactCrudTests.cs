@@ -50,6 +50,9 @@ public sealed class FirstContactCrudTests : ControllerTestBase
     public async Task Edit_UpdatesMainFieldsAndAtomicallyReplacesSelections()
     {
         var form = await AddFormAsync();
+        form.Status = "Concluida";
+        form.Complemento = "Complemento importado";
+        form.FonteDados = "Fonte importada";
         Db.FichaCondicoes.Add(new FichaCondicoes { FkIdFicha = form.IdFicha, Cond = "Antiga" });
         Db.FichaPeticoes.Add(new FichaPeticoes { FkIdFicha = form.IdFicha, Pet = "Antiga" });
         await Db.SaveChangesAsync();
@@ -57,7 +60,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         var update = NewForm(form.FK_id_Atores, form.FkIdComunidade!.Value);
         update.IdFicha = form.IdFicha;
         update.Coment = "Comentário editado";
-        update.Status = "Concluida";
+        update.Status = "EmProgresso";
 
         var result = await controller.Edit(form.IdFicha, update,
             new List<string> { "Nova" }, new List<string> { "Nova" },
@@ -66,7 +69,10 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.FichasPrimeiroContato.AsNoTracking().SingleAsync(item => item.IdFicha == form.IdFicha);
         Assert.Equal("Comentário editado", saved.Coment);
-        Assert.Equal(form.DtCriacao, saved.DtCriacao);
+        Assert.Equal("Concluida", saved.Status);
+        Assert.Equal("Complemento importado", saved.Complemento);
+        Assert.Equal("Fonte importada", saved.FonteDados);
+        Assert.InRange((saved.DtCriacao - form.DtCriacao).Duration(), TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
         Assert.Equal(form.FkIdUsuario, saved.FkIdUsuario);
         Assert.Equal(new[] { "Nova" }, await Db.FichaCondicoes.Where(item => item.FkIdFicha == form.IdFicha).Select(item => item.Cond).ToArrayAsync());
         Assert.Equal(new[] { "Nova" }, await Db.FichaPeticoes.Where(item => item.FkIdFicha == form.IdFicha).Select(item => item.Pet).ToArrayAsync());

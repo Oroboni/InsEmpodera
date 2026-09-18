@@ -1,5 +1,6 @@
 using Empodera.Models;
 using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Playwright;
 using Xunit;
@@ -19,6 +20,7 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             var name = Unique("Usuário UI");
             var editedName = name + " editado";
             var email = $"e2e-{Guid.NewGuid():N}@example.test";
+            var editedEmail = $"editado-{Guid.NewGuid():N}@example.test";
             var initialTotal = int.Parse((await page.Locator("#totalUsers").InnerTextAsync()).Trim());
 
             await page.Locator("button.btn-add").ClickAsync();
@@ -36,6 +38,7 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("select[name=FkIdPerfil]").SelectOptionAsync("1");
             await page.Locator("select[name=Genero]").SelectOptionAsync("2");
             await page.Locator("input[name=Ocupacao]").FillAsync("Qualidade E2E");
+            await page.Locator("input[name=DtNascimento]").FillAsync("1995-02-14");
             await Assertions.Expect(page.Locator("[name=IdiomaPreferido]")).ToHaveCountAsync(0);
             await page.GetByRole(AriaRole.Button, new() { Name = "Salvar Usuário" }).ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
@@ -47,6 +50,17 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
                 .Where(user => user.Email == email)
                 .Select(user => user.IdUsuario)
                 .SingleAsync());
+            var createdUser = await Fixture.QueryAsync(db => db.Usuarios
+                .AsNoTracking().SingleAsync(user => user.IdUsuario == id));
+            Assert.Equal(name, createdUser.Nome);
+            Assert.Equal(email, createdUser.Email);
+            Assert.Equal(1, createdUser.FkIdPerfil);
+            Assert.Equal(2, createdUser.Genero);
+            Assert.Equal("Qualidade E2E", createdUser.Ocupacao);
+            Assert.Equal(new DateTime(1995, 2, 14), createdUser.DtNascimento.Date);
+            Assert.Equal("S", createdUser.Ativo);
+            Assert.NotEqual(PasswordVerificationResult.Failed,
+                new PasswordHasher<Usuario>().VerifyHashedPassword(createdUser, createdUser.Senha, "NovaSenha@123"));
             Assert.Equal(IdiomaPreferido.Default, await Fixture.QueryAsync(db => db.Usuarios
                 .Where(user => user.IdUsuario == id)
                 .Select(user => user.IdiomaPreferido)
@@ -70,19 +84,37 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
 
             await page.GotoAsync($"/Users/Edit/{id}");
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(name);
+            await Assertions.Expect(page.Locator("input[name=Email]")).ToHaveValueAsync(email);
+            await Assertions.Expect(page.Locator("input[name=Ocupacao]")).ToHaveValueAsync("Qualidade E2E");
+            await Assertions.Expect(page.Locator("input[name=DtNascimento]")).ToHaveValueAsync("1995-02-14");
             await page.Locator("#edit-save-btn").ClickAsync();
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
+            await page.Locator("input[name=Email]").FillAsync(editedEmail);
             await page.Locator("input[name=Ocupacao]").FillAsync("QA automatizado");
             await page.Locator("input[name=Senha]").FillAsync("SenhaEditada@123");
             await page.Locator("select[name=Genero]").SelectOptionAsync("1");
+            await page.Locator("input[name=DtNascimento]").FillAsync("1994-03-15");
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
 
-            Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Usuarios
-                .Where(user => user.IdUsuario == id)
-                .Select(user => user.Nome)
-                .SingleAsync()));
+            var editedUser = await Fixture.QueryAsync(db => db.Usuarios
+                .AsNoTracking().SingleAsync(user => user.IdUsuario == id));
+            Assert.Equal(editedName, editedUser.Nome);
+            Assert.Equal(editedEmail, editedUser.Email);
+            Assert.Equal(1, editedUser.FkIdPerfil);
+            Assert.Equal(1, editedUser.Genero);
+            Assert.Equal("QA automatizado", editedUser.Ocupacao);
+            Assert.Equal(new DateTime(1994, 3, 15), editedUser.DtNascimento.Date);
+            Assert.NotEqual(PasswordVerificationResult.Failed,
+                new PasswordHasher<Usuario>().VerifyHashedPassword(editedUser, editedUser.Senha, "SenhaEditada@123"));
+
+            await page.GotoAsync($"/Users/Edit/{id}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(editedName);
+            await Assertions.Expect(page.Locator("input[name=Email]")).ToHaveValueAsync(editedEmail);
+            await Assertions.Expect(page.Locator("input[name=Ocupacao]")).ToHaveValueAsync("QA automatizado");
+            await Assertions.Expect(page.Locator("input[name=DtNascimento]")).ToHaveValueAsync("1994-03-15");
 
             await page.GotoAsync($"/Users/Details/{id}");
             await page.GetByTestId("user-deactivate").ClickAsync();
@@ -98,9 +130,9 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
                 .Where(user => user.IdUsuario == id)
                 .Select(user => user.Ativo)
                 .SingleAsync()));
-            await page.Locator("#searchUsersInput").FillAsync(email);
+            await page.Locator("#searchUsersInput").FillAsync(editedEmail);
             await page.Locator("button[data-status=inativos]").ClickAsync();
-            await Assertions.Expect(page.Locator(".user-item").Filter(new() { HasText = email })).ToBeVisibleAsync();
+            await Assertions.Expect(page.Locator(".user-item").Filter(new() { HasText = editedEmail })).ToBeVisibleAsync();
 
             await page.GetByTestId($"user-details-{id}").ClickAsync();
             await page.GetByTestId("user-reactivate").ClickAsync();
@@ -127,8 +159,11 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
 
             await page.Locator("input[name=Nome]").FillAsync(name);
             await page.Locator("textarea[name=Local]").FillAsync("Rua dos Testes, 123, Fortaleza");
+            await page.Locator("#add-secondary-address").ClickAsync();
+            await page.Locator("textarea[name=LocalSecundario]").FillAsync("Avenida Secundária, 45, Fortaleza");
             await page.Locator("input[name=Complemento]").FillAsync("Próximo ao laboratório");
             await page.Locator("textarea[name=Descricao]").FillAsync("Criada por uma jornada real de navegador");
+            await page.Locator("textarea[name=Descricao_Acessibilidade]").FillAsync("Entrada acessível e elevador");
             await page.Locator("select[name=Status]").SelectOptionAsync("Em processo");
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath.StartsWith(
@@ -140,6 +175,15 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
                 .SingleAsync());
             Assert.Equal($"/Comunidade/ComunidadesDetalhes/{id}", new Uri(page.Url).AbsolutePath,
                 ignoreCase: true);
+            var createdCommunity = await Fixture.QueryAsync(db => db.Comunidades
+                .AsNoTracking().SingleAsync(community => community.Id_Comunidade == id));
+            Assert.Equal(name, createdCommunity.Nome);
+            Assert.Equal("Rua dos Testes, 123, Fortaleza", createdCommunity.Local);
+            Assert.Equal("Avenida Secundária, 45, Fortaleza", createdCommunity.LocalSecundario);
+            Assert.Equal("Próximo ao laboratório", createdCommunity.Complemento);
+            Assert.Equal("Criada por uma jornada real de navegador", createdCommunity.Descricao);
+            Assert.Equal("Entrada acessível e elevador", createdCommunity.Descricao_Acessibilidade);
+            Assert.Equal("Em processo", createdCommunity.Status);
             await page.GotoAsync("/Comunidade");
             await Assertions.Expect(page.Locator(".comunidade-item").Filter(new() { HasText = name })).ToBeVisibleAsync();
 
@@ -151,19 +195,37 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
 
             await page.GotoAsync($"/Comunidade/ComunidadesDetalhes/{id}");
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeDisabledAsync();
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(name);
+            await Assertions.Expect(page.Locator("textarea[name=Local]")).ToHaveValueAsync("Rua dos Testes, 123, Fortaleza");
+            await Assertions.Expect(page.Locator("textarea[name=LocalSecundario]")).ToHaveValueAsync("Avenida Secundária, 45, Fortaleza");
             await page.Locator("#edit-save-btn").ClickAsync();
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToBeEnabledAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
+            await page.Locator("textarea[name=Local]").FillAsync("Rua Atualizada, 456, Recife");
+            await page.Locator("textarea[name=LocalSecundario]").FillAsync("Avenida Atualizada, 78, Recife");
+            await page.Locator("input[name=Complemento]").FillAsync("Referência atualizada");
             await page.Locator("textarea[name=Descricao]").FillAsync("Descrição alterada pelo navegador");
+            await page.Locator("textarea[name=Descricao_Acessibilidade]").FillAsync("Rampa atualizada");
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/ComunidadesDetalhes/{id}");
 
-            Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Comunidades
-                .Where(community => community.Id_Comunidade == id)
-                .Select(community => community.Nome)
-                .SingleAsync()));
+            var editedCommunity = await Fixture.QueryAsync(db => db.Comunidades
+                .AsNoTracking().SingleAsync(community => community.Id_Comunidade == id));
+            Assert.Equal(editedName, editedCommunity.Nome);
+            Assert.Equal("Rua Atualizada, 456, Recife", editedCommunity.Local);
+            Assert.Equal("Avenida Atualizada, 78, Recife", editedCommunity.LocalSecundario);
+            Assert.Equal("Referência atualizada", editedCommunity.Complemento);
+            Assert.Equal("Descrição alterada pelo navegador", editedCommunity.Descricao);
+            Assert.Equal("Rampa atualizada", editedCommunity.Descricao_Acessibilidade);
+            Assert.Equal("Em processo", editedCommunity.Status);
 
             await page.GotoAsync($"/Comunidade/ComunidadesDetalhes/{id}");
+            await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(editedName);
+            await Assertions.Expect(page.Locator("textarea[name=Local]")).ToHaveValueAsync("Rua Atualizada, 456, Recife");
+            await Assertions.Expect(page.Locator("textarea[name=LocalSecundario]")).ToHaveValueAsync("Avenida Atualizada, 78, Recife");
+            await Assertions.Expect(page.Locator("input[name=Complemento]")).ToHaveValueAsync("Referência atualizada");
+            await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync("Descrição alterada pelo navegador");
+            await Assertions.Expect(page.Locator("textarea[name=Descricao_Acessibilidade]")).ToHaveValueAsync("Rampa atualizada");
             var exportLink = page.Locator("a[href*='/Services/ExportComunidade']");
             await Assertions.Expect(exportLink).ToBeVisibleAsync();
             var download = await page.RunAndWaitForDownloadAsync(() => exportLink.ClickAsync());

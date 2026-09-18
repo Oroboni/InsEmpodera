@@ -41,13 +41,14 @@
             <span asp-validation-for="Data" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" data-axis-picker>
             <label>Eixos</label>
+            <div class="eixos-tag-container" data-axis-tags></div>
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
                         <i class="fa-solid fa-tags"></i>
-                        <span>Selecione os eixos</span>
+                        <span class="multiselect-placeholder">Selecione os eixos</span>
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
@@ -56,7 +57,7 @@
                         @foreach (var eixo in (IEnumerable<Eixo>)ViewBag.EixosList)
                         {
                             <li>
-                                <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                                <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo" data-tag-name="@eixo.Nome"
                                        checked="@selectedEixos.Contains(eixo.IdEixo)" />
                                 <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
                             </li>
@@ -70,8 +71,11 @@
             <label asp-for="Descricao">Descrição <span class="text-danger">*</span></label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-align-left" style="top:15px;transform:none"></i>
-                <textarea asp-for="Descricao" maxlength="4000" required></textarea>
+                <textarea asp-for="Descricao" maxlength="4000" data-actor-mentions
+                          aria-describedby="actor-mention-help" aria-controls="actor-mention-list" required></textarea>
             </div>
+            <small id="actor-mention-help">Digite @@ e escolha um ator. A menção será clicável na leitura do diário.</small>
+            <ul id="actor-mention-list" class="actor-mention-list" role="listbox" hidden></ul>
             <span asp-validation-for="Descricao" class="text-danger"></span>
         </div>
 
@@ -98,3 +102,9 @@
         </form>
     }
 </div>
+
+@section Scripts {
+    <script type="application/json" id="actor-mention-data">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MentionActors))</script>
+    <script src="~/js/personal-process-mentions.js" asp-append-version="true"></script>
+    <script src="~/js/axis-picker.js" asp-append-version="true"></script>
+}
