@@ -119,8 +119,9 @@ public sealed class ActorAggregatePersistenceTests : ControllerTestBase
             vulnerabilidades: new List<string> { "Substancias", "Prevencao" });
 
         var editRedirect = Assert.IsType<RedirectToActionResult>(editResult);
-        Assert.Equal("AtoresVinculados", editRedirect.ActionName);
-        Assert.Equal(community.Id_Comunidade, editRedirect.RouteValues?["id"]);
+        Assert.Equal(nameof(ComunidadeController.Edit_Atores), editRedirect.ActionName);
+        Assert.Equal(saved.IdAtores, editRedirect.RouteValues?["id"]);
+        Assert.Equal(community.Id_Comunidade, editRedirect.RouteValues?["comunidadeId"]);
 
         Db.ChangeTracker.Clear();
         var edited = await Db.Atores

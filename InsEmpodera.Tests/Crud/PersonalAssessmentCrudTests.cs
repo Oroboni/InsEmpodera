@@ -18,6 +18,7 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
         var result = await controller.create(assessment);
 
         var redirect = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal(nameof(PersonalAssessmentController.Index), redirect.ActionName);
         Assert.Equal(actor.IdAtores, redirect.RouteValues!["atorId"]);
         var saved = await Db.AvaliacaoPessoal.SingleAsync(item => item.IdAvaliacao == assessment.IdAvaliacao);
         Assert.Equal(1, saved.FkIdUsuario);
@@ -54,7 +55,8 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
         var result = await controller.edit(update, assessment.IdAvaliacao);
 
         var redirect = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal(actor.IdAtores, redirect.RouteValues!["atorId"]);
+        Assert.Equal(nameof(PersonalAssessmentController.Edit), redirect.ActionName);
+        Assert.Equal(assessment.IdAvaliacao, redirect.RouteValues!["id"]);
         var saved = await Db.AvaliacaoPessoal.FindAsync(assessment.IdAvaliacao);
         Assert.Equal(5, saved!.CCrimes);
         Assert.Equal(5, saved.Substancias);

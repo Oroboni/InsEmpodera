@@ -401,7 +401,7 @@ namespace Empodera.Controllers
                 throw;
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Edit), new { id });
         }
 
         // POST: Concluir ficha

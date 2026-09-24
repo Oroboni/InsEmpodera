@@ -333,7 +333,7 @@ public class UsersController : Controller
         }
 
         SetSuccessMessage($"Usuário {usuariobd.Nome} atualizado com sucesso.");
-        return RedirectToAction("index", "Users");
+        return RedirectToAction(nameof(Edit), new { id = usuariobd.IdUsuario });
     }
 
 

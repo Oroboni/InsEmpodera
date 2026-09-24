@@ -220,7 +220,7 @@ public class PersonalAssessmentController : Controller
 
         _context.AvaliacaoPessoal.Update(avaliacaobd);
         await _context.SaveChangesAsync();
-        return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacaobd.FK_id_Atores});
+        return RedirectToAction(nameof(Edit), new { id = avaliacaobd.IdAvaliacao });
     }
     private async Task PopulateActorsListAsync(int? selectedActorId)
     {

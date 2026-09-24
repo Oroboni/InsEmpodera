@@ -26,7 +26,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var result = controller.ComunidadesDetalhes(community, 0);
 
         var redirect = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("ComunidadesDetalhes", redirect.ActionName);
+        Assert.Equal(nameof(ComunidadeController.Index), redirect.ActionName);
         var saved = await Db.Comunidades.SingleAsync(item => item.Nome == community.Nome);
         Assert.Equal("Em processo", saved.Status);
         Assert.Equal(1, saved.FK_Id_Usuario);

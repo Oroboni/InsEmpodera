@@ -188,7 +188,7 @@ public class AtividadesController : Controller
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Edit), new { id = atividade.IdAtividade });
     }
     [HttpPost]
     [ValidateAntiForgeryToken]

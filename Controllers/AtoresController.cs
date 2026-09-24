@@ -226,7 +226,7 @@ public class AtoresController : Controller
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Edit), new { id });
     }
 
 

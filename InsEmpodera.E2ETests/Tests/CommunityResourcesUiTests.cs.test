@@ -84,7 +84,7 @@ public sealed class CommunityResourcesUiTests(E2ETestFixture fixture) : BrowserT
             await page.Locator("details.multiselect-wrapper summary").ClickAsync();
             await page.Locator("textarea[name=Servicos]").FillAsync("Oficinas de informática");
             await page.GetByRole(AriaRole.Button, new() { Name = "SALVAR ALTERAÇÕES" }).ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/ComunidadeRecursos");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/ComunidadeDetalhesRecursos/{created.Id_Rede}");
 
             var edited = await Fixture.QueryAsync(db => db.RedeRecursos
                 .Where(item => item.Id_Rede == created.Id_Rede)

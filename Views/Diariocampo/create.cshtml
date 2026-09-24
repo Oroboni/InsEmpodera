@@ -210,21 +210,23 @@
                 </div>
             </div>
 
-            <div class="input-card action-modal-field action-modal-field-wide action-modal-axes">
+            <div class="input-card action-modal-field action-modal-field-wide action-modal-axes" data-axis-picker>
                 <div class="input-content no-icon">
                     <label>Eixos (Selecione um ou mais)</label>
-                    
-                    <div class="eixos-grid-modal">
-                        @foreach (var eixo in listaEixos) {
-                            <label class="checkbox-card-label">
-                                <input type="checkbox" 
-                                       name="modalEixos" 
-                                       value="@eixo.IdEixo" 
-                                       data-nome="@eixo.Nome">
-                                <span data-i18n-text>@eixo.Nome</span>
-                            </label>
-                        }
-                    </div>
+                    <div class="eixos-tag-container" data-axis-tags></div>
+                    <details class="multiselect-wrapper">
+                        <summary><div class="select-wrapper">
+                            <i class="fa-solid fa-tags"></i>
+                            <span class="multiselect-placeholder">Selecione os eixos</span>
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+                        </div></summary>
+                        <div class="multiselect-panel"><ul>
+                            @foreach (var eixo in listaEixos) {
+                                <li><input type="checkbox" name="modalEixos" value="@eixo.IdEixo" id="modal-eixo-@eixo.IdEixo" data-nome="@eixo.Nome" data-tag-name="@eixo.Nome" />
+                                    <label for="modal-eixo-@eixo.IdEixo">@eixo.Nome</label></li>
+                            }
+                        </ul></div>
+                    </details>
                 </div>
             </div>
 

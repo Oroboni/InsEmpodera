@@ -213,24 +213,26 @@ describe('tags de eixos em recursos da comunidade', () => {
   it('trata o nome vindo do banco como texto e permite remover a seleção', () => {
     const attack = '<img src=x onerror="window.__resourceTagXss=1">';
     document.body.innerHTML = `
-      <div id="tag-container"></div>
-      <div id="multiselect-panel"><ul><li>
-        <input type="checkbox" id="eixo-9" data-tag-class="tag-pink">
-      </li></ul></div>`;
+      <div data-axis-picker>
+        <div data-axis-tags></div>
+        <div class="multiselect-panel"><ul><li>
+          <input type="checkbox" id="eixo-9">
+          <label for="eixo-9">Eixo</label>
+        </li></ul></div>
+      </div>`;
     const checkbox = document.getElementById('eixo-9');
     checkbox.dataset.tagName = attack;
-    runInlineScript('Views/Comunidade/Create_Recursos.cshtml');
-    dispatchReady();
+    runPublicScript('axis-picker.js');
 
     checkbox.checked = true;
-    document.getElementById('multiselect-panel').dispatchEvent(new Event('change', { bubbles: true }));
-    const tag = document.querySelector('#tag-container .tag-item');
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+    const tag = document.querySelector('[data-axis-tags] .tag-item');
     expect(tag.textContent).toContain(attack);
     expect(tag.querySelector('img')).toBeNull();
     expect(window.__resourceTagXss).toBeUndefined();
 
     tag.querySelector('.tag-remove-btn').click();
     expect(checkbox.checked).toBe(false);
-    expect(document.querySelector('#tag-container .tag-item')).toBeNull();
+    expect(document.querySelector('[data-axis-tags] .tag-item')).toBeNull();
   });
 });

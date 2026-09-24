@@ -44,7 +44,7 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("textarea[name=Descricao]").FillAsync(marker);
             await page.Locator("input[name=Localizacao]").PressSequentiallyAsync("Rua do Diário, 50");
             await Assertions.Expect(page.Locator("input[name=Localizacao]")).ToHaveValueAsync("Rua do Diário, 50");
-            await page.Locator("[data-axis-picker] summary").ClickAsync();
+            await page.Locator("form.main-form [data-axis-picker] summary").ClickAsync();
             await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
             await page.Locator("form.main-form > .buttons-container button[type=submit]").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
@@ -77,7 +77,7 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("textarea[name=Descricao]").FillAsync(marker + " editado");
             await page.Locator("input[name=Localizacao]").FillAsync("Avenida do Diário, 80");
             await page.Locator("#editForm button[type=submit]").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/DiarioCampo/Edit/{created.IdDCampo}");
 
             var edited = await Fixture.QueryAsync(db => db.DiariosCampo
                 .Where(diary => diary.IdDCampo == created.IdDCampo)
@@ -170,11 +170,11 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("input[name=Data]").FillAsync("2026-08-21");
             await page.Locator("textarea[name=Descricao]").FillAsync(editedMarker);
             await page.Locator("input[name=Localizacao]").FillAsync("Avenida Atualizada, 20");
-            await page.Locator("[data-axis-picker] summary").ClickAsync();
+            await page.Locator("#editForm [data-axis-picker] summary").ClickAsync();
             await page.Locator($"[data-axis-picker] .tag-remove-btn").ClickAsync();
             await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[1]}']").CheckAsync();
             await page.Locator("#editForm button[type=submit]").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/DiarioCampo/Edit/{diaryId}");
 
             var updated = await Fixture.QueryAsync(db => db.DiariosCampo
                 .Where(diary => diary.IdDCampo == diaryId)
@@ -226,7 +226,7 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("select[name=FkIdComunidade]").SelectOptionAsync(prerequisites.CommunityId.ToString());
             await page.Locator("input[name=Data]").FillAsync("2026-08-22");
             await page.Locator("textarea[name=Descricao]").FillAsync(marker);
-            await page.Locator("[data-axis-picker] summary").ClickAsync();
+            await page.Locator("form.main-form [data-axis-picker] summary").ClickAsync();
             await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[0]}']").CheckAsync();
 
             await page.Locator("button.btn-add-circle").ClickAsync();
@@ -239,7 +239,8 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("#atorAcao").SelectOptionAsync(secondActorId.ToString());
             await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar participante" }).ClickAsync();
             await Assertions.Expect(page.Locator("#atoresSelecionadosAcao li")).ToHaveCountAsync(2);
-            await page.Locator($"label.checkbox-card-label:has(input[name=modalEixos][value='{prerequisites.AxisIds[0]}'])").ClickAsync();
+            await page.Locator("#modalAcao [data-axis-picker] summary").ClickAsync();
+            await page.Locator($"#modalAcao input[name=modalEixos][value='{prerequisites.AxisIds[0]}']").CheckAsync();
             await page.Locator("#modalAcao .btn-confirm").ClickAsync();
             await Assertions.Expect(page.Locator("#container-institucional .action-list-item"))
                 .ToContainTextAsync("Encaminhamento institucional");
@@ -284,11 +285,12 @@ public sealed class FieldDiaryUiTests(E2ETestFixture fixture) : BrowserTestBase(
             await page.Locator("#quantidadeAcao").FillAsync("1");
             await page.Locator("#atorAcao").SelectOptionAsync(secondActorId.ToString());
             await page.GetByRole(AriaRole.Button, new() { Name = "Adicionar participante" }).ClickAsync();
-            await page.Locator("#eixoAcao").SelectOptionAsync(prerequisites.AxisIds[1].ToString());
+            await page.Locator("#modalAcao [data-axis-picker] summary").ClickAsync();
+            await page.Locator($"#modalAcao input[name=modalEixos][value='{prerequisites.AxisIds[1]}']").CheckAsync();
             await page.Locator("#modalAcao .btn-confirm").ClickAsync();
             await Assertions.Expect(page.Locator("input[name='TempAcoes.Index']")).ToHaveCountAsync(1);
             await page.Locator("#editForm button[type=submit]").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/DiarioCampo");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/DiarioCampo/Edit/{diaryId}");
 
             Assert.False(await Fixture.QueryAsync(db => db.DiarioDAcoes
                 .AnyAsync(item => item.IdDAcoes == action.IdDAcoes)));

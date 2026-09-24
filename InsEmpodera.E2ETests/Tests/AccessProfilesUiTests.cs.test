@@ -96,7 +96,7 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             await usersEditPermissions.Nth(0).Locator("xpath=..").ClickAsync();
             await usersEditPermissions.Nth(1).Locator("xpath=..").ClickAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/AccessProfile/Edit/{profileId}");
 
             Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Perfis
                 .Where(profile => profile.IdPerfil == profileId)
@@ -166,12 +166,13 @@ public sealed class AccessProfilesUiTests(E2ETestFixture fixture) : BrowserTestB
             await permissions.First.Locator("xpath=..").ClickAsync();
             await permissions.Nth(1).Locator("xpath=..").ClickAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/AccessProfile");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/AccessProfile/Edit/{profileId}");
             Assert.Equal(editedName, await Fixture.QueryAsync(db => db.Perfis
                 .Where(profile => profile.IdPerfil == profileId)
                 .Select(profile => profile.Nome)
                 .SingleAsync()));
 
+            await page.GotoAsync("/AccessProfile");
             var card = page.Locator(".profile-item").Filter(new() { HasText = editedName });
             await Assertions.Expect(card).ToBeVisibleAsync();
             var deleteButton = card.GetByRole(AriaRole.Button,

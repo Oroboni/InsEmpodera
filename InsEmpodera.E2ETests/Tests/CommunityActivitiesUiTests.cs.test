@@ -61,7 +61,7 @@ public sealed class CommunityActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator($"input[name=EixosSelecionados][value='{prerequisites.AxisIds[1]}']").CheckAsync();
             await page.Locator("details.multiselect-wrapper summary").ClickAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "EDITAR ATIVIDADE" }).ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade/AtividadesVinculadas");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/Edit_Atividades/{created.IdAtividade}");
 
             var edited = await Fixture.QueryAsync(db => db.Atividades
                 .Where(item => item.IdAtividade == created.IdAtividade)

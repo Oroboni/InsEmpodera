@@ -142,7 +142,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         _context.Comunidades.Add(comunidade);
         _context.SaveChanges();
         
-        return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.Id_Comunidade });
+        return RedirectToAction(nameof(Index));
     }
         
         // 2. Lógica de EDIÇÃO (Id_Comunidade > 0)
@@ -685,7 +685,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         await _context.SaveChangesAsync();
-        return RedirectToAction("ComunidadeRecursos", new { comunidadeId = recursoDb.FkIdComunidade });
+        return RedirectToAction(nameof(ComunidadeDetalhesRecursos), new { id = recursoDb.Id_Rede });
     }
 
     [HttpPost]
@@ -901,7 +901,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("AtoresVinculados", "Comunidade", new { id = ComunidadeId });
+        return RedirectToAction(nameof(Edit_Atores), new { id = ator.IdAtores, comunidadeId = ComunidadeId });
     }
 
 
@@ -1110,7 +1110,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("AtividadesVinculadas", new { comunidadeId });
+        return RedirectToAction(nameof(Edit_Atividades), new { id, comunidadeId });
 
     }
 

@@ -48,13 +48,13 @@
         </div>
 
         <!-- Eixos -->
-        <div class="input-card full-width">
+        <div class="input-card full-width" data-axis-picker>
             <div class="icon-box"><i class="fa-solid fa-tags"></i></div>
             <div class="input-content">
                 <label>Eixos <span class="text-danger">*</span></label>
                 
                 <!-- Container de Tags Selecionadas -->
-                <div class="eixos-tag-container" id="tag-container"></div>
+                <div class="eixos-tag-container" data-axis-tags></div>
 
                 <!-- Dropdown de Seleção -->
                 <details class="multiselect-wrapper">
@@ -65,7 +65,7 @@
                             <i class="fa-solid fa-chevron-down select-arrow"></i>
                         </div>
                     </summary>
-                    <div class="multiselect-panel" id="multiselect-panel">
+                    <div class="multiselect-panel">
                         <ul>
                             @if (eixos != null)
                             {
@@ -114,65 +114,12 @@
 </form>
 
 @section Scripts {
+    <script src="~/js/axis-picker.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('.main-form');
             const createBtn = document.getElementById('create-activity-btn');
-            const tagContainer = document.getElementById('tag-container');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
             let isSubmitting = false;
-
-            // Função para atualizar as tags
-            function updateTagView() {
-                tagContainer.innerHTML = '';
-
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-
-                    if (cb.checked) {
-                        const tagName = cb.dataset.tagName;
-                        const tag = document.createElement('span');
-                        tag.className = 'tag-item tag-purple';
-                        tag.textContent = tagName;
-
-                        const removeBtn = document.createElement('i');
-                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.dataset.checkboxId = cb.id;
-
-                        tag.appendChild(removeBtn);
-                        tagContainer.appendChild(tag);
-
-                        listItem.classList.add('is-selected');
-                    } else {
-                        listItem.classList.remove('is-selected');
-                    }
-                });
-            }
-
-            // Evento de mudança nos checkboxes
-            multiselectPanel.addEventListener('change', function (e) {
-                if (e.target.type === 'checkbox') {
-                    updateTagView();
-                }
-            });
-
-            // Evento de clique no X das tags
-            tagContainer.addEventListener('click', function (e) {
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const checkboxId = e.target.dataset.checkboxId;
-                    const checkboxToUncheck = document.getElementById(checkboxId);
-
-                    if (checkboxToUncheck) {
-                        checkboxToUncheck.checked = false;
-                        updateTagView();
-                    }
-                }
-            });
-
-            // Inicialização
-            updateTagView();
-
             // Handler do botão criar
             form.addEventListener('submit', function (e) {
                 if (!isSubmitting && form.checkValidity()) {

@@ -224,7 +224,7 @@ public class AccessProfileController : Controller
                 throw;
         }
 
-        return RedirectToAction("Index", "AccessProfile");
+        return RedirectToAction(nameof(Edit), new { id = perfilDb.IdPerfil });
     }
 
     [HttpPost]

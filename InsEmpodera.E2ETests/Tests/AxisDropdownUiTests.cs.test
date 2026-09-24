@@ -1,4 +1,5 @@
 using InsEmpodera.E2ETests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Playwright;
 using Xunit;
 
@@ -19,4 +20,50 @@ public sealed class AxisDropdownUiTests(E2ETestFixture fixture) : BrowserTestBas
             Assert.True(await card.Locator("input[name=EixosSelecionados]").CountAsync() > 0);
             Assert.Equal("visible", await card.EvaluateAsync<string>("element => getComputedStyle(element).overflow"));
         });
+
+    [Fact(DisplayName = "Eixos — linha inteira seleciona nas telas de cadastro e no modal de ações")]
+    public Task AxisPicker_WholeOptionRowIsClickableAcrossCreateScreens() =>
+        RunInBrowserAsync(nameof(AxisPicker_WholeOptionRowIsClickableAcrossCreateScreens), async page =>
+        {
+            await LoginAsync(page);
+            var ids = await Fixture.QueryAsync(async db => new
+            {
+                Community = await db.Comunidades.Where(item => item.Ativo == "S")
+                    .Select(item => item.Id_Comunidade).FirstAsync(),
+                Actor = await db.Atores.Where(item => item.Ativo == "S")
+                    .Select(item => item.IdAtores).FirstAsync()
+            });
+            var createPaths = new[]
+            {
+                "/Atividades/Create",
+                $"/Comunidade/Create_Atividades?comunidadeId={ids.Community}",
+                $"/Comunidade/Create_Recursos?comunidadeId={ids.Community}",
+                $"/PersonalProcess/Create?atorId={ids.Actor}",
+                "/DiarioCampo/Create"
+            };
+
+            foreach (var path in createPaths)
+            {
+                await page.GotoAsync(path);
+                await SelectAxisFromFarRightAsync(page, page.Locator("[data-axis-picker]:visible").First);
+            }
+
+            await page.Locator("button.btn-add-circle").ClickAsync();
+            await Assertions.Expect(page.Locator("#modalAcao")).ToBeVisibleAsync();
+            await SelectAxisFromFarRightAsync(page, page.Locator("#modalAcao [data-axis-picker]"));
+        });
+
+    private static async Task SelectAxisFromFarRightAsync(IPage page, ILocator picker)
+    {
+        await picker.Locator("summary").ClickAsync();
+        var row = picker.Locator(".multiselect-panel li:visible").First;
+        var checkbox = row.Locator("input[type=checkbox]");
+        var checkboxId = await checkbox.GetAttributeAsync("id");
+        Assert.NotNull(checkboxId);
+        var box = await row.BoundingBoxAsync();
+        Assert.NotNull(box);
+        await page.Mouse.ClickAsync(box.X + box.Width - 8, box.Y + box.Height / 2);
+        await Assertions.Expect(picker.Locator($"input[id='{checkboxId}']")).ToBeCheckedAsync();
+        await Assertions.Expect(picker.Locator("[data-axis-tags] .tag-item")).ToHaveCountAsync(1);
+    }
 }

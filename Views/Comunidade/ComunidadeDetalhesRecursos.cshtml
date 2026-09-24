@@ -57,9 +57,9 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" data-axis-picker>
             <label>Eixos</label>
-            <div class="eixos-tag-container" id="tag-container"></div>
+            <div class="eixos-tag-container" data-axis-tags></div>
             <details class="multiselect-wrapper">
                 <summary>
                     <div class="select-wrapper">
@@ -68,7 +68,7 @@
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
+                <div class="multiselect-panel">
                     <ul>
                         @if (eixos != null)
                         {
@@ -129,42 +129,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const tagContainer = document.getElementById('tag-container');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-
-            function updateTagView() {
-                tagContainer.innerHTML = '';
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-                    if (cb.checked) {
-                        const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass;
-                        const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
-                        tag.textContent = tagName;
-                        const removeBtn = document.createElement('i');
-                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.dataset.checkboxId = cb.id;
-                        tag.appendChild(removeBtn);
-                        tagContainer.appendChild(tag);
-                        listItem.classList.add('is-selected');
-                    } else {
-                        listItem.classList.remove('is-selected');
-                    }
-                });
-            }
-
-            multiselectPanel.addEventListener('change', (e) => { if (e.target.type === 'checkbox') updateTagView(); });
-            tagContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const cb = document.getElementById(e.target.dataset.checkboxId);
-                    if (cb) { cb.checked = false; updateTagView(); }
-                }
-            });
-            updateTagView();
-        });
-    </script>
+    <script src="~/js/axis-picker.js" asp-append-version="true"></script>
 }

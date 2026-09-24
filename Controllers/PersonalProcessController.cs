@@ -134,7 +134,7 @@ public class PersonalProcessController : Controller
             .Select(eixoId => new DiarioProcessoEixo { FkIdDiarioProcesso = id, FkIdEixo = eixoId })
             .ToList();
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index), new { atorId = persisted.FK_id_Atores });
+        return RedirectToAction(nameof(Edit), new { id = persisted.IdDiarioProcesso });
     }
 
     [HttpPost]

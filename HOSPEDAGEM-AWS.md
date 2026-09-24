@@ -5,7 +5,7 @@
 **Projeto:** `Oroboni/InsEmpodera`  
 **Branch de implantação:** `Online`  
 **URL pública atual:** `https://34.234.8.175`  
-**Última revisão deste guia:** 9 de setembro de 2026
+**Última revisão deste guia:** 22 de setembro de 2026
 
 ---
 
@@ -719,34 +719,25 @@ sudo certbot delete --cert-name empodera-ip-staging --non-interactive
 
 ### 12.3 Automatizar a renovação
 
-Crie o serviço:
+Crie o serviço diretamente, evitando que o arquivo fique vazio ou com nome incorreto:
 
 ```bash
-sudo nano /etc/systemd/system/certbot-renew.service
-```
-
-Conteúdo:
-
-```ini
+sudo tee /etc/systemd/system/certbot-renew.service >/dev/null <<'EOF'
 [Unit]
 Description=Renovar certificados do Let's Encrypt
+Wants=network-online.target
 After=network-online.target nginx.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/certbot renew --quiet
-ExecStartPost=/usr/bin/systemctl reload nginx
+ExecStart=/usr/local/bin/certbot renew --quiet --deploy-hook "/usr/bin/systemctl reload nginx"
+EOF
 ```
 
 Crie o temporizador:
 
 ```bash
-sudo nano /etc/systemd/system/certbot-renew.timer
-```
-
-Conteúdo:
-
-```ini
+sudo tee /etc/systemd/system/certbot-renew.timer >/dev/null <<'EOF'
 [Unit]
 Description=Verificar renovação do Let's Encrypt quatro vezes por dia
 
@@ -757,25 +748,52 @@ Persistent=true
 
 [Install]
 WantedBy=timers.target
+EOF
 ```
 
-Ative:
+Valide, recarregue e ative:
 
 ```bash
+sudo systemd-analyze verify \
+  /etc/systemd/system/certbot-renew.service \
+  /etc/systemd/system/certbot-renew.timer
+
 sudo systemctl daemon-reload
 sudo systemctl enable --now certbot-renew.timer
+sudo systemctl is-enabled certbot-renew.timer
+sudo systemctl is-active certbot-renew.timer
 sudo systemctl list-timers certbot-renew.timer --all
+
 sudo systemctl start certbot-renew.service
-sudo systemctl status certbot-renew.service --no-pager
+sudo systemctl show certbot-renew.service -p Result -p ExecMainStatus
+sudo journalctl -u certbot-renew.service -n 100 --no-pager
 ```
 
-Teste o processo de renovação:
+Os resultados esperados são:
+
+```text
+enabled
+active
+Result=success
+ExecMainStatus=0
+```
+
+O serviço é do tipo `oneshot`. Depois de concluir uma verificação com sucesso, ele pode aparecer como `inactive (dead)`; isso é normal. Quem deve permanecer `active` é `certbot-renew.timer`.
+
+Teste uma renovação simulada completa:
 
 ```bash
 sudo certbot renew --dry-run --deploy-hook "/usr/bin/systemctl reload nginx"
 ```
 
 O certificado de IP dura aproximadamente seis dias. O temporizador acima verifica a renovação quatro vezes por dia e recarrega o Nginx depois de uma execução bem-sucedida do Certbot.
+
+Use os nomes das unidades sem barras invertidas:
+
+```text
+certbot-renew.service
+certbot-renew.timer
+```
 
 ---
 
@@ -1224,6 +1242,14 @@ sudo journalctl -u certbot-renew.service -n 100 --no-pager
 sudo certbot certificates
 ```
 
+Se aparecer `Unit certbot-renew.service not found` ou `Unit certbot-renew.timer not found`, as unidades ainda não foram criadas. Execute integralmente a seção 12.3 e depois confirme:
+
+```bash
+sudo systemctl is-enabled certbot-renew.timer
+sudo systemctl is-active certbot-renew.timer
+sudo systemctl list-timers certbot-renew.timer --all
+```
+
 Se o certificado já estiver vencido, reemita imediatamente usando o mesmo nome e o mesmo webroot:
 
 ```bash
@@ -1314,7 +1340,7 @@ Não publique na EC2. Execute `dotnet publish` no computador Windows, compacte o
 - [ ] Nginx escuta nas portas 80 e 443.
 - [ ] HTTP redireciona para HTTPS.
 - [ ] O certificado de `34.234.8.175` é confiável.
-- [ ] `certbot-renew.timer` está ativo.
+- [ ] `certbot-renew.timer` está `enabled` e `active`.
 - [ ] `/Account`, CSS e JavaScript retornam HTTP 200 por HTTPS.
 
 ### Teste funcional

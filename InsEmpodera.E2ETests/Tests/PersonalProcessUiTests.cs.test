@@ -94,7 +94,7 @@ public sealed class PersonalProcessUiTests(E2ETestFixture fixture) : BrowserTest
             await page.Locator("[data-axis-picker] .tag-remove-btn").ClickAsync();
             await page.Locator($"input[name=eixosIds][value='{prerequisites.AxisIds[1]}']").CheckAsync();
             await page.GetByRole(AriaRole.Button, new() { Name = "SALVAR ALTERAÇÕES" }).ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalProcess");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/PersonalProcess/Edit/{diaryId}");
 
             Assert.Equal(edited, await Fixture.QueryAsync(db => db.DiariosProcessoPessoal
                 .Where(d => d.IdDiarioProcesso == diaryId).Select(d => d.Descricao).SingleAsync()));

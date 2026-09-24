@@ -44,7 +44,9 @@ public sealed class PersonalProcessCrudTests : ControllerTestBase
             Descricao = "Acompanhamento atualizado"
         }, [secondAxis.IdEixo]);
 
-        Assert.IsType<RedirectToActionResult>(edit);
+        var editRedirect = Assert.IsType<RedirectToActionResult>(edit);
+        Assert.Equal(nameof(PersonalProcessController.Edit), editRedirect.ActionName);
+        Assert.Equal(saved.IdDiarioProcesso, editRedirect.RouteValues!["id"]);
         Db.ChangeTracker.Clear();
         var updated = await Db.DiariosProcessoPessoal.Include(d => d.Eixos).SingleAsync();
         Assert.Equal("Acompanhamento atualizado", updated.Descricao);

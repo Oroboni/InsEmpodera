@@ -27,10 +27,10 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" data-axis-picker>
             <label>Eixos</label>
 
-            <div class="eixos-tag-container" id="tag-container">
+            <div class="eixos-tag-container" data-axis-tags>
             </div>
 
             <details class="multiselect-wrapper">
@@ -41,7 +41,7 @@
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
+                <div class="multiselect-panel">
                     <ul>
                         @if (eixos != null)
                         {
@@ -74,73 +74,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const tagContainer = document.getElementById('tag-container');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-
-            // Todos os checkboxes de eixos
-            const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-
-            // --- 1. Função Principal: Atualiza a UI (Tags e Lista) ---
-            function updateTagView() {
-                // Limpa o container de tags
-                tagContainer.innerHTML = '';
-
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-
-                    if (cb.checked) {
-                        // Se está marcado: cria a tag
-                        const tagName = cb.dataset.tagName;
-                        const tagClass = cb.dataset.tagClass;
-
-                        const tag = document.createElement('span');
-                        tag.className = `tag-item ${tagClass}`;
-                        tag.textContent = tagName;
-
-                        // Cria o botão 'x' de remover
-                        const removeBtn = document.createElement('i');
-                        removeBtn.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeBtn.dataset.checkboxId = cb.id; // Liga o 'x' ao seu checkbox
-
-                        tag.appendChild(removeBtn);
-                        tagContainer.appendChild(tag);
-
-                        // Esconde o item da lista dropdown
-                        listItem.classList.add('is-selected');
-                    } else {
-                        // Se não está marcado: mostra na lista
-                        listItem.classList.remove('is-selected');
-                    }
-                });
-            }
-
-            // --- 2. Evento: Clicar no Checkbox (na lista) ---
-            multiselectPanel.addEventListener('change', function (e) {
-                if (e.target.type === 'checkbox') {
-                    updateTagView();
-                }
-            });
-
-            // --- 3. Evento: Clicar no 'X' da Tag (no container) ---
-            tagContainer.addEventListener('click', function (e) {
-                // Se clicou no 'x' (classe 'tag-remove-btn')
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const checkboxId = e.target.dataset.checkboxId;
-                    const checkboxToUncheck = document.getElementById(checkboxId);
-
-                    if (checkboxToUncheck) {
-                        checkboxToUncheck.checked = false;
-                        // Atualiza a UI
-                        updateTagView();
-                    }
-                }
-            });
-
-            // --- 4. Inicialização ---
-            // Mostra as tags que já vieram selecionadas (se houver alguma 'checked')
-            updateTagView();
-        });
-    </script>
+    <script src="~/js/axis-picker.js" asp-append-version="true"></script>
 }

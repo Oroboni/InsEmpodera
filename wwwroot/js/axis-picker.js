@@ -1,6 +1,7 @@
 document.querySelectorAll('[data-axis-picker]').forEach(picker => {
     const tags = picker.querySelector('[data-axis-tags]');
-    const options = [...picker.querySelectorAll('input[name="EixosSelecionados"], input[name="eixosIds"]')];
+    const panel = picker.querySelector('.multiselect-panel');
+    const options = [...(panel?.querySelectorAll('input[type="checkbox"]') || [])];
     if (!tags) return;
 
     const render = () => {
@@ -28,5 +29,13 @@ document.querySelectorAll('[data-axis-picker]').forEach(picker => {
     };
 
     picker.addEventListener('change', render);
+    panel?.addEventListener('click', event => {
+        const row = event.target.closest('li');
+        if (!row || event.target.closest('label, input, button')) return;
+        const option = row.querySelector('input[type="checkbox"]');
+        if (!option || option.disabled) return;
+        option.checked = !option.checked;
+        option.dispatchEvent(new Event('change', { bubbles: true }));
+    });
     render();
 });

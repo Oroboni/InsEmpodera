@@ -149,7 +149,7 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             await page.Locator("label.checkbox-option:has(input[name=SelectedResultados])").First.ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=SelectedResultados])").Nth(1).ClickAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/FichaPrimeiroContato");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/FichaPrimeiroContato/Edit/{fichaId}");
 
             var fichaEdited = await Fixture.QueryAsync(db => db.FichasPrimeiroContato
                 .Where(ficha => ficha.IdFicha == fichaId)
@@ -185,6 +185,7 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaRespostas.CountAsync(item => item.FkIdFicha == fichaId)));
             Assert.Equal(1, await Fixture.QueryAsync(db => db.FichaResultados.CountAsync(item => item.FkIdFicha == fichaId)));
 
+            await page.GotoAsync("/FichaPrimeiroContato");
             await page.Locator($".btn-concluir[data-id='{fichaId}']").ClickAsync();
             await Assertions.Expect(page.Locator("#modalConcluir")).ToBeVisibleAsync();
             await page.Locator("#modalConcluir .btn-cancel").ClickAsync();
@@ -307,8 +308,7 @@ public sealed class FirstContactAndAssessmentUiTests(E2ETestFixture fixture) : B
                 await SetRangeAsync(page.Locator($"input[name={metric.Name}]"), metric.Value);
             await Assertions.Expect(page.Locator("input[name=Saude]")).ToHaveAttributeAsync("data-level", "4");
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/PersonalAssessment"
-                && new Uri(url).Query.Contains($"atorId={actorId}"));
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/PersonalAssessment/Edit/{assessmentId}");
 
             var scores = await Fixture.QueryAsync(db => db.AvaliacaoPessoal
                 .Where(assessment => assessment.IdAvaliacao == assessmentId)

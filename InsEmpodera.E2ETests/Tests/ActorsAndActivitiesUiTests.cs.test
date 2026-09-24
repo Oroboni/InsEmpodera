@@ -78,7 +78,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Moradia])").ClickAsync();
             await page.Locator("label.checkbox-option:has(input[name=vulnerabilidades][value=Prevencao])").ClickAsync();
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == listPath);
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Comunidade/Edit_Atores/{created.IdAtores}");
 
             var edited = await Fixture.QueryAsync(db => db.Atores
                 .Where(actor => actor.IdAtores == created.IdAtores)
@@ -104,7 +104,6 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             Assert.Contains("Vulnerabilidade:Prevencao", edited.Resources);
             Assert.DoesNotContain("Vulnerabilidade:Moradia", edited.Resources);
 
-            await page.Locator(".form-item").Filter(new() { HasText = editedName }).Locator("a.btn-action").ClickAsync();
             await Assertions.Expect(page.Locator("input[name=Idade]")).ToHaveValueAsync("37");
             await Assertions.Expect(page.Locator("select[name=tipoRelacionamento]")).ToHaveValueAsync("1");
             await page.Locator("#openDeleteModalBtn").ClickAsync();
@@ -211,7 +210,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("input[name=PapelSocial2]").FillAsync("Mediação e cultura");
             await page.Locator("#inputTelefone").FillAsync("+351 21 555 0199");
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atores");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Atores/Edit/{actorId}");
 
             var actorState = await Fixture.QueryAsync(db => db.Atores
                 .Where(actor => actor.IdAtores == actorId)
@@ -281,7 +280,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("details.multiselect-wrapper summary").ClickAsync();
             await page.Locator($"label[for='eixo-{prerequisites.Axes[0].IdEixo}']").ClickAsync();
             await Assertions.Expect(firstAxis).ToBeCheckedAsync();
-            await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[0].Nome);
+            await Assertions.Expect(page.Locator("[data-axis-tags]")).ToContainTextAsync(prerequisites.Axes[0].Nome);
             await page.Locator("#create-activity-btn").ClickAsync();
             await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atividades");
 
@@ -312,17 +311,17 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(name);
             await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync("Atividade criada integralmente pela UI");
             await Assertions.Expect(page.Locator("select[name=ComunidadeId]")).ToHaveValueAsync(prerequisites.CommunityId.ToString());
-            await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[0].Nome);
+            await Assertions.Expect(page.Locator("[data-axis-tags]")).ToContainTextAsync(prerequisites.Axes[0].Nome);
             await page.Locator("#edit-save-btn").ClickAsync();
             await page.Locator("input[name=Nome]").FillAsync(editedName);
             await page.Locator("textarea[name=Descricao]").FillAsync("Descrição atualizada pela UI");
             await page.Locator("details.multiselect-wrapper summary").ClickAsync();
             await page.Locator($"label[for='eixo-{prerequisites.Axes[0].IdEixo}']").ClickAsync();
             await page.Locator($"label[for='eixo-{prerequisites.Axes[1].IdEixo}']").ClickAsync();
-            await Assertions.Expect(page.Locator("#tag-container")).Not.ToContainTextAsync(prerequisites.Axes[0].Nome);
-            await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[1].Nome);
+            await Assertions.Expect(page.Locator("[data-axis-tags]")).Not.ToContainTextAsync(prerequisites.Axes[0].Nome);
+            await Assertions.Expect(page.Locator("[data-axis-tags]")).ToContainTextAsync(prerequisites.Axes[1].Nome);
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Atividades");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Atividades/Edit/{activityId}");
 
             var linkedAxisIds = await Fixture.QueryAsync(db => db.AtividadesEixo
                 .Where(link => link.FkIdAtividade == activityId)
@@ -340,7 +339,7 @@ public sealed class ActorsAndActivitiesUiTests(E2ETestFixture fixture) : Browser
             await page.GotoAsync($"/Atividades/Edit/{activityId}");
             await Assertions.Expect(page.Locator("input[name=Nome]")).ToHaveValueAsync(editedName);
             await Assertions.Expect(page.Locator("textarea[name=Descricao]")).ToHaveValueAsync("Descrição atualizada pela UI");
-            await Assertions.Expect(page.Locator("#tag-container")).ToContainTextAsync(prerequisites.Axes[1].Nome);
+            await Assertions.Expect(page.Locator("[data-axis-tags]")).ToContainTextAsync(prerequisites.Axes[1].Nome);
             await page.Locator("#openDeleteModalBtn").ClickAsync();
             await Assertions.Expect(page.Locator("#deleteConfirmationModal")).ToBeVisibleAsync();
             await page.Locator("#deleteConfirmationModal form button[type=submit]").ClickAsync();

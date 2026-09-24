@@ -97,7 +97,7 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("select[name=Genero]").SelectOptionAsync("1");
             await page.Locator("input[name=DtNascimento]").FillAsync("1994-03-15");
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Users");
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == $"/Users/Edit/{id}");
 
             var editedUser = await Fixture.QueryAsync(db => db.Usuarios
                 .AsNoTracking().SingleAsync(user => user.IdUsuario == id));
@@ -166,15 +166,12 @@ public sealed class UsersAndCommunitiesUiTests(E2ETestFixture fixture) : Browser
             await page.Locator("textarea[name=Descricao_Acessibilidade]").FillAsync("Entrada acessível e elevador");
             await page.Locator("select[name=Status]").SelectOptionAsync("Em processo");
             await page.Locator("#edit-save-btn").ClickAsync();
-            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath.StartsWith(
-                "/Comunidade/ComunidadesDetalhes/", StringComparison.OrdinalIgnoreCase));
+            await page.WaitForURLAsync(url => new Uri(url).AbsolutePath == "/Comunidade");
 
             var id = await Fixture.QueryAsync(db => db.Comunidades
                 .Where(community => community.Nome == name)
                 .Select(community => community.Id_Comunidade)
                 .SingleAsync());
-            Assert.Equal($"/Comunidade/ComunidadesDetalhes/{id}", new Uri(page.Url).AbsolutePath,
-                ignoreCase: true);
             var createdCommunity = await Fixture.QueryAsync(db => db.Comunidades
                 .AsNoTracking().SingleAsync(community => community.Id_Comunidade == id));
             Assert.Equal(name, createdCommunity.Nome);

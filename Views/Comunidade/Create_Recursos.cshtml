@@ -61,9 +61,9 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" data-axis-picker>
             <label>Eixos Relacionados</label>
-            <div class="eixos-tag-container" id="tag-container"></div>
+            <div class="eixos-tag-container" data-axis-tags></div>
 
             <details class="multiselect-wrapper">
                 <summary>
@@ -73,7 +73,7 @@
                         <i class="fa-solid fa-chevron-down select-arrow"></i>
                     </div>
                 </summary>
-                <div class="multiselect-panel" id="multiselect-panel">
+                <div class="multiselect-panel">
                     <ul>
                         @if (eixos != null)
                         {
@@ -107,49 +107,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Script simples para gerenciar as tags visuais dos eixos
-        document.addEventListener('DOMContentLoaded', function () {
-            const tagContainer = document.getElementById('tag-container');
-            const multiselectPanel = document.getElementById('multiselect-panel');
-
-            function updateTagView() {
-                tagContainer.replaceChildren();
-                const checkboxes = multiselectPanel.querySelectorAll('input[type="checkbox"]');
-
-                checkboxes.forEach(cb => {
-                    const listItem = cb.closest('li');
-                    if (cb.checked) {
-                        const tag = document.createElement('span');
-                        tag.className = `tag-item ${cb.dataset.tagClass || 'tag-default'}`;
-                        tag.appendChild(document.createTextNode(cb.dataset.tagName || ''));
-
-                        const removeButton = document.createElement('i');
-                        removeButton.className = 'fa-solid fa-xmark tag-remove-btn';
-                        removeButton.dataset.id = cb.id;
-                        removeButton.setAttribute('role', 'button');
-                        removeButton.setAttribute('aria-label', `Remover eixo ${cb.dataset.tagName || ''}`);
-                        tag.append(document.createTextNode(' '), removeButton);
-                        tagContainer.appendChild(tag);
-                        listItem.classList.add('is-selected');
-                    } else {
-                        listItem.classList.remove('is-selected');
-                    }
-                });
-            }
-
-            multiselectPanel.addEventListener('change', updateTagView);
-
-            tagContainer.addEventListener('click', function (e) {
-                if (e.target.classList.contains('tag-remove-btn')) {
-                    const id = e.target.dataset.id;
-                    const cb = document.getElementById(id);
-                    if (cb) {
-                        cb.checked = false;
-                        updateTagView();
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="~/js/axis-picker.js" asp-append-version="true"></script>
 }

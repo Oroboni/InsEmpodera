@@ -214,7 +214,7 @@ namespace Empodera.Controllers
                     if (!DiarioCampoExists(diarioCampo.IdDCampo)) return NotFound();
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit), new { id = diarioCampo.IdDCampo });
             }
 
             var persisted = await _context.DiariosCampo
