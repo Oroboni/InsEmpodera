@@ -3,11 +3,12 @@
   use empodera;
 
   CREATE TABLE `acoes` (
-    `IdAcoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
+    `IdAcoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
     `Quantidade` int(11) NULL,
-    `FkIdAtividade` int(11) NOT NULL,
-    `Nome` longtext NULL,
-    `Provedor` longtext NULL
+    `FkIdAtividade` binary(16) NOT NULL,
+    `Nome` varchar(255)NULL,
+    `Provedor` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -17,9 +18,10 @@
   --
 
   CREATE TABLE `acoesatores` (
-    `IdAAtores` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FK_id_Atores` int(11) NOT NULL,
-    `FkIdAcoes` int(11) NOT NULL
+    `IdAAtores` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FK_id_Atores` binary(16) NOT NULL,
+    `FkIdAcoes` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -29,9 +31,10 @@
   --
 
   CREATE TABLE `anexosdiario` (
-    `IdAnexos` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdDiario` int(11) NOT NULL,
-    `Caminho` longtext NULL
+    `IdAnexos` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdDiario` binary(16) NOT NULL,
+    `Caminho` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -41,15 +44,16 @@
   --
 
   CREATE TABLE `atividades` (
-    `IdAtividade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL,
-    `Descricao` longtext NULL,
-    `Foto` longtext DEFAULT NULL,
-    `FkIdComunidade` int(11) NOT NULL,
+    `IdAtividade` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL,
+    `Descricao` varchar(255)NULL,
+    `Foto` varchar(255)DEFAULT NULL,
+    `FkIdComunidade` binary(16) NOT NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `FkIdUsuario` int(11) NOT NULL,
-    `FkIdUsuarioM` int(11) DEFAULT NULL
+    `FkIdUsuario` binary(16) NOT NULL,
+    `FkIdUsuarioM` BINARY(16) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -91,9 +95,10 @@
   --
 
   CREATE TABLE `atividadeseixo` (
-    `IdAEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdEixo` int(11) NOT NULL,
-    `FkIdAtividade` int(11) NOT NULL
+    `IdAEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdEixo` binary(16) NOT NULL,
+    `FkIdAtividade` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -103,9 +108,10 @@
   --
 
   CREATE TABLE `atorcomunidades` (
-    `IdAtorComunidade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdComunidade` int(11) NOT NULL,
-    `FK_id_Atores` int(11) NOT NULL,
+    `IdAtorComunidade` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdComunidade` binary(16) NOT NULL,
+    `FK_id_Atores` binary(16) NOT NULL,
     `TipoRelacionamento` int(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -405,22 +411,23 @@
   --
 
   CREATE TABLE `atores` (
-    `IdAtores` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL,
+    `IdAtores` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL,
     `Genero` int(11) DEFAULT NULL,
     `Idade` int(11) DEFAULT NULL,
-    `PapelSocial1` longtext DEFAULT NULL,
-    `PapelSocial2` longtext DEFAULT NULL,
-    `Telefone` longtext DEFAULT NULL,
+    `PapelSocial1` varchar(255)DEFAULT NULL,
+    `PapelSocial2` varchar(255)DEFAULT NULL,
+    `Telefone` varchar(255)DEFAULT NULL,
     `DaEquipe` tinyint(1) NULL,
     `Rope` tinyint(1) NULL,
     `Lopiniao` tinyint(1) NULL,
     `Mcomunidade` tinyint(1) NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `Ativo` longtext NULL,
-    `FkIdUsuario` int(11) NOT NULL,
-    `FkIdUsuarioM` int(11) DEFAULT NULL
+    `Ativo` varchar(255)NULL,
+    `FkIdUsuario` binary(16) NOT NULL,
+    `FkIdUsuarioM` BINARY(16) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -719,8 +726,9 @@
   --
 
   CREATE TABLE `avaliacaopessoal` (
-    `IdAvaliacao` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FK_id_Atores` int(11) NOT NULL,
+    `IdAvaliacao` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FK_id_Atores` binary(16) NOT NULL,
     `CCrimes` int(11) NULL,
     `Substancias` int(11) NULL,
     `Moradia` int(11) NULL,
@@ -732,7 +740,7 @@
     `Lazer` int(11) NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `FkIdUsuario` int(11) NOT NULL
+    `FkIdUsuario` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -742,21 +750,22 @@
   --
 
   CREATE TABLE `comunidades` (
-    `Id_Comunidade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL,
-    `Local` longtext DEFAULT NULL,
-    `LocalMapa` longtext DEFAULT NULL,
-    `LocalSecundario` longtext DEFAULT NULL,
-    `LocalMapaSecundario` longtext DEFAULT NULL,
-    `Status` longtext NULL,
-    `Complemento` longtext DEFAULT NULL,
-    `Descricao` longtext DEFAULT NULL,
-    `Descricao_Acessibilidade` longtext DEFAULT NULL,
+    `Id_Comunidade` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL,
+    `Local` varchar(255)DEFAULT NULL,
+    `LocalMapa` varchar(255)DEFAULT NULL,
+    `LocalSecundario` varchar(255)DEFAULT NULL,
+    `LocalMapaSecundario` varchar(255)DEFAULT NULL,
+    `Status` varchar(255)NULL,
+    `Complemento` varchar(255)DEFAULT NULL,
+    `Descricao` varchar(255)DEFAULT NULL,
+    `Descricao_Acessibilidade` varchar(255)DEFAULT NULL,
     `Dt_Criacao` datetime(6) NULL,
     `Dt_Modificacao` datetime(6) NULL,
-    `FK_Id_Usuario` int(11) NOT NULL,
-    `FK_Id_UsuarioM` int(11) DEFAULT NULL,
-    `Ativo` longtext NULL
+    `FK_Id_Usuario` binary(16) NOT NULL,
+    `FK_Id_UsuarioM` BINARY(16) DEFAULT NULL,
+    `Ativo` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -796,9 +805,10 @@
   --
 
   CREATE TABLE `daatores` (
-    `Id` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdDDacoes` int(11) NOT NULL,
-    `FK_id_Atores` int(11) NOT NULL
+    `Id` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdDDacoes` binary(16) NOT NULL,
+    `FK_id_Atores` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -808,9 +818,10 @@
   --
 
   CREATE TABLE `detalhesdacoes` (
-    `Id` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL,
-    `FkIdDDacoes` int(11) NOT NULL
+    `Id` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL,
+    `FkIdDDacoes` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -820,9 +831,10 @@
   --
 
   CREATE TABLE `detalheseixos` (
-    `IdDiarioEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdDetalhes` int(11) NOT NULL,
-    `FkIdEixo` int(11) NOT NULL
+    `IdDiarioEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdDetalhes` binary(16) NOT NULL,
+    `FkIdEixo` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -832,9 +844,10 @@
   --
 
   CREATE TABLE `diarioacoes` (
-    `IdDAcoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdAcoes` int(11) NOT NULL,
-    `FkIdDiario` int(11) NOT NULL
+    `IdDAcoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdAcoes` binary(16) NOT NULL,
+    `FkIdDiario` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -844,10 +857,11 @@
   --
 
   CREATE TABLE `diariodacoes` (
-    `IdDAcoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdDiario` int(11) NOT NULL,
-    `Nome` longtext NULL,
-    `PeovedorEx` longtext NULL,
+    `IdDAcoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdDiario` binary(16) NOT NULL,
+    `Nome` varchar(255)NULL,
+    `PeovedorEx` varchar(255)NULL,
     `Quantidade` int(11) NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -858,9 +872,10 @@
   --
 
   CREATE TABLE `diarioeixos` (
-    `IdDiarioEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdDiario` int(11) NOT NULL,
-    `FkIdEixo` int(11) NOT NULL
+    `IdDiarioEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdDiario` binary(16) NOT NULL,
+    `FkIdEixo` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -870,15 +885,16 @@
   --
 
   CREATE TABLE `diarioscampo` (
-    `IdDCampo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdComunidade` int(11) NULL,
+    `IdDCampo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdComunidade` BINARY(16) NULL,
     `Data` datetime(6) NULL,
-    `Descricao` longtext NULL,
-    `Localizacao` longtext NULL,
+    `Descricao` varchar(255)NULL,
+    `Localizacao` varchar(255)NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `Foto` longtext NULL,
-    `FkIdUsuario` int(11) NULL
+    `Foto` varchar(255)NULL,
+    `FkIdUsuario` BINARY(16) NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -926,15 +942,13 @@
   --
 
   CREATE TABLE `eixos` (
-    `IdEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL
+    `IdEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   INSERT INTO `eixos` (`Nome`) VALUES
   ('REDES'),
-  ('SEGURIDADE SOCIAL'),
-  ('SUBSTÂNCIAS'),
-  ('PREVENÇÃO'),
   ('ASSISTÊNCIA BÁSICA E REDUÇÃO DE DANOS'),
   ('EDUCAÇÃO'),
   ('SAÚDE FÍSICA E PSICOLÓGICA'),
@@ -948,9 +962,10 @@
   --
 
   CREATE TABLE `fichacondicoes` (
-    `IdCondicoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdFicha` int(11) NOT NULL,
-    `Cond` longtext NULL
+    `IdCondicoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdFicha` binary(16) NOT NULL,
+    `Cond` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1100,9 +1115,10 @@
   --
 
   CREATE TABLE `fichapeticoes` (
-    `IdPeticoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdFicha` int(11) NOT NULL,
-    `Pet` longtext NULL
+    `IdPeticoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdFicha` binary(16) NOT NULL,
+    `Pet` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1202,9 +1218,10 @@
   --
 
   CREATE TABLE `ficharespostas` (
-    `IdCondicoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdFicha` int(11) NOT NULL,
-    `Resp` longtext NULL
+    `IdCondicoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdFicha` binary(16) NOT NULL,
+    `Resp` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1298,9 +1315,10 @@
   --
 
   CREATE TABLE `ficharesultados` (
-    `IdCondicoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdFicha` int(11) NOT NULL,
-    `Result` longtext NULL
+    `IdCondicoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdFicha` binary(16) NOT NULL,
+    `Result` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1414,35 +1432,36 @@
   --
 
   CREATE TABLE `fichasprimeirocontato` (
-    `IdFicha` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FK_id_Atores` int(11) NOT NULL,
-    `Endereco` longtext DEFAULT NULL,
-    `Complemento` longtext DEFAULT NULL,
-    `Emprego` longtext DEFAULT NULL,
-    `CEstabeleceu` longtext DEFAULT NULL,
-    `NovoParceiro` longtext DEFAULT NULL,
-    `FornecidoParceiro` longtext DEFAULT NULL,
-    `Telefone` longtext DEFAULT NULL,
-    `LContato` longtext DEFAULT NULL,
-    `FonteDados` longtext DEFAULT NULL,
-    `EstaFamiliar` longtext DEFAULT NULL,
-    `EstruFamiliar` longtext DEFAULT NULL,
+    `IdFicha` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FK_id_Atores` binary(16) NOT NULL,
+    `Endereco` varchar(255)DEFAULT NULL,
+    `Complemento` varchar(255)DEFAULT NULL,
+    `Emprego` varchar(255)DEFAULT NULL,
+    `CEstabeleceu` varchar(255)DEFAULT NULL,
+    `NovoParceiro` varchar(255)DEFAULT NULL,
+    `FornecidoParceiro` varchar(255)DEFAULT NULL,
+    `Telefone` varchar(255)DEFAULT NULL,
+    `LContato` varchar(255)DEFAULT NULL,
+    `FonteDados` varchar(255)DEFAULT NULL,
+    `EstaFamiliar` varchar(255)DEFAULT NULL,
+    `EstruFamiliar` varchar(255)DEFAULT NULL,
     `NFIlhos` int(11) DEFAULT NULL,
     `NFilhas` int(11) DEFAULT NULL,
     `AEscolar` int(11) DEFAULT NULL,
-    `Status` longtext DEFAULT NULL,
-    `SLer` longtext DEFAULT NULL,
-    `SCalc` longtext DEFAULT NULL,
-    `SComp` longtext DEFAULT NULL,
+    `Status` varchar(255)DEFAULT NULL,
+    `SLer` varchar(255)DEFAULT NULL,
+    `SCalc` varchar(255)DEFAULT NULL,
+    `SComp` varchar(255)DEFAULT NULL,
     `QReabili` int(11) DEFAULT NULL,
-    `LTrat` longtext DEFAULT NULL,
-    `Coment` longtext DEFAULT NULL,
+    `LTrat` varchar(255)DEFAULT NULL,
+    `Coment` varchar(255)DEFAULT NULL,
     `DtContato` datetime(6) NULL,
     `HoraContato` time(6) NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `FkIdComunidade` int(11) DEFAULT NULL,
-    `FkIdUsuario` int(11) NOT NULL
+    `FkIdComunidade` BINARY(16) DEFAULT NULL,
+    `FkIdUsuario` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1502,17 +1521,18 @@
   --
 
   CREATE TABLE `fontesinfo` (
-    `IdFonte` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdFicha` int(11) NOT NULL,
-    `Nome` longtext NULL,
+    `IdFonte` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdFicha` binary(16) NOT NULL,
+    `Nome` varchar(255)NULL,
     `Genero` int(11) DEFAULT NULL,
     `Idade` int(11) NULL,
-    `PapelSocial1` longtext NULL,
-    `PapelSocial2` longtext NULL,
-    `Telefone` longtext NULL,
-    `Extra` longtext NULL,
-    `Fk_Id_Ator` int(11) NOT NULL,
-    `AtorIdAtores` int(11) DEFAULT NULL
+    `PapelSocial1` varchar(255)NULL,
+    `PapelSocial2` varchar(255)NULL,
+    `Telefone` varchar(255)NULL,
+    `Extra` varchar(255)NULL,
+    `Fk_Id_Ator` binary(16) NOT NULL,
+    `AtorIdAtores` BINARY(16) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -1522,9 +1542,10 @@
   --
 
   CREATE TABLE `perfis` (
-    `IdPerfil` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdUsuario` int(11) NOT NULL,
-    `Nome` longtext NULL,
+    `IdPerfil` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdUsuario` binary(16) NOT NULL,
+    `Nome` varchar(255)NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1547,14 +1568,15 @@
   --
 
   CREATE TABLE `permissoes` (
-    `IdPermissoes` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdPerfil` int(11) NOT NULL,
-    `Modulo` longtext NULL,
-    `PodeListar` longtext NULL,
-    `PodeDetalhar` longtext NULL,
-    `PodeCriar` longtext NULL,
-    `PodeAtualizar` longtext NULL,
-    `PodeDeletar` longtext NULL
+    `IdPermissoes` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdPerfil` binary(16) NOT NULL,
+    `Modulo` varchar(255)NULL,
+    `PodeListar` varchar(255)NULL,
+    `PodeDetalhar` varchar(255)NULL,
+    `PodeCriar` varchar(255)NULL,
+    `PodeAtualizar` varchar(255)NULL,
+    `PodeDeletar` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1630,11 +1652,12 @@
   --
 
   CREATE TABLE `recursosatores` (
-    `Id_Recursos_Atores` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FK_id_Atores` int(11) NOT NULL,
-    `Tipo` longtext NULL,
-    `Nome` longtext NULL,
-    `Pode` longtext DEFAULT NULL
+    `Id_Recursos_Atores` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FK_id_Atores` binary(16) NOT NULL,
+    `Tipo` varchar(255)NULL,
+    `Nome` varchar(255)NULL,
+    `Pode` varchar(255)DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1670,9 +1693,10 @@
   --
 
   CREATE TABLE `redeeixos` (
-    `IdRedeEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdRede` int(11) NOT NULL,
-    `FkIdEixo` int(11) NOT NULL
+    `IdRedeEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdRede` binary(16) NOT NULL,
+    `FkIdEixo` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -1682,17 +1706,18 @@
   --
 
   CREATE TABLE `rederecursos` (
-    `Id_Rede` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FK_id_Atores` int(11) DEFAULT NULL,
-    `FkIdComunidade` int(11) NOT NULL,
-    `Nome` longtext DEFAULT NULL,
-    `Tipo` longtext NULL,
-    `Dispositivo` longtext DEFAULT NULL,
-    `Localizacao` longtext DEFAULT NULL,
-    `Servicos` longtext DEFAULT NULL,
+    `Id_Rede` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FK_id_Atores` BINARY(16) DEFAULT NULL,
+    `FkIdComunidade` binary(16) NOT NULL,
+    `Nome` varchar(255)DEFAULT NULL,
+    `Tipo` varchar(255)NULL,
+    `Dispositivo` varchar(255)DEFAULT NULL,
+    `Localizacao` varchar(255)DEFAULT NULL,
+    `Servicos` varchar(255)DEFAULT NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `FkIdUsuario` int(11) NOT NULL
+    `FkIdUsuario` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1819,10 +1844,11 @@
   --
 
   CREATE TABLE `redesprimarias` (
-    `IdRedePrimaria` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdAtorPrincipal` int(11) NOT NULL,
-    `FkIdAtorRelacionados` int(11) NOT NULL,
-    `TipoRelacao` longtext NULL
+    `IdRedePrimaria` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdAtorPrincipal` binary(16) NOT NULL,
+    `FkIdAtorRelacionados` binary(16) NOT NULL,
+    `TipoRelacao` varchar(255)NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -1832,19 +1858,20 @@
   --
 
   CREATE TABLE `usuarios` (
-    `IdUsuario` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL,
-    `Senha` longtext NULL,
-    `Foto` longtext DEFAULT NULL,
+    `IdUsuario` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL,
+    `Senha` varchar(255)NULL,
+    `Foto` varchar(255)DEFAULT NULL,
     `Email` varchar(256) NULL,
-    `Ocupacao` longtext NULL,
+    `Ocupacao` varchar(255)NULL,
     `Genero` int(11) DEFAULT NULL,
     `DtNascimento` datetime(6) NULL,
     `DtCriacao` datetime(6) NULL,
     `DtAtualizacao` datetime(6) DEFAULT NULL,
-    `Ativo` longtext NULL,
+    `Ativo` varchar(255)NULL,
     `IdiomaPreferido` int(11) NULL,
-    `FkIdPerfil` int(11) NOT NULL,
+    `FkIdPerfil` binary(16) NOT NULL,
     `UserName` varchar(256) NULL,
     `NormalizedUserName` varchar(256) NULL,
     `NormalizedEmail` varchar(256) NULL,
@@ -1877,11 +1904,12 @@
   --
 
   CREATE TABLE `vulnerabilidades` (
-    `IdVulnerabilidade` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `Nome` longtext NULL,
-    `Localizacao` longtext NULL,
-    `Servicos` longtext NULL,
-    `FkIdComunidade` int(11) NOT NULL
+    `IdVulnerabilidade` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Nome` varchar(255)NULL,
+    `Localizacao` varchar(255)NULL,
+    `Servicos` varchar(255)NULL,
+    `FkIdComunidade` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
@@ -1964,9 +1992,10 @@
   --
 
   CREATE TABLE `vulnerabilidadeseixo` (
-    `IdVEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdEixo` int(11) NOT NULL,
-    `FkIdVulnerabilidade` int(11) NOT NULL
+    `IdVEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdEixo` binary(16) NOT NULL,
+    `FkIdVulnerabilidade` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -1976,14 +2005,15 @@
   --
 
   CREATE TABLE `diariosprocessopessoal` (
-    `IdDiarioProcesso` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FK_id_Atores` int(11) NOT NULL,
+    `IdDiarioProcesso` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FK_id_Atores` binary(16) NOT NULL,
     `Data` datetime(6) NULL,
     `Descricao` varchar(4000) NULL,
     `DtCriacao` datetime(6) NULL,
     `DtModificacao` datetime(6) NULL,
-    `FkIdUsuario` int(11) NOT NULL,
-    `FkIdUsuarioM` int(11) DEFAULT NULL
+    `FkIdUsuario` binary(16) NOT NULL,
+    `FkIdUsuarioM` BINARY(16) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------
@@ -1993,9 +2023,10 @@
   --
 
   CREATE TABLE `diariosprocessoeixos` (
-    `IdDiarioProcessoEixo` int(11) NOT NULL DEFAULT floor(100000 + rand() * 900000),
-    `FkIdDiarioProcesso` int(11) NOT NULL,
-    `FkIdEixo` int(11) NOT NULL
+    `IdDiarioProcessoEixo` binary(16) NOT NULL
+        DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `FkIdDiarioProcesso` binary(16) NOT NULL,
+    `FkIdEixo` binary(16) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   --
