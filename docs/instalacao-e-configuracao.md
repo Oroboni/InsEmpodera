@@ -187,16 +187,23 @@ O terminal deve exibir `Now listening on: https://localhost:7121` e `Hosting env
 
 Abra `https://localhost:7121` e entre com `joao@email.com` e a senha definida no passo 2.
 
-### Sobre o arquivo `Banco.txt`
+### Alternativa: criar o banco pelos scripts SQL
 
-O arquivo [`Banco.txt`](../Banco.txt) contém um script SQL completo (estrutura e dados), mas **não é recomendado** para criar o ambiente local no estado atual:
+Em vez do passo 2, o banco pode ser criado por um dos scripts do repositório:
 
-- começa com `DROP DATABASE IF EXISTS empodera`, apagando qualquer banco com esse nome;
-- na versão atual da branch `Online`, as chaves são declaradas como `binary(16)`, enquanto o modelo da aplicação usa inteiros;
-- ao ser importado em um MySQL 9.7 durante esta revisão, parou na linha 59 com `Data too long for column 'Descricao'`, deixando o banco incompleto;
-- contém registros de comunidades e pessoas que não devem ser copiados para ambientes de teste.
+| Script | Conteúdo | Comando |
+| --- | --- | --- |
+| [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql) | Estrutura e dados de exemplo fictícios | `mysql -u empodera_dev -p empodera < Database/Empodera.schema.sql` (o banco `empodera` precisa existir e estar vazio) |
+| [`Banco.txt`](../Banco.txt) | Estrutura e os dados usados pela equipe | `mysql -u root -p < Banco.txt` |
 
-A situação dos scripts SQL está detalhada em [banco-de-dados.md](banco-de-dados.md#scripts-sql-do-repositório).
+Cuidados com o `Banco.txt`:
+
+- ele começa com `DROP DATABASE IF EXISTS empodera`: **apaga** qualquer banco com esse nome antes de recriá-lo;
+- contém registros de comunidades e pessoas; não o use em ambientes compartilhados nem o divulgue fora da equipe;
+- as senhas dos usuários não são publicadas; para definir a senha do usuário de ID 1 em uma cópia local, execute o passo 2 uma vez sobre o banco importado;
+- os nomes de tabela estão em minúsculas. Em servidores Linux, que diferenciam maiúsculas de minúsculas, é preciso ajustar os nomes ou configurar `lower_case_table_names`, como descrito na seção 6.3 de [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md).
+
+A situação de cada script está detalhada em [banco-de-dados.md](banco-de-dados.md#scripts-sql-do-repositório).
 
 ## Variáveis de configuração
 

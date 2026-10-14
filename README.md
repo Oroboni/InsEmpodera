@@ -75,7 +75,7 @@ A descrição detalhada, com atores e situação de implementação de cada item
 - migrations do Entity Framework — o esquema é criado pelo EF Core a partir do modelo (ver [Banco de dados](#-banco-de-dados));
 - implantação automatizada — a publicação em servidor é manual.
 
-**Limitações conhecidas:** não há migrations; o script [`Banco.txt`](Banco.txt) da versão atual não é compatível com o modelo da aplicação; e parte das verificações de permissão ainda depende da sessão HTTP. A lista completa está em [docs/requisitos.md](docs/requisitos.md#limitações-conhecidas).
+**Limitações conhecidas:** não há migrations; o script [`Banco.txt`](Banco.txt) apaga o banco antes de recriá-lo e contém registros de comunidades e pessoas; e parte das verificações de permissão ainda depende da sessão HTTP. A lista completa está em [docs/requisitos.md](docs/requisitos.md#limitações-conhecidas).
 
 ## 📋 Requisitos
 
@@ -264,7 +264,7 @@ Nesse modo, os eixos temáticos não são cadastrados automaticamente; o passo o
 
 > **Atenção:** nunca execute o passo 1 contra um banco com dados reais — ele redefine a senha do usuário de ID 1.
 
-O passo a passo completo (inclusive para Windows), o motivo de não usar o `Banco.txt` e a solução de problemas estão em [docs/instalacao-e-configuracao.md](docs/instalacao-e-configuracao.md).
+O passo a passo completo (inclusive para Windows), as alternativas com os scripts SQL do repositório e a solução de problemas estão em [docs/instalacao-e-configuracao.md](docs/instalacao-e-configuracao.md).
 
 ### Exemplo de uso
 
@@ -295,7 +295,7 @@ Detalhes e valores padrão: [docs/instalacao-e-configuracao.md](docs/instalacao-
 
 - **Mapeamento:** Entity Framework Core com 34 entidades registradas em [`Data/ApplicationDbContext.cs`](Data/ApplicationDbContext.cs).
 - **Provedores:** MySQL/MariaDB em desenvolvimento e produção; SQLite no modo de demonstração.
-- **Criação do esquema:** não há migrations no repositório. O esquema é criado pelo próprio EF Core (`EnsureCreated`) quando a aplicação roda no ambiente `Testing`, tanto em SQLite quanto em MySQL. O script [`Banco.txt`](Banco.txt) existe, mas sua versão atual é incompatível com o modelo.
+- **Criação do esquema:** não há migrations no repositório. O esquema é criado pelo próprio EF Core (`EnsureCreated`) quando a aplicação roda no ambiente `Testing`, tanto em SQLite quanto em MySQL. Alternativamente, o banco pode ser criado pelos scripts [`Database/Empodera.schema.sql`](Database/Empodera.schema.sql) (somente estrutura e dados de exemplo) ou [`Banco.txt`](Banco.txt) (estrutura e dados da equipe).
 - **Dados iniciais:** perfis, permissões e cinco usuários de exemplo, criados junto com o esquema; os dez eixos temáticos são cadastrados na inicialização em `Development` e `Production`, caso estejam ausentes.
 - **Chaves primárias:** inteiros aleatórios entre 100000 e 999999, gerados pela aplicação.
 
