@@ -184,10 +184,8 @@ As permissões são registradas por perfil e por módulo, com cinco ações: **l
 | Limitação | Impacto |
 | --- | --- |
 | Não há migrations do Entity Framework no repositório | Em `Development` e produção, as tabelas não são criadas na inicialização; o esquema precisa ser criado antes (ver [instalacao-e-configuracao.md](instalacao-e-configuracao.md#opção-b--desenvolvimento-com-mysql-ou-mariadb)), e mudanças futuras no modelo exigem scripts manuais |
-| A versão atual de [`Banco.txt`](../Banco.txt) declara as chaves como `binary(16)`, enquanto o modelo usa inteiros | O script não reproduz um banco compatível com a aplicação; na importação em MySQL 9.7 feita nesta revisão, falhou na linha 59 |
 | `Banco.txt` começa com `DROP DATABASE IF EXISTS empodera` | Executá-lo em um servidor com dados apaga o banco existente |
 | `Banco.txt` e `wwwroot/uploads/` contêm registros e planilhas de comunidades e pessoas | Possível exposição de dados pessoais em repositório público; recomenda-se revisão pela equipe |
-| `Database/Empodera.schema.sql` não possui as colunas do Identity | O arquivo está desatualizado e não deve ser usado para criar o banco |
 | As verificações de permissão nos controllers leem o ID do usuário da sessão HTTP | A sessão é derivada da identidade autenticada, mas a lógica de permissão está repetida em cada controller |
 | `Email__User` aceita somente `empodera.ajuda@gmail.com` | Trocar o remetente exige alteração de código |
 | A recuperação de senha depende do Gmail | Sem credenciais configuradas, o fluxo é exibido, mas nenhum e-mail é enviado |

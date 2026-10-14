@@ -9,7 +9,7 @@
 - [Rotas por módulo](#rotas-por-módulo)
 - [Endpoints que retornam arquivos ou JSON](#endpoints-que-retornam-arquivos-ou-json)
 - [Respostas e erros](#respostas-e-erros)
-- [Rotas legadas sem página](#rotas-legadas-sem-página)
+- [Rotas antigas](#rotas-antigas)
 - [Integrações externas](#integrações-externas)
 
 ## Existe uma API?
@@ -115,12 +115,16 @@ A resposta é um objeto JSON cujas chaves são os textos em português e cujos v
 | Limite de tentativas excedido | `429` |
 | Erro inesperado fora de `Development` | Página `/Home/Error` |
 
-## Rotas legadas sem página
+## Rotas antigas
 
-As rotas abaixo existem no código, mas não têm view correspondente nem aparecem no menu. Quando acessadas por um usuário autenticado, retornam **HTTP 500** (`The view ... was not found`). Os relatórios equivalentes estão em `/Relatorios`.
+As rotas abaixo não aparecem no menu e não têm página própria. Elas foram mantidas por compatibilidade e redirecionam para a tela equivalente, mantendo os parâmetros e as verificações de login e permissão:
 
-- `/Report/Rsc`, `/Report/FirstContact`, `/Report/PersonalAssessment`, `/Report/Actions` e `/Report/PrimaryNetwork`;
-- `/Dashboard`, `/DiariosDeCampo` e `/DiarioProcessoPessoal`.
+| Rota antiga | Redireciona para |
+| --- | --- |
+| `/Report/Rsc`, `/Report/FirstContact`, `/Report/PersonalAssessment`, `/Report/Actions`, `/Report/PrimaryNetwork` | Relatório de mesmo nome em `/Relatorios` |
+| `/Dashboard` | `/` (página inicial) |
+| `/DiariosDeCampo` | `/DiarioCampo` |
+| `/DiarioProcessoPessoal` | `/PersonalProcess` |
 
 ## Integrações externas
 

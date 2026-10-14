@@ -10,7 +10,8 @@ namespace Empodera.Controllers
             { 
                 return RedirectToAction("Index", "Account"); 
             }
-            return DefaultIndex();
+            // Rota antiga sem página própria: a tela equivalente fica em HomeController.
+            return RedirectToAction("Index", "Home");
         }
     }
 }

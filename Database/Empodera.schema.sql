@@ -1,16 +1,20 @@
-﻿ALTER DATABASE CHARACTER SET utf8mb4;
+-- Esquema gerado a partir do modelo do EF Core (Data/ApplicationDbContext.cs) para MariaDB 10.4.32.
+-- Cria as 34 tabelas e os dados iniciais ficticios: perfis, permissoes e usuarios de exemplo.
+-- Execute em um banco vazio. Este script nao apaga bancos existentes.
+
+ALTER DATABASE CHARACTER SET utf8mb4;
 
 
 CREATE TABLE `Eixos` (
-    `IdEixo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `IdEixo` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_Eixos` PRIMARY KEY (`IdEixo`)
 ) CHARACTER SET=utf8mb4;
 
 
 CREATE TABLE `Perfis` (
-    `IdPerfil` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdUsuario` BINARY(16) NOT NULL,
+    `IdPerfil` int NOT NULL AUTO_INCREMENT,
+    `FkIdUsuario` int NOT NULL,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
@@ -19,8 +23,8 @@ CREATE TABLE `Perfis` (
 
 
 CREATE TABLE `Permissoes` (
-    `IdPermissoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdPerfil` BINARY(16) NOT NULL,
+    `IdPermissoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdPerfil` int NOT NULL,
     `Modulo` longtext CHARACTER SET utf8mb4 NOT NULL,
     `PodeListar` longtext CHARACTER SET utf8mb4 NOT NULL,
     `PodeDetalhar` longtext CHARACTER SET utf8mb4 NOT NULL,
@@ -33,7 +37,7 @@ CREATE TABLE `Permissoes` (
 
 
 CREATE TABLE `Usuarios` (
-    `IdUsuario` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `IdUsuario` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Senha` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Foto` longtext CHARACTER SET utf8mb4 NULL,
@@ -45,14 +49,26 @@ CREATE TABLE `Usuarios` (
     `DtAtualizacao` datetime(6) NULL,
     `Ativo` longtext CHARACTER SET utf8mb4 NOT NULL,
     `IdiomaPreferido` int NOT NULL,
-    `FkIdPerfil` BINARY(16) NOT NULL,
+    `FkIdPerfil` int NOT NULL,
+    `UserName` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `NormalizedUserName` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `NormalizedEmail` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `EmailConfirmed` tinyint(1) NOT NULL,
+    `SecurityStamp` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `PhoneNumber` longtext CHARACTER SET utf8mb4 NULL,
+    `PhoneNumberConfirmed` tinyint(1) NOT NULL,
+    `TwoFactorEnabled` tinyint(1) NOT NULL,
+    `LockoutEnd` datetime(6) NULL,
+    `LockoutEnabled` tinyint(1) NOT NULL,
+    `AccessFailedCount` int NOT NULL,
     CONSTRAINT `PK_Usuarios` PRIMARY KEY (`IdUsuario`),
     CONSTRAINT `FK_Usuarios_Perfis_FkIdPerfil` FOREIGN KEY (`FkIdPerfil`) REFERENCES `Perfis` (`IdPerfil`) ON DELETE RESTRICT
 ) CHARACTER SET=utf8mb4;
 
 
 CREATE TABLE `Atores` (
-    `IdAtores` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `IdAtores` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Genero` int NULL,
     `Idade` int NULL,
@@ -66,8 +82,8 @@ CREATE TABLE `Atores` (
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
     `Ativo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdUsuario` BINARY(16) NOT NULL,
-    `FkIdUsuarioM` BINARY(16) NULL,
+    `FkIdUsuario` int NOT NULL,
+    `FkIdUsuarioM` int NULL,
     CONSTRAINT `PK_Atores` PRIMARY KEY (`IdAtores`),
     CONSTRAINT `FK_Atores_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE,
     CONSTRAINT `FK_Atores_Usuarios_FkIdUsuarioM` FOREIGN KEY (`FkIdUsuarioM`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT
@@ -75,7 +91,7 @@ CREATE TABLE `Atores` (
 
 
 CREATE TABLE `Comunidades` (
-    `Id_Comunidade` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Id_Comunidade` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Local` longtext CHARACTER SET utf8mb4 NULL,
     `LocalMapa` longtext CHARACTER SET utf8mb4 NULL,
@@ -87,8 +103,8 @@ CREATE TABLE `Comunidades` (
     `Descricao_Acessibilidade` longtext CHARACTER SET utf8mb4 NULL,
     `Dt_Criacao` datetime(6) NOT NULL,
     `Dt_Modificacao` datetime(6) NOT NULL,
-    `FK_Id_Usuario` BINARY(16) NOT NULL,
-    `FK_Id_UsuarioM` BINARY(16) NULL,
+    `FK_Id_Usuario` int NOT NULL,
+    `FK_Id_UsuarioM` int NULL,
     `Ativo` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_Comunidades` PRIMARY KEY (`Id_Comunidade`),
     CONSTRAINT `FK_Comunidades_Usuarios_FK_Id_Usuario` FOREIGN KEY (`FK_Id_Usuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE,
@@ -97,8 +113,8 @@ CREATE TABLE `Comunidades` (
 
 
 CREATE TABLE `AvaliacaoPessoal` (
-    `IdAvaliacao` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FK_id_Atores` BINARY(16) NOT NULL,
+    `IdAvaliacao` int NOT NULL AUTO_INCREMENT,
+    `FK_id_Atores` int NOT NULL,
     `CCrimes` int NOT NULL,
     `Substancias` int NOT NULL,
     `Moradia` int NOT NULL,
@@ -110,16 +126,32 @@ CREATE TABLE `AvaliacaoPessoal` (
     `Lazer` int NOT NULL,
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` BINARY(16) NOT NULL,
+    `FkIdUsuario` int NOT NULL,
     CONSTRAINT `PK_AvaliacaoPessoal` PRIMARY KEY (`IdAvaliacao`),
     CONSTRAINT `FK_AvaliacaoPessoal_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
     CONSTRAINT `FK_AvaliacaoPessoal_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE
 ) CHARACTER SET=utf8mb4;
 
 
+CREATE TABLE `diariosprocessopessoal` (
+    `IdDiarioProcesso` int NOT NULL AUTO_INCREMENT,
+    `FK_id_Atores` int NOT NULL,
+    `Data` datetime(6) NOT NULL,
+    `Descricao` varchar(4000) CHARACTER SET utf8mb4 NOT NULL,
+    `DtCriacao` datetime(6) NOT NULL,
+    `DtModificacao` datetime(6) NOT NULL,
+    `FkIdUsuario` int NOT NULL,
+    `FkIdUsuarioM` int NULL,
+    CONSTRAINT `PK_diariosprocessopessoal` PRIMARY KEY (`IdDiarioProcesso`),
+    CONSTRAINT `FK_diariosprocessopessoal_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
+    CONSTRAINT `FK_diariosprocessopessoal_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT,
+    CONSTRAINT `FK_diariosprocessopessoal_Usuarios_FkIdUsuarioM` FOREIGN KEY (`FkIdUsuarioM`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT
+) CHARACTER SET=utf8mb4;
+
+
 CREATE TABLE `RecursosAtores` (
-    `Id_Recursos_Atores` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FK_id_Atores` BINARY(16) NOT NULL,
+    `Id_Recursos_Atores` int NOT NULL AUTO_INCREMENT,
+    `FK_id_Atores` int NOT NULL,
     `Tipo` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Pode` longtext CHARACTER SET utf8mb4 NULL,
@@ -129,9 +161,9 @@ CREATE TABLE `RecursosAtores` (
 
 
 CREATE TABLE `RedesPrimarias` (
-    `IdRedePrimaria` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdAtorPrincipal` BINARY(16) NOT NULL,
-    `FkIdAtorRelacionados` BINARY(16) NOT NULL,
+    `IdRedePrimaria` int NOT NULL AUTO_INCREMENT,
+    `FkIdAtorPrincipal` int NOT NULL,
+    `FkIdAtorRelacionados` int NOT NULL,
     `TipoRelacao` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_RedesPrimarias` PRIMARY KEY (`IdRedePrimaria`),
     CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorPrincipal` FOREIGN KEY (`FkIdAtorPrincipal`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT,
@@ -140,15 +172,15 @@ CREATE TABLE `RedesPrimarias` (
 
 
 CREATE TABLE `Atividades` (
-    `IdAtividade` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `IdAtividade` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Descricao` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Descricao` longtext CHARACTER SET utf8mb4 NULL,
     `Foto` longtext CHARACTER SET utf8mb4 NULL,
-    `FkIdComunidade` BINARY(16) NOT NULL,
+    `FkIdComunidade` int NOT NULL,
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` BINARY(16) NOT NULL,
-    `FkIdUsuarioM` BINARY(16) NULL,
+    `FkIdUsuario` int NOT NULL,
+    `FkIdUsuarioM` int NULL,
     CONSTRAINT `PK_Atividades` PRIMARY KEY (`IdAtividade`),
     CONSTRAINT `FK_Atividades_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
     CONSTRAINT `FK_Atividades_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE,
@@ -157,9 +189,10 @@ CREATE TABLE `Atividades` (
 
 
 CREATE TABLE `AtorComunidades` (
-    `IdAtorComunidade` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdComunidade` BINARY(16) NOT NULL,
-    `FK_id_Atores` BINARY(16) NOT NULL,
+    `IdAtorComunidade` int NOT NULL AUTO_INCREMENT,
+    `FkIdComunidade` int NOT NULL,
+    `FK_id_Atores` int NOT NULL,
+    `TipoRelacionamento` int NULL,
     CONSTRAINT `PK_AtorComunidades` PRIMARY KEY (`IdAtorComunidade`),
     CONSTRAINT `FK_AtorComunidades_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
     CONSTRAINT `FK_AtorComunidades_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE
@@ -167,15 +200,15 @@ CREATE TABLE `AtorComunidades` (
 
 
 CREATE TABLE `DiariosCampo` (
-    `IdDCampo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdComunidade` BINARY(16) NOT NULL,
+    `IdDCampo` int NOT NULL AUTO_INCREMENT,
+    `FkIdComunidade` int NOT NULL,
     `Data` datetime(6) NOT NULL,
     `Descricao` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Localizacao` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Localizacao` longtext CHARACTER SET utf8mb4 NULL,
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
-    `Foto` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdUsuario` BINARY(16) NOT NULL,
+    `Foto` longtext CHARACTER SET utf8mb4 NULL,
+    `FkIdUsuario` int NOT NULL,
     CONSTRAINT `PK_DiariosCampo` PRIMARY KEY (`IdDCampo`),
     CONSTRAINT `FK_DiariosCampo_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
     CONSTRAINT `FK_DiariosCampo_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE
@@ -183,8 +216,8 @@ CREATE TABLE `DiariosCampo` (
 
 
 CREATE TABLE `FichasPrimeiroContato` (
-    `IdFicha` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FK_id_Atores` BINARY(16) NOT NULL,
+    `IdFicha` int NOT NULL AUTO_INCREMENT,
+    `FK_id_Atores` int NOT NULL,
     `Endereco` longtext CHARACTER SET utf8mb4 NULL,
     `Complemento` longtext CHARACTER SET utf8mb4 NULL,
     `Emprego` longtext CHARACTER SET utf8mb4 NULL,
@@ -210,8 +243,8 @@ CREATE TABLE `FichasPrimeiroContato` (
     `HoraContato` time(6) NOT NULL,
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
-    `FkIdComunidade` BINARY(16) NULL,
-    `FkIdUsuario` BINARY(16) NOT NULL,
+    `FkIdComunidade` int NULL,
+    `FkIdUsuario` int NOT NULL,
     CONSTRAINT `PK_FichasPrimeiroContato` PRIMARY KEY (`IdFicha`),
     CONSTRAINT `FK_FichasPrimeiroContato_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
     CONSTRAINT `FK_FichasPrimeiroContato_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
@@ -220,9 +253,9 @@ CREATE TABLE `FichasPrimeiroContato` (
 
 
 CREATE TABLE `RedeRecursos` (
-    `Id_Rede` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FK_id_Atores` BINARY(16) NULL,
-    `FkIdComunidade` BINARY(16) NOT NULL,
+    `Id_Rede` int NOT NULL AUTO_INCREMENT,
+    `FK_id_Atores` int NULL,
+    `FkIdComunidade` int NOT NULL,
     `Nome` longtext CHARACTER SET utf8mb4 NULL,
     `Tipo` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Dispositivo` longtext CHARACTER SET utf8mb4 NULL,
@@ -230,7 +263,7 @@ CREATE TABLE `RedeRecursos` (
     `Servicos` longtext CHARACTER SET utf8mb4 NULL,
     `DtCriacao` datetime(6) NOT NULL,
     `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` BINARY(16) NOT NULL,
+    `FkIdUsuario` int NOT NULL,
     CONSTRAINT `PK_RedeRecursos` PRIMARY KEY (`Id_Rede`),
     CONSTRAINT `FK_RedeRecursos_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
     CONSTRAINT `FK_RedeRecursos_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
@@ -239,20 +272,30 @@ CREATE TABLE `RedeRecursos` (
 
 
 CREATE TABLE `Vulnerabilidades` (
-    `IdVulnerabilidade` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `IdVulnerabilidade` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Localizacao` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Servicos` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdComunidade` BINARY(16) NOT NULL,
+    `FkIdComunidade` int NOT NULL,
     CONSTRAINT `PK_Vulnerabilidades` PRIMARY KEY (`IdVulnerabilidade`),
     CONSTRAINT `FK_Vulnerabilidades_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE
 ) CHARACTER SET=utf8mb4;
 
 
+CREATE TABLE `diariosprocessoeixos` (
+    `IdDiarioProcessoEixo` int NOT NULL AUTO_INCREMENT,
+    `FkIdDiarioProcesso` int NOT NULL,
+    `FkIdEixo` int NOT NULL,
+    CONSTRAINT `PK_diariosprocessoeixos` PRIMARY KEY (`IdDiarioProcessoEixo`),
+    CONSTRAINT `FK_diariosprocessoeixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE,
+    CONSTRAINT `FK_diariosprocessoeixos_diariosprocessopessoal_FkIdDiarioProces~` FOREIGN KEY (`FkIdDiarioProcesso`) REFERENCES `diariosprocessopessoal` (`IdDiarioProcesso`) ON DELETE CASCADE
+) CHARACTER SET=utf8mb4;
+
+
 CREATE TABLE `Acoes` (
-    `IdAcoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `IdAcoes` int NOT NULL AUTO_INCREMENT,
     `Quantidade` int NOT NULL,
-    `FkIdAtividade` BINARY(16) NOT NULL,
+    `FkIdAtividade` int NOT NULL,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Provedor` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_Acoes` PRIMARY KEY (`IdAcoes`),
@@ -261,9 +304,9 @@ CREATE TABLE `Acoes` (
 
 
 CREATE TABLE `AtividadesEixo` (
-    `IdAEixo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdEixo` BINARY(16) NOT NULL,
-    `FkIdAtividade` BINARY(16) NOT NULL,
+    `IdAEixo` int NOT NULL AUTO_INCREMENT,
+    `FkIdEixo` int NOT NULL,
+    `FkIdAtividade` int NOT NULL,
     CONSTRAINT `PK_AtividadesEixo` PRIMARY KEY (`IdAEixo`),
     CONSTRAINT `FK_AtividadesEixo_Atividades_FkIdAtividade` FOREIGN KEY (`FkIdAtividade`) REFERENCES `Atividades` (`IdAtividade`) ON DELETE CASCADE,
     CONSTRAINT `FK_AtividadesEixo_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE
@@ -271,8 +314,8 @@ CREATE TABLE `AtividadesEixo` (
 
 
 CREATE TABLE `AnexosDiario` (
-    `IdAnexos` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdDiario` BINARY(16) NOT NULL,
+    `IdAnexos` int NOT NULL AUTO_INCREMENT,
+    `FkIdDiario` int NOT NULL,
     `Caminho` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_AnexosDiario` PRIMARY KEY (`IdAnexos`),
     CONSTRAINT `FK_AnexosDiario_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE
@@ -280,8 +323,8 @@ CREATE TABLE `AnexosDiario` (
 
 
 CREATE TABLE `DiarioDAcoes` (
-    `IdDAcoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdDiario` BINARY(16) NOT NULL,
+    `IdDAcoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdDiario` int NOT NULL,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `PeovedorEx` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Quantidade` int NOT NULL,
@@ -291,9 +334,9 @@ CREATE TABLE `DiarioDAcoes` (
 
 
 CREATE TABLE `DiarioEixos` (
-    `IdDiarioEixo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdDiario` BINARY(16) NOT NULL,
-    `FkIdEixo` BINARY(16) NOT NULL,
+    `IdDiarioEixo` int NOT NULL AUTO_INCREMENT,
+    `FkIdDiario` int NOT NULL,
+    `FkIdEixo` int NOT NULL,
     CONSTRAINT `PK_DiarioEixos` PRIMARY KEY (`IdDiarioEixo`),
     CONSTRAINT `FK_DiarioEixos_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE,
     CONSTRAINT `FK_DiarioEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE
@@ -301,8 +344,8 @@ CREATE TABLE `DiarioEixos` (
 
 
 CREATE TABLE `FichaCondicoes` (
-    `IdCondicoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdFicha` BINARY(16) NOT NULL,
+    `IdCondicoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdFicha` int NOT NULL,
     `Cond` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_FichaCondicoes` PRIMARY KEY (`IdCondicoes`),
     CONSTRAINT `FK_FichaCondicoes_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
@@ -310,8 +353,8 @@ CREATE TABLE `FichaCondicoes` (
 
 
 CREATE TABLE `FichaPeticoes` (
-    `IdPeticoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdFicha` BINARY(16) NOT NULL,
+    `IdPeticoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdFicha` int NOT NULL,
     `Pet` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_FichaPeticoes` PRIMARY KEY (`IdPeticoes`),
     CONSTRAINT `FK_FichaPeticoes_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
@@ -319,8 +362,8 @@ CREATE TABLE `FichaPeticoes` (
 
 
 CREATE TABLE `FichaRespostas` (
-    `IdCondicoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdFicha` BINARY(16) NOT NULL,
+    `IdCondicoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdFicha` int NOT NULL,
     `Resp` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_FichaRespostas` PRIMARY KEY (`IdCondicoes`),
     CONSTRAINT `FK_FichaRespostas_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
@@ -328,8 +371,8 @@ CREATE TABLE `FichaRespostas` (
 
 
 CREATE TABLE `FichaResultados` (
-    `IdCondicoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdFicha` BINARY(16) NOT NULL,
+    `IdCondicoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdFicha` int NOT NULL,
     `Result` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_FichaResultados` PRIMARY KEY (`IdCondicoes`),
     CONSTRAINT `FK_FichaResultados_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
@@ -337,8 +380,8 @@ CREATE TABLE `FichaResultados` (
 
 
 CREATE TABLE `FontesInfo` (
-    `IdFonte` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdFicha` BINARY(16) NOT NULL,
+    `IdFonte` int NOT NULL AUTO_INCREMENT,
+    `FkIdFicha` int NOT NULL,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Genero` int NULL,
     `Idade` int NOT NULL,
@@ -346,8 +389,8 @@ CREATE TABLE `FontesInfo` (
     `PapelSocial2` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Telefone` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Extra` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Fk_Id_Ator` BINARY(16) NOT NULL,
-    `AtorIdAtores` BINARY(16) NULL,
+    `Fk_Id_Ator` int NOT NULL,
+    `AtorIdAtores` int NULL,
     CONSTRAINT `PK_FontesInfo` PRIMARY KEY (`IdFonte`),
     CONSTRAINT `FK_FontesInfo_Atores_AtorIdAtores` FOREIGN KEY (`AtorIdAtores`) REFERENCES `Atores` (`IdAtores`),
     CONSTRAINT `FK_FontesInfo_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
@@ -355,9 +398,9 @@ CREATE TABLE `FontesInfo` (
 
 
 CREATE TABLE `RedeEixos` (
-    `IdRedeEixo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdRede` BINARY(16) NOT NULL,
-    `FkIdEixo` BINARY(16) NOT NULL,
+    `IdRedeEixo` int NOT NULL AUTO_INCREMENT,
+    `FkIdRede` int NOT NULL,
+    `FkIdEixo` int NOT NULL,
     CONSTRAINT `PK_RedeEixos` PRIMARY KEY (`IdRedeEixo`),
     CONSTRAINT `FK_RedeEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE,
     CONSTRAINT `FK_RedeEixos_RedeRecursos_FkIdRede` FOREIGN KEY (`FkIdRede`) REFERENCES `RedeRecursos` (`Id_Rede`) ON DELETE CASCADE
@@ -365,9 +408,9 @@ CREATE TABLE `RedeEixos` (
 
 
 CREATE TABLE `VulnerabilidadesEixo` (
-    `IdVEixo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdEixo` BINARY(16) NOT NULL,
-    `FkIdVulnerabilidade` BINARY(16) NOT NULL,
+    `IdVEixo` int NOT NULL AUTO_INCREMENT,
+    `FkIdEixo` int NOT NULL,
+    `FkIdVulnerabilidade` int NOT NULL,
     CONSTRAINT `PK_VulnerabilidadesEixo` PRIMARY KEY (`IdVEixo`),
     CONSTRAINT `FK_VulnerabilidadesEixo_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE,
     CONSTRAINT `FK_VulnerabilidadesEixo_Vulnerabilidades_FkIdVulnerabilidade` FOREIGN KEY (`FkIdVulnerabilidade`) REFERENCES `Vulnerabilidades` (`IdVulnerabilidade`) ON DELETE CASCADE
@@ -375,9 +418,9 @@ CREATE TABLE `VulnerabilidadesEixo` (
 
 
 CREATE TABLE `AcoesAtores` (
-    `IdAAtores` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FK_id_Atores` BINARY(16) NOT NULL,
-    `FkIdAcoes` BINARY(16) NOT NULL,
+    `IdAAtores` int NOT NULL AUTO_INCREMENT,
+    `FK_id_Atores` int NOT NULL,
+    `FkIdAcoes` int NOT NULL,
     CONSTRAINT `PK_AcoesAtores` PRIMARY KEY (`IdAAtores`),
     CONSTRAINT `FK_AcoesAtores_Acoes_FkIdAcoes` FOREIGN KEY (`FkIdAcoes`) REFERENCES `Acoes` (`IdAcoes`) ON DELETE CASCADE,
     CONSTRAINT `FK_AcoesAtores_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE
@@ -385,9 +428,9 @@ CREATE TABLE `AcoesAtores` (
 
 
 CREATE TABLE `DiarioAcoes` (
-    `IdDAcoes` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdAcoes` BINARY(16) NOT NULL,
-    `FkIdDiario` BINARY(16) NOT NULL,
+    `IdDAcoes` int NOT NULL AUTO_INCREMENT,
+    `FkIdAcoes` int NOT NULL,
+    `FkIdDiario` int NOT NULL,
     CONSTRAINT `PK_DiarioAcoes` PRIMARY KEY (`IdDAcoes`),
     CONSTRAINT `FK_DiarioAcoes_Acoes_FkIdAcoes` FOREIGN KEY (`FkIdAcoes`) REFERENCES `Acoes` (`IdAcoes`) ON DELETE CASCADE,
     CONSTRAINT `FK_DiarioAcoes_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE
@@ -395,9 +438,9 @@ CREATE TABLE `DiarioAcoes` (
 
 
 CREATE TABLE `DAAtores` (
-    `Id` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdDDacoes` BINARY(16) NOT NULL,
-    `FK_id_Atores` BINARY(16) NOT NULL,
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `FkIdDDacoes` int NOT NULL,
+    `FK_id_Atores` int NOT NULL,
     CONSTRAINT `PK_DAAtores` PRIMARY KEY (`Id`),
     CONSTRAINT `FK_DAAtores_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
     CONSTRAINT `FK_DAAtores_DiarioDAcoes_FkIdDDacoes` FOREIGN KEY (`FkIdDDacoes`) REFERENCES `DiarioDAcoes` (`IdDAcoes`) ON DELETE CASCADE
@@ -405,18 +448,18 @@ CREATE TABLE `DAAtores` (
 
 
 CREATE TABLE `DetalhesDAcoes` (
-    `Id` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
+    `Id` int NOT NULL AUTO_INCREMENT,
     `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdDDacoes` BINARY(16) NOT NULL,
+    `FkIdDDacoes` int NOT NULL,
     CONSTRAINT `PK_DetalhesDAcoes` PRIMARY KEY (`Id`),
     CONSTRAINT `FK_DetalhesDAcoes_DiarioDAcoes_FkIdDDacoes` FOREIGN KEY (`FkIdDDacoes`) REFERENCES `DiarioDAcoes` (`IdDAcoes`) ON DELETE CASCADE
 ) CHARACTER SET=utf8mb4;
 
 
 CREATE TABLE `DetalhesEixos` (
-    `IdDiarioEixo` BINARY(16) NOT NULL DEFAULT (UNHEX(REPLACE(UUID(), '-', ''))),
-    `FkIdDetalhes` BINARY(16) NOT NULL,
-    `FkIdEixo` BINARY(16) NOT NULL,
+    `IdDiarioEixo` int NOT NULL AUTO_INCREMENT,
+    `FkIdDetalhes` int NOT NULL,
+    `FkIdEixo` int NOT NULL,
     CONSTRAINT `PK_DetalhesEixos` PRIMARY KEY (`IdDiarioEixo`),
     CONSTRAINT `FK_DetalhesEixos_DetalhesDAcoes_FkIdDetalhes` FOREIGN KEY (`FkIdDetalhes`) REFERENCES `DetalhesDAcoes` (`Id`) ON DELETE CASCADE,
     CONSTRAINT `FK_DetalhesEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE
@@ -495,12 +538,12 @@ VALUES (43, 4, 'DiariosCampo', 'N', 'N', 'N', 'N', 'S'),
 (60, 5, 'SER', 'S', 'S', 'N', 'S', 'S');
 
 
-INSERT INTO `Usuarios` (`IdUsuario`, `Ativo`, `DtAtualizacao`, `DtCriacao`, `DtNascimento`, `Email`, `FkIdPerfil`, `Foto`, `Genero`, `IdiomaPreferido`, `Nome`, `Ocupacao`, `Senha`)
-VALUES (1, 'S', TIMESTAMP '2025-01-01 00:00:00', TIMESTAMP '2024-01-01 00:00:00', TIMESTAMP '1990-01-01 00:00:00', 'joao@email.com', 1, 'foto1.jpg', 1, 0, 'joao', 'Coordenador', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=='),
-(2, 'S', TIMESTAMP '2025-02-01 00:00:00', TIMESTAMP '2024-02-01 00:00:00', TIMESTAMP '1985-02-02 00:00:00', 'u2@example.com', 2, 'foto2.jpg', 2, 0, 'Usuario Dois', 'Pesquisador', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=='),
-(3, 'S', TIMESTAMP '2025-03-01 00:00:00', TIMESTAMP '2024-03-01 00:00:00', TIMESTAMP '1995-03-03 00:00:00', 'u3@example.com', 3, 'foto3.jpg', 1, 0, 'Usuario Tres', 'Voluntario', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=='),
-(4, 'N', TIMESTAMP '2025-04-01 00:00:00', TIMESTAMP '2024-04-01 00:00:00', TIMESTAMP '1992-04-04 00:00:00', 'u4@example.com', 4, 'foto4.jpg', 2, 0, 'Usuario Quatro', 'Analista', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA=='),
-(5, 'N', TIMESTAMP '2025-05-01 00:00:00', TIMESTAMP '2024-05-01 00:00:00', TIMESTAMP '1988-05-05 00:00:00', 'u5@example.com', 5, 'foto5.jpg', 1, 0, 'Usuario Cinco', 'Gerente', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==');
+INSERT INTO `Usuarios` (`IdUsuario`, `AccessFailedCount`, `Ativo`, `ConcurrencyStamp`, `DtAtualizacao`, `DtCriacao`, `DtNascimento`, `Email`, `EmailConfirmed`, `FkIdPerfil`, `Foto`, `Genero`, `IdiomaPreferido`, `LockoutEnabled`, `LockoutEnd`, `Nome`, `NormalizedEmail`, `NormalizedUserName`, `Ocupacao`, `PhoneNumber`, `PhoneNumberConfirmed`, `SecurityStamp`, `Senha`, `TwoFactorEnabled`, `UserName`)
+VALUES (1, 0, 'S', 'seed-concurrency-stamp-1', TIMESTAMP '2025-01-01 00:00:00', TIMESTAMP '2024-01-01 00:00:00', TIMESTAMP '1990-01-01 00:00:00', 'joao@email.com', TRUE, 1, 'foto1.jpg', 1, 0, TRUE, NULL, 'joao', 'JOAO@EMAIL.COM', 'JOAO@EMAIL.COM', 'Coordenador', NULL, FALSE, 'seed-security-stamp-1', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'joao@email.com'),
+(2, 0, 'S', 'seed-concurrency-stamp-2', TIMESTAMP '2025-02-01 00:00:00', TIMESTAMP '2024-02-01 00:00:00', TIMESTAMP '1985-02-02 00:00:00', 'u2@example.com', TRUE, 2, 'foto2.jpg', 2, 0, TRUE, NULL, 'Usuario Dois', 'U2@EXAMPLE.COM', 'U2@EXAMPLE.COM', 'Pesquisador', NULL, FALSE, 'seed-security-stamp-2', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u2@example.com'),
+(3, 0, 'S', 'seed-concurrency-stamp-3', TIMESTAMP '2025-03-01 00:00:00', TIMESTAMP '2024-03-01 00:00:00', TIMESTAMP '1995-03-03 00:00:00', 'u3@example.com', TRUE, 3, 'foto3.jpg', 1, 0, TRUE, NULL, 'Usuario Tres', 'U3@EXAMPLE.COM', 'U3@EXAMPLE.COM', 'Voluntario', NULL, FALSE, 'seed-security-stamp-3', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u3@example.com'),
+(4, 0, 'N', 'seed-concurrency-stamp-4', TIMESTAMP '2025-04-01 00:00:00', TIMESTAMP '2024-04-01 00:00:00', TIMESTAMP '1992-04-04 00:00:00', 'u4@example.com', TRUE, 4, 'foto4.jpg', 2, 0, TRUE, NULL, 'Usuario Quatro', 'U4@EXAMPLE.COM', 'U4@EXAMPLE.COM', 'Analista', NULL, FALSE, 'seed-security-stamp-4', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u4@example.com'),
+(5, 0, 'N', 'seed-concurrency-stamp-5', TIMESTAMP '2025-05-01 00:00:00', TIMESTAMP '2024-05-01 00:00:00', TIMESTAMP '1988-05-05 00:00:00', 'u5@example.com', TRUE, 5, 'foto5.jpg', 1, 0, TRUE, NULL, 'Usuario Cinco', 'U5@EXAMPLE.COM', 'U5@EXAMPLE.COM', 'Gerente', NULL, FALSE, 'seed-security-stamp-5', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u5@example.com');
 
 
 CREATE INDEX `IX_Acoes_FkIdAtividade` ON `Acoes` (`FkIdAtividade`);
@@ -590,6 +633,21 @@ CREATE INDEX `IX_DiariosCampo_FkIdComunidade` ON `DiariosCampo` (`FkIdComunidade
 CREATE INDEX `IX_DiariosCampo_FkIdUsuario` ON `DiariosCampo` (`FkIdUsuario`);
 
 
+CREATE UNIQUE INDEX `IX_diariosprocessoeixos_FkIdDiarioProcesso_FkIdEixo` ON `diariosprocessoeixos` (`FkIdDiarioProcesso`, `FkIdEixo`);
+
+
+CREATE INDEX `IX_diariosprocessoeixos_FkIdEixo` ON `diariosprocessoeixos` (`FkIdEixo`);
+
+
+CREATE INDEX `IX_diariosprocessopessoal_FK_id_Atores` ON `diariosprocessopessoal` (`FK_id_Atores`);
+
+
+CREATE INDEX `IX_diariosprocessopessoal_FkIdUsuario` ON `diariosprocessopessoal` (`FkIdUsuario`);
+
+
+CREATE INDEX `IX_diariosprocessopessoal_FkIdUsuarioM` ON `diariosprocessopessoal` (`FkIdUsuarioM`);
+
+
 CREATE INDEX `IX_FichaCondicoes_FkIdFicha` ON `FichaCondicoes` (`FkIdFicha`);
 
 
@@ -647,6 +705,12 @@ CREATE INDEX `IX_RedesPrimarias_FkIdAtorRelacionados` ON `RedesPrimarias` (`FkId
 CREATE INDEX `IX_Usuarios_FkIdPerfil` ON `Usuarios` (`FkIdPerfil`);
 
 
+CREATE UNIQUE INDEX `IX_Usuarios_NormalizedEmail` ON `Usuarios` (`NormalizedEmail`);
+
+
+CREATE UNIQUE INDEX `IX_Usuarios_NormalizedUserName` ON `Usuarios` (`NormalizedUserName`);
+
+
 CREATE INDEX `IX_Vulnerabilidades_FkIdComunidade` ON `Vulnerabilidades` (`FkIdComunidade`);
 
 
@@ -654,4 +718,5 @@ CREATE INDEX `IX_VulnerabilidadesEixo_FkIdEixo` ON `VulnerabilidadesEixo` (`FkId
 
 
 CREATE INDEX `IX_VulnerabilidadesEixo_FkIdVulnerabilidade` ON `VulnerabilidadesEixo` (`FkIdVulnerabilidade`);
+
 

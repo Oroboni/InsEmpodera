@@ -144,17 +144,18 @@ Como não há migrations, `Database.MigrateAsync()` (chamado fora do ambiente `T
 | --- | --- | --- |
 | Demonstração com SQLite | Executar no ambiente `Testing`; `EnsureCreated` cria o arquivo e as tabelas | Sim |
 | Banco MySQL/MariaDB novo | Executar uma vez no ambiente `Testing` com `DatabaseProvider=MySql` (ver [instalação, opção B](instalacao-e-configuracao.md#opção-b--desenvolvimento-com-mysql-ou-mariadb)) | Sim, em MySQL 9.7.1 |
+| Banco MySQL/MariaDB a partir de script | Importar `Database/Empodera.schema.sql` (somente exemplo) ou `Banco.txt` (dados da equipe) | Sim, em MySQL 9.7.1 |
 | Testes automatizados | Cada teste cria um banco temporário `insempodera_*` com `EnsureCreated` e o apaga ao final | Sim, em MySQL 9.7.1 |
 | Servidor de produção | Importação de um dump do banco existente, conforme [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md) | Não |
 
-`EnsureCreated` não altera um banco que já tenha tabelas. Ao iniciar em `Development`, o EF Core também cria a tabela vazia `__EFMigrationsHistory`, sem efeito sobre os dados. Mudanças futuras no modelo precisam de scripts SQL incrementais, como o já existente em `Database/`.
+`EnsureCreated` não altera um banco que já tenha tabelas. Ao iniciar em `Development`, o EF Core também cria a tabela vazia `__EFMigrationsHistory`, sem efeito sobre os dados. Mudanças futuras no modelo precisam de scripts SQL incrementais, como o já existente em `Database/`, e da atualização de `Database/Empodera.schema.sql`.
 
 ## Scripts SQL do repositório
 
 | Arquivo | Conteúdo | Situação |
 | --- | --- | --- |
-| [`Banco.txt`](../Banco.txt) | `DROP DATABASE`, criação de 34 tabelas, dados e restrições | A versão atual declara as chaves como `binary(16)`, incompatível com as chaves inteiras do modelo; falhou na importação em MySQL 9.7.1 (linha 59). É usado pelo teste `IdentityDatabaseContractTests`, que confere apenas a presença das colunas do Identity |
-| [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql) | Esquema gerado a partir do modelo | Não contém as colunas do Identity (`NormalizedEmail`, `SecurityStamp`…) |
+| [`Banco.txt`](../Banco.txt) | `DROP DATABASE`, criação de 34 tabelas, dados da equipe e restrições | Compatível com o modelo; importado sem erros em MySQL 9.7.1 e usado pela aplicação nesta revisão. Tabelas em minúsculas. Também é lido pelo teste `IdentityDatabaseContractTests`, que confere as colunas do Identity |
+| [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql) | Esquema gerado pelo EF Core a partir do modelo atual, para MariaDB 10.4.32, com os dados de exemplo fictícios | Importado sem erros em MySQL 9.7.1 nesta revisão; não apaga bancos existentes |
 | [`Database/20260830_adicionar_endereco_secundario_comunidades.sql`](../Database/20260830_adicionar_endereco_secundario_comunidades.sql) | Adiciona `LocalSecundario` e `LocalMapaSecundario` em `Comunidades` | Script incremental para bancos existentes |
 
 > **Cuidado:** `Banco.txt` apaga o banco `empodera` antes de recriá-lo. Não o execute em servidores com dados.

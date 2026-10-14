@@ -26,11 +26,11 @@ dotnet build .\InsEmpodera.E2ETests\InsEmpodera.E2ETests.csproj -c Release
 dotnet test .\InsEmpodera.E2ETests\InsEmpodera.E2ETests.csproj -c Release --no-build
 ```
 
-Pré-requisitos: .NET SDK 9, Node.js/npm e PowerShell 7. O teste não exige MySQL nem usa o banco de desenvolvimento.
+Pré-requisitos: .NET SDK 9, Node.js/npm, PowerShell 7 e um servidor MySQL ou MariaDB informado em `TEST_MYSQL_CONNECTION` (somente o servidor, sem `Database`). O banco de desenvolvimento não é usado.
 
 ## Isolamento e evidências
 
-- Cada execução sobe Kestrel em uma porta livre e cria um arquivo SQLite temporário exclusivo.
+- Cada execução sobe Kestrel em uma porta livre e cria um banco MySQL temporário exclusivo (`insempodera_e2e_*`), removido ao final.
 - O banco é criado a partir do modelo real, recebe apenas seeds conhecidos e é descartado ao final.
 - Cada cenário cria dados com GUID e a coleção xUnit é serial, evitando colisões entre CRUDs.
 - Requisições externas são bloqueadas. Qualquer erro JavaScript ou resposta local 4xx/5xx — inclusive CSS, scripts, imagens e fontes — reprova o cenário.
@@ -55,7 +55,7 @@ Os testes de CRUD sempre conferem o banco após os eventos visíveis, inclusive 
 
 ## Limite conhecido
 
-A recuperação de senha ainda é somente uma simulação visual em `wwwroot/js/forget.js`: o formulário usa `preventDefault`, não chama backend e não envia email. O E2E valida apenas a navegação e os estados visuais dessa tela; ele não afirma que houve recuperação real.
+A recuperação de senha é implementada no servidor (`AccountController.ForgotPassword`) e envia o link pelo Gmail, mas a suíte E2E valida apenas a navegação e os estados visuais dessa tela: nenhum e-mail real é enviado durante os testes. O envio é coberto pelos testes de backend em `InsEmpodera.Tests/Security/PasswordRecoveryIdentityHttpTests.cs`, que capturam a mensagem em vez de enviá-la.
 
 ## CI
 
