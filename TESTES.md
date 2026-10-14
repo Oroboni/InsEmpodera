@@ -2,7 +2,9 @@
 
 A suíte valida a compilação, a seleção de idioma, as páginas públicas, o redirecionamento de sessão, o login, as páginas principais e os ciclos CRUD da aplicação.
 
-Os testes de integração usam um banco SQLite temporário em memória. O MySQL configurado para desenvolvimento ou produção não é acessado nem alterado.
+Os testes de banco e de integração criam bancos MySQL temporários (prefixo `insempodera_`) no servidor indicado pela variável `TEST_MYSQL_CONNECTION` e os removem ao final. O banco configurado para desenvolvimento ou produção não é acessado nem alterado.
+
+Pré-requisitos, comandos para macOS/Linux e o subconjunto que dispensa MySQL estão em [docs/testes.md](docs/testes.md).
 
 ## Executar no Windows
 
