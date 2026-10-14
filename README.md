@@ -23,7 +23,6 @@ Aplicação web desenvolvida em ASP.NET Core MVC para apoiar o Instituto Empoder
 - [Integração contínua e deploy](#-integração-contínua-e-deploy)
 - [Documentação complementar](#-documentação-complementar)
 - [Equipe](#-equipe)
-- [Projetos relacionados](#-projetos-relacionados)
 
 ## 🎯 Visão geral
 
@@ -363,7 +362,3 @@ Composição atual da equipe responsável pelo projeto:
 
 O projeto foi iniciado no segundo semestre de 2025, com orientação de Paula Rocha e Antonio Munari. O histórico completo de contribuições permanece registrado nos commits do repositório.
 
-## 🔗 Projetos relacionados
-
-- [Integração e Entrega Contínua — DevOps](https://github.com/Isadora-Correa/Integracao-Entrega-Continua-DevOps) — repositório da disciplina que reúne as atividades do semestre, incluindo a [Tarefa 09](https://github.com/Isadora-Correa/Integracao-Entrega-Continua-DevOps/blob/main/Aula09/Tarefa09/Atividade09.md), que motivou esta documentação.
-- [Aula — Documentação de Software](https://github.com/deivisontakatu/aula-documentacao-software) — material de referência utilizado na revisão.
