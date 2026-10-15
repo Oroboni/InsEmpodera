@@ -36,7 +36,7 @@ namespace Empodera.Services
             int linha = 2;
             foreach (var a in atores)
             {
-                ws.Cell(linha, 1).Value = a.IdAtor;
+                ws.Cell(linha, 1).Value = a.IdAtor.ToString("D");
                 ws.Cell(linha, 2).Value = a.Nome;
                 ws.Cell(linha, 3).Value = a.Genero;
                 ws.Cell(linha, 4).Value = a.Idade;

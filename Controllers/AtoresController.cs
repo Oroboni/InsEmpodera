@@ -19,9 +19,9 @@ public class AtoresController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Resumo(int id)
+    public async Task<IActionResult> Resumo(Guid id)
     {
-        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
+        if (!Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
             return RedirectToAction("Index", "Account");
 
         var usuario = await _context.Usuarios
@@ -44,7 +44,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanList("Atores"))
         {
             return StatusCode(StatusCodes.Status403Forbidden);
@@ -66,7 +66,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -89,7 +89,7 @@ public class AtoresController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Atores ator, int ComunidadeId, List<string>? recursos = null, List<string>? vulnerabilidades = null, int? tipoRelacionamento = null)
+    public async Task<IActionResult> Create(Atores ator, Guid ComunidadeId, List<string>? recursos = null, List<string>? vulnerabilidades = null, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -97,7 +97,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -117,7 +117,7 @@ public class AtoresController : Controller
         }
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
-        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        ator.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
 
         ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades, tipoRelacionamento);
         _context.Atores.Add(ator);
@@ -128,7 +128,7 @@ public class AtoresController : Controller
 
 
     // GET: /Actor/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    public async Task<IActionResult> Edit(Guid? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -137,7 +137,7 @@ public class AtoresController : Controller
             return NotFound();
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -171,7 +171,7 @@ public class AtoresController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Atores atorFormulario, int id, int ComunidadeId, int? tipoRelacionamento = null)
+    public async Task<IActionResult> Edit(Atores atorFormulario, Guid id, Guid ComunidadeId, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("ID") == null)
         {
@@ -179,7 +179,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -198,12 +198,13 @@ public class AtoresController : Controller
         atorDb.Idade = atorFormulario.Idade;
         atorDb.PapelSocial1 = atorFormulario.PapelSocial1;
         atorDb.PapelSocial2 = atorFormulario.PapelSocial2;
+        atorDb.Interesse = atorFormulario.Interesse;
         atorDb.Telefone = atorFormulario.Telefone;
         atorDb.DaEquipe = atorFormulario.DaEquipe;
         atorDb.Lopiniao = atorFormulario.Lopiniao;
         atorDb.Mcomunidade = atorFormulario.Mcomunidade;
         atorDb.Rope = atorFormulario.Rope;
-        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        atorDb.FkIdUsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
         atorDb.DtModificacao = DateTime.Now;
 
         var atorCom = await _context.AtorComunidades.FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
@@ -233,7 +234,7 @@ public class AtoresController : Controller
     // POST: /Actor/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int? id)
+    public async Task<IActionResult> Delete(Guid? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -241,7 +242,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanDelete("Atores"))
         {
             return RedirectToAction("Index", "Atores");

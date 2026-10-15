@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Editar Diário Pessoal";
     Layout = "_Layout";
-    var selectedEixos = (HashSet<int>)(ViewBag.SelectedEixos ?? new HashSet<int>());
+    var selectedEixos = (HashSet<Guid>)(ViewBag.SelectedEixos ?? new HashSet<Guid>());
     bool canDelete = ViewBag.CanDelete == true;
 }
 

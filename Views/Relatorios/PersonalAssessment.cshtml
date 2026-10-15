@@ -5,7 +5,7 @@
     // A linha "DisableMainScroll" FOI REMOVIDA daqui para CORRIGIR a rolagem.
     
     // Pega o AtorId selecionado (enviado pelo Controller)
-    int? selectedAtorId = ViewBag.SelectedAtorId; 
+    Guid? selectedAtorId = ViewBag.SelectedAtorId; 
     var avaliacoes = ViewBag.Avaliacoes as IReadOnlyList<Empodera.Models.AvaliacaoPessoal>
         ?? Array.Empty<Empodera.Models.AvaliacaoPessoal>();
     var avaliacao = ViewBag.AvaliacaoSelecionada as Empodera.Models.AvaliacaoPessoal;

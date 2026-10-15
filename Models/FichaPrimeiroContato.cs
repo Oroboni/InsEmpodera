@@ -8,8 +8,8 @@ namespace Empodera.Models
 {
     public class FichaPrimeiroContato
     {
-        public int IdFicha { get; set; }
-        public int FK_id_Atores { get; set; }
+        public Guid IdFicha { get; set; }
+        public Guid FK_id_Atores { get; set; }
 
         public string? Endereco { get; set; }
         public string? Complemento { get; set; }
@@ -52,10 +52,10 @@ namespace Empodera.Models
 
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
-        public int? FkIdComunidade { get; set; }
+        public Guid? FkIdComunidade { get; set; }
         [ForeignKey("FkIdComunidade")]
         public virtual Comunidade? Comunidade { get; set; }
-        public int FkIdUsuario { get; set; }
+        public Guid FkIdUsuario { get; set; }
 
         [ForeignKey("FK_id_Atores")]
         public virtual Atores Ator { get; set; } = null!;

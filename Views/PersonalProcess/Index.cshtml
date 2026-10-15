@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Diário Pessoal";
     Layout = "_Layout";
-    int? selectedAtorId = ViewBag.SelectedAtorId;
+    Guid? selectedAtorId = ViewBag.SelectedAtorId;
     var mentionActors = ViewBag.MentionActors as IReadOnlyDictionary<int, string>
         ?? new Dictionary<int, string>();
 }

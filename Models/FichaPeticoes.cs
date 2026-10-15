@@ -6,8 +6,8 @@ namespace Empodera.Models
 {
     public class FichaPeticoes
     {
-        public int IdPeticoes { get; set; }     
-        public int FkIdFicha { get; set; }    
+        public Guid IdPeticoes { get; set; }     
+        public Guid FkIdFicha { get; set; }    
         public string Pet { get; set; } = null!;
 
         public FichaPrimeiroContato Ficha { get; set; } = null!;

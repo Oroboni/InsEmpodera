@@ -31,7 +31,7 @@ public class RelatoriosController : BaseController
         return View();
     }
 
-    public async Task<IActionResult> PrimaryNetwork(int? atorId)
+    public async Task<IActionResult> PrimaryNetwork(Guid? atorId)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null)
@@ -41,7 +41,7 @@ public class RelatoriosController : BaseController
         return View();
     }
 
-    public async Task<IActionResult> PersonalAssessment(int? atorId, int? avaliacaoId)
+    public async Task<IActionResult> PersonalAssessment(Guid? atorId, Guid? avaliacaoId)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null) return denied;
@@ -61,7 +61,7 @@ public class RelatoriosController : BaseController
     }
 
     public async Task<IActionResult> FirstContact(
-        int? comunidadeId,
+        Guid? comunidadeId,
         string campo = "status",
         int? genero = null,
         string? estruturaFamiliar = null,
@@ -129,7 +129,7 @@ public class RelatoriosController : BaseController
         });
     }
 
-    public async Task<IActionResult> Actions(int? comunidadeId, int? atorId, DateTime? dataDe, DateTime? dataAte)
+    public async Task<IActionResult> Actions(Guid? comunidadeId, Guid? atorId, DateTime? dataDe, DateTime? dataAte)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null)
@@ -187,7 +187,7 @@ public class RelatoriosController : BaseController
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
         var loggedUser = await _context.Usuarios
             .AsNoTracking()
             .Include(user => user.Perfil)
@@ -201,7 +201,7 @@ public class RelatoriosController : BaseController
             : RedirectToAction("Index", "Home");
     }
 
-    private async Task PopulateActiveCommunitiesAsync(int? selectedId = null)
+    private async Task PopulateActiveCommunitiesAsync(Guid? selectedId = null)
     {
         ViewBag.Comunidades = new SelectList(
             await _context.Comunidades
@@ -214,7 +214,7 @@ public class RelatoriosController : BaseController
             selectedId);
     }
 
-    private async Task PopulateActiveActorsAsync(int? selectedId = null)
+    private async Task PopulateActiveActorsAsync(Guid? selectedId = null)
     {
         ViewBag.AtorList = new SelectList(
             await _context.Atores.AsNoTracking().Where(a => a.Ativo == "S")

@@ -6,9 +6,9 @@ namespace Empodera.Models
 {
     public class DAAtores
     {
-        public int Id { get; set; }             
-        public int FkIdDDacoes { get; set; }    
-        public int FK_id_Atores { get; set; }     
+        public Guid Id { get; set; }             
+        public Guid FkIdDDacoes { get; set; }    
+        public Guid FK_id_Atores { get; set; }     
 
         public DiarioDAcoes DiarioDAcoes { get; set; } = null!;
         public Atores Ator { get; set; } = null!;

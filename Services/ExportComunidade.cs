@@ -157,11 +157,12 @@ namespace Empodera.Services
                 wsAtores.Cell(linhaAtor, 3).Value = ator.Idade;
                 wsAtores.Cell(linhaAtor, 4).Value = ator.PapelSocial1;
                 wsAtores.Cell(linhaAtor, 5).Value = ator.PapelSocial2;
-                wsAtores.Cell(linhaAtor, 6).Value = ator.Telefone;
-                wsAtores.Cell(linhaAtor, 7).Value = ator.DaEquipe ? "Sim" : "Não";
-                wsAtores.Cell(linhaAtor, 8).Value = ator.Rope ? "Sim" : "Não";
-                wsAtores.Cell(linhaAtor, 9).Value = ator.Lopiniao ? "Sim" : "Não";
-                wsAtores.Cell(linhaAtor, 10).Value = ator.Mcomunidade ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 6).Value = ator.Interesse;
+                wsAtores.Cell(linhaAtor, 7).Value = ator.Telefone;
+                wsAtores.Cell(linhaAtor, 8).Value = ator.DaEquipe ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 9).Value = ator.Rope ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 10).Value = ator.Lopiniao ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 11).Value = ator.Mcomunidade ? "Sim" : "Não";
 
                 linhaAtor++;
             }

@@ -6,9 +6,9 @@ namespace Empodera.Models
 {
    public class Acoes
     {
-        public int IdAcoes { get; set; }    
+        public Guid IdAcoes { get; set; }    
         public int Quantidade { get; set; }
-        public int FkIdAtividade { get; set; }  
+        public Guid FkIdAtividade { get; set; }  
         public string Nome { get; set; } = null!;
         public string Provedor { get; set; } = null!;
 

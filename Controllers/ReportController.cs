@@ -57,7 +57,7 @@ public class ReportController : Controller
         if (files == null || files.Count == 0)
             return RedirectToAction("Index");
 
-        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var userId))
+        if (!Guid.TryParse(HttpContext.Session.GetString("ID"), out var userId))
             return RedirectToAction("Index", "Account");
 
         const long maxUploadBytes = 20 * 1024 * 1024;
@@ -158,7 +158,7 @@ public class ReportController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private async Task ProcessarExcel(string filepath, int userId)
+    private async Task ProcessarExcel(string filepath, Guid userId)
     {
         var conf = new ExcelDataSetConfiguration
         {
@@ -207,7 +207,7 @@ public class ReportController : Controller
         // ─────────────────────────────────────────────────────────────
 
         // Mapa nome → IdAtores para uso nas abas seguintes
-        var atoresPorNome = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var atoresPorNome = new Dictionary<string, Guid>(StringComparer.OrdinalIgnoreCase);
 
         if (dataSet.Tables.Count > 1)
         {
@@ -293,7 +293,7 @@ public class ReportController : Controller
 
                 // Coluna 3 = Ator (nome do ator relacionado, se "Recurso Relacional")
                 var nomeAtor  = row[3]?.ToString()?.Trim();
-                int? idAtor   = null;
+                Guid? idAtor   = null;
                 if (!string.IsNullOrEmpty(nomeAtor) && atoresPorNome.TryGetValue(nomeAtor, out var aid))
                     idAtor = aid;
 
@@ -411,7 +411,7 @@ public class ReportController : Controller
                 var nomeAtor = row[0]?.ToString()?.Trim();
                 if (string.IsNullOrEmpty(nomeAtor)) continue;
 
-                if (!atoresPorNome.TryGetValue(nomeAtor, out int idAtor)) continue;
+                if (!atoresPorNome.TryGetValue(nomeAtor, out Guid idAtor)) continue;
 
                 DateTime.TryParse(row[1]?.ToString(), out DateTime dtAvaliacao);
 
@@ -453,7 +453,7 @@ public class ReportController : Controller
                 var descricao = row[2]?.ToString()?.Trim();
                 if (string.IsNullOrEmpty(nomeAtor) && string.IsNullOrEmpty(descricao)) continue;
 
-                if (!atoresPorNome.TryGetValue(nomeAtor ?? "", out int idAtor)) continue;
+                if (!atoresPorNome.TryGetValue(nomeAtor ?? "", out Guid idAtor)) continue;
 
                 DateTime.TryParse(row[1]?.ToString(), out DateTime data);
 
@@ -497,7 +497,7 @@ public class ReportController : Controller
                 if (string.IsNullOrEmpty(nomeAtor)) continue;
 
                 // Tenta resolver o ator; cria vínculo se já existir
-                atoresPorNome.TryGetValue(nomeAtor, out int idAtor);
+                atoresPorNome.TryGetValue(nomeAtor, out Guid idAtor);
 
                 DateTime.TryParse(row[3]?.ToString(), out DateTime dtNasc);
                 DateTime.TryParse(row[6]?.ToString(), out DateTime dtContato);
@@ -933,7 +933,7 @@ public class ReportController : Controller
     // ─── Actions de relatório ────────────────────────────────────────
 
     // GET: /Report/Rsc
-    public async Task<IActionResult> Rsc(int? comunidadeId)
+    public async Task<IActionResult> Rsc(Guid? comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -947,7 +947,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/FirstContact
-    public async Task<IActionResult> FirstContact(int? comunidadeId)
+    public async Task<IActionResult> FirstContact(Guid? comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -961,7 +961,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/PersonalAssessment
-    public async Task<IActionResult> PersonalAssessment(int? atorId)
+    public async Task<IActionResult> PersonalAssessment(Guid? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -976,7 +976,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/Actions
-    public async Task<IActionResult> Actions(int? comunidadeId, int? atorId)
+    public async Task<IActionResult> Actions(Guid? comunidadeId, Guid? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -991,7 +991,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/PrimaryNetwork
-    public async Task<IActionResult> PrimaryNetwork(int? atorId)
+    public async Task<IActionResult> PrimaryNetwork(Guid? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -1007,7 +1007,7 @@ public class ReportController : Controller
 
     private Task<Usuario?> CurrentUserWithPermissionsAsync()
     {
-        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
         return _context.Usuarios
             .AsNoTracking()
             .Include(user => user.Perfil)

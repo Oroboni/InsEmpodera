@@ -6,9 +6,9 @@ namespace Empodera.Models
 {
     public class RedePrimaria
     {
-        public int IdRedePrimaria { get; set; }   
-        public int FkIdAtorPrincipal { get; set; }    
-        public int FkIdAtorRelacionados { get; set; } 
+        public Guid IdRedePrimaria { get; set; }   
+        public Guid FkIdAtorPrincipal { get; set; }    
+        public Guid FkIdAtorRelacionados { get; set; } 
         public string TipoRelacao { get; set; } = null!;
 
         public Atores AtorPrincipal { get; set; } = null!;

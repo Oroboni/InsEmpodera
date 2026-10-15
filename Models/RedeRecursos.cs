@@ -6,9 +6,9 @@ namespace Empodera.Models
 {
     public class RedeRecursos
     {
-        public int Id_Rede { get; set; }         
-        public int? FK_id_Atores{ get; set; }     
-        public int FkIdComunidade { get; set; } 
+        public Guid Id_Rede { get; set; }         
+        public Guid? FK_id_Atores{ get; set; }     
+        public Guid FkIdComunidade { get; set; } 
         public string? Nome { get; set; }
         public string Tipo { get; set; } = null!;
         public string? Dispositivo { get; set; }
@@ -16,7 +16,7 @@ namespace Empodera.Models
         public string? Servicos { get; set; }
         public DateTime DtCriacao { get; set; }
         public DateTime DtModificacao { get; set; }
-        public int FkIdUsuario { get; set; }   
+        public Guid FkIdUsuario { get; set; }   
 
         public Atores Ator { get; set; } = null!;
         public Comunidade Comunidade { get; set; } = null!;

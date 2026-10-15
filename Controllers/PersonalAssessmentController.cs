@@ -16,7 +16,7 @@ public class PersonalAssessmentController : Controller
 
     // GET: /PersonalAssessment/
     // Opcionalmente, pode receber o ID do ator
-    public async Task<IActionResult> Index(int? atorId)
+    public async Task<IActionResult> Index(Guid? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -24,7 +24,7 @@ public class PersonalAssessmentController : Controller
         }
 
         var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
         if (!PodeAvaliacao.CanList("AvaliacoesPessoais"))
         {
             return StatusCode(StatusCodes.Status403Forbidden);
@@ -57,7 +57,7 @@ public class PersonalAssessmentController : Controller
     }
 
     // GET: /PersonalAssessment/Create
-    public async Task<IActionResult> Create(int? atorId)
+    public async Task<IActionResult> Create(Guid? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -65,7 +65,7 @@ public class PersonalAssessmentController : Controller
         }
 
         var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
         if (!PodeAvaliacao.CanCreate("AvaliacoesPessoais"))
         {
             return RedirectToAction("Index", "PersonalAssessment");
@@ -94,7 +94,7 @@ public class PersonalAssessmentController : Controller
         }
 
         var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
         if (!PodeAvaliacao.CanCreate("AvaliacoesPessoais"))
         {
             return RedirectToAction("Index", "PersonalAssessment");
@@ -116,14 +116,14 @@ public class PersonalAssessmentController : Controller
 
         avaliacao.DtCriacao = DateTime.Now;
         avaliacao.DtModificacao = DateTime.Now;
-        avaliacao.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        avaliacao.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
         _context.AvaliacaoPessoal.Add(avaliacao);
         await _context.SaveChangesAsync();
         return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacao.FK_id_Atores});
     }
 
     // GET: /PersonalAssessment/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    public async Task<IActionResult> Edit(Guid? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -136,7 +136,7 @@ public class PersonalAssessmentController : Controller
         }
 
         var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
         if (!PodeAvaliacao.CanUpdate("AvaliacoesPessoais"))
         {
             return RedirectToAction("Index", "PersonalAssessment");
@@ -163,7 +163,7 @@ public class PersonalAssessmentController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> edit(AvaliacaoPessoal avaliacao, int? id)
+    public async Task<IActionResult> edit(AvaliacaoPessoal avaliacao, Guid? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -176,7 +176,7 @@ public class PersonalAssessmentController : Controller
         }
 
         var PodeAvaliacao = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
+        .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "AvaliacoesPessoais")).FirstOrDefault();
         if (!PodeAvaliacao.CanUpdate("AvaliacoesPessoais"))
         {
             return RedirectToAction("Index", "PersonalAssessment");
@@ -222,7 +222,7 @@ public class PersonalAssessmentController : Controller
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Edit), new { id = avaliacaobd.IdAvaliacao });
     }
-    private async Task PopulateActorsListAsync(int? selectedActorId)
+    private async Task PopulateActorsListAsync(Guid? selectedActorId)
     {
         ViewBag.AtoresList = new SelectList(
             await _context.Atores
@@ -235,7 +235,7 @@ public class PersonalAssessmentController : Controller
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int? id)
+    public async Task<IActionResult> Delete(Guid? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -243,7 +243,7 @@ public class PersonalAssessmentController : Controller
         if (id == null)
             return NotFound();
 
-        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
         var loggedUser = await _context.Usuarios
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)

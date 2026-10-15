@@ -10,12 +10,13 @@ namespace Empodera.Services
 {
     public class AtorRelatorioDto
     {
-        public int IdAtor { get; set; }
+        public Guid IdAtor { get; set; }
         public string Nome { get; set; } = string.Empty;
         public int? Genero { get; set; }
         public int Idade { get; set; }
         public string PapelSocial1 { get; set; } = string.Empty;
         public string PapelSocial2 { get; set; } = string.Empty;
+        public string Interesse { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
         public string Extra { get; set; } = string.Empty;
         public DateTime DtCriacao { get; set; }

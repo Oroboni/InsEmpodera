@@ -1,0 +1,719 @@
+/* --- Configurações Globais e Variáveis de Cor --- */
+:root {
+    --cor-fundo: #7C4288;
+    --cor-painel-info: #7C4288;
+    --cor-destaque: #6BC0B7;
+    --cor-texto-claro: #FFFFFF;
+    --cor-texto-escuro: #333333;
+    --cor-texto-placeholder: #A0AEC0;
+    --cor-fundo-input: #F7F7F7;
+    --cor-sombra: rgba(35, 33, 39, 0.2);
+    --cor-sucesso: #48BB78;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cor-fundo);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- Transição de Entrada da Página --- */
+body {
+    animation: pageSlideIn 0.8s ease-out;
+}
+
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* --- Círculos Decorativos de Fundo --- */
+.background-circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    border-style: solid;
+    opacity: 0.4;
+    animation: floatCircles 6s ease-in-out infinite;
+}
+
+@keyframes floatCircles {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.circle-1 { 
+    width: 200px; 
+    height: 200px; 
+    border: 12px solid var(--cor-texto-claro); 
+    top: 10%; 
+    left: 5%; 
+    animation-delay: 0s;
+}
+
+.circle-2 { 
+    width: 150px; 
+    height: 150px; 
+    border: 10px solid var(--cor-destaque); 
+    top: 5%; 
+    right: 15%; 
+    animation-delay: 1s;
+}
+
+.circle-3 { 
+    width: 250px; 
+    height: 250px; 
+    border: 15px solid var(--cor-texto-claro); 
+    bottom: 10%; 
+    right: 5%; 
+    animation-delay: 2s;
+}
+
+.circle-4 { 
+    width: 120px; 
+    height: 120px; 
+    border: 8px solid var(--cor-destaque); 
+    bottom: 15%; 
+    left: 10%; 
+    animation-delay: 0.5s;
+}
+
+.circle-5 { 
+    width: 180px; 
+    height: 180px; 
+    border: 10px solid var(--cor-destaque); 
+    top: 60%; 
+    left: -50px; 
+    animation-delay: 1.5s;
+}
+
+.circle-6 { 
+    width: 100px; 
+    height: 100px; 
+    border: 8px solid var(--cor-texto-claro); 
+    top: 25%; 
+    right: -30px; 
+    animation-delay: 3s;
+}
+
+/* --- Container Principal --- */
+.container-geral {
+    display: flex;
+    width: 800px;
+    min-height: 500px;
+    height: auto;
+
+    background-color: var(--cor-texto-claro);
+    border-radius: 25px;
+    box-shadow: 0 20px 40px var(--cor-sombra);
+
+    overflow: hidden;
+
+    position: relative;
+    z-index: 2;
+
+    animation: containerSlideIn 0.6s ease-out 0.2s both;
+
+    transition: height 0.35s ease;
+}
+
+/* Aumenta a tela quando a mensagem aparece */
+.container-geral.recovery-submitted {
+    min-height: 620px;
+}
+
+.painel-recovery {
+    background-color: var(--cor-texto-claro);
+    flex-basis: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 40px;
+
+    position: relative;
+
+    animation: panelSlideLeft 0.8s ease-out 0.4s both;
+}
+
+.container-geral.recovery-submitted .painel-recovery {
+    justify-content: flex-start;
+    padding-top: 75px;
+    padding-bottom: 35px;
+}
+
+/* Garante que o formulário não estoure */
+.recovery-form {
+    width: 100%;
+    max-width: 100%;
+}
+
+
+.success-message {
+    display: none;
+}
+
+.success-message.show {
+    display: flex;
+
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 12px 14px;
+    margin-bottom: 18px;
+
+    background: #F0FFF4;
+
+    border: 1px solid #9AE6B4;
+    border-left: 4px solid #48BB78;
+    border-radius: 12px;
+
+    text-align: left;
+
+    animation: successSlideIn 0.35s ease;
+}
+
+.success-icon {
+    flex: 0 0 34px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #48BB78;
+    color: white;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    margin: 0;
+}
+
+.success-text {
+    flex: 1;
+
+    color: #276749;
+
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+@keyframes successSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ícone */
+.success-icon {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    background-color: var(--cor-sucesso);
+    color: white;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    margin: 0;
+}
+
+
+/* Texto */
+.success-text {
+    color: #276749;
+
+    font-weight: 500;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+
+/* Quando a confirmação existir, diminui um pouco alguns espaços */
+.recovery-submitted .recovery-form h2 {
+    margin-bottom: 0.65rem;
+}
+
+.recovery-submitted .recovery-description {
+    margin-bottom: 1.25rem;
+}
+
+.recovery-submitted .form-group {
+    margin-bottom: 1.15rem;
+}
+
+@keyframes containerSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* --- Painel da Esquerda - FORMULÁRIO (INVERTIDO) --- */
+.painel-recovery {
+    background-color: var(--cor-texto-claro);
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    animation: panelSlideLeft 0.8s ease-out 0.4s both;
+}
+
+@keyframes panelSlideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 30px; /* Mudou para esquerda */
+    width: 60px;
+}
+
+.logo img {
+    width: 100%;
+}
+
+.recovery-form {
+    width: 100%;
+}
+
+.recovery-form h2 {
+    color: var(--cor-texto-escuro);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.recovery-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-label {
+    display: block;
+    color: #4A3F4E;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin: 0 0 0.45rem 0.8rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid #E2E8F0;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    background-color: var(--cor-fundo-input);
+    transition: all 0.3s ease;
+    animation: inputFadeIn 0.6s ease-out 0.6s both;
+}
+
+@keyframes inputFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--cor-destaque);
+    border-width: 2px;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 192, 183, 0.2);
+}
+
+.form-input::placeholder {
+    color: var(--cor-texto-placeholder);
+}
+
+/* --- Botões --- */
+.recovery-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--cor-destaque);
+    color: var(--cor-texto-claro);
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    animation: buttonFadeIn 0.6s ease-out 0.8s both;
+}
+
+@keyframes buttonFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.recovery-button:hover {
+    background-color: #5BA8A0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 192, 183, 0.3);
+}
+
+.recovery-button:active {
+    transform: translateY(0);
+}
+
+.cancel-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: transparent;
+    color: var(--cor-texto-escuro);
+    border: 2px solid #E2E8F0;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: buttonFadeIn 0.6s ease-out 1s both;
+    text-align: center;
+    text-decoration: none;
+}
+
+.cancel-button:hover {
+    border-color: var(--cor-destaque);
+    color: var(--cor-destaque);
+    transform: translateY(-2px);
+}
+
+/* --- Painel da Direita - INFORMAÇÕES (INVERTIDO) --- */
+.painel-info {
+    background-color: var(--cor-painel-info);
+    color: var(--cor-texto-claro);
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 50px;
+    animation: panelSlideRight 0.8s ease-out 0.4s both;
+}
+
+@keyframes panelSlideRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.painel-info h1 {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.painel-info p {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.back-to-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cor-texto-claro);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.back-to-login:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(-5px);
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.back-to-login:hover .back-arrow {
+    transform: translateX(-3px);
+}
+
+/* --- Mensagem de Sucesso --- */
+.success-message {
+    display: none;
+    background-color: #F0FFF4;
+    border: 1px solid var(--cor-sucesso);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.success-message.show {
+    display: block;
+    animation: successSlideIn 0.4s ease;
+}
+
+@keyframes successSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.success-icon {
+    color: var(--cor-sucesso);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.success-text {
+    color: var(--cor-sucesso);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* --- Transição de Saída --- */
+.page-exit {
+    animation: pageSlideOut 0.5s ease-in forwards;
+}
+
+@keyframes pageSlideOut {
+    to {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+}
+
+@media (max-width: 850px) {
+
+    body {
+        overflow-y: auto;
+        padding: 25px 0;
+    }
+
+    .container-geral,
+    .container-geral.recovery-submitted {
+        flex-direction: column-reverse;
+
+        width: 90%;
+        max-width: 400px;
+
+        height: auto;
+        min-height: auto;
+    }
+
+    .painel-info {
+        padding: 30px 25px;
+
+        text-align: center;
+        align-items: center;
+    }
+
+    .painel-info h1 {
+        font-size: 1.8rem;
+    }
+
+    .painel-recovery {
+        padding: 50px 30px 30px;
+    }
+
+    .logo {
+        top: 15px;
+        right: 25px;
+        left: auto;
+
+        width: 50px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .container-geral,
+    .container-geral.recovery-submitted {
+        width: 95%;
+        margin: 20px;
+
+        min-height: auto;
+    }
+
+    .painel-info {
+        padding: 25px 20px;
+    }
+
+    .painel-recovery {
+        padding: 50px 25px 25px;
+    }
+
+    .logo {
+        top: 18px;
+        right: 22px;
+        left: auto;
+
+        width: 35px;
+    }
+
+    .recovery-form h2 {
+        font-size: 1.2rem;
+    }
+
+    .recovery-description {
+        font-size: 0.8rem;
+    }
+
+    .success-message.show {
+        align-items: flex-start;
+    }
+
+    .success-text {
+        font-size: 0.78rem;
+    }
+}
+
+.validation-summary,
+.field-validation-error {
+    color: #B42318;
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.validation-summary:empty,
+.field-validation-error:empty {
+    display: none;
+}
+
+.validation-summary ul {
+    margin: 0 0 1rem;
+    padding: 0.85rem 1rem 0.85rem 2rem;
+    background: #FFF1F0;
+    border: 1px solid #FDA29B;
+    border-radius: 12px;
+}
+
+.reset-container {
+    min-height: 570px;
+    height: auto;
+}
+
+.confirmation-container {
+    min-height: 430px;
+    height: auto;
+}
+
+.confirmation-panel {
+    align-items: center;
+    text-align: center;
+}
+
+.confirmation-icon {
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: #EAF8F6;
+    color: #287A71;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.confirmation-link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}

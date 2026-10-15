@@ -2,7 +2,7 @@ namespace Empodera.Models;
 
 public sealed class FirstContactReportViewModel
 {
-    public int? ComunidadeId { get; init; }
+    public Guid? ComunidadeId { get; init; }
     public string Campo { get; init; } = "status";
     public int? Genero { get; init; }
     public string? EstruturaFamiliar { get; init; }
@@ -22,8 +22,8 @@ public sealed record ReportSeriesItem(string Label, int Value, decimal Percentag
 
 public sealed class ActionsReportViewModel
 {
-    public int? ComunidadeId { get; init; }
-    public int? AtorId { get; init; }
+    public Guid? ComunidadeId { get; init; }
+    public Guid? AtorId { get; init; }
     public DateTime? DataDe { get; init; }
     public DateTime? DataAte { get; init; }
     public IReadOnlyList<ActionReportRow> Rows { get; init; } = [];

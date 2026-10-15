@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Empodera.Data;
 using Empodera.Models;
 using Microsoft.AspNetCore.Identity;
@@ -26,8 +25,8 @@ public sealed class EmpoderaUserStore(ApplicationDbContext context) :
         ArgumentNullException.ThrowIfNull(user);
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user.IdUsuario <= 0)
-            user.IdUsuario = await NextRandomIdAsync(cancellationToken);
+        if (user.IdUsuario == Guid.Empty)
+            user.IdUsuario = Guid.NewGuid();
 
         user.ConcurrencyStamp = NewStamp();
         user.SecurityStamp = string.IsNullOrWhiteSpace(user.SecurityStamp) ? NewStamp() : user.SecurityStamp;
@@ -55,7 +54,7 @@ public sealed class EmpoderaUserStore(ApplicationDbContext context) :
     }
 
     public Task<string> GetUserIdAsync(Usuario user, CancellationToken cancellationToken) =>
-        Task.FromResult(user.IdUsuario.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        Task.FromResult(user.IdUsuario.ToString("D"));
 
     public Task<string?> GetUserNameAsync(Usuario user, CancellationToken cancellationToken) =>
         Task.FromResult<string?>(user.UserName);
@@ -77,7 +76,7 @@ public sealed class EmpoderaUserStore(ApplicationDbContext context) :
 
     public async Task<Usuario?> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-        if (!int.TryParse(userId, out var id))
+        if (!Guid.TryParse(userId, out var id))
             return null;
         return await context.Usuarios.SingleOrDefaultAsync(user => user.IdUsuario == id, cancellationToken);
     }
@@ -200,18 +199,6 @@ public sealed class EmpoderaUserStore(ApplicationDbContext context) :
     public void Dispose()
     {
         // O DbContext é controlado pelo escopo de injeção de dependência.
-    }
-
-    private async Task<int> NextRandomIdAsync(CancellationToken cancellationToken)
-    {
-        for (var attempt = 0; attempt < 64; attempt++)
-        {
-            var candidate = RandomNumberGenerator.GetInt32(100_000, 1_000_000);
-            if (!await context.Usuarios.AnyAsync(user => user.IdUsuario == candidate, cancellationToken))
-                return candidate;
-        }
-
-        throw new InvalidOperationException("Não foi possível gerar um identificador de usuário único.");
     }
 
     private async Task<IdentityResult> SaveAsync(CancellationToken cancellationToken)

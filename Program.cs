@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Empodera.Services.Identity;
 using Empodera.Services.Email;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,9 +73,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 "Defina ConnectionStrings__DefaultConnection por variável de ambiente ou cofre de segredos.");
         }
 
+        var mysqlConnection = new MySqlConnectionStringBuilder(connectionString)
+        {
+            GuidFormat = MySqlGuidFormat.Binary16
+        }.ConnectionString;
+
         options.UseMySql(
-            connectionString,
-            ServerVersion.AutoDetect(connectionString));
+            mysqlConnection,
+            ServerVersion.AutoDetect(mysqlConnection));
     }
     else
     {
@@ -158,32 +164,6 @@ app.Use(async (context, next) =>
     });
     await next();
 });
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    if (app.Environment.IsEnvironment("Testing"))
-    {
-        await db.Database.EnsureCreatedAsync();
-        var testPassword = builder.Configuration["Testing:AdminPassword"];
-        if (!string.IsNullOrWhiteSpace(testPassword))
-        {
-            var testUser = await db.Usuarios.FirstOrDefaultAsync(user => user.IdUsuario == 1);
-            if (testUser is not null)
-            {
-                testUser.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>()
-                    .HashPassword(testUser, testPassword);
-                testUser.Ativo = "S";
-                await db.SaveChangesAsync();
-            }
-        }
-    }
-    else
-    {
-        await db.Database.MigrateAsync();
-        await EixoCatalogo.EnsureCreatedAsync(db);
-    }
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

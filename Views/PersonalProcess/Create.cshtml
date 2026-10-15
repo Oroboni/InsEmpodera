@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Adicionar Diário Pessoal";
     Layout = "_Layout";
-    var selectedEixos = (HashSet<int>)(ViewBag.SelectedEixos ?? new HashSet<int>());
+    var selectedEixos = (HashSet<Guid>)(ViewBag.SelectedEixos ?? new HashSet<Guid>());
 }
 
 @section Styles {

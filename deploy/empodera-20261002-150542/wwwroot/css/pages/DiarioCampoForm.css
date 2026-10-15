@@ -1,0 +1,358 @@
+/* ================================================
+   DIÁRIO DE CAMPO - ESTILOS ESPECÍFICOS
+   Sistema de Design Empodera
+   ================================================ */
+
+/* ===== EIXOS CHECKBOX GRID ===== */
+.eixos-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.checkbox-card-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+    font-weight: var(--font-weight-medium);
+}
+
+.checkbox-card-label:hover {
+    border-color: var(--color-primary-300);
+    background-color: var(--color-primary-50);
+}
+
+.checkbox-card-label input[type="checkbox"] {
+    accent-color: var(--color-primary);
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.checkbox-card-label:has(input:checked) {
+    background-color: var(--color-primary-100);
+    border-color: var(--color-primary);
+    color: var(--color-primary-800);
+    font-weight: var(--font-weight-semibold);
+}
+
+.checkbox-card-label.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--color-gray-50);
+}
+
+.checkbox-card-label.disabled input[type="checkbox"] {
+    cursor: not-allowed;
+}
+
+/* ===== MENTION LIST (@) ===== */
+#mention-list {
+    position: absolute;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-height: 250px;
+    overflow-y: auto;
+    min-width: 280px;
+    z-index: 9999;
+    display: none;
+    padding: var(--space-2);
+    margin-top: var(--space-2);
+    list-style: none;
+}
+
+.mention-item {
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    transition: all 0.2s ease;
+}
+
+.mention-item:hover {
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-800);
+}
+
+.mention-item i {
+    color: var(--color-gray-400);
+    font-size: var(--font-size-base);
+}
+
+.mention-item:hover i {
+    color: var(--color-primary);
+}
+
+/* ===== ACCORDION (Details/Summary) ===== */
+.accordion-box {
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-5);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.accordion-box:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.accordion-summary {
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-800);
+    background-color: var(--color-gray-50);
+    list-style: none;
+    transition: all 0.2s ease;
+    user-select: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.accordion-summary:hover {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-800);
+}
+
+.accordion-summary::-webkit-details-marker {
+    display: none;
+}
+
+.accordion-summary i {
+    transition: transform 0.3s ease;
+    color: var(--color-gray-500);
+    flex-shrink: 0;
+}
+
+details[open] .accordion-summary i {
+    transform: rotate(180deg);
+    color: var(--color-primary);
+}
+
+.accordion-content {
+    padding: var(--space-5);
+    border-top: 1px solid var(--color-gray-200);
+    background-color: var(--color-white);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ===== ACTION LIST ITEMS ===== */
+.action-list-item {
+    background: var(--color-gray-50);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-2);
+    border-left: 4px solid var(--color-primary);
+    font-size: var(--font-size-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.action-list-item:hover {
+    background-color: var(--color-primary-50);
+    border-left-color: var(--color-primary-dark);
+}
+
+.action-list-item strong {
+    color: var(--color-gray-900);
+    font-weight: var(--font-weight-semibold);
+}
+
+.action-list-item em {
+    color: var(--color-gray-600);
+    font-style: normal;
+    font-size: var(--font-size-xs);
+}
+
+.action-list-item .btn-action {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.action-list-item:hover .btn-action {
+    opacity: 1;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state-acoes {
+    text-align: center;
+    padding: var(--space-8) var(--space-4);
+    color: var(--color-gray-500);
+}
+
+.empty-state-acoes i {
+    font-size: 3rem;
+    color: var(--color-gray-400);
+    margin-bottom: var(--space-3);
+}
+
+.empty-state-acoes p {
+    margin: var(--space-2) 0 0 0;
+    font-size: var(--font-size-sm);
+}
+
+/* ===== MAP CONTAINER ===== */
+.map-container {
+    height: 350px;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    background: var(--color-gray-100);
+    margin-top: var(--space-4);
+    border: 2px solid var(--color-gray-300);
+    overflow: hidden;
+}
+
+/* ===== MODAL OVERLAYS ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay .modal-content {
+    background: var(--color-white);
+    padding: var(--space-8);
+    border-radius: var(--radius-2xl);
+    width: min(500px, 90vw);
+    box-shadow: var(--shadow-2xl);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+.modal-content h3 {
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+}
+
+.modal-content .text-muted {
+    margin-bottom: var(--space-6);
+}
+
+/* ===== EDIT MODE INDICATORS ===== */
+.edit-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-white);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.edit-mode-badge i {
+    font-size: var(--font-size-xs);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .eixos-options-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .checkbox-card-label {
+        padding: 10px 14px;
+        font-size: var(--font-size-xs);
+    }
+
+    .accordion-summary {
+        padding: var(--space-3) var(--space-4);
+        font-size: var(--font-size-sm);
+    }
+
+    .accordion-content {
+        padding: var(--space-4);
+    }
+
+    .action-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+
+    .map-container {
+        height: 250px;
+    }
+
+    .modal-overlay .modal-content {
+        padding: var(--space-6);
+        width: 95vw;
+    }
+
+    #mention-list {
+        min-width: 200px;
+        max-height: 180px;
+    }
+
+    .mention-item {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .eixos-options-grid {
+        gap: 8px;
+    }
+
+    .checkbox-card-label {
+        padding: 8px 12px;
+    }
+
+    .map-container {
+        height: 200px;
+    }
+}

@@ -4,10 +4,10 @@ namespace Empodera.Models;
 
 public class DiarioProcessoPessoal
 {
-    public int IdDiarioProcesso { get; set; }
+    public Guid IdDiarioProcesso { get; set; }
 
     [Display(Name = "Ator")]
-    public int FK_id_Atores { get; set; }
+    public Guid FK_id_Atores { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime Data { get; set; }
@@ -18,8 +18,8 @@ public class DiarioProcessoPessoal
 
     public DateTime DtCriacao { get; set; }
     public DateTime DtModificacao { get; set; }
-    public int FkIdUsuario { get; set; }
-    public int? FkIdUsuarioM { get; set; }
+    public Guid FkIdUsuario { get; set; }
+    public Guid? FkIdUsuarioM { get; set; }
 
     public Atores Ator { get; set; } = null!;
     public Usuario Usuario { get; set; } = null!;
