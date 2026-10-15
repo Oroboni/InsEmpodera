@@ -932,6 +932,8 @@ public class ReportController : Controller
 
     // ─── Actions de relatório ────────────────────────────────────────
 
+    // Rotas antigas de relatório: as telas ficam em RelatoriosController.
+
     // GET: /Report/Rsc
     public async Task<IActionResult> Rsc(Guid? comunidadeId)
     {
@@ -945,9 +947,11 @@ public class ReportController : Controller
         ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
         return View();
     }
+    public Task<IActionResult> Rsc(int? comunidadeId) =>
+        RedirectToReportAsync(nameof(RelatoriosController.Rsc), null);
 
     // GET: /Report/FirstContact
-    public async Task<IActionResult> FirstContact(Guid? comunidadeId)
+    public async Task<IActionResult> FirstContact(int? comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -961,7 +965,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/PersonalAssessment
-    public async Task<IActionResult> PersonalAssessment(Guid? atorId)
+    public async Task<IActionResult> PersonalAssessment(int? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -976,7 +980,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/Actions
-    public async Task<IActionResult> Actions(Guid? comunidadeId, Guid? atorId)
+    public async Task<IActionResult> Actions(int? comunidadeId, int? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -991,7 +995,7 @@ public class ReportController : Controller
     }
 
     // GET: /Report/PrimaryNetwork
-    public async Task<IActionResult> PrimaryNetwork(Guid? atorId)
+    public async Task<IActionResult> PrimaryNetwork(int? atorId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -1000,9 +1004,7 @@ public class ReportController : Controller
         if (!loggedUser.CanViewDetails("SER"))
             return RedirectToAction("Index", "Relatorios");
 
-        ViewBag.AtorList = new SelectList(await _context.Atores.Where(actor => actor.Ativo != "N").ToListAsync(), "IdAtores", "Nome", atorId);
-        ViewBag.SelectedAtorId = atorId;
-        return View();
+        return RedirectToAction(action, "Relatorios", routeValues);
     }
 
     private Task<Usuario?> CurrentUserWithPermissionsAsync()
