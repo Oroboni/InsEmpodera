@@ -62,8 +62,8 @@
                 <div class="icon-box purple"><i class="fa-solid fa-map-pin"></i></div>
                 <div class="input-content">
                     <label asp-for="Endereco">Endereço</label>
-                    <input asp-for="Endereco" id="input-endereco" class="clean-input" readonly
-                        placeholder="Use a lupa no mapa acima para buscar..." />
+                    <input asp-for="Endereco" id="input-endereco" class="clean-input" autocomplete="off"
+                        placeholder="Digite o endereço ou use a lupa do mapa" />
                 </div>
             </div>
 
@@ -491,9 +491,9 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script src="~/js/ficha/wizard.js"></script>
-    <script src="~/js/ficha/edit-mode.js"></script>
-    <script src="~/js/ficha/delete-modal.js"></script>
+    <script src="~/js/ficha/wizard.js" asp-append-version="true"></script>
+    <script src="~/js/ficha/edit-mode.js" asp-append-version="true"></script>
+    <script src="~/js/ficha/delete-modal.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/form-utils.js" asp-append-version="true"></script>
     <script src="~/js/fichaprimeirocontato.js" asp-append-version="true"></script>

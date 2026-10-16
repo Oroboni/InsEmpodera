@@ -628,4 +628,112 @@
     <value>Nominatim suggestion failed:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_5dbc09940cfa8f52' xml:space='preserve'>
+    <value>Subjective Network</value>
+    <comment>Source: Rede Subjetiva</comment>
+  </data>
+  <data name='Ui_68b5895a80b8f7af' xml:space='preserve'>
+    <value>Interest</value>
+    <comment>Source: Interesse</comment>
+  </data>
+  <data name='Ui_47dc94cae6ebf947' xml:space='preserve'>
+    <value>Choose the country and enter the area code and number.</value>
+    <comment>Source: Escolha o país e digite DDD e número.</comment>
+  </data>
+  <data name='Ui_9350df84b3d28499' xml:space='preserve'>
+    <value>No actors added to this network yet.</value>
+    <comment>Source: Nenhum ator adicionado a esta rede ainda.</comment>
+  </data>
+  <data name='Ui_bc3a5125ec88a0df' xml:space='preserve'>
+    <value>Click</value>
+    <comment>Source: Clique em</comment>
+  </data>
+  <data name='Ui_53cff9c13ee57fbc' xml:space='preserve'>
+    <value>to change the network.</value>
+    <comment>Source: para alterar a rede.</comment>
+  </data>
+  <data name='Ui_8748028b31956e61' xml:space='preserve'>
+    <value>Register new actor</value>
+    <comment>Source: Cadastrar novo ator</comment>
+  </data>
+  <data name='Ui_2210ffa668072074' xml:space='preserve'>
+    <value>Family</value>
+    <comment>Source: Família</comment>
+  </data>
+  <data name='Ui_a25fd08cc38ade07' xml:space='preserve'>
+    <value>Work</value>
+    <comment>Source: Trabalho</comment>
+  </data>
+  <data name='Ui_ffc34644cffd8d8d' xml:space='preserve'>
+    <value>Other:</value>
+    <comment>Source: Outra:</comment>
+  </data>
+  <data name='Ui_99cd01dc03bf6f6f' xml:space='preserve'>
+    <value>Enter the actor's interest</value>
+    <comment>Source: Digite o interesse do ator</comment>
+  </data>
+  <data name='Ui_b2f752ca1c1b5ac4' xml:space='preserve'>
+    <value>Country code</value>
+    <comment>Source: DDI (código do país)</comment>
+  </data>
+  <data name='Ui_a857b7e072919ce4' xml:space='preserve'>
+    <value>Opens the actor registration; after saving, the actor comes back selected here</value>
+    <comment>Source: Abre o cadastro de ator; ao salvar, ele volta selecionado aqui</comment>
+  </data>
+  <data name='Ui_cdbcd2845e415217' xml:space='preserve'>
+    <value>Write the relationship (e.g.: Father)</value>
+    <comment>Source: Escreva a relação (ex.: Pai)</comment>
+  </data>
+  <data name='Ui_f25cfc33b7648c9b' xml:space='preserve'>
+    <value>Other relationship</value>
+    <comment>Source: Outra relação</comment>
+  </data>
+  <data name='Ui_e0967cc736d11692' xml:space='preserve'>
+    <value>Secondary social role</value>
+    <comment>Source: Papel social secundário</comment>
+  </data>
+  <data name='Ui_4a570fa34224d102' xml:space='preserve'>
+    <value>Actor's interest</value>
+    <comment>Source: Interesse do ator</comment>
+  </data>
+  <data name='Ui_d4d433241a966b7c' xml:space='preserve'>
+    <value>When you save, this window closes and the actor appears selected in the network you were filling in.</value>
+    <comment>Source: Ao salvar, esta janela fecha e o ator aparece selecionado na rede que você estava preenchendo.</comment>
+  </data>
+  <data name='Ui_fa921aa30ba3b4bc' xml:space='preserve'>
+    <value>Neighbors/Community</value>
+    <comment>Source: Vizinhos/Comunidade</comment>
+  </data>
+  <data name='Ui_a6ef9bf2715fb21b' xml:space='preserve'>
+    <value>Relationship Type</value>
+    <comment>Source: Tipo de Relação</comment>
+  </data>
+  <data name='Ui_f0cf3b624f571293' xml:space='preserve'>
+    <value>Add to Primary Network</value>
+    <comment>Source: Adicionar à Rede Primária</comment>
+  </data>
+  <data name='Ui_7ca9809e4793890d' xml:space='preserve'>
+    <value>Add to Subjective Network</value>
+    <comment>Source: Adicionar à Rede Subjetiva</comment>
+  </data>
+  <data name='Ui_664e383f4590ee39' xml:space='preserve'>
+    <value>Select the actor</value>
+    <comment>Source: Selecione o ator</comment>
+  </data>
+  <data name='Ui_fb3a871b28ad236b' xml:space='preserve'>
+    <value>Select the community first.</value>
+    <comment>Source: Selecione primeiro a comunidade.</comment>
+  </data>
+  <data name='Ui_09f0ac523a664502' xml:space='preserve'>
+    <value>Actor registered:</value>
+    <comment>Source: Ator cadastrado:</comment>
+  </data>
+  <data name='Ui_75af4616c66977b8' xml:space='preserve'>
+    <value>Returning to the previous page…</value>
+    <comment>Source: Voltando para a tela anterior…</comment>
+  </data>
+  <data name='Ui_b953c734b704a36d' xml:space='preserve'>
+    <value>Close this window</value>
+    <comment>Source: Fechar esta janela</comment>
+  </data>
 </root>

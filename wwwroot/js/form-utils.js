@@ -56,13 +56,14 @@ function initDateMaxToday(inputId) {
     }
 }
 
-function initMapSafe(mapId, inputId) {
+function initMapSafe(mapId, inputId, options) {
     if (
         typeof initMapSelector === "function" &&
         document.getElementById(mapId) &&
         document.getElementById(inputId)
     ) {
-        initMapSelector(mapId, inputId);
+        if (options) initMapSelector(mapId, inputId, options);
+        else initMapSelector(mapId, inputId);
     }
 }
 

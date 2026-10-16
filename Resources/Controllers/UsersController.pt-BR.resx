@@ -452,4 +452,72 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_fdea3840ede105cf' xml:space='preserve'>
+    <value>Use pelo menos 8 caracteres, com maiúscula, minúscula, número e símbolo.</value>
+    <comment>Source: Use pelo menos 8 caracteres, com maiúscula, minúscula, número e símbolo.</comment>
+  </data>
+  <data name='Ui_cceab8f39860a970' xml:space='preserve'>
+    <value>Foto de perfil</value>
+    <comment>Source: Foto de perfil</comment>
+  </data>
+  <data name='Ui_fd368138921be134' xml:space='preserve'>
+    <value>JPG, PNG ou WEBP, até 2 MB. Aparece no menu e na lista de usuários.</value>
+    <comment>Source: JPG, PNG ou WEBP, até 2 MB. Aparece no menu e na lista de usuários.</comment>
+  </data>
+  <data name='Ui_b19bf9a37ac61eac' xml:space='preserve'>
+    <value>Escolher foto</value>
+    <comment>Source: Escolher foto</comment>
+  </data>
+  <data name='Ui_658fa27e285235d8' xml:space='preserve'>
+    <value>Trocar foto</value>
+    <comment>Source: Trocar foto</comment>
+  </data>
+  <data name='Ui_3c41f89f1e8680b1' xml:space='preserve'>
+    <value>Remover foto</value>
+    <comment>Source: Remover foto</comment>
+  </data>
+  <data name='Ui_2ed7ce78e9360943' xml:space='preserve'>
+    <value>Acesso</value>
+    <comment>Source: Acesso</comment>
+  </data>
+  <data name='Ui_f10a9c0673ab14bb' xml:space='preserve'>
+    <value>Dados Pessoais</value>
+    <comment>Source: Dados Pessoais</comment>
+  </data>
+  <data name='Ui_b31837c78cd79f61' xml:space='preserve'>
+    <value>Informações Básicas</value>
+    <comment>Source: Informações Básicas</comment>
+  </data>
+  <data name='Ui_66a4f21b5d31e14c' xml:space='preserve'>
+    <value>Informações do Sistema</value>
+    <comment>Source: Informações do Sistema</comment>
+  </data>
+  <data name='Ui_f6d7d1b50677930a' xml:space='preserve'>
+    <value>Criado em</value>
+    <comment>Source: Criado em</comment>
+  </data>
+  <data name='Ui_9634373efef17186' xml:space='preserve'>
+    <value>Última atualização</value>
+    <comment>Source: Última atualização</comment>
+  </data>
+  <data name='Ui_611958aa80c6dc3b' xml:space='preserve'>
+    <value>Envie uma imagem JPG, PNG ou WEBP.</value>
+    <comment>Source: Envie uma imagem JPG, PNG ou WEBP.</comment>
+  </data>
+  <data name='Ui_d76198fd64c5f6b2' xml:space='preserve'>
+    <value>A foto deve ter no máximo 2 MB.</value>
+    <comment>Source: A foto deve ter no máximo 2 MB.</comment>
+  </data>
+  <data name='Ui_e7b2a8be5420085e' xml:space='preserve'>
+    <value>O arquivo da foto está vazio.</value>
+    <comment>Source: O arquivo da foto está vazio.</comment>
+  </data>
+  <data name='Ui_f5f08b6ee917189a' xml:space='preserve'>
+    <value>Todos os status</value>
+    <comment>Source: Todos os status</comment>
+  </data>
+  <data name='Ui_6d3dae532a59cc15' xml:space='preserve'>
+    <value>Filtrar por status</value>
+    <comment>Source: Filtrar por status</comment>
+  </data>
 </root>

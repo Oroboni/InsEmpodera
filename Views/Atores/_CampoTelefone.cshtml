@@ -1,0 +1,35 @@
+@model string?
+@*
+    Telefone com DDI. O valor gravado em Atores.Telefone fica no formato
+    "+DDI número" (ex.: +55 15 95555-5644) e é montado por atores-telefone.js.
+*@
+<div class="input-card full-width">
+    <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
+    <div class="input-content">
+        <label for="telefoneNumero">Telefone</label>
+        <div class="telefone-ddi" data-telefone>
+            <select id="telefoneDdi" class="clean-input telefone-ddi-select" aria-label="DDI (código do país)">
+                <option value="55" selected>+55 Brasil</option>
+                <option value="54">+54 Argentina</option>
+                <option value="591">+591 Bolívia</option>
+                <option value="56">+56 Chile</option>
+                <option value="57">+57 Colômbia</option>
+                <option value="595">+595 Paraguai</option>
+                <option value="51">+51 Peru</option>
+                <option value="598">+598 Uruguai</option>
+                <option value="58">+58 Venezuela</option>
+                <option value="509">+509 Haiti</option>
+                <option value="244">+244 Angola</option>
+                <option value="258">+258 Moçambique</option>
+                <option value="351">+351 Portugal</option>
+                <option value="34">+34 Espanha</option>
+                <option value="1">+1 EUA/Canadá</option>
+                <option value="outro">Outro país</option>
+            </select>
+            <input id="telefoneNumero" type="tel" class="clean-input telefone-numero" inputmode="tel"
+                autocomplete="tel-national" maxlength="24" placeholder="15 95555-5644" />
+            <input type="hidden" id="telefoneValor" name="Telefone" value="@Model" />
+        </div>
+        <small class="text-muted telefone-dica">Escolha o país e digite DDD e número.</small>
+    </div>
+</div>

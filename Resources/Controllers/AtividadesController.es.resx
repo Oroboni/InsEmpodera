@@ -199,7 +199,7 @@
     <comment>Source: Nova Atividade</comment>
   </data>
   <data name='Ui_252aabe9267ac515' xml:space='preserve'>
-    <value>Diferentes ejes</value>
+    <value>Ejes diferentes</value>
     <comment>Source: Eixos Diferentes</comment>
   </data>
   <data name='Ui_7c4890a8d1e6c458' xml:space='preserve'>
@@ -211,7 +211,7 @@
     <comment>Source: Buscar atividades</comment>
   </data>
   <data name='Ui_d1cb95facbf0929e' xml:space='preserve'>
-    <value>Multidisciplinario</value>
+    <value>Multidisciplinarias</value>
     <comment>Source: Multidisciplinares</comment>
   </data>
   <data name='Ui_5c7fd4c56b0f7367' xml:space='preserve'>
@@ -219,7 +219,7 @@
     <comment>Source: Todas as Atividades</comment>
   </data>
   <data name='Ui_58d984567e68aef8' xml:space='preserve'>
-    <value>Actividades totales</value>
+    <value>Total de actividades</value>
     <comment>Source: Total de Atividades</comment>
   </data>
   <data name='Ui_c2f7a799890cc03f' xml:space='preserve'>
@@ -455,5 +455,13 @@
   <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
     <value>La sugerencia de nominatim falló:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+  <data name='Ui_c9d0decb8a486583' xml:space='preserve'>
+    <value>Todos los ejes</value>
+    <comment>Source: Todos os eixos</comment>
+  </data>
+  <data name='Ui_6d0f092b4502a0fe' xml:space='preserve'>
+    <value>Filtrar por eje</value>
+    <comment>Source: Filtrar por eixo</comment>
   </data>
 </root>

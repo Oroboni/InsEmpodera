@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
     <style>
         .report-summary { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-        .report-total { background:#f1eafa; color:#582192; padding:.6rem 1rem; border-radius:999px; font-weight:700; }
+        .report-total { background:var(--color-primary-50); color:var(--color-primary); padding:.6rem 1rem; border-radius:999px; font-weight:700; }
         .report-series { width:100%; display:grid; gap:.9rem; }
         .series-row { display:grid; grid-template-columns:minmax(150px, 240px) 1fr 92px; gap:1rem; align-items:center; }
-        .series-track { height:24px; background:#eeeaf1; border-radius:999px; overflow:hidden; }
-        .series-bar { height:100%; min-width:3px; background:linear-gradient(90deg,#6a2a94,#bd4c92); border-radius:inherit; }
+        .series-track { height:24px; background:var(--color-primary-50); border-radius:999px; overflow:hidden; }
+        .series-bar { height:100%; min-width:3px; background:linear-gradient(90deg,var(--color-primary),var(--color-primary-light)); border-radius:inherit; }
         .series-value { text-align:right; font-weight:700; }
         .filter-actions { display:flex; gap:.75rem; align-items:end; }
         @@media (max-width:760px) { .series-row { grid-template-columns:1fr; gap:.35rem; } .series-value { text-align:left; } }
@@ -142,11 +142,11 @@
         <div class="report-body">
             @if (!Model.ComunidadeId.HasValue)
             {
-                <div class="report-empty-state"><i class="fa-solid fa-chart-pie" style="font-size:4rem;color:#9c75ca"></i><p>Primeiro selecione uma comunidade.</p></div>
+                <div class="report-empty-state"><i class="fa-solid fa-chart-pie" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Primeiro selecione uma comunidade.</p></div>
             }
             else if (Model.Total == 0)
             {
-                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:#9c75ca"></i><p>Nenhuma ficha corresponde aos filtros escolhidos.</p></div>
+                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Nenhuma ficha corresponde aos filtros escolhidos.</p></div>
             }
             else
             {

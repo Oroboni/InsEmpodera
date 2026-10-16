@@ -1,0 +1,341 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <resheader name='resmimetype'>
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name='version'>
+    <value>2.0</value>
+  </resheader>
+  <resheader name='reader'>
+    <value>
+       System.Resources.ResXResourceReader, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089 
+    </value>
+  </resheader>
+  <resheader name='writer'>
+    <value>
+       System.Resources.ResXResourceWriter, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089 
+    </value>
+  </resheader>
+  <data name='Ui_f150afd3c5994d18' xml:space='preserve'>
+    <value>System</value>
+    <comment>Source: Sistema</comment>
+  </data>
+  <data name='Ui_46332f9d834ef8dd' xml:space='preserve'>
+    <value>Description</value>
+    <comment>Source: Descrição</comment>
+  </data>
+  <data name='Ui_15116ba377896771' xml:space='preserve'>
+    <value>Version</value>
+    <comment>Source: Versão</comment>
+  </data>
+  <data name='Ui_0d2b7ca65666383e' xml:space='preserve'>
+    <value>Environment</value>
+    <comment>Source: Ambiente</comment>
+  </data>
+  <data name='Ui_d481d734900c8eb7' xml:space='preserve'>
+    <value>Organization</value>
+    <comment>Source: Organização</comment>
+  </data>
+  <data name='Ui_96eb91870f2cec1c' xml:space='preserve'>
+    <value>ECO2 Community Treatment System</value>
+    <comment>Source: Sistema de Tratamento Comunitário ECO2</comment>
+  </data>
+  <data name='Ui_7d9aaa875a9e6516' xml:space='preserve'>
+    <value>Demo</value>
+    <comment>Source: Demonstração</comment>
+  </data>
+  <data name='Ui_ccb244688314d11b' xml:space='preserve'>
+    <value>Production</value>
+    <comment>Source: Produção</comment>
+  </data>
+  <data name='Ui_c36c2f69fb8b507f' xml:space='preserve'>
+    <value>Development</value>
+    <comment>Source: Desenvolvimento</comment>
+  </data>
+  <data name='Ui_5895b95d5e62ffd3' xml:space='preserve'>
+    <value>Help Center</value>
+    <comment>Source: Central de Ajuda</comment>
+  </data>
+  <data name='Ui_2ebab86719d08d70' xml:space='preserve'>
+    <value>Data and Backup</value>
+    <comment>Source: Dados e Backup</comment>
+  </data>
+  <data name='Ui_32de9c9091e28c55' xml:space='preserve'>
+    <value>Find the right area of the system, review the workflows and learn how to request support.</value>
+    <comment>Source: Encontre a área certa do sistema, relembre os fluxos de trabalho e saiba como pedir suporte.</comment>
+  </data>
+  <data name='Ui_10348a6eea49b108' xml:space='preserve'>
+    <value>No results for your search. Try another term or contact support.</value>
+    <comment>Source: Nenhum resultado para a sua pesquisa. Tente outro termo ou fale com o suporte.</comment>
+  </data>
+  <data name='Ui_b6fc9e4a50c77d8b' xml:space='preserve'>
+    <value>Follow-up workflow</value>
+    <comment>Source: Fluxo de acompanhamento</comment>
+  </data>
+  <data name='Ui_ce52a8758ecfc717' xml:space='preserve'>
+    <value>The recommended sequence to start and follow a case.</value>
+    <comment>Source: A sequência recomendada para iniciar e acompanhar um caso.</comment>
+  </data>
+  <data name='Ui_f54058e0d610c422' xml:space='preserve'>
+    <value>Community</value>
+    <comment>Source: Comunidade</comment>
+  </data>
+  <data name='Ui_5aaf3116dfd21dcb' xml:space='preserve'>
+    <value>Confirm or register the community of the case.</value>
+    <comment>Source: Confirme ou cadastre a comunidade do atendimento.</comment>
+  </data>
+  <data name='Ui_905463a25488a95b' xml:space='preserve'>
+    <value>Actor</value>
+    <comment>Source: Ator</comment>
+  </data>
+  <data name='Ui_3854acbe6f6fbefc' xml:space='preserve'>
+    <value>Register the person and their primary and subjective networks.</value>
+    <comment>Source: Cadastre a pessoa e registre suas redes primária e subjetiva.</comment>
+  </data>
+  <data name='Ui_98369e85a7626e44' xml:space='preserve'>
+    <value>First Contact Form</value>
+    <comment>Source: Ficha de 1º Contato</comment>
+  </data>
+  <data name='Ui_5593f7caadc1ef1b' xml:space='preserve'>
+    <value>Record the initial service and complete the three steps.</value>
+    <comment>Source: Registre o atendimento inicial e conclua as três etapas.</comment>
+  </data>
+  <data name='Ui_9eee40637a39d4d1' xml:space='preserve'>
+    <value>Follow-up</value>
+    <comment>Source: Acompanhamento</comment>
+  </data>
+  <data name='Ui_f47ca4eb74fe7db1' xml:space='preserve'>
+    <value>Use the Personal Diary and Personal Assessments throughout the process.</value>
+    <comment>Source: Use o Diário Pessoal e as Avaliações Pessoais ao longo do processo.</comment>
+  </data>
+  <data name='Ui_dc4bb10b6d41fdbf' xml:space='preserve'>
+    <value>Reports</value>
+    <comment>Source: Relatórios</comment>
+  </data>
+  <data name='Ui_6bb4133068069d78' xml:space='preserve'>
+    <value>Check the indicators and export the data when needed.</value>
+    <comment>Source: Consulte os indicadores e exporte os dados quando necessário.</comment>
+  </data>
+  <data name='Ui_6df22ed5728757f7' xml:space='preserve'>
+    <value>System modules</value>
+    <comment>Source: Módulos do sistema</comment>
+  </data>
+  <data name='Ui_069c39e182cbaafa' xml:space='preserve'>
+    <value>Shortcuts to each area, with what you will find there.</value>
+    <comment>Source: Atalhos para cada área, com o que você encontra nela.</comment>
+  </data>
+  <data name='Ui_8d0bc92e603ac7e7' xml:space='preserve'>
+    <value>Communities</value>
+    <comment>Source: Comunidades</comment>
+  </data>
+  <data name='Ui_d2b220cb02b5c160' xml:space='preserve'>
+    <value>Register territories and addresses and follow their links.</value>
+    <comment>Source: Cadastre territórios, endereços e acompanhe seus vínculos.</comment>
+  </data>
+  <data name='Ui_68148f2f667cdefb' xml:space='preserve'>
+    <value>Actors</value>
+    <comment>Source: Atores</comment>
+  </data>
+  <data name='Ui_9dd55fa283ac4252' xml:space='preserve'>
+    <value>Community members, resources, vulnerabilities and networks.</value>
+    <comment>Source: Pessoas da comunidade, recursos, vulnerabilidades e redes.</comment>
+  </data>
+  <data name='Ui_12784d66b6ed34fe' xml:space='preserve'>
+    <value>Record the initial service in three steps.</value>
+    <comment>Source: Registre o atendimento inicial em três etapas.</comment>
+  </data>
+  <data name='Ui_857ba347e9501289' xml:space='preserve'>
+    <value>Field Diaries</value>
+    <comment>Source: Diários de Campo</comment>
+  </data>
+  <data name='Ui_19b7cda643566b2e' xml:space='preserve'>
+    <value>Document visits, axes and actions taken.</value>
+    <comment>Source: Documente visitas, eixos e ações realizadas.</comment>
+  </data>
+  <data name='Ui_11c232e7b1a22169' xml:space='preserve'>
+    <value>Personal Diary</value>
+    <comment>Source: Diário Pessoal</comment>
+  </data>
+  <data name='Ui_94f3085a380b1284' xml:space='preserve'>
+    <value>Follow each actor's process over time.</value>
+    <comment>Source: Acompanhe o processo de cada ator ao longo do tempo.</comment>
+  </data>
+  <data name='Ui_c359946dfeeb07aa' xml:space='preserve'>
+    <value>Personal Assessments</value>
+    <comment>Source: Avaliações Pessoais</comment>
+  </data>
+  <data name='Ui_083b8149cd6784af' xml:space='preserve'>
+    <value>Assess the actor's indicators and compare progress.</value>
+    <comment>Source: Avalie indicadores do ator e compare a evolução.</comment>
+  </data>
+  <data name='Ui_dff6624256ba2a95' xml:space='preserve'>
+    <value>Activities</value>
+    <comment>Source: Atividades</comment>
+  </data>
+  <data name='Ui_2cfa25566da49244' xml:space='preserve'>
+    <value>Activities by community, with axes and actions.</value>
+    <comment>Source: Atividades por comunidade, com eixos e ações.</comment>
+  </data>
+  <data name='Ui_256e6d97662e5828' xml:space='preserve'>
+    <value>RSC, forms, assessments, actions and primary network.</value>
+    <comment>Source: RSC, fichas, avaliações, ações e rede primária.</comment>
+  </data>
+  <data name='Ui_d25d31edf919f1f1' xml:space='preserve'>
+    <value>Spreadsheet exports and full system backup.</value>
+    <comment>Source: Exportações em planilha e backup geral do sistema.</comment>
+  </data>
+  <data name='Ui_b84ecc76deafd97d' xml:space='preserve'>
+    <value>Frequently asked questions</value>
+    <comment>Source: Perguntas frequentes</comment>
+  </data>
+  <data name='Ui_765cf416069e1582' xml:space='preserve'>
+    <value>Quick answers to the most common questions.</value>
+    <comment>Source: Respostas rápidas para as dúvidas mais comuns.</comment>
+  </data>
+  <data name='Ui_39977a29c5d7708d' xml:space='preserve'>
+    <value>Where do I start a new follow-up?</value>
+    <comment>Source: Por onde começo um novo acompanhamento?</comment>
+  </data>
+  <data name='Ui_f856d6136ede4a47' xml:space='preserve'>
+    <value>Confirm the community and the actor. Then open the First Contact Form and go through the three steps before finishing.</value>
+    <comment>Source: Confirme a comunidade e o ator. Depois, abra a Ficha de 1º Contato e avance pelas três etapas antes de concluir.</comment>
+  </data>
+  <data name='Ui_799f9da5a5d0899e' xml:space='preserve'>
+    <value>How do I add people to an actor's networks?</value>
+    <comment>Source: Como adiciono pessoas às redes de um ator?</comment>
+  </data>
+  <data name='Ui_f07a6e49ff2571bd' xml:space='preserve'>
+    <value>In Actors, open the actor and click Primary Network or Subjective Network. Use Add and choose the community, the actor and the relationship type. If the person is not registered yet, use Register new actor: after saving, they come back selected. The links are stored when the actor is saved.</value>
+    <comment>Source: Em Atores, abra o ator e clique em Rede Primária ou Rede Subjetiva. Use Adicionar, escolha a comunidade, o ator e o tipo de relação. Se a pessoa ainda não estiver cadastrada, use Cadastrar novo ator: ao salvar, ela volta selecionada. Os vínculos são gravados quando o ator é salvo.</comment>
+  </data>
+  <data name='Ui_fb662c2f8a7cb229' xml:space='preserve'>
+    <value>How do I mention another actor in the Personal Diary?</value>
+    <comment>Source: Como menciono outro ator no Diário Pessoal?</comment>
+  </data>
+  <data name='Ui_9ce911fba1081a86' xml:space='preserve'>
+    <value>In the description, type @ followed by the name and choose the actor in the list. When reading the diary, the mention becomes a link to the actor's data.</value>
+    <comment>Source: Na descrição, digite @ seguido do nome e escolha o ator na lista. Na leitura do diário, a menção vira um link para os dados do ator.</comment>
+  </data>
+  <data name='Ui_953d61509bfe2648' xml:space='preserve'>
+    <value>How do I back up the data?</value>
+    <comment>Source: Como faço o backup dos dados?</comment>
+  </data>
+  <data name='Ui_27c106561e0695fe' xml:space='preserve'>
+    <value>In Data and Backup, administrators can generate the full backup as an Excel spreadsheet. Restoring on the same page is additive: it adds new records and never deletes or overwrites existing ones.</value>
+    <comment>Source: Em Dados e Backup, administradores podem gerar o backup geral em planilha Excel. A restauração pela mesma tela é aditiva: adiciona registros novos e nunca apaga ou sobrescreve os existentes.</comment>
+  </data>
+  <data name='Ui_641134bc3a33936f' xml:space='preserve'>
+    <value>How do I change the system language?</value>
+    <comment>Source: Como mudo o idioma do sistema?</comment>
+  </data>
+  <data name='Ui_0eae1a6c33484075' xml:space='preserve'>
+    <value>In Settings, choose the interface language. You can also choose the language on the login screen, before signing in.</value>
+    <comment>Source: Em Configurações, escolha o idioma da interface. Também é possível escolher o idioma na tela de login, antes de entrar.</comment>
+  </data>
+  <data name='Ui_b5c15f50e91fec95' xml:space='preserve'>
+    <value>Where can I find access permissions?</value>
+    <comment>Source: Onde encontro as permissões de acesso?</comment>
+  </data>
+  <data name='Ui_b3656a222b82cd6d' xml:space='preserve'>
+    <value>In Access Profiles, you can review or adjust each profile's permissions per module.</value>
+    <comment>Source: Em Perfis de Acesso, é possível consultar ou ajustar as permissões de cada perfil por módulo.</comment>
+  </data>
+  <data name='Ui_f7eed7309ae58e82' xml:space='preserve'>
+    <value>What should I do when an option does not appear?</value>
+    <comment>Source: O que fazer quando uma opção não aparece?</comment>
+  </data>
+  <data name='Ui_2adf191712c3df2b' xml:space='preserve'>
+    <value>Check whether your profile has permission for the area. If the problem continues, contact support with the page and the action performed.</value>
+    <comment>Source: Verifique se o seu perfil tem permissão para a área. Se o problema continuar, fale com o suporte informando a tela e a ação realizadas.</comment>
+  </data>
+  <data name='Ui_5bb77a5b46f12cbc' xml:space='preserve'>
+    <value>Support</value>
+    <comment>Source: Suporte</comment>
+  </data>
+  <data name='Ui_e12bc2c75701d203' xml:space='preserve'>
+    <value>Didn't find what you needed?</value>
+    <comment>Source: Não encontrou o que precisava?</comment>
+  </data>
+  <data name='Ui_ea812245ada86e04' xml:space='preserve'>
+    <value>E-mail support</value>
+    <comment>Source: Enviar e-mail ao suporte</comment>
+  </data>
+  <data name='Ui_6240bbbbb253c7b9' xml:space='preserve'>
+    <value>When reporting a problem, include:</value>
+    <comment>Source: Ao relatar um problema, informe:</comment>
+  </data>
+  <data name='Ui_6ead743389ca4928' xml:space='preserve'>
+    <value>The page you were on</value>
+    <comment>Source: A tela em que estava</comment>
+  </data>
+  <data name='Ui_60069eaaef556007' xml:space='preserve'>
+    <value>What you tried to do</value>
+    <comment>Source: O que tentou fazer</comment>
+  </data>
+  <data name='Ui_6752b4afb5ce3b7a' xml:space='preserve'>
+    <value>Approximate date and time</value>
+    <comment>Source: Data e horário aproximados</comment>
+  </data>
+  <data name='Ui_c1a2e7fab6464688' xml:space='preserve'>
+    <value>The message shown, if any</value>
+    <comment>Source: A mensagem exibida, se houver</comment>
+  </data>
+  <data name='Ui_21c7fd2a35975e2d' xml:space='preserve'>
+    <value>About the system</value>
+    <comment>Source: Sobre o sistema</comment>
+  </data>
+  <data name='Ui_625953d5bbcb14ec' xml:space='preserve'>
+    <value>Search by module or question (e.g.: backup, language, network)</value>
+    <comment>Source: Pesquise por módulo ou dúvida (ex.: backup, idioma, rede)</comment>
+  </data>
+  <data name='Ui_1f5d2fedf1e7254c' xml:space='preserve'>
+    <value>Search help</value>
+    <comment>Source: Pesquisar na ajuda</comment>
+  </data>
+  <data name='Ui_badc4b903c4e444f' xml:space='preserve'>
+    <value>Guidance center</value>
+    <comment>Source: Central de orientação</comment>
+  </data>
+  <data name='Ui_fe0addd707813a35' xml:space='preserve'>
+    <value>Help</value>
+    <comment>Source: Ajuda</comment>
+  </data>
+  <data name='Ui_0cf017a386e9aab9' xml:space='preserve'>
+    <value>Quickly find the right area of the system, review the main workflows and learn how to request support.</value>
+    <comment>Source: Encontre rapidamente a área certa do sistema, relembre os principais fluxos de trabalho e saiba como pedir suporte.</comment>
+  </data>
+  <data name='Ui_151c33ab8248559c' xml:space='preserve'>
+    <value>Quick access</value>
+    <comment>Source: Acesso rápido</comment>
+  </data>
+  <data name='Ui_70528a3eb86f2134' xml:space='preserve'>
+    <value>Frequently asked questions</value>
+    <comment>Source: Dúvidas frequentes</comment>
+  </data>
+  <data name='Ui_d596de3116acdf4d' xml:space='preserve'>
+    <value>How do I change the system colors?</value>
+    <comment>Source: Como mudo as cores do sistema?</comment>
+  </data>
+  <data name='Ui_d3a6c40c9d9bf9f1' xml:space='preserve'>
+    <value>In Settings, under System colors, administrators can choose a ready-made palette, generate a palette from a color or adjust each color. Saved colors apply to all users.</value>
+    <comment>Source: Em Configurações, na seção Cores do sistema, administradores podem escolher uma paleta pronta, gerar uma paleta a partir de uma cor ou ajustar cada cor. As cores salvas valem para todos os usuários.</comment>
+  </data>
+  <data name='Ui_ca65f8e7f02924d0' xml:space='preserve'>
+    <value>Use Access Profiles to review or adjust the permissions assigned to users.</value>
+    <comment>Source: Use Perfis de Acesso para consultar ou ajustar as permissões associadas aos usuários.</comment>
+  </data>
+  <data name='Ui_bbfb04cdec64fa15' xml:space='preserve'>
+    <value>Check whether your profile has permission for the area. If the problem continues, contact support with the page and the action performed.</value>
+    <comment>Source: Verifique se seu perfil possui permissão para a área. Se o problema continuar, fale com o suporte informando a tela e a ação realizadas.</comment>
+  </data>
+  <data name='Ui_49516811557cd4a1' xml:space='preserve'>
+    <value>When reporting a problem, include the page you were on, what you tried to do, the approximate date and time and the message shown, if any.</value>
+    <comment>Source: Ao relatar um problema, informe a tela em que estava, o que tentou fazer, a data e o horário aproximados e a mensagem exibida, se houver.</comment>
+  </data>
+  <data name='Ui_cb97619899f897c3' xml:space='preserve'>
+    <value>Support and system information</value>
+    <comment>Source: Suporte e informações do sistema</comment>
+  </data>
+</root>

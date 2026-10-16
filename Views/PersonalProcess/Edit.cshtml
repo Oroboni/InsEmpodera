@@ -1,110 +1,155 @@
 @model Empodera.Models.DiarioProcessoPessoal
-@using Empodera.Models
 @{
     ViewData["Title"] = "Editar Diário Pessoal";
     Layout = "_Layout";
-    var selectedEixos = (HashSet<Guid>)(ViewBag.SelectedEixos ?? new HashSet<Guid>());
     bool canDelete = ViewBag.CanDelete == true;
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/personal-process.css" asp-append-version="true" />
 }
 
-<div class="container">
-    <div class="breadcrumb">
-        <h1><a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores">Diário de Processo Pessoal</a> &gt; <strong>Editar</strong></h1>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="text-primary">Diário de Processo Pessoal</a>
+            <span class="separator">&gt;</span>
+            <strong class="text-muted">Detalhes do Registro</strong>
+        </h2>
     </div>
 
-    <form asp-action="Edit" asp-route-id="@Model.IdDiarioProcesso" method="post">
+    <form asp-action="Edit" asp-route-id="@Model.IdDiarioProcesso" method="post" class="main-form" id="processForm">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdDiarioProcesso" />
-        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-        <div class="form-group">
-            <label asp-for="FK_id_Atores">Ator <span class="text-danger">*</span></label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <select asp-for="FK_id_Atores" class="form-control" asp-items="ViewBag.AtorList" required></select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
-            </div>
-            <span asp-validation-for="FK_id_Atores" class="text-danger"></span>
-        </div>
+        <partial name="_CamposDiario" />
 
-        <div class="form-group">
-            <label asp-for="Data">Data <span class="text-danger">*</span></label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-calendar-day"></i>
-                <input asp-for="Data" type="date" required />
-            </div>
-            <span asp-validation-for="Data" class="text-danger"></span>
-        </div>
+        <div class="purple-divider"></div>
+        <div class="section-label">Informações do Sistema</div>
 
-        <div class="form-group" data-axis-picker>
-            <label>Eixos</label>
-            <div class="eixos-tag-container" data-axis-tags></div>
-            <details class="multiselect-wrapper">
-                <summary>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-tags"></i>
-                        <span class="multiselect-placeholder">Selecione os eixos</span>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </summary>
-                <div class="multiselect-panel">
-                    <ul>
-                        @foreach (var eixo in (IEnumerable<Eixo>)ViewBag.EixosList)
-                        {
-                            <li>
-                                <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo" data-tag-name="@eixo.Nome"
-                                       checked="@selectedEixos.Contains(eixo.IdEixo)" />
-                                <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
-                            </li>
-                        }
-                    </ul>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-calendar-plus"></i></div>
+            <div class="input-content">
+                <label>Criação</label>
+                <div class="user-info-display">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="user-name">@(Model.Usuario?.Nome ?? "—")</span>
+                    <span class="user-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span>
                 </div>
-            </details>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Descricao">Descrição <span class="text-danger">*</span></label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-align-left" style="top:15px;transform:none"></i>
-                <textarea asp-for="Descricao" maxlength="4000" data-actor-mentions
-                          aria-describedby="actor-mention-help" aria-controls="actor-mention-list" required></textarea>
             </div>
-            <small id="actor-mention-help">Digite @@ e escolha um ator. A menção será clicável na leitura do diário.</small>
-            <ul id="actor-mention-list" class="actor-mention-list" role="listbox" hidden></ul>
-            <span asp-validation-for="Descricao" class="text-danger"></span>
         </div>
 
-        <div class="form-footer">
-            <span>Criado em <strong>@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</strong></span>
-            <span>Atualizado em <strong>@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</strong></span>
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-user-pen"></i></div>
+            <div class="input-content">
+                <label>Última atualização</label>
+                <div class="user-info-display">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="user-name">@(Model.UsuarioModificacao?.Nome ?? Model.Usuario?.Nome ?? "—")</span>
+                    <span class="user-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            </div>
         </div>
 
-        <div class="form-buttons">
-            @if (canDelete)
-            {
-                <button type="submit" form="deletePersonalProcessForm" class="btn btn-delete">DELETAR</button>
-            }
-            <a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="btn btn-secondary">VOLTAR</a>
-            <button type="submit" class="btn btn-primary">SALVAR ALTERAÇÕES</button>
+        <div class="buttons-container">
+            <a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+            <div class="action-buttons-group">
+                <button type="button" class="wizard-btn btn-next" id="edit-save-btn">
+                    <i class="fa-solid fa-edit"></i> Editar
+                </button>
+                @if (canDelete)
+                {
+                    <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
+                        <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
+                }
+            </div>
         </div>
     </form>
-
-    @if (canDelete)
-    {
-        <form id="deletePersonalProcessForm" asp-action="Delete" asp-route-id="@Model.IdDiarioProcesso" method="post"
-              onsubmit="return confirm('Deseja realmente excluir este registro?');">
-            @Html.AntiForgeryToken()
-        </form>
-    }
 </div>
+
+@if (canDelete)
+{
+    <div class="modal-overlay" id="deleteConfirmationModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="modal-content">
+            <div class="modal-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3 class="modal-title" id="deleteModalTitle">Confirmar Exclusão</h3>
+            <p class="modal-text">
+                Você tem certeza que deseja deletar o registro de <strong>@Model.Data.ToString("dd/MM/yyyy")</strong>?<br>
+                Essa ação não pode ser desfeita.
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="wizard-btn btn-prev" id="cancelDeleteBtn">Cancelar</button>
+                <form asp-action="Delete" asp-route-id="@Model.IdDiarioProcesso" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-modal-confirm wizard-btn btn-next">Sim, Deletar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
 
 @section Scripts {
     <script type="application/json" id="actor-mention-data">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MentionActors))</script>
     <script src="~/js/personal-process-mentions.js" asp-append-version="true"></script>
     <script src="~/js/axis-picker.js" asp-append-version="true"></script>
+    <script>
+        // Mesmo comportamento das demais telas de detalhes: abre em visualização e libera os campos em "Editar".
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('processForm');
+            const campos = form.querySelectorAll('.clean-input, input[name="eixosIds"]');
+            const seletorEixos = form.querySelector('.multiselect-wrapper');
+            const btn = document.getElementById('edit-save-btn');
+            const temErro = form.querySelector('.validation-summary-errors, .field-validation-error');
+            let editando = false;
+
+            function aplicarEstado() {
+                campos.forEach(c => c.disabled = !editando);
+                form.classList.toggle('modo-visualizacao', !editando);
+                if (seletorEixos) {
+                    seletorEixos.classList.toggle('is-disabled', !editando);
+                    if (!editando) seletorEixos.open = false;
+                }
+                btn.innerHTML = editando
+                    ? '<i class="fa-solid fa-check"></i> Salvar Alterações'
+                    : '<i class="fa-solid fa-edit"></i> Editar';
+                btn.classList.toggle('btn-save-final', editando);
+                btn.classList.toggle('btn-next', !editando);
+            }
+
+            seletorEixos?.querySelector('summary')?.addEventListener('click', e => { if (!editando) e.preventDefault(); });
+
+            btn.addEventListener('click', function () {
+                if (!editando) {
+                    editando = true;
+                    aplicarEstado();
+                    form.querySelector('textarea')?.focus();
+                    return;
+                }
+                if (form.reportValidity()) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+                    form.submit();
+                }
+            });
+
+            // Se o servidor devolveu erro de validação, volta direto em modo de edição.
+            editando = !!temErro;
+            aplicarEstado();
+
+            const modal = document.getElementById('deleteConfirmationModal');
+            if (modal) {
+                const fecharModal = () => modal.classList.remove('active');
+                document.getElementById('openDeleteModalBtn').addEventListener('click', () => modal.classList.add('active'));
+                document.getElementById('cancelDeleteBtn').addEventListener('click', fecharModal);
+                modal.addEventListener('click', e => { if (e.target === modal) fecharModal(); });
+                document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+            }
+        });
+    </script>
 }

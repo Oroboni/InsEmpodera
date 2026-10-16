@@ -61,3 +61,6 @@ Empodera.testing.db
 Frontend.Tests/coverage/
 Frontend.Tests/vitest-results.json
 InsEmpodera.E2ETests/TestResults/
+
+# Cores do site personalizadas pela administração (dados do ambiente, não do código)
+App_Data/

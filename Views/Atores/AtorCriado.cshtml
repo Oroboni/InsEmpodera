@@ -1,0 +1,48 @@
+@model Empodera.Models.Atores
+@using System.Text.Json
+@*
+    Exibida quando o cadastro de ator foi aberto em janela a partir do modal de redes
+    (Atores/Create?retorno=janela). Devolve o ator criado para a tela de origem e fecha a janela.
+*@
+@{
+    ViewData["Title"] = "Ator cadastrado";
+    Layout = "_Layout";
+    var atorCriado = new
+    {
+        tipo = "empodera:ator-criado",
+        id = Model.IdAtores,
+        nome = Model.Nome,
+        comunidadeId = (Guid?)ViewBag.ComunidadeIdCriado
+    };
+}
+
+<div class="modern-container">
+    <div class="no-records" style="margin-top: 3rem;">
+        <div class="no-records-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3>Ator cadastrado: @Model.Nome</h3>
+        <p id="ator-criado-msg">Voltando para a tela anterior…</p>
+        <button type="button" class="wizard-btn btn-next" id="ator-criado-fechar" hidden>
+            <i class="fa-solid fa-xmark"></i> Fechar esta janela
+        </button>
+    </div>
+</div>
+
+<script type="application/json" id="ator-criado-dados">@Html.Raw(JsonSerializer.Serialize(atorCriado))</script>
+<script>
+    (function () {
+        const dados = JSON.parse(document.getElementById('ator-criado-dados').textContent);
+        // Avisa a tela de origem (mesma origem) pelos dois canais disponíveis.
+        try { window.opener && window.opener.postMessage(dados, window.location.origin); } catch { }
+        try { const canal = new BroadcastChannel('empodera-atores'); canal.postMessage(dados); canal.close(); } catch { }
+
+        const btn = document.getElementById('ator-criado-fechar');
+        btn.addEventListener('click', () => window.close());
+        setTimeout(() => window.close(), 600);
+        // Se o navegador não permitir fechar sozinho, mostra o botão.
+        setTimeout(() => {
+            document.getElementById('ator-criado-msg').textContent =
+                'O ator já está disponível na tela anterior. Você pode fechar esta janela.';
+            btn.hidden = false;
+        }, 1500);
+    })();
+</script>

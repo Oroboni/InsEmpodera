@@ -7,9 +7,9 @@
 
 @section Styles {
 
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" asp-append-version="true" />
 }
 
 <form asp-controller="PersonalAssessment" asp-action="Create" method="post" class="main-form">
@@ -120,7 +120,7 @@
 </form>
 
 @section Scripts {
-    <script src="~/js/personal-assessment.js"></script>
+    <script src="~/js/personal-assessment.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('.main-form');

@@ -1,3 +1,4 @@
+using Empodera.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
@@ -118,7 +119,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Usuario usuario)
+    public async Task<IActionResult> Create(Usuario usuario, IFormFile? fotoArquivo = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -133,8 +134,10 @@ public class UsersController : Controller
         if (!CanManageIdentity(PodePerfis) && usuario.FkIdPerfil != PodePerfis!.FkIdPerfil)
             return StatusCode(StatusCodes.Status403Forbidden);
 
+        usuario.Foto = null; // a foto só muda pelo envio validado (fotoArquivo), nunca pelo campo do formulário
         NormalizeEditableFields(usuario);
-        var validationError = await ValidateEditableFieldsAsync(usuario, requirePassword: true);
+        var validationError = await ValidateEditableFieldsAsync(usuario, requirePassword: true)
+            ?? FotoUsuarioService.Validar(fotoArquivo);
         if (validationError != null)
         {
             ViewBag.ErrorMessage = validationError;
@@ -186,6 +189,7 @@ public class UsersController : Controller
             return View(usuario);
         }
 
+        await SalvarFotoAsync(usuario, fotoArquivo, removerFoto: false);
         SetSuccessMessage($"Usuário {usuario.Nome} criado com sucesso.");
         return RedirectToAction(nameof(Index));
     }
@@ -231,7 +235,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, Usuario usuario)
+    public async Task<IActionResult> Edit(Guid id, Usuario usuario, IFormFile? fotoArquivo = null, bool removerFoto = false)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -256,8 +260,10 @@ public class UsersController : Controller
         if (usuario.IdUsuario != Guid.Empty && usuario.IdUsuario != id)
             return NotFound();
 
+        usuario.Foto = usuariobd.Foto;
         NormalizeEditableFields(usuario);
-        var validationError = await ValidateEditableFieldsAsync(usuario, requirePassword: false);
+        var validationError = await ValidateEditableFieldsAsync(usuario, requirePassword: false)
+            ?? FotoUsuarioService.Validar(fotoArquivo);
         if (validationError != null)
         {
             ViewBag.ErrorMessage = validationError;
@@ -331,6 +337,13 @@ public class UsersController : Controller
             await LoadProfilesAsync(usuario.FkIdPerfil);
             return View(usuario);
         }
+
+        await SalvarFotoAsync(usuariobd, fotoArquivo, removerFoto);
+
+        // Editar a própria conta renova o carimbo de segurança e invalidaria o login atual
+        // (a página seguinte dava 403). Renova a sessão para continuar conectado com os dados novos.
+        if (id == loggedUserId && HttpContext.RequestServices.GetService<SignInManager<Usuario>>() is { } signInManager)
+            await signInManager.RefreshSignInAsync(usuariobd);
 
         SetSuccessMessage($"Usuário {usuariobd.Nome} atualizado com sucesso.");
         return RedirectToAction(nameof(Edit), new { id = usuariobd.IdUsuario });
@@ -522,6 +535,39 @@ public class UsersController : Controller
 
     private static bool IsAdminProfile(Perfil? profile) =>
         string.Equals(profile?.Nome, "Admin", StringComparison.OrdinalIgnoreCase);
+
+    // GET: /Users/Foto/{id} — foto de perfil, só para usuários autenticados.
+    [HttpGet]
+    public IActionResult Foto(Guid id)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return Unauthorized();
+        var foto = HttpContext.RequestServices.GetService<FotoUsuarioService>()?.Obter(id);
+        if (foto is null)
+            return NotFound();
+        Response.Headers.CacheControl = "private, max-age=86400";
+        return PhysicalFile(foto.Value.Caminho, foto.Value.Tipo);
+    }
+
+    // Grava ou remove a foto depois que o usuário foi salvo (precisa do Id).
+    private async Task SalvarFotoAsync(Usuario usuario, IFormFile? fotoArquivo, bool removerFoto)
+    {
+        var fotos = HttpContext?.RequestServices?.GetService<FotoUsuarioService>();
+        if (fotos is null || usuario.IdUsuario == Guid.Empty) return;
+
+        if (fotoArquivo is not null)
+            usuario.Foto = await fotos.SalvarAsync(usuario.IdUsuario, fotoArquivo, HttpContext!.RequestAborted);
+        else if (removerFoto)
+        {
+            fotos.Remover(usuario.IdUsuario);
+            usuario.Foto = null;
+        }
+        else
+            return;
+
+        _context.Update(usuario);
+        await _context.SaveChangesAsync();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

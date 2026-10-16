@@ -23,7 +23,7 @@
     padding: 4px 10px;
     border-radius: 16px;
     background: #ebebff;
-    color: #5b21b6;
+    color: var(--color-primary-500);
     font-size: .8rem;
     font-weight: 600;
 }
@@ -84,7 +84,7 @@
 
 [data-axis-picker] .multiselect-wrapper summary:hover .select-wrapper,
 [data-axis-picker] .multiselect-wrapper summary:focus-visible .select-wrapper {
-    border-color: var(--color-primary, #7b1fa2);
+    border-color: var(--color-primary, var(--color-primary-500));
 }
 
 [data-axis-picker] .multiselect-panel {
@@ -95,7 +95,7 @@
     z-index: 100;
     padding: 0;
     background: #fff;
-    border: 1px solid var(--color-primary, #7b1fa2);
+    border: 1px solid var(--color-primary, var(--color-primary-500));
     border-radius: 0 0 8px 8px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
 }

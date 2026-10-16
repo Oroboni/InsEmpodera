@@ -37,9 +37,290 @@
     margin-top: var(--space-3);
 }
 
+/* ===== TELEFONE COM DDI ===== */
+.telefone-ddi {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.telefone-ddi .telefone-ddi-select {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 10rem;
+}
+
+.telefone-ddi .telefone-numero {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.telefone-dica {
+    display: block;
+    margin-top: var(--space-1);
+}
+
+/* ===== BOTÕES DE REDE (Primária / Subjetiva) ===== */
+.redes-botoes {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    margin: var(--space-4) 0 var(--space-2);
+}
+
+.redes-botoes .wizard-btn {
+    min-width: 11rem;
+    justify-content: center;
+}
+
+.redes-contador {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.4rem;
+    height: 1.4rem;
+    padding: 0 6px;
+    border-radius: var(--radius-full);
+    background: #fff;
+    color: var(--color-primary-dark);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+/* ===== MODAIS DE REDE ===== */
+.redes-modal [hidden],
+.redes-botoes [hidden] {
+    display: none !important;
+}
+
+.redes-modal .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+
+.redes-modal .redes-modal-content {
+    max-width: 560px;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    margin: 0 var(--space-4);
+    text-align: left;
+}
+
+.redes-modal-titulo {
+    color: var(--color-primary-800);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0 2rem var(--space-4) 0;
+}
+
+.redes-modal-fechar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--color-primary-dark);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.redes-modal-fechar:hover,
+.redes-modal-fechar:focus-visible {
+    background: var(--color-primary-50);
+}
+
+.redes-tabela {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.redes-tabela th {
+    color: var(--color-primary-dark);
+    font-weight: var(--font-weight-bold);
+    text-align: left;
+    padding: var(--space-2) var(--space-2);
+    border-bottom: 2px solid var(--color-primary-100);
+}
+
+.redes-tabela td {
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid var(--color-gray-100);
+    color: var(--color-gray-800);
+    font-weight: var(--font-weight-medium);
+}
+
+.redes-col-acao {
+    width: 84px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.redes-acao {
+    border: none;
+    background: transparent;
+    color: var(--color-gray-500);
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: var(--radius-md, 6px);
+}
+
+.redes-editar:hover,
+.redes-editar:focus-visible {
+    color: var(--color-primary);
+    background: var(--color-primary-50);
+}
+
+.redes-remover:hover,
+.redes-remover:focus-visible {
+    color: #e74c3c;
+    background: var(--color-gray-100);
+}
+
+.redes-tag-novo {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    vertical-align: middle;
+}
+
+.redes-vazio,
+.redes-aviso {
+    color: var(--color-gray-600);
+    text-align: center;
+    margin: var(--space-4) 0;
+}
+
+.redes-modal-acoes {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-5, 1.25rem);
+}
+
+.redes-form .input-card {
+    margin-bottom: var(--space-3);
+}
+
+.redes-tipos {
+    border: 1px solid var(--color-primary-100);
+    border-radius: 12px;
+    padding: var(--space-3) var(--space-4);
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+}
+
+.redes-tipos legend {
+    float: none;
+    width: auto;
+    padding: 0 var(--space-2);
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-800);
+}
+
+.redes-tipos label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    margin: 0;
+}
+
+.redes-tipo-outra input[type="text"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    border-bottom: 1px solid var(--color-gray-400);
+    background: transparent;
+    padding: 2px 4px;
+    outline: none;
+}
+
+.redes-tipo-outra input[type="text"]:focus {
+    border-bottom-color: var(--color-primary);
+}
+
+.redes-dica {
+    display: block;
+    margin-top: var(--space-1);
+}
+
+.redes-erro {
+    color: #c0392b;
+    font-weight: var(--font-weight-medium);
+    min-height: 1.2em;
+    margin: var(--space-3) 0 0;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .checkbox-label {
         font-size: var(--font-size-sm);
     }
+
+    .redes-botoes {
+        gap: var(--space-3);
+    }
+
+    .redes-botoes .wizard-btn {
+        flex: 1 1 100%;
+    }
+
+    .redes-modal-acoes .wizard-btn {
+        flex: 1 1 0;
+        justify-content: center;
+    }
+}
+/* ===== CADASTRO ABERTO EM JANELA (a partir do modal de redes) ===== */
+.cadastro-janela-aviso {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-radius: 12px;
+    background: var(--color-primary-50);
+    color: var(--color-primary-800);
+    font-weight: var(--font-weight-medium);
+}
+
+.redes-label-linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+}
+
+.redes-novo-ator {
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: var(--radius-md, 6px);
+    white-space: nowrap;
+}
+
+.redes-novo-ator:hover,
+.redes-novo-ator:focus-visible {
+    background: var(--color-primary-50);
+    text-decoration: underline;
 }

@@ -62,11 +62,12 @@ describe('listagem de atividades', () => {
   function arrange() {
     document.body.innerHTML = `
       <input id="searchActivitiesInput">
-      <button class="filter-eixo-btn active" data-eixo="todos">Todos</button>
-      <button class="filter-eixo-btn" data-eixo="saude">Saúde</button>
-      <button class="filter-eixo-btn" data-eixo="educacao">Educação</button>
+      <div class="list-filter"><select id="filtroEixo">
+        <option value="todos">Todos</option><option value="saude">Saúde</option><option value="educacao">Educação</option>
+        <option value="educacao especial">Educação especial</option>
+      </select></div>
       <div id="activitiesGrid">
-        <div class="activity-item" data-nome="oficina de saúde" data-eixos="saude prevencao"></div>
+        <div class="activity-item" data-nome="oficina de saúde" data-eixos="saude|prevencao"></div>
         <div class="activity-item" data-nome="reforço escolar" data-eixos="educacao"></div>
       </div>
       <div id="noResultsMessage" style="display:none"></div>
@@ -75,11 +76,17 @@ describe('listagem de atividades', () => {
     dispatchReady();
   }
 
+  const escolherEixo = valor => {
+    const filtro = document.getElementById('filtroEixo');
+    filtro.value = valor;
+    filtro.dispatchEvent(new Event('change'));
+  };
+
   it('combina busca textual e filtro de eixo', () => {
     arrange();
-    document.querySelector('[data-eixo="saude"]').click();
+    escolherEixo('saude');
     expect(visible(document.querySelectorAll('.activity-item'))).toHaveLength(1);
-    expect(document.querySelector('[data-eixo="saude"]').classList.contains('active')).toBe(true);
+    expect(document.querySelector('.list-filter').classList.contains('is-active')).toBe(true);
 
     const search = document.getElementById('searchActivitiesInput');
     search.value = 'escolar';
@@ -87,13 +94,22 @@ describe('listagem de atividades', () => {
     expect(visible(document.querySelectorAll('.activity-item'))).toHaveLength(0);
     expect(document.getElementById('noResultsMessage').style.display).toBe('block');
 
-    document.querySelector('[data-eixo="todos"]').click();
+    escolherEixo('todos');
+    expect(visible(document.querySelectorAll('.activity-item'))).toHaveLength(1);
+    expect(document.querySelector('.list-filter').classList.contains('is-active')).toBe(false);
+  });
+
+  it('compara o eixo exato, sem casar trechos do nome de outro eixo', () => {
+    arrange();
+    escolherEixo('educacao especial');
+    expect(visible(document.querySelectorAll('.activity-item'))).toHaveLength(0);
+    escolherEixo('educacao');
     expect(visible(document.querySelectorAll('.activity-item'))).toHaveLength(1);
   });
 
   it('Escape limpa somente a busca e preserva o filtro escolhido', () => {
     arrange();
-    document.querySelector('[data-eixo="educacao"]').click();
+    escolherEixo('educacao');
     const search = document.getElementById('searchActivitiesInput');
     search.value = 'inexistente';
     search.dispatchEvent(new Event('input'));
@@ -108,9 +124,9 @@ describe('listagem de usuários', () => {
   function arrange() {
     document.body.innerHTML = `
       <input id="searchUsersInput">
-      <button class="filter-eixo-btn active" data-status="todos"></button>
-      <button class="filter-eixo-btn" data-status="ativos"></button>
-      <button class="filter-eixo-btn" data-status="inativos"></button>
+      <div class="list-filter"><select id="filtroStatus">
+        <option value="todos">Todos</option><option value="ativos">Ativos</option><option value="inativos">Inativos</option>
+      </select></div>
       <div id="usersGrid">
         <div class="user-item" data-nome="ana silva" data-email="ana@example.org" data-ativo="true"></div>
         <div class="user-item" data-nome="bruno costa" data-email="bruno@example.org" data-ativo="false"></div>
@@ -132,8 +148,11 @@ describe('listagem de usuários', () => {
 
   it('combina status, busca e estado vazio', () => {
     arrange();
-    document.querySelector('[data-status="ativos"]').click();
+    const filtro = document.getElementById('filtroStatus');
+    filtro.value = 'ativos';
+    filtro.dispatchEvent(new Event('change'));
     expect(visible(document.querySelectorAll('.user-item'))).toHaveLength(1);
+    expect(filtro.closest('.list-filter').classList.contains('is-active')).toBe(true);
 
     const search = document.getElementById('searchUsersInput');
     search.value = 'bruno';
@@ -141,7 +160,8 @@ describe('listagem de usuários', () => {
     expect(document.getElementById('usersGrid').style.display).toBe('none');
     expect(document.getElementById('noResultsMessage').style.display).toBe('block');
 
-    document.querySelector('[data-status="inativos"]').click();
+    filtro.value = 'inativos';
+    filtro.dispatchEvent(new Event('change'));
     expect(visible(document.querySelectorAll('.user-item'))).toHaveLength(1);
     expect(document.getElementById('usersGrid').style.display).toBe('flex');
   });
@@ -151,12 +171,12 @@ describe('fluxos da lista de fichas de primeiro contato', () => {
   function arrange() {
     document.body.innerHTML = `
       <input id="searchInput">
-      <button class="filter-eixo-btn active" data-status="todos"></button>
-      <button class="filter-eixo-btn" data-status="EmProgresso"></button>
-      <button class="filter-eixo-btn" data-status="Concluida"></button>
-      <button class="filter-comunidade-btn active" data-comunidade="todas"></button>
-      <button class="filter-comunidade-btn" data-comunidade="10"></button>
-      <button class="filter-comunidade-btn" data-comunidade="20"></button>
+      <div class="list-filter"><select id="filtroStatus">
+        <option value="todos"></option><option value="EmProgresso"></option><option value="Concluida"></option>
+      </select></div>
+      <div class="list-filter"><select id="filtroComunidade">
+        <option value="todas"></option><option value="10"></option><option value="20"></option>
+      </select></div>
       <div id="fichasContainer">
         <div class="ficha-item" data-nome="ana" data-status="EmProgresso" data-comunidade="10"></div>
         <div class="ficha-item" data-nome="beatriz" data-status="Concluida" data-comunidade="10"></div>
@@ -181,8 +201,11 @@ describe('fluxos da lista de fichas de primeiro contato', () => {
 
   it('combina nome, status e comunidade e recalcula todos os contadores', () => {
     arrange();
-    document.querySelector('[data-status="EmProgresso"]').click();
-    document.querySelector('[data-comunidade="10"]').click();
+    for (const [id, valor] of [['filtroStatus', 'EmProgresso'], ['filtroComunidade', '10']]) {
+      const filtro = document.getElementById(id);
+      filtro.value = valor;
+      filtro.dispatchEvent(new Event('change'));
+    }
     expect(visible(document.querySelectorAll('.ficha-item'))).toHaveLength(1);
     expect(document.getElementById('totalFichas').textContent).toBe('1');
     expect(document.getElementById('emProgressoCount').textContent).toBe('1');

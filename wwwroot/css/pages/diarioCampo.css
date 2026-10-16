@@ -5,21 +5,15 @@
    Tema Clean + Bordas arredondadas + Hover suave
 ============================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
-
 :root {
-    --primary: #590082;
-    --primary-dark: #7000cc;
+    --primary: var(--color-primary-dark);
+    --primary-dark: var(--color-primary-500);
     --bg-light: #f8f8f8;
     --text-dark: #333;
     --border: #e5e5e5;
 }
 
-body {
-    font-family: 'Montserrat', sans-serif;
-    background: #fafafa;
-    color: var(--text-dark);
-}
+/* Fonte, fundo e cor do texto vêm do tema global (site.css); esta página não os sobrescreve. */
 
 /* ───────────────────────────── FORM DE BUSCA ───────────────────────────── */
 
@@ -630,7 +624,7 @@ input[type="file"] {
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: rgba(33, 13, 39, 0.16);
+    background: rgb(var(--color-primary-800-rgb) / 0.16);
     backdrop-filter: none;
 }
 
@@ -642,7 +636,7 @@ input[type="file"] {
     padding: 0;
     border: 0;
     border-radius: 22px;
-    box-shadow: 0 24px 70px rgba(31, 18, 35, 0.28);
+    box-shadow: 0 24px 70px rgb(var(--color-primary-800-rgb) / 0.28);
 }
 
 #modalAcao .action-modal-header {
@@ -655,12 +649,12 @@ input[type="file"] {
     margin: 0;
     padding: 18px 28px 15px;
     background: linear-gradient(135deg, #fbf7fc 0%, #fff 70%);
-    border-bottom: 1px solid #eee8f0;
+    border-bottom: 1px solid var(--color-primary-50);
 }
 
 #modalAcao .action-modal-header .modal-title {
     margin: 0 0 4px;
-    color: var(--color-primary, #42134a);
+    color: var(--color-primary, var(--color-primary-800));
     font-size: clamp(1.35rem, 3vw, 1.75rem);
     line-height: 1.2;
 }
@@ -680,14 +674,14 @@ input[type="file"] {
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background: #f4f0f5;
+    background: var(--color-primary-50);
     color: #544b57;
     cursor: pointer;
     transition: background-color .2s ease, transform .2s ease;
 }
 
 #modalAcao .btn-close-modal:hover {
-    background: #ebe1ed;
+    background: var(--color-primary-50);
     transform: rotate(4deg);
 }
 
@@ -753,9 +747,9 @@ input[type="file"] {
 }
 
 #modalAcao .action-modal-field .clean-input:focus {
-    border-color: var(--color-primary, #42134a);
+    border-color: var(--color-primary, var(--color-primary-800));
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(66, 19, 74, .1);
+    box-shadow: 0 0 0 3px rgb(var(--color-primary-800-rgb) / .1);
 }
 
 #modalAcao .action-modal-field .clean-input::placeholder {
@@ -765,7 +759,7 @@ input[type="file"] {
 
 #modalAcao .action-modal-axes {
     padding: 12px 14px;
-    border: 1px solid #ece4ee;
+    border: 1px solid var(--color-primary-50);
     border-radius: 14px;
     background: #faf7fb;
 }
@@ -787,7 +781,7 @@ input[type="file"] {
     border: 1px solid #e4dce6;
     border-radius: 12px;
     background: #fff;
-    color: #42134a;
+    color: var(--color-primary-800);
     font-size: .84rem;
     font-weight: 650;
     line-height: 1.2;
@@ -796,8 +790,8 @@ input[type="file"] {
 }
 
 #modalAcao .action-modal-axes .checkbox-card-label:has(input:checked) {
-    border-color: var(--color-primary, #42134a);
-    background: #f4eaf6;
+    border-color: var(--color-primary, var(--color-primary-800));
+    background: var(--color-primary-50);
 }
 
 #modalAcao .action-modal-axes input[type="checkbox"] {
@@ -805,7 +799,7 @@ input[type="file"] {
     width: 18px;
     height: 18px;
     margin: 0;
-    accent-color: var(--color-primary, #42134a);
+    accent-color: var(--color-primary, var(--color-primary-800));
 }
 
 #modalAcao .action-modal-actions {
@@ -814,7 +808,7 @@ input[type="file"] {
     gap: 10px;
     margin: 2px -28px -22px;
     padding: 12px 28px;
-    border-top: 1px solid #eee8f0;
+    border-top: 1px solid var(--color-primary-50);
     background: #fcfafc;
 }
 
@@ -834,7 +828,7 @@ input[type="file"] {
 
 #modalAcao .action-modal-cancel:hover {
     border-color: #bfb3c3;
-    background: #f7f3f8;
+    background: var(--color-primary-50);
 }
 
 #modalAcao .action-modal-quantity { max-width: none; }
@@ -893,7 +887,7 @@ input[type="file"] {
         margin: 2px -18px calc(-20px - env(safe-area-inset-bottom));
         padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
         background: #fff;
-        box-shadow: 0 -8px 20px rgba(31, 18, 35, .08);
+        box-shadow: 0 -8px 20px rgb(var(--color-primary-800-rgb) / .08);
     }
 
     #modalAcao .action-modal-actions .wizard-btn {
@@ -991,20 +985,20 @@ input[type="file"] {
     gap: .4rem;
     padding: .35rem .55rem;
     border-radius: 999px;
-    background: #efe6f5;
-    color: #542566;
+    background: var(--color-primary-50);
+    color: var(--color-primary-dark);
 }
 .selected-actors button {
     border: 0;
     background: transparent;
-    color: #652279;
+    color: var(--color-primary-600);
     cursor: pointer;
     text-decoration: underline;
 }
 .input-card[data-axis-picker] { overflow: visible; position: relative; z-index: 20; }
 [data-axis-picker] .eixos-tag-container { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; margin-bottom: 8px; padding: 9px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
 [data-axis-picker] .tag-item { display: inline-flex; align-items: center; gap: 7px; padding: 4px 10px; border-radius: 16px; font-size: .8rem; font-weight: 600; }
-[data-axis-picker] .tag-purple { background: #ebebff; color: #5b21b6; }
+[data-axis-picker] .tag-purple { background: #ebebff; color: var(--color-primary-500); }
 [data-axis-picker] .tag-remove-btn { border: 0; background: none; color: inherit; cursor: pointer; font-size: 1rem; line-height: 1; }
 [data-axis-picker] .multiselect-wrapper { position: relative; display: block; }
 [data-axis-picker] .multiselect-wrapper summary { list-style: none; cursor: pointer; }
@@ -1019,3 +1013,56 @@ input[type="file"] {
 [data-axis-picker] .multiselect-panel li.is-selected { display: none; }
 [data-axis-picker] .multiselect-panel input { width: 18px; height: 18px; margin: 0; }
 [data-axis-picker] .multiselect-panel label { margin: 0; cursor: pointer; }
+
+/* ===== MENÇÕES (@) NO RELATO =====
+   (os estilos antigos estavam em DiarioCampoForm.css, que nenhuma tela carrega) */
+#mention-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    min-width: 280px;
+    max-height: 280px;
+    margin: var(--space-2) 0 0;
+    padding: var(--space-2);
+    overflow-y: auto;
+    list-style: none;
+    background: var(--color-white);
+    border: 1px solid var(--color-primary-100);
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgb(var(--color-primary-800-rgb) / .15);
+    z-index: 50;
+}
+
+/* Lista aberta fica acima do rodapé fixo dos formulários. */
+.input-card:has(#mention-list[style*="display: block"]) {
+    z-index: calc(var(--z-sticky) + 2);
+}
+
+.input-content:has(> #mention-list) {
+    position: relative;
+}
+
+.mention-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: 8px;
+    color: var(--color-gray-700);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+}
+
+.mention-item:hover,
+.mention-item.is-active {
+    background: var(--color-primary-50);
+    color: var(--color-primary-800);
+    font-weight: var(--font-weight-bold);
+}
+
+.mention-empty {
+    padding: var(--space-3);
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+}

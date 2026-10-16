@@ -1,16 +1,15 @@
 @model Empodera.Models.Usuario
 @{
     ViewData["Title"] = "Usuários";
-    ViewData["PageCSS"] = "usuarios-edit";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
-    <form asp-action="Create" method="post" class="main-form" data-testid="user-create-form">
+    <form asp-action="Create" method="post" class="main-form" enctype="multipart/form-data" data-testid="user-create-form">
         @Html.AntiForgeryToken()
 
 
@@ -29,6 +28,10 @@
                 @ViewBag.ErrorMessage
             </div>
         }
+
+        <div class="section-label">Informações Básicas</div>
+
+        <partial name="_CampoFoto" />
 
         <!-- Nome -->
         <div class="input-card full-width">
@@ -68,6 +71,9 @@
         </div>
 
 
+        <div class="purple-divider"></div>
+        <div class="section-label">Acesso</div>
+
         <!-- Senha -->
         <div class="input-card full-width">
                 <div class="icon-box">
@@ -80,6 +86,9 @@
                 </div>
         </div>
 
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Dados Pessoais</div>
 
         <!-- Gênero -->
         <div class="grid-row">
@@ -132,3 +141,7 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="~/js/usuario-foto.js" asp-append-version="true"></script>
+}

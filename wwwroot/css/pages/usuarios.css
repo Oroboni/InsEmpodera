@@ -101,7 +101,7 @@
     font-weight: bold;
     font-size: 16px;
     font-family: var(--font-family-primary);
-    color: #7a3188;
+    color: var(--color-primary);
 }
 
 .container-info {
@@ -179,10 +179,10 @@
 .usuarios-search-bar input:focus {
     outline: none;
 
-    border-color: #6a0dad;
+    border-color: var(--color-primary-500);
     /* Roxo principal ao focar */
 
-    box-shadow: 0 0 0 2px rgba(106, 29, 173, 0.2);
+    box-shadow: 0 0 0 2px rgb(var(--color-primary-500-rgb) / 0.2);
 }
 
 /* Ícone de lupa dentro da barra de busca */
@@ -196,7 +196,7 @@
 
     transform: translateY(-50%);
 
-    color: #6a0dad;
+    color: var(--color-primary-500);
     /* Roxo principal */
 
     width: 20px;
