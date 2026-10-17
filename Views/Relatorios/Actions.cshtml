@@ -12,7 +12,7 @@
         .date-row { display:flex; gap:15px; width:100%; }
         .date-row .form-group { flex:1; margin-bottom:0; }
         .report-totals { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
-        .report-total { background:#f1eafa; color:#582192; padding:.6rem 1rem; border-radius:999px; font-weight:700; }
+        .report-total { background:var(--color-primary-50); color:var(--color-primary); padding:.6rem 1rem; border-radius:999px; font-weight:700; }
     </style>
 }
 
@@ -51,11 +51,11 @@
         <div class="report-body">
             @if (!Model.ComunidadeId.HasValue)
             {
-                <div class="report-empty-state"><i class="fa-solid fa-list-check" style="font-size:4rem;color:#9c75ca"></i><p>Selecione uma comunidade para consultar as ações registradas.</p></div>
+                <div class="report-empty-state"><i class="fa-solid fa-list-check" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Selecione uma comunidade para consultar as ações registradas.</p></div>
             }
             else if (Model.Rows.Count == 0)
             {
-                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:#9c75ca"></i><p>Nenhuma ação corresponde aos filtros escolhidos.</p></div>
+                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Nenhuma ação corresponde aos filtros escolhidos.</p></div>
             }
             else
             {

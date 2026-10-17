@@ -1822,7 +1822,8 @@
     `IdRedePrimaria` int(11) NOT NULL DEFAULT (floor(100000 + rand() * 900000)),
     `FkIdAtorPrincipal` int(11) NOT NULL,
     `FkIdAtorRelacionados` int(11) NOT NULL,
-    `TipoRelacao` longtext NULL
+    `TipoRelacao` longtext NULL,
+    `TipoRede` varchar(20) NOT NULL DEFAULT 'Primaria'
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
   -- --------------------------------------------------------

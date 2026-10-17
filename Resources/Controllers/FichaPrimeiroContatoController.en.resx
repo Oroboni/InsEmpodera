@@ -747,7 +747,7 @@
     <comment>Source: Transtorno estresse pós traumático</comment>
   </data>
   <data name='Ui_cede13abf6147434' xml:space='preserve'>
-    <value>Insert relevant notes here...</value>
+    <value>Enter relevant notes here...</value>
     <comment>Source: Insira observações relevantes aqui...</comment>
   </data>
   <data name='Ui_cbe7a83cbaf6e9d8' xml:space='preserve'>
@@ -1051,5 +1051,53 @@
   <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
     <value>Nominatim suggestion failed:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+  <data name='Ui_b01675eac92bcd49' xml:space='preserve'>
+    <value>Type the address or use the map search</value>
+    <comment>Source: Digite o endereço ou use a lupa do mapa</comment>
+  </data>
+  <data name='Ui_f21c912e72ec591b' xml:space='preserve'>
+    <value>Meeting/Conversation</value>
+    <comment>Source: Encontro/Conversa</comment>
+  </data>
+  <data name='Ui_944e4b66e49504d5' xml:space='preserve'>
+    <value>Daycare</value>
+    <comment>Source: Creche</comment>
+  </data>
+  <data name='Ui_217ca4a1ab189086' xml:space='preserve'>
+    <value>Therapy</value>
+    <comment>Source: Terapia</comment>
+  </data>
+  <data name='Ui_bdc3c7fc5b4d0133' xml:space='preserve'>
+    <value>Family visit</value>
+    <comment>Source: Visita familiar</comment>
+  </data>
+  <data name='Ui_7aa409001aeaaa0a' xml:space='preserve'>
+    <value>Medication</value>
+    <comment>Source: Medicamentos</comment>
+  </data>
+  <data name='Ui_3ac483217e193455' xml:space='preserve'>
+    <value>STI</value>
+    <comment>Source: IST</comment>
+  </data>
+  <data name='Ui_f5f08b6ee917189a' xml:space='preserve'>
+    <value>All statuses</value>
+    <comment>Source: Todos os status</comment>
+  </data>
+  <data name='Ui_3ca49eadf2d62b85' xml:space='preserve'>
+    <value>In progress</value>
+    <comment>Source: Em progresso</comment>
+  </data>
+  <data name='Ui_b5ac64d68118c7a2' xml:space='preserve'>
+    <value>All communities</value>
+    <comment>Source: Todas as comunidades</comment>
+  </data>
+  <data name='Ui_6d3dae532a59cc15' xml:space='preserve'>
+    <value>Filter by status</value>
+    <comment>Source: Filtrar por status</comment>
+  </data>
+  <data name='Ui_e9b1cfbc19223fc5' xml:space='preserve'>
+    <value>Filter by community</value>
+    <comment>Source: Filtrar por comunidade</comment>
   </data>
 </root>

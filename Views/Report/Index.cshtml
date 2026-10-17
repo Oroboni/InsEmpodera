@@ -1,10 +1,12 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using Empodera.Models
 @{
     ViewData["Title"] = "Dados e Backup";
     ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
     var communities = ViewBag.Comunidades as SelectList;
     var isAdmin = ViewBag.IsAdmin is true;
+    var inventario = ViewBag.Inventario as IEnumerable<IndicadorInventario> ?? [];
 }
 
 @section Styles { <link rel="stylesheet" href="~/css/pages/reports.css" /> }
@@ -14,7 +16,7 @@
         <div class="data-hub-hero-copy">
             <span class="data-hub-eyebrow"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Central segura de dados</span>
             <h1 id="data-hub-title">Exportações e backup</h1>
-            <p>Baixe planilhas completas para análise ou gere um backup geral para transportar dados entre instalações do InsEmpodera.</p>
+            <p>Baixe planilhas completas para análise ou gere um backup geral para transportar dados entre instalações do EcoRedes.</p>
         </div>
         <div class="data-hub-hero-badge" aria-label="Formato atual do backup: Excel"><span>BACKUP</span><strong>XLSX</strong></div>
     </header>
@@ -23,6 +25,25 @@
     { <div class="data-alert data-alert-success" role="status"><i class="fa-solid fa-circle-check"></i><span>@success</span></div> }
     @if (TempData["ImportError"] is string error)
     { <div class="data-alert data-alert-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i><span>@error</span></div> }
+
+    <section class="data-section" aria-labelledby="inventory-title">
+        <div class="data-section-heading">
+            <div><span class="data-section-number"><i class="fa-solid fa-chart-simple"></i></span><h2 id="inventory-title">Inventário de dados</h2></div>
+            <p>Quantidade de registros guardados hoje no sistema.</p>
+        </div>
+        <div class="inventory-grid">
+            @foreach (var item in inventario)
+            {
+                <div class="inventory-card">
+                    <span class="export-icon export-icon-community"><i class="fa-solid @item.Icone"></i></span>
+                    <div>
+                        <strong>@item.Total.ToString("N0", new System.Globalization.CultureInfo("pt-BR"))</strong>
+                        <span>@item.Rotulo</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
 
     <section class="data-section" aria-labelledby="exports-title">
         <div class="data-section-heading">
@@ -79,6 +100,19 @@
                 </form>
             </div>
         }
+    </section>
+
+    <section class="data-section" aria-labelledby="practices-title">
+        <div class="data-section-heading">
+            <div><span class="data-section-number">03</span><h2 id="practices-title">Boas práticas</h2></div>
+            <p>As planilhas contêm dados pessoais das comunidades atendidas.</p>
+        </div>
+        <ul class="practices-grid">
+            <li><i class="fa-solid fa-calendar-check"></i><span>Gere um backup geral antes de grandes alterações ou importações.</span></li>
+            <li><i class="fa-solid fa-user-lock"></i><span>Guarde as planilhas em local seguro e com acesso restrito.</span></li>
+            <li><i class="fa-solid fa-share-nodes"></i><span>Não compartilhe exportações por canais públicos ou e-mail pessoal.</span></li>
+            <li><i class="fa-solid fa-trash-can"></i><span>Apague cópias locais que não forem mais necessárias.</span></li>
+        </ul>
     </section>
 </main>
 

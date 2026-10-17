@@ -1,7 +1,30 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Config
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Ambiente
 @{
     ViewData["Title"] = "Ajuda";
     ViewData["PageCSS"] = "ajuda";
     Layout = "_Layout";
+    var emailSuporte = Config["Email:User"];
+    var versao = typeof(Program).Assembly.GetName().Version?.ToString(3) ?? "1.0.0";
+    var ambiente = Ambiente.EnvironmentName switch
+    {
+        "Production" => "Produção",
+        "Development" => "Desenvolvimento",
+        "Testing" => "Demonstração",
+        var outro => outro
+    };
+    var modulos = new[]
+    {
+        (Controller: "Comunidade", Icone: "fa-city", Titulo: "Comunidades", Texto: "Cadastre territórios, endereços e acompanhe seus vínculos."),
+        (Controller: "Atores", Icone: "fa-users", Titulo: "Atores", Texto: "Pessoas da comunidade, recursos, vulnerabilidades e redes."),
+        (Controller: "FichaPrimeiroContato", Icone: "fa-clipboard-list", Titulo: "Ficha de 1º Contato", Texto: "Registre o atendimento inicial em três etapas."),
+        (Controller: "DiarioCampo", Icone: "fa-book", Titulo: "Diários de Campo", Texto: "Documente visitas, eixos e ações realizadas."),
+        (Controller: "PersonalProcess", Icone: "fa-book-open", Titulo: "Diário Pessoal", Texto: "Acompanhe o processo de cada ator ao longo do tempo."),
+        (Controller: "PersonalAssessment", Icone: "fa-chart-line", Titulo: "Avaliações Pessoais", Texto: "Avalie indicadores do ator e compare a evolução."),
+        (Controller: "Atividades", Icone: "fa-bolt", Titulo: "Atividades", Texto: "Atividades por comunidade, com eixos e ações."),
+        (Controller: "Relatorios", Icone: "fa-chart-simple", Titulo: "Relatórios", Texto: "RSC, fichas, avaliações, ações e rede primária."),
+        (Controller: "Report", Icone: "fa-database", Titulo: "Dados e Backup", Texto: "Exportações em planilha e backup geral do sistema.")
+    };
 }
 
 <main class="help-page" aria-labelledby="help-title">
@@ -9,46 +32,133 @@
         <div>
             <span class="page-eyebrow">Central de orientação</span>
             <h1 id="help-title">Ajuda</h1>
-            <p>Encontre rapidamente a área certa do sistema e relembre os principais fluxos de trabalho.</p>
+            <p>Encontre rapidamente a área certa do sistema, relembre os principais fluxos de trabalho e saiba como pedir suporte.</p>
+            <div class="help-hero-meta">
+                <span><i class="fa-solid fa-code-branch"></i> Versão @versao</span>
+                <span><i class="fa-solid fa-server"></i> @ambiente</span>
+            </div>
         </div>
         <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
     </header>
 
-    <section aria-labelledby="quick-access-title">
+    <div class="help-search" role="search">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="search" id="helpSearch" placeholder="Pesquise por módulo ou dúvida (ex.: backup, idioma, rede)"
+               aria-label="Pesquisar na ajuda" autocomplete="off" />
+    </div>
+    <p class="help-search-empty" id="helpSearchEmpty" hidden>Nenhum resultado para a sua pesquisa. Tente outro termo ou fale com o suporte.</p>
+
+    <section aria-labelledby="quick-access-title" data-help-section>
         <h2 id="quick-access-title">Acesso rápido</h2>
-        <div class="help-grid">
-            <a class="help-card" asp-controller="Comunidade" asp-action="Index">
-                <i class="fa-solid fa-city" aria-hidden="true"></i>
-                <span><strong>Comunidades</strong>Cadastre territórios e acompanhe seus vínculos.</span>
-            </a>
-            <a class="help-card" asp-controller="Atores" asp-action="Index">
-                <i class="fa-solid fa-users" aria-hidden="true"></i>
-                <span><strong>Atores</strong>Consulte pessoas, redes e relações comunitárias.</span>
-            </a>
-            <a class="help-card" asp-controller="FichaPrimeiroContato" asp-action="Index">
-                <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
-                <span><strong>Primeiro contato</strong>Registre, atualize e conclua o atendimento inicial.</span>
-            </a>
-            <a class="help-card" asp-controller="DiarioCampo" asp-action="Index">
-                <i class="fa-solid fa-book" aria-hidden="true"></i>
-                <span><strong>Diários de Campo</strong>Documente visitas, eixos e ações realizadas.</span>
-            </a>
+        <div class="help-grid help-grid-3">
+            @foreach (var modulo in modulos)
+            {
+                <a class="help-card" asp-controller="@modulo.Controller" asp-action="Index" data-help-item>
+                    <i class="fa-solid @modulo.Icone" aria-hidden="true"></i>
+                    <span><strong>@modulo.Titulo</strong>@modulo.Texto</span>
+                </a>
+            }
         </div>
     </section>
 
-    <section class="help-faq" aria-labelledby="faq-title">
+    <section aria-labelledby="flow-title" data-help-section>
+        <h2 id="flow-title">Fluxo de acompanhamento</h2>
+        <ol class="help-steps">
+            <li data-help-item><strong>Comunidade</strong><span>Confirme ou cadastre a comunidade do atendimento.</span></li>
+            <li data-help-item><strong>Ator</strong><span>Cadastre a pessoa e registre suas redes primária e subjetiva.</span></li>
+            <li data-help-item><strong>Ficha de 1º Contato</strong><span>Registre o atendimento inicial e conclua as três etapas.</span></li>
+            <li data-help-item><strong>Acompanhamento</strong><span>Use o Diário Pessoal e as Avaliações Pessoais ao longo do processo.</span></li>
+            <li data-help-item><strong>Relatórios</strong><span>Consulte os indicadores e exporte os dados quando necessário.</span></li>
+        </ol>
+    </section>
+
+    <section class="help-faq" aria-labelledby="faq-title" data-help-section>
         <h2 id="faq-title">Dúvidas frequentes</h2>
-        <details>
+        <details data-help-item>
             <summary>Por onde começo um novo acompanhamento?</summary>
             <p>Confirme a comunidade e o ator. Depois, abra a Ficha de 1º Contato e avance pelas três etapas antes de concluir.</p>
         </details>
-        <details>
-            <summary>Onde encontro permissões de acesso?</summary>
+        <details data-help-item>
+            <summary>Como adiciono pessoas às redes de um ator?</summary>
+            <p>Em Atores, abra o ator e clique em Rede Primária ou Rede Subjetiva. Use Adicionar, escolha a comunidade, o ator e o tipo de relação. Se a pessoa ainda não estiver cadastrada, use Cadastrar novo ator: ao salvar, ela volta selecionada. Os vínculos são gravados quando o ator é salvo.</p>
+        </details>
+        <details data-help-item>
+            <summary>Como menciono outro ator no Diário Pessoal?</summary>
+            <p>Na descrição, digite @@ seguido do nome e escolha o ator na lista. Na leitura do diário, a menção vira um link para os dados do ator.</p>
+        </details>
+        <details data-help-item>
+            <summary>Como faço o backup dos dados?</summary>
+            <p>Em Dados e Backup, administradores podem gerar o backup geral em planilha Excel. A restauração pela mesma tela é aditiva: adiciona registros novos e nunca apaga ou sobrescreve os existentes.</p>
+        </details>
+        <details data-help-item>
+            <summary>Como mudo o idioma do sistema?</summary>
+            <p>Em Configurações, escolha o idioma da interface. Também é possível escolher o idioma na tela de login, antes de entrar.</p>
+        </details>
+        <details data-help-item>
+            <summary>Como mudo as cores do sistema?</summary>
+            <p>Em Configurações, na seção Cores do sistema, administradores podem escolher uma paleta pronta, gerar uma paleta a partir de uma cor ou ajustar cada cor. As cores salvas valem para todos os usuários.</p>
+        </details>
+        <details data-help-item>
+            <summary>Onde encontro as permissões de acesso?</summary>
             <p>Use Perfis de Acesso para consultar ou ajustar as permissões associadas aos usuários.</p>
         </details>
-        <details>
+        <details data-help-item>
             <summary>O que fazer quando uma opção não aparece?</summary>
-            <p>Verifique se seu perfil possui permissão para a área. Se o problema continuar, informe ao responsável técnico da sua organização a tela e a ação realizadas.</p>
+            <p>Verifique se seu perfil possui permissão para a área. Se o problema continuar, fale com o suporte informando a tela e a ação realizadas.</p>
         </details>
     </section>
+
+    <section class="help-grid help-bottom" aria-label="Suporte e informações do sistema">
+        <article class="help-card help-card-static">
+            <i class="fa-solid fa-headset" aria-hidden="true"></i>
+            <span>
+                <strong>Suporte</strong>
+                Ao relatar um problema, informe a tela em que estava, o que tentou fazer, a data e o horário aproximados e a mensagem exibida, se houver.
+                @if (!string.IsNullOrWhiteSpace(emailSuporte))
+                {
+                    <a class="help-card-link" href="mailto:@emailSuporte"><i class="fa-solid fa-envelope"></i> @emailSuporte</a>
+                }
+            </span>
+        </article>
+        <article class="help-card help-card-static">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <span>
+                <strong>Sobre o sistema</strong>
+                EcoRedes — Sistema de Tratamento Comunitário ECO2.<br />
+                Versão @versao · @ambiente · Instituto Empodera
+            </span>
+        </article>
+    </section>
 </main>
+
+@section Scripts {
+    <script>
+        // Filtra atalhos, etapas e perguntas pelo texto digitado (ignora acentos e maiúsculas).
+        (() => {
+            const campo = document.getElementById('helpSearch');
+            const vazio = document.getElementById('helpSearchEmpty');
+            if (!campo) return;
+            const normalizar = t => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+            const secoes = [...document.querySelectorAll('[data-help-section]')];
+            campo.addEventListener('input', () => {
+                const termo = normalizar(campo.value.trim());
+                let total = 0;
+                secoes.forEach(secao => {
+                    let visiveis = 0;
+                    secao.querySelectorAll('[data-help-item]').forEach(item => {
+                        const combina = !termo || normalizar(item.textContent).includes(termo);
+                        item.hidden = !combina;
+                        if (item.tagName === 'DETAILS') item.open = Boolean(termo) && combina;
+                        if (combina) visiveis++;
+                    });
+                    secao.hidden = visiveis === 0;
+                    total += visiveis;
+                });
+                vazio.hidden = total > 0;
+            });
+            campo.addEventListener('keydown', e => {
+                if (e.key === 'Escape') { campo.value = ''; campo.dispatchEvent(new Event('input')); }
+            });
+        })();
+    </script>
+}

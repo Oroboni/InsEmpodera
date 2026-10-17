@@ -1,14 +1,26 @@
+@inject Empodera.Services.FotoUsuarioService FotosMenu
+@inject Microsoft.Extensions.Configuration.IConfiguration AppConfig
+@{
+    var temaConfigurado = (AppConfig["Tema"] ?? "verde").Trim().ToLowerInvariant();
+    var temaAtivo = System.Text.RegularExpressions.Regex.IsMatch(temaConfigurado, "^[a-z-]{1,30}$") ? temaConfigurado : "verde";
+}
 <!DOCTYPE html>
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name" data-tema="@temaAtivo">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Laços - Instituto Empodera</title>
+    <title>EcoRedes - Sistema de Tratamento Comunitário ECO2</title>
     <link rel="icon" href="~/images/Logo-empodera.svg" type="image/x-icon">
 
     <!-- CSS Base -->
     <link rel="stylesheet" href="~/css/_variaveis.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/tema.css" asp-append-version="true" />
+    <partial name="_TemaPersonalizado" />
+    <script>
+        // Indicadores recolhidos: aplica a preferência salva antes da renderização (evita "piscar").
+        try { if (localStorage.getItem('empodera.indicadores') === 'recolhidos') document.documentElement.classList.add('indicadores-recolhidos'); } catch (e) { }
+    </script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/sidebar/sidebar.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
@@ -46,7 +58,23 @@
 
             <!-- 2. SIDEBAR (Adicionado ID sidebar) -->
             <div class="section-1" id="sidebar">
-                <h2>Olá, @(ViewContext.HttpContext?.Session?.GetString("Nome"))</h2>
+                @{
+                    var nomeMenu = ViewContext.HttpContext?.Session?.GetString("Nome");
+                    var urlFotoMenu = Guid.TryParse(ViewContext.HttpContext?.Session?.GetString("ID"), out var idMenu) ? FotosMenu.Url(idMenu) : null;
+                }
+                <h2 class="sidebar-user">
+                    <span class="avatar avatar-md sidebar-avatar" aria-hidden="true">
+                        @if (urlFotoMenu is not null)
+                        {
+                            <img src="@urlFotoMenu" alt="" />
+                        }
+                        else
+                        {
+                            @Empodera.Services.FotoUsuarioService.Iniciais(nomeMenu)
+                        }
+                    </span>
+                    <span class="sidebar-user-text">Olá, @nomeMenu</span>
+                </h2>
                 <ul>
                     <p>Principais</p>
                     <li data-page="home" class="@IsActive("Home")">
@@ -195,6 +223,8 @@
         });
     </script>
 
+    <script src="~/js/indicadores.js" asp-append-version="true"></script>
+    <script src="~/js/tooltip.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

@@ -1,142 +1,109 @@
-.input-wrapper, .select-wrapper {
-    position: relative;
-    width: 100%;
-    display: block; /* Garante que o wrapper ocupe a linha */
+/* ================================================================
+   DIÁRIO DE PROCESSO PESSOAL
+   Só o que é exclusivo desta tela. O layout (cartões, campos, eixos,
+   botões) vem dos componentes padrão em site.css / diarioCampo.css.
+   ================================================================ */
+
+/* ===== Descrição ===== */
+.process-description-card textarea.clean-input {
+    min-height: 140px;
+    resize: vertical;
+    line-height: 1.5;
 }
 
-/* CORREÇÃO AQUI: Adicionado box-sizing para a data não vazar */
-.form-control, 
-input[type="text"],
-input[type="date"],
-select {
-    width: 100%;
-    height: 48px;
-    padding: 12px 16px 12px 45px !important; /* 45px à esquerda para o ícone */
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background-color: #fff;
-    font-size: 0.95rem;
-    color: #333;
-    outline: none;
-    appearance: none; 
-    -webkit-appearance: none;
-    
-    /* A MAGIA ACONTECE AQUI: */
-    box-sizing: border-box; /* Impede que o padding aumente a largura total */
-    max-width: 100%; /* Garante que nunca passe do pai */
+.process-description-card .input-content {
+    position: relative; /* âncora da lista de menções */
 }
 
-/* O restante do arquivo continua igual... */
-.input-wrapper > i, 
-.select-wrapper > i.fa-user,
-.select-wrapper > i.fa-tags {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6a0dad; 
-    font-size: 1.1rem;
-    pointer-events: none;
-    z-index: 10;
+/* O cartão não pode cortar a lista de menções (era o motivo de os atores não aparecerem). */
+.process-description-card {
+    overflow: visible;
 }
 
-.select-arrow {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    pointer-events: none;
-}
-
-/* --- Área de Tags (Igual Atividades) --- */
-.eixos-tag-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background-color: #f8fafc;
-    min-height: 48px;
-    margin-bottom: 8px;
-}
-
-.tag-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-/* Ícone de fechar a tag */
-.tag-remove-btn {
-    cursor: pointer;
-    font-size: 0.9em;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-}
-.tag-remove-btn:hover {
-    opacity: 1;
-}
-
-/* Cores das Tags (baseado no activity-index.css) */
-.tag-purple { background-color: #EBEBFF; color: #5B21B6; }
-
-/* Esconde item selecionado da lista dropdown */
-.is-selected {
-    display: none !important;
-}
-
-/* --- Acordeão e Anexos --- */
-.accordion-wrapper {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    margin-bottom: 20px;
+/* Texto da descrição na listagem: até 3 linhas, preservando as menções clicáveis. */
+.process-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-}
-.accordion-wrapper summary {
-    padding: 12px 16px;
-    background-color: #f8fafc;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    list-style: none;
-}
-.anexos-area {
-    border: 2px dashed #cbd5e1;
-    border-radius: 12px;
-    padding: 30px;
-    text-align: center;
-    background-color: #f8fafc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    color: #64748b;
+    white-space: normal;
+    line-height: 1.45;
 }
 
+/* ===== Modo visualização da edição =====
+   Mostra a descrição formatada (menções como link) e esconde o editor e a remoção de eixos. */
+.process-description-preview {
+    padding: var(--space-2) 0;
+    line-height: 1.6;
+    color: var(--color-gray-800);
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.main-form:not(.modo-visualizacao) [data-modo-leitura],
+.main-form.modo-visualizacao .process-description-card textarea,
+.main-form.modo-visualizacao #actor-mention-help,
+.main-form.modo-visualizacao .tag-remove-btn {
+    display: none;
+}
+
+/* ===== Seletor de eixos bloqueado (modo visualização da edição) ===== */
+.multiselect-wrapper.is-disabled summary {
+    cursor: default;
+    opacity: 0.7;
+}
+
+/* ===== Menções a atores (@) ===== */
 .actor-mention-list {
     position: absolute;
     z-index: 50;
-    left: 1rem;
-    right: 1rem;
+    top: 100%;
+    left: 0;
+    right: 0;
     margin: .25rem 0 0;
     padding: .35rem;
     list-style: none;
     background: #fff;
-    border: 1px solid #d6c4ee;
+    border: 1px solid var(--color-primary-100);
     border-radius: 10px;
-    box-shadow: 0 10px 28px rgba(44, 21, 68, .15);
+    box-shadow: 0 10px 28px rgb(var(--color-primary-800-rgb) / .15);
 }
-.form-group:has([data-actor-mentions]) { position: relative; }
+
 .actor-mention-list[hidden] { display: none; }
+
+/* A lista abre acima do rodapé fixo dos formulários (senão ficava escondida atrás dele). */
+.process-description-card:has(.actor-mention-list:not([hidden])) {
+    position: relative;
+    z-index: calc(var(--z-sticky) + 2);
+}
+
+.actor-mention-list {
+    max-height: 280px;
+    overflow-y: auto;
+    scroll-margin-bottom: calc(var(--rodape-altura, 104px) + 16px);
+}
+
+.actor-mention-header {
+    padding: .45rem .75rem .35rem;
+    color: var(--color-gray-600);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.actor-mention-empty {
+    padding: .7rem .75rem;
+    color: var(--color-gray-600);
+    font-size: .88rem;
+}
+
+.actor-mention-option.is-active {
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
 .actor-mention-option {
     display: block;
     width: 100%;
@@ -144,17 +111,22 @@ select {
     border: 0;
     border-radius: 7px;
     background: transparent;
-    color: #48236c;
+    color: var(--color-primary-dark);
     text-align: left;
     cursor: pointer;
 }
-.actor-mention-option:hover, .actor-mention-option:focus { background: #f1e9fb; }
+
+.actor-mention-option:hover,
+.actor-mention-option:focus { background: var(--color-primary-50); }
+
 .actor-mention {
-    color: #58259a;
-    background: #efe5fb;
+    color: var(--color-primary);
+    background: var(--color-primary-50);
     border-radius: 4px;
     padding: 0 .2rem;
     font-weight: 700;
     text-decoration: none;
 }
-.actor-mention:hover, .actor-mention:focus { text-decoration: underline; }
+
+.actor-mention:hover,
+.actor-mention:focus { text-decoration: underline; }

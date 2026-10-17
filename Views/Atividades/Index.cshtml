@@ -8,9 +8,9 @@
 
 @section Styles {
     
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
@@ -21,7 +21,52 @@
         </h2>
     </div>
 
-    <!-- Barra de Busca -->
+    <!-- Estatísticas -->
+    <button type="button" class="section-label indicadores-toggle" data-indicadores
+            aria-expanded="true" title="Recolher ou mostrar os indicadores">
+        <span>Indicadores</span>
+        <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+    </button>
+    <div class="actions-grid">
+        <div class="action-card stats-card">
+            <span class="card-title" id="totalActivities">@Model.Count()</span>
+            <span class="card-subtitle">Total de Atividades</span>
+            <div class="card-icons">
+                <i class="fas fa-tasks"></i>
+            </div>
+        </div>
+
+        @{
+            var eixosUnicos = Model.SelectMany(a => a.AtividadesEixos.Select(ae => ae.Eixo.Nome)).Distinct().Count();
+        }
+        <div class="action-card stats-card stats-card-purple">
+            <span class="card-title">@eixosUnicos</span>
+            <span class="card-subtitle">Eixos Diferentes</span>
+            <div class="card-icons">
+                <i class="fas fa-layer-group"></i>
+            </div>
+        </div>
+
+        @{
+            var atividadesComMultiplosEixos = Model.Count(a => a.AtividadesEixos.Count > 1);
+        }
+        <div class="action-card stats-card stats-card-cyan">
+            <span class="card-title">@atividadesComMultiplosEixos</span>
+            <span class="card-subtitle">Multidisciplinares</span>
+            <div class="card-icons">
+                <i class="fas fa-sitemap"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Busca, filtro por eixo e novo -->
+    @{
+        var eixosFiltro = Model.SelectMany(a => a.AtividadesEixos.Select(ae => ae.Eixo))
+            .DistinctBy(e => e.IdEixo)
+            .OrderBy(e => e.Nome)
+            .Select(e => new { e.Nome, Total = Model.Count(a => a.AtividadesEixos.Any(ae => ae.FkIdEixo == e.IdEixo)) })
+            .ToList();
+    }
     <div class="search-container">
         <div class="search-input-group">
             <div class="search-wrapper">
@@ -33,80 +78,25 @@
             </div>
         </div>
 
+        @if (eixosFiltro.Count > 0)
+        {
+            <div class="list-filter">
+                <i class="fa-solid fa-filter list-filter-icon" aria-hidden="true"></i>
+                <select id="filtroEixo" aria-label="Filtrar por eixo">
+                    <option value="todos">Todos os eixos</option>
+                    @foreach (var eixo in eixosFiltro)
+                    {
+                        <option value="@eixo.Nome.ToLower()">@eixo.Nome (@eixo.Total)</option>
+                    }
+                </select>
+                <i class="fa-solid fa-chevron-down list-filter-arrow" aria-hidden="true"></i>
+            </div>
+        }
+
         <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create", "Atividades")'"
             title="Adicionar Nova Atividade">
             <i class="fa-solid fa-plus"></i>
         </button>
-    </div>
-
-    <!-- Estatísticas -->
-    <div class="section-label">Resumo</div>
-    <div class="actions-grid">
-        <div class="action-card stats-card">
-            <span class="card-title" style="font-size: var(--font-size-4xl);" id="totalActivities">@Model.Count()</span>
-            <span class="card-subtitle">Total de Atividades</span>
-            <div class="card-icons">
-                <i class="fas fa-tasks"></i>
-            </div>
-        </div>
-
-        @{
-            var eixosUnicos = Model.SelectMany(a => a.AtividadesEixos.Select(ae => ae.Eixo.Nome)).Distinct().Count();
-        }
-        <div class="action-card stats-card" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);">@eixosUnicos</span>
-            <span class="card-subtitle">Eixos Diferentes</span>
-            <div class="card-icons">
-                <i class="fas fa-layer-group"></i>
-            </div>
-        </div>
-
-        @{
-            var atividadesComMultiplosEixos = Model.Count(a => a.AtividadesEixos.Count > 1);
-        }
-        <div class="action-card stats-card" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
-            <span class="card-title" style="font-size: var(--font-size-4xl);">@atividadesComMultiplosEixos</span>
-            <span class="card-subtitle">Multidisciplinares</span>
-            <div class="card-icons">
-                <i class="fas fa-sitemap"></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Filtro por Eixo -->
-    <div class="purple-divider"></div>
-    <div class="section-label">Filtrar por Eixo</div>
-
-    <div class="eixos-filter-container">
-        <button class="filter-eixo-btn active" data-eixo="todos">
-            <i class="fas fa-th"></i>
-            Todos
-        </button>
-        @{
-            var todosEixos = Model.SelectMany(a => a.AtividadesEixos.Select(ae => ae.Eixo))
-            .DistinctBy(e => e.IdEixo)
-            .OrderBy(e => e.Nome);
-
-            foreach (var eixo in todosEixos)
-            {
-                var eixoNome = eixo.Nome;
-                var iconClass = eixoNome.ToLower() switch
-                {
-                    "prevenção" => "fa-shield-halved",
-                    "ocupação" => "fa-briefcase",
-                    "lazer" => "fa-gamepad",
-                    "segurança social" => "fa-hands-holding-child",
-                    "educação" => "fa-graduation-cap",
-                    "saúde" => "fa-heartbeat",
-                    "assistência básica" => "fa-hand-holding-heart",
-                    _ => "fa-circle"
-                };
-                <button class="filter-eixo-btn" data-eixo="@eixoNome.ToLower()">
-                    <i class="fas @iconClass"></i>
-                    @eixoNome
-                </button>
-            }
-        }
     </div>
 
     <!-- Lista de Atividades -->
@@ -119,7 +109,7 @@
             @foreach (var atividade in Model)
             {
 
-                var eixosString = string.Join(",", atividade.AtividadesEixos.Select(ae => ae.Eixo.Nome.ToLower()));
+                var eixosString = string.Join("|", atividade.AtividadesEixos.Select(ae => ae.Eixo.Nome.ToLower()));
 
                 <div class="form-item activity-item" data-nome="@atividade.Nome?.ToLower()" data-eixos="@eixosString">
 
@@ -201,7 +191,7 @@
             const activitiesGrid = document.getElementById('activitiesGrid');
             const noResultsMessage = document.getElementById('noResultsMessage');
             const activityItems = document.querySelectorAll('.activity-item');
-            const filterButtons = document.querySelectorAll('.filter-eixo-btn');
+            const filtroEixo = document.getElementById('filtroEixo');
 
             let currentEixoFilter = 'todos';
 
@@ -219,7 +209,7 @@
 
                     // Verificar se corresponde ao filtro de eixo
                     const matchesEixo = currentEixoFilter === 'todos' ||
-                        eixos.includes(currentEixoFilter);
+                        eixos.split('|').includes(currentEixoFilter);
 
                     const shouldShow = matchesSearch && matchesEixo;
 
@@ -244,21 +234,11 @@
             // Event listener para busca
             searchInput.addEventListener('input', filterActivities);
 
-            // Event listeners para filtros de eixo
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    // Remover active de todos os botões
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                    // Adicionar active no botão clicado
-                    this.classList.add('active');
-
-                    // Atualizar filtro atual
-                    currentEixoFilter = this.getAttribute('data-eixo');
-
-                    // Aplicar filtros
-                    filterActivities();
-                });
+            // Filtro por eixo (um único seletor)
+            filtroEixo?.addEventListener('change', function () {
+                currentEixoFilter = this.value;
+                this.closest('.list-filter')?.classList.toggle('is-active', currentEixoFilter !== 'todos');
+                filterActivities();
             });
 
             // Limpar busca ao pressionar ESC

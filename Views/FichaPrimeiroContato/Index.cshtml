@@ -7,9 +7,9 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/activity-index.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
@@ -20,28 +20,15 @@
         </h2>
     </div>
 
-    <!-- Barra de Busca -->
-    <div class="search-container">
-        <div class="search-input-group">
-            <div class="search-wrapper">
-                <input type="search" id="searchInput" placeholder="Busque por nome do ator..."
-                    aria-label="Buscar fichas" />
-                <button type="button" class="btn-search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-        </div>
-
-        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create")'"
-            title="Adicionar Nova Ficha">
-            <i class="fa-solid fa-plus"></i>
-        </button>
-    </div>
 
     @if (Model != null && Model.Any())
     {
         <!-- Estatísticas -->
-        <div class="section-label">Resumo</div>
+        <button type="button" class="section-label indicadores-toggle" data-indicadores
+                aria-expanded="true" title="Recolher ou mostrar os indicadores">
+            <span>Indicadores</span>
+            <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+        </button>
         <div class="actions-grid">
             <div class="action-card stats-card">
                 <span class="card-title" id="totalFichas">@Model.Count()</span>
@@ -84,50 +71,54 @@
                 </div>
             </div>
         </div>
+    }
 
-        <!-- Filtro por Status -->
-        <div class="purple-divider"></div>
-        <div class="section-label">Filtrar por Status</div>
-
-        <div class="eixos-filter-container">
-            <button class="filter-eixo-btn active" data-status="todos">
-                <i class="fas fa-th"></i>
-                Todos
-            </button>
-            <button class="filter-eixo-btn" data-status="EmProgresso">
-                <i class="fas fa-spinner"></i>
-                Em Progresso
-            </button>
-            <button class="filter-eixo-btn" data-status="Concluida">
-                <i class="fas fa-check-circle"></i>
-                Concluídas
-            </button>
-            <button class="filter-eixo-btn" data-status="Abandonada">
-                <i class="fas fa-times-circle"></i>
-                Abandonadas
-            </button>
+    <!-- Barra de Busca -->
+    <div class="search-container">
+        <div class="search-input-group">
+            <div class="search-wrapper">
+                <input type="search" id="searchInput" placeholder="Busque por nome do ator..."
+                    aria-label="Buscar fichas" />
+                <button type="button" class="btn-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Filtro por Comunidade -->
+        <div class="list-filter">
+            <i class="fa-solid fa-filter list-filter-icon" aria-hidden="true"></i>
+            <select id="filtroStatus" aria-label="Filtrar por status">
+                <option value="todos">Todos os status</option>
+                <option value="EmProgresso">Em progresso</option>
+                <option value="Concluida">Concluídas</option>
+                <option value="Abandonada">Abandonadas</option>
+            </select>
+            <i class="fa-solid fa-chevron-down list-filter-arrow" aria-hidden="true"></i>
+        </div>
+
         @if (ViewBag.Comunidades != null && ((IEnumerable<dynamic>)ViewBag.Comunidades).Any())
         {
-            <div class="purple-divider"></div>
-            <div class="section-label">Filtrar por Comunidade</div>
-
-            <div class="eixos-filter-container">
-                <button class="filter-comunidade-btn active" data-comunidade="todas">
-                    <i class="fas fa-home"></i>
-                    Todas as Comunidades
-                </button>
-                @foreach (var item in ViewBag.Comunidades)
-                {
-                    <button class="filter-comunidade-btn" data-comunidade="@item.Value">
-                        <i class="fas fa-map-marker-alt"></i>
-                        @item.Text
-                    </button>
-                }
+            <div class="list-filter">
+                <i class="fa-solid fa-city list-filter-icon" aria-hidden="true"></i>
+                <select id="filtroComunidade" aria-label="Filtrar por comunidade">
+                    <option value="todas">Todas as comunidades</option>
+                    @foreach (var item in ViewBag.Comunidades)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <i class="fa-solid fa-chevron-down list-filter-arrow" aria-hidden="true"></i>
             </div>
         }
+
+        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create")'"
+            title="Adicionar Nova Ficha">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
 
         <!-- Lista de Fichas -->
         <div class="purple-divider"></div>
@@ -279,8 +270,8 @@
             const fichasContainer = document.getElementById('fichasContainer');
             const noResultsMessage = document.getElementById('noResultsMessage');
             const fichaItems = document.querySelectorAll('.ficha-item');
-            const filterStatusButtons = document.querySelectorAll('.filter-eixo-btn');
-            const filterComunidadeButtons = document.querySelectorAll('.filter-comunidade-btn');
+            const filtroStatus = document.getElementById('filtroStatus');
+            const filtroComunidade = document.getElementById('filtroComunidade');
 
             let currentStatusFilter = 'todos';
             let currentComunidadeFilter = 'todas';
@@ -342,10 +333,14 @@
                 const concluidasVisible = visibleItems.filter(item => item.getAttribute('data-status') === 'Concluida').length;
                 const abandonadasVisible = visibleItems.filter(item => item.getAttribute('data-status') === 'Abandonada').length;
 
-                document.getElementById('totalFichas').textContent = totalVisible;
-                document.getElementById('emProgressoCount').textContent = emProgressoVisible;
-                document.getElementById('concluidasCount').textContent = concluidasVisible;
-                document.getElementById('abandonadasCount').textContent = abandonadasVisible;
+                const el_totalFichas = document.getElementById('totalFichas');
+                if (el_totalFichas) el_totalFichas.textContent = totalVisible;
+                const el_emProgressoCount = document.getElementById('emProgressoCount');
+                if (el_emProgressoCount) el_emProgressoCount.textContent = emProgressoVisible;
+                const el_concluidasCount = document.getElementById('concluidasCount');
+                if (el_concluidasCount) el_concluidasCount.textContent = concluidasVisible;
+                const el_abandonadasCount = document.getElementById('abandonadasCount');
+                if (el_abandonadasCount) el_abandonadasCount.textContent = abandonadasVisible;
             }
 
             // Event listener para busca
@@ -360,24 +355,16 @@
                 });
             }
 
-            // Event listeners para filtros de status
-            filterStatusButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    filterStatusButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    currentStatusFilter = this.getAttribute('data-status');
-                    filterFichas();
-                });
+            // Filtros de status e comunidade (seletores únicos)
+            filtroStatus?.addEventListener('change', function () {
+                currentStatusFilter = this.value;
+                this.closest('.list-filter')?.classList.toggle('is-active', this.value !== 'todos');
+                filterFichas();
             });
-
-            // Event listeners para filtros de comunidade
-            filterComunidadeButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    filterComunidadeButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    currentComunidadeFilter = this.getAttribute('data-comunidade');
-                    filterFichas();
-                });
+            filtroComunidade?.addEventListener('change', function () {
+                currentComunidadeFilter = this.value;
+                this.closest('.list-filter')?.classList.toggle('is-active', this.value !== 'todas');
+                filterFichas();
             });
 
             // Modais

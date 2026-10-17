@@ -6,8 +6,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
     <style>
         /* Estilos específicos "Teia" para visualização */
         .action-group-container {
@@ -155,7 +155,7 @@
                         <div style="flex: 1;">
                             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                                 <strong style="color: #333;">@acao.Nome</strong>
-                                <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;">
+                                <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: var(--color-primary-50); color: var(--color-primary-500); border: 1px solid var(--color-primary-200);">
                                     Institucional
                                 </span>
                             </div>

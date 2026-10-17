@@ -64,7 +64,8 @@ label:has(input[type="checkbox"]) {
     padding: var(--space-6) var(--space-10);
     font-family: var(--font-family-primary);
     max-width: 100%;
-    overflow-x: hidden;
+    /* clip (e não hidden) para não criar contexto de rolagem e permitir o rodapé fixo */
+    overflow-x: clip;
 }
 
 .forms-container {
@@ -299,7 +300,7 @@ label:has(input[type="checkbox"]) {
 
 /* Variações de cores para stats cards */
 .stats-card-purple {
-    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+    background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-500) 100%);
 }
 
 .stats-card-cyan {
@@ -347,7 +348,7 @@ label:has(input[type="checkbox"]) {
 }
 
 .activity-icon-purple {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, var(--color-primary) 100%);
 }
 
 /* ===== LAYOUT DE ITENS (Lista) ===== */
@@ -494,7 +495,7 @@ label:has(input[type="checkbox"]) {
 
 .tag-purple {
     background-color: #ebebff;
-    color: #5b21b6;
+    color: var(--color-primary-500);
 }
 
 .tag-trans {
@@ -548,7 +549,7 @@ label:has(input[type="checkbox"]) {
 }
 
 .tag-pink {
-    background-color: #fce7f3;
+    background-color: var(--color-primary-50);
     color: #9d174d;
 }
 
@@ -786,7 +787,7 @@ label:has(input[type="checkbox"]) {
     width: 40px;
     height: 40px;
     border-radius: var(--radius-lg);
-    background-color: purple;
+    background-color: var(--color-primary);
     border: 1px solid var(--color-gray-300);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -795,7 +796,7 @@ label:has(input[type="checkbox"]) {
 }
 
 .btn-action:hover {
-    background-color: rgb(88, 0, 88);
+    background-color: var(--color-primary-dark);
     transform: scale(1.05);
     box-shadow: var(--shadow-sm);
 }
@@ -894,6 +895,72 @@ label:has(input[type="checkbox"]) {
     margin-top: var(--space-8);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-gray-300);
+}
+
+/* ===== RODAPÉ DE AÇÕES FIXO =====
+   Os botões dos formulários ficam sempre presos à borda inferior da tela,
+   ao lado do menu lateral, em qualquer ponto da rolagem. */
+:root {
+    --rodape-sidebar: 280px;
+    --rodape-padding-x: calc(var(--space-8) + var(--space-10) + var(--space-2));
+    --rodape-altura: 104px;
+}
+
+.section-2 .buttons-container {
+    position: fixed;
+    left: var(--rodape-sidebar);
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-sticky);
+    margin: 0;
+    padding: var(--space-4) var(--rodape-padding-x);
+    background-color: var(--color-gray-200);
+    border-top: 1px solid var(--color-gray-300);
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Espaço no fim da página para o rodapé fixo não cobrir o último campo. */
+.section-2:has(.buttons-container) {
+    padding-bottom: calc(var(--rodape-altura) + var(--space-6));
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --rodape-sidebar: 240px;
+        --rodape-padding-x: calc(var(--space-6) * 3);
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --rodape-sidebar: 0px;
+        --rodape-padding-x: var(--space-8);
+        --rodape-altura: 84px;
+    }
+
+    /* No celular os botões ficam lado a lado para a barra ocupar pouco espaço. */
+    .section-2 .buttons-container {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-3);
+        padding-top: var(--space-3);
+        padding-bottom: var(--space-3);
+    }
+
+    .section-2 .buttons-container .wizard-btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        justify-content: center;
+        padding-left: var(--space-3);
+        padding-right: var(--space-3);
+    }
+
+    .section-2 .buttons-container .action-buttons-group {
+        flex: 2 1 0;
+        width: auto;
+        flex-wrap: nowrap;
+    }
 }
 
 .action-buttons-group {
@@ -1022,6 +1089,11 @@ label:has(input[type="checkbox"]) {
     z-index: 30;
 }
 
+/* Painel de eixos aberto fica acima do rodapé fixo dos formulários. */
+.input-card:has(.multiselect-wrapper[open]) {
+    z-index: calc(var(--z-sticky) + 1);
+}
+
 .input-content {
     min-width: 0;
     flex-grow: 1;
@@ -1068,7 +1140,7 @@ label:has(input[type="checkbox"]) {
     border-radius: 50%;
     cursor: pointer;
     color: white;
-    background: var(--color-primary, #6f42c1);
+    background: var(--color-primary, var(--color-primary-500));
 }
 
 .btn-remove-address {
@@ -1117,8 +1189,8 @@ label:has(input[type="checkbox"]) {
     padding: 10px;
     border-radius: 18px;
     background: linear-gradient(180deg, #ffffff 0%, #fcf9ff 100%);
-    border: 1px solid rgba(170, 120, 199, 0.22);
-    box-shadow: 0 18px 32px rgba(56, 29, 74, 0.14);
+    border: 1px solid rgb(var(--color-primary-300-rgb) / 0.22);
+    box-shadow: 0 18px 32px rgb(var(--color-primary-800-rgb) / 0.14);
     max-height: 280px;
     overflow-y: auto;
     backdrop-filter: blur(10px);
@@ -1145,8 +1217,8 @@ label:has(input[type="checkbox"]) {
     width: 8px;
     height: 8px;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #d9b4f1 100%);
-    box-shadow: 0 0 0 4px rgba(170, 120, 199, 0.14);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-200) 100%);
+    box-shadow: 0 0 0 4px rgb(var(--color-primary-300-rgb) / 0.14);
 }
 
 .address-suggestion-item {
@@ -1164,16 +1236,16 @@ label:has(input[type="checkbox"]) {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    border: 1px solid rgba(170, 120, 199, 0.08);
+    border: 1px solid rgb(var(--color-primary-300-rgb) / 0.08);
 }
 
 .address-suggestion-item:hover,
 .address-suggestion-item:focus {
-    background: linear-gradient(180deg, #f8efff 0%, #f4e8ff 100%);
+    background: linear-gradient(180deg, var(--color-primary-50) 0%, var(--color-primary-50) 100%);
     color: var(--color-primary-900);
     outline: none;
     transform: translateY(-1px);
-    box-shadow: 0 10px 18px rgba(98, 53, 127, 0.12);
+    box-shadow: 0 10px 18px rgb(var(--color-primary-600-rgb) / 0.12);
 }
 
 .address-suggestion-primary {
@@ -1618,7 +1690,7 @@ input[type="checkbox"]:disabled + .radio-label {
 .details-icon-circle svg {
     width: 20px;
     height: 20px;
-    color: #6a0dad;
+    color: var(--color-primary-500);
 }
 
 /* ===== PROFILE-SPECIFIC (Perfis de Acesso) ===== */
@@ -1953,4 +2025,439 @@ input[type="checkbox"]:disabled + .radio-label {
         width: auto;
         min-width: 160px;
     }
+}
+
+/* ===== LUPA DO MAPA (leaflet-control-geocoder) ===== */
+.leaflet-control-geocoder-expanded .leaflet-control-geocoder-form input {
+    width: min(360px, 60vw);
+    font-family: var(--font-family-primary);
+}
+
+.leaflet-control-geocoder-alternatives {
+    width: min(400px, 70vw);
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.leaflet-control-geocoder-alternatives li a,
+.leaflet-control-geocoder-alternatives li {
+    white-space: normal;
+    line-height: 1.35;
+}
+
+.leaflet-control-geocoder-alternatives li {
+    padding: 8px 12px;
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-800);
+}
+
+.leaflet-control-geocoder-alternatives li:hover,
+.leaflet-control-geocoder-alternatives .leaflet-control-geocoder-selected {
+    background-color: var(--color-primary-50);
+}
+
+/* ===== FILTRO DE LISTAGEM =====
+   Um único seletor ao lado da busca (substitui as listas de botões por eixo/status/comunidade,
+   que cresciam sem limite). Mesmo visual da barra de busca. */
+.search-container:has(.list-filter) {
+    height: auto;
+    min-height: 5rem;
+}
+
+.list-filter {
+    position: relative;
+    flex: 0 0 auto;
+    width: 240px;
+}
+
+.list-filter > .list-filter-icon,
+.list-filter > .list-filter-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-primary);
+    pointer-events: none;
+}
+
+.list-filter > .list-filter-icon {
+    left: 16px;
+    font-size: 0.9rem;
+}
+
+.list-filter > .list-filter-arrow {
+    right: 16px;
+    font-size: 0.75rem;
+    color: var(--color-gray-500);
+}
+
+.list-filter select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #fff;
+    border-style: solid;
+    border-width: 0 0 4px 0;
+    border-color: var(--color-primary);
+    border-radius: 24px;
+    padding: 1.25rem 2.5rem 1.25rem 2.6rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--color-gray-800);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.list-filter select:focus-visible {
+    box-shadow: 0 0 0 3px var(--color-primary-100), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Filtro aplicado: destaca para o usuário perceber que a lista está filtrada. */
+.list-filter.is-active select {
+    background: var(--color-primary-50);
+    color: var(--color-primary-800);
+    font-weight: var(--font-weight-bold);
+}
+
+@media (max-width: 768px) {
+    .search-container:has(.list-filter) {
+        flex-wrap: wrap;
+        padding: var(--space-2) 0;
+    }
+
+    .search-container:has(.list-filter) .search-input-group {
+        flex: 1 1 calc(100% - 4rem);
+    }
+
+    .list-filter {
+        order: 3;
+        flex: 1 1 100%;
+        width: auto;
+    }
+}
+
+/* Respiro entre os indicadores (KPIs) e a barra de busca que vem logo abaixo. */
+.actions-grid + .search-container,
+#diarioKpis + .search-container {
+    margin-top: var(--space-5);
+}
+
+/* ===== INDICADORES RECOLHÍVEIS =====
+   Título "Indicadores" das listagens: clicável, recolhe/mostra os cartões logo abaixo. */
+.indicadores-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 2px 6px 2px 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: none;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.indicadores-chevron {
+    font-size: 0.8rem;
+    color: var(--color-gray-500);
+    transition: transform .2s ease, color .2s ease;
+}
+
+.indicadores-toggle:hover .indicadores-chevron,
+.indicadores-toggle:focus-visible .indicadores-chevron {
+    color: var(--color-primary);
+}
+
+.indicadores-toggle:focus-visible {
+    outline: 3px solid var(--color-primary-200);
+    outline-offset: 2px;
+}
+
+.indicadores-recolhidos [data-indicadores] .indicadores-chevron {
+    transform: rotate(180deg);
+}
+
+.indicadores-recolhidos [data-indicadores] + .actions-grid {
+    display: none;
+}
+
+/* Cartões colados ao título "Indicadores" (sem o respiro duplo de margem do título + da grade). */
+.indicadores-toggle.section-label {
+    margin-bottom: var(--space-3);
+}
+
+[data-indicadores] + .actions-grid {
+    margin-top: 0;
+}
+
+/* ===== TOOLTIP GLOBAL (wwwroot/js/tooltip.js) =====
+   Fica fixo sobre a página: nunca é cortado e sempre cabe na janela. */
+.app-tooltip {
+    position: fixed;
+    z-index: 20000;
+    max-width: min(320px, calc(100vw - 16px));
+    padding: 10px 14px;
+    background: var(--color-white);
+    color: var(--color-gray-800);
+    border: 1px solid var(--color-gray-300);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: pre-line;
+    text-align: left;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s ease;
+}
+
+.app-tooltip.is-visible {
+    opacity: 1;
+}
+
+.app-tooltip::after {
+    content: "";
+    position: absolute;
+    left: var(--seta-x, 50%);
+    width: 10px;
+    height: 10px;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.app-tooltip[data-lado="cima"]::after {
+    bottom: -6px;
+    border-top: none;
+    border-left: none;
+}
+
+.app-tooltip[data-lado="baixo"]::after {
+    top: -6px;
+    border-bottom: none;
+    border-right: none;
+}
+
+/* Com o tooltip global ativo, desliga o balão antigo feito só em CSS. */
+.js-tooltips .tooltip-icon::before,
+.js-tooltips .tooltip-icon::after {
+    display: none;
+}
+
+.tooltip-icon:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* ===== AVATAR (foto do usuário ou iniciais) ===== */
+.avatar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    color: #fff;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-sm { width: 36px; height: 36px; font-size: .8rem; }
+.avatar-md { width: 44px; height: 44px; font-size: .9rem; }
+.avatar-xl { width: 96px; height: 96px; font-size: 1.8rem; box-shadow: 0 8px 22px rgb(var(--color-primary-800-rgb) / .18); }
+
+/* ===== CAMPO DE FOTO (Usuários) ===== */
+.user-photo-card {
+    align-items: center;
+    gap: var(--space-5);
+}
+
+.user-photo-content {
+    gap: 4px;
+}
+
+.user-photo-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.user-photo-choose {
+    cursor: pointer;
+    margin: 0;
+}
+
+.user-photo-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.user-photo-input:focus-visible + .user-photo-remove,
+.user-photo-actions:focus-within .user-photo-choose {
+    outline: 3px solid var(--color-primary-200);
+    outline-offset: 2px;
+}
+
+.user-photo-remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #b42318;
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+}
+
+.user-photo-remove:hover { background: #fef3f2; }
+.user-photo-remove[hidden] { display: none; }
+
+.user-photo-error {
+    color: #b42318;
+    font-weight: var(--font-weight-medium);
+}
+
+.user-photo-error[hidden] { display: none; }
+
+/* Modo visualização (Editar Usuário): sem ações até clicar em Editar. */
+.main-form.modo-visualizacao .user-photo-actions { display: none; }
+
+@media (max-width: 640px) {
+    .user-photo-card { flex-direction: column; align-items: flex-start; }
+}
+
+/* ===== PÁGINAS NO PADRÃO DA HOME (Dados e Backup, Ajuda, Configurações) =====
+   Mesma largura, banner e acabamento de cartões da página inicial (home.css). */
+.section-2 .help-page,
+.section-2 .settings-page,
+.section-2 .data-hub {
+    width: min(1240px, 100%);
+    margin: 0 auto;
+    padding: var(--space-2) 0 var(--space-10);
+}
+
+.section-2 .help-hero,
+.section-2 .settings-hero,
+.section-2 .data-hub-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border-radius: 28px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 85% 20%, rgb(255 255 255 / .18), transparent 32%),
+        radial-gradient(circle at 70% 110%, rgb(var(--color-primary-300-rgb) / .45), transparent 40%),
+        linear-gradient(130deg, var(--color-primary-800) 0%, var(--color-primary-dark) 45%, var(--color-primary) 100%);
+    box-shadow: 0 24px 60px rgb(var(--color-primary-800-rgb) / .28);
+}
+
+.section-2 .help-hero::after,
+.section-2 .settings-hero::after,
+.section-2 .data-hub-hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: -120px;
+    bottom: -160px;
+    width: 420px;
+    height: 420px;
+    border: 60px solid rgb(255 255 255 / .05);
+    border-radius: 50%;
+}
+
+.section-2 .help-hero h1,
+.section-2 .settings-hero h1,
+.section-2 .data-hub-hero h1 {
+    margin: .2rem 0 0;
+    color: #fff;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.05;
+}
+
+/* Chamada acima do título: mesma pílula translúcida da data na Home. */
+.section-2 .help-hero .page-eyebrow,
+.section-2 .settings-hero .page-eyebrow,
+.section-2 .data-hub-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    width: auto;
+    margin: 0 0 var(--space-4);
+    padding: .35rem .85rem;
+    border: 1px solid rgb(255 255 255 / .22);
+    border-radius: 999px;
+    background: rgb(255 255 255 / .1);
+    color: #fff;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+}
+
+.section-2 .help-hero p,
+.section-2 .settings-hero p,
+.section-2 .data-hub-hero p {
+    color: rgb(255 255 255 / .82);
+}
+
+/* Cartões e painéis com o acabamento dos painéis da Home. */
+.section-2 .help-card,
+.section-2 .help-steps li,
+.section-2 .help-faq details,
+.section-2 .help-search input,
+.section-2 .settings-language-panel,
+.section-2 .settings-card,
+.section-2 .data-section {
+    border: 1px solid rgb(var(--color-primary-800-rgb) / .06);
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 8px 26px rgb(var(--color-primary-800-rgb) / .06);
+}
+
+.section-2 .help-card:hover {
+    box-shadow: 0 16px 34px rgb(var(--color-primary-800-rgb) / .12);
+}
+
+.section-2 .data-section,
+.section-2 .settings-language-panel {
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.section-2 .backup-panel {
+    border-radius: 28px;
+}
+
+/* ===== TÍTULO DA PÁGINA MAIS PRÓXIMO DO CONTEÚDO =====
+   Vale para todas as telas (listagens e cadastros). Nas listagens, "Indicadores" vem logo após o título
+   e não soma a própria margem superior. */
+.section-2 .header-section h2 {
+    margin-bottom: var(--space-5);
+}
+
+.header-section + .indicadores-toggle {
+    margin-top: 0;
 }

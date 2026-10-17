@@ -392,4 +392,108 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_bbded624ee7b3b46' xml:space='preserve'>
+    <value>Para visualizar o diário pessoal, primeiro selecione um ator no filtro acima.</value>
+    <comment>Source: Para visualizar o diário pessoal, primeiro selecione um ator no filtro acima.</comment>
+  </data>
+  <data name='Ui_ed68d4bd8a9f3399' xml:space='preserve'>
+    <value>Total de Registros</value>
+    <comment>Source: Total de Registros</comment>
+  </data>
+  <data name='Ui_a5552fc81165fa24' xml:space='preserve'>
+    <value>Registros encontrados</value>
+    <comment>Source: Registros encontrados</comment>
+  </data>
+  <data name='Ui_cfdcbfde5bd06aa5' xml:space='preserve'>
+    <value>Eixos Trabalhados</value>
+    <comment>Source: Eixos Trabalhados</comment>
+  </data>
+  <data name='Ui_c20cea6e2895609f' xml:space='preserve'>
+    <value>Dias desde o último</value>
+    <comment>Source: Dias desde o último</comment>
+  </data>
+  <data name='Ui_dfbbc351de615679' xml:space='preserve'>
+    <value>Todos os Registros</value>
+    <comment>Source: Todos os Registros</comment>
+  </data>
+  <data name='Ui_028eb3f7c35b827b' xml:space='preserve'>
+    <value>Registro de</value>
+    <comment>Source: Registro de</comment>
+  </data>
+  <data name='Ui_ce31a065dbcc5f8d' xml:space='preserve'>
+    <value>Busque na descrição...</value>
+    <comment>Source: Busque na descrição...</comment>
+  </data>
+  <data name='Ui_99e3db3d2b64c2fc' xml:space='preserve'>
+    <value>Buscar no diário</value>
+    <comment>Source: Buscar no diário</comment>
+  </data>
+  <data name='Ui_57bb143ea5f11a78' xml:space='preserve'>
+    <value>Adicionar Novo Registro</value>
+    <comment>Source: Adicionar Novo Registro</comment>
+  </data>
+  <data name='Ui_a415b5072650b3d6' xml:space='preserve'>
+    <value>Ver dados básicos do ator</value>
+    <comment>Source: Ver dados básicos do ator</comment>
+  </data>
+  <data name='Ui_843195c6a3e4fb38' xml:space='preserve'>
+    <value>Ver registro de</value>
+    <comment>Source: Ver registro de</comment>
+  </data>
+  <data name='Ui_a3e71b818b6315b1' xml:space='preserve'>
+    <value>Nenhum registro encontrado</value>
+    <comment>Source: Nenhum registro encontrado</comment>
+  </data>
+  <data name='Ui_56307295dd4b46f2' xml:space='preserve'>
+    <value>Nenhuma descrição contém</value>
+    <comment>Source: Nenhuma descrição contém</comment>
+  </data>
+  <data name='Ui_51e77ebabe388d3d' xml:space='preserve'>
+    <value>Tente outros termos.</value>
+    <comment>Source: Tente outros termos.</comment>
+  </data>
+  <data name='Ui_9f3ebbde555a2c21' xml:space='preserve'>
+    <value>Limpar busca</value>
+    <comment>Source: Limpar busca</comment>
+  </data>
+  <data name='Ui_ed2f7be79ad82bb2' xml:space='preserve'>
+    <value>Nenhum registro cadastrado</value>
+    <comment>Source: Nenhum registro cadastrado</comment>
+  </data>
+  <data name='Ui_ec14b8670b381814' xml:space='preserve'>
+    <value>Comece adicionando o primeiro registro do diário pessoal deste ator.</value>
+    <comment>Source: Comece adicionando o primeiro registro do diário pessoal deste ator.</comment>
+  </data>
+  <data name='Ui_cf56f8e114f9bb95' xml:space='preserve'>
+    <value>Adicionar Primeiro Registro</value>
+    <comment>Source: Adicionar Primeiro Registro</comment>
+  </data>
+  <data name='Ui_c8c2d283fce7a581' xml:space='preserve'>
+    <value>Novo Registro</value>
+    <comment>Source: Novo Registro</comment>
+  </data>
+  <data name='Ui_93c24e03b5c668a5' xml:space='preserve'>
+    <value>Detalhes do Registro</value>
+    <comment>Source: Detalhes do Registro</comment>
+  </data>
+  <data name='Ui_779e262caafc8dc2' xml:space='preserve'>
+    <value>Digite @ e escolha um ator. A menção será clicável na leitura do diário.</value>
+    <comment>Source: Digite @ e escolha um ator. A menção será clicável na leitura do diário.</comment>
+  </data>
+  <data name='Ui_380b56c3ba829c34' xml:space='preserve'>
+    <value>Adicionar Registro</value>
+    <comment>Source: Adicionar Registro</comment>
+  </data>
+  <data name='Ui_715a95431797427a' xml:space='preserve'>
+    <value>Descreva o processo... Digite @ para mencionar um ator</value>
+    <comment>Source: Descreva o processo... Digite @ para mencionar um ator</comment>
+  </data>
+  <data name='Ui_2026204714b803fe' xml:space='preserve'>
+    <value>Você tem certeza que deseja deletar o registro de</value>
+    <comment>Source: Você tem certeza que deseja deletar o registro de</comment>
+  </data>
+  <data name='Ui_d5060516d6c6def9' xml:space='preserve'>
+    <value>Salvar Alterações</value>
+    <comment>Source: Salvar Alterações</comment>
+  </data>
 </root>

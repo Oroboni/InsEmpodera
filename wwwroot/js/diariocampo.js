@@ -175,9 +175,9 @@
             const badge = itemDiv.querySelector('[data-action-type]');
             badge.classList.add(badgeClass);
             badge.textContent = tipo === 'equipe' ? 'Equipe' : 'Institucional';
-            badge.style.background = tipo === 'equipe' ? '#e3f2fd' : '#f3e5f5';
-            badge.style.color = tipo === 'equipe' ? '#1565c0' : '#7b1fa2';
-            badge.style.border = `1px solid ${tipo === 'equipe' ? '#90caf9' : '#ce93d8'}`;
+            badge.style.background = tipo === 'equipe' ? '#e3f2fd' : 'var(--color-primary-50)';
+            badge.style.color = tipo === 'equipe' ? '#1565c0' : 'var(--color-primary-500)';
+            badge.style.border = `1px solid ${tipo === 'equipe' ? '#90caf9' : 'var(--color-primary-200)'}`;
 
             const removeButton = itemDiv.querySelector('[data-action-remove]');
             removeButton.setAttribute('aria-label', `Remover ação ${nome}`);
@@ -237,18 +237,57 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        function showSuggestions(query, atPos) {
-            const matches = atoresList.filter(a => {
-                const nome = a.Nome || a.Text || "";
-                return nome.toLowerCase().includes(query.toLowerCase());
-            });
+        // Busca tolerante: ignora acentos/maiúsculas e aceita letras em sequência ("isao" -> "Isadora").
+        const normalizarNome = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        function pontuarNome(nome, busca) {
+            if (!busca) return 0;
+            if (nome.startsWith(busca)) return 0;
+            if (nome.split(/\s+/).some(p => p.startsWith(busca))) return 1;
+            if (nome.includes(busca)) return 2;
+            // Letras em sequência: quanto mais juntas e mais perto do início, melhor.
+            let pos = 0, primeira = -1, lacunas = 0, anterior = -1;
+            for (const letra of busca) {
+                pos = nome.indexOf(letra, pos);
+                if (pos < 0) return -1;
+                if (primeira < 0) primeira = pos; else lacunas += pos - anterior - 1;
+                anterior = pos;
+                pos++;
+            }
+            return 3 + (primeira + lacunas) / 100;
+        }
+        let mentionAtiva = -1;
+        function marcarMencao(indice) {
+            const itens = [...mentionList.querySelectorAll('.mention-item')];
+            if (!itens.length) return;
+            mentionAtiva = (indice + itens.length) % itens.length;
+            itens.forEach((el, i) => el.classList.toggle('is-active', i === mentionAtiva));
+            itens[mentionAtiva].scrollIntoView?.({ block: 'nearest' });
+        }
 
+        function showSuggestions(query, atPos) {
+            const busca = normalizarNome(query);
+            const matches = atoresList
+                .map(a => ({ a, chave: normalizarNome(a.Nome || a.Text || "") }))
+                .map(x => ({ ...x, pontos: pontuarNome(x.chave, busca) }))
+                .filter(x => x.pontos >= 0)
+                .sort((x, y) => x.pontos - y.pontos || x.chave.localeCompare(y.chave))
+                .slice(0, 8)
+                .map(x => x.a);
+
+            mentionList.replaceChildren();
+            mentionAtiva = -1;
             if (matches.length === 0) {
-                mentionList.style.display = 'none';
+                const vazio = document.createElement('li');
+                vazio.className = 'mention-empty';
+                vazio.textContent = atoresList.length
+                    ? 'Nenhum ator encontrado. Confira o nome ou cadastre o ator em Atores.'
+                    : 'Nenhum ator cadastrado.';
+                mentionList.appendChild(vazio);
+                mentionList.style.display = 'block';
+                mentionList.style.width = textarea.offsetWidth + "px";
                 return;
             }
 
-            mentionList.replaceChildren();
             matches.forEach(actor => {
                 const nome = String(actor.Nome || actor.Text || "Ator");
                 const item = document.createElement('li');
@@ -267,7 +306,19 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             mentionList.style.display = 'block';
             mentionList.style.width = textarea.offsetWidth + "px";
+            marcarMencao(0);
         }
+
+        // Teclado: setas navegam, Enter/Tab escolhem, Esc fecha.
+        textarea.addEventListener('keydown', function (e) {
+            if (mentionList.style.display !== 'block') return;
+            if (e.key === 'Escape') { mentionList.style.display = 'none'; return; }
+            const itens = [...mentionList.querySelectorAll('.mention-item')];
+            if (!itens.length) return;
+            if (e.key === 'ArrowDown') { e.preventDefault(); marcarMencao(mentionAtiva + 1); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); marcarMencao(mentionAtiva - 1); }
+            else if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); itens[Math.max(mentionAtiva, 0)].click(); }
+        });
 
         mentionList.addEventListener('click', function (e) {
             const item = e.target.closest('.mention-item');

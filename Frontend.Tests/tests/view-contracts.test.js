@@ -269,7 +269,7 @@ describe('segurança dos templates DOM do diário', () => {
 
   it.each(['Views/Diariocampo/create.cshtml', 'Views/Diariocampo/edit.cshtml'])('%s delega eventos ao script compartilhado sem redeclarar handlers', file => {
     const source = readProjectFile(file);
-    expect(source).toContain('<script src="~/js/diariocampo.js"></script>');
+    expect(source).toMatch(/<script src="~\/js\/diariocampo\.js"(?: asp-append-version="true")?><\/script>/);
     expect(source).toContain('window.atoresDisponiveis');
     expect(source).not.toMatch(/function\s+(?:abrirModalAcao|fecharModal|salvarAcaoNoGrid|removerItemGrid)\s*\(/);
   });

@@ -130,7 +130,10 @@ describe('inicialização da página de ficha', () => {
     window.pageInit();
     expect(window.initTelefoneMask).toHaveBeenCalledWith('inputTelefone');
     expect(window.initDateMaxToday).toHaveBeenCalledWith('DtContato');
-    expect(window.initMapSafe).toHaveBeenCalledWith('mapa-principal', 'input-endereco');
+    expect(window.initMapSafe).toHaveBeenCalledWith('mapa-principal', 'input-endereco', {
+      sourceInputId: 'input-endereco',
+      manualInputId: 'input-endereco'
+    });
     expect(window.setPageState).toHaveBeenCalledOnce();
   });
 

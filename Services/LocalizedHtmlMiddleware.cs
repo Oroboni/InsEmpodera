@@ -138,7 +138,8 @@ public sealed partial class LocalizedHtmlMiddleware(RequestDelegate next)
         var parts = Regex.Split(source.Trim(), @"\s+")
             .Where(part => part.Length > 0)
             .Select(Regex.Escape);
-        return new Regex(string.Join(@"\s+", parts), RegexOptions.Compiled);
+        // Só casa palavras inteiras: impede que "Conta" seja trocado dentro de "Contato".
+        return new Regex(@"(?<![\p{L}\p{N}])" + string.Join(@"\s+", parts) + @"(?![\p{L}\p{N}])", RegexOptions.Compiled);
     }
 
     private sealed record ResourceEntry(
@@ -150,7 +151,9 @@ public sealed partial class LocalizedHtmlMiddleware(RequestDelegate next)
     [GeneratedRegex(@">([^<>]+)<", RegexOptions.Compiled)]
     private static partial Regex TextNodeRegex();
 
-    [GeneratedRegex(@"<(script|style|textarea)\b[^>]*>.*?</\1>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline)]
+    // Scripts e estilos ficam intactos; do textarea protege só o conteúdo digitado,
+    // para que atributos como placeholder e title continuem traduzíveis.
+    [GeneratedRegex(@"<(script|style)\b[^>]*>.*?</\1>|(?<=<textarea\b[^>]*>).*?(?=</textarea>)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline)]
     private static partial Regex ProtectedBlockRegex();
 
     [GeneratedRegex("\\b(placeholder|title|aria-label|alt|data-tooltip)=\\\"([^\\\"]+)\\\"", RegexOptions.Compiled | RegexOptions.IgnoreCase)]

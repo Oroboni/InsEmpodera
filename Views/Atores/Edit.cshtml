@@ -5,7 +5,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
@@ -36,21 +37,6 @@
         </div>
 
         <div class="input-card full-width">
-            <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
-            <div class="input-content">
-                <label for="tipoRelacionamento">Tipo de relacionamento</label>
-                <select id="tipoRelacionamento" name="tipoRelacionamento" class="clean-input simple-select" disabled>
-                    <option value="">Selecione um tipo</option>
-                    <option value="1" selected="@(ViewBag.TipoRelacionamento == 1)">Amigo</option>
-                    <option value="2" selected="@(ViewBag.TipoRelacionamento == 2)">Colega de trabalho</option>
-                    <option value="3" selected="@(ViewBag.TipoRelacionamento == 3)">Conhecido</option>
-                    <option value="4" selected="@(ViewBag.TipoRelacionamento == 4)">Familiar</option>
-                    <option value="5" selected="@(ViewBag.TipoRelacionamento == 5)">Vizinho</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="input-card full-width">
             <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
             <div class="input-content">
                 <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
@@ -58,18 +44,22 @@
             </div>
         </div>
 
+        <div class="redes-botoes">
+            <button type="button" class="wizard-btn btn-next" data-rede-abrir="Primaria" data-testid="btn-rede-primaria">
+                <i class="fa-solid fa-people-roof"></i> Rede Primária
+                <span class="redes-contador" data-rede-contador="Primaria" hidden></span>
+            </button>
+            <button type="button" class="wizard-btn btn-next" data-rede-abrir="Subjetiva" data-testid="btn-rede-subjetiva">
+                <i class="fa-solid fa-diagram-project"></i> Rede Subjetiva
+                <span class="redes-contador" data-rede-contador="Subjetiva" hidden></span>
+            </button>
+        </div>
+        <div data-redes-campos data-editavel="false"></div>
+
         <div class="purple-divider"></div>
         <div class="section-label">Dados Pessoais</div>
 
         <div class="grid-row">
-            <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
-                <div class="input-content">
-                    <label for="Idade">Idade</label>
-                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" disabled>
-                </div>
-            </div>
-
             <div class="input-card">
                 <div class="icon-box purple"><i class="fa-solid fa-venus-mars"></i></div>
                 <div class="input-content">
@@ -82,6 +72,14 @@
                         <option value="3">Transgênero</option>
                     </select>
                     <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                </div>
+            </div>
+
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="input-content">
+                    <label for="Idade">Idade</label>
+                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" disabled>
                 </div>
             </div>
         </div>
@@ -97,41 +95,34 @@
 
         <div class="grid-row">
             <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-people-group"></i></div>
+                <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="input-content">
                     <label asp-for="PapelSocial1">Papel Social</label>
                     <input asp-for="PapelSocial1" type="text" class="clean-input" placeholder="Papel social principal"
-                        disabled>
+                        maxlength="200" disabled>
                 </div>
             </div>
 
             <div class="input-card">
-                <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
+                <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="input-content">
                     <label asp-for="PapelSocial2">Papel Social (Adicional)</label>
                     <input asp-for="PapelSocial2" type="text" class="clean-input" placeholder="Papel social secundário"
-                        disabled>
+                        maxlength="200" disabled>
                 </div>
             </div>
         </div>
 
         <div class="input-card full-width">
-            <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
+            <div class="icon-box purple"><i class="fa-solid fa-lightbulb"></i></div>
             <div class="input-content">
-                <label for="inputInteresse">Interesse</label>
-                <input id="inputInteresse" name="interesse" type="text" class="clean-input"
-                    placeholder="Digite seu interesse" />
+                <label asp-for="Interesse">Interesse</label>
+                <input asp-for="Interesse" id="inputInteresse" type="text" class="clean-input"
+                    placeholder="Interesse do ator" maxlength="200" disabled>
             </div>
         </div>
 
-        <div class="input-card full-width">
-            <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
-            <div class="input-content">
-                <label asp-for="Telefone">Telefone</label>
-                <input asp-for="Telefone" id="inputTelefone" name="telefone" type="tel" class="clean-input"
-                    maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" disabled>
-            </div>
-        </div>
+        <partial name="_CampoTelefone" model="Model.Telefone" />
 
         <div class="purple-divider"></div>
         <div class="section-label">Ações Relacionadas</div>
@@ -206,6 +197,8 @@
     </form>
 </div>
 
+<partial name="_RedesModais" />
+
 <!-- Modal de Confirmação de Exclusão -->
 <div class="modal-overlay" id="deleteConfirmationModal">
     <div class="modal-content">
@@ -261,6 +254,7 @@
                 editSaveBtn.setAttribute('type', 'submit');
                 editSaveBtn.classList.remove('btn-next');
                 editSaveBtn.classList.add('btn-save-final');
+                window.AtoresRedes?.setEditavel(true);
             } else {
                 // Modo visualização
                 inputFields.forEach(field => field.disabled = true);
@@ -355,5 +349,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/atores-telefone.js" asp-append-version="true"></script>
+        <script src="~/js/atores-redes.js" asp-append-version="true"></script>
     }
 }

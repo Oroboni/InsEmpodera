@@ -6,7 +6,11 @@ window.pageInit = function () {
     initDateMaxToday("DtContato");
 
     // Mapa
-    initMapSafe("mapa-principal", "input-endereco");
+    // O próprio campo de endereço aceita digitação e mostra sugestões (além da lupa do mapa).
+    initMapSafe("mapa-principal", "input-endereco", {
+        sourceInputId: "input-endereco",
+        manualInputId: "input-endereco"
+    });
 
     // Estado inicial dos campos (se houver modo edição)
     if (typeof setPageState === "function") {

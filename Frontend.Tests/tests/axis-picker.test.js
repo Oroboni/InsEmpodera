@@ -16,7 +16,12 @@ const axisViews = [
 
 describe('contrato do seletor de eixos nas telas', () => {
   it.each(axisViews)('%s usa o componente compartilhado para todos os campos de eixos', view => {
-    const source = readProjectFile(view);
+    // Inclui as partials da mesma pasta renderizadas pela view (ex.: <partial name="_CamposDiario" />).
+    const folder = view.slice(0, view.lastIndexOf('/') + 1);
+    const own = readProjectFile(view);
+    const partials = [...own.matchAll(/<partial\s+name="(_[A-Za-z0-9]+)"/g)]
+      .map(match => readProjectFile(`${folder}${match[1]}.cshtml`));
+    const source = [own, ...partials].join('\n');
     const pickers = [...source.matchAll(/<[^>]+\bdata-axis-picker(?=[\s>])/g)];
     const tags = [...source.matchAll(/<[^>]+\bdata-axis-tags(?=[\s>])/g)];
     expect(pickers.length).toBeGreaterThan(0);

@@ -166,6 +166,7 @@ CREATE TABLE `RedesPrimarias` (
     `FkIdAtorPrincipal` int NOT NULL,
     `FkIdAtorRelacionados` int NOT NULL,
     `TipoRelacao` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `TipoRede` varchar(20) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'Primaria',
     CONSTRAINT `PK_RedesPrimarias` PRIMARY KEY (`IdRedePrimaria`),
     CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorPrincipal` FOREIGN KEY (`FkIdAtorPrincipal`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT,
     CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorRelacionados` FOREIGN KEY (`FkIdAtorRelacionados`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT

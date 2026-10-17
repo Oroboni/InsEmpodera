@@ -22,8 +22,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
     <style>
         /* Estilos específicos para a listagem estilo Teia */
         .action-group-container { margin-bottom: 25px; }
@@ -111,7 +111,7 @@
             </div>
             <div class="input-content">
                 <label for="descricaoInput">Relato / Descrição</label>
-                <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use para mencionar atores"></textarea>
+                <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
                 <ul id="mention-list"></ul>
             </div>
         </div>
@@ -275,7 +275,7 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     
-    <script src="~/js/diariocampo.js"></script>
+    <script src="~/js/diariocampo.js" asp-append-version="true"></script>
     <script src="~/js/axis-picker.js" asp-append-version="true"></script>
 
     <script>
