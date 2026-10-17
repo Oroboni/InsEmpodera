@@ -1,7 +1,6 @@
 @model Empodera.Models.Usuario
 @{
     ViewData["Title"] = "Editar Usuário";
-    ViewData["PageCSS"] = "usuarios-edit";
     Layout = "_Layout";
     var canManageIdentity = (ViewBag.CanManageIdentity as bool?) == true;
     var canDelete = (ViewBag.CanDeleteUsers as bool?) == true;
@@ -9,11 +8,11 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/usuarios-edit.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
-    <form asp-action="Edit" method="post" class="main-form" data-testid="user-edit-form">
+    <form asp-action="Edit" method="post" class="main-form" enctype="multipart/form-data" data-testid="user-edit-form">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdUsuario" />
 
@@ -33,6 +32,10 @@
                 @ViewBag.ErrorMessage
             </div>
         }
+
+        <div class="section-label">Informações Básicas</div>
+
+        <partial name="_CampoFoto" />
 
         <!-- Nome -->
         <div class="input-card full-width">
@@ -77,6 +80,9 @@
             </div>
         </div>
 
+        <div class="purple-divider"></div>
+        <div class="section-label">Acesso</div>
+
         <!-- Senha -->
         <div class="input-card full-width">
             <div class="icon-box">
@@ -90,6 +96,29 @@
                 <small class="text-muted" style="margin-top: 4px; display: block;">Preencha somente quando quiser trocar a senha.</small>
             </div>
         </div>
+
+        <!-- Status Ativo -->
+        <div class="input-card full-width">
+                <div class="icon-box">
+                    <i class="fa-solid fa-toggle-on"></i>
+                </div>
+                <div class="input-content">
+                    <label asp-for="Ativo">Status</label>
+                    <select asp-for="Ativo" class="clean-input simple-select" disabled
+                        data-locked="@((!canManageIdentity || isCurrentUser).ToString().ToLowerInvariant())">
+                        <option value="S">Ativo</option>
+                        <option value="N">Inativo</option>
+                    </select>
+                    @if (!canManageIdentity || isCurrentUser)
+                    {
+                        <input type="hidden" name="Ativo" value="@Model.Ativo" />
+                    }
+                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Dados Pessoais</div>
 
         <!-- Gênero e Ocupação -->
         <div class="grid-row">
@@ -132,24 +161,24 @@
             </div>
         </div>
 
-        <!-- Status Ativo -->
-        <div class="input-card full-width">
-                <div class="icon-box">
-                    <i class="fa-solid fa-toggle-on"></i>
-                </div>
+        <div class="purple-divider"></div>
+        <div class="section-label">Informações do Sistema</div>
+
+        <div class="grid-row">
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-plus"></i></div>
                 <div class="input-content">
-                    <label asp-for="Ativo">Status</label>
-                    <select asp-for="Ativo" class="clean-input simple-select" disabled
-                        data-locked="@((!canManageIdentity || isCurrentUser).ToString().ToLowerInvariant())">
-                        <option value="S">Ativo</option>
-                        <option value="N">Inativo</option>
-                    </select>
-                    @if (!canManageIdentity || isCurrentUser)
-                    {
-                        <input type="hidden" name="Ativo" value="@Model.Ativo" />
-                    }
-                    <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                    <label>Criado em</label>
+                    <div class="user-info-display"><span class="user-date">@Model.DtCriacao.ToString("dd/MM/yyyy HH:mm")</span></div>
                 </div>
+            </div>
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-user-pen"></i></div>
+                <div class="input-content">
+                    <label>Última atualização</label>
+                    <div class="user-info-display"><span class="user-date">@(Model.DtAtualizacao?.ToString("dd/MM/yyyy HH:mm") ?? "—")</span></div>
+                </div>
+            </div>
         </div>
 
         <!-- Botões -->
@@ -209,6 +238,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/js/usuario-foto.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('.main-form');
@@ -229,14 +259,16 @@
                             field.disabled = false;
                         }
                     });
-                    editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
+                    form.classList.remove('modo-visualizacao');
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Alterações';
                     editSaveBtn.setAttribute('type', 'submit');
                     editSaveBtn.classList.remove('btn-next');
                     editSaveBtn.classList.add('btn-save-final');
                 } else {
                     // Modo visualização
                     inputFields.forEach(field => field.disabled = true);
-                    editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
+                    form.classList.add('modo-visualizacao');
+                editSaveBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Editar';
                     editSaveBtn.setAttribute('type', 'button');
                     editSaveBtn.classList.remove('btn-save-final');
                     editSaveBtn.classList.add('btn-next');
@@ -291,7 +323,7 @@
                     isEditMode = true;
                     setPageState();
                     // Focar no primeiro campo editável
-                    const firstInput = form.querySelector('input:not([disabled]):not([type="hidden"]):not([readonly])');
+                    const firstInput = form.querySelector('input:not([disabled]):not([type="hidden"]):not([type="file"]):not([readonly])');
                     if (firstInput) firstInput.focus();
                 }
             });

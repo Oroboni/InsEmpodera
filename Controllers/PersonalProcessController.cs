@@ -91,11 +91,16 @@ public class PersonalProcessController : Controller
         var diario = await _context.DiariosProcessoPessoal
             .AsNoTracking()
             .Include(d => d.Eixos)
+            .Include(d => d.Usuario)
+            .Include(d => d.UsuarioModificacao)
             .FirstOrDefaultAsync(d => d.IdDiarioProcesso == id.Value);
         if (diario is null) return NotFound();
 
         await PopulateListsAsync(diario.FK_id_Atores, diario.Eixos.Select(e => e.FkIdEixo));
         ViewBag.CanDelete = user.CanDelete(Module);
+        ViewBag.MentionNames = await _context.Atores.AsNoTracking()
+            .Where(a => a.Ativo != "N")
+            .ToDictionaryAsync(a => a.IdAtores, a => a.Nome);
         return View(diario);
     }
 

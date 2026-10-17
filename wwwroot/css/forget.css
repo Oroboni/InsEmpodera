@@ -1,7 +1,7 @@
 /* --- Configurações Globais e Variáveis de Cor --- */
 :root {
-    --cor-fundo: #7C4288;
-    --cor-painel-info: #7C4288;
+    --cor-fundo: var(--color-primary);
+    --cor-painel-info: var(--color-primary);
     --cor-destaque: #6BC0B7;
     --cor-texto-claro: #FFFFFF;
     --cor-texto-escuro: #333333;

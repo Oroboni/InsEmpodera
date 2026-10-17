@@ -108,10 +108,10 @@
 
     outline: none;
 
-    border-color: #6a0dad;
+    border-color: var(--color-primary-500);
     /* Roxo principal ao focar */
 
-    box-shadow: 0 0 0 2px rgba(106, 29, 173, 0.2);
+    box-shadow: 0 0 0 2px rgb(var(--color-primary-500-rgb) / 0.2);
 
 }
 
@@ -129,7 +129,7 @@
 
     transform: translateY(-50%);
 
-    color: #6a0dad;
+    color: var(--color-primary-500);
     /* Roxo principal */
 
     width: 20px;
@@ -156,7 +156,7 @@
 
     flex-shrink: 0;
 
-    background-color: #7A3188;
+    background-color: var(--color-primary);
     /* Roxo principal */
 
     border-radius: 50%;
@@ -180,7 +180,7 @@
 
 .atores-add-button:hover {
 
-    background-color: #5e1a75;
+    background-color: var(--color-primary-dark);
     /* Roxo mais escuro no hover */
 
 }
@@ -293,7 +293,7 @@
 
 .ator-card .details-icon {
 
-    color: #6a0dad;
+    color: var(--color-primary-500);
     /* Roxo principal */
 
     width: 22px;
@@ -331,7 +331,7 @@
 
 .atores-list-container::-webkit-scrollbar-thumb {
 
-    background-color: #6a0dad;
+    background-color: var(--color-primary-500);
     /* Roxo principal */
 
     border-radius: 4px;
@@ -340,7 +340,7 @@
 
 .atores-list-container::-webkit-scrollbar-thumb:hover {
 
-    background-color: #5e1a75;
+    background-color: var(--color-primary-dark);
 
 }
 
@@ -350,6 +350,6 @@
 
     scrollbar-width: thin;
 
-    scrollbar-color: #6a0dad transparent;
+    scrollbar-color: var(--color-primary-500) transparent;
 
 }

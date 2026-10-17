@@ -22,8 +22,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
     <style>
         /* Estilos específicos Teia */
         .action-group-container { margin-bottom: 25px; }
@@ -120,7 +120,7 @@
             </div>
             <div class="input-content">
                 <label asp-for="Descricao">Relato / Descrição</label>
-                <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Use para mencionar atores..."></textarea>
+                <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
                 <ul id="mention-list"></ul>
             </div>
         </div>
@@ -153,7 +153,7 @@
                             <div style="flex: 1;">
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                                     <strong style="color: #333;">@acao.Nome</strong>
-                                    <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;">Institucional</span>
+                                    <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: var(--color-primary-50); color: var(--color-primary-500); border: 1px solid var(--color-primary-200);">Institucional</span>
                                 </div>
                                 <div style="font-size: 0.8rem; color: #666;">
                                     <i class="fa-solid fa-building"></i> @acao.PeovedorEx
@@ -326,7 +326,7 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    <script src="~/js/diariocampo.js"></script>
+    <script src="~/js/diariocampo.js" asp-append-version="true"></script>
     <script src="~/js/axis-picker.js" asp-append-version="true"></script>
 
     <script>

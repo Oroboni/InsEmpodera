@@ -452,4 +452,72 @@
     <value>Nominatim suggestion failed:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_fdea3840ede105cf' xml:space='preserve'>
+    <value>Use at least 8 characters, with uppercase, lowercase, a number and a symbol.</value>
+    <comment>Source: Use pelo menos 8 caracteres, com maiúscula, minúscula, número e símbolo.</comment>
+  </data>
+  <data name='Ui_cceab8f39860a970' xml:space='preserve'>
+    <value>Profile photo</value>
+    <comment>Source: Foto de perfil</comment>
+  </data>
+  <data name='Ui_fd368138921be134' xml:space='preserve'>
+    <value>JPG, PNG or WEBP, up to 2 MB. Shown in the menu and in the user list.</value>
+    <comment>Source: JPG, PNG ou WEBP, até 2 MB. Aparece no menu e na lista de usuários.</comment>
+  </data>
+  <data name='Ui_b19bf9a37ac61eac' xml:space='preserve'>
+    <value>Choose photo</value>
+    <comment>Source: Escolher foto</comment>
+  </data>
+  <data name='Ui_658fa27e285235d8' xml:space='preserve'>
+    <value>Change photo</value>
+    <comment>Source: Trocar foto</comment>
+  </data>
+  <data name='Ui_3c41f89f1e8680b1' xml:space='preserve'>
+    <value>Remove photo</value>
+    <comment>Source: Remover foto</comment>
+  </data>
+  <data name='Ui_2ed7ce78e9360943' xml:space='preserve'>
+    <value>Access</value>
+    <comment>Source: Acesso</comment>
+  </data>
+  <data name='Ui_f10a9c0673ab14bb' xml:space='preserve'>
+    <value>Personal Details</value>
+    <comment>Source: Dados Pessoais</comment>
+  </data>
+  <data name='Ui_b31837c78cd79f61' xml:space='preserve'>
+    <value>Basic Information</value>
+    <comment>Source: Informações Básicas</comment>
+  </data>
+  <data name='Ui_66a4f21b5d31e14c' xml:space='preserve'>
+    <value>System Information</value>
+    <comment>Source: Informações do Sistema</comment>
+  </data>
+  <data name='Ui_f6d7d1b50677930a' xml:space='preserve'>
+    <value>Created on</value>
+    <comment>Source: Criado em</comment>
+  </data>
+  <data name='Ui_9634373efef17186' xml:space='preserve'>
+    <value>Last update</value>
+    <comment>Source: Última atualização</comment>
+  </data>
+  <data name='Ui_611958aa80c6dc3b' xml:space='preserve'>
+    <value>Upload a JPG, PNG or WEBP image.</value>
+    <comment>Source: Envie uma imagem JPG, PNG ou WEBP.</comment>
+  </data>
+  <data name='Ui_d76198fd64c5f6b2' xml:space='preserve'>
+    <value>The photo must be at most 2 MB.</value>
+    <comment>Source: A foto deve ter no máximo 2 MB.</comment>
+  </data>
+  <data name='Ui_e7b2a8be5420085e' xml:space='preserve'>
+    <value>The photo file is empty.</value>
+    <comment>Source: O arquivo da foto está vazio.</comment>
+  </data>
+  <data name='Ui_f5f08b6ee917189a' xml:space='preserve'>
+    <value>All statuses</value>
+    <comment>Source: Todos os status</comment>
+  </data>
+  <data name='Ui_6d3dae532a59cc15' xml:space='preserve'>
+    <value>Filter by status</value>
+    <comment>Source: Filtrar por status</comment>
+  </data>
 </root>

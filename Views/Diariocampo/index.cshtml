@@ -6,8 +6,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
@@ -34,6 +34,32 @@
                         }
                     }
                 </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estatísticas da comunidade selecionada -->
+    <div id="diarioKpis" hidden>
+        <button type="button" class="section-label indicadores-toggle" data-indicadores
+                aria-expanded="true" title="Recolher ou mostrar os indicadores">
+            <span>Indicadores</span>
+            <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="actions-grid">
+            <div class="action-card stats-card">
+                <span class="card-title" id="kpiTotal">0</span>
+                <span class="card-subtitle">Registros na comunidade</span>
+                <div class="card-icons"><i class="fas fa-book"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title" id="kpiRecentes">0</span>
+                <span class="card-subtitle">Últimos 30 dias</span>
+                <div class="card-icons"><i class="fas fa-calendar-week"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title" id="kpiUltimo">—</span>
+                <span class="card-subtitle">Último registro</span>
+                <div class="card-icons"><i class="fas fa-calendar-check"></i></div>
             </div>
         </div>
     </div>
@@ -90,6 +116,7 @@
                     <div class="form-item diario-item" 
                          style="display: none;" 
                          data-comunidade="@item.FkIdComunidade"
+                         data-data="@item.Data.ToString("yyyy-MM-dd")"
                          data-search="@(item.Descricao?.ToLower()) @(item.Localizacao?.ToLower()) @dataFormatada">
                         
                         <div class="item-header">
@@ -157,9 +184,31 @@
                 window.location.assign(url);
             });
 
+            // Indicadores da comunidade escolhida (independem da busca textual).
+            const kpis = document.getElementById('diarioKpis');
+            function atualizarIndicadores(comunidade) {
+                if (!kpis) return;
+                kpis.hidden = !comunidade;
+                if (!comunidade) return;
+                const datas = Array.from(items)
+                    .filter(item => item.getAttribute('data-comunidade') === comunidade)
+                    .map(item => item.getAttribute('data-data'))
+                    .filter(Boolean)
+                    .sort();
+                const limite = new Date();
+                limite.setDate(limite.getDate() - 30);
+                const limiteIso = limite.toISOString().slice(0, 10);
+                document.getElementById('kpiTotal').textContent = datas.length;
+                document.getElementById('kpiRecentes').textContent = datas.filter(d => d >= limiteIso).length;
+                const ultimo = datas[datas.length - 1];
+                document.getElementById('kpiUltimo').textContent = ultimo ? ultimo.split('-').reverse().join('/') : '—';
+            }
+
             function updateView() {
                 const selectedComunidade = comunidadeFilter.value;
                 const searchTerm = searchInput.value.toLowerCase().trim();
+
+                atualizarIndicadores(selectedComunidade);
 
                 // Se não há comunidade selecionada
                 if (!selectedComunidade) {

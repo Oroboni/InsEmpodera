@@ -65,7 +65,7 @@
 .assessment-controls .search-icon-button .search-icon {
     position: static;
     transform: none;
-    color: #6a0dad;
+    color: var(--color-primary-500);
 }
 
 .assessment-controls .btn-add-assessment {
@@ -76,7 +76,7 @@
     padding: 0 24px;
     height: 48px;
     flex-shrink: 0;
-    background-color: #6A2A73;
+    background-color: var(--color-primary-600);
     color: white;
     font-size: 0.9rem;
     font-weight: 600;
@@ -87,7 +87,7 @@
     transition: background-color 0.2s;
 }
 .assessment-controls .btn-add-assessment:hover {
-    background-color: #47144e;
+    background-color: var(--color-primary-700);
 }
 
 /* --- Estados de Conteúdo (Vazio ou Lista) --- */
@@ -146,7 +146,7 @@
     color: #6b7280;
 }
 .assessment-card .details-icon {
-    color: #6a0dad;
+    color: var(--color-primary-500);
     width: 22px;
     height: 22px;
 }
@@ -266,7 +266,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #6a0dad; /* Cor roxa da bolinha */
+    background: var(--color-primary-500); /* Cor roxa da bolinha */
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -276,7 +276,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #6a0dad;
+    background: var(--color-primary-500);
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);

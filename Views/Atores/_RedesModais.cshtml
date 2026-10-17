@@ -1,0 +1,107 @@
+@using System.Text.Json
+@*
+    Modais de Rede Primária e Rede Subjetiva (atores-redes.js).
+    Deve ficar FORA do formulário principal; os campos enviados ao servidor
+    são gerados dentro do elemento [data-redes-campos] do formulário.
+*@
+@{
+    var dadosRedes = new
+    {
+        atores = (object?)ViewBag.AtoresDisponiveisRede,
+        comunidades = (object?)ViewBag.ComunidadesRede,
+        redes = (object?)ViewBag.RedesAtuais
+    };
+}
+<script type="application/json" id="redes-dados">@Html.Raw(JsonSerializer.Serialize(dadosRedes))</script>
+
+<div class="modal-overlay redes-modal" id="modalRedeLista" role="dialog" aria-modal="true"
+    aria-labelledby="modalRedeListaTitulo">
+    <div class="modal-content redes-modal-content">
+        <button type="button" class="redes-modal-fechar" data-redes-fechar aria-label="Fechar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="redes-modal-titulo" id="modalRedeListaTitulo">Rede Primária</h3>
+
+        <table class="redes-tabela" id="redesTabela">
+            <thead>
+                <tr>
+                    <th scope="col">Ator</th>
+                    <th scope="col">Tipo de Relação</th>
+                    <th scope="col" class="redes-col-acao"><span class="visually-hidden">Remover</span></th>
+                </tr>
+            </thead>
+            <tbody id="redesTabelaCorpo"></tbody>
+        </table>
+        <p class="redes-vazio" id="redesVazio">Nenhum ator adicionado a esta rede ainda.</p>
+        <p class="redes-aviso" id="redesAvisoEdicao">Clique em <strong>Editar</strong> para alterar a rede.</p>
+
+        <div class="redes-modal-acoes">
+            <button type="button" class="wizard-btn btn-next" id="redesBtnAdicionar">
+                <i class="fa-solid fa-plus"></i> Adicionar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay redes-modal" id="modalRedeForm" role="dialog" aria-modal="true"
+    aria-labelledby="modalRedeFormTitulo">
+    <form class="modal-content redes-modal-content redes-form" id="redesForm" novalidate>
+        <button type="button" class="redes-modal-fechar" data-redes-voltar aria-label="Fechar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="redes-modal-titulo" id="modalRedeFormTitulo">Adicionar à Rede Primária</h3>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-city"></i></div>
+            <div class="input-content">
+                <label for="redesComunidade">Comunidade <span class="text-danger">*</span></label>
+                <select id="redesComunidade" class="clean-input" required>
+                    <option value="">Selecione a comunidade</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-card full-width">
+            <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+            <div class="input-content">
+                <div class="redes-label-linha">
+                    <label for="redesAtor">Ator <span class="text-danger">*</span></label>
+                    <button type="button" class="redes-novo-ator" id="redesNovoAtor"
+                        title="Abre o cadastro de ator; ao salvar, ele volta selecionado aqui">
+                        <i class="fa-solid fa-user-plus"></i> Cadastrar novo ator
+                    </button>
+                </div>
+                <select id="redesAtor" class="clean-input" required>
+                    <option value="">Selecione o ator</option>
+                </select>
+                <small class="text-muted redes-dica" id="redesNomeDica" aria-live="polite">
+                    Selecione primeiro a comunidade.
+                </small>
+            </div>
+        </div>
+
+        <fieldset class="redes-tipos">
+            <legend>Tipo de Relação <span class="text-danger">*</span></legend>
+            <label><input type="radio" name="redesTipoRelacao" value="Família" /> Família</label>
+            <label><input type="radio" name="redesTipoRelacao" value="Vizinhos/Comunidade" /> Vizinhos/Comunidade</label>
+            <label><input type="radio" name="redesTipoRelacao" value="Trabalho" /> Trabalho</label>
+            <label><input type="radio" name="redesTipoRelacao" value="Amigo" /> Amigo</label>
+            <label class="redes-tipo-outra">
+                <input type="radio" name="redesTipoRelacao" value="__outra" id="redesTipoOutra" /> Outra:
+                <input type="text" id="redesOutraTexto" maxlength="100" placeholder="Escreva a relação (ex.: Pai)"
+                    aria-label="Outra relação" />
+            </label>
+        </fieldset>
+
+        <p class="redes-erro" id="redesErro" role="alert"></p>
+
+        <div class="redes-modal-acoes">
+            <button type="button" class="wizard-btn btn-prev" data-redes-voltar>
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </button>
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-check"></i> Salvar
+            </button>
+        </div>
+    </form>
+</div>

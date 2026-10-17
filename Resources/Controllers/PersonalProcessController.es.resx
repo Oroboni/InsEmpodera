@@ -135,7 +135,7 @@
     <comment>Source: Nenhuma ação vinculada.</comment>
   </data>
   <data name='Ui_d07701c9462afe38' xml:space='preserve'>
-    <value>Diario de procesos personales</value>
+    <value>Diario de Proceso Personal</value>
     <comment>Source: Diário de Processo Pessoal</comment>
   </data>
   <data name='Ui_485aff8075b6134e' xml:space='preserve'>
@@ -391,5 +391,109 @@
   <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
     <value>La sugerencia de nominatim falló:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+  <data name='Ui_bbded624ee7b3b46' xml:space='preserve'>
+    <value>Para ver el diario personal, primero seleccione un actor en el filtro de arriba.</value>
+    <comment>Source: Para visualizar o diário pessoal, primeiro selecione um ator no filtro acima.</comment>
+  </data>
+  <data name='Ui_ed68d4bd8a9f3399' xml:space='preserve'>
+    <value>Total de registros</value>
+    <comment>Source: Total de Registros</comment>
+  </data>
+  <data name='Ui_a5552fc81165fa24' xml:space='preserve'>
+    <value>Registros encontrados</value>
+    <comment>Source: Registros encontrados</comment>
+  </data>
+  <data name='Ui_cfdcbfde5bd06aa5' xml:space='preserve'>
+    <value>Ejes trabajados</value>
+    <comment>Source: Eixos Trabalhados</comment>
+  </data>
+  <data name='Ui_c20cea6e2895609f' xml:space='preserve'>
+    <value>Días desde el último</value>
+    <comment>Source: Dias desde o último</comment>
+  </data>
+  <data name='Ui_dfbbc351de615679' xml:space='preserve'>
+    <value>Todos los registros</value>
+    <comment>Source: Todos os Registros</comment>
+  </data>
+  <data name='Ui_028eb3f7c35b827b' xml:space='preserve'>
+    <value>Registro del</value>
+    <comment>Source: Registro de</comment>
+  </data>
+  <data name='Ui_ce31a065dbcc5f8d' xml:space='preserve'>
+    <value>Busque en la descripción...</value>
+    <comment>Source: Busque na descrição...</comment>
+  </data>
+  <data name='Ui_99e3db3d2b64c2fc' xml:space='preserve'>
+    <value>Buscar en el diario</value>
+    <comment>Source: Buscar no diário</comment>
+  </data>
+  <data name='Ui_57bb143ea5f11a78' xml:space='preserve'>
+    <value>Agregar nuevo registro</value>
+    <comment>Source: Adicionar Novo Registro</comment>
+  </data>
+  <data name='Ui_a415b5072650b3d6' xml:space='preserve'>
+    <value>Ver datos básicos del actor</value>
+    <comment>Source: Ver dados básicos do ator</comment>
+  </data>
+  <data name='Ui_843195c6a3e4fb38' xml:space='preserve'>
+    <value>Ver registro del</value>
+    <comment>Source: Ver registro de</comment>
+  </data>
+  <data name='Ui_a3e71b818b6315b1' xml:space='preserve'>
+    <value>No se encontraron registros</value>
+    <comment>Source: Nenhum registro encontrado</comment>
+  </data>
+  <data name='Ui_56307295dd4b46f2' xml:space='preserve'>
+    <value>Ninguna descripción contiene</value>
+    <comment>Source: Nenhuma descrição contém</comment>
+  </data>
+  <data name='Ui_51e77ebabe388d3d' xml:space='preserve'>
+    <value>Pruebe otros términos.</value>
+    <comment>Source: Tente outros termos.</comment>
+  </data>
+  <data name='Ui_9f3ebbde555a2c21' xml:space='preserve'>
+    <value>Limpiar búsqueda</value>
+    <comment>Source: Limpar busca</comment>
+  </data>
+  <data name='Ui_ed2f7be79ad82bb2' xml:space='preserve'>
+    <value>Ningún registro cargado</value>
+    <comment>Source: Nenhum registro cadastrado</comment>
+  </data>
+  <data name='Ui_ec14b8670b381814' xml:space='preserve'>
+    <value>Comience agregando el primer registro del diario personal de este actor.</value>
+    <comment>Source: Comece adicionando o primeiro registro do diário pessoal deste ator.</comment>
+  </data>
+  <data name='Ui_cf56f8e114f9bb95' xml:space='preserve'>
+    <value>Agregar primer registro</value>
+    <comment>Source: Adicionar Primeiro Registro</comment>
+  </data>
+  <data name='Ui_c8c2d283fce7a581' xml:space='preserve'>
+    <value>Nuevo registro</value>
+    <comment>Source: Novo Registro</comment>
+  </data>
+  <data name='Ui_93c24e03b5c668a5' xml:space='preserve'>
+    <value>Detalles del registro</value>
+    <comment>Source: Detalhes do Registro</comment>
+  </data>
+  <data name='Ui_779e262caafc8dc2' xml:space='preserve'>
+    <value>Escriba @ y elija un actor. La mención será clicable al leer el diario.</value>
+    <comment>Source: Digite @ e escolha um ator. A menção será clicável na leitura do diário.</comment>
+  </data>
+  <data name='Ui_380b56c3ba829c34' xml:space='preserve'>
+    <value>Agregar registro</value>
+    <comment>Source: Adicionar Registro</comment>
+  </data>
+  <data name='Ui_715a95431797427a' xml:space='preserve'>
+    <value>Describa el proceso... Escriba @ para mencionar a un actor</value>
+    <comment>Source: Descreva o processo... Digite @ para mencionar um ator</comment>
+  </data>
+  <data name='Ui_2026204714b803fe' xml:space='preserve'>
+    <value>¿Seguro que desea eliminar el registro del</value>
+    <comment>Source: Você tem certeza que deseja deletar o registro de</comment>
+  </data>
+  <data name='Ui_d5060516d6c6def9' xml:space='preserve'>
+    <value>Guardar cambios</value>
+    <comment>Source: Salvar Alterações</comment>
   </data>
 </root>

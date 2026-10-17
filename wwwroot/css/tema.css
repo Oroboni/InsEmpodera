@@ -1,0 +1,84 @@
+/* ================================================================
+   TEMA DE CORES DO SISTEMA
+   ----------------------------------------------------------------
+   Todas as cores de identidade visual ficam AQUI. O restante do CSS
+   usa apenas estes tokens (var(--color-primary-...)).
+
+   COMO TROCAR O TEMA:
+     appsettings.json  ->  "Tema": "verde"   (ou "roxo")
+     (ou variável de ambiente Tema=roxo) e reinicie a aplicação.
+
+   COMO CRIAR UM TEMA NOVO:
+     copie um dos blocos abaixo, troque o nome em data-tema="..." e
+     os valores; depois use esse nome na chave "Tema".
+
+   Os tokens *-rgb guardam os canais para transparências:
+     rgb(var(--color-primary-rgb) / 0.2)
+   ================================================================ */
+
+/* Tema ROXO - identidade original do sistema (padrão caso nenhum tema seja informado) */
+:root,
+:root[data-tema="roxo"] {
+    --color-primary: #7A3188;
+    --color-primary-light: #9b4db0;
+    --color-primary-dark: #5a1f66;
+    --color-primary-50: #f3e9f7;
+    --color-primary-100: #e0c8ef;
+    --color-primary-200: #caa3e4;
+    --color-primary-300: #b17dd8;
+    --color-primary-400: #9b58cd;
+    --color-primary-500: #8640b5;
+    --color-primary-600: #6a2a73;
+    --color-primary-700: #51215a;
+    --color-primary-800: #3a153f;
+
+    --color-primary-rgb: 122 49 136;
+    --color-primary-light-rgb: 155 77 176;
+    --color-primary-dark-rgb: 90 31 102;
+    --color-primary-50-rgb: 243 233 247;
+    --color-primary-100-rgb: 224 200 239;
+    --color-primary-200-rgb: 202 163 228;
+    --color-primary-300-rgb: 177 125 216;
+    --color-primary-400-rgb: 155 88 205;
+    --color-primary-500-rgb: 134 64 181;
+    --color-primary-600-rgb: 106 42 115;
+    --color-primary-700-rgb: 81 33 90;
+    --color-primary-800-rgb: 58 21 63;
+
+    --color-secondary: #6BC0B7;
+    --color-secondary-light: #9be0db;
+    --color-secondary-dark: #4a8680;
+}
+
+/* Tema VERDE - EcoRedes (paleta #9CB080, #618764, #2B5748, #273338) */
+:root[data-tema="verde"] {
+    --color-primary: #2B5748;
+    --color-primary-light: #618764;
+    --color-primary-dark: #1E3F33;
+    --color-primary-50: #EEF3EB;
+    --color-primary-100: #DCE6D3;
+    --color-primary-200: #C2D2B3;
+    --color-primary-300: #9CB080;
+    --color-primary-400: #7E9A72;
+    --color-primary-500: #618764;
+    --color-primary-600: #2B5748;
+    --color-primary-700: #22463A;
+    --color-primary-800: #273338;
+
+    --color-primary-rgb: 43 87 72;
+    --color-primary-light-rgb: 97 135 100;
+    --color-primary-dark-rgb: 30 63 51;
+    --color-primary-50-rgb: 238 243 235;
+    --color-primary-100-rgb: 220 230 211;
+    --color-primary-200-rgb: 194 210 179;
+    --color-primary-300-rgb: 156 176 128;
+    --color-primary-400-rgb: 126 154 114;
+    --color-primary-500-rgb: 97 135 100;
+    --color-primary-600-rgb: 43 87 72;
+    --color-primary-700-rgb: 34 70 58;
+    --color-primary-800-rgb: 39 51 56;
+
+    --color-secondary: #618764;
+    --color-secondary-light: #9CB080;
+    --color-secondary-dark: #2B5748;
+}

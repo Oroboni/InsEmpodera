@@ -338,6 +338,11 @@ namespace Empodera.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<RedePrimaria>()
+                .Property(rp => rp.TipoRede)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            modelBuilder.Entity<RedePrimaria>()
                 .HasOne(rp => rp.AtorPrincipal)
                 .WithMany()
                 .HasForeignKey(rp => rp.FkIdAtorPrincipal)

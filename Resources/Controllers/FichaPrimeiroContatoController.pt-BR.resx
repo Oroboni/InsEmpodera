@@ -1052,4 +1052,52 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_b01675eac92bcd49' xml:space='preserve'>
+    <value>Digite o endereço ou use a lupa do mapa</value>
+    <comment>Source: Digite o endereço ou use a lupa do mapa</comment>
+  </data>
+  <data name='Ui_f21c912e72ec591b' xml:space='preserve'>
+    <value>Encontro/Conversa</value>
+    <comment>Source: Encontro/Conversa</comment>
+  </data>
+  <data name='Ui_944e4b66e49504d5' xml:space='preserve'>
+    <value>Creche</value>
+    <comment>Source: Creche</comment>
+  </data>
+  <data name='Ui_217ca4a1ab189086' xml:space='preserve'>
+    <value>Terapia</value>
+    <comment>Source: Terapia</comment>
+  </data>
+  <data name='Ui_bdc3c7fc5b4d0133' xml:space='preserve'>
+    <value>Visita familiar</value>
+    <comment>Source: Visita familiar</comment>
+  </data>
+  <data name='Ui_7aa409001aeaaa0a' xml:space='preserve'>
+    <value>Medicamentos</value>
+    <comment>Source: Medicamentos</comment>
+  </data>
+  <data name='Ui_3ac483217e193455' xml:space='preserve'>
+    <value>IST</value>
+    <comment>Source: IST</comment>
+  </data>
+  <data name='Ui_f5f08b6ee917189a' xml:space='preserve'>
+    <value>Todos os status</value>
+    <comment>Source: Todos os status</comment>
+  </data>
+  <data name='Ui_3ca49eadf2d62b85' xml:space='preserve'>
+    <value>Em progresso</value>
+    <comment>Source: Em progresso</comment>
+  </data>
+  <data name='Ui_b5ac64d68118c7a2' xml:space='preserve'>
+    <value>Todas as comunidades</value>
+    <comment>Source: Todas as comunidades</comment>
+  </data>
+  <data name='Ui_6d3dae532a59cc15' xml:space='preserve'>
+    <value>Filtrar por status</value>
+    <comment>Source: Filtrar por status</comment>
+  </data>
+  <data name='Ui_e9b1cfbc19223fc5' xml:space='preserve'>
+    <value>Filtrar por comunidade</value>
+    <comment>Source: Filtrar por comunidade</comment>
+  </data>
 </root>

@@ -177,7 +177,7 @@ input[type="text"]::placeholder {
 /* Estado aberto */
 .multiselect-wrapper[open]>summary .select-wrapper {
     border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+    box-shadow: 0 0 0 3px rgb(var(--color-primary-400-rgb) / 0.1) !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }

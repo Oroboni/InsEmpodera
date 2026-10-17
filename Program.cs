@@ -45,6 +45,11 @@ if (!string.IsNullOrWhiteSpace(dataProtectionKeysPath))
 
 // Add services to the container.
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+// Mantém letras acentuadas legíveis no HTML (ex.: "Diários" em vez de "Di&#xE1;rios").
+// Sem isso, textos dinâmicos com acento não são reconhecidos pelo LocalizedHtmlMiddleware.
+// Caracteres perigosos (<, >, &, aspas) continuam sendo codificados.
+builder.Services.Configure<Microsoft.Extensions.WebEncoders.WebEncoderOptions>(options =>
+    options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(System.Text.Unicode.UnicodeRanges.All));
 builder.Services.AddAntiforgery(options => options.SuppressXFrameOptionsHeader = true);
 builder.Services.AddControllersWithViews(options =>
     {
@@ -145,6 +150,8 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddSingleton<TemaPersonalizadoService>();
+builder.Services.AddSingleton<FotoUsuarioService>();
 builder.Services.AddScoped<RelatorioExcelService>();
 builder.Services.AddScoped<SpreadsheetExportService>();
 builder.Services.AddScoped<ExcelBackupService>();
@@ -197,6 +204,33 @@ app.Use(async (context, next) =>
     });
     await next();
 });
+
+// Modo de demonstração: cria o esquema a partir do modelo e define a senha do usuário de exemplo.
+if (app.Environment.IsEnvironment("Testing"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.EnsureCreatedAsync();
+    var testPassword = builder.Configuration["Testing:AdminPassword"];
+    if (!string.IsNullOrWhiteSpace(testPassword))
+    {
+        var testUser = await db.Usuarios.FirstOrDefaultAsync(user => user.NormalizedEmail == "JOAO@EMAIL.COM");
+        if (testUser is not null)
+        {
+            testUser.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>()
+                .HashPassword(testUser, testPassword);
+            testUser.Ativo = "S";
+            await db.SaveChangesAsync();
+        }
+    }
+}
+
+// Garante os eixos temáticos padrão (só insere os ausentes); sem eles os seletores de eixos ficam vazios.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await EixoCatalogo.EnsureCreatedAsync(db);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
