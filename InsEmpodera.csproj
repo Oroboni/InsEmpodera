@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>InsEmpodera-Local-Development</UserSecretsId>
-    <DefaultItemExcludes>$(DefaultItemExcludes);deploy/**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);deploy/**;TestResults/**;strix_runs/**;scripts/**;docs/**;.config/**;.github/**;.vs/**;.vscode/**;InsEmpodera.Tests/**;InsEmpodera.E2ETests/**;Frontend.Tests/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +35,10 @@
 
   <ItemGroup>
     <Content Remove="wwwroot/uploads/**" />
-    <None Include="wwwroot/uploads/**" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="wwwroot/uploads/**" />
+    <Content Update="appsettings.Development.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
+    <Content Update="dotnet-tools.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
+    <None Update=".config/dotnet-tools.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,5 +54,13 @@
     <Content Remove="Frontend.Tests\**" />
     <EmbeddedResource Remove="Frontend.Tests\**" />
     <None Remove="Frontend.Tests\**" />
+    <Compile Remove="TestResults\**\*.cs" />
+    <Content Remove="TestResults\**" />
+    <EmbeddedResource Remove="TestResults\**" />
+    <None Remove="TestResults\**" />
+    <Compile Remove="strix_runs\**\*.cs" />
+    <Content Remove="strix_runs\**" />
+    <EmbeddedResource Remove="strix_runs\**" />
+    <None Remove="strix_runs\**" />
   </ItemGroup>
 </Project>

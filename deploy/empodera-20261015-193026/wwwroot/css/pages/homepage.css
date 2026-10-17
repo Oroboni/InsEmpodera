@@ -1,0 +1,317 @@
+/* ============================================
+   ESTILOS MOBILE FIRST - TELA INICIAL
+   ============================================ */
+
+/* Logo - Mobile */
+#logo-empodera {
+    width: 60px;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Container do logo + textos - Mobile */
+.text-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Textos do logo - Mobile */
+#sistema-text {
+    font-family: var(--font-family-thin);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin: 0;
+}
+
+#lacos-text {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin: 0;
+}
+
+/* Cards de estatísticas - Mobile */
+.cards-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0 1rem;
+}
+
+.card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+}
+
+.card p {
+    font-size: var(--font-size-base);
+    margin-bottom: 1rem;
+    color: var(--color-text);
+    line-height: 1.4;
+}
+
+.card button {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-base);
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+    background-color: var(--color-secondary);
+}
+
+.card button:active {
+    transform: scale(0.98);
+}
+
+/* ============================================
+   MEDIA QUERIES - TABLET (768px ou mais)
+   ============================================ */
+@media screen and (min-width: 768px) {
+    .text-box {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    #logo-empodera {
+        width: 80px;
+    }
+
+    #sistema-text {
+        font-size: var(--font-size-2xl);
+    }
+
+    #lacos-text {
+        font-size: var(--font-size-3xl);
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        padding: 0 1.5rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .card h2 {
+        font-size: var(--font-size-3xl);
+    }
+
+    .card p {
+        font-size: var(--font-size-lg);
+    }
+
+    .card button {
+        width: auto;
+        padding: 0.75rem 2rem;
+    }
+}
+
+/* ============================================
+   MEDIA QUERIES - DESKTOP (1024px ou mais)
+   ============================================ */
+@media screen and (min-width: 1024px) {
+    .text-box {
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    #logo-empodera {
+        width: 100px;
+    }
+
+    #sistema-text {
+        font-size: var(--font-size-4xl);
+    }
+
+    #lacos-text {
+        font-size: var(--font-size-5xl);
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 2rem auto 0;
+        padding: 0 2rem;
+    }
+
+    .card {
+        padding: 2rem;
+    }
+
+    .card h2 {
+        font-size: var(--font-size-4xl);
+    }
+
+    .card p {
+        font-size: var(--font-size-xl);
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* ============================================
+   MEDIA QUERIES - DESKTOP GRANDE (1440px ou mais)
+   ============================================ */
+@media screen and (min-width: 1440px) {
+    .text-box {
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    #logo-empodera {
+        width: 120px;
+    }
+
+    #sistema-text {
+        font-size: var(--font-size-5xl);
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1400px;
+    }
+
+    .card {
+        padding: 2.5rem;
+    }
+
+    .card h2 {
+        font-size: var(--font-size-5xl);
+    }
+}
+
+/* ============================================
+   UTILITÁRIOS E MELHORIAS DE ACESSIBILIDADE
+   ============================================ */
+
+/* Foco visível para acessibilidade */
+.card button:focus-visible {
+    outline: 3px solid var(--color-secondary);
+    outline-offset: 2px;
+}
+
+/* Melhor contraste para texto */
+.card p {
+    color: var(--color-text);
+    opacity: 0.9;
+}
+
+/* Estados de carregamento (opcional) */
+.card.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.card.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Botão visual de exportação nas barras de busca */
+.search-container .btn-export {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 !important;
+    flex-shrink: 0;
+    background-color: #25a84a !important;
+    border: none !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 168, 74, 0.22);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.search-container .btn-export:hover {
+    background-color: #1e873d !important;
+    transform: translateY(-1px);
+}
+
+.search-container .btn-export i {
+    color: #fff !important;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Impressão */
+@media print {
+    .card button {
+        display: none;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        box-shadow: none;
+        break-inside: avoid;
+    }
+}

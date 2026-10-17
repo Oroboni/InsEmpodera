@@ -1,0 +1,207 @@
+/* Container para o switch e o texto */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; /* Adiciona algum espaço entre a barra de busca e o toggle */
+}
+
+.toggle-label {
+    font-size: 16px;
+    color: #444;
+    margin-left: 10px; /* Espaço entre o switch e o texto */
+    cursor: pointer;
+}
+
+/* Oculta o checkbox nativo */
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* O elemento slider (o fundo cinza/verde) */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px; /* Largura do switch */
+    height: 24px; /* Altura do switch */
+    flex-shrink: 0; /* Impede que ele encolha */
+}
+
+/* O 'slider' em si (a pista e o círculo) */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; /* Cor cinza para DESLIGADO (Inativos não incluídos) */
+    transition: 0.4s;
+}
+
+/* O círculo (o "thumb") */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; /* Altura do círculo */
+    width: 18px; /* Largura do círculo */
+    left: 3px; /* Posição inicial */
+    bottom: 3px;
+    background-color: white; /* Cor do círculo */
+    transition: 0.4s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Quando o checkbox é checado (LIGADO) */
+.toggle-switch input:checked + .slider {
+    background-color: #757575; /* Cor para LIGADO (Inativos incluídos) - Cinza escuro para simular sua imagem */
+}
+
+/* Movimenta o círculo para a direita quando LIGADO */
+.toggle-switch input:checked + .slider:before {
+    transform: translateX(24px
+    ); /* (Largura do switch - Largura do círculo - 2*left/right) -> 48px - 18px - 2*3px = 24px */
+}
+
+/* Arredonda o slider e o thumb */
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.ator-photo-placeholder {
+    width: 40px; /* Ajuste o tamanho conforme sua necessidade */
+    height: 40px;
+    border-radius: 50%; /* Torna a imagem circular */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    margin-right: 15px; /* Espaçamento entre a foto e o nome */
+}
+.ator-card {
+    display: flex;
+    align-items: center; /* Mantém o ícone centralizado verticalmente com o bloco Nome/Email */
+    /* MUDANÇA: Use space-between para empurrar o segundo item (o ícone) para a direita */
+    justify-content: space-between;
+}
+
+/* Ajusta o parágrafo de e-mail */
+.ator-card p {
+    margin: 0; /* Remove a margem padrão do parágrafo */
+    line-height: 1.2; /* Ajusta a altura da linha para o e-mail */
+    font-size: 14px; /* Opcional: E-mail ligeiramente menor */
+    color: #6c757d; /* Opcional: Cor mais suave para o e-mail */
+}
+
+/* Garante que o span do nome não tenha margem inferior */
+.ator-name2 {
+    margin-bottom: 2px;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: var(--font-family-primary);
+    color: #7a3188;
+}
+
+.container-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Button Eyes*/
+
+.btn-eye {
+    background-color: var(--color-primary-800);
+    color: var(--color-white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: var(--space-3);
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-eye:hover {
+    background-color: var(--color-primary-600);
+    transform: scale(1.05);
+}
+
+/* Contêiner para a barra de busca e o botão "+" */
+
+.usuarios-search-container {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+    
+}
+
+/* Barra de busca */
+
+.usuarios-search-bar {
+    flex-grow: 1;
+    /* Faz a barra ocupar o máximo de espaço */
+
+    position: relative;
+}
+
+.usuarios-search-bar input {
+    width: 100%;
+    background: #fff;
+    border-width: 0 0 4px 0;
+    border-color: var(--color-primary);
+    border-radius: 24px;
+    padding: 1.25rem 1rem;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    padding-right: 2.5rem;
+    box-sizing: border-box;
+}
+
+.usuarios-search-bar input::placeholder {
+    color: #9d9c9f;
+    /* Cor do placeholder "Busque por usuarios..." */
+
+    font-weight: 400;
+
+    font-style: italic;
+}
+
+.usuarios-search-bar input:focus {
+    outline: none;
+
+    border-color: #6a0dad;
+    /* Roxo principal ao focar */
+
+    box-shadow: 0 0 0 2px rgba(106, 29, 173, 0.2);
+}
+
+/* Ícone de lupa dentro da barra de busca */
+
+.usuarios-search-bar .search-icon {
+    position: absolute;
+
+    right: 20px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #6a0dad;
+    /* Roxo principal */
+
+    width: 20px;
+
+    height: 20px;
+}
+
+

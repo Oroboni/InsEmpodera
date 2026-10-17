@@ -58,6 +58,44 @@ namespace Empodera.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // MariaDB no Linux diferencia maiusculas de minusculas nos nomes das tabelas.
+            // O dump Banco.txt usa estes nomes em minusculas, portanto o mapeamento deve
+            // ser explicito em vez de depender do nome dos DbSets.
+            modelBuilder.Entity<Usuario>().ToTable("usuarios");
+            modelBuilder.Entity<Perfil>().ToTable("perfis");
+            modelBuilder.Entity<Permissoes>().ToTable("permissoes");
+            modelBuilder.Entity<Comunidade>().ToTable("comunidades");
+            modelBuilder.Entity<Atores>().ToTable("atores");
+            modelBuilder.Entity<RedeRecursos>().ToTable("rederecursos");
+            modelBuilder.Entity<Eixo>().ToTable("eixos");
+            modelBuilder.Entity<RedeEixo>().ToTable("redeeixos");
+            modelBuilder.Entity<AtorComunidade>().ToTable("atorcomunidades");
+            modelBuilder.Entity<DiarioCampo>().ToTable("diarioscampo");
+            modelBuilder.Entity<DiarioAcoes>().ToTable("diarioacoes");
+            modelBuilder.Entity<DiarioDAcoes>().ToTable("diariodacoes");
+            modelBuilder.Entity<DetalhesDAcoes>().ToTable("detalhesdacoes");
+            modelBuilder.Entity<DetalhesEixos>().ToTable("detalheseixos");
+            modelBuilder.Entity<DAAtores>().ToTable("daatores");
+            modelBuilder.Entity<DiarioEixo>().ToTable("diarioeixos");
+            modelBuilder.Entity<Acoes>().ToTable("acoes");
+            modelBuilder.Entity<AcoesAtores>().ToTable("acoesatores");
+            modelBuilder.Entity<AnexosDiario>().ToTable("anexosdiario");
+            modelBuilder.Entity<Vulnerabilidade>().ToTable("vulnerabilidades");
+            modelBuilder.Entity<VulnerabilidadesEixo>().ToTable("vulnerabilidadeseixo");
+            modelBuilder.Entity<RedePrimaria>().ToTable("redesprimarias");
+            modelBuilder.Entity<AvaliacaoPessoal>().ToTable("avaliacaopessoal");
+            modelBuilder.Entity<FichaPrimeiroContato>().ToTable("fichasprimeirocontato");
+            modelBuilder.Entity<FonteInf>().ToTable("fontesinfo");
+            modelBuilder.Entity<FichaCondicoes>().ToTable("fichacondicoes");
+            modelBuilder.Entity<FichaPeticoes>().ToTable("fichapeticoes");
+            modelBuilder.Entity<FichaResp>().ToTable("ficharespostas");
+            modelBuilder.Entity<FichaResult>().ToTable("ficharesultados");
+            modelBuilder.Entity<Atividades>().ToTable("atividades");
+            modelBuilder.Entity<AtividadesEixo>().ToTable("atividadeseixo");
+            modelBuilder.Entity<RecursosAtores>().ToTable("recursosatores");
+            modelBuilder.Entity<DiarioProcessoPessoal>().ToTable("diariosprocessopessoal");
+            modelBuilder.Entity<DiarioProcessoEixo>().ToTable("diariosprocessoeixos");
+
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
             modelBuilder.Entity<Usuario>().Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
             modelBuilder.Entity<Usuario>().HasIndex(u => u.NormalizedUserName).IsUnique();
@@ -95,8 +133,6 @@ namespace Empodera.Data
             modelBuilder.Entity<RecursosAtores>().HasKey(ra => ra.Id_Recursos_Atores);
             modelBuilder.Entity<DiarioProcessoPessoal>().HasKey(d => d.IdDiarioProcesso);
             modelBuilder.Entity<DiarioProcessoEixo>().HasKey(d => d.IdDiarioProcessoEixo);
-            modelBuilder.Entity<DiarioProcessoPessoal>().ToTable("diariosprocessopessoal");
-            modelBuilder.Entity<DiarioProcessoEixo>().ToTable("diariosprocessoeixos");
             modelBuilder.Entity<DiarioProcessoEixo>()
                 .HasIndex(d => new { d.FkIdDiarioProcesso, d.FkIdEixo })
                 .IsUnique();
