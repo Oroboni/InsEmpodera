@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Remove="InsEmpodera.Tests\**\*.cs" />
     <Compile Remove="scripts\ForeignKey.Tests\**\*.cs" />
+    <Compile Remove="scripts\PkBenchmark\**\*.cs" />
     <Content Remove="InsEmpodera.Tests\**" />
     <EmbeddedResource Remove="InsEmpodera.Tests\**" />
     <None Remove="InsEmpodera.Tests\**" />
