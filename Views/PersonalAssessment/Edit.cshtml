@@ -7,9 +7,9 @@
 
 @section Styles {
 
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" asp-append-version="true" />
 }
 
 <form asp-controller="PersonalAssessment" asp-action="Edit" asp-route-id="@Model.IdAvaliacao" method="post" class="main-form">
@@ -105,7 +105,7 @@
         </div>
 
         <!-- Informações do Sistema -->
-        @if (Model.IdAvaliacao > 0)
+        @if (Model.IdAvaliacao != Guid.Empty)
         {
             <div class="purple-divider"></div>
             <div class="section-label">Informações do Sistema</div>
@@ -162,7 +162,7 @@
                     <i class="fa-solid fa-edit"></i> Editar
                 </button>
 
-                @if (Model.IdAvaliacao > 0)
+                @if (Model.IdAvaliacao != Guid.Empty)
                 {
                     <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
                         <i class="fa-solid fa-trash"></i> Deletar
@@ -174,7 +174,7 @@
 </form>
 
 <!-- Modal de Confirmação de Exclusão -->
-@if (Model.IdAvaliacao > 0)
+@if (Model.IdAvaliacao != Guid.Empty)
 {
     <div class="modal-overlay" id="deleteConfirmationModal">
         <div class="modal-content">
@@ -205,7 +205,7 @@
 }
 
 @section Scripts {
-    <script src="~/js/personal-assessment.js"></script>
+    <script src="~/js/personal-assessment.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('.main-form');

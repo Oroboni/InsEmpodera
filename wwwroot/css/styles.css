@@ -1,8 +1,8 @@
 /* --- Configurações Globais e Variáveis de Cor --- */
 :root {
-    --cor-fundo: #7C4288;
-    --cor-painel-info: #7C4288;
-    --cor-destaque: #6BC0B7;
+    --cor-fundo: var(--color-primary);
+    --cor-painel-info: var(--color-primary);
+    --cor-destaque: var(--color-secondary);
     --cor-texto-claro: #FFFFFF;
     --cor-texto-escuro: #333333;
     --cor-texto-placeholder: #A0AEC0;
@@ -27,104 +27,236 @@ body {
     overflow: hidden;
 }
 
+/* ===== SELETOR DE IDIOMA (login) =====
+   Botão translúcido sobre o fundo da marca + menu em cartão. */
 .login-language-switcher {
     position: fixed;
     top: 20px;
     right: 24px;
     z-index: 10;
-    color: var(--cor-texto-escuro);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
 
 .login-language-switcher summary {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    padding: 9px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.65);
-    border-radius: 22px;
-    background: #fff;
-    box-shadow: 0 8px 24px var(--cor-sombra);
+    gap: 9px;
+    height: 44px;
+    padding: 0 14px 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     list-style: none;
+    font-size: 0.9rem;
     font-weight: 600;
-    transition: transform 160ms ease, box-shadow 160ms ease;
+    user-select: none;
+    transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
 
 .login-language-switcher summary::-webkit-details-marker {
     display: none;
 }
 
+.login-language-switcher summary:hover,
+.login-language-switcher[open] summary {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
 .login-language-switcher summary:focus-visible,
 .login-language-menu button:focus-visible {
-    outline: 3px solid var(--cor-destaque);
+    outline: 3px solid rgba(255, 255, 255, 0.7);
     outline-offset: 2px;
 }
 
-.login-language-switcher summary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 28px var(--cor-sombra);
+.login-language-switcher svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.login-language-switcher[open] summary span:last-child {
+.login-language-globe {
+    width: 18px;
+    height: 18px;
+    opacity: 0.9;
+}
+
+.login-language-code {
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--color-primary-800);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.login-language-chevron {
+    width: 16px;
+    height: 16px;
+    transition: transform 160ms ease;
+}
+
+/* Mesmo tamanho para qualquer idioma: largura fixa e o nome ocupa o espaço restante. */
+.login-language-switcher summary {
+    width: 200px;
+    box-sizing: border-box;
+}
+
+.login-language-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.login-language-switcher[open] .login-language-chevron {
     transform: rotate(180deg);
 }
 
 .login-language-menu {
-    width: max-content;
-    min-width: 205px;
-    margin-top: 8px;
-    margin-left: auto;
-    padding: 6px;
-    border-radius: 14px;
+    position: absolute;
+    right: 0;
+    width: 270px;
+    margin-top: 10px;
+    padding: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 18px;
     background: #fff;
-    box-shadow: 0 12px 30px var(--cor-sombra);
-    animation: language-menu-in 140ms ease-out;
+    color: var(--cor-texto-escuro, #333);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+    transform-origin: top right;
+    animation: language-menu-in 150ms ease-out;
 }
 
 @keyframes language-menu-in {
-    from { opacity: 0; transform: translateY(-5px) scale(0.98); }
+    from { opacity: 0; transform: translateY(-6px) scale(0.97); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+.login-language-title {
+    margin: 4px 10px 8px;
+    color: #64748b;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.login-language-menu form {
+    margin: 0;
+}
+
 .login-language-menu button {
-    display: flex;
+    display: grid;
+    grid-template-columns: 36px 1fr 22px;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
-    min-height: 40px;
-    padding: 8px 12px;
-    border: 0;
-    border-radius: 9px;
+    padding: 9px 10px;
+    border: 1px solid transparent;
+    border-radius: 12px;
     background: transparent;
-    color: var(--cor-texto-escuro);
+    color: inherit;
     cursor: pointer;
     font: inherit;
     text-align: left;
+    transition: background-color 140ms ease, border-color 140ms ease;
 }
 
 .login-language-menu button:hover {
-    background: var(--cor-fundo-input);
-    color: var(--cor-painel-info);
+    background: var(--color-primary-50, #f3f4f6);
 }
 
-.login-language-menu button.is-active {
-    background: rgba(107, 192, 183, 0.15);
-    color: var(--cor-painel-info);
+.login-language-option-code {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.login-language-option-text strong {
+    display: block;
+    color: #1e293b;
+    font-size: 0.9rem;
     font-weight: 600;
 }
 
+.login-language-option-text small {
+    display: block;
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
 .language-selected-mark {
-    color: #3b938a;
-    font-size: 1rem;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    color: transparent;
+}
+
+.language-selected-mark svg {
+    width: 12px;
+    height: 12px;
+    stroke-width: 3;
+}
+
+.login-language-menu button.is-active {
+    border-color: var(--color-primary-200, #c7d2fe);
+    background: var(--color-primary-50, #f3f4f6);
+}
+
+.login-language-menu button.is-active .login-language-option-code {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.login-language-menu button.is-active .language-selected-mark {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .login-language-switcher summary,
-    .login-language-menu {
+    .login-language-menu,
+    .login-language-chevron {
         animation: none;
         transition: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-language-name {
+        display: none;
+    }
+
+    .login-language-switcher summary {
+        width: auto;
+    }
+
+    .login-language-menu {
+        width: min(270px, calc(100vw - 24px));
     }
 }
 
@@ -373,7 +505,7 @@ input[type="checkbox"] {
 }
 
 .login-button:hover {
-    background-color: #5BA8A0;
+    background-color: var(--color-secondary-dark);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(107, 192, 183, 0.3);
 }
@@ -421,10 +553,6 @@ input[type="checkbox"] {
     .login-language-switcher {
         top: 12px;
         right: 12px;
-    }
-
-    .login-language-switcher summary {
-        padding: 8px 11px;
     }
 
     .container-geral {

@@ -650,4 +650,32 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_aff4a93487ceb273' xml:space='preserve'>
+    <value>Participantes</value>
+    <comment>Source: Participantes</comment>
+  </data>
+  <data name='Ui_602ef905b318f969' xml:space='preserve'>
+    <value>+ Adicionar ator</value>
+    <comment>Source: + Adicionar ator</comment>
+  </data>
+  <data name='Ui_d60a9b28bcfa6bd0' xml:space='preserve'>
+    <value>Digite o endereço completo...</value>
+    <comment>Source: Digite o endereço completo...</comment>
+  </data>
+  <data name='Ui_83204379808320f1' xml:space='preserve'>
+    <value>Adicionar participante</value>
+    <comment>Source: Adicionar participante</comment>
+  </data>
+  <data name='Ui_00dc6190ecb0086f' xml:space='preserve'>
+    <value>Registros na comunidade</value>
+    <comment>Source: Registros na comunidade</comment>
+  </data>
+  <data name='Ui_6b3aec840894e495' xml:space='preserve'>
+    <value>Últimos 30 dias</value>
+    <comment>Source: Últimos 30 dias</comment>
+  </data>
+  <data name='Ui_984b0d50a50745f1' xml:space='preserve'>
+    <value>Último registro</value>
+    <comment>Source: Último registro</comment>
+  </data>
 </root>

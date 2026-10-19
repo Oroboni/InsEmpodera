@@ -61,7 +61,7 @@
 .section-1 li {
     display: flex;
     flex: 1;
-    margin: 1px var(--space-3);
+    margin: 1px 0 1px var(--space-3);
 
     min-height: 40px;
     max-height: 60px;
@@ -78,9 +78,10 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    margin: 0 -15px 0 0;
+    margin: 0;
     padding: 0 var(--space-4);
     border: 0;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
     background: transparent;
     color: inherit;
     font: inherit;
@@ -104,14 +105,13 @@
 
 .section-1 li:hover .sidebar-logout-button {
     background-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(4px);
 }
 .section-1 li a {
     display: flex;
     align-items: center;
     width: 100%;
     height: 100%;
-    margin-right: -15px;
+    margin-right: 0;
     padding: 0 var(--space-4);
     text-decoration: none;
     color: var(--color-gray-100);
@@ -136,19 +136,21 @@
 /* === ESTADOS DO MENU === */
 .section-1 li:hover a {
     background-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(4px);
 }
 
-.section-1 li.active a {
+/* Item ativo como "aba": encosta na borda direita e usa a cor do fundo da página,
+   continuando visualmente para dentro da área de conteúdo. */
+.section-1 li.active a,
+.section-1 li.active:hover a {
     background-color: var(--color-gray-300);
     color: var(--color-primary-600);
-    font-weight: var(--font-weight-semibold);
-    box-shadow: var(--shadow-sm);
+    font-weight: var(--font-weight-bold);
+    box-shadow: none;
+    transform: none;
 }
 
-.section-1 li.active:hover a {
-    background-color: var(--color-gray-200);
-    transform: translateX(4px);
+.section-1 li.active a i {
+    color: var(--color-primary-600);
 }
 
 /* === SECTION 2 - CONTEÚDO PRINCIPAL === */
@@ -159,7 +161,9 @@
     padding: var(--space-8);
     box-sizing: border-box;
     min-height: 100vh;
-    overflow-y: auto;
+    /* A página rola no documento; clip evita criar um contexto de rolagem que
+       impediria os rodapés fixos (position: sticky) dos formulários. */
+    overflow-x: clip;
 }
 
 /* === RESPONSIVIDADE === */
@@ -182,7 +186,7 @@
     }
 
     .section-1 li {
-        margin: var(--space-1) var(--space-3);
+        margin: var(--space-1) 0 var(--space-1) var(--space-3);
     }
 
     .section-1 li a p {
@@ -224,7 +228,7 @@
     }
 
     .section-1 li {
-        margin: 0.125rem var(--space-3);
+        margin: 0.125rem 0 0.125rem var(--space-3);
     }
 
     .section-1 li a {
@@ -349,7 +353,26 @@ overflow: hidden;
         background: none;
         border: none;
         font-size: 1.5rem;
-        color: var(--color-primary-600, #4a148c);
+        color: var(--color-primary-600, var(--color-primary-dark));
         cursor: pointer;
     }
+}
+/* ===== Usuário conectado (foto + saudação) ===== */
+.section-1 > h2.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.sidebar-avatar {
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-user-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

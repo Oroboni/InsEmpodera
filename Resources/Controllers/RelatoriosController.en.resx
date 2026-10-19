@@ -836,4 +836,24 @@
     <value>Nominatim suggestion failed:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_f0c8de7f8bd079e8' xml:space='preserve'>
+    <value>LOAD REPORT</value>
+    <comment>Source: CARREGAR RELATÓRIO</comment>
+  </data>
+  <data name='Ui_3325b04628db8bbd' xml:space='preserve'>
+    <value>To</value>
+    <comment>Source: Até</comment>
+  </data>
+  <data name='Ui_a64ce3c89fb42335' xml:space='preserve'>
+    <value>CLEAR</value>
+    <comment>Source: LIMPAR</comment>
+  </data>
+  <data name='Ui_7649c86e09f4743b' xml:space='preserve'>
+    <value>APPLY FILTERS</value>
+    <comment>Source: APLICAR FILTROS</comment>
+  </data>
+  <data name='Ui_8f90498b0f557145' xml:space='preserve'>
+    <value>to view the recorded actions.</value>
+    <comment>Source: para consultar as ações registradas.</comment>
+  </data>
 </root>

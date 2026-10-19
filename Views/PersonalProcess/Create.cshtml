@@ -1,88 +1,37 @@
 @model Empodera.Models.DiarioProcessoPessoal
-@using Empodera.Models
 @{
     ViewData["Title"] = "Adicionar Diário Pessoal";
     Layout = "_Layout";
-    var selectedEixos = (HashSet<int>)(ViewBag.SelectedEixos ?? new HashSet<int>());
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/activity-form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/personal-process.css" asp-append-version="true" />
 }
 
-<div class="container">
-    <div class="breadcrumb">
-        <h1><a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores">Diário de Processo Pessoal</a> &gt; <strong>Adicionar</strong></h1>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" asp-route-atorId="@(Model.FK_id_Atores == Guid.Empty ? null : Model.FK_id_Atores)" class="text-primary">Diário de Processo Pessoal</a>
+            <span class="separator">&gt;</span>
+            <strong class="text-muted">Novo Registro</strong>
+        </h2>
     </div>
 
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" class="main-form">
         @Html.AntiForgeryToken()
-        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-        <div class="form-group">
-            <label asp-for="FK_id_Atores">Ator <span class="text-danger">*</span></label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <select asp-for="FK_id_Atores" class="form-control" asp-items="ViewBag.AtorList" required>
-                    <option value="">Selecione um ator</option>
-                </select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
-            </div>
-            <span asp-validation-for="FK_id_Atores" class="text-danger"></span>
-        </div>
+        <partial name="_CamposDiario" />
 
-        <div class="form-group">
-            <label asp-for="Data">Data <span class="text-danger">*</span></label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-calendar-day"></i>
-                <input asp-for="Data" type="date" required />
-            </div>
-            <span asp-validation-for="Data" class="text-danger"></span>
-        </div>
-
-        <div class="form-group" data-axis-picker>
-            <label>Eixos</label>
-            <div class="eixos-tag-container" data-axis-tags></div>
-            <details class="multiselect-wrapper">
-                <summary>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-tags"></i>
-                        <span class="multiselect-placeholder">Selecione os eixos</span>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </summary>
-                <div class="multiselect-panel">
-                    <ul>
-                        @foreach (var eixo in (IEnumerable<Eixo>)ViewBag.EixosList)
-                        {
-                            <li>
-                                <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo" data-tag-name="@eixo.Nome"
-                                       checked="@selectedEixos.Contains(eixo.IdEixo)" />
-                                <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </details>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Descricao">Descrição <span class="text-danger">*</span></label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-align-left" style="top:15px;transform:none"></i>
-                <textarea asp-for="Descricao" maxlength="4000" data-actor-mentions
-                          aria-describedby="actor-mention-help" aria-controls="actor-mention-list"
-                          placeholder="Descreva o processo... Digite @@ para mencionar um ator" required></textarea>
-            </div>
-            <small id="actor-mention-help">Digite @@ e escolha um ator. A menção será clicável na leitura do diário.</small>
-            <ul id="actor-mention-list" class="actor-mention-list" role="listbox" hidden></ul>
-            <span asp-validation-for="Descricao" class="text-danger"></span>
-        </div>
-
-        <div class="form-buttons">
-            <a asp-action="Index" asp-route-atorId="@Model.FK_id_Atores" class="btn btn-secondary">CANCELAR</a>
-            <button type="submit" class="btn-full-width">ADICIONAR DIÁRIO</button>
+        <div class="buttons-container">
+            <a asp-action="Index" asp-route-atorId="@(Model.FK_id_Atores == Guid.Empty ? null : Model.FK_id_Atores)" class="wizard-btn btn-prev">
+                <i class="fa-solid fa-arrow-left"></i> Cancelar
+            </a>
+            <button type="submit" class="wizard-btn btn-next">
+                <i class="fa-solid fa-check"></i> Adicionar Registro
+            </button>
         </div>
     </form>
 </div>

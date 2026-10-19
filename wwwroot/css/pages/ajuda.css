@@ -94,3 +94,55 @@
     .help-hero > i { display: none; }
     .help-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== Complementos: busca, módulos, fluxo, suporte ===== */
+.help-hero-meta { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.help-hero-meta span {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .35rem .8rem; border: 1px solid rgba(255, 255, 255, .3); border-radius: 999px;
+    background: rgba(255, 255, 255, .13); font-size: .8rem; font-weight: 600;
+}
+
+.help-search { position: relative; margin-top: 1.5rem; }
+.help-search > i { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--color-primary); }
+.help-search input {
+    width: 100%; height: 58px; padding: 0 1.2rem 0 3.2rem;
+    border: 1px solid var(--color-gray-200); border-radius: 18px; background: white;
+    color: var(--color-gray-800); font: inherit; box-shadow: var(--shadow-sm);
+}
+.help-search input:focus { outline: none; border-color: var(--color-primary-400); box-shadow: 0 0 0 3px var(--color-primary-100); }
+.help-search-empty { margin: .8rem 0 0; color: var(--color-gray-600); }
+
+.help-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.help-steps {
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem;
+    margin: 1rem 0 0; padding: 0; list-style: none; counter-reset: etapa;
+}
+.help-steps li {
+    counter-increment: etapa; padding: 1.1rem; border: 1px solid var(--color-gray-200);
+    border-radius: 18px; background: white; box-shadow: var(--shadow-sm);
+}
+.help-steps li::before {
+    content: counter(etapa); display: grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: .6rem;
+    border-radius: 50%; background: linear-gradient(135deg, var(--color-primary-800), var(--color-primary-500));
+    color: white; font-weight: 700;
+}
+.help-steps strong { display: block; color: var(--color-primary-800); }
+.help-steps span { display: block; margin-top: .3rem; color: var(--color-gray-600); font-size: .88rem; line-height: 1.5; }
+
+.help-bottom { margin-top: 2rem; }
+.help-card-static:hover { transform: none; border-color: var(--color-gray-200); box-shadow: var(--shadow-sm); }
+.help-card-static span { line-height: 1.6; color: var(--color-gray-700); }
+.help-card-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: .6rem; color: var(--color-primary); font-weight: 700; text-decoration: none; }
+.help-card-link:hover { text-decoration: underline; }
+
+[data-help-section][hidden], [data-help-item][hidden] { display: none !important; }
+
+@media (max-width: 1000px) {
+    .help-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .help-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+    .help-grid-3, .help-steps { grid-template-columns: 1fr; }
+}

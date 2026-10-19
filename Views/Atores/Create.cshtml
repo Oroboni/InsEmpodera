@@ -1,12 +1,13 @@
 @model Empodera.Models.Atores
 @{
+    var emJanela = ViewBag.Retorno as string == "janela";
     ViewData["Title"] = "Adicionar Novo Ator";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="@Url.Content("~/css/pages/fichaprimeirocontato.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/css/pages/atores.css")" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
@@ -20,6 +21,14 @@
 
     <form asp-action="Create" method="post" data-testid="actor-create-form">
         <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+        @if (emJanela)
+        {
+            <input type="hidden" name="retorno" value="janela" />
+            <div class="cadastro-janela-aviso" role="note">
+                <i class="fa-solid fa-circle-info"></i>
+                Ao salvar, esta janela fecha e o ator aparece selecionado na rede que você estava preenchendo.
+            </div>
+        }
         <div class="section-label">Informações Básicas</div>
 
         <div class="input-card full-width">
@@ -41,20 +50,17 @@
             </div>
         </div>
 
-        <div class="input-card full-width">
-            <div class="icon-box purple"><i class="fa-solid fa-heart"></i></div>
-            <div class="input-content">
-                <label for="tipoRelacionamento">Tipo de relacionamento</label>
-                <select id="tipoRelacionamento" name="tipoRelacionamento" class="clean-input">
-                    <option value="">Selecione um tipo</option>
-                    <option value="1">Amigo</option>
-                    <option value="2">Colega de trabalho</option>
-                    <option value="3">Conhecido</option>
-                    <option value="4">Familiar</option>
-                    <option value="5">Vizinho</option>
-                </select>
-            </div>
+        <div class="redes-botoes">
+            <button type="button" class="wizard-btn btn-next" data-rede-abrir="Primaria" data-testid="btn-rede-primaria">
+                <i class="fa-solid fa-people-roof"></i> Rede Primária
+                <span class="redes-contador" data-rede-contador="Primaria" hidden></span>
+            </button>
+            <button type="button" class="wizard-btn btn-next" data-rede-abrir="Subjetiva" data-testid="btn-rede-subjetiva">
+                <i class="fa-solid fa-diagram-project"></i> Rede Subjetiva
+                <span class="redes-contador" data-rede-contador="Subjetiva" hidden></span>
+            </button>
         </div>
+        <div data-redes-campos></div>
 
         <div class="purple-divider"></div>
         <div class="section-label">Recursos e Vulnerabilidades</div>
@@ -216,18 +222,29 @@
         </div>
 
         <div class="input-card full-width">
-            <div class="icon-box purple"><i class="fa-solid fa-phone"></i></div>
+            <div class="icon-box purple"><i class="fa-solid fa-lightbulb"></i></div>
             <div class="input-content">
-                <label for="inputTelefone">Telefone</label>
-                <input id="inputTelefone" name="telefone" type="tel" class="clean-input"
-                    maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" />
+                <label for="inputInteresse">Interesse</label>
+                <input id="inputInteresse" name="interesse" type="text" class="clean-input"
+                    placeholder="Digite o interesse do ator" />
             </div>
         </div>
 
+        <partial name="_CampoTelefone" model="Model.Telefone" />
+
         <div class="buttons-container">
-            <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
-                <i class="fa-solid fa-arrow-left"></i> Cancelar
-            </a>
+            @if (emJanela)
+            {
+                <button type="button" class="wizard-btn btn-prev" onclick="window.close()">
+                    <i class="fa-solid fa-xmark"></i> Cancelar
+                </button>
+            }
+            else
+            {
+                <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
+                    <i class="fa-solid fa-arrow-left"></i> Cancelar
+                </a>
+            }
             <button type="submit" class="wizard-btn btn-next" data-testid="actor-create-submit">
                 <i class="fa-solid fa-check"></i> Adicionar Ator
             </button>
@@ -235,9 +252,13 @@
     </form>
 </div>
 
+<partial name="_RedesModais" />
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/atores-telefone.js" asp-append-version="true"></script>
+        <script src="~/js/atores-redes.js" asp-append-version="true"></script>
     }
 }

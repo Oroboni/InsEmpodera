@@ -74,6 +74,7 @@ CREATE TABLE `Atores` (
     `Idade` int NULL,
     `PapelSocial1` longtext CHARACTER SET utf8mb4 NULL,
     `PapelSocial2` longtext CHARACTER SET utf8mb4 NULL,
+    `interesse` longtext CHARACTER SET utf8mb4 NULL,
     `Telefone` longtext CHARACTER SET utf8mb4 NULL,
     `DaEquipe` tinyint(1) NOT NULL,
     `Rope` tinyint(1) NOT NULL,
@@ -165,6 +166,7 @@ CREATE TABLE `RedesPrimarias` (
     `FkIdAtorPrincipal` int NOT NULL,
     `FkIdAtorRelacionados` int NOT NULL,
     `TipoRelacao` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `TipoRede` varchar(20) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'Primaria',
     CONSTRAINT `PK_RedesPrimarias` PRIMARY KEY (`IdRedePrimaria`),
     CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorPrincipal` FOREIGN KEY (`FkIdAtorPrincipal`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT,
     CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorRelacionados` FOREIGN KEY (`FkIdAtorRelacionados`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT
@@ -387,6 +389,7 @@ CREATE TABLE `FontesInfo` (
     `Idade` int NOT NULL,
     `PapelSocial1` longtext CHARACTER SET utf8mb4 NOT NULL,
     `PapelSocial2` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Interesse` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Telefone` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Extra` longtext CHARACTER SET utf8mb4 NOT NULL,
     `Fk_Id_Ator` int NOT NULL,

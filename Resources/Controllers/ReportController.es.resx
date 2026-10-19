@@ -208,4 +208,344 @@
     <value>La sugerencia de nominatim falló:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_f150afd3c5994d18' xml:space='preserve'>
+    <value>Sistema</value>
+    <comment>Source: Sistema</comment>
+  </data>
+  <data name='Ui_46332f9d834ef8dd' xml:space='preserve'>
+    <value>Descripción</value>
+    <comment>Source: Descrição</comment>
+  </data>
+  <data name='Ui_15116ba377896771' xml:space='preserve'>
+    <value>Versión</value>
+    <comment>Source: Versão</comment>
+  </data>
+  <data name='Ui_0d2b7ca65666383e' xml:space='preserve'>
+    <value>Entorno</value>
+    <comment>Source: Ambiente</comment>
+  </data>
+  <data name='Ui_d481d734900c8eb7' xml:space='preserve'>
+    <value>Organización</value>
+    <comment>Source: Organização</comment>
+  </data>
+  <data name='Ui_96eb91870f2cec1c' xml:space='preserve'>
+    <value>Sistema de Tratamiento Comunitario ECO2</value>
+    <comment>Source: Sistema de Tratamento Comunitário ECO2</comment>
+  </data>
+  <data name='Ui_7d9aaa875a9e6516' xml:space='preserve'>
+    <value>Demostración</value>
+    <comment>Source: Demonstração</comment>
+  </data>
+  <data name='Ui_ccb244688314d11b' xml:space='preserve'>
+    <value>Producción</value>
+    <comment>Source: Produção</comment>
+  </data>
+  <data name='Ui_c36c2f69fb8b507f' xml:space='preserve'>
+    <value>Desarrollo</value>
+    <comment>Source: Desenvolvimento</comment>
+  </data>
+  <data name='Ui_5895b95d5e62ffd3' xml:space='preserve'>
+    <value>Centro de Ayuda</value>
+    <comment>Source: Central de Ajuda</comment>
+  </data>
+  <data name='Ui_2ebab86719d08d70' xml:space='preserve'>
+    <value>Datos y Copia de seguridad</value>
+    <comment>Source: Dados e Backup</comment>
+  </data>
+  <data name='Ui_53ca1f2fb6996d25' xml:space='preserve'>
+    <value>Exporta hojas de cálculo para análisis, genera la copia de seguridad completa del sistema y restaura datos desde una copia.</value>
+    <comment>Source: Exporte planilhas para análise, gere o backup geral do sistema e restaure dados a partir de um backup.</comment>
+  </data>
+  <data name='Ui_b0b9cdf98b0d2040' xml:space='preserve'>
+    <value>Formato XLSX</value>
+    <comment>Source: Formato XLSX</comment>
+  </data>
+  <data name='Ui_d4ef134a3f884ef3' xml:space='preserve'>
+    <value>Perfil:</value>
+    <comment>Source: Perfil:</comment>
+  </data>
+  <data name='Ui_d7566e26be995a07' xml:space='preserve'>
+    <value>Acceso controlado por perfil</value>
+    <comment>Source: Acesso controlado por perfil</comment>
+  </data>
+  <data name='Ui_70387585d92db4fb' xml:space='preserve'>
+    <value>Inventario de datos</value>
+    <comment>Source: Inventário de dados</comment>
+  </data>
+  <data name='Ui_8d0bc92e603ac7e7' xml:space='preserve'>
+    <value>Comunidades</value>
+    <comment>Source: Comunidades</comment>
+  </data>
+  <data name='Ui_68148f2f667cdefb' xml:space='preserve'>
+    <value>Actores</value>
+    <comment>Source: Atores</comment>
+  </data>
+  <data name='Ui_6fbbda17207ff812' xml:space='preserve'>
+    <value>Diarios de campo</value>
+    <comment>Source: Diários de campo</comment>
+  </data>
+  <data name='Ui_799a56f648559db8' xml:space='preserve'>
+    <value>Fichas de primer contacto</value>
+    <comment>Source: Fichas de 1º contato</comment>
+  </data>
+  <data name='Ui_55e7a18ecab74b9d' xml:space='preserve'>
+    <value>Evaluaciones personales</value>
+    <comment>Source: Avaliações pessoais</comment>
+  </data>
+  <data name='Ui_f352a7dba6d9ae0a' xml:space='preserve'>
+    <value>Usuarios activos</value>
+    <comment>Source: Usuários ativos</comment>
+  </data>
+  <data name='Ui_90be267065083b66' xml:space='preserve'>
+    <value>Exportaciones por módulo</value>
+    <comment>Source: Exportações por módulo</comment>
+  </data>
+  <data name='Ui_9447602b1b11c2d1' xml:space='preserve'>
+    <value>Hojas XLSX con IDs, claves y tablas de relación, listas para análisis.</value>
+    <comment>Source: Planilhas XLSX com IDs, chaves e tabelas de relacionamento, prontas para análise.</comment>
+  </data>
+  <data name='Ui_2da7526b86e3aaa3' xml:space='preserve'>
+    <value>Comunidad completa</value>
+    <comment>Source: Comunidade completa</comment>
+  </data>
+  <data name='Ui_a956eae40003ab3b' xml:space='preserve'>
+    <value>Por comunidad</value>
+    <comment>Source: Por comunidade</comment>
+  </data>
+  <data name='Ui_db90cd79bbd38a67' xml:space='preserve'>
+    <value>Actores, actividades, recursos, vulnerabilidades, diarios, fichas y todas las tablas de vínculo.</value>
+    <comment>Source: Atores, atividades, recursos, vulnerabilidades, diários, fichas e todas as tabelas de vínculo.</comment>
+  </data>
+  <data name='Ui_255ac3041e6c3427' xml:space='preserve'>
+    <value>Seleccione la comunidad</value>
+    <comment>Source: Selecione a comunidade</comment>
+  </data>
+  <data name='Ui_292f20ee64bce44a' xml:space='preserve'>
+    <value>Exportar</value>
+    <comment>Source: Exportar</comment>
+  </data>
+  <data name='Ui_110625e08461f662' xml:space='preserve'>
+    <value>Actores de la comunidad</value>
+    <comment>Source: Atores da comunidade</comment>
+  </data>
+  <data name='Ui_c142eed1fce9e97c' xml:space='preserve'>
+    <value>Actores vinculados, recursos agregados, evaluaciones y vínculos con la comunidad.</value>
+    <comment>Source: Atores vinculados, recursos agregados, avaliações e vínculos com a comunidade.</comment>
+  </data>
+  <data name='Ui_6476f132b397b090' xml:space='preserve'>
+    <value>Todos los actores</value>
+    <comment>Source: Todos os atores</comment>
+  </data>
+  <data name='Ui_2130a3b5e09e419f' xml:space='preserve'>
+    <value>General</value>
+    <comment>Source: Geral</comment>
+  </data>
+  <data name='Ui_25a8d54dd433f1d7' xml:space='preserve'>
+    <value>Registro, comunidades, recursos, evaluaciones y redes primarias.</value>
+    <comment>Source: Cadastro, comunidades, recursos, avaliações e redes primárias.</comment>
+  </data>
+  <data name='Ui_aeb265081f1edc7d' xml:space='preserve'>
+    <value>Descargar XLSX</value>
+    <comment>Source: Baixar XLSX</comment>
+  </data>
+  <data name='Ui_b946a5d992091496' xml:space='preserve'>
+    <value>Registros, ejes, acciones, actores de las acciones y anexos.</value>
+    <comment>Source: Registros, eixos, ações, atores das ações e anexos.</comment>
+  </data>
+  <data name='Ui_d86c206fb4766aae' xml:space='preserve'>
+    <value>Fichas de primer contacto</value>
+    <comment>Source: Fichas de primeiro contato</comment>
+  </data>
+  <data name='Ui_7e458dc8b7fcf76b' xml:space='preserve'>
+    <value>Fichas y registros de condiciones, peticiones, respuestas y resultados.</value>
+    <comment>Source: Fichas e registros de condições, petições, respostas e resultados.</comment>
+  </data>
+  <data name='Ui_8995af2f429ac612' xml:space='preserve'>
+    <value>Copia de seguridad completa del sistema</value>
+    <comment>Source: Backup geral do sistema</comment>
+  </data>
+  <data name='Ui_7b9cb48a49a549b8' xml:space='preserve'>
+    <value>Copia completa de la base de datos en una hoja de Excel: todas las tablas, IDs, claves, usuarios, permisos y relaciones.</value>
+    <comment>Source: Cópia completa do banco em uma planilha Excel: todas as tabelas, IDs, chaves, usuários, permissões e relacionamentos.</comment>
+  </data>
+  <data name='Ui_cb47538a2c237c52' xml:space='preserve'>
+    <value>Generar copia completa</value>
+    <comment>Source: Gerar backup geral</comment>
+  </data>
+  <data name='Ui_934da05f1a9d6a53' xml:space='preserve'>
+    <value>Solo administradores</value>
+    <comment>Source: Somente administradores</comment>
+  </data>
+  <data name='Ui_c04bc458da2a6523' xml:space='preserve'>
+    <value>Estructura versionada y validada antes de cualquier importación.</value>
+    <comment>Source: Estrutura versionada e validada antes de qualquer importação.</comment>
+  </data>
+  <data name='Ui_e60178a251543f78' xml:space='preserve'>
+    <value>Importación transaccional y aditiva: todo o nada.</value>
+    <comment>Source: Importação transacional e aditiva: tudo ou nada.</comment>
+  </data>
+  <data name='Ui_3cebe35ef7a453ac' xml:space='preserve'>
+    <value>Nunca elimina ni sobrescribe registros existentes.</value>
+    <comment>Source: Nunca remove nem sobrescreve registros existentes.</comment>
+  </data>
+  <data name='Ui_fa649906cfb6417b' xml:space='preserve'>
+    <value>Restaurar datos desde una copia</value>
+    <comment>Source: Restaurar dados de um backup</comment>
+  </data>
+  <data name='Ui_0290c6c5cfe0f081' xml:space='preserve'>
+    <value>Agrega al sistema los datos de una hoja de copia completa generada en esta pantalla.</value>
+    <comment>Source: Adiciona ao sistema os dados de uma planilha de backup geral gerada por esta tela.</comment>
+  </data>
+  <data name='Ui_0f23f7001fbed200' xml:space='preserve'>
+    <value>Seleccione el archivo</value>
+    <comment>Source: Selecione o arquivo</comment>
+  </data>
+  <data name='Ui_e286501a03266344' xml:space='preserve'>
+    <value>Copia completa en .xlsx, hasta 100 MB.</value>
+    <comment>Source: Backup geral em .xlsx, até 100 MB.</comment>
+  </data>
+  <data name='Ui_a2661ff39ce51bb2' xml:space='preserve'>
+    <value>Validación</value>
+    <comment>Source: Validação</comment>
+  </data>
+  <data name='Ui_044c6edb012a34ad' xml:space='preserve'>
+    <value>La estructura y la versión se verifican antes de guardar.</value>
+    <comment>Source: Estrutura e versão são conferidas antes de gravar.</comment>
+  </data>
+  <data name='Ui_02de5cb9e894ec56' xml:space='preserve'>
+    <value>Importación</value>
+    <comment>Source: Importação</comment>
+  </data>
+  <data name='Ui_4af780f132789895' xml:space='preserve'>
+    <value>Se agregan los registros nuevos; los existentes quedan intactos.</value>
+    <comment>Source: Registros novos são adicionados; os existentes ficam intactos.</comment>
+  </data>
+  <data name='Ui_16304bd3caba83af' xml:space='preserve'>
+    <value>Elija la copia completa .xlsx</value>
+    <comment>Source: Escolha o backup geral .xlsx</comment>
+  </data>
+  <data name='Ui_43cd6d3af4408df1' xml:space='preserve'>
+    <value>Haga clic para seleccionar o arrastre el archivo aquí</value>
+    <comment>Source: Clique para selecionar ou arraste o arquivo para cá</comment>
+  </data>
+  <data name='Ui_dbb1623abff9d195' xml:space='preserve'>
+    <value>Validar e importar</value>
+    <comment>Source: Validar e importar</comment>
+  </data>
+  <data name='Ui_d318aba307cf318b' xml:space='preserve'>
+    <value>Buenas prácticas</value>
+    <comment>Source: Boas práticas</comment>
+  </data>
+  <data name='Ui_0ef5bf17afbe5579' xml:space='preserve'>
+    <value>Genere una copia completa antes de grandes cambios o importaciones.</value>
+    <comment>Source: Gere um backup geral antes de grandes alterações ou importações.</comment>
+  </data>
+  <data name='Ui_a8a6cdca7d1cee57' xml:space='preserve'>
+    <value>Las hojas contienen datos personales: guárdelas en un lugar seguro y con acceso restringido.</value>
+    <comment>Source: As planilhas contêm dados pessoais: guarde-as em local seguro e com acesso restrito.</comment>
+  </data>
+  <data name='Ui_0a4071d58a8a5bd4' xml:space='preserve'>
+    <value>No comparta exportaciones por canales públicos o correo personal.</value>
+    <comment>Source: Não compartilhe exportações por canais públicos ou e-mail pessoal.</comment>
+  </data>
+  <data name='Ui_8eeccdbaff2b0683' xml:space='preserve'>
+    <value>Elimine las copias locales que ya no sean necesarias.</value>
+    <comment>Source: Apague cópias locais que não forem mais necessárias.</comment>
+  </data>
+  <data name='Ui_22ee20d63a1cfc56' xml:space='preserve'>
+    <value>Etapas de la importación</value>
+    <comment>Source: Etapas da importação</comment>
+  </data>
+  <data name='Ui_cdd44e8a98fe881c' xml:space='preserve'>
+    <value>Centro seguro de datos</value>
+    <comment>Source: Central segura de dados</comment>
+  </data>
+  <data name='Ui_41cfb2b9b18241ce' xml:space='preserve'>
+    <value>Exportaciones y copia de seguridad</value>
+    <comment>Source: Exportações e backup</comment>
+  </data>
+  <data name='Ui_8c48b197f0b7dc44' xml:space='preserve'>
+    <value>Descargue hojas completas para análisis o genere una copia completa para transportar datos entre instalaciones de EcoRedes.</value>
+    <comment>Source: Baixe planilhas completas para análise ou gere um backup geral para transportar dados entre instalações do EcoRedes.</comment>
+  </data>
+  <data name='Ui_f26fffdf81186559' xml:space='preserve'>
+    <value>Formato actual de la copia: Excel</value>
+    <comment>Source: Formato atual do backup: Excel</comment>
+  </data>
+  <data name='Ui_882d417322258bea' xml:space='preserve'>
+    <value>Cantidad de registros guardados hoy en el sistema.</value>
+    <comment>Source: Quantidade de registros guardados hoje no sistema.</comment>
+  </data>
+  <data name='Ui_3b3f0955cb1275d6' xml:space='preserve'>
+    <value>Hojas por módulo</value>
+    <comment>Source: Planilhas por módulo</comment>
+  </data>
+  <data name='Ui_bbc534e90bcdd696' xml:space='preserve'>
+    <value>Archivos XLSX con IDs, claves y tablas de relación.</value>
+    <comment>Source: Arquivos XLSX com IDs, chaves e tabelas de relacionamento.</comment>
+  </data>
+  <data name='Ui_877e1f9d01c32018' xml:space='preserve'>
+    <value>COMUNIDAD</value>
+    <comment>Source: COMUNIDADE</comment>
+  </data>
+  <data name='Ui_0609ec7637db865d' xml:space='preserve'>
+    <value>RECORTE</value>
+    <comment>Source: RECORTE</comment>
+  </data>
+  <data name='Ui_1f6aba7a3a511b65' xml:space='preserve'>
+    <value>GENERAL</value>
+    <comment>Source: GERAL</comment>
+  </data>
+  <data name='Ui_bd827ff055b39103' xml:space='preserve'>
+    <value>FORMATO OFICIAL</value>
+    <comment>Source: FORMATO OFICIAL</comment>
+  </data>
+  <data name='Ui_02f82d961309df5c' xml:space='preserve'>
+    <value>Conserva todas las tablas, IDs, claves foráneas, usuarios, permisos y relaciones de la base.</value>
+    <comment>Source: Preserva todas as tabelas, IDs, chaves estrangeiras, usuários, permissões e relacionamentos do banco.</comment>
+  </data>
+  <data name='Ui_c1c76a33639b7168' xml:space='preserve'>
+    <value>Estructura versionada y validada</value>
+    <comment>Source: Estrutura versionada e validada</comment>
+  </data>
+  <data name='Ui_f5f998d180b25d96' xml:space='preserve'>
+    <value>Importación transaccional y aditiva</value>
+    <comment>Source: Importação transacional e aditiva</comment>
+  </data>
+  <data name='Ui_4ba5212f6d6353fd' xml:space='preserve'>
+    <value>Nunca elimina ni sobrescribe registros existentes</value>
+    <comment>Source: Nunca remove nem sobrescreve registros existentes</comment>
+  </data>
+  <data name='Ui_9aee55296bebdee9' xml:space='preserve'>
+    <value>Hoja de Excel .xlsx</value>
+    <comment>Source: Planilha Excel .xlsx</comment>
+  </data>
+  <data name='Ui_ede9ba0fab964b51' xml:space='preserve'>
+    <value>IMPORTAR EXCEL</value>
+    <comment>Source: IMPORTAR EXCEL</comment>
+  </data>
+  <data name='Ui_240ae890ca9e01b6' xml:space='preserve'>
+    <value>Agregar datos desde una copia</value>
+    <comment>Source: Adicionar dados de um backup</comment>
+  </data>
+  <data name='Ui_0172ed96d1b17f24' xml:space='preserve'>
+    <value>Use la hoja de copia completa generada arriba. Los registros con IDs existentes se conservarán.</value>
+    <comment>Source: Use a planilha de backup geral gerada acima. Registros com IDs já existentes serão preservados.</comment>
+  </data>
+  <data name='Ui_21e1cccebfa55b79' xml:space='preserve'>
+    <value>Hoja de Excel • máximo de 100 MB</value>
+    <comment>Source: Planilha Excel • máximo de 100 MB</comment>
+  </data>
+  <data name='Ui_dd56b9f0c90b696d' xml:space='preserve'>
+    <value>Disponible solo para administradores</value>
+    <comment>Source: Disponível somente para administradores</comment>
+  </data>
+  <data name='Ui_43528e64846cd4a0' xml:space='preserve'>
+    <value>Las hojas contienen datos personales de las comunidades atendidas.</value>
+    <comment>Source: As planilhas contêm dados pessoais das comunidades atendidas.</comment>
+  </data>
+  <data name='Ui_643102d6c82f079c' xml:space='preserve'>
+    <value>Guarde las hojas en un lugar seguro y con acceso restringido.</value>
+    <comment>Source: Guarde as planilhas em local seguro e com acesso restrito.</comment>
+  </data>
 </root>

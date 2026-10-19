@@ -16,7 +16,7 @@ namespace Empodera.Controllers
         }
 
         // GET: FichaPrimeiroContato
-        public async Task<IActionResult> Index(string search, string status, int? comunidade)
+        public async Task<IActionResult> Index(string search, string status, Guid? comunidade)
         {
             if (HttpContext.Session.GetString("Email") == null)
             {
@@ -24,7 +24,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -81,7 +81,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -127,7 +127,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -144,7 +144,7 @@ namespace Empodera.Controllers
                 ficha.Status = "EmProgresso";
             }
 
-            ficha.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+            ficha.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
 
             _context.FichasPrimeiroContato.Add(ficha);
             await _context.SaveChangesAsync();
@@ -203,12 +203,12 @@ namespace Empodera.Controllers
 
         // GET: FichaPrimeiroContato/Edit/5
         // GET: FichaPrimeiroContato/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
 
-            var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+            var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
             var loggedUser = await _context.Usuarios
                 .Include(user => user.Perfil)
                 .ThenInclude(profile => profile.Permissoes)
@@ -260,7 +260,7 @@ namespace Empodera.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            int id,
+            Guid id,
             FichaPrimeiroContato ficha,
             List<string>? SelectedCondicoes,
             List<string>? SelectedPeticoes,
@@ -273,7 +273,7 @@ namespace Empodera.Controllers
             }
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -407,13 +407,13 @@ namespace Empodera.Controllers
         // POST: Concluir ficha
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Concluir(int id, string returnUrl)
+        public async Task<IActionResult> Concluir(Guid id, string returnUrl)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -442,13 +442,13 @@ namespace Empodera.Controllers
         // POST: Abandonar ficha
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Abandonar(int id, string returnUrl)
+        public async Task<IActionResult> Abandonar(Guid id, string returnUrl)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -475,13 +475,13 @@ namespace Empodera.Controllers
         }
 
         // GET: FichaPrimeiroContato/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -505,13 +505,13 @@ namespace Empodera.Controllers
         // POST: FichaPrimeiroContato/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
 
             var PodeDiario = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-                .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0")
+                .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString())
                     && u.Perfil.Permissoes.Any(p => p.Modulo == "Ficha1Contato"))
                 .FirstOrDefault();
 
@@ -535,7 +535,7 @@ namespace Empodera.Controllers
             returnUrl.StartsWith('/') &&
             !returnUrl.StartsWith("//", StringComparison.Ordinal) &&
             !returnUrl.StartsWith("/\\", StringComparison.Ordinal);
-        private bool FichaExists(int id)
+        private bool FichaExists(Guid id)
         {
             return _context.FichasPrimeiroContato.Any(e => e.IdFicha == id);
         }

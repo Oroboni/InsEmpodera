@@ -1,9 +1,4 @@
-using System.Data;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using Empodera.Models;
 
 namespace Empodera.Data
@@ -15,7 +10,6 @@ namespace Empodera.Data
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             PrepareIdentityFields();
-            PrepareRandomPrimaryKeys();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
@@ -24,7 +18,6 @@ namespace Empodera.Data
             CancellationToken cancellationToken = default)
         {
             PrepareIdentityFields();
-            await PrepareRandomPrimaryKeysAsync(cancellationToken);
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
@@ -65,6 +58,44 @@ namespace Empodera.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // MariaDB no Linux diferencia maiusculas de minusculas nos nomes das tabelas.
+            // O dump Banco.txt usa estes nomes em minusculas, portanto o mapeamento deve
+            // ser explicito em vez de depender do nome dos DbSets.
+            modelBuilder.Entity<Usuario>().ToTable("usuarios");
+            modelBuilder.Entity<Perfil>().ToTable("perfis");
+            modelBuilder.Entity<Permissoes>().ToTable("permissoes");
+            modelBuilder.Entity<Comunidade>().ToTable("comunidades");
+            modelBuilder.Entity<Atores>().ToTable("atores");
+            modelBuilder.Entity<RedeRecursos>().ToTable("rederecursos");
+            modelBuilder.Entity<Eixo>().ToTable("eixos");
+            modelBuilder.Entity<RedeEixo>().ToTable("redeeixos");
+            modelBuilder.Entity<AtorComunidade>().ToTable("atorcomunidades");
+            modelBuilder.Entity<DiarioCampo>().ToTable("diarioscampo");
+            modelBuilder.Entity<DiarioAcoes>().ToTable("diarioacoes");
+            modelBuilder.Entity<DiarioDAcoes>().ToTable("diariodacoes");
+            modelBuilder.Entity<DetalhesDAcoes>().ToTable("detalhesdacoes");
+            modelBuilder.Entity<DetalhesEixos>().ToTable("detalheseixos");
+            modelBuilder.Entity<DAAtores>().ToTable("daatores");
+            modelBuilder.Entity<DiarioEixo>().ToTable("diarioeixos");
+            modelBuilder.Entity<Acoes>().ToTable("acoes");
+            modelBuilder.Entity<AcoesAtores>().ToTable("acoesatores");
+            modelBuilder.Entity<AnexosDiario>().ToTable("anexosdiario");
+            modelBuilder.Entity<Vulnerabilidade>().ToTable("vulnerabilidades");
+            modelBuilder.Entity<VulnerabilidadesEixo>().ToTable("vulnerabilidadeseixo");
+            modelBuilder.Entity<RedePrimaria>().ToTable("redesprimarias");
+            modelBuilder.Entity<AvaliacaoPessoal>().ToTable("avaliacaopessoal");
+            modelBuilder.Entity<FichaPrimeiroContato>().ToTable("fichasprimeirocontato");
+            modelBuilder.Entity<FonteInf>().ToTable("fontesinfo");
+            modelBuilder.Entity<FichaCondicoes>().ToTable("fichacondicoes");
+            modelBuilder.Entity<FichaPeticoes>().ToTable("fichapeticoes");
+            modelBuilder.Entity<FichaResp>().ToTable("ficharespostas");
+            modelBuilder.Entity<FichaResult>().ToTable("ficharesultados");
+            modelBuilder.Entity<Atividades>().ToTable("atividades");
+            modelBuilder.Entity<AtividadesEixo>().ToTable("atividadeseixo");
+            modelBuilder.Entity<RecursosAtores>().ToTable("recursosatores");
+            modelBuilder.Entity<DiarioProcessoPessoal>().ToTable("diariosprocessopessoal");
+            modelBuilder.Entity<DiarioProcessoEixo>().ToTable("diariosprocessoeixos");
+
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
             modelBuilder.Entity<Usuario>().Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
             modelBuilder.Entity<Usuario>().HasIndex(u => u.NormalizedUserName).IsUnique();
@@ -102,8 +133,6 @@ namespace Empodera.Data
             modelBuilder.Entity<RecursosAtores>().HasKey(ra => ra.Id_Recursos_Atores);
             modelBuilder.Entity<DiarioProcessoPessoal>().HasKey(d => d.IdDiarioProcesso);
             modelBuilder.Entity<DiarioProcessoEixo>().HasKey(d => d.IdDiarioProcessoEixo);
-            modelBuilder.Entity<DiarioProcessoPessoal>().ToTable("diariosprocessopessoal");
-            modelBuilder.Entity<DiarioProcessoEixo>().ToTable("diariosprocessoeixos");
             modelBuilder.Entity<DiarioProcessoEixo>()
                 .HasIndex(d => new { d.FkIdDiarioProcesso, d.FkIdEixo })
                 .IsUnique();
@@ -309,6 +338,11 @@ namespace Empodera.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<RedePrimaria>()
+                .Property(rp => rp.TipoRede)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            modelBuilder.Entity<RedePrimaria>()
                 .HasOne(rp => rp.AtorPrincipal)
                 .WithMany()
                 .HasForeignKey(rp => rp.FkIdAtorPrincipal)
@@ -458,84 +492,84 @@ namespace Empodera.Data
 
             // Perfis
             modelBuilder.Entity<Perfil>().HasData(
-                new Perfil { IdPerfil = 1, FkIdUsuario = 1, Nome = "Admin" },
-                new Perfil { IdPerfil = 2, FkIdUsuario = 2, Nome = "Editor" },
-                new Perfil { IdPerfil = 3, FkIdUsuario = 3, Nome = "Colaborador" },
-                new Perfil { IdPerfil = 4, FkIdUsuario = 4, Nome = "Visualizador" },
-                new Perfil { IdPerfil = 5, FkIdUsuario = 5, Nome = "Supervisor" }
+                new Perfil { IdPerfil = SeedGuid(1), FkIdUsuario = SeedGuid(1), Nome = "Admin" },
+                new Perfil { IdPerfil = SeedGuid(2), FkIdUsuario = SeedGuid(2), Nome = "Editor" },
+                new Perfil { IdPerfil = SeedGuid(3), FkIdUsuario = SeedGuid(3), Nome = "Colaborador" },
+                new Perfil { IdPerfil = SeedGuid(4), FkIdUsuario = SeedGuid(4), Nome = "Visualizador" },
+                new Perfil { IdPerfil = SeedGuid(5), FkIdUsuario = SeedGuid(5), Nome = "Supervisor" }
             );
 
             // Permissoes
             modelBuilder.Entity<Permissoes>().HasData(
                 // ===================== ADMIN =====================
-                new Permissoes { IdPermissoes = 1, FkIdPerfil = 1, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 2, FkIdPerfil = 1, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 3, FkIdPerfil = 1, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 4, FkIdPerfil = 1, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 5, FkIdPerfil = 1, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 6, FkIdPerfil = 1, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 7, FkIdPerfil = 1, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 8, FkIdPerfil = 1, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 9, FkIdPerfil = 1, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 10, FkIdPerfil = 1, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 11, FkIdPerfil = 1, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
-                new Permissoes { IdPermissoes = 12, FkIdPerfil = 1, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(1), FkIdPerfil = SeedGuid(1), Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(2), FkIdPerfil = SeedGuid(1), Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(3), FkIdPerfil = SeedGuid(1), Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(4), FkIdPerfil = SeedGuid(1), Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(5), FkIdPerfil = SeedGuid(1), Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(6), FkIdPerfil = SeedGuid(1), Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(7), FkIdPerfil = SeedGuid(1), Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(8), FkIdPerfil = SeedGuid(1), Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(9), FkIdPerfil = SeedGuid(1), Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(10), FkIdPerfil = SeedGuid(1), Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(11), FkIdPerfil = SeedGuid(1), Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
+                new Permissoes { IdPermissoes = SeedGuid(12), FkIdPerfil = SeedGuid(1), Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "S" },
 
                 // ===================== EDITOR =====================
-                new Permissoes { IdPermissoes = 13, FkIdPerfil = 2, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 14, FkIdPerfil = 2, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 15, FkIdPerfil = 2, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 16, FkIdPerfil = 2, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 17, FkIdPerfil = 2, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 18, FkIdPerfil = 2, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 19, FkIdPerfil = 2, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 20, FkIdPerfil = 2, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 21, FkIdPerfil = 2, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 22, FkIdPerfil = 2, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 23, FkIdPerfil = 2, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 24, FkIdPerfil = 2, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(13), FkIdPerfil = SeedGuid(2), Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(14), FkIdPerfil = SeedGuid(2), Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(15), FkIdPerfil = SeedGuid(2), Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(16), FkIdPerfil = SeedGuid(2), Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(17), FkIdPerfil = SeedGuid(2), Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(18), FkIdPerfil = SeedGuid(2), Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(19), FkIdPerfil = SeedGuid(2), Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(20), FkIdPerfil = SeedGuid(2), Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(21), FkIdPerfil = SeedGuid(2), Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(22), FkIdPerfil = SeedGuid(2), Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(23), FkIdPerfil = SeedGuid(2), Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(24), FkIdPerfil = SeedGuid(2), Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
 
                 // ===================== COLABORADOR =====================
-                new Permissoes { IdPermissoes = 25, FkIdPerfil = 3, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 26, FkIdPerfil = 3, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 27, FkIdPerfil = 3, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 28, FkIdPerfil = 3, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 29, FkIdPerfil = 3, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 30, FkIdPerfil = 3, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 31, FkIdPerfil = 3, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 32, FkIdPerfil = 3, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 33, FkIdPerfil = 3, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 34, FkIdPerfil = 3, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 35, FkIdPerfil = 3, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 36, FkIdPerfil = 3, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(25), FkIdPerfil = SeedGuid(3), Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(26), FkIdPerfil = SeedGuid(3), Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(27), FkIdPerfil = SeedGuid(3), Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(28), FkIdPerfil = SeedGuid(3), Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(29), FkIdPerfil = SeedGuid(3), Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(30), FkIdPerfil = SeedGuid(3), Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(31), FkIdPerfil = SeedGuid(3), Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(32), FkIdPerfil = SeedGuid(3), Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(33), FkIdPerfil = SeedGuid(3), Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(34), FkIdPerfil = SeedGuid(3), Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(35), FkIdPerfil = SeedGuid(3), Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(36), FkIdPerfil = SeedGuid(3), Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
 
                 // ===================== VISUALIZADOR =====================
-                new Permissoes { IdPermissoes = 37, FkIdPerfil = 4, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 38, FkIdPerfil = 4, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 39, FkIdPerfil = 4, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 40, FkIdPerfil = 4, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 41, FkIdPerfil = 4, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 42, FkIdPerfil = 4, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 43, FkIdPerfil = 4, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 44, FkIdPerfil = 4, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 45, FkIdPerfil = 4, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 46, FkIdPerfil = 4, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 47, FkIdPerfil = 4, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 48, FkIdPerfil = 4, Modulo = "SER", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(37), FkIdPerfil = SeedGuid(4), Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(38), FkIdPerfil = SeedGuid(4), Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(39), FkIdPerfil = SeedGuid(4), Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(40), FkIdPerfil = SeedGuid(4), Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(41), FkIdPerfil = SeedGuid(4), Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(42), FkIdPerfil = SeedGuid(4), Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(43), FkIdPerfil = SeedGuid(4), Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(44), FkIdPerfil = SeedGuid(4), Modulo = "Atores", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(45), FkIdPerfil = SeedGuid(4), Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(46), FkIdPerfil = SeedGuid(4), Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(47), FkIdPerfil = SeedGuid(4), Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(48), FkIdPerfil = SeedGuid(4), Modulo = "SER", PodeListar = "S", PodeDetalhar = "N", PodeCriar = "N", PodeAtualizar = "N", PodeDeletar = "N" },
 
                 // ===================== SUPERVISOR =====================
-                new Permissoes { IdPermissoes = 49, FkIdPerfil = 5, Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 50, FkIdPerfil = 5, Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 51, FkIdPerfil = 5, Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 52, FkIdPerfil = 5, Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 53, FkIdPerfil = 5, Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 54, FkIdPerfil = 5, Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 55, FkIdPerfil = 5, Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 56, FkIdPerfil = 5, Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 57, FkIdPerfil = 5, Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 58, FkIdPerfil = 5, Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 59, FkIdPerfil = 5, Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
-                new Permissoes { IdPermissoes = 60, FkIdPerfil = 5, Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" }
+                new Permissoes { IdPermissoes = SeedGuid(49), FkIdPerfil = SeedGuid(5), Modulo = "Usuarios", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(50), FkIdPerfil = SeedGuid(5), Modulo = "Perfis", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(51), FkIdPerfil = SeedGuid(5), Modulo = "Atividades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(52), FkIdPerfil = SeedGuid(5), Modulo = "Comunidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(53), FkIdPerfil = SeedGuid(5), Modulo = "Vulnerabilidades", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(54), FkIdPerfil = SeedGuid(5), Modulo = "Recursos", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(55), FkIdPerfil = SeedGuid(5), Modulo = "DiariosCampo", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(56), FkIdPerfil = SeedGuid(5), Modulo = "Atores", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(57), FkIdPerfil = SeedGuid(5), Modulo = "Ficha1Contato", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(58), FkIdPerfil = SeedGuid(5), Modulo = "DiariosProcessoPessoal", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(59), FkIdPerfil = SeedGuid(5), Modulo = "AvaliacoesPessoais", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" },
+                new Permissoes { IdPermissoes = SeedGuid(60), FkIdPerfil = SeedGuid(5), Modulo = "SER", PodeListar = "S", PodeDetalhar = "S", PodeCriar = "S", PodeAtualizar = "S", PodeDeletar = "N" }
             );
         }
 
@@ -553,7 +587,7 @@ namespace Empodera.Data
             var normalizedEmail = email.ToUpperInvariant();
             return new Usuario
             {
-                IdUsuario = id,
+                IdUsuario = SeedGuid(id),
                 UserName = email,
                 NormalizedUserName = normalizedEmail,
                 Email = email,
@@ -570,11 +604,14 @@ namespace Empodera.Data
                 DtNascimento = birthDate,
                 DtCriacao = new DateTime(2024, Math.Min(id, 12), 1),
                 DtAtualizacao = new DateTime(2025, Math.Min(id, 12), 1),
-                FkIdPerfil = profileId,
+                FkIdPerfil = SeedGuid(profileId),
                 Ativo = active,
                 IdiomaPreferido = IdiomaPreferido.Default
             };
         }
+
+        private static Guid SeedGuid(int value) =>
+            Guid.ParseExact($"000000000000000000000000{value:X8}", "N");
 
         private void PrepareIdentityFields()
         {
@@ -595,188 +632,5 @@ namespace Empodera.Data
             }
         }
 
-        private void PrepareRandomPrimaryKeys()
-        {
-            var targets = GetRandomKeyTargets();
-            if (targets.Count == 0)
-                return;
-
-            var reservedKeys = GetReservedKeys(targets);
-            var connection = Database.GetDbConnection();
-            var shouldClose = connection.State != ConnectionState.Open;
-
-            if (shouldClose)
-                connection.Open();
-
-            try
-            {
-                foreach (var target in targets.Where(target => target.NeedsGeneration))
-                {
-                    var key = GenerateAvailableKey(target, reservedKeys);
-                    var propertyEntry = target.Entry.Property(target.PropertyName);
-                    propertyEntry.CurrentValue = key;
-                    propertyEntry.IsTemporary = false;
-                    reservedKeys.Add(target.ReservationKey(key));
-                }
-            }
-            finally
-            {
-                if (shouldClose)
-                    connection.Close();
-            }
-
-            ChangeTracker.DetectChanges();
-        }
-
-        private async Task PrepareRandomPrimaryKeysAsync(CancellationToken cancellationToken)
-        {
-            var targets = GetRandomKeyTargets();
-            if (targets.Count == 0)
-                return;
-
-            var reservedKeys = GetReservedKeys(targets);
-            var connection = Database.GetDbConnection();
-            var shouldClose = connection.State != ConnectionState.Open;
-
-            if (shouldClose)
-                await connection.OpenAsync(cancellationToken);
-
-            try
-            {
-                foreach (var target in targets.Where(target => target.NeedsGeneration))
-                {
-                    var key = await GenerateAvailableKeyAsync(target, reservedKeys, cancellationToken);
-                    var propertyEntry = target.Entry.Property(target.PropertyName);
-                    propertyEntry.CurrentValue = key;
-                    propertyEntry.IsTemporary = false;
-                    reservedKeys.Add(target.ReservationKey(key));
-                }
-            }
-            finally
-            {
-                if (shouldClose)
-                    await connection.CloseAsync();
-            }
-
-            ChangeTracker.DetectChanges();
-        }
-
-        private List<RandomKeyTarget> GetRandomKeyTargets()
-        {
-            ChangeTracker.DetectChanges();
-            var targets = new List<RandomKeyTarget>();
-
-            foreach (var entry in ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added))
-            {
-                var primaryKey = entry.Metadata.FindPrimaryKey();
-                if (primaryKey?.Properties.Count != 1 || primaryKey.Properties[0].ClrType != typeof(int))
-                    continue;
-
-                var property = primaryKey.Properties[0];
-                var tableName = entry.Metadata.GetTableName();
-                if (tableName is null)
-                    continue;
-
-                var schema = entry.Metadata.GetSchema();
-                var storeObject = StoreObjectIdentifier.Table(tableName, schema);
-                var columnName = property.GetColumnName(storeObject) ?? property.Name;
-                var propertyEntry = entry.Property(property.Name);
-                var currentValue = (int)(propertyEntry.CurrentValue ?? 0);
-                targets.Add(new RandomKeyTarget(
-                    entry,
-                    property.Name,
-                    tableName,
-                    schema,
-                    columnName,
-                    currentValue,
-                    propertyEntry.IsTemporary || currentValue == 0));
-            }
-
-            return targets;
-        }
-
-        private static HashSet<string> GetReservedKeys(IEnumerable<RandomKeyTarget> targets) =>
-            targets
-                .Where(target => !target.NeedsGeneration)
-                .Select(target => target.ReservationKey(target.CurrentValue))
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        private int GenerateAvailableKey(RandomKeyTarget target, ISet<string> reservedKeys)
-        {
-            for (var attempt = 0; attempt < 128; attempt++)
-            {
-                var candidate = RandomNumberGenerator.GetInt32(100000, 1000000);
-                if (reservedKeys.Contains(target.ReservationKey(candidate)) || KeyExists(target, candidate))
-                    continue;
-
-                return candidate;
-            }
-
-            throw new InvalidOperationException($"Não foi possível gerar uma chave aleatória livre para {target.TableName}.");
-        }
-
-        private async Task<int> GenerateAvailableKeyAsync(
-            RandomKeyTarget target,
-            ISet<string> reservedKeys,
-            CancellationToken cancellationToken)
-        {
-            for (var attempt = 0; attempt < 128; attempt++)
-            {
-                var candidate = RandomNumberGenerator.GetInt32(100000, 1000000);
-                if (reservedKeys.Contains(target.ReservationKey(candidate)) ||
-                    await KeyExistsAsync(target, candidate, cancellationToken))
-                    continue;
-
-                return candidate;
-            }
-
-            throw new InvalidOperationException($"Não foi possível gerar uma chave aleatória livre para {target.TableName}.");
-        }
-
-        private bool KeyExists(RandomKeyTarget target, int candidate)
-        {
-            using var command = CreateKeyLookupCommand(target, candidate);
-            return command.ExecuteScalar() is not null;
-        }
-
-        private async Task<bool> KeyExistsAsync(
-            RandomKeyTarget target,
-            int candidate,
-            CancellationToken cancellationToken)
-        {
-            await using var command = CreateKeyLookupCommand(target, candidate);
-            return await command.ExecuteScalarAsync(cancellationToken) is not null;
-        }
-
-        private System.Data.Common.DbCommand CreateKeyLookupCommand(RandomKeyTarget target, int candidate)
-        {
-            var command = Database.GetDbConnection().CreateCommand();
-            var qualifiedTable = string.IsNullOrWhiteSpace(target.Schema)
-                ? QuoteIdentifier(target.TableName)
-                : $"{QuoteIdentifier(target.Schema)}.{QuoteIdentifier(target.TableName)}";
-            command.CommandText =
-                $"SELECT 1 FROM {qualifiedTable} WHERE {QuoteIdentifier(target.ColumnName)} = @id LIMIT 1";
-            command.Transaction = Database.CurrentTransaction?.GetDbTransaction();
-
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = "@id";
-            parameter.Value = candidate;
-            command.Parameters.Add(parameter);
-            return command;
-        }
-
-        private static string QuoteIdentifier(string identifier) => $"`{identifier.Replace("`", "``")}`";
-
-        private sealed record RandomKeyTarget(
-            EntityEntry Entry,
-            string PropertyName,
-            string TableName,
-            string? Schema,
-            string ColumnName,
-            int CurrentValue,
-            bool NeedsGeneration)
-        {
-            public string ReservationKey(int value) => $"{Schema}.{TableName}.{ColumnName}:{value}";
-        }
     }
 }

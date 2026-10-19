@@ -1,0 +1,84 @@
+@model Empodera.Models.DiarioProcessoPessoal
+@using Empodera.Models
+@using Empodera.Services
+@*
+    Campos do Diário de Processo Pessoal, no padrão das demais telas (input-card + section-label).
+    Usado por Create.cshtml e Edit.cshtml.
+*@
+@{
+    var selectedEixos = (HashSet<Guid>)(ViewBag.SelectedEixos ?? new HashSet<Guid>());
+    var ehNovo = Model.IdDiarioProcesso == Guid.Empty;
+    var nomesMencao = ViewBag.MentionNames as IReadOnlyDictionary<Guid, string>;
+}
+
+<div class="section-label">Informações Básicas</div>
+
+<div class="input-card full-width">
+    <div class="icon-box purple"><i class="fa-solid fa-user"></i></div>
+    <div class="input-content">
+        <label asp-for="FK_id_Atores">Ator <span class="text-danger">*</span></label>
+        <select asp-for="FK_id_Atores" class="clean-input" asp-items="ViewBag.AtorList" required>
+            @if (ehNovo)
+            {
+                <option value="">Selecione um ator</option>
+            }
+        </select>
+        <span asp-validation-for="FK_id_Atores" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="input-card full-width">
+    <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+    <div class="input-content">
+        <label asp-for="Data">Data <span class="text-danger">*</span></label>
+        <input asp-for="Data" type="date" class="clean-input" required />
+        <span asp-validation-for="Data" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="input-card full-width" data-axis-picker>
+    <div class="icon-box purple"><i class="fa-solid fa-tags"></i></div>
+    <div class="input-content">
+        <label>Eixos</label>
+        <div class="eixos-tag-container" data-axis-tags></div>
+        <details class="multiselect-wrapper">
+            <summary><div class="select-wrapper">
+                <i class="fa-solid fa-tags"></i>
+                <span class="multiselect-placeholder">Selecione os eixos</span>
+                <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div></summary>
+            <div class="multiselect-panel"><ul>
+                @foreach (var eixo in (IEnumerable<Eixo>)ViewBag.EixosList)
+                {
+                    <li>
+                        <input type="checkbox" name="eixosIds" value="@eixo.IdEixo" id="eixo-@eixo.IdEixo"
+                               data-tag-name="@eixo.Nome" checked="@selectedEixos.Contains(eixo.IdEixo)" />
+                        <label for="eixo-@eixo.IdEixo">@eixo.Nome</label>
+                    </li>
+                }
+            </ul></div>
+        </details>
+    </div>
+</div>
+
+<div class="purple-divider"></div>
+<div class="section-label">Detalhamento</div>
+
+<div class="input-card full-width process-description-card">
+    <div class="icon-box purple"><i class="fa-solid fa-align-left"></i></div>
+    <div class="input-content">
+        <label asp-for="Descricao">Descrição <span class="text-danger">*</span></label>
+        @if (nomesMencao is not null)
+        {
+            <div class="process-description-preview" data-modo-leitura>
+                @AtorMentions.Render(Model.Descricao, nomesMencao, id => Url.Action("Resumo", "Atores", new { id }) ?? "#")
+            </div>
+        }
+        <textarea asp-for="Descricao" class="clean-input" rows="6" maxlength="4000" data-actor-mentions
+                  aria-describedby="actor-mention-help" aria-controls="actor-mention-list"
+                  placeholder="Descreva o processo... Digite @@ para mencionar um ator" required></textarea>
+        <small id="actor-mention-help" class="text-muted">Digite @@ e escolha um ator. A menção será clicável na leitura do diário.</small>
+        <ul id="actor-mention-list" class="actor-mention-list" role="listbox" hidden></ul>
+        <span asp-validation-for="Descricao" class="text-danger"></span>
+    </div>
+</div>

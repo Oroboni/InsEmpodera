@@ -8,14 +8,14 @@ namespace Empodera.Services;
 public static class AtorMentions
 {
     private static readonly Regex Marcador = new(
-        @"@\[(?<nome>[^\]\r\n]{1,100})\]\(ator:(?<id>\d{1,10})\)",
+        @"@\[(?<nome>[^\]\r\n]{1,100})\]\(ator:(?<id>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\)",
         RegexOptions.Compiled | RegexOptions.CultureInvariant,
         TimeSpan.FromMilliseconds(200));
 
     public static IHtmlContent Render(
         string? descricao,
-        IReadOnlyDictionary<int, string> atores,
-        Func<int, string> urlDoAtor)
+        IReadOnlyDictionary<Guid, string> atores,
+        Func<Guid, string> urlDoAtor)
     {
         var texto = descricao ?? string.Empty;
         var html = new StringBuilder();
@@ -24,7 +24,7 @@ public static class AtorMentions
         foreach (Match match in Marcador.Matches(texto))
         {
             html.Append(HtmlEncoder.Default.Encode(texto[inicio..match.Index]));
-            if (int.TryParse(match.Groups["id"].Value, out var id) && atores.TryGetValue(id, out var nome))
+            if (Guid.TryParse(match.Groups["id"].Value, out var id) && atores.TryGetValue(id, out var nome))
             {
                 html.Append("<a class=\"actor-mention\" href=\"")
                     .Append(HtmlEncoder.Default.Encode(urlDoAtor(id)))

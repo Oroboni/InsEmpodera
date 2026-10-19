@@ -868,4 +868,16 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_ab4d089a9ce7625f' xml:space='preserve'>
+    <value>Exportar comunidades para Excel</value>
+    <comment>Source: Exportar comunidades para Excel</comment>
+  </data>
+  <data name='Ui_f99670c07d52b733' xml:space='preserve'>
+    <value>Iniciar processo</value>
+    <comment>Source: Iniciar processo</comment>
+  </data>
+  <data name='Ui_51b6c94bc50b0cd0' xml:space='preserve'>
+    <value>Início indisponível para o status</value>
+    <comment>Source: Início indisponível para o status</comment>
+  </data>
 </root>

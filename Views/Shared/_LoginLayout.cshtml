@@ -1,3 +1,8 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration AppConfig
+@{
+    var temaConfigurado = (AppConfig["Tema"] ?? "verde").Trim().ToLowerInvariant();
+    var temaAtivo = System.Text.RegularExpressions.Regex.IsMatch(temaConfigurado, "^[a-z-]{1,30}$") ? temaConfigurado : "verde";
+}
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var currentLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
@@ -17,12 +22,14 @@
     var languageMode = Context.Request.Cookies[Empodera.Services.UserCultureService.PreferenceModeCookieName];
 }
 <!DOCTYPE html>
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name" data-tema="@temaAtivo">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
+    <title>@ViewData["Title"] - EcoRedes</title>
     <link rel="icon" href="~/images/Logo-empodera.svg" type="image/x-icon">
+    <link rel="stylesheet" href="~/css/tema.css" asp-append-version="true" />
+    <partial name="_TemaPersonalizado" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,25 +38,36 @@
     <script src="~/js/localization.js" asp-append-version="true" defer></script>
 </head>
 <body class="login-body">
+    @{
+        var eIngles = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase);
+        var eEspanhol = currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase);
+        var siglaAtual = eIngles ? "EN" : eEspanhol ? "ES" : "PT";
+        var tituloIdioma = eIngles ? "Language" : "Idioma";
+        var descricaoAutomatico = eIngles ? "Use browser language" : eEspanhol ? "Usar el idioma del navegador" : "Usar o idioma do navegador";
+        var usaIdiomaExplicito = string.Equals(languageMode, "explicit", StringComparison.Ordinal);
+    }
     <details class="login-language-switcher" data-current-culture="@currentCulture">
         <summary aria-label="@selectLanguageLabel">
-            <span aria-hidden="true">🌐</span>
-            <span>@currentLanguage</span>
-            <span aria-hidden="true">▾</span>
+            <svg class="login-language-globe" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
+            </svg>
+            <span class="login-language-code" aria-hidden="true">@siglaAtual</span>
+            <span class="login-language-name">@currentLanguage</span>
+            <svg class="login-language-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" /></svg>
         </summary>
         <div class="login-language-menu" role="group" aria-label="@selectLanguageLabel">
+            <p class="login-language-title">@tituloIdioma</p>
             @foreach (var language in new[]
             {
-                (Code: "auto", Label: automaticLanguage),
-                (Code: "pt-BR", Label: "Português"),
-                (Code: "en", Label: "English"),
-                (Code: "es", Label: "Español")
+                (Code: "auto", Sigla: "A", Label: automaticLanguage.Replace(" (navegador)", "").Replace(" (browser)", ""), Descricao: descricaoAutomatico),
+                (Code: "pt-BR", Sigla: "PT", Label: "Português", Descricao: "Português do Brasil"),
+                (Code: "en", Sigla: "EN", Label: "English", Descricao: "English (US)"),
+                (Code: "es", Sigla: "ES", Label: "Español", Descricao: "Español")
             })
             {
                 var isActive = language.Code == "auto"
-                    ? !string.Equals(languageMode, "explicit", StringComparison.Ordinal)
-                    : string.Equals(languageMode, "explicit", StringComparison.Ordinal)
-                      && string.Equals(language.Code, currentCulture, StringComparison.OrdinalIgnoreCase);
+                    ? !usaIdiomaExplicito
+                    : usaIdiomaExplicito && string.Equals(language.Code, currentCulture, StringComparison.OrdinalIgnoreCase);
                 <form asp-for="IdiomaPreferido" asp-controller="Language" asp-action="Set" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="culture" value="@language.Code" />
@@ -58,16 +76,30 @@
                             class="@(isActive ? "is-active" : null)"
                             aria-current="@(isActive ? "true" : null)"
                             lang="@(language.Code == "auto" ? currentCulture : language.Code)">
-                        <span>@language.Label</span>
-                        @if (isActive)
-                        {
-                            <span class="language-selected-mark" aria-hidden="true">✓</span>
-                        }
+                        <span class="login-language-option-code" aria-hidden="true">@language.Sigla</span>
+                        <span class="login-language-option-text">
+                            <strong>@language.Label</strong>
+                            <small>@language.Descricao</small>
+                        </span>
+                        <span class="language-selected-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><path d="m5 12 5 5 9-10" /></svg>
+                        </span>
                     </button>
                 </form>
             }
         </div>
     </details>
+    <script>
+        // Fecha o seletor de idioma ao clicar fora ou com Esc.
+        (() => {
+            const seletor = document.querySelector('.login-language-switcher');
+            if (!seletor) return;
+            document.addEventListener('click', e => { if (seletor.open && !seletor.contains(e.target)) seletor.open = false; });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && seletor.open) { seletor.open = false; seletor.querySelector('summary').focus(); }
+            });
+        })();
+    </script>
     @RenderBody()
     @await RenderSectionAsync("Scripts", required: false)
 </body>

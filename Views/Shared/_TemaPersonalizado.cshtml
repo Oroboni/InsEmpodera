@@ -1,0 +1,9 @@
+@inject Empodera.Services.TemaPersonalizadoService TemaPersonalizado
+@* Cores definidas em Configurações > Cores do sistema (sobrepõem o tema base de tema.css). *@
+@{
+    var cssPersonalizado = TemaPersonalizado.GerarCss();
+}
+@if (cssPersonalizado is not null)
+{
+    <style id="tema-personalizado">@Html.Raw(cssPersonalizado)</style>
+}

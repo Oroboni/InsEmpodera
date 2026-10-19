@@ -6,8 +6,8 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/diarioCampo.css" asp-append-version="true" />
     <style>
         /* Estilos específicos "Teia" para visualização */
         .action-group-container {
@@ -98,18 +98,11 @@
             <div class="tag-list" style="margin-top: var(--space-3);">
                 @if (Model.DiarioEixos != null && Model.DiarioEixos.Any())
                 {
+                    var eixoIndex = 0;
+                    var eixoColors = new[] { "tag-purple", "tag-blue", "tag-green", "tag-yellow", "tag-lightblue", "tag-red", "tag-orange" };
                     foreach (var de in Model.DiarioEixos)
                     {
-                        var colorClass = "tag-blue";
-                        switch(de.FkIdEixo) {
-                            case 1: colorClass = "tag-purple"; break;
-                            case 2: colorClass = "tag-blue"; break;
-                            case 3: colorClass = "tag-green"; break;
-                            case 4: colorClass = "tag-yellow"; break;
-                            case 5: colorClass = "tag-lightblue"; break;
-                            case 6: colorClass = "tag-red"; break;
-                            case 7: colorClass = "tag-orange"; break;
-                        }
+                        var colorClass = eixoColors[eixoIndex++ % eixoColors.Length];
                         <span class="tag-item @colorClass">
                             <i class="fa-solid fa-check"></i>
                             @de.Eixo?.Nome
@@ -162,7 +155,7 @@
                         <div style="flex: 1;">
                             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                                 <strong style="color: #333;">@acao.Nome</strong>
-                                <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;">
+                                <span class="tag-item tag-purple" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: var(--color-primary-50); color: var(--color-primary-500); border: 1px solid var(--color-primary-200);">
                                     Institucional
                                 </span>
                             </div>

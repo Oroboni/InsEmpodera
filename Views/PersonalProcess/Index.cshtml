@@ -3,107 +3,166 @@
 @{
     ViewData["Title"] = "Diário Pessoal";
     Layout = "_Layout";
-    int? selectedAtorId = ViewBag.SelectedAtorId;
-    var mentionActors = ViewBag.MentionActors as IReadOnlyDictionary<int, string>
-        ?? new Dictionary<int, string>();
+    Guid? selectedAtorId = ViewBag.SelectedAtorId;
+    string? searchQuery = ViewBag.SearchQuery as string;
+    var mentionActors = ViewBag.MentionActors as IReadOnlyDictionary<Guid, string>
+        ?? new Dictionary<Guid, string>();
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/activity-index.css"/>
-    <link rel="stylesheet" href="~/css/pages/personal-assessment.css" asp-append-version="true" />
-    <style>
-        .process-tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem; }
-        .process-tag { padding:.25rem .65rem; border-radius:999px; background:#eee9ff; color:#56239b; font-size:.78rem; font-weight:600; }
-        .empty-process { min-height:280px; display:grid; place-content:center; text-align:center; color:#676171; gap:.75rem; }
-        .empty-process i { font-size:3.5rem; color:#9c75ca; }
-    </style>
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/activity-index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/personal-process.css" asp-append-version="true" />
 }
 
-<div class="assessment-page-container">
-    <div class="assessment-header">
-        <div class="assessment-title"><h2>Diário de Processo Pessoal</h2></div>
-
-        <form asp-action="Index" method="get" id="atorSelectForm">
-            <div class="input-card full-width">
-                <div class="icon-box">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-
-                <div class="input-content">
-                    <label for="atorId">Ator</label>
-
-                    <select id="atorId" name="atorId" class="clean-input"
-                            asp-items="ViewBag.AtorList" onchange="this.form.submit()">
-                        <option value="">Selecione um ator</option>
-                    </select>
-                </div>
-            </div>
-        </form>
-
-        @if (selectedAtorId.HasValue)
-        {
-            <div class="assessment-controls">
-                <form class="search-bar" asp-action="Index" method="get">
-                    <input type="hidden" name="atorId" value="@selectedAtorId" />
-                    <input type="search" class="search-input" name="searchQuery"
-                           placeholder="Buscar na descrição..." value="@ViewBag.SearchQuery" />
-                    <button type="submit" class="search-icon-button" aria-label="Pesquisar diário">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    </button>
-                </form>
-                <a asp-action="Create" asp-route-atorId="@selectedAtorId" class="btn-add-assessment">
-                    <i class="fa-solid fa-plus"></i> ADICIONAR
-                </a>
-            </div>
-        }
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <strong class="text-primary">Diário de Processo Pessoal</strong>
+        </h2>
     </div>
 
-    <div class="assessment-content-area">
-        @if (!selectedAtorId.HasValue)
+    <!-- Filtro de Ator -->
+    <div class="input-card full-width">
+        <div class="icon-box"><i class="fa-solid fa-user"></i></div>
+        <div class="input-content">
+            <label for="atorId">Selecione o Ator</label>
+            <form asp-action="Index" method="get" id="atorSelectForm">
+                <select id="atorId" name="atorId" class="clean-input" asp-items="ViewBag.AtorList"
+                        onchange="this.form.submit()">
+                    <option value="">Selecione um Ator</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    @if (selectedAtorId.HasValue)
+    {
+        @if (Model.Count > 0)
         {
-            <div class="empty-process">
-                <i class="fa-solid fa-book-open-reader"></i>
-                <strong>Selecione um ator para consultar seu diário pessoal.</strong>
+            var eixosDiferentes = Model.SelectMany(d => d.Eixos).Select(e => e.FkIdEixo).Distinct().Count();
+            var diasDesdeUltimo = (DateTime.Today - Model.Max(d => d.Data).Date).Days;
+
+            <!-- Estatísticas -->
+            <button type="button" class="section-label indicadores-toggle" data-indicadores
+                    aria-expanded="true" title="Recolher ou mostrar os indicadores">
+                <span>Indicadores</span>
+                <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+            </button>
+            <div class="actions-grid">
+                <div class="action-card stats-card">
+                    <span class="card-title">@Model.Count</span>
+                    <span class="card-subtitle">@(string.IsNullOrWhiteSpace(searchQuery) ? "Total de Registros" : "Registros encontrados")</span>
+                    <div class="card-icons"><i class="fas fa-book-open"></i></div>
+                </div>
+                <div class="action-card stats-card stats-card-purple">
+                    <span class="card-title">@eixosDiferentes</span>
+                    <span class="card-subtitle">Eixos Trabalhados</span>
+                    <div class="card-icons"><i class="fas fa-tags"></i></div>
+                </div>
+                <div class="action-card stats-card stats-card-cyan">
+                    <span class="card-title">@Math.Max(diasDesdeUltimo, 0)</span>
+                    <span class="card-subtitle">Dias desde o último</span>
+                    <div class="card-icons"><i class="fas fa-calendar-check"></i></div>
+                </div>
             </div>
         }
-        else if (Model.Count == 0)
+
+        <!-- Barra de Busca -->
+        <div class="search-container">
+            <form class="search-input-group" asp-action="Index" method="get" role="search">
+                <input type="hidden" name="atorId" value="@selectedAtorId" />
+                <div class="search-wrapper">
+                    <input type="search" name="searchQuery" value="@searchQuery"
+                           placeholder="Busque na descrição..." aria-label="Buscar no diário" />
+                    <button type="submit" class="btn-search" aria-label="Pesquisar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+
+            <button type="button" class="btn-add"
+                    onclick="window.location.href='@Url.Action("Create", new { atorId = selectedAtorId })'"
+                    title="Adicionar Novo Registro">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        @if (Model.Count > 0)
         {
-            <div class="empty-process">
-                <i class="fa-regular fa-clipboard"></i>
-                <strong>Nenhum registro encontrado para este ator.</strong>
-                <span>Use o botão Adicionar para criar o primeiro.</span>
-            </div>
-        }
-        else
-        {
-            <div class="assessment-list-container">
+            <!-- Lista de Registros -->
+            <div class="purple-divider"></div>
+            <div class="section-label">Todos os Registros</div>
+
+            <div class="forms-list">
                 @foreach (var item in Model)
                 {
-                    <div class="assessment-card">
-                        <div class="assessment-card-info">
-                            <h3>@item.Data.ToString("dd/MM/yyyy")</h3>
-                            <p>@AtorMentions.Render(item.Descricao, mentionActors,
-                                id => Url.Action("Resumo", "Atores", new { id }) ?? "#")</p>
-                            @if (item.Eixos.Count > 0)
-                            {
-                                <div class="process-tags">
-                                    @foreach (var link in item.Eixos.OrderBy(e => e.Eixo.Nome))
+                    <div class="form-item">
+                        <div class="form-info">
+                            <div class="item-header">
+                                <div class="activity-icon activity-icon-purple">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <div class="item-content">
+                                    <p class="name item-name">Registro de @item.Data.ToString("dd/MM/yyyy")</p>
+                                    <p class="item-subtitle process-description">
+                                        @AtorMentions.Render(item.Descricao, mentionActors,
+                                            id => Url.Action("Resumo", "Atores", new { id }) ?? "#")
+                                    </p>
+                                    @if (item.Eixos.Count > 0)
                                     {
-                                        <span class="process-tag">@link.Eixo.Nome</span>
+                                        <div class="tag-list">
+                                            @foreach (var link in item.Eixos.OrderBy(e => e.Eixo.Nome))
+                                            {
+                                                <span class="tag-item tag-purple"><i class="fas fa-tag"></i> @link.Eixo.Nome</span>
+                                            }
+                                        </div>
                                     }
                                 </div>
-                            }
+                            </div>
                         </div>
-                        <a asp-action="Edit" asp-route-id="@item.IdDiarioProcesso" class="details-icon"
-                           aria-label="Editar diário de @item.Data.ToString("dd/MM/yyyy")">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </a>
+
+                        <div class="actions">
+                            <a class="btn-action" asp-action="Edit" asp-route-id="@item.IdDiarioProcesso"
+                               title="Ver detalhes" aria-label="Ver registro de @item.Data.ToString("dd/MM/yyyy")">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </div>
                     </div>
                 }
             </div>
         }
-    </div>
+        else if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            <div class="no-records">
+                <div class="no-records-icon"><i class="fas fa-search"></i></div>
+                <h3>Nenhum registro encontrado</h3>
+                <p>Nenhuma descrição contém “@searchQuery”. Tente outros termos.</p>
+                <a class="btn-save" asp-action="Index" asp-route-atorId="@selectedAtorId">
+                    <i class="fa-solid fa-xmark"></i> Limpar busca
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="no-records">
+                <div class="no-records-icon"><i class="fas fa-book-open"></i></div>
+                <h3>Nenhum registro cadastrado</h3>
+                <p>Comece adicionando o primeiro registro do diário pessoal deste ator.</p>
+                <button type="button" class="btn-save"
+                        onclick="window.location.href='@Url.Action("Create", new { atorId = selectedAtorId })'">
+                    <i class="fa-solid fa-plus"></i> Adicionar Primeiro Registro
+                </button>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-user"></i></div>
+            <h3>Selecione um Ator</h3>
+            <p>Para visualizar o diário pessoal, primeiro selecione um ator no filtro acima.</p>
+        </div>
+    }
 </div>

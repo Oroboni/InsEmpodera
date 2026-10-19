@@ -80,25 +80,8 @@
    
 /* 1. VARIÁVEIS GLOBAIS (especificidades a serem definidas) */
 :root {
-  /* === CORES PRIMÁRIAS === */
-  --color-primary: #7A3188; /* cor base da identidade visual*/
-  --color-primary-light: #9b4db0;    /* versão mais clara */
-  --color-primary-dark: #5a1f66;     /* versão mais escura */
-  --color-primary-50: #f3e9f7;
-  --color-primary-100: #e0c8ef;
-  --color-primary-200: #caa3e4;
-  --color-primary-300: #b17dd8;
-  --color-primary-400: #9b58cd;
-  --color-primary-500: #8640b5;  
-  --color-primary-600: #6a2a73;
-  --color-primary-700: #51215a;
-  --color-primary-800: #3a153f;
-
-
-  /* === CORES SECUNDÁRIAS === */
-  --color-secondary: #6BC0B7;        /* base */
-  --color-secondary-light: #9be0db;  /* mais clara */
-  --color-secondary-dark: #4a8680;   /* mais escura */
+  /* === CORES PRIMÁRIAS E SECUNDÁRIAS ===
+     Definidas em tema.css (troca de tema pela chave "Tema" do appsettings.json). */
 
 
   /* === CORES DO SISTEMA === */

@@ -31,7 +31,7 @@ public class ServicesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExportComunidadeCompleta(int id)
+    public async Task<IActionResult> ExportComunidadeCompleta(Guid id)
     {
         var user = await AuthorizedUserAsync("Comunidades");
         if (user.Result != null) return user.Result;
@@ -43,7 +43,7 @@ public class ServicesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExportAtoresComunidade(int id)
+    public async Task<IActionResult> ExportAtoresComunidade(Guid id)
     {
         var user = await AuthorizedUserAsync("Atores");
         if (user.Result != null) return user.Result;
@@ -54,7 +54,7 @@ public class ServicesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExportAtividadesComunidade(int id)
+    public async Task<IActionResult> ExportAtividadesComunidade(Guid id)
     {
         var user = await AuthorizedUserAsync("Atividades");
         if (user.Result != null) return user.Result;
@@ -65,7 +65,7 @@ public class ServicesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExportRecursosComunidade(int id)
+    public async Task<IActionResult> ExportRecursosComunidade(Guid id)
     {
         var user = await AuthorizedUserAsync("Recursos");
         if (user.Result != null) return user.Result;
@@ -115,7 +115,7 @@ public class ServicesController : Controller
     {
         if (HttpContext.Session.GetString("Email") == null)
             return (null, RedirectToAction("Index", "Account"));
-        var id = int.TryParse(HttpContext.Session.GetString("ID"), out var parsed) ? parsed : 0;
+        var id = Guid.TryParse(HttpContext.Session.GetString("ID"), out var parsed) ? parsed : Guid.Empty;
         var user = await _context.Usuarios.AsNoTracking().Include(item => item.Perfil)
             .ThenInclude(item => item.Permissoes).FirstOrDefaultAsync(item => item.IdUsuario == id, HttpContext.RequestAborted);
         if (user == null || !user.CanViewDetails(module) || adminOnly && !string.Equals(user.Perfil?.Nome, "Admin", StringComparison.OrdinalIgnoreCase))
@@ -129,12 +129,12 @@ public class ServicesController : Controller
         fileName);
 
     [HttpGet]
-    public async Task<IActionResult> ExportComunidade(int id)
+    public async Task<IActionResult> ExportComunidade(Guid id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
+        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
         var loggedUser = await _context.Usuarios
             .AsNoTracking()
             .Include(user => user.Perfil)

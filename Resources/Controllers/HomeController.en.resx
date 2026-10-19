@@ -26,9 +26,9 @@
     <value>Date</value>
     <comment>Source: Data</comment>
   </data>
-  <data name='Ui_15ab4e0eb947899b' xml:space='preserve'>
-    <value>ties</value>
-    <comment>Source: laços</comment>
+  <data name='Ui_96eb91870f2cec1c' xml:space='preserve'>
+    <value>ECO2 Community Treatment System</value>
+    <comment>Source: Sistema de Tratamento Comunitário ECO2</comment>
   </data>
   <data name='Ui_68148f2f667cdefb' xml:space='preserve'>
     <value>Actors</value>
@@ -223,5 +223,125 @@
   <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
     <value>Nominatim suggestion failed:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+  <data name='Ui_fe01c0c9210f2f95' xml:space='preserve'>
+    <value>Good morning</value>
+    <comment>Source: Bom dia</comment>
+  </data>
+  <data name='Ui_128781da89cf7f2e' xml:space='preserve'>
+    <value>Good afternoon</value>
+    <comment>Source: Boa tarde</comment>
+  </data>
+  <data name='Ui_53d32016ee7aa629' xml:space='preserve'>
+    <value>Good evening</value>
+    <comment>Source: Boa noite</comment>
+  </data>
+  <data name='Ui_e5ceabdf17b8507f' xml:space='preserve'>
+    <value>New actor</value>
+    <comment>Source: Novo ator</comment>
+  </data>
+  <data name='Ui_4f01610915e0a67c' xml:space='preserve'>
+    <value>New form</value>
+    <comment>Source: Nova ficha</comment>
+  </data>
+  <data name='Ui_b79d16c6fc9d6ed6' xml:space='preserve'>
+    <value>New field diary</value>
+    <comment>Source: Novo diário de campo</comment>
+  </data>
+  <data name='Ui_519b52a2cdfb5801' xml:space='preserve'>
+    <value>in process</value>
+    <comment>Source: em processo</comment>
+  </data>
+  <data name='Ui_77f69ae33831f93f' xml:space='preserve'>
+    <value>in the last 30 days</value>
+    <comment>Source: nos últimos 30 dias</comment>
+  </data>
+  <data name='Ui_17bd143699ca853e' xml:space='preserve'>
+    <value>in progress</value>
+    <comment>Source: em andamento</comment>
+  </data>
+  <data name='Ui_089963539b553aec' xml:space='preserve'>
+    <value>active</value>
+    <comment>Source: ativos</comment>
+  </data>
+  <data name='Ui_a57e70a25e30a891' xml:space='preserve'>
+    <value>View communities</value>
+    <comment>Source: Ver comunidades</comment>
+  </data>
+  <data name='Ui_e48c9ce144fc3043' xml:space='preserve'>
+    <value>View actors</value>
+    <comment>Source: Ver atores</comment>
+  </data>
+  <data name='Ui_1c0af3263aa2196d' xml:space='preserve'>
+    <value>View forms</value>
+    <comment>Source: Ver fichas</comment>
+  </data>
+  <data name='Ui_d9f616d506d310ee' xml:space='preserve'>
+    <value>View diaries</value>
+    <comment>Source: Ver diários</comment>
+  </data>
+  <data name='Ui_e30fbc949891c04b' xml:space='preserve'>
+    <value>View all</value>
+    <comment>Source: Ver todos</comment>
+  </data>
+  <data name='Ui_799a56f648559db8' xml:space='preserve'>
+    <value>First contact forms</value>
+    <comment>Source: Fichas de 1º contato</comment>
+  </data>
+  <data name='Ui_6fbbda17207ff812' xml:space='preserve'>
+    <value>Field diaries</value>
+    <comment>Source: Diários de campo</comment>
+  </data>
+  <data name='Ui_b9ecce567823235b' xml:space='preserve'>
+    <value>Recently registered actors</value>
+    <comment>Source: Atores cadastrados recentemente</comment>
+  </data>
+  <data name='Ui_2bef59c575536a29' xml:space='preserve'>
+    <value>The latest registrations in the system.</value>
+    <comment>Source: Os últimos cadastros no sistema.</comment>
+  </data>
+  <data name='Ui_0f9e92e5e1e0b916' xml:space='preserve'>
+    <value>No community</value>
+    <comment>Source: Sem comunidade</comment>
+  </data>
+  <data name='Ui_3ae9a6fb7eb3d651' xml:space='preserve'>
+    <value>No actors registered yet.</value>
+    <comment>Source: Nenhum ator cadastrado ainda.</comment>
+  </data>
+  <data name='Ui_06bbc8a4e08f7d97' xml:space='preserve'>
+    <value>Register the first actor</value>
+    <comment>Source: Cadastrar o primeiro ator</comment>
+  </data>
+  <data name='Ui_151c33ab8248559c' xml:space='preserve'>
+    <value>Quick access</value>
+    <comment>Source: Acesso rápido</comment>
+  </data>
+  <data name='Ui_0032ecc4e4d2070a' xml:space='preserve'>
+    <value>The most used modules day to day.</value>
+    <comment>Source: Os módulos mais usados no dia a dia.</comment>
+  </data>
+  <data name='Ui_11c232e7b1a22169' xml:space='preserve'>
+    <value>Personal Diary</value>
+    <comment>Source: Diário Pessoal</comment>
+  </data>
+  <data name='Ui_e85aefd8eea1fcf4' xml:space='preserve'>
+    <value>Assessments</value>
+    <comment>Source: Avaliações</comment>
+  </data>
+  <data name='Ui_dff6624256ba2a95' xml:space='preserve'>
+    <value>Activities</value>
+    <comment>Source: Atividades</comment>
+  </data>
+  <data name='Ui_dc4bb10b6d41fdbf' xml:space='preserve'>
+    <value>Reports</value>
+    <comment>Source: Relatórios</comment>
+  </data>
+  <data name='Ui_2ebab86719d08d70' xml:space='preserve'>
+    <value>Data and Backup</value>
+    <comment>Source: Dados e Backup</comment>
+  </data>
+  <data name='Ui_54998e73fe0edef9' xml:space='preserve'>
+    <value>Key indicators</value>
+    <comment>Source: Indicadores principais</comment>
   </data>
 </root>

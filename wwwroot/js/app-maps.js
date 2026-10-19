@@ -44,6 +44,13 @@ function initMapSelector(mapId, inputId, options = {}) {
     var map = L.map(mapId).setView([latitude, longitude], startZoom);
     window.__empoderaMaps[mapId] = map;
 
+    // Recalcula o mapa quando o contêiner muda de tamanho (fontes/CSS carregando, abas,
+    // menu lateral). Sem isso o Leaflet desenha só parte dos blocos e o resto fica vazio.
+    if (typeof ResizeObserver === "function") {
+        new ResizeObserver(() => map.invalidateSize()).observe(mapElement);
+    }
+    window.addEventListener("load", () => map.invalidateSize());
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap'
     }).addTo(map);
@@ -491,18 +498,23 @@ function initMapSelector(mapId, inputId, options = {}) {
     }
 
     // 3. Adiciona a Lupa de Busca (Geocoding)
+    // O leaflet-control-geocoder 3.x espera Promises (await geocoder.geocode(query, context));
+    // o callback opcional mantém compatibilidade com a API antiga (geocode(query, cb, context)).
+    const responder = (results, cb, context) => {
+        if (typeof cb === "function") cb.call(context || this, results);
+        return results;
+    };
     const customGeocoder = {
         geocode: async function(query, cb, context) {
             const result = await geocodeWithFetch(query);
-            const results = result ? [result] : [];
-            cb.call(context || this, results);
+            return responder(result ? [result] : [], cb, context);
         },
         suggest: async function(query, cb, context) {
             const results = await fetchSuggestions(query, 5);
-            cb.call(context || this, results);
+            return responder(results || [], cb, context);
         },
-        reverse: function(_location, _scale, cb, context) {
-            cb.call(context || this, []);
+        reverse: async function(_location, _scale, cb, context) {
+            return responder([], cb, context);
         }
     };
 
@@ -510,6 +522,9 @@ function initMapSelector(mapId, inputId, options = {}) {
         L.Control.geocoder({
             defaultMarkGeocode: false,
             placeholder: "Buscar endereço...",
+            errorMessage: "Nenhum endereço encontrado.",
+            suggestMinLength: 3,
+            suggestTimeout: 350,
             geocoder: customGeocoder
         })
         .on('markgeocode', function(e) {
@@ -543,6 +558,7 @@ function initMapSelector(mapId, inputId, options = {}) {
     if (manualInput) {
         let manualSearchTimeout = null;
         let manualSuggestionsTimeout = null;
+        let suggestionsRequest = 0; // descarta respostas de buscas antigas
         const suggestionsList = createSuggestionsList(manualInput);
 
         const applySuggestion = async (suggestion) => {
@@ -636,13 +652,16 @@ function initMapSelector(mapId, inputId, options = {}) {
             }
 
             manualSuggestionsTimeout = setTimeout(async () => {
+                const request = ++suggestionsRequest;
                 if (typedValue.length < 3) {
                     hideSuggestions(suggestionsList);
                     return;
                 }
 
                 const suggestions = await fetchSuggestions(typedValue, 5);
-                renderSuggestions(suggestions);
+                if (request === suggestionsRequest && manualInput.value.trim() === typedValue) {
+                    renderSuggestions(suggestions);
+                }
             }, 250);
 
             manualSearchTimeout = setTimeout(async () => {

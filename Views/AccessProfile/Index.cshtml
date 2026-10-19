@@ -5,14 +5,14 @@
     Layout = "_Layout";
     ViewData["PageCSS"] = "homepage";
     var canDeleteProfiles = ViewBag.CanDeleteProfiles is true;
-    var loggedProfileId = ViewBag.LoggedProfileId is int value ? value : 0;
+    var loggedProfileId = ViewBag.LoggedProfileId is Guid value ? value : Guid.Empty;
 }
 
 @section Styles {
 
-    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/pages/perfisacesso.css" />
+    <link rel="stylesheet" href="~/css/pages/fichaprimeirocontato.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/perfisacesso.css" asp-append-version="true" />
 }
 
 <div class="modern-container">
@@ -46,7 +46,11 @@
     </div>
 
     <!-- Estatísticas -->
-    <div class="section-label">Resumo</div>
+    <button type="button" class="section-label indicadores-toggle" data-indicadores
+            aria-expanded="true" title="Recolher ou mostrar os indicadores">
+        <span>Indicadores</span>
+        <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+    </button>
     <div class="actions-grid">
         <div class="action-card stats-card">
             <span class="card-title" id="totalProfiles">@Model.Count()</span>

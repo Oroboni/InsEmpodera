@@ -176,4 +176,468 @@
     <value>Nominatim suggestion failed:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_f150afd3c5994d18' xml:space='preserve'>
+    <value>System</value>
+    <comment>Source: Sistema</comment>
+  </data>
+  <data name='Ui_46332f9d834ef8dd' xml:space='preserve'>
+    <value>Description</value>
+    <comment>Source: Descrição</comment>
+  </data>
+  <data name='Ui_15116ba377896771' xml:space='preserve'>
+    <value>Version</value>
+    <comment>Source: Versão</comment>
+  </data>
+  <data name='Ui_0d2b7ca65666383e' xml:space='preserve'>
+    <value>Environment</value>
+    <comment>Source: Ambiente</comment>
+  </data>
+  <data name='Ui_d481d734900c8eb7' xml:space='preserve'>
+    <value>Organization</value>
+    <comment>Source: Organização</comment>
+  </data>
+  <data name='Ui_96eb91870f2cec1c' xml:space='preserve'>
+    <value>ECO2 Community Treatment System</value>
+    <comment>Source: Sistema de Tratamento Comunitário ECO2</comment>
+  </data>
+  <data name='Ui_7d9aaa875a9e6516' xml:space='preserve'>
+    <value>Demo</value>
+    <comment>Source: Demonstração</comment>
+  </data>
+  <data name='Ui_ccb244688314d11b' xml:space='preserve'>
+    <value>Production</value>
+    <comment>Source: Produção</comment>
+  </data>
+  <data name='Ui_c36c2f69fb8b507f' xml:space='preserve'>
+    <value>Development</value>
+    <comment>Source: Desenvolvimento</comment>
+  </data>
+  <data name='Ui_5895b95d5e62ffd3' xml:space='preserve'>
+    <value>Help Center</value>
+    <comment>Source: Central de Ajuda</comment>
+  </data>
+  <data name='Ui_2ebab86719d08d70' xml:space='preserve'>
+    <value>Data and Backup</value>
+    <comment>Source: Dados e Backup</comment>
+  </data>
+  <data name='Ui_76b0fb6ad18939ac' xml:space='preserve'>
+    <value>Settings</value>
+    <comment>Source: Configurações</comment>
+  </data>
+  <data name='Ui_c7c3cb04d14e903f' xml:space='preserve'>
+    <value>Interface preferences, your account details and security options.</value>
+    <comment>Source: Preferências da interface, dados da sua conta e opções de segurança.</comment>
+  </data>
+  <data name='Ui_6706dbe8b72352eb' xml:space='preserve'>
+    <value>Preferences</value>
+    <comment>Source: Preferências</comment>
+  </data>
+  <data name='Ui_e81f7b8f54b16866' xml:space='preserve'>
+    <value>Your account</value>
+    <comment>Source: Sua conta</comment>
+  </data>
+  <data name='Ui_375ff96ef792b288' xml:space='preserve'>
+    <value>Security and access</value>
+    <comment>Source: Segurança e acesso</comment>
+  </data>
+  <data name='Ui_97a0fa0947ad8f6a' xml:space='preserve'>
+    <value>About</value>
+    <comment>Source: Sobre</comment>
+  </data>
+  <data name='Ui_69d5600efbb5a82a' xml:space='preserve'>
+    <value>Apply to this browser and take effect immediately.</value>
+    <comment>Source: Valem para este navegador e são aplicadas imediatamente.</comment>
+  </data>
+  <data name='Ui_980b2fd3e50c6074' xml:space='preserve'>
+    <value>Interface language</value>
+    <comment>Source: Idioma da interface</comment>
+  </data>
+  <data name='Ui_cf49e4b33d3d53f8' xml:space='preserve'>
+    <value>It can also be chosen on the login screen, before signing in.</value>
+    <comment>Source: Também pode ser escolhido na tela de login, antes de entrar.</comment>
+  </data>
+  <data name='Ui_b803f24d52edd7bc' xml:space='preserve'>
+    <value>Automatic</value>
+    <comment>Source: Automático</comment>
+  </data>
+  <data name='Ui_8061fc845a753fea' xml:space='preserve'>
+    <value>Use browser language</value>
+    <comment>Source: Usar o idioma do navegador</comment>
+  </data>
+  <data name='Ui_17fd3dbea250e2e1' xml:space='preserve'>
+    <value>Brazilian Portuguese</value>
+    <comment>Source: Português do Brasil</comment>
+  </data>
+  <data name='Ui_bab918f0f164dbdb' xml:space='preserve'>
+    <value>Color theme</value>
+    <comment>Source: Tema de cores</comment>
+  </data>
+  <data name='Ui_3f7ee2b3d23555f2' xml:space='preserve'>
+    <value>Set by the system administration for all users.</value>
+    <comment>Source: Definido pela administração do sistema para todos os usuários.</comment>
+  </data>
+  <data name='Ui_be77897d5df9ea0d' xml:space='preserve'>
+    <value>EcoRedes Green</value>
+    <comment>Source: Verde EcoRedes</comment>
+  </data>
+  <data name='Ui_0871bebdc9be7902' xml:space='preserve'>
+    <value>Purple (original identity)</value>
+    <comment>Source: Roxo (identidade original)</comment>
+  </data>
+  <data name='Ui_c454de2ea95935ab' xml:space='preserve'>
+    <value>Active theme</value>
+    <comment>Source: Tema ativo</comment>
+  </data>
+  <data name='Ui_2fef4477070d75b9' xml:space='preserve'>
+    <value>Managed</value>
+    <comment>Source: Gerenciado</comment>
+  </data>
+  <data name='Ui_60c5c68d9e5b55bb' xml:space='preserve'>
+    <value>Details of the signed-in user. To change them, contact an administrator.</value>
+    <comment>Source: Dados do usuário conectado. Para alterá-los, fale com um administrador.</comment>
+  </data>
+  <data name='Ui_752abd514a8afc49' xml:space='preserve'>
+    <value>Account details could not be loaded.</value>
+    <comment>Source: Não foi possível carregar os dados da conta.</comment>
+  </data>
+  <data name='Ui_5086900635fec3ef' xml:space='preserve'>
+    <value>Name</value>
+    <comment>Source: Nome</comment>
+  </data>
+  <data name='Ui_2550d962e536e7c0' xml:space='preserve'>
+    <value>E-mail</value>
+    <comment>Source: E-mail</comment>
+  </data>
+  <data name='Ui_a4e7b687fa6af364' xml:space='preserve'>
+    <value>Access profile</value>
+    <comment>Source: Perfil de acesso</comment>
+  </data>
+  <data name='Ui_1f8fd361b26185c3' xml:space='preserve'>
+    <value>Occupation</value>
+    <comment>Source: Ocupação</comment>
+  </data>
+  <data name='Ui_e384b608696bcd28' xml:space='preserve'>
+    <value>Permissions, password and session.</value>
+    <comment>Source: Permissões, senha e sessão.</comment>
+  </data>
+  <data name='Ui_e1c05ca3cc5322f8' xml:space='preserve'>
+    <value>Profiles and permissions</value>
+    <comment>Source: Perfis e permissões</comment>
+  </data>
+  <data name='Ui_91510fb319cf324d' xml:space='preserve'>
+    <value>Which actions each profile can perform in the system modules.</value>
+    <comment>Source: Quais ações cada perfil pode realizar nos módulos do sistema.</comment>
+  </data>
+  <data name='Ui_0c5d2dcb4c212ded' xml:space='preserve'>
+    <value>View access profiles</value>
+    <comment>Source: Ver Perfis de Acesso</comment>
+  </data>
+  <data name='Ui_f5b264f0274a8fb5' xml:space='preserve'>
+    <value>No permission</value>
+    <comment>Source: Sem permissão</comment>
+  </data>
+  <data name='Ui_d482c10b3d4d2a19' xml:space='preserve'>
+    <value>Password</value>
+    <comment>Source: Senha</comment>
+  </data>
+  <data name='Ui_c0cc706bd57612db' xml:space='preserve'>
+    <value>Receive an e-mail link to set a new password.</value>
+    <comment>Source: Receba por e-mail um link para definir uma nova senha.</comment>
+  </data>
+  <data name='Ui_97d527258efdac53' xml:space='preserve'>
+    <value>Reset password</value>
+    <comment>Source: Redefinir senha</comment>
+  </data>
+  <data name='Ui_1f214f9f888ffbcc' xml:space='preserve'>
+    <value>End session</value>
+    <comment>Source: Encerrar sessão</comment>
+  </data>
+  <data name='Ui_e3e6736cbbb1a5ff' xml:space='preserve'>
+    <value>Securely ends the session in this browser.</value>
+    <comment>Source: Finaliza a sessão neste navegador com segurança.</comment>
+  </data>
+  <data name='Ui_43afd54c89e35af7' xml:space='preserve'>
+    <value>Sign out</value>
+    <comment>Source: Fazer logout</comment>
+  </data>
+  <data name='Ui_68d02fe207345bf9' xml:space='preserve'>
+    <value>Need help?</value>
+    <comment>Source: Precisa de ajuda?</comment>
+  </data>
+  <data name='Ui_64e1842b12eacc56' xml:space='preserve'>
+    <value>Settings sections</value>
+    <comment>Source: Seções das configurações</comment>
+  </data>
+  <data name='Ui_4cd39d4fd48cb748' xml:space='preserve'>
+    <value>System colors</value>
+    <comment>Source: Cores do sistema</comment>
+  </data>
+  <data name='Ui_2d67cf6ea8b08a93' xml:space='preserve'>
+    <value>Customize all site colors. The preview appears on this page right away; when saved, the colors apply to all users.</value>
+    <comment>Source: Personalize todas as cores do site. A pré-visualização aparece nesta página na hora; ao salvar, as cores valem para todos os usuários.</comment>
+  </data>
+  <data name='Ui_69a5d10fc0bff13f' xml:space='preserve'>
+    <value>Only administrators can change the system colors.</value>
+    <comment>Source: Somente administradores podem alterar as cores do sistema.</comment>
+  </data>
+  <data name='Ui_542ce3405b379d41' xml:space='preserve'>
+    <value>Ready-made palettes</value>
+    <comment>Source: Paletas prontas</comment>
+  </data>
+  <data name='Ui_76096134ebe9f7cb' xml:space='preserve'>
+    <value>Original purple</value>
+    <comment>Source: Roxo original</comment>
+  </data>
+  <data name='Ui_69c6b88a57cc3076' xml:space='preserve'>
+    <value>Generate palette from a color</value>
+    <comment>Source: Gerar paleta a partir de uma cor</comment>
+  </data>
+  <data name='Ui_f28ec1ff572e240b' xml:space='preserve'>
+    <value>Generate</value>
+    <comment>Source: Gerar</comment>
+  </data>
+  <data name='Ui_205067758b9c5726' xml:space='preserve'>
+    <value>Primary color</value>
+    <comment>Source: Cor principal</comment>
+  </data>
+  <data name='Ui_c95f1c6f7a9c666e' xml:space='preserve'>
+    <value>System identity: menu, buttons, links and headings.</value>
+    <comment>Source: Identidade do sistema: menu, botões, links e títulos.</comment>
+  </data>
+  <data name='Ui_afc19f1734c1d195' xml:space='preserve'>
+    <value>Primary</value>
+    <comment>Source: Principal</comment>
+  </data>
+  <data name='Ui_d65679349bf44ba9' xml:space='preserve'>
+    <value>Buttons, links and highlights</value>
+    <comment>Source: Botões, links e destaques</comment>
+  </data>
+  <data name='Ui_49b77beafc8339f8' xml:space='preserve'>
+    <value>Side menu</value>
+    <comment>Source: Menu lateral</comment>
+  </data>
+  <data name='Ui_3f9c974c30e6f3dd' xml:space='preserve'>
+    <value>Side menu background</value>
+    <comment>Source: Fundo do menu lateral</comment>
+  </data>
+  <data name='Ui_3991111e65bd6c8c' xml:space='preserve'>
+    <value>Dark primary</value>
+    <comment>Source: Principal escura</comment>
+  </data>
+  <data name='Ui_52a82b8a41341fd0' xml:space='preserve'>
+    <value>Buttons on hover</value>
+    <comment>Source: Botões ao passar o mouse</comment>
+  </data>
+  <data name='Ui_4707c39f0135cf19' xml:space='preserve'>
+    <value>Light primary</value>
+    <comment>Source: Principal clara</comment>
+  </data>
+  <data name='Ui_0e047199c1cdcea0' xml:space='preserve'>
+    <value>Highlights and icons</value>
+    <comment>Source: Realces e ícones</comment>
+  </data>
+  <data name='Ui_4349947e66185eb8' xml:space='preserve'>
+    <value>Headings</value>
+    <comment>Source: Títulos</comment>
+  </data>
+  <data name='Ui_0e87dd57a655381f' xml:space='preserve'>
+    <value>Headings and highlighted text</value>
+    <comment>Source: Títulos e textos de destaque</comment>
+  </data>
+  <data name='Ui_0919f6fa139b9f6d' xml:space='preserve'>
+    <value>Primary color shades</value>
+    <comment>Source: Tons da cor principal</comment>
+  </data>
+  <data name='Ui_20b9e0792af768b2' xml:space='preserve'>
+    <value>Scale used in soft backgrounds, borders, tags and indicators.</value>
+    <comment>Source: Escala usada em fundos suaves, bordas, etiquetas e indicadores.</comment>
+  </data>
+  <data name='Ui_fa0ad40d74a66ab9' xml:space='preserve'>
+    <value>Shade 50</value>
+    <comment>Source: Tom 50</comment>
+  </data>
+  <data name='Ui_fe76f21491a1b19e' xml:space='preserve'>
+    <value>Shade 100</value>
+    <comment>Source: Tom 100</comment>
+  </data>
+  <data name='Ui_c3919224d2675b0b' xml:space='preserve'>
+    <value>Shade 200</value>
+    <comment>Source: Tom 200</comment>
+  </data>
+  <data name='Ui_931d0d5f32d13ce3' xml:space='preserve'>
+    <value>Shade 300</value>
+    <comment>Source: Tom 300</comment>
+  </data>
+  <data name='Ui_515cf8b8d5bd4274' xml:space='preserve'>
+    <value>Shade 400</value>
+    <comment>Source: Tom 400</comment>
+  </data>
+  <data name='Ui_88d0fab450989b6e' xml:space='preserve'>
+    <value>Shade 500</value>
+    <comment>Source: Tom 500</comment>
+  </data>
+  <data name='Ui_5ab9ae2fed9ba95d' xml:space='preserve'>
+    <value>Shade 700</value>
+    <comment>Source: Tom 700</comment>
+  </data>
+  <data name='Ui_8b65d68ebf28019b' xml:space='preserve'>
+    <value>Soft backgrounds and selection</value>
+    <comment>Source: Fundos suaves e seleção</comment>
+  </data>
+  <data name='Ui_b77b685a4937972d' xml:space='preserve'>
+    <value>Soft borders</value>
+    <comment>Source: Bordas suaves</comment>
+  </data>
+  <data name='Ui_ced10e95c1196e6b' xml:space='preserve'>
+    <value>Focus outlines</value>
+    <comment>Source: Contornos de foco</comment>
+  </data>
+  <data name='Ui_cd9cc5cc5f422fd6' xml:space='preserve'>
+    <value>Light details</value>
+    <comment>Source: Detalhes claros</comment>
+  </data>
+  <data name='Ui_8cd43da506b6a722' xml:space='preserve'>
+    <value>Icons and highlights</value>
+    <comment>Source: Ícones e realces</comment>
+  </data>
+  <data name='Ui_cd0b84e99b45ca43' xml:space='preserve'>
+    <value>Indicator cards</value>
+    <comment>Source: Cartões de indicadores</comment>
+  </data>
+  <data name='Ui_99c46b55a787597c' xml:space='preserve'>
+    <value>Strong text</value>
+    <comment>Source: Textos fortes</comment>
+  </data>
+  <data name='Ui_3c12192227a8c423' xml:space='preserve'>
+    <value>Secondary color</value>
+    <comment>Source: Cor secundária</comment>
+  </data>
+  <data name='Ui_2c481d0eced4c7c3' xml:space='preserve'>
+    <value>Login button and complementary highlights.</value>
+    <comment>Source: Botão de entrada do login e destaques complementares.</comment>
+  </data>
+  <data name='Ui_3977c752a25af4da' xml:space='preserve'>
+    <value>Secondary</value>
+    <comment>Source: Secundária</comment>
+  </data>
+  <data name='Ui_b4940f6da40ad7fd' xml:space='preserve'>
+    <value>Sign-in button and subtitles</value>
+    <comment>Source: Botão Entrar e subtítulos</comment>
+  </data>
+  <data name='Ui_7f9384d6963d9f72' xml:space='preserve'>
+    <value>Light secondary</value>
+    <comment>Source: Secundária clara</comment>
+  </data>
+  <data name='Ui_9793a5a3ee010967' xml:space='preserve'>
+    <value>Highlights</value>
+    <comment>Source: Realces</comment>
+  </data>
+  <data name='Ui_ff7eab9ec3b0db7e' xml:space='preserve'>
+    <value>Dark secondary</value>
+    <comment>Source: Secundária escura</comment>
+  </data>
+  <data name='Ui_19f2a459266b6698' xml:space='preserve'>
+    <value>On hover</value>
+    <comment>Source: Ao passar o mouse</comment>
+  </data>
+  <data name='Ui_ae1c549b5cb87116' xml:space='preserve'>
+    <value>Backgrounds, text and borders</value>
+    <comment>Source: Fundos, textos e bordas</comment>
+  </data>
+  <data name='Ui_6453f91aad4438d4' xml:space='preserve'>
+    <value>Neutral page colors.</value>
+    <comment>Source: Cores neutras da página.</comment>
+  </data>
+  <data name='Ui_463640af3dd34746' xml:space='preserve'>
+    <value>Page background</value>
+    <comment>Source: Fundo da página</comment>
+  </data>
+  <data name='Ui_e10073578a9e6ea8' xml:space='preserve'>
+    <value>Area behind the content</value>
+    <comment>Source: Área atrás do conteúdo</comment>
+  </data>
+  <data name='Ui_d03a025e8d934082' xml:space='preserve'>
+    <value>Content background</value>
+    <comment>Source: Fundo do conteúdo</comment>
+  </data>
+  <data name='Ui_c7076109d82198ef' xml:space='preserve'>
+    <value>Main area of the pages</value>
+    <comment>Source: Área principal das telas</comment>
+  </data>
+  <data name='Ui_02c4e49ec4456217' xml:space='preserve'>
+    <value>Soft background</value>
+    <comment>Source: Fundo suave</comment>
+  </data>
+  <data name='Ui_3105442ac6508bc2' xml:space='preserve'>
+    <value>Rows, fields and hover</value>
+    <comment>Source: Linhas, campos e hover</comment>
+  </data>
+  <data name='Ui_0d33d03cbb94f43a' xml:space='preserve'>
+    <value>Borders</value>
+    <comment>Source: Bordas</comment>
+  </data>
+  <data name='Ui_8a42113c0cc8a7a8' xml:space='preserve'>
+    <value>Field borders</value>
+    <comment>Source: Bordas de campos</comment>
+  </data>
+  <data name='Ui_42a93e61ae93083a' xml:space='preserve'>
+    <value>Secondary text</value>
+    <comment>Source: Texto secundário</comment>
+  </data>
+  <data name='Ui_6d3da712fe0b3cfa' xml:space='preserve'>
+    <value>Descriptions and captions</value>
+    <comment>Source: Descrições e legendas</comment>
+  </data>
+  <data name='Ui_6df3d6661c095ce7' xml:space='preserve'>
+    <value>Text</value>
+    <comment>Source: Texto</comment>
+  </data>
+  <data name='Ui_0b0badec3b7894f1' xml:space='preserve'>
+    <value>General text</value>
+    <comment>Source: Textos em geral</comment>
+  </data>
+  <data name='Ui_26e7a3040498778d' xml:space='preserve'>
+    <value>Strong text</value>
+    <comment>Source: Texto forte</comment>
+  </data>
+  <data name='Ui_eae017a84905c155' xml:space='preserve'>
+    <value>Item titles</value>
+    <comment>Source: Títulos de itens</comment>
+  </data>
+  <data name='Ui_534c4da814316270' xml:space='preserve'>
+    <value>Discard changes</value>
+    <comment>Source: Descartar alterações</comment>
+  </data>
+  <data name='Ui_36caa50c074c7d86' xml:space='preserve'>
+    <value>Save for all users</value>
+    <comment>Source: Salvar para todos os usuários</comment>
+  </data>
+  <data name='Ui_a63eb40a7f40c58a' xml:space='preserve'>
+    <value>The system is using custom colors.</value>
+    <comment>Source: O sistema está usando cores personalizadas.</comment>
+  </data>
+  <data name='Ui_81e0856ce8cf439f' xml:space='preserve'>
+    <value>Restore default colors</value>
+    <comment>Source: Restaurar cores padrão</comment>
+  </data>
+  <data name='Ui_244262674bf4bc3f' xml:space='preserve'>
+    <value>Colors saved. They now apply to all users.</value>
+    <comment>Source: Cores salvas. Elas já valem para todos os usuários.</comment>
+  </data>
+  <data name='Ui_edc2735920eca0ef' xml:space='preserve'>
+    <value>Default colors restored.</value>
+    <comment>Source: Cores padrão restauradas.</comment>
+  </data>
+  <data name='Ui_00d551e63dd540fc' xml:space='preserve'>
+    <value>Profile</value>
+    <comment>Source: Perfil</comment>
+  </data>
+  <data name='Ui_21c7fd2a35975e2d' xml:space='preserve'>
+    <value>About the system</value>
+    <comment>Source: Sobre o sistema</comment>
+  </data>
+  <data name='Ui_73d18a4b467d9e1b' xml:space='preserve'>
+    <value>Other options</value>
+    <comment>Source: Outras opções</comment>
+  </data>
 </root>

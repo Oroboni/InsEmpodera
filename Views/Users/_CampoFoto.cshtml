@@ -1,0 +1,38 @@
+@model Empodera.Models.Usuario
+@inject Empodera.Services.FotoUsuarioService Fotos
+@*
+    Foto de perfil do usuário (Create e Edit). O arquivo vai em "fotoArquivo";
+    "removerFoto" apaga a foto atual. Pré-visualização em wwwroot/js/usuario-foto.js.
+*@
+@{
+    var urlFoto = Model.IdUsuario == Guid.Empty ? null : Fotos.Url(Model.IdUsuario);
+    var iniciais = Empodera.Services.FotoUsuarioService.Iniciais(Model.Nome);
+}
+<div class="input-card full-width user-photo-card" data-user-photo>
+    <div class="user-photo-preview avatar avatar-xl" data-photo-preview>
+        @if (urlFoto is not null)
+        {
+            <img src="@urlFoto" alt="Foto de @Model.Nome" data-photo-img />
+        }
+        else
+        {
+            <span data-photo-initials>@iniciais</span>
+        }
+    </div>
+    <div class="input-content user-photo-content">
+        <label for="fotoArquivo">Foto de perfil</label>
+        <small class="text-muted">JPG, PNG ou WEBP, até 2 MB. Aparece no menu e na lista de usuários.</small>
+        <div class="user-photo-actions">
+            <label class="wizard-btn btn-prev user-photo-choose" for="fotoArquivo">
+                <i class="fa-solid fa-camera"></i> <span data-photo-choose-label>@(urlFoto is null ? "Escolher foto" : "Trocar foto")</span>
+            </label>
+            <input type="file" id="fotoArquivo" name="fotoArquivo" class="clean-input user-photo-input"
+                   accept="image/jpeg,image/png,image/webp" />
+            <button type="button" class="user-photo-remove" data-photo-remove @(urlFoto is null ? "hidden" : null)>
+                <i class="fa-solid fa-trash"></i> Remover foto
+            </button>
+            <input type="hidden" name="removerFoto" value="false" data-photo-remove-flag />
+        </div>
+        <small class="user-photo-error" data-photo-error role="alert" hidden></small>
+    </div>
+</div>

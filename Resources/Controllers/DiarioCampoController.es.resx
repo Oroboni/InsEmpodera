@@ -481,7 +481,7 @@
     <comment>Source: Ex: UBS, Escola, Associação...</comment>
   </data>
   <data name='Ui_1c704dbc292dd79f' xml:space='preserve'>
-    <value>Escribe aquí... Úsalo para mencionar actores.</value>
+    <value>Escriba aquí... Use para mencionar actores</value>
     <comment>Source: Digite aqui... Use para mencionar atores</comment>
   </data>
   <data name='Ui_a373fcaf825a2220' xml:space='preserve'>
@@ -649,5 +649,33 @@
   <data name='Ui_3c0857b3b5567e10' xml:space='preserve'>
     <value>La sugerencia de nominatim falló:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
+  </data>
+  <data name='Ui_aff4a93487ceb273' xml:space='preserve'>
+    <value>Participantes</value>
+    <comment>Source: Participantes</comment>
+  </data>
+  <data name='Ui_602ef905b318f969' xml:space='preserve'>
+    <value>+ Agregar actor</value>
+    <comment>Source: + Adicionar ator</comment>
+  </data>
+  <data name='Ui_d60a9b28bcfa6bd0' xml:space='preserve'>
+    <value>Escriba la dirección completa...</value>
+    <comment>Source: Digite o endereço completo...</comment>
+  </data>
+  <data name='Ui_83204379808320f1' xml:space='preserve'>
+    <value>Agregar participante</value>
+    <comment>Source: Adicionar participante</comment>
+  </data>
+  <data name='Ui_00dc6190ecb0086f' xml:space='preserve'>
+    <value>Registros en la comunidad</value>
+    <comment>Source: Registros na comunidade</comment>
+  </data>
+  <data name='Ui_6b3aec840894e495' xml:space='preserve'>
+    <value>Últimos 30 días</value>
+    <comment>Source: Últimos 30 dias</comment>
+  </data>
+  <data name='Ui_984b0d50a50745f1' xml:space='preserve'>
+    <value>Último registro</value>
+    <comment>Source: Último registro</comment>
   </data>
 </root>

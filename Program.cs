@@ -5,14 +5,51 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using System.Threading.RateLimiting;
+using System.Net;
 using Empodera.Services.Identity;
 using Empodera.Services.Email;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto |
+        ForwardedHeaders.XForwardedHost;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+    options.KnownProxies.Add(IPAddress.Loopback);
+    options.KnownProxies.Add(IPAddress.IPv6Loopback);
+});
+
+var dataProtectionKeysPath = builder.Configuration["DataProtection:KeysPath"];
+if (string.IsNullOrWhiteSpace(dataProtectionKeysPath) &&
+    !builder.Environment.IsDevelopment() &&
+    !builder.Environment.IsEnvironment("Testing"))
+{
+    dataProtectionKeysPath = "/var/lib/empodera/keys";
+}
+
+if (!string.IsNullOrWhiteSpace(dataProtectionKeysPath))
+{
+    builder.Services
+        .AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath))
+        .SetApplicationName("InstitutoEmpodera");
+}
+
 // Add services to the container.
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+// Mantém letras acentuadas legíveis no HTML (ex.: "Diários" em vez de "Di&#xE1;rios").
+// Sem isso, textos dinâmicos com acento não são reconhecidos pelo LocalizedHtmlMiddleware.
+// Caracteres perigosos (<, >, &, aspas) continuam sendo codificados.
+builder.Services.Configure<Microsoft.Extensions.WebEncoders.WebEncoderOptions>(options =>
+    options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(System.Text.Unicode.UnicodeRanges.All));
 builder.Services.AddAntiforgery(options => options.SuppressXFrameOptionsHeader = true);
 builder.Services.AddControllersWithViews(options =>
     {
@@ -72,9 +109,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 "Defina ConnectionStrings__DefaultConnection por variável de ambiente ou cofre de segredos.");
         }
 
+        var mysqlConnection = new MySqlConnectionStringBuilder(connectionString)
+        {
+            GuidFormat = MySqlGuidFormat.Binary16
+        }.ConnectionString;
+
         options.UseMySql(
-            connectionString,
-            ServerVersion.AutoDetect(connectionString));
+            mysqlConnection,
+            ServerVersion.AutoDetect(mysqlConnection));
     }
     else
     {
@@ -108,11 +150,15 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddSingleton<TemaPersonalizadoService>();
+builder.Services.AddSingleton<FotoUsuarioService>();
 builder.Services.AddScoped<RelatorioExcelService>();
 builder.Services.AddScoped<SpreadsheetExportService>();
 builder.Services.AddScoped<ExcelBackupService>();
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 var supportedCultures = new[]
 {
@@ -159,30 +205,31 @@ app.Use(async (context, next) =>
     await next();
 });
 
+// Modo de demonstração: cria o esquema a partir do modelo e define a senha do usuário de exemplo.
+if (app.Environment.IsEnvironment("Testing"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.EnsureCreatedAsync();
+    var testPassword = builder.Configuration["Testing:AdminPassword"];
+    if (!string.IsNullOrWhiteSpace(testPassword))
+    {
+        var testUser = await db.Usuarios.FirstOrDefaultAsync(user => user.NormalizedEmail == "JOAO@EMAIL.COM");
+        if (testUser is not null)
+        {
+            testUser.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>()
+                .HashPassword(testUser, testPassword);
+            testUser.Ativo = "S";
+            await db.SaveChangesAsync();
+        }
+    }
+}
+
+// Garante os eixos temáticos padrão (só insere os ausentes); sem eles os seletores de eixos ficam vazios.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    if (app.Environment.IsEnvironment("Testing"))
-    {
-        await db.Database.EnsureCreatedAsync();
-        var testPassword = builder.Configuration["Testing:AdminPassword"];
-        if (!string.IsNullOrWhiteSpace(testPassword))
-        {
-            var testUser = await db.Usuarios.FirstOrDefaultAsync(user => user.IdUsuario == 1);
-            if (testUser is not null)
-            {
-                testUser.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>()
-                    .HashPassword(testUser, testPassword);
-                testUser.Ativo = "S";
-                await db.SaveChangesAsync();
-            }
-        }
-    }
-    else
-    {
-        await db.Database.MigrateAsync();
-        await EixoCatalogo.EnsureCreatedAsync(db);
-    }
+    await EixoCatalogo.EnsureCreatedAsync(db);
 }
 
 // Configure the HTTP request pipeline.

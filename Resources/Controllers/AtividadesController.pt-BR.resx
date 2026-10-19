@@ -456,4 +456,12 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_c9d0decb8a486583' xml:space='preserve'>
+    <value>Todos os eixos</value>
+    <comment>Source: Todos os eixos</comment>
+  </data>
+  <data name='Ui_6d0f092b4502a0fe' xml:space='preserve'>
+    <value>Filtrar por eixo</value>
+    <comment>Source: Filtrar por eixo</comment>
+  </data>
 </root>

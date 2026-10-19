@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Cores da marca vêm do tema ativo (wwwroot/css/tema.css); o canvas do Chart.js não entende var(--...).
+    const estiloRaiz = getComputedStyle(document.documentElement);
+    const corTema = (token, fallback) => estiloRaiz.getPropertyValue(token).trim() || fallback;
+    const corPrimaria = corTema('--color-primary', '#7A3188');
+    const corPrimariaRgb = corTema('--color-primary-rgb', '122 49 136');
+
     // 1. Gráfico de Pizza (Fichas de 1º Contato)
     const pieChartCtx = document.getElementById('firstContactPieChart');
     if (pieChartCtx) {
@@ -42,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     label: radarChartCtx.dataset.label,
                     data: JSON.parse(radarChartCtx.dataset.points),
                     fill: true,
-                    backgroundColor: 'rgba(122, 49, 136, 0.2)',
-                    borderColor: 'rgb(122, 49, 136)',
-                    pointBackgroundColor: 'rgb(122, 49, 136)',
+                    backgroundColor: `rgb(${corPrimariaRgb} / 0.2)`,
+                    borderColor: corPrimaria,
+                    pointBackgroundColor: corPrimaria,
                 }]
             },
             options: {

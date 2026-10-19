@@ -1,33 +1,132 @@
-﻿@{
-    ViewData["Title"] = "HomePage";
-    ViewData["PageCSS"] = "homepage"; 
-    Layout = "_Layout"; 
-    var comunidade = ViewBag.Comunidade as List<Empodera.Models.Comunidade>;
-    var ator = ViewBag.Atores as List<Empodera.Models.Atores>;
+﻿@model Empodera.Models.PainelInicial
+@{
+    ViewData["Title"] = "Início";
+    ViewData["PageCSS"] = "home";
+    Layout = "_Layout";
+    var nome = Context.Session.GetString("Nome") ?? "";
+    // O servidor roda em UTC; saudação e data seguem o horário de Brasília.
+    var agora = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "America/Sao_Paulo");
+    var hora = agora.Hour;
+    var saudacao = hora >= 5 && hora < 12 ? "Bom dia" : hora >= 12 && hora < 18 ? "Boa tarde" : "Boa noite";
+    var hoje = agora.ToString("D", System.Globalization.CultureInfo.CurrentUICulture);
+    var ptBr = new System.Globalization.CultureInfo("pt-BR");
+    string Numero(int valor) => valor.ToString("N0", ptBr);
 }
 
-<div class="header">
-    <img src="@Url.Content("~/images/Logo-empodera.svg")" alt="Logo">
-    <div class="text-box">
-        <h1 id="sistema-text">sistema</h1>
-        <h1 id="lacos-text">laços</h1>
-    </div>
-</div>
+<div class="home-page">
+    <!-- Cabeçalho -->
+    <section class="home-hero" aria-labelledby="home-title">
+        <div class="home-hero-glow" aria-hidden="true"></div>
+        <div class="home-hero-content">
+            <p class="home-hero-date"><i class="fa-regular fa-calendar"></i> @(char.ToUpper(hoje[0]) + hoje[1..])</p>
+            <p class="home-hero-greeting">@saudacao, <strong>@nome</strong></p>
+            <h1 id="home-title">EcoRedes</h1>
+            <p class="home-hero-subtitle">Sistema de Tratamento Comunitário ECO2</p>
 
-<div class="cards-container">
-    <div class="card">
-        <h2>@(comunidade?.Count ?? 0)</h2>
-        <p>Comunidades</p>
-        <a asp-controller="Comunidade" asp-action="Index">Visualizar</a>
-    </div>
-    <div class="card">
-        <h2>@(ator?.Count ?? 0)</h2>
-        <p>Atores</p>
-        <a asp-controller="Atores" asp-action="Index">Visualizar</a>
-    </div>
-    <div class="card">
-        <h2>@(ViewBag.Usuarios?.Count ?? 0)</h2>
-        <p>Usuários</p>
-        <a asp-controller="Users" asp-action="Index">Visualizar</a>
+            <div class="home-hero-actions">
+                <a asp-controller="Atores" asp-action="Create" class="home-action home-action-primary">
+                    <i class="fa-solid fa-user-plus"></i> Novo ator
+                </a>
+                <a asp-controller="FichaPrimeiroContato" asp-action="Create" class="home-action">
+                    <i class="fa-solid fa-clipboard-list"></i> Nova ficha
+                </a>
+                <a asp-controller="DiarioCampo" asp-action="Create" class="home-action">
+                    <i class="fa-solid fa-book"></i> Novo diário de campo
+                </a>
+            </div>
+        </div>
+        <div class="home-hero-brand" aria-hidden="true">
+            <img src="@Url.Content("~/images/Logo-empodera.svg")" alt="" />
+        </div>
+    </section>
+
+    <!-- Indicadores -->
+    <section class="home-kpis" aria-label="Indicadores principais">
+        <a class="home-kpi" asp-controller="Comunidade" asp-action="Index">
+            <span class="home-kpi-icon"><i class="fa-solid fa-city"></i></span>
+            <span class="home-kpi-label">Comunidades</span>
+            <span class="home-kpi-value">@Numero(Model.Comunidades)</span>
+            <span class="home-kpi-detail"><i class="fa-solid fa-circle-dot"></i> @Numero(Model.ComunidadesEmProcesso) em processo</span>
+            <span class="home-kpi-link">Ver comunidades <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+        <a class="home-kpi" asp-controller="Atores" asp-action="Index">
+            <span class="home-kpi-icon"><i class="fa-solid fa-users"></i></span>
+            <span class="home-kpi-label">Atores</span>
+            <span class="home-kpi-value">@Numero(Model.Atores)</span>
+            <span class="home-kpi-detail"><i class="fa-solid fa-arrow-trend-up"></i> @Numero(Model.AtoresUltimos30Dias) nos últimos 30 dias</span>
+            <span class="home-kpi-link">Ver atores <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+        <a class="home-kpi" asp-controller="FichaPrimeiroContato" asp-action="Index">
+            <span class="home-kpi-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+            <span class="home-kpi-label">Fichas de 1º contato</span>
+            <span class="home-kpi-value">@Numero(Model.Fichas)</span>
+            <span class="home-kpi-detail"><i class="fa-solid fa-hourglass-half"></i> @Numero(Model.FichasEmProgresso) em andamento</span>
+            <span class="home-kpi-link">Ver fichas <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+        <a class="home-kpi" asp-controller="DiarioCampo" asp-action="Index">
+            <span class="home-kpi-icon"><i class="fa-solid fa-book"></i></span>
+            <span class="home-kpi-label">Diários de campo</span>
+            <span class="home-kpi-value">@Numero(Model.DiariosCampo)</span>
+            <span class="home-kpi-detail"><i class="fa-solid fa-calendar-week"></i> @Numero(Model.DiariosUltimos30Dias) nos últimos 30 dias</span>
+            <span class="home-kpi-link">Ver diários <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+    </section>
+
+    <div class="home-columns">
+        <!-- Atividade recente -->
+        <section class="home-panel" aria-labelledby="recent-title">
+            <header class="home-panel-header">
+                <div>
+                    <h2 id="recent-title">Atores cadastrados recentemente</h2>
+                    <p>Os últimos cadastros no sistema.</p>
+                </div>
+                <a asp-controller="Atores" asp-action="Index" class="home-panel-link">Ver todos <i class="fa-solid fa-arrow-right"></i></a>
+            </header>
+            @if (Model.AtoresRecentes.Count > 0)
+            {
+                <ul class="home-recent">
+                    @foreach (var ator in Model.AtoresRecentes)
+                    {
+                        var iniciais = string.Concat(ator.Nome.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(p => char.ToUpper(p[0])));
+                        <li>
+                            <a asp-controller="Atores" asp-action="Edit" asp-route-id="@ator.Id">
+                                <span class="home-avatar" aria-hidden="true">@iniciais</span>
+                                <span class="home-recent-text">
+                                    <strong>@ator.Nome</strong>
+                                    <small><i class="fa-solid fa-city"></i> @(ator.Comunidade ?? "Sem comunidade")</small>
+                                </span>
+                                <span class="home-recent-date">@ator.CriadoEm.ToString("dd/MM/yyyy")</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="home-empty">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <p>Nenhum ator cadastrado ainda.</p>
+                    <a asp-controller="Atores" asp-action="Create" class="home-action home-action-primary">Cadastrar o primeiro ator</a>
+                </div>
+            }
+        </section>
+
+        <!-- Acesso rápido -->
+        <section class="home-panel" aria-labelledby="shortcuts-title">
+            <header class="home-panel-header">
+                <div>
+                    <h2 id="shortcuts-title">Acesso rápido</h2>
+                    <p>Os módulos mais usados no dia a dia.</p>
+                </div>
+            </header>
+            <div class="home-shortcuts">
+                <a asp-controller="PersonalProcess" asp-action="Index"><i class="fa-solid fa-book-open"></i><span>Diário Pessoal</span></a>
+                <a asp-controller="PersonalAssessment" asp-action="Index"><i class="fa-solid fa-chart-line"></i><span>Avaliações</span></a>
+                <a asp-controller="Atividades" asp-action="Index"><i class="fa-solid fa-bolt"></i><span>Atividades</span></a>
+                <a asp-controller="Relatorios" asp-action="Index"><i class="fa-solid fa-chart-simple"></i><span>Relatórios</span></a>
+                <a asp-controller="Report" asp-action="Index"><i class="fa-solid fa-database"></i><span>Dados e Backup</span></a>
+                <a asp-controller="Users" asp-action="Index"><i class="fa-solid fa-user-gear"></i><span>Usuários <small>@Numero(Model.UsuariosAtivos) ativos</small></span></a>
+            </div>
+        </section>
     </div>
 </div>

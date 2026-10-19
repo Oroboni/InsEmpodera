@@ -1,5 +1,11 @@
+@using Empodera.Models
+@using Empodera.Services
 @{
     ViewData["PageCSS"] = "configuracoes";
+    var conta = ViewBag.Conta as ContaUsuarioResumo;
+    var podeEditarCores = conta?.IsAdmin == true;
+    var coresPersonalizadas = ViewBag.CoresPersonalizadas is true;
+    var versao = typeof(Program).Assembly.GetName().Version?.ToString(3) ?? "1.0.0";
     Layout = "_Layout";
 
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
@@ -93,13 +99,174 @@
         </div>
     </section>
 
+
+    <section class="settings-language-panel settings-colors-panel" id="cores" aria-labelledby="colors-title">
+        <div class="settings-section-heading">
+            <span class="settings-section-icon" aria-hidden="true">
+                <i class="fa-solid fa-palette"></i>
+            </span>
+            <div>
+                <h2 id="colors-title">Cores do sistema</h2>
+                <p>Personalize todas as cores do site. A pré-visualização aparece nesta página na hora; ao salvar, as cores valem para todos os usuários.</p>
+            </div>
+        </div>
+
+        @if (TempData["CoresMensagem"] is string coresMensagem)
+        {
+            <div class="colors-alert colors-alert-success" role="status"><i class="fa-solid fa-circle-check"></i> @coresMensagem</div>
+        }
+        @if (TempData["CoresErro"] is string coresErro)
+        {
+            <div class="colors-alert colors-alert-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i> @coresErro</div>
+        }
+        @if (!podeEditarCores)
+        {
+            <div class="settings-language-note"><i class="fa-solid fa-lock" aria-hidden="true"></i><span>Somente administradores podem alterar as cores do sistema.</span></div>
+        }
+
+        <div class="colors-toolbar">
+            <div class="colors-presets" role="group" aria-label="Paletas prontas">
+                <span class="colors-toolbar-label">Paletas prontas</span>
+                <button type="button" class="colors-preset" data-preset="verde" @(podeEditarCores ? null : "disabled")>
+                    <span class="colors-preset-swatch" style="background: linear-gradient(135deg, #9CB080, #2B5748 60%, #273338)"></span> Verde EcoRedes
+                </button>
+                <button type="button" class="colors-preset" data-preset="roxo" @(podeEditarCores ? null : "disabled")>
+                    <span class="colors-preset-swatch" style="background: linear-gradient(135deg, #b17dd8, #7A3188 60%, #3a153f)"></span> Roxo original
+                </button>
+            </div>
+            <div class="colors-generator">
+                <label for="corBase" class="colors-toolbar-label">Gerar paleta a partir de uma cor</label>
+                <div class="colors-generator-row">
+                    <input type="color" id="corBase" value="#2B5748" @(podeEditarCores ? null : "disabled") />
+                    <button type="button" class="colors-button" id="gerarPaleta" @(podeEditarCores ? null : "disabled")>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <form asp-controller="Configuracoes" asp-action="SalvarCores" method="post" id="formCores">
+            @Html.AntiForgeryToken()
+            @foreach (var grupo in new[]
+            {
+                (Titulo: "Cor principal", Descricao: "Identidade do sistema: menu, botões, links e títulos.", Cores: new[]
+                {
+                    ("color-primary", "Principal", "Botões, links e destaques"),
+                    ("color-primary-600", "Menu lateral", "Fundo do menu lateral"),
+                    ("color-primary-dark", "Principal escura", "Botões ao passar o mouse"),
+                    ("color-primary-light", "Principal clara", "Realces e ícones"),
+                    ("color-primary-800", "Títulos", "Títulos e textos de destaque")
+                }),
+                (Titulo: "Tons da cor principal", Descricao: "Escala usada em fundos suaves, bordas, etiquetas e indicadores.", Cores: new[]
+                {
+                    ("color-primary-50", "Tom 50", "Fundos suaves e seleção"),
+                    ("color-primary-100", "Tom 100", "Bordas suaves"),
+                    ("color-primary-200", "Tom 200", "Contornos de foco"),
+                    ("color-primary-300", "Tom 300", "Detalhes claros"),
+                    ("color-primary-400", "Tom 400", "Ícones e realces"),
+                    ("color-primary-500", "Tom 500", "Cartões de indicadores"),
+                    ("color-primary-700", "Tom 700", "Textos fortes")
+                }),
+                (Titulo: "Cor secundária", Descricao: "Botão de entrada do login e destaques complementares.", Cores: new[]
+                {
+                    ("color-secondary", "Secundária", "Botão Entrar e subtítulos"),
+                    ("color-secondary-light", "Secundária clara", "Realces"),
+                    ("color-secondary-dark", "Secundária escura", "Ao passar o mouse")
+                }),
+                (Titulo: "Fundos, textos e bordas", Descricao: "Cores neutras da página.", Cores: new[]
+                {
+                    ("color-gray-300", "Fundo da página", "Área atrás do conteúdo"),
+                    ("color-gray-200", "Fundo do conteúdo", "Área principal das telas"),
+                    ("color-gray-100", "Fundo suave", "Linhas, campos e hover"),
+                    ("color-gray-400", "Bordas", "Bordas de campos"),
+                    ("color-gray-600", "Texto secundário", "Descrições e legendas"),
+                    ("color-gray-800", "Texto", "Textos em geral"),
+                    ("color-gray-900", "Texto forte", "Títulos de itens")
+                })
+            })
+            {
+                <fieldset class="colors-group" @(podeEditarCores ? null : "disabled")>
+                    <legend>@grupo.Titulo</legend>
+                    <p class="colors-group-description">@grupo.Descricao</p>
+                    <div class="colors-grid">
+                        @foreach (var (token, rotulo, uso) in grupo.Cores)
+                        {
+                            <div class="color-field">
+                                <input type="color" class="color-picker" id="cor-@token" data-token="@token" aria-label="@rotulo" />
+                                <label for="hex-@token" class="color-field-text">
+                                    <strong>@rotulo</strong>
+                                    <small>@uso</small>
+                                </label>
+                                <input type="text" class="color-hex" id="hex-@token" name="cores[@token]" data-token="@token"
+                                       maxlength="7" spellcheck="false" autocomplete="off" pattern="#[0-9A-Fa-f]{6}" />
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            }
+
+            <ul class="colors-warnings" id="avisosContraste" aria-live="polite" hidden></ul>
+
+            @if (podeEditarCores)
+            {
+                <div class="colors-actions">
+                    <button type="button" class="colors-button colors-button-ghost" id="descartarCores">
+                        <i class="fa-solid fa-rotate-left"></i> Descartar alterações
+                    </button>
+                    <button type="submit" class="colors-button colors-button-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar para todos os usuários
+                    </button>
+                </div>
+            }
+        </form>
+
+        @if (podeEditarCores && coresPersonalizadas)
+        {
+            <form asp-controller="Configuracoes" asp-action="RestaurarCores" method="post" class="colors-restore"
+                  onsubmit="return confirm('Voltar às cores padrão do sistema? A personalização atual será removida.');">
+                @Html.AntiForgeryToken()
+                <span><i class="fa-solid fa-circle-info"></i> O sistema está usando cores personalizadas.</span>
+                <button type="submit" class="colors-button colors-button-ghost"><i class="fa-solid fa-arrow-rotate-left"></i> Restaurar cores padrão</button>
+            </form>
+        }
+    </section>
+
     <section class="settings-grid" aria-label="Outras opções">
+        @if (conta is not null)
+        {
+            <article class="settings-card">
+                <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+                <div>
+                    <h2>Sua conta</h2>
+                    <dl class="settings-account">
+                        <dt>Nome</dt><dd>@conta.Nome</dd>
+                        <dt>E-mail</dt><dd>@conta.Email</dd>
+                        <dt>Perfil</dt><dd>@conta.Perfil</dd>
+                        @if (!string.IsNullOrWhiteSpace(conta.Ocupacao))
+                        {
+                            <dt>Ocupação</dt><dd>@conta.Ocupacao</dd>
+                        }
+                    </dl>
+                </div>
+            </article>
+        }
+        <article class="settings-card">
+            <i class="fa-solid fa-key" aria-hidden="true"></i>
+            <div>
+                <h2>Senha</h2>
+                <p>Receba por e-mail um link para definir uma nova senha.</p>
+                <a asp-controller="Account" asp-action="Forgot">Redefinir senha</a>
+            </div>
+        </article>
         <article class="settings-card">
             <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
             <div>
                 <h2>@profilesTitle</h2>
                 <p>@profilesDescription</p>
-                <a asp-controller="AccessProfile" asp-action="Index">@profilesAction</a>
+                @if (conta?.PodeVerPerfis != false)
+                {
+                    <a asp-controller="AccessProfile" asp-action="Index">@profilesAction</a>
+                }
             </div>
         </article>
         <article class="settings-card settings-card-danger">
@@ -112,5 +279,17 @@
                 </form>
             </div>
         </article>
+        <article class="settings-card">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <div>
+                <h2>Sobre o sistema</h2>
+                <p><strong>EcoRedes</strong> — Sistema de Tratamento Comunitário ECO2<br />Versão @versao · Instituto Empodera</p>
+                <a asp-controller="Ajuda" asp-action="Index">Central de Ajuda</a>
+            </div>
+        </article>
     </section>
 </main>
+
+@section Scripts {
+    <script src="~/js/editor-cores.js" asp-append-version="true"></script>
+}

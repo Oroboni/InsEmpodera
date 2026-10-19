@@ -6,7 +6,7 @@ namespace Empodera.Models
 {
     public class Usuario
     {
-        public int IdUsuario { get; set; }
+        public Guid IdUsuario { get; set; }
         public string Nome { get; set; } = null!;
         public string Senha { get; set; } = null!;
         public string? Foto { get; set; } = null!;
@@ -19,7 +19,7 @@ namespace Empodera.Models
         public string Ativo { get; set; } = "S";
         [EnumDataType(typeof(IdiomaPreferido))]
         public IdiomaPreferido IdiomaPreferido { get; set; } = IdiomaPreferido.Default;
-        public int FkIdPerfil { get; set; }
+        public Guid FkIdPerfil { get; set; }
 
         // Campos mantidos pelo ASP.NET Core Identity através do EmpoderaUserStore.
         // Os dados de domínio e o perfil existente continuam sendo a fonte das

@@ -126,9 +126,9 @@
     <value>and restarting the app.</value>
     <comment>Source: and restarting the app.</comment>
   </data>
-  <data name='Ui_e62437ebee1aa381' xml:space='preserve'>
-    <value>Ties - Instituto Empodera</value>
-    <comment>Source: Laços - Instituto Empodera</comment>
+  <data name='Ui_4a4e37dcd40d9f26' xml:space='preserve'>
+    <value>EcoRedes - ECO2 Community Treatment System</value>
+    <comment>Source: EcoRedes - Sistema de Tratamento Comunitário ECO2</comment>
   </data>
   <data name='Ui_9e39bd9a411e0038' xml:space='preserve'>
     <value>environment by setting the</value>
@@ -174,5 +174,129 @@
   <data name='Ui_4b5d63a0f3da3639' xml:space='preserve'>
     <value>Menu elements not found</value>
     <comment>Source: Elementos do menu não encontrados</comment>
+  </data>
+  <data name='Ui_c359946dfeeb07aa' xml:space='preserve'>
+    <value>Personal Assessments</value>
+    <comment>Source: Avaliações Pessoais</comment>
+  </data>
+  <data name='Ui_2ebab86719d08d70' xml:space='preserve'>
+    <value>Data and Backup</value>
+    <comment>Source: Dados e Backup</comment>
+  </data>
+  <data name='Ui_99af6606ff9d6cd5' xml:space='preserve'>
+    <value>Menu</value>
+    <comment>Source: Menu</comment>
+  </data>
+  <data name='Ui_d0527e4b3d658351' xml:space='preserve'>
+    <value>Logout</value>
+    <comment>Source: Logout</comment>
+  </data>
+  <data name='Ui_59dc926760d04aea' xml:space='preserve'>
+    <value>Back</value>
+    <comment>Source: Voltar</comment>
+  </data>
+  <data name='Ui_883173decc42570f' xml:space='preserve'>
+    <value>Delete</value>
+    <comment>Source: Deletar</comment>
+  </data>
+  <data name='Ui_d76f94dd0a8a7e74' xml:space='preserve'>
+    <value>Confirm Deletion</value>
+    <comment>Source: Confirmar Exclusão</comment>
+  </data>
+  <data name='Ui_a667e7e619935dd5' xml:space='preserve'>
+    <value>This action cannot be undone.</value>
+    <comment>Source: Essa ação não pode ser desfeita.</comment>
+  </data>
+  <data name='Ui_3e69f57a8b911064' xml:space='preserve'>
+    <value>Yes, Delete</value>
+    <comment>Source: Sim, Deletar</comment>
+  </data>
+  <data name='Ui_b31837c78cd79f61' xml:space='preserve'>
+    <value>Basic Information</value>
+    <comment>Source: Informações Básicas</comment>
+  </data>
+  <data name='Ui_66a4f21b5d31e14c' xml:space='preserve'>
+    <value>System Information</value>
+    <comment>Source: Informações do Sistema</comment>
+  </data>
+  <data name='Ui_9634373efef17186' xml:space='preserve'>
+    <value>Last update</value>
+    <comment>Source: Última atualização</comment>
+  </data>
+  <data name='Ui_3c9717bdf2260bc9' xml:space='preserve'>
+    <value>Summary</value>
+    <comment>Source: Resumo</comment>
+  </data>
+  <data name='Ui_b0b3d3389bd4cc8e' xml:space='preserve'>
+    <value>Details</value>
+    <comment>Source: Detalhamento</comment>
+  </data>
+  <data name='Ui_b893109d2a2c4d16' xml:space='preserve'>
+    <value>Search</value>
+    <comment>Source: Pesquisar</comment>
+  </data>
+  <data name='Ui_967bcf34a9138e10' xml:space='preserve'>
+    <value>Add</value>
+    <comment>Source: Adicionar</comment>
+  </data>
+  <data name='Ui_aef7cd5b2081351d' xml:space='preserve'>
+    <value>Save</value>
+    <comment>Source: Salvar</comment>
+  </data>
+  <data name='Ui_0f2bd88ef0acbda9' xml:space='preserve'>
+    <value>Close</value>
+    <comment>Source: Fechar</comment>
+  </data>
+  <data name='Ui_a3037dc71a43fa40' xml:space='preserve'>
+    <value>Remove</value>
+    <comment>Source: Remover</comment>
+  </data>
+  <data name='Ui_81f9ee702326aed4' xml:space='preserve'>
+    <value>BASIC ASSISTANCE AND HARM REDUCTION</value>
+    <comment>Source: ASSISTÊNCIA BÁSICA E REDUÇÃO DE DANOS</comment>
+  </data>
+  <data name='Ui_3ee2473135834fc5' xml:space='preserve'>
+    <value>PHYSICAL AND PSYCHOLOGICAL HEALTH</value>
+    <comment>Source: SAÚDE FÍSICA E PSICOLÓGICA</comment>
+  </data>
+  <data name='Ui_6231e48d338f8ab6' xml:space='preserve'>
+    <value>OCCUPATION/WORK</value>
+    <comment>Source: OCUPAÇÃO/TRABALHO</comment>
+  </data>
+  <data name='Ui_d7613370c7448a4c' xml:space='preserve'>
+    <value>LEISURE/CULTURE</value>
+    <comment>Source: LAZER/CULTURA</comment>
+  </data>
+  <data name='Ui_b02f23b950b73d92' xml:space='preserve'>
+    <value>SOCIAL SECURITY</value>
+    <comment>Source: SEGURIDADE SOCIAL</comment>
+  </data>
+  <data name='Ui_ae7f16ad3b10c3ff' xml:space='preserve'>
+    <value>SUBSTANCES</value>
+    <comment>Source: SUBSTÂNCIAS</comment>
+  </data>
+  <data name='Ui_4ee7e9a3d2e4208c' xml:space='preserve'>
+    <value>PREVENTION</value>
+    <comment>Source: PREVENÇÃO</comment>
+  </data>
+  <data name='Ui_48370ba863ff1e7e' xml:space='preserve'>
+    <value>EDUCATION</value>
+    <comment>Source: EDUCAÇÃO</comment>
+  </data>
+  <data name='Ui_f0e2b97b375fcbc8' xml:space='preserve'>
+    <value>HOUSING</value>
+    <comment>Source: MORADIA</comment>
+  </data>
+  <data name='Ui_2e6a0420bc6cdd68' xml:space='preserve'>
+    <value>NETWORKS</value>
+    <comment>Source: REDES</comment>
+  </data>
+  <data name='Ui_b46a4fcc9a4f8bfd' xml:space='preserve'>
+    <value>Indicators</value>
+    <comment>Source: Indicadores</comment>
+  </data>
+  <data name='Ui_8e997a39f0143d2e' xml:space='preserve'>
+    <value>Collapse or show the indicators</value>
+    <comment>Source: Recolher ou mostrar os indicadores</comment>
   </data>
 </root>
