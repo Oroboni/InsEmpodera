@@ -34,25 +34,23 @@ namespace Empodera.Controllers
             }
             ViewBag.Conta = await CarregarContaAsync();
             ViewBag.TemaAtivo = (HttpContext.RequestServices.GetService<IConfiguration>()?["Tema"] ?? "verde").Trim().ToLowerInvariant();
-            ViewBag.CoresPersonalizadas = HttpContext.RequestServices.GetService<TemaPersonalizadoService>()?.Obter() is { Count: > 0 };
+            ViewBag.CoresPersonalizadas = Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId)
+                && HttpContext.RequestServices.GetService<TemaPersonalizadoService>()?.Obter(usuarioId) is { Count: > 0 };
             return DefaultIndex();
         }
 
-        // POST: /Configuracoes/SalvarCores — somente administradores.
+        // POST: /Configuracoes/SalvarCores — cores da plataforma do próprio usuário logado.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SalvarCores(Dictionary<string, string> cores)
+        public IActionResult SalvarCores(Dictionary<string, string> cores)
         {
-            if (HttpContext.Session.GetString("Email") == null)
+            if (HttpContext.Session.GetString("Email") == null || !Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
                 return RedirectToAction("Index", "Account");
-            var conta = await CarregarContaAsync();
-            if (conta?.IsAdmin != true)
-                return StatusCode(StatusCodes.Status403Forbidden);
 
             try
             {
-                HttpContext.RequestServices.GetRequiredService<TemaPersonalizadoService>().Salvar(cores ?? new());
-                TempData["CoresMensagem"] = "Cores salvas. Elas já valem para todos os usuários.";
+                HttpContext.RequestServices.GetRequiredService<TemaPersonalizadoService>().Salvar(usuarioId, cores ?? new());
+                TempData["CoresMensagem"] = "Suas cores foram salvas. Elas valem só para a sua conta.";
             }
             catch (ArgumentException ex)
             {
@@ -61,18 +59,15 @@ namespace Empodera.Controllers
             return Redirect(Url.Action(nameof(Index)) + "#cores");
         }
 
-        // POST: /Configuracoes/RestaurarCores — volta ao tema padrão. Somente administradores.
+        // POST: /Configuracoes/RestaurarCores — o usuário logado volta às cores padrão.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RestaurarCores()
+        public IActionResult RestaurarCores()
         {
-            if (HttpContext.Session.GetString("Email") == null)
+            if (HttpContext.Session.GetString("Email") == null || !Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
                 return RedirectToAction("Index", "Account");
-            var conta = await CarregarContaAsync();
-            if (conta?.IsAdmin != true)
-                return StatusCode(StatusCodes.Status403Forbidden);
 
-            HttpContext.RequestServices.GetRequiredService<TemaPersonalizadoService>().Restaurar();
+            HttpContext.RequestServices.GetRequiredService<TemaPersonalizadoService>().Restaurar(usuarioId);
             TempData["CoresMensagem"] = "Cores padrão restauradas.";
             return Redirect(Url.Action(nameof(Index)) + "#cores");
         }

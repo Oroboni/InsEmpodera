@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -6,9 +7,9 @@ using System.Text.RegularExpressions;
 namespace Empodera.Services;
 
 /// <summary>
-/// Cores do site definidas pela administração em Configurações > Cores do sistema.
-/// Ficam em App_Data/tema-personalizado.json e sobrepõem o tema base (chave "Tema" do appsettings).
-/// Sem o arquivo, vale apenas o tema base de wwwroot/css/tema.css.
+/// Cores da plataforma escolhidas por cada usuário em Configurações > Cores da plataforma.
+/// Ficam em App_Data/temas-usuarios/{id do usuário}.json e sobrepõem, só para aquele usuário,
+/// o tema base (chave "Tema" do appsettings). Sem o arquivo, vale o tema base de wwwroot/css/tema.css.
 /// </summary>
 public sealed partial class TemaPersonalizadoService
 {
@@ -24,43 +25,38 @@ public sealed partial class TemaPersonalizadoService
     ];
 
     private static readonly HashSet<string> TokensPermitidos = new(Tokens, StringComparer.Ordinal);
-    private readonly string _arquivo;
-    private readonly object _trava = new();
-    private Dictionary<string, string>? _cache;
-    private bool _carregado;
+    private readonly string _pasta;
+    private readonly ConcurrentDictionary<Guid, Dictionary<string, string>?> _cache = new();
 
     public TemaPersonalizadoService(IWebHostEnvironment ambiente)
     {
-        _arquivo = Path.Combine(ambiente.ContentRootPath, "App_Data", "tema-personalizado.json");
+        _pasta = Path.Combine(ambiente.ContentRootPath, "App_Data", "temas-usuarios");
     }
 
     [GeneratedRegex("^#[0-9a-fA-F]{6}$")]
     private static partial Regex CorHex();
 
-    public IReadOnlyDictionary<string, string>? Obter()
-    {
-        lock (_trava)
+    // O nome do arquivo vem só do Id (Guid), nunca de algo digitado.
+    private string Arquivo(Guid usuarioId) => Path.Combine(_pasta, $"{usuarioId:N}.json");
+
+    public IReadOnlyDictionary<string, string>? Obter(Guid usuarioId) =>
+        _cache.GetOrAdd(usuarioId, id =>
         {
-            if (_carregado) return _cache;
-            _carregado = true;
             try
             {
-                if (File.Exists(_arquivo))
-                {
-                    var lido = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(_arquivo));
-                    _cache = lido is null ? null : Filtrar(lido);
-                }
+                var arquivo = Arquivo(id);
+                if (!File.Exists(arquivo)) return null;
+                var lido = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(arquivo));
+                return lido is null ? null : Filtrar(lido);
             }
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
             {
-                _cache = null; // arquivo inválido: segue com o tema base
+                return null; // arquivo inválido: segue com o tema base
             }
-            return _cache;
-        }
-    }
+        });
 
-    /// <summary>Salva as cores. Ignora tokens desconhecidos; rejeita valores que não sejam #RRGGBB.</summary>
-    public void Salvar(IDictionary<string, string> cores)
+    /// <summary>Salva as cores do usuário. Ignora tokens desconhecidos; rejeita valores que não sejam #RRGGBB.</summary>
+    public void Salvar(Guid usuarioId, IDictionary<string, string> cores)
     {
         var validas = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var (token, valor) in cores)
@@ -73,30 +69,23 @@ public sealed partial class TemaPersonalizadoService
         if (validas.Count == 0)
             throw new ArgumentException("Nenhuma cor válida foi enviada.");
 
-        lock (_trava)
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(_arquivo)!);
-            File.WriteAllText(_arquivo, JsonSerializer.Serialize(validas, new JsonSerializerOptions { WriteIndented = true }));
-            _cache = validas;
-            _carregado = true;
-        }
+        Directory.CreateDirectory(_pasta);
+        File.WriteAllText(Arquivo(usuarioId), JsonSerializer.Serialize(validas, new JsonSerializerOptions { WriteIndented = true }));
+        _cache[usuarioId] = validas;
     }
 
-    /// <summary>Remove a personalização e volta ao tema base.</summary>
-    public void Restaurar()
+    /// <summary>Remove a personalização do usuário; ele volta ao tema base.</summary>
+    public void Restaurar(Guid usuarioId)
     {
-        lock (_trava)
-        {
-            if (File.Exists(_arquivo)) File.Delete(_arquivo);
-            _cache = null;
-            _carregado = true;
-        }
+        var arquivo = Arquivo(usuarioId);
+        if (File.Exists(arquivo)) File.Delete(arquivo);
+        _cache[usuarioId] = null;
     }
 
     /// <summary>CSS com as variáveis personalizadas (inclui os canais *-rgb usados em transparências).</summary>
-    public string? GerarCss()
+    public string? GerarCss(Guid usuarioId)
     {
-        var cores = Obter();
+        var cores = Obter(usuarioId);
         if (cores is null || cores.Count == 0) return null;
 
         var css = new StringBuilder(":root[data-tema] {");

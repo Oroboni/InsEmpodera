@@ -266,4 +266,12 @@
     <value>Sugestão Nominatim falhou:</value>
     <comment>Source: Sugestão Nominatim falhou:</comment>
   </data>
+  <data name='Ui_8830d7899ab951aa' xml:space='preserve'>
+    <value>O link expira em 30 minutos. O EcoRedes nunca solicitará sua senha por e-mail.</value>
+    <comment>Source: O link expira em 30 minutos. O EcoRedes nunca solicitará sua senha por e-mail.</comment>
+  </data>
+  <data name='Ui_899c2abdb943460a' xml:space='preserve'>
+    <value>Sua nova senha já está ativa. Você pode voltar ao login e acessar o EcoRedes.</value>
+    <comment>Source: Sua nova senha já está ativa. Você pode voltar ao login e acessar o EcoRedes.</comment>
+  </data>
 </root>
