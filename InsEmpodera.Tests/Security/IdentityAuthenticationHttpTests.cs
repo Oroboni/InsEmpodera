@@ -65,8 +65,8 @@ public sealed class IdentityAuthenticationHttpTests : IClassFixture<EmpoderaWebA
         Assert.Equal(HttpStatusCode.Forbidden, protectedPage.StatusCode);
     }
 
-    [Fact(DisplayName = "Identity — UserManager cria usuário com chave inteira aleatória")]
-    public async Task UserManager_CreatesRandomIntegerUserId()
+    [Fact(DisplayName = "Identity — UserManager cria usuário com GUID aleatório")]
+    public async Task UserManager_CreatesRandomGuidUserId()
     {
         using var scope = _factory.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
@@ -80,14 +80,15 @@ public sealed class IdentityAuthenticationHttpTests : IClassFixture<EmpoderaWebA
             DtNascimento = new DateTime(1990, 1, 1),
             DtCriacao = DateTime.UtcNow,
             Ativo = "S",
-            FkIdPerfil = 3,
+            FkIdPerfil = TestIds.Seed(3),
             EmailConfirmed = true
         };
 
         var result = await userManager.CreateAsync(user, "Identity@123");
 
         Assert.True(result.Succeeded, string.Join(" ", result.Errors.Select(error => error.Description)));
-        Assert.InRange(user.IdUsuario, 100_000, 999_999);
+        Assert.NotEqual(Guid.Empty, user.IdUsuario);
+        Assert.NotEqual(TestIds.Seed(1), user.IdUsuario);
         Assert.Equal(email.ToUpperInvariant(), user.NormalizedEmail);
         Assert.Equal(email.ToUpperInvariant(), user.NormalizedUserName);
     }
@@ -110,7 +111,7 @@ public sealed class IdentityAuthenticationHttpTests : IClassFixture<EmpoderaWebA
                 ["Nome"] = editor.Nome,
                 ["Email"] = editor.Email,
                 ["Senha"] = string.Empty,
-                ["FkIdPerfil"] = "1",
+                ["FkIdPerfil"] = TestIds.Seed(1).ToString(),
                 ["Ativo"] = "S",
                 ["Ocupacao"] = editor.Ocupacao,
                 ["Genero"] = "1"
@@ -119,6 +120,6 @@ public sealed class IdentityAuthenticationHttpTests : IClassFixture<EmpoderaWebA
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
-            Assert.Equal(2, (await db.Usuarios.SingleAsync(item => item.IdUsuario == editor.IdUsuario)).FkIdPerfil));
+            Assert.Equal(TestIds.Seed(2), (await db.Usuarios.SingleAsync(item => item.IdUsuario == editor.IdUsuario)).FkIdPerfil));
     }
 }

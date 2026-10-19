@@ -1,13 +1,31 @@
+using System.Data;
+using InsEmpodera.Tests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace InsEmpodera.Tests.Architecture;
 
-public sealed class IdentityDatabaseContractTests
+public sealed class IdentityDatabaseContractTests : ControllerTestBase
 {
     [Fact(DisplayName = "Banco — tabela usuarios contém o contrato de segurança do Identity")]
-    public void BancoTxt_ContainsIdentitySecurityColumnsAndIndexes()
+    public async Task UsuariosTable_ContainsIdentitySecurityColumnsAndIndexes()
     {
-        var source = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "Banco.txt"));
+        var connection = Db.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+            await connection.OpenAsync();
+
+        var columns = new Dictionary<string, (string Type, string Extra)>(StringComparer.OrdinalIgnoreCase);
+        await using (var command = connection.CreateCommand())
+        {
+            command.CommandText = """
+                SELECT COLUMN_NAME, COLUMN_TYPE, EXTRA
+                FROM information_schema.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuarios'
+                """;
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                columns.Add(reader.GetString(0), (reader.GetString(1), reader.GetString(2)));
+        }
 
         foreach (var column in new[]
                  {
@@ -15,19 +33,26 @@ public sealed class IdentityDatabaseContractTests
                      "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed",
                      "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount"
                  })
-            Assert.Contains($"`{column}`", source, StringComparison.Ordinal);
+            Assert.Contains(column, columns.Keys);
 
-        Assert.Contains("IX_Usuarios_NormalizedUserName", source, StringComparison.Ordinal);
-        Assert.Contains("IX_Usuarios_NormalizedEmail", source, StringComparison.Ordinal);
-        Assert.Contains("ADD PRIMARY KEY (`IdUsuario`)", source, StringComparison.Ordinal);
-        Assert.DoesNotContain("AUTO_INCREMENT`IdUsuario`", source, StringComparison.Ordinal);
-    }
+        Assert.Equal("binary(16)", columns["IdUsuario"].Type, ignoreCase: true);
+        Assert.DoesNotContain("auto_increment", columns["IdUsuario"].Extra, StringComparison.OrdinalIgnoreCase);
 
-    private static string FindRepositoryRoot()
-    {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
-        while (current is not null && !File.Exists(Path.Combine(current.FullName, "InsEmpodera.csproj")))
-            current = current.Parent;
-        return current?.FullName ?? throw new DirectoryNotFoundException("Raiz do projeto não encontrada.");
+        var indexes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        await using (var command = connection.CreateCommand())
+        {
+            command.CommandText = """
+                SELECT DISTINCT INDEX_NAME
+                FROM information_schema.STATISTICS
+                WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuarios'
+                """;
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+                indexes.Add(reader.GetString(0));
+        }
+
+        Assert.Contains("PRIMARY", indexes);
+        Assert.Contains("IX_Usuarios_NormalizedUserName", indexes);
+        Assert.Contains("IX_Usuarios_NormalizedEmail", indexes);
     }
 }

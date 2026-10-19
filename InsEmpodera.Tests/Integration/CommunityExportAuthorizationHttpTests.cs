@@ -102,7 +102,7 @@ public sealed class CommunityExportAuthorizationHttpTests : IClassFixture<Empode
         Assert.DoesNotContain(otherName, exportedValues);
     }
 
-    private Task<int> SeedCommunityAsync(string name, string active) =>
+    private Task<Guid> SeedCommunityAsync(string name, string active) =>
         HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var community = new Comunidade
@@ -112,7 +112,7 @@ public sealed class CommunityExportAuthorizationHttpTests : IClassFixture<Empode
                 LocalMapa = "Rua da exportação, 10, São Paulo",
                 Status = "Em diagnóstico",
                 Ativo = active,
-                FK_Id_Usuario = 1,
+                FK_Id_Usuario = TestIds.Seed(1),
                 Dt_Criacao = DateTime.UtcNow,
                 Dt_Modificacao = DateTime.UtcNow
             };

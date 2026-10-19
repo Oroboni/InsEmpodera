@@ -29,11 +29,11 @@ public sealed class PersonalProcessCrudTests : ControllerTestBase
         Assert.Equal(nameof(PersonalProcessController.Index), createRedirect.ActionName);
         Db.ChangeTracker.Clear();
         var saved = await Db.DiariosProcessoPessoal.Include(d => d.Eixos).SingleAsync();
-        Assert.InRange(saved.IdDiarioProcesso, 100000, 999999);
+        Assert.NotEqual(Guid.Empty, saved.IdDiarioProcesso);
         Assert.Equal(actor.IdAtores, saved.FK_id_Atores);
-        Assert.Equal(1, saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.Single(saved.Eixos);
-        Assert.InRange(saved.Eixos[0].IdDiarioProcessoEixo, 100000, 999999);
+        Assert.NotEqual(Guid.Empty, saved.Eixos[0].IdDiarioProcessoEixo);
         Assert.Equal(firstAxis.IdEixo, saved.Eixos[0].FkIdEixo);
 
         var edit = await controller.Edit(saved.IdDiarioProcesso, new DiarioProcessoPessoal
@@ -67,10 +67,10 @@ public sealed class PersonalProcessCrudTests : ControllerTestBase
 
         var result = await controller.Create(new DiarioProcessoPessoal
         {
-            FK_id_Atores = 999999,
+            FK_id_Atores = TestIds.Missing,
             Data = DateTime.Today,
             Descricao = "Registro inválido"
-        }, [999999]);
+        }, [TestIds.Missing]);
 
         Assert.IsType<ViewResult>(result);
         Assert.False(controller.ModelState.IsValid);
@@ -89,8 +89,8 @@ public sealed class PersonalProcessCrudTests : ControllerTestBase
             Descricao = "Registro que deve voltar do Excel",
             DtCriacao = DateTime.UtcNow,
             DtModificacao = DateTime.UtcNow,
-            FkIdUsuario = 1,
-            FkIdUsuarioM = 1,
+            FkIdUsuario = TestIds.Seed(1),
+            FkIdUsuarioM = TestIds.Seed(1),
             Eixos = [new DiarioProcessoEixo { FkIdEixo = axis.IdEixo }]
         };
         Db.DiariosProcessoPessoal.Add(diary);

@@ -174,7 +174,7 @@ public sealed class ActorAggregatePersistenceTests : ControllerTestBase
             expected,
             actor.RecursosAtores.Single(item => item.Tipo == type && item.Nome == name).Pode);
 
-    private static void AssertRandomKey(int id) => Assert.InRange(id, 100000, 999999);
+    private static void AssertRandomKey(Guid id) => Assert.NotEqual(Guid.Empty, id);
 
     private static Atores NewActor(string name) => new()
     {

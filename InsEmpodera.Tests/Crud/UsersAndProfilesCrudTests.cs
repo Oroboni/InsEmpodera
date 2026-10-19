@@ -46,7 +46,7 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     [Fact]
     public async Task Users_Edit_UpdatesFieldsAndPreservesPasswordWhenBlank()
     {
-        var original = await Db.Usuarios.AsNoTracking().SingleAsync(item => item.IdUsuario == 2);
+        var original = await Db.Usuarios.AsNoTracking().SingleAsync(item => item.IdUsuario == TestIds.Seed(2));
         var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
         var update = NewUser("editado@test.local");
         update.IdUsuario = original.IdUsuario;
@@ -69,9 +69,9 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     {
         var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
         var user = NewUser("joao@email.com");
-        user.IdUsuario = 2;
+        user.IdUsuario = TestIds.Seed(2);
 
-        var result = await controller.Edit(2, user);
+        var result = await controller.Edit(TestIds.Seed(2), user);
 
         Assert.IsType<ViewResult>(result);
         Assert.Equal("Email já cadastrado.", controller.ViewBag.ErrorMessage);
@@ -81,7 +81,7 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     public async Task Users_Edit_MissingRecordReturnsNotFound()
     {
         var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
-        var result = await controller.Edit(999_999, NewUser("missing@test.local"));
+        var result = await controller.Edit(TestIds.Missing, NewUser("missing@test.local"));
         Assert.IsType<NotFoundResult>(result);
     }
 
@@ -105,11 +105,11 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     {
         var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
 
-        var result = await controller.Details(2);
+        var result = await controller.Details(TestIds.Seed(2));
 
         var view = Assert.IsType<ViewResult>(result);
         var user = Assert.IsType<Usuario>(view.Model);
-        Assert.Equal(2, user.IdUsuario);
+        Assert.Equal(TestIds.Seed(2), user.IdUsuario);
         Assert.NotNull(user.Perfil);
     }
 
@@ -118,10 +118,10 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     {
         var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db));
 
-        var result = await controller.DeleteConfirmation(2);
+        var result = await controller.DeleteConfirmation(TestIds.Seed(2));
 
         var view = Assert.IsType<ViewResult>(result);
-        Assert.Equal(2, Assert.IsType<Usuario>(view.Model).IdUsuario);
+        Assert.Equal(TestIds.Seed(2), Assert.IsType<Usuario>(view.Model).IdUsuario);
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     [Fact]
     public async Task Profiles_Edit_UpdatesNameAndPermissions()
     {
-        var profile = await Db.Perfis.Include(item => item.Permissoes).SingleAsync(item => item.IdPerfil == 2);
+        var profile = await Db.Perfis.Include(item => item.Permissoes).SingleAsync(item => item.IdPerfil == TestIds.Seed(2));
         var permission = profile.Permissoes.First();
         var controller = Attach(new AccessProfileController(Db));
         var update = new Perfil
@@ -208,7 +208,7 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
     public async Task Profiles_Edit_IdMismatchReturnsNotFound()
     {
         var controller = Attach(new AccessProfileController(Db));
-        var result = await controller.Edit(1, new Perfil { IdPerfil = 2, Nome = "Inconsistente" });
+        var result = await controller.Edit(TestIds.Seed(1), new Perfil { IdPerfil = TestIds.Seed(2), Nome = "Inconsistente" });
         Assert.IsType<NotFoundResult>(result);
     }
 
@@ -219,7 +219,7 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
         var profiles = Attach(new AccessProfileController(Db), userId: null);
 
         AssertLoginRedirect(await users.Create(NewUser("anonymous@test.local")));
-        AssertLoginRedirect(await profiles.Edit(1, new Perfil { IdPerfil = 1, Nome = "Sem sessão" }));
+        AssertLoginRedirect(await profiles.Edit(TestIds.Seed(1), new Perfil { IdPerfil = TestIds.Seed(1), Nome = "Sem sessão" }));
     }
 
     private static Usuario NewUser(string email) => new()
@@ -230,7 +230,7 @@ public sealed class UsersAndProfilesCrudTests : ControllerTestBase
         Ocupacao = "Analista",
         Genero = 1,
         DtNascimento = new DateTime(1990, 1, 1),
-        FkIdPerfil = 1,
+        FkIdPerfil = TestIds.Seed(1),
         Ativo = "S"
     };
 

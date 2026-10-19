@@ -20,7 +20,11 @@ public abstract class ControllerTestBase : IAsyncLifetime
         if (string.IsNullOrWhiteSpace(mysqlServer))
             throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar os testes de banco em MySQL.");
         var serverVersion = ServerVersion.AutoDetect(mysqlServer);
-        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer) { Database = _databaseName };
+        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer)
+        {
+            Database = _databaseName,
+            GuidFormat = MySqlGuidFormat.Binary16
+        };
         Db = new ApplicationDbContext(
             new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseMySql(connectionBuilder.ConnectionString, serverVersion)
@@ -39,6 +43,14 @@ public abstract class ControllerTestBase : IAsyncLifetime
     }
 
     protected T Attach<T>(T controller, int? userId = 1, IFormCollection? form = null)
+        where T : Controller
+        => AttachWithGuid(controller, userId.HasValue ? TestIds.Seed(userId.Value) : null, form);
+
+    protected T Attach<T>(T controller, Guid userId, IFormCollection? form = null)
+        where T : Controller
+        => AttachWithGuid(controller, userId, form);
+
+    private T AttachWithGuid<T>(T controller, Guid? userId, IFormCollection? form)
         where T : Controller
     {
         var context = new DefaultHttpContext { Session = new TestSession() };
@@ -66,7 +78,7 @@ public abstract class ControllerTestBase : IAsyncLifetime
             Ativo = "S",
             Dt_Criacao = DateTime.UtcNow,
             Dt_Modificacao = DateTime.UtcNow,
-            FK_Id_Usuario = 1
+            FK_Id_Usuario = TestIds.Seed(1)
         };
         Db.Comunidades.Add(community);
         await Db.SaveChangesAsync();
@@ -82,7 +94,7 @@ public abstract class ControllerTestBase : IAsyncLifetime
             Ativo = "S",
             DtCriacao = DateTime.UtcNow,
             DtModificacao = DateTime.UtcNow,
-            FkIdUsuario = 1
+            FkIdUsuario = TestIds.Seed(1)
         };
         Db.Atores.Add(actor);
         await Db.SaveChangesAsync();

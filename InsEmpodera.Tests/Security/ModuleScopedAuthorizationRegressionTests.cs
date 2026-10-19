@@ -26,7 +26,7 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
             new UsersController(NullLogger<UsersController>.Instance, Db), userId).Create());
         Assert.IsType<ViewResult>(Attach(new AccessProfileController(Db), userId).Create());
         Assert.IsType<ViewResult>(Attach(
-            new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), userId).ComunidadesDetalhes(0));
+            new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), userId).ComunidadesDetalhes(Guid.Empty));
         Assert.IsType<ViewResult>(await Attach(
             new AtoresController(NullLogger<AtoresController>.Instance, Db), userId).Create());
         Assert.IsType<ViewResult>(await Attach(new AtividadesController(Db), userId).Create());
@@ -115,11 +115,11 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
             "Comunidades", list: "S", details: "S", create: "N", update: "S", delete: "N"));
 
         var creator = Attach(new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), creatorId);
-        Assert.IsType<ViewResult>(creator.ComunidadesDetalhes(0));
+        Assert.IsType<ViewResult>(creator.ComunidadesDetalhes(Guid.Empty));
         Assert.IsType<RedirectToActionResult>(creator.ComunidadesDetalhes(community.Id_Comunidade));
 
         var editor = Attach(new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), editorId);
-        Assert.IsType<RedirectToActionResult>(editor.ComunidadesDetalhes(0));
+        Assert.IsType<RedirectToActionResult>(editor.ComunidadesDetalhes(Guid.Empty));
         Assert.IsType<ViewResult>(editor.ComunidadesDetalhes(community.Id_Comunidade));
     }
 
@@ -171,12 +171,12 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
         Assert.False(user.CanList("ModuloAusente"));
     }
 
-    private async Task<int> CreateUserWithPermissionsAsync(params Permissoes[] permissions)
+    private async Task<Guid> CreateUserWithPermissionsAsync(params Permissoes[] permissions)
     {
         var profile = new Perfil
         {
             Nome = $"Perfil misto {Guid.NewGuid():N}",
-            FkIdUsuario = 1,
+            FkIdUsuario = TestIds.Seed(1),
             DtCriacao = DateTime.UtcNow,
             DtModificacao = DateTime.UtcNow,
             Permissoes = permissions.ToList()

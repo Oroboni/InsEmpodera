@@ -21,27 +21,27 @@ public sealed class CrudAuthorizationTests : ControllerTestBase
         var activity = new Atividades
         {
             Nome = "Protegida", Descricao = "Protegida", FkIdComunidade = community.Id_Comunidade,
-            FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+            FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         var diary = new DiarioCampo
         {
-            FkIdComunidade = community.Id_Comunidade, FkIdUsuario = 1, Data = DateTime.UtcNow,
+            FkIdComunidade = community.Id_Comunidade, FkIdUsuario = TestIds.Seed(1), Data = DateTime.UtcNow,
             Descricao = "Protegido", Localizacao = "Local", Foto = "foto.png",
             DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         var assessment = new AvaliacaoPessoal
         {
-            FK_id_Atores = actor.IdAtores, FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+            FK_id_Atores = actor.IdAtores, FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         var form = new FichaPrimeiroContato
         {
-            FK_id_Atores = actor.IdAtores, FkIdComunidade = community.Id_Comunidade, FkIdUsuario = 1,
+            FK_id_Atores = actor.IdAtores, FkIdComunidade = community.Id_Comunidade, FkIdUsuario = TestIds.Seed(1),
             DtContato = DateTime.UtcNow, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         var user = new Usuario
         {
             Nome = "Protegido", Email = $"protected-{Guid.NewGuid():N}@test.local", Ocupacao = "Teste",
-            DtNascimento = new DateTime(1990, 1, 1), DtCriacao = DateTime.UtcNow, Ativo = "S", FkIdPerfil = 1,
+            DtNascimento = new DateTime(1990, 1, 1), DtCriacao = DateTime.UtcNow, Ativo = "S", FkIdPerfil = TestIds.Seed(1),
             Senha = "temporária"
         };
         user.Senha = new PasswordHasher<Usuario>().HashPassword(user, user.Senha);
@@ -71,18 +71,18 @@ public sealed class CrudAuthorizationTests : ControllerTestBase
     public async Task LoggedUser_CannotDeactivateOwnAccount()
     {
         var controller = Attach(new UsersController(NullLogger<UsersController>.Instance, Db), 1);
-        var result = await controller.Delete(1);
+        var result = await controller.Delete(TestIds.Seed(1));
         Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("S", (await Db.Usuarios.FindAsync(1))!.Ativo);
+        Assert.Equal("S", (await Db.Usuarios.FindAsync(TestIds.Seed(1)))!.Ativo);
     }
 
     [Fact]
     public async Task DeleteEndpoints_MissingIdsDoNotSucceedSilently()
     {
-        Assert.IsType<NotFoundResult>(await Attach(new UsersController(NullLogger<UsersController>.Instance, Db)).Delete(999_999));
-        Assert.IsType<NotFoundResult>(await Attach(new AtividadesController(Db)).Delete(999_999));
-        Assert.IsType<NotFoundResult>(await Attach(new PersonalAssessmentController(Db)).Delete(999_999));
-        Assert.IsType<NotFoundResult>(await Attach(new DiarioCampoController(Db)).Delete(999_999));
-        Assert.IsType<NotFoundResult>(await Attach(new FichaPrimeiroContatoController(Db)).Delete(999_999));
+        Assert.IsType<NotFoundResult>(await Attach(new UsersController(NullLogger<UsersController>.Instance, Db)).Delete(TestIds.Missing));
+        Assert.IsType<NotFoundResult>(await Attach(new AtividadesController(Db)).Delete(TestIds.Missing));
+        Assert.IsType<NotFoundResult>(await Attach(new PersonalAssessmentController(Db)).Delete(TestIds.Missing));
+        Assert.IsType<NotFoundResult>(await Attach(new DiarioCampoController(Db)).Delete(TestIds.Missing));
+        Assert.IsType<NotFoundResult>(await Attach(new FichaPrimeiroContatoController(Db)).Delete(TestIds.Missing));
     }
 }

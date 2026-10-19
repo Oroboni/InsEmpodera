@@ -46,7 +46,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
             ["Ocupacao"] = "Tester",
             ["Genero"] = "1",
             ["DtNascimento"] = "1990-01-01",
-            ["FkIdPerfil"] = "1",
+            ["FkIdPerfil"] = TestIds.Seed(1).ToString(),
             ["Ativo"] = "S"
         });
         AssertRedirect(create);
@@ -56,7 +56,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         {
             ["IdUsuario"] = id.ToString(), ["Nome"] = "Usuário HTTP editado", ["Senha"] = "",
             ["Email"] = email, ["Ocupacao"] = "QA", ["Genero"] = "2",
-            ["DtNascimento"] = "1990-01-01", ["FkIdPerfil"] = "1", ["Ativo"] = "S"
+            ["DtNascimento"] = "1990-01-01", ["FkIdPerfil"] = TestIds.Seed(1).ToString(), ["Ativo"] = "S"
         });
         AssertRedirect(edit);
         Assert.Equal("Usuário HTTP editado", await QueryAsync(db => db.Usuarios.Where(item => item.IdUsuario == id).Select(item => item.Nome).SingleAsync()));
@@ -72,9 +72,9 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         using var client = await CreateAuthenticatedClientAsync();
         var name = $"Comunidade HTTP {Guid.NewGuid():N}";
 
-        var create = await PostFormAsync(client, "/Comunidade/ComunidadesDetalhes/0", "/Comunidade/ComunidadesDetalhes?id=0", new()
+        var create = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{Guid.Empty}", $"/Comunidade/ComunidadesDetalhes?id={Guid.Empty}", new()
         {
-            ["Id_Comunidade"] = "0", ["Nome"] = name,
+            ["Id_Comunidade"] = Guid.Empty.ToString(), ["Nome"] = name,
             ["Local"] = "Rua HTTP, 10, São Paulo",
             ["LocalSecundario"] = "Rua HTTP Dois, 20, São Paulo",
             ["Status"] = "Em Processo", ["Ativo"] = "S"
@@ -231,7 +231,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         });
         await QueryAsync(async db =>
         {
-            var user = await db.Usuarios.SingleAsync(item => item.IdUsuario == 1);
+            var user = await db.Usuarios.SingleAsync(item => item.IdUsuario == TestIds.Seed(1));
             user.Senha = new PasswordHasher<Usuario>().HashPassword(user, Password);
             user.Ativo = "S";
             await db.SaveChangesAsync();
@@ -264,27 +264,27 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         return await operation(db);
     }
 
-    private Task<int> SeedCommunityAsync() => QueryAsync(async db =>
+    private Task<Guid> SeedCommunityAsync() => QueryAsync(async db =>
     {
         var community = new Comunidade
         {
             Nome = $"Pré-requisito {Guid.NewGuid():N}", Local = "Rua de Teste, 1, São Paulo",
             LocalMapa = "Rua de Teste, 1, São Paulo", Status = "Em processo", Ativo = "S",
-            FK_Id_Usuario = 1, Dt_Criacao = DateTime.UtcNow, Dt_Modificacao = DateTime.UtcNow
+            FK_Id_Usuario = TestIds.Seed(1), Dt_Criacao = DateTime.UtcNow, Dt_Modificacao = DateTime.UtcNow
         };
         db.Comunidades.Add(community);
         await db.SaveChangesAsync();
         return community.Id_Comunidade;
     });
 
-    private Task<int> SeedAxisAsync() => QueryAsync(async db =>
+    private Task<Guid> SeedAxisAsync() => QueryAsync(async db =>
     {
         var axis = new Eixo { Nome = $"Eixo HTTP {Guid.NewGuid():N}" };
         db.Eixos.Add(axis);
         await db.SaveChangesAsync();
         return axis.IdEixo;
     });
-    private async Task<int> SeedActorAsync(int? communityId = null)
+    private async Task<Guid> SeedActorAsync(Guid? communityId = null)
     {
         var actualCommunityId = communityId ?? await SeedCommunityAsync();
         return await QueryAsync(async db =>
@@ -292,7 +292,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
             var actor = new Atores
             {
                 Nome = $"Ator pré-requisito {Guid.NewGuid():N}", Ativo = "S", Idade = 30,
-                FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+                FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
             };
             db.Atores.Add(actor);
             await db.SaveChangesAsync();
@@ -302,14 +302,14 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         });
     }
 
-    private static Dictionary<string, string> AssessmentFields(int actorId, int score) => new()
+    private static Dictionary<string, string> AssessmentFields(Guid actorId, int score) => new()
     {
         ["FK_id_Atores"] = actorId.ToString(), ["CCrimes"] = score.ToString(), ["Substancias"] = score.ToString(),
         ["Moradia"] = score.ToString(), ["Prevencao"] = score.ToString(), ["AssBasica"] = score.ToString(),
         ["Educacao"] = score.ToString(), ["Saude"] = score.ToString(), ["Ocupacao"] = score.ToString(), ["Lazer"] = score.ToString()
     };
 
-    private static Dictionary<string, string> FirstContactFields(int actorId, int communityId, string comment) => new()
+    private static Dictionary<string, string> FirstContactFields(Guid actorId, Guid communityId, string comment) => new()
     {
         ["FK_id_Atores"] = actorId.ToString(), ["FkIdComunidade"] = communityId.ToString(), ["Endereco"] = "Rua HTTP, 100",
         ["Telefone"] = "11999990000", ["DtContato"] = "2026-08-23", ["HoraContato"] = "10:30",

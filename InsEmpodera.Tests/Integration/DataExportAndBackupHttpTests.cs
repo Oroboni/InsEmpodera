@@ -61,7 +61,7 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
         };
         Assert.Equal(expectedSheets, workbook.Worksheets.Select(sheet => sheet.Name));
         Assert.Equal(nameof(Comunidade.Id_Comunidade), workbook.Worksheet("Comunidades").Cell(1, 1).GetString());
-        Assert.Equal(communityId, workbook.Worksheet("Comunidades").Cell(2, 1).GetValue<int>());
+        Assert.Equal(communityId.ToString(), workbook.Worksheet("Comunidades").Cell(2, 1).GetString(), ignoreCase: true);
     }
 
     [Theory]
@@ -281,7 +281,7 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
             return result;
         });
 
-    private Task<int> SeedCommunityAsync() =>
+    private Task<Guid> SeedCommunityAsync() =>
         HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var community = new Comunidade
@@ -291,7 +291,7 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
                 LocalMapa = "Rua da Integração, 10",
                 Status = "Em processo",
                 Ativo = "S",
-                FK_Id_Usuario = 1,
+                FK_Id_Usuario = TestIds.Seed(1),
                 Dt_Criacao = DateTime.UtcNow,
                 Dt_Modificacao = DateTime.UtcNow
             };

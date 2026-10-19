@@ -22,7 +22,11 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
         var mysqlServer = Environment.GetEnvironmentVariable("TEST_MYSQL_CONNECTION");
         if (string.IsNullOrWhiteSpace(mysqlServer))
             throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar integrações HTTP em MySQL.");
-        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer) { Database = _databaseName };
+        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer)
+        {
+            Database = _databaseName,
+            GuidFormat = MySqlGuidFormat.Binary16
+        };
         _mysqlConnectionString = connectionBuilder.ConnectionString;
     }
 

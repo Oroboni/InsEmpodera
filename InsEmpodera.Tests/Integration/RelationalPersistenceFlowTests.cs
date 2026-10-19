@@ -17,7 +17,7 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         var activity = new Atividades
         {
             Nome = "Original", Descricao = "Original", FkIdComunidade = community.Id_Comunidade,
-            FkIdUsuario = 1, DtCriacao = createdAt, DtModificacao = createdAt
+            FkIdUsuario = TestIds.Seed(1), DtCriacao = createdAt, DtModificacao = createdAt
         };
         Db.Atividades.Add(activity);
         await Db.SaveChangesAsync();
@@ -26,19 +26,19 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
             IdAtividade = activity.IdAtividade,
             Nome = "Editada",
             Descricao = "Editada",
-            FkIdUsuario = 5,
-            FkIdUsuarioM = 5,
+            FkIdUsuario = TestIds.Seed(5),
+            FkIdUsuarioM = TestIds.Seed(5),
             DtCriacao = DateTime.UtcNow.AddYears(10),
             DtModificacao = DateTime.UtcNow.AddYears(10)
         };
 
         var result = await Attach(new AtividadesController(Db), userId: 2)
-            .Edit(activity.IdAtividade, payload, new List<int>(), community.Id_Comunidade);
+            .Edit(activity.IdAtividade, payload, new List<Guid>(), community.Id_Comunidade);
 
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Atividades.AsNoTracking().SingleAsync(item => item.IdAtividade == activity.IdAtividade);
-        Assert.Equal(1, saved.FkIdUsuario);
-        Assert.Equal(2, saved.FkIdUsuarioM);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(2), saved.FkIdUsuarioM);
         Assert.Equal(createdAt, saved.DtCriacao);
         Assert.True(saved.DtModificacao < DateTime.UtcNow.AddMinutes(1));
     }
@@ -50,13 +50,13 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         var secondActor = await CreateActorAsync(name: "Ator adulterado");
         var createdAt = new DateTime(2025, 2, 20, 10, 0, 0, DateTimeKind.Utc);
         var assessment = Assessment(firstActor.IdAtores, 1);
-        assessment.FkIdUsuario = 1;
+        assessment.FkIdUsuario = TestIds.Seed(1);
         assessment.DtCriacao = createdAt;
         assessment.DtModificacao = createdAt;
         Db.AvaliacaoPessoal.Add(assessment);
         await Db.SaveChangesAsync();
         var payload = Assessment(secondActor.IdAtores, 5);
-        payload.FkIdUsuario = 5;
+        payload.FkIdUsuario = TestIds.Seed(5);
         payload.DtCriacao = DateTime.UtcNow.AddYears(10);
 
         var result = await Attach(new PersonalAssessmentController(Db), userId: 2)
@@ -66,7 +66,7 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         var saved = await Db.AvaliacaoPessoal.AsNoTracking()
             .SingleAsync(item => item.IdAvaliacao == assessment.IdAvaliacao);
         Assert.Equal(firstActor.IdAtores, saved.FK_id_Atores);
-        Assert.Equal(1, saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.Equal(createdAt, saved.DtCriacao);
         Assert.Equal(5, saved.Saude);
     }
@@ -79,8 +79,8 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         {
             Nome = marker,
             Descricao = "Referências inexistentes",
-            FkIdComunidade = 999_991,
-            FkIdUsuario = 999_992,
+            FkIdComunidade = TestIds.Seed(999_991),
+            FkIdUsuario = TestIds.Seed(999_992),
             DtCriacao = DateTime.UtcNow,
             DtModificacao = DateTime.UtcNow
         });
@@ -97,14 +97,14 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         var community = await CreateCommunityAsync();
         var actor = await CreateActorAsync(community);
         var assessment = Assessment(actor.IdAtores, 2);
-        assessment.FkIdUsuario = 1;
+        assessment.FkIdUsuario = TestIds.Seed(1);
         assessment.DtCriacao = DateTime.UtcNow;
         assessment.DtModificacao = DateTime.UtcNow;
         var form = new FichaPrimeiroContato
         {
             FK_id_Atores = actor.IdAtores,
             FkIdComunidade = community.Id_Comunidade,
-            FkIdUsuario = 1,
+            FkIdUsuario = TestIds.Seed(1),
             DtContato = DateTime.UtcNow,
             HoraContato = TimeSpan.FromHours(9),
             DtCriacao = DateTime.UtcNow,
@@ -132,7 +132,7 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         Assert.False(await Db.RecursosAtores.AnyAsync(item => item.FK_id_Atores == actor.IdAtores));
     }
 
-    private static AvaliacaoPessoal Assessment(int actorId, int score) => new()
+    private static AvaliacaoPessoal Assessment(Guid actorId, int score) => new()
     {
         FK_id_Atores = actorId,
         CCrimes = score,

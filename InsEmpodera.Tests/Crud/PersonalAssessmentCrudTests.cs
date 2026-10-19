@@ -21,7 +21,7 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
         Assert.Equal(nameof(PersonalAssessmentController.Index), redirect.ActionName);
         Assert.Equal(actor.IdAtores, redirect.RouteValues!["atorId"]);
         var saved = await Db.AvaliacaoPessoal.SingleAsync(item => item.IdAvaliacao == assessment.IdAvaliacao);
-        Assert.Equal(1, saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.NotEqual(default, saved.DtCriacao);
         Assert.Equal(2, saved.Saude);
     }
@@ -67,7 +67,7 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
     public async Task Edit_MissingRecordReturnsNotFound()
     {
         var controller = Attach(new PersonalAssessmentController(Db));
-        Assert.IsType<NotFoundResult>(await controller.edit(NewAssessment(1, 3), 999_999));
+        Assert.IsType<NotFoundResult>(await controller.edit(NewAssessment(TestIds.Seed(1), 3), TestIds.Missing));
     }
 
     [Fact]
@@ -91,19 +91,19 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
     public async Task Delete_MissingRecordReturnsNotFound()
     {
         var controller = Attach(new PersonalAssessmentController(Db));
-        Assert.IsType<NotFoundResult>(await controller.Delete(999_999));
+        Assert.IsType<NotFoundResult>(await controller.Delete(TestIds.Missing));
     }
 
-    private static AvaliacaoPessoal NewPersistedAssessment(int actorId, int score)
+    private static AvaliacaoPessoal NewPersistedAssessment(Guid actorId, int score)
     {
         var assessment = NewAssessment(actorId, score);
-        assessment.FkIdUsuario = 1;
+        assessment.FkIdUsuario = TestIds.Seed(1);
         assessment.DtCriacao = DateTime.UtcNow;
         assessment.DtModificacao = DateTime.UtcNow;
         return assessment;
     }
 
-    private static AvaliacaoPessoal NewAssessment(int actorId, int score) => new()
+    private static AvaliacaoPessoal NewAssessment(Guid actorId, int score) => new()
     {
         FK_id_Atores = actorId,
         CCrimes = score,

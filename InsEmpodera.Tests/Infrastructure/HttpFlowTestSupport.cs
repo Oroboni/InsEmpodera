@@ -40,7 +40,7 @@ internal static class HttpFlowTestSupport
                 DtNascimento = new DateTime(1990, 1, 1),
                 DtCriacao = DateTime.UtcNow,
                 DtAtualizacao = DateTime.UtcNow,
-                FkIdPerfil = profileId,
+                FkIdPerfil = TestIds.Seed(profileId),
                 Ativo = active,
                 IdiomaPreferido = preferredLanguage
             };
