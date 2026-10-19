@@ -338,4 +338,12 @@
     <value>Suporte e informações do sistema</value>
     <comment>Source: Suporte e informações do sistema</comment>
   </data>
+  <data name='Ui_6dfdbbc05cfda346' xml:space='preserve'>
+    <value>Como mudo as cores da plataforma?</value>
+    <comment>Source: Como mudo as cores da plataforma?</comment>
+  </data>
+  <data name='Ui_2702c699713ae64e' xml:space='preserve'>
+    <value>Em Configurações, na seção Cores da plataforma, cada usuário pode escolher uma paleta pronta, gerar uma paleta a partir de uma cor ou ajustar cada cor. As cores salvas valem só para a sua conta.</value>
+    <comment>Source: Em Configurações, na seção Cores da plataforma, cada usuário pode escolher uma paleta pronta, gerar uma paleta a partir de uma cor ou ajustar cada cor. As cores salvas valem só para a sua conta.</comment>
+  </data>
 </root>

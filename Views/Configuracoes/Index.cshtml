@@ -3,7 +3,7 @@
 @{
     ViewData["PageCSS"] = "configuracoes";
     var conta = ViewBag.Conta as ContaUsuarioResumo;
-    var podeEditarCores = conta?.IsAdmin == true;
+    var podeEditarCores = conta is not null;
     var coresPersonalizadas = ViewBag.CoresPersonalizadas is true;
     var versao = typeof(Program).Assembly.GetName().Version?.ToString(3) ?? "1.0.0";
     Layout = "_Layout";
@@ -14,11 +14,7 @@
     ViewData["Title"] = isEnglish ? "Settings" : isSpanish ? "Configuración" : "Configurações";
     var languageMode = Context.Request.Cookies[Empodera.Services.UserCultureService.PreferenceModeCookieName];
     var usesExplicitLanguage = string.Equals(languageMode, "explicit", StringComparison.Ordinal);
-    var currentLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
-        ? "English"
-        : currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase)
-            ? "Español"
-            : "Português";
+    var currentLanguage = Empodera.Services.IdiomasInterface.Nome(isEnglish ? "en" : isSpanish ? "es" : "pt-BR", currentCulture);
     var eyebrow = isEnglish ? "System preferences" : isSpanish ? "Preferencias del sistema" : "Preferências do sistema";
     var pageDescription = isEnglish ? "Customize the interface in this browser." : isSpanish ? "Personaliza la interfaz de este navegador." : "Personalize a interface deste navegador.";
     var currentLanguageLabel = isEnglish ? "Current language" : isSpanish ? "Idioma actual" : "Idioma atual";
@@ -65,11 +61,12 @@
 
             @foreach (var language in new[]
             {
-                (Code: "auto", ShortName: "A", Label: automaticLabel, Description: automaticDescription),
-                (Code: "pt-BR", ShortName: "PT", Label: "Português", Description: "Português do Brasil"),
-                (Code: "en", ShortName: "EN", Label: "English", Description: "English"),
-                (Code: "es", ShortName: "ES", Label: "Español", Description: "Español")
-            })
+                (Code: "auto", ShortName: "A", Label: automaticLabel, Description: automaticDescription)
+            }.Concat(Empodera.Services.IdiomasInterface.Codigos.Select(codigo => (
+                Code: codigo,
+                ShortName: Empodera.Services.IdiomasInterface.Sigla(codigo),
+                Label: Empodera.Services.IdiomasInterface.Nome(codigo, currentCulture),
+                Description: Empodera.Services.IdiomasInterface.NomeNativo(codigo)))))
             {
                 var isActive = language.Code == "auto"
                     ? !usesExplicitLanguage
@@ -106,8 +103,8 @@
                 <i class="fa-solid fa-palette"></i>
             </span>
             <div>
-                <h2 id="colors-title">Cores do sistema</h2>
-                <p>Personalize todas as cores do site. A pré-visualização aparece nesta página na hora; ao salvar, as cores valem para todos os usuários.</p>
+                <h2 id="colors-title">Cores da plataforma</h2>
+                <p>Escolha as suas cores da plataforma. A pré-visualização aparece nesta página na hora; ao salvar, as cores valem só para a sua conta, sem mudar a dos outros usuários.</p>
             </div>
         </div>
 
@@ -118,10 +115,6 @@
         @if (TempData["CoresErro"] is string coresErro)
         {
             <div class="colors-alert colors-alert-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i> @coresErro</div>
-        }
-        @if (!podeEditarCores)
-        {
-            <div class="settings-language-note"><i class="fa-solid fa-lock" aria-hidden="true"></i><span>Somente administradores podem alterar as cores do sistema.</span></div>
         }
 
         <div class="colors-toolbar">
@@ -214,7 +207,7 @@
                         <i class="fa-solid fa-rotate-left"></i> Descartar alterações
                     </button>
                     <button type="submit" class="colors-button colors-button-primary">
-                        <i class="fa-solid fa-floppy-disk"></i> Salvar para todos os usuários
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar minhas cores
                     </button>
                 </div>
             }
@@ -223,9 +216,9 @@
         @if (podeEditarCores && coresPersonalizadas)
         {
             <form asp-controller="Configuracoes" asp-action="RestaurarCores" method="post" class="colors-restore"
-                  onsubmit="return confirm('Voltar às cores padrão do sistema? A personalização atual será removida.');">
+                  onsubmit="return confirm('Voltar às cores padrão? As suas cores personalizadas serão removidas.');">
                 @Html.AntiForgeryToken()
-                <span><i class="fa-solid fa-circle-info"></i> O sistema está usando cores personalizadas.</span>
+                <span><i class="fa-solid fa-circle-info"></i> Você está usando cores personalizadas.</span>
                 <button type="submit" class="colors-button colors-button-ghost"><i class="fa-solid fa-arrow-rotate-left"></i> Restaurar cores padrão</button>
             </form>
         }

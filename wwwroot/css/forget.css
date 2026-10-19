@@ -2,7 +2,7 @@
 :root {
     --cor-fundo: var(--color-primary);
     --cor-painel-info: var(--color-primary);
-    --cor-destaque: #6BC0B7;
+    --cor-destaque: var(--color-secondary); /* mesma cor do botão Entrar do login (segue o tema) */
     --cor-texto-claro: #FFFFFF;
     --cor-texto-escuro: #333333;
     --cor-texto-placeholder: #A0AEC0;
@@ -392,7 +392,7 @@ body {
     border-color: var(--cor-destaque);
     border-width: 2px;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(107, 192, 183, 0.2);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--cor-destaque) 20%, transparent);
 }
 
 .form-input::placeholder {
@@ -429,9 +429,9 @@ body {
 }
 
 .recovery-button:hover {
-    background-color: #5BA8A0;
+    background-color: var(--color-secondary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(107, 192, 183, 0.3);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--cor-destaque) 30%, transparent);
 }
 
 .recovery-button:active {
@@ -706,8 +706,8 @@ body {
     height: 70px;
     margin-bottom: 1.25rem;
     border-radius: 50%;
-    background: #EAF8F6;
-    color: #287A71;
+    background: color-mix(in srgb, var(--cor-destaque) 12%, white);
+    color: var(--color-secondary-dark);
     font-size: 2.2rem;
     font-weight: 700;
 }
@@ -716,4 +716,10 @@ body {
     display: block;
     text-align: center;
     text-decoration: none;
+}
+/* Botões e campos usam a fonte do sistema (o navegador aplicaria a fonte padrão dele). */
+.form-input,
+.recovery-button,
+.cancel-button {
+    font-family: inherit;
 }

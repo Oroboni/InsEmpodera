@@ -1,6 +1,8 @@
 // Menções a atores (@) no Diário de Processo Pessoal.
 // Digitar "@" abre a lista; o texto seguinte filtra os atores sem diferenciar acentos/maiúsculas
 // e aceita letras em sequência (ex.: "isao" encontra "Isadora"). Setas navegam, Enter/Tab escolhem.
+// No campo a menção aparece só como "@Nome", destacada na cor do sistema; o formato salvo
+// "@[Nome](ator:id)" (usado para gerar o link na leitura) é montado apenas no envio do formulário.
 (() => {
     const campo = document.querySelector('[data-actor-mentions]');
     const lista = document.getElementById('actor-mention-list');
@@ -15,6 +17,75 @@
     const normalizar = texto => String(texto ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase();
     const indice = atores.map(ator => ({ ator, chave: normalizar(ator.nome) }))
         .sort((a, b) => a.chave.localeCompare(b.chave));
+
+    // Nome exibido -> id do ator, para remontar o formato salvo no envio.
+    const mencoes = new Map();
+    const TOKEN = /@\[([^\]\r\n]{1,120})\]\(ator:([^)\s]+)\)/g;
+    const escaparRegex = texto => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
+    function padraoMencoes() {
+        if (!mencoes.size) return null;
+        const nomes = [...mencoes.keys()].sort((a, b) => b.length - a.length).map(escaparRegex);
+        return new RegExp(`@(${nomes.join('|')})(?![\\p{L}\\p{N}_])`, 'gu');
+    }
+
+    // Texto do campo -> formato salvo.
+    function serializar(texto) {
+        const padrao = padraoMencoes();
+        return padrao ? texto.replace(padrao, (_, nome) => `@[${nome}](ator:${mencoes.get(nome)})`) : texto;
+    }
+
+    // Camada atrás do campo que pinta as menções (o texto do campo fica transparente por cima).
+    const editor = document.createElement('div');
+    editor.className = 'actor-mention-editor';
+    const fundo = document.createElement('div');
+    fundo.className = 'actor-mention-backdrop';
+    fundo.setAttribute('aria-hidden', 'true');
+    campo.parentNode.insertBefore(editor, campo);
+    editor.append(fundo, campo);
+
+    function copiarEstilo() {
+        const estilo = getComputedStyle(campo);
+        ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'wordSpacing', 'textAlign', 'tabSize',
+            'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+            'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth', 'boxSizing']
+            .forEach(prop => { fundo.style[prop] = estilo[prop]; });
+    }
+
+    function pintar() {
+        const padrao = padraoMencoes();
+        const texto = campo.value;
+        const partes = [];
+        let ultimo = 0;
+        if (padrao) {
+            for (const achado of texto.matchAll(padrao)) {
+                partes.push(document.createTextNode(texto.slice(ultimo, achado.index)));
+                const destaque = document.createElement('mark');
+                destaque.className = 'actor-mention-chip';
+                destaque.textContent = achado[0];
+                partes.push(destaque);
+                ultimo = achado.index + achado[0].length;
+            }
+        }
+        partes.push(document.createTextNode(texto.slice(ultimo) + '\u200b'));
+        fundo.replaceChildren(...partes);
+        // Com barra de rolagem o campo tem menos largura útil; a camada de trás acompanha.
+        const estilo = getComputedStyle(campo);
+        const barra = campo.offsetWidth - campo.clientWidth - parseFloat(estilo.borderLeftWidth) - parseFloat(estilo.borderRightWidth);
+        fundo.style.paddingRight = `${parseFloat(estilo.paddingRight) + Math.max(barra, 0)}px`;
+        fundo.scrollTop = campo.scrollTop;
+    }
+
+    // Valor vindo do servidor: "@[Nome](ator:id)" vira "@Nome" no campo.
+    campo.value = campo.value.replace(TOKEN, (_, nome, id) => { mencoes.set(nome, id); return `@${nome}`; });
+    copiarEstilo();
+    pintar();
+    campo.addEventListener('input', pintar);
+    campo.addEventListener('scroll', () => { fundo.scrollTop = campo.scrollTop; });
+    window.addEventListener('resize', () => { copiarEstilo(); pintar(); });
+
+    // No envio, o servidor recebe o formato salvo; o que a pessoa vê no campo não muda.
+    campo.form?.addEventListener('formdata', event => event.formData.set(campo.name, serializar(campo.value)));
 
     let inicio = -1;
     let fim = -1;
@@ -58,8 +129,9 @@
 
     function selecionar(ator) {
         if (inicio < 0) return;
-        const token = `@[${ator.nome}](ator:${ator.id})`;
-        campo.setRangeText(`${token} `, inicio, fim, 'end');
+        mencoes.set(ator.nome, ator.id);
+        campo.setRangeText(`@${ator.nome} `, inicio, fim, 'end');
+        pintar();
         campo.dispatchEvent(new Event('change', { bubbles: true }));
         fechar();
         campo.focus();
@@ -76,7 +148,9 @@
     function atualizar() {
         const antes = campo.value.slice(0, campo.selectionStart);
         const match = /(?:^|\s)@([^@\r\n]{0,60})$/.exec(antes);
-        if (!match || match[1].includes('](')) { fechar(); return; }
+        // Depois de uma menção já escolhida ("@Ana Souza continua..."), o texto seguinte não é busca.
+        const jaMencionado = match && [...mencoes.keys()].some(nome => match[1].startsWith(nome) && /^\s/.test(match[1].slice(nome.length)));
+        if (!match || jaMencionado) { fechar(); return; }
 
         inicio = antes.length - match[1].length - 1;
         fim = campo.selectionStart;

@@ -1,4 +1,4 @@
-// Editor de cores (Configurações > Cores do sistema).
+// Editor de cores (Configurações > Cores da plataforma, de cada usuário).
 // - Carrega as cores em uso (tema base ou personalização salva).
 // - Pré-visualiza na página inteira enquanto se edita (sem salvar).
 // - Paletas prontas, gerador a partir de uma cor e aviso de contraste.

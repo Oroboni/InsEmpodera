@@ -44,14 +44,8 @@ function animatePageElements() {
 // Manipula o foco nos inputs
 function handleInputFocus(event) {
     const input = event.target;
+    // O rótulo "E-mail" fica fixo acima do campo; só o grupo recebe o estado de foco.
     input.parentElement.classList.add('focused');
-    
-    // Animação suave no label se existir
-    const label = input.parentElement.querySelector('label');
-    if (label) {
-        label.style.transform = 'translateY(-25px) scale(0.8)';
-        label.style.color = 'var(--cor-destaque)';
-    }
 }
 
 // Manipula a perda de foco nos inputs
@@ -60,12 +54,6 @@ function handleInputBlur(event) {
     
     if (!input.value) {
         input.parentElement.classList.remove('focused');
-        
-        const label = input.parentElement.querySelector('label');
-        if (label) {
-            label.style.transform = '';
-            label.style.color = '';
-        }
     }
 }
 

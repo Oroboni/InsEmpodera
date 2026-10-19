@@ -640,4 +640,28 @@
     <value>Other options</value>
     <comment>Source: Outras opções</comment>
   </data>
+  <data name='Ui_657b4c33e8ca7393' xml:space='preserve'>
+    <value>Platform colors</value>
+    <comment>Source: Cores da plataforma</comment>
+  </data>
+  <data name='Ui_07a84b70e7983e2f' xml:space='preserve'>
+    <value>Choose your platform colors. The preview appears on this page right away; once saved, the colors apply only to your account, without changing anyone else’s.</value>
+    <comment>Source: Escolha as suas cores da plataforma. A pré-visualização aparece nesta página na hora; ao salvar, as cores valem só para a sua conta, sem mudar a dos outros usuários.</comment>
+  </data>
+  <data name='Ui_ee28089536687659' xml:space='preserve'>
+    <value>Save my colors</value>
+    <comment>Source: Salvar minhas cores</comment>
+  </data>
+  <data name='Ui_424db972293fbe6a' xml:space='preserve'>
+    <value>Go back to the default colors? Your custom colors will be removed.</value>
+    <comment>Source: Voltar às cores padrão? As suas cores personalizadas serão removidas.</comment>
+  </data>
+  <data name='Ui_dea815f4c79e2930' xml:space='preserve'>
+    <value>You are using custom colors.</value>
+    <comment>Source: Você está usando cores personalizadas.</comment>
+  </data>
+  <data name='Ui_c6b5e41834506e3e' xml:space='preserve'>
+    <value>Your colors were saved. They apply only to your account.</value>
+    <comment>Source: Suas cores foram salvas. Elas valem só para a sua conta.</comment>
+  </data>
 </root>

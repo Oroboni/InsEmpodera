@@ -5,11 +5,9 @@
 }
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
-    var currentLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
-        ? "English"
-        : currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase)
-            ? "Español"
-            : "Português";
+    var codigoAtual = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "en"
+        : currentCulture.StartsWith("es", StringComparison.OrdinalIgnoreCase) ? "es" : "pt-BR";
+    var currentLanguage = Empodera.Services.IdiomasInterface.Nome(codigoAtual, currentCulture);
     var automaticLanguage = currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)
         ? "Automatic (browser)"
         : "Automático (navegador)";
@@ -59,11 +57,12 @@
             <p class="login-language-title">@tituloIdioma</p>
             @foreach (var language in new[]
             {
-                (Code: "auto", Sigla: "A", Label: automaticLanguage.Replace(" (navegador)", "").Replace(" (browser)", ""), Descricao: descricaoAutomatico),
-                (Code: "pt-BR", Sigla: "PT", Label: "Português", Descricao: "Português do Brasil"),
-                (Code: "en", Sigla: "EN", Label: "English", Descricao: "English (US)"),
-                (Code: "es", Sigla: "ES", Label: "Español", Descricao: "Español")
-            })
+                (Code: "auto", Sigla: "A", Label: automaticLanguage.Replace(" (navegador)", "").Replace(" (browser)", ""), Descricao: descricaoAutomatico)
+            }.Concat(Empodera.Services.IdiomasInterface.Codigos.Select(codigo => (
+                Code: codigo,
+                Sigla: Empodera.Services.IdiomasInterface.Sigla(codigo),
+                Label: Empodera.Services.IdiomasInterface.Nome(codigo, currentCulture),
+                Descricao: Empodera.Services.IdiomasInterface.NomeNativo(codigo)))))
             {
                 var isActive = language.Code == "auto"
                     ? !usaIdiomaExplicito

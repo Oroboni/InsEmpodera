@@ -42,6 +42,7 @@
 
 .main-form:not(.modo-visualizacao) [data-modo-leitura],
 .main-form.modo-visualizacao .process-description-card textarea,
+.main-form.modo-visualizacao .actor-mention-editor,
 .main-form.modo-visualizacao #actor-mention-help,
 .main-form.modo-visualizacao .tag-remove-btn {
     display: none;
@@ -130,3 +131,49 @@
 
 .actor-mention:hover,
 .actor-mention:focus { text-decoration: underline; }
+
+/* ===== Campo com menções destacadas =====
+   O texto do campo fica transparente e a camada de trás (mesma fonte e espaçamento) mostra
+   o texto com "@Nome" na cor do sistema. O destaque não muda a largura das letras, para o
+   cursor continuar alinhado. */
+.actor-mention-editor {
+    position: relative;
+}
+
+.actor-mention-backdrop {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    overflow: hidden;
+    border-style: solid;
+    border-color: transparent;
+    color: var(--color-gray-700);
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: normal;
+    pointer-events: none;
+}
+
+.actor-mention-editor textarea {
+    position: relative;
+    display: block;
+    background: transparent !important;
+    color: transparent;
+    caret-color: var(--color-gray-700);
+}
+
+.actor-mention-editor textarea::placeholder {
+    color: var(--color-gray-500);
+}
+
+.actor-mention-editor textarea::selection {
+    background: rgb(var(--color-primary-800-rgb) / .2);
+    color: transparent;
+}
+
+.actor-mention-chip {
+    border-radius: 4px;
+    background: var(--color-primary-100);
+    box-shadow: 0 0 0 2px var(--color-primary-100);
+    color: var(--color-primary-dark);
+}
