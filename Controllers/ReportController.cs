@@ -36,16 +36,16 @@ public class ReportController : Controller
             await _context.Comunidades.AsNoTracking().Where(item => item.Ativo != "N").OrderBy(item => item.Nome).ToListAsync(),
             "Id_Comunidade", "Nome");
         ViewBag.IsAdmin = string.Equals(loggedUser.Perfil?.Nome, "Admin", StringComparison.OrdinalIgnoreCase);
-        ViewBag.PerfilUsuario = loggedUser.Perfil?.Nome;
-        ViewBag.Inventario = new List<IndicadorInventario>
-        {
-            new("Comunidades", "fa-city", await _context.Comunidades.CountAsync(c => c.Ativo != "N")),
-            new("Atores", "fa-users", await _context.Atores.CountAsync(a => a.Ativo != "N")),
-            new("Diários de campo", "fa-book", await _context.DiariosCampo.CountAsync()),
-            new("Fichas de 1º contato", "fa-clipboard-list", await _context.FichasPrimeiroContato.CountAsync()),
-            new("Avaliações pessoais", "fa-chart-line", await _context.AvaliacaoPessoal.CountAsync()),
-            new("Usuários ativos", "fa-user-gear", await _context.Usuarios.CountAsync(u => u.Ativo == "S"))
-        };
+
+
+
+
+
+
+
+
+
+
         return View();
     }
 
@@ -945,23 +945,67 @@ public class ReportController : Controller
     // Rotas antigas de relatório: as telas ficam em RelatoriosController.
 
     // GET: /Report/Rsc
-    public Task<IActionResult> Rsc(Guid? comunidadeId) =>
+    public async Task<IActionResult> Rsc(Guid? comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
+        return View();
+    }
+    public Task<IActionResult> Rsc(int? comunidadeId) =>
         RedirectToReportAsync(nameof(RelatoriosController.Rsc), null);
 
     // GET: /Report/FirstContact
-    public Task<IActionResult> FirstContact(Guid? comunidadeId) =>
-        RedirectToReportAsync(nameof(RelatoriosController.FirstContact), new { comunidadeId });
+    public async Task<IActionResult> FirstContact(int? comunidadeId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
+        return View();
+    }
 
     // GET: /Report/PersonalAssessment
-    public Task<IActionResult> PersonalAssessment(Guid? atorId) =>
-        RedirectToReportAsync(nameof(RelatoriosController.PersonalAssessment), new { atorId });
+    public async Task<IActionResult> PersonalAssessment(int? atorId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.AtorList = new SelectList(await _context.Atores.Where(actor => actor.Ativo != "N").ToListAsync(), "IdAtores", "Nome", atorId);
+        ViewBag.SelectedAtorId = atorId;
+        return View();
+    }
 
     // GET: /Report/Actions
-    public Task<IActionResult> Actions(Guid? comunidadeId, Guid? atorId) =>
-        RedirectToReportAsync(nameof(RelatoriosController.Actions), new { comunidadeId, atorId });
+    public async Task<IActionResult> Actions(int? comunidadeId, int? atorId)
+    {
+        if (HttpContext.Session.GetString("Email") == null)
+            return RedirectToAction("Index", "Account");
+
+        var loggedUser = await CurrentUserWithPermissionsAsync();
+        if (!loggedUser.CanViewDetails("SER"))
+            return RedirectToAction("Index", "Relatorios");
+
+        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
+        ViewBag.AtorList = new SelectList(await _context.Atores.Where(actor => actor.Ativo != "N").ToListAsync(), "IdAtores", "Nome", atorId);
+        return View();
+    }
 
     // GET: /Report/PrimaryNetwork
-    public Task<IActionResult> PrimaryNetwork(Guid? atorId) =>
+    public Task<IActionResult> PrimaryNetwork(int? atorId) =>
         RedirectToReportAsync(nameof(RelatoriosController.PrimaryNetwork), new { atorId });
 
     private async Task<IActionResult> RedirectToReportAsync(string action, object? routeValues)
@@ -986,5 +1030,4 @@ public class ReportController : Controller
             .FirstOrDefaultAsync(
                 user => user.IdUsuario == loggedUserId,
                 HttpContext.RequestAborted);
-    }
-}
+    }}
