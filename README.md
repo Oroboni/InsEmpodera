@@ -183,7 +183,7 @@ InsEmpodera/
 ├── InsEmpodera.sln           # Solução com a aplicação e os testes
 ├── Program.cs                # Inicialização da aplicação
 ├── appsettings.json          # Configuração sem segredos
-└── testar.ps1                # Executor de todas as suítes de teste
+└── testar.ps1                # Executor dos testes de backend e banco
 ```
 
 ## 🚀 Como executar
@@ -322,7 +322,9 @@ As rotas por módulo e os endpoints que devolvem arquivos ou JSON estão em [doc
 | Arquitetura e unidade (subconjunto) | xUnit | Não | ver [docs/testes.md](docs/testes.md#subconjunto-sem-banco) |
 | Interface (JavaScript e DOM) | Vitest + jsdom | Não | `npm ci --prefix Frontend.Tests` e `npm test --prefix Frontend.Tests` |
 | Jornadas no navegador | Playwright (Chromium) | Sim | `dotnet test InsEmpodera.E2ETests/InsEmpodera.E2ETests.csproj` |
-| Todas as suítes, com relatório | PowerShell | Sim | `./testar.ps1` |
+| Backend e banco, com relatório | PowerShell | Sim | `./testar.ps1` |
+
+Os testes de interface e navegador permanecem no repositório para execução manual, mas não são executados por `testar.ps1` nem pelos workflows de CI.
 
 As suítes que usam banco criam e removem bancos temporários no servidor indicado por `TEST_MYSQL_CONNECTION`; o banco de desenvolvimento não é alterado. Instruções, cobertura e roteiro de validação manual: [docs/testes.md](docs/testes.md).
 

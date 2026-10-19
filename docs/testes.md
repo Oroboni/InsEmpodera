@@ -88,19 +88,18 @@ Requer `TEST_MYSQL_CONNECTION` e PowerShell 7. A aplicação é iniciada automat
 
 ```powershell
 dotnet build InsEmpodera.E2ETests/InsEmpodera.E2ETests.csproj -c Release
-./bin/InsEmpodera.E2ETests/Release/net9.0/playwright.ps1 install chromium
+./bin/InsEmpodera.E2ETests/Release/net10.0/playwright.ps1 install chromium
 dotnet test InsEmpodera.E2ETests/InsEmpodera.E2ETests.csproj -c Release --no-build
 ```
 
 Para acompanhar o navegador, defina `E2E_HEADED=true` e, opcionalmente, `E2E_SLOWMO=250`. Em caso de falha, capturas de tela e *traces* ficam em `InsEmpodera.E2ETests/TestResults/e2e-artifacts`.
 
-## Executor completo
+## Executor de backend e banco
 
-O script [`testar.ps1`](../testar.ps1) restaura as dependências, compila em `Release`, instala o Chromium e executa, em sequência, backend, interface e E2E. Se `TEST_MYSQL_CONNECTION` não estiver definida, ele usa a connection string guardada em *user secrets*.
+O script [`testar.ps1`](../testar.ps1) restaura as dependências, compila em `Release` e executa somente os testes de backend, integração HTTP e banco. Não instala Node.js ou Chromium e não executa Vitest nem Playwright. Se `TEST_MYSQL_CONNECTION` não estiver definida, ele usa a connection string guardada em *user secrets*.
 
 ```powershell
 ./testar.ps1
-./testar.ps1 -Headed -SlowMo 250   # exibe o navegador
 ```
 
 Saídas geradas em `TestResults/` (ignoradas pelo Git):
@@ -109,7 +108,7 @@ Saídas geradas em `TestResults/` (ignoradas pelo Git):
 | --- | --- |
 | `RELATORIO-DE-TESTES.md` | Resumo legível da execução |
 | `DIAGNOSTICO-DE-TESTES.json` | Diagnóstico estruturado das falhas |
-| `01-backend/*.trx`, `03-navegador/*.trx` | Resultados detalhados do xUnit |
+| `01-backend/*.trx` | Resultados detalhados do xUnit |
 | `00-compilacao/compilacao.log` | Log da compilação |
 
 ## Testes de mutação

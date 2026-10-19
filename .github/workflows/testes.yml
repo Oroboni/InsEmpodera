@@ -1,4 +1,4 @@
-name: Testes completos
+name: Testes de backend e banco
 
 # main.yml continua responsável apenas pelas branches legadas de importação
 # e pela publicação do aplicativo. Este workflow cobre as demais branches.
@@ -37,10 +37,10 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - name: Preparar o .NET 9
+      - name: Preparar o .NET 10
         uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Cache do NuGet
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
@@ -50,26 +50,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Preparar o Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: 22.x
-          cache: npm
-          cache-dependency-path: Frontend.Tests/package-lock.json
-
-      - name: Cache do Chromium do Playwright
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('InsEmpodera.E2ETests/InsEmpodera.E2ETests.csproj') }}
-
-      - name: Executar backend, frontend e jornadas no navegador
+      - name: Executar testes de backend e banco
         shell: pwsh
         env:
           TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
         run: ./testar.ps1
 
-      - name: Publicar resultados, cobertura e evidências de falha
+      - name: Publicar resultados e cobertura
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -78,9 +65,6 @@ jobs:
           retention-days: 14
           path: |
             TestResults/**
-            Frontend.Tests/coverage/**
-            Frontend.Tests/vitest-results.json
-            InsEmpodera.E2ETests/TestResults/**
 
   chave-estrangeira:
     name: FK da ficha de primeiro contato
@@ -134,10 +118,10 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - name: Preparar o .NET 9
+      - name: Preparar o .NET 10
         uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Executar integrações no mesmo banco usado em produção
         id: testes_mysql
