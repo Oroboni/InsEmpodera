@@ -4,9 +4,11 @@
     ViewData["PageCSS"] = "home";
     Layout = "_Layout";
     var nome = Context.Session.GetString("Nome") ?? "";
-    var hora = DateTime.Now.Hour;
-    var saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
-    var hoje = DateTime.Today.ToString("D", System.Globalization.CultureInfo.CurrentUICulture);
+    // O servidor roda em UTC; saudação e data seguem o horário de Brasília.
+    var agora = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "America/Sao_Paulo");
+    var hora = agora.Hour;
+    var saudacao = hora >= 5 && hora < 12 ? "Bom dia" : hora >= 12 && hora < 18 ? "Boa tarde" : "Boa noite";
+    var hoje = agora.ToString("D", System.Globalization.CultureInfo.CurrentUICulture);
     var ptBr = new System.Globalization.CultureInfo("pt-BR");
     string Numero(int valor) => valor.ToString("N0", ptBr);
 }

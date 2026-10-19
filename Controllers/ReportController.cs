@@ -961,7 +961,10 @@ public class ReportController : Controller
         RedirectToReportAsync(nameof(RelatoriosController.Actions), new { comunidadeId, atorId });
 
     // GET: /Report/PrimaryNetwork
-    public async Task<IActionResult> PrimaryNetwork(int? atorId)
+    public Task<IActionResult> PrimaryNetwork(Guid? atorId) =>
+        RedirectToReportAsync(nameof(RelatoriosController.PrimaryNetwork), new { atorId });
+
+    private async Task<IActionResult> RedirectToReportAsync(string action, object? routeValues)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
