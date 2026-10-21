@@ -21,7 +21,9 @@ namespace Empodera.Models
         public string Status { get; set; } = string.Empty;
         [StringLength(255)]
         public string? Complemento { get; set; } = string.Empty;
+        [StringLength(5000)]
         public string? Descricao { get; set; } = string.Empty;
+        [StringLength(2000)]
         public string? Descricao_Acessibilidade { get; set; } = string.Empty;
         public DateTime Dt_Criacao { get; set; }
         public DateTime? Dt_Modificacao { get; set; }

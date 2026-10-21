@@ -89,7 +89,7 @@ public sealed class RevisaoDdlTests : ControllerTestBase
         });
     }
 
-    [Fact(DisplayName = "DDL — collation herdado do banco, sem utf8mb3, sem INT(n) e DATETIME sem precisão")]
+    [Fact(DisplayName = "DDL — collation herdado do banco, sem utf8mb3, sem TEXT/LONGTEXT, sem INT(n) e DATETIME sem precisão")]
     public async Task Tipos_SeguemARevisao()
     {
         var colunas = await ConsultarAsync("""
@@ -101,8 +101,11 @@ public sealed class RevisaoDdlTests : ControllerTestBase
 
         Assert.All(colunas, c =>
         {
-            if (c[3] != "") Assert.Equal("utf8mb4", c[3]);
-            if (c[4] != "") Assert.Equal("utf8mb4_0900_ai_ci", c[4]);
+            // O hash da senha é a única coluna com conjunto próprio (ASCII binário, revisão 5.4).
+            var senha = c[0] == "usuarios" && c[1] == "Senha";
+            if (c[3] != "") Assert.Equal(senha ? "ascii" : "utf8mb4", c[3]);
+            if (c[4] != "") Assert.Equal(senha ? "ascii_bin" : "utf8mb4_0900_ai_ci", c[4]);
+            Assert.DoesNotContain(c[6], new[] { "tinytext", "text", "mediumtext", "longtext" });
             Assert.DoesNotMatch(@"^(tiny|small|medium|big)?int\(\d+\)", c[2]);
             if (c[6] is "datetime" or "time") Assert.Equal("0", c[5]);
         });
@@ -112,15 +115,15 @@ public sealed class RevisaoDdlTests : ControllerTestBase
         Assert.All(tabelas, t => Assert.Equal("utf8mb4_0900_ai_ci", t[1]));
     }
 
-    [Fact(DisplayName = "DDL — senha continua exatamente como antes (longtext NOT NULL)")]
-    public async Task Senha_NaoFoiAlterada()
+    [Fact(DisplayName = "DDL — senha em VARCHAR(255) ASCII binário (hash do Identity)")]
+    public async Task Senha_EhVarcharAsciiBinario()
     {
         var senha = await ConsultarAsync("""
-            SELECT COLUMN_TYPE, IS_NULLABLE FROM information_schema.COLUMNS
+            SELECT COLUMN_TYPE, CHARACTER_SET_NAME, COLLATION_NAME, IS_NULLABLE FROM information_schema.COLUMNS
             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuarios' AND COLUMN_NAME = 'Senha'
             """);
 
-        Assert.Equal(new[] { "longtext", "NO" }, Assert.Single(senha));
+        Assert.Equal(new[] { "varchar(255)", "ascii", "ascii_bin", "NO" }, Assert.Single(senha));
     }
 
     private async Task<List<string[]>> ConsultarAsync(string sql)

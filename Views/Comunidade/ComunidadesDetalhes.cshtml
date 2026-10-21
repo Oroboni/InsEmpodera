@@ -98,7 +98,7 @@
       <div class="icon-box"><i class="fa-solid fa-align-left"></i></div>
       <div class="input-content">
         <label asp-for="Descricao">Descrição</label>
-        <textarea asp-for="Descricao" class="clean-input" rows="4"
+        <textarea asp-for="Descricao" maxlength="5000" class="clean-input" rows="4"
                   placeholder="Adicione uma descrição sobre a comunidade...">@(Model.Id_Comunidade != 0 ? Model.Descricao : string.Empty)</textarea>
       </div>
     </div>
@@ -123,7 +123,7 @@
       <div class="icon-box"><i class="fa-solid fa-universal-access"></i></div>
       <div class="input-content">
         <label asp-for="Descricao_Acessibilidade">Descrição de Acessibilidade</label>
-        <textarea asp-for="Descricao_Acessibilidade" class="clean-input" rows="4"
+        <textarea asp-for="Descricao_Acessibilidade" maxlength="2000" class="clean-input" rows="4"
                   placeholder="Adicione informações sobre acessibilidade...">@(Model.Id_Comunidade != 0 ? Model.Descricao_Acessibilidade : string.Empty)</textarea>
       </div>
     </div>

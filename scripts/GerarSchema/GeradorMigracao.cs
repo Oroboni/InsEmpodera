@@ -191,6 +191,9 @@ public static class GeradorMigracao
                 Problema(sql, $"{tabela}.{coluna} vazio (obrigatório)", $"SELECT COUNT(*) FROM {Antigo}.{tabela} WHERE {valor} IS NULL");
             if (p.GetMaxLength() is int tamanho)
                 Problema(sql, $"{tabela}.{coluna} com mais de {tamanho} caracteres", $"SELECT COUNT(*) FROM {Antigo}.{tabela} WHERE CHAR_LENGTH({coluna}) > {tamanho}");
+            if (p.FindAnnotation("MySql:CharSet")?.Value is "ascii")
+                Problema(sql, $"{tabela}.{coluna} com caracteres fora do ASCII",
+                    $"SELECT COUNT(*) FROM {Antigo}.{tabela} WHERE CAST({coluna} AS BINARY) <> CAST(CONVERT({coluna} USING ascii) AS BINARY)");
             var regra = e.GetCheckConstraints().FirstOrDefault(c => c.Sql.StartsWith(nova + " ", StringComparison.Ordinal));
             if (regra is not null)
                 Problema(sql, $"{tabela}.{coluna} fora da regra {regra.Name}",

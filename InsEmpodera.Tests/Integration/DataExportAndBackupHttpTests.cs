@@ -133,9 +133,9 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
     {
         var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
         var actorName = $"Ator João — inclusão 🌎 {Guid.NewGuid():N}";
-        // Texto longo (maior que o limite de uma célula do Excel) numa coluna TEXT: na revisão do DDL,
-        // colunas curtas como Atores.PapelSocial1 passaram a ter tamanho justificado (VARCHAR(100)).
-        var longDescription = string.Concat(Enumerable.Repeat("Informação comunitária com acentos. ", 1_200));
+        // Texto no limite da coluna (comunidades.Descricao é VARCHAR(5000) desde a revisão do DDL),
+        // com acentos, precisa voltar idêntico do backup.
+        var longDescription = string.Concat(Enumerable.Repeat("Informação comunitária com acentos. ", 140))[..5000];
         var communityName = $"Comunidade backup {Guid.NewGuid():N}";
         var restoredCommunityId = await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
@@ -181,12 +181,8 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
             Assert.Equal(HttpStatusCode.OK, communityExport.StatusCode);
             await using var communityStream = await communityExport.Content.ReadAsStreamAsync();
             using var communityWorkbook = new XLWorkbook(communityStream);
-            var longTexts = communityWorkbook.Worksheet("TextosLongos");
-            var reconstructed = string.Concat(longTexts.RowsUsed().Skip(1)
-                .Where(row => row.Cell(3).GetString() == nameof(Comunidade.Descricao))
-                .OrderBy(row => row.Cell(4).GetValue<int>())
-                .Select(row => row.Cell(5).GetString()));
-            Assert.Equal(longDescription, reconstructed);
+            var descricoes = communityWorkbook.Worksheet("Comunidades").RowsUsed().SelectMany(row => row.Cells()).Select(cell => cell.GetString());
+            Assert.Contains(longDescription, descricoes);
         }
 
         using var download = await client.GetAsync("/Services/ExportBackupGeral");

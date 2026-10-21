@@ -86,6 +86,7 @@ INSERT INTO migracao_problemas SELECT 'atividades.FkIdComunidade aponta para com
 INSERT INTO migracao_problemas SELECT 'atividades.FkIdComunidade vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades WHERE FkIdComunidade IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'atividades.FkIdUsuario aponta para usuarios inexistente', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades c LEFT JOIN empodera_antigo.usuarios p ON p.IdUsuario = c.FkIdUsuario WHERE c.FkIdUsuario IS NOT NULL AND p.IdUsuario IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'atividades.FkIdUsuario vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades WHERE FkIdUsuario IS NULL) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'atividades.Descricao com mais de 2000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades WHERE CHAR_LENGTH(Descricao) > 2000) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'atividades.Foto com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades WHERE CHAR_LENGTH(Foto) > 255) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'atividades.Nome vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades WHERE Nome IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'atividades.Nome com mais de 150 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.atividades WHERE CHAR_LENGTH(Nome) > 150) x WHERE n > 0;
@@ -152,6 +153,8 @@ INSERT INTO migracao_problemas SELECT 'comunidades.Ativo vazio (obrigatório)', 
 INSERT INTO migracao_problemas SELECT 'comunidades.Ativo com mais de 1 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(Ativo) > 1) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'comunidades.Ativo fora da regra CK_Comunidades_Ativo', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE Ativo IS NOT NULL AND NOT (Ativo COLLATE utf8mb4_bin IN ('S', 'N'))) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'comunidades.Complemento com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(Complemento) > 255) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'comunidades.Descricao com mais de 5000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(Descricao) > 5000) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'comunidades.Descricao_Acessibilidade com mais de 2000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(Descricao_Acessibilidade) > 2000) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'comunidades.Local com mais de 500 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(Local) > 500) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'comunidades.LocalMapa com mais de 500 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(LocalMapa) > 500) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'comunidades.LocalMapaSecundario com mais de 500 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.comunidades WHERE CHAR_LENGTH(LocalMapaSecundario) > 500) x WHERE n > 0;
@@ -201,6 +204,7 @@ INSERT INTO migracao_problemas SELECT 'diarioscampo.FkIdUsuario aponta para usua
 INSERT INTO migracao_problemas SELECT 'diarioscampo.FkIdUsuario vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.diarioscampo WHERE FkIdUsuario IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'diarioscampo.Data vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.diarioscampo WHERE DATE(Data) IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'diarioscampo.Descricao vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.diarioscampo WHERE Descricao IS NULL) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'diarioscampo.Descricao com mais de 8000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.diarioscampo WHERE CHAR_LENGTH(Descricao) > 8000) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'diarioscampo.Foto com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.diarioscampo WHERE CHAR_LENGTH(Foto) > 255) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'diarioscampo.Localizacao com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.diarioscampo WHERE CHAR_LENGTH(Localizacao) > 255) x WHERE n > 0;
 -- diariosprocessoeixos
@@ -246,6 +250,7 @@ INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.FkIdUsuario aponta 
 INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.FkIdUsuario vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE FkIdUsuario IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.AEscolar fora da regra CK_FichasPrimeiroContato_AEscolar', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE AEscolar IS NOT NULL AND NOT (AEscolar <= 30)) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.CEstabeleceu com mais de 100 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE CHAR_LENGTH(CEstabeleceu) > 100) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.Coment com mais de 2000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE CHAR_LENGTH(Coment) > 2000) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.Complemento com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE CHAR_LENGTH(Complemento) > 255) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.DtContato vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE DATE(DtContato) IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'fichasprimeirocontato.Emprego com mais de 150 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.fichasprimeirocontato WHERE CHAR_LENGTH(Emprego) > 150) x WHERE n > 0;
@@ -335,6 +340,7 @@ INSERT INTO migracao_problemas SELECT 'rederecursos.FkIdUsuario vazio (obrigató
 INSERT INTO migracao_problemas SELECT 'rederecursos.Dispositivo com mais de 150 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.rederecursos WHERE CHAR_LENGTH(Dispositivo) > 150) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'rederecursos.Localizacao com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.rederecursos WHERE CHAR_LENGTH(Localizacao) > 255) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'rederecursos.Nome com mais de 150 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.rederecursos WHERE CHAR_LENGTH(Nome) > 150) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'rederecursos.Servicos com mais de 2000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.rederecursos WHERE CHAR_LENGTH(Servicos) > 2000) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'rederecursos.Tipo vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.rederecursos WHERE Tipo IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'rederecursos.Tipo com mais de 50 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.rederecursos WHERE CHAR_LENGTH(Tipo) > 50) x WHERE n > 0;
 -- redesprimarias
@@ -381,6 +387,8 @@ INSERT INTO migracao_problemas SELECT 'usuarios.PhoneNumberConfirmed fora da reg
 INSERT INTO migracao_problemas SELECT 'usuarios.SecurityStamp vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE SecurityStamp IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'usuarios.SecurityStamp com mais de 100 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE CHAR_LENGTH(SecurityStamp) > 100) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'usuarios.Senha vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE Senha IS NULL) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'usuarios.Senha com mais de 255 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE CHAR_LENGTH(Senha) > 255) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'usuarios.Senha com caracteres fora do ASCII', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE CAST(Senha AS BINARY) <> CAST(CONVERT(Senha USING ascii) AS BINARY)) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'usuarios.TwoFactorEnabled vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE TwoFactorEnabled IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'usuarios.TwoFactorEnabled fora da regra CK_Usuarios_TwoFactorEnabled', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE TwoFactorEnabled IS NOT NULL AND NOT (TwoFactorEnabled IN (0, 1))) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'usuarios.UserName vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.usuarios WHERE UserName IS NULL) x WHERE n > 0;
@@ -395,6 +403,7 @@ INSERT INTO migracao_problemas SELECT 'vulnerabilidades.Localizacao com mais de 
 INSERT INTO migracao_problemas SELECT 'vulnerabilidades.Nome vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.vulnerabilidades WHERE Nome IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'vulnerabilidades.Nome com mais de 150 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.vulnerabilidades WHERE CHAR_LENGTH(Nome) > 150) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'vulnerabilidades.Servicos vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.vulnerabilidades WHERE Servicos IS NULL) x WHERE n > 0;
+INSERT INTO migracao_problemas SELECT 'vulnerabilidades.Servicos com mais de 2000 caracteres', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.vulnerabilidades WHERE CHAR_LENGTH(Servicos) > 2000) x WHERE n > 0;
 -- vulnerabilidadeseixo
 INSERT INTO migracao_problemas SELECT 'vulnerabilidadeseixo.FkIdEixo aponta para eixos inexistente', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.vulnerabilidadeseixo c LEFT JOIN empodera_antigo.eixos p ON p.IdEixo = c.FkIdEixo WHERE c.FkIdEixo IS NOT NULL AND p.IdEixo IS NULL) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'vulnerabilidadeseixo.FkIdEixo vazio (obrigatório)', n FROM (SELECT COUNT(*) AS n FROM empodera_antigo.vulnerabilidadeseixo WHERE FkIdEixo IS NULL) x WHERE n > 0;

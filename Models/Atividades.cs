@@ -9,6 +9,7 @@ namespace Empodera.Models
         public int IdAtividade { get; set; }     
         [StringLength(150)]
         public string Nome { get; set; } = null!;
+        [StringLength(2000)]
         public string? Descricao { get; set; }
         [StringLength(255)]
         public string? Foto { get; set; } = null!;

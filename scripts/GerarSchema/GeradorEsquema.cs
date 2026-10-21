@@ -120,7 +120,13 @@ public static class GeradorEsquema
         {
             var c = colunas[i];
             var nome = c.GetColumnName(t)!;
-            var linha = new StringBuilder($"    {nome.PadRight(largura)}{Tipo(c, t)} {(c.IsColumnNullable(t) ? "NULL" : "NOT NULL")}");
+            var linha = new StringBuilder($"    {nome.PadRight(largura)}{Tipo(c, t)}");
+            // Só colunas com conjunto de caracteres próprio repetem CHARACTER SET/COLLATE (ex.: hash da senha em ASCII).
+            if (c.FindAnnotation("MySql:CharSet")?.Value is string conjunto)
+                linha.Append($" CHARACTER SET {conjunto}");
+            if (c.GetCollation() is { } collation)
+                linha.Append($" COLLATE {collation}");
+            linha.Append(c.IsColumnNullable(t) ? " NULL" : " NOT NULL");
             if (c.GetDefaultValueSql(t) is { } padraoSql)
                 linha.Append($" DEFAULT {padraoSql}");
             else if (c.FindAnnotation(RelationalAnnotationNames.DefaultValue)?.Value is { } padrao)

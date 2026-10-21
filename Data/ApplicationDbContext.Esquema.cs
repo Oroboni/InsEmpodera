@@ -11,11 +11,10 @@ namespace Empodera.Data
     /// <summary>
     /// Esquema do banco conforme a revisão técnica do DDL (docs/revisao-ddl-mysql.md):
     /// chaves INT UNSIGNED AUTO_INCREMENT, colunas com o mesmo nome da chave que referenciam
-    /// (sem prefixo Fk), tamanhos justificados, Sim/Não em CHAR(1) ou TINYINT com CHECK,
+    /// (sem prefixo Fk), VARCHAR com tamanhos justificados (sem TEXT/LONGTEXT), Sim/Não em CHAR(1) ou TINYINT com CHECK,
     /// datas sem frações de segundo, auditoria igual em todas as tabelas e restrições nomeadas
     /// (FK_Filha_Pai, UQ_Tabela_Colunas, CK_Tabela_Coluna).
     /// O script Database/Empodera.schema.sql é gerado a partir deste modelo (scripts/GerarSchema).
-    /// A coluna usuarios.Senha fica exatamente como era (longtext NOT NULL).
     /// </summary>
     public partial class ApplicationDbContext
     {
@@ -47,12 +46,14 @@ namespace Empodera.Data
 
         private void ConfigurarEsquema(ModelBuilder mb)
         {
-            // ── usuarios ── (Senha não é alterada: continua longtext NOT NULL)
+            // ── usuarios ── Senha guarda o hash do Identity (base64, 84 caracteres): VARCHAR(255) em ASCII binário,
+            // como recomenda a revisão (5.4) — hash não precisa de Unicode nem de comparação sem distinção de maiúsculas.
             mb.Entity<Usuario>(e =>
             {
                 Chave(e, u => u.IdUsuario, "IdUsuario");
                 Texto(e, u => u.Nome, "Nome", 150);
-                e.Property(u => u.Senha).HasColumnName("Senha").HasColumnType("longtext").IsRequired();
+                Texto(e, u => u.Senha, "Senha", 255);
+                if (UsaMySql) e.Property(u => u.Senha).HasCharSet("ascii").UseCollation("ascii_bin");
                 Texto(e, u => u.Foto, "Foto", 255);
                 Texto(e, u => u.Email, "Email", 254);
                 Texto(e, u => u.Ocupacao, "Ocupacao", 100);
@@ -116,8 +117,8 @@ namespace Empodera.Data
                 Texto(e, c => c.LocalMapaSecundario, "LocalMapaSecundario", 500);
                 Texto(e, c => c.Status, "Status", 30);
                 Texto(e, c => c.Complemento, "Complemento", 255);
-                TextoLongo(e, c => c.Descricao, "Descricao");
-                TextoLongo(e, c => c.Descricao_Acessibilidade, "DescricaoAcessibilidade");
+                Texto(e, c => c.Descricao, "Descricao", 5000);            // maior texto real: 3.433
+                Texto(e, c => c.Descricao_Acessibilidade, "DescricaoAcessibilidade", 2000);
                 Criacao(e, c => c.Dt_Criacao);
                 Modificacao(e, c => c.Dt_Modificacao);
                 Referencia(e, c => c.FK_Id_Usuario, "IdUsuario");
@@ -154,7 +155,7 @@ namespace Empodera.Data
                 Texto(e, r => r.Nome, "Nome", 150);
                 Texto(e, r => r.Tipo, "Tipo", 50);
                 Texto(e, r => r.Dispositivo, "Dispositivo", 150);
-                TextoLongo(e, r => r.Servicos, "Servicos");
+                Texto(e, r => r.Servicos, "Servicos", 2000);
                 Texto(e, r => r.Localizacao, "Localizacao", 255);
                 Criacao(e, r => r.DtCriacao);
                 Modificacao(e, r => r.DtModificacao);
@@ -186,7 +187,7 @@ namespace Empodera.Data
                 Chave(e, d => d.IdDCampo, "IdDiarioCampo");
                 Referencia(e, d => d.FkIdComunidade, "IdComunidade");
                 Data(e, d => d.Data, "Data");
-                TextoLongo(e, d => d.Descricao, "Descricao");
+                Texto(e, d => d.Descricao, "Descricao", 8000);            // maior texto real: 5.299
                 Texto(e, d => d.Localizacao, "Localizacao", 255);
                 Texto(e, d => d.Foto, "Foto", 255);
                 Criacao(e, d => d.DtCriacao);
@@ -249,7 +250,7 @@ namespace Empodera.Data
                 Referencia(e, x => x.FkIdComunidade, "IdComunidade");
                 Texto(e, x => x.Nome, "Nome", 150);
                 Texto(e, x => x.Localizacao, "Localizacao", 255);
-                TextoLongo(e, x => x.Servicos, "Servicos");
+                Texto(e, x => x.Servicos, "Servicos", 2000);
                 Auditoria(e);
             });
 
@@ -312,7 +313,7 @@ namespace Empodera.Data
                 SimNaoTexto(e, f => f.SComp, "SComp", "CK_FichasPrimeiroContato_SComp");
                 Pequeno(e, f => f.QReabili, "QReabili", "CK_FichasPrimeiroContato_QReabili", "QReabili <= 100");
                 Texto(e, f => f.LTrat, "LTrat", 150);
-                TextoLongo(e, f => f.Coment, "Coment");
+                Texto(e, f => f.Coment, "Coment", 2000);
                 Data(e, f => f.DtContato, "DtContato");
                 e.Property(f => f.HoraContato).HasColumnName("HoraContato");
                 if (UsaMySql) e.Property(f => f.HoraContato).HasColumnType("time");
@@ -348,7 +349,7 @@ namespace Empodera.Data
             {
                 Chave(e, x => x.IdAtividade, "IdAtividade");
                 Texto(e, x => x.Nome, "Nome", 150);
-                TextoLongo(e, x => x.Descricao, "Descricao");
+                Texto(e, x => x.Descricao, "Descricao", 2000);
                 Texto(e, x => x.Foto, "Foto", 255);
                 Referencia(e, x => x.FkIdComunidade, "IdComunidade");
                 Criacao(e, x => x.DtCriacao);
@@ -433,13 +434,6 @@ namespace Empodera.Data
 
         private static void Texto<T>(EntityTypeBuilder<T> e, Expression<Func<T, string?>> prop, string coluna, int tamanho) where T : class =>
             e.Property(prop).HasColumnName(coluna).HasMaxLength(tamanho);
-
-        // Texto livre (descrições, comentários, serviços): sem limite de digitação na aplicação.
-        private void TextoLongo<T>(EntityTypeBuilder<T> e, Expression<Func<T, string?>> prop, string coluna) where T : class
-        {
-            var p = e.Property(prop).HasColumnName(coluna);
-            if (UsaMySql) p.HasColumnType("text");
-        }
 
         // 'S' ou 'N' (já é o que a aplicação grava). No MySQL a comparação do CHECK é binária: com o
         // collation utf8mb4_0900_ai_ci, 's' e 'n' minúsculos também passariam.

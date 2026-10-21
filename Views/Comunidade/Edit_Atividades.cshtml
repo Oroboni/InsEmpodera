@@ -63,7 +63,7 @@
             <label for="Descricao">Descrição</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Descricao">@Model.Descricao</textarea>
+                <textarea asp-for="Descricao" maxlength="2000">@Model.Descricao</textarea>
             </div>
         </div>
 

@@ -18,7 +18,7 @@ Os dois scripts são **gerados** a partir do modelo do EF, que é a fonte única
 espera e o DDL entregue não divergem; um teste falha se alguém alterar o modelo sem regenerar os scripts.
 Todos os testes de backend (228) criam o banco executando `Empodera.schema.sql`, não pelo EF.
 
-**Restrição combinada com a equipe:** a coluna `usuarios.Senha` não foi alterada (continua `LONGTEXT NOT NULL`).
+**Sem `TEXT`/`LONGTEXT`:** todas as colunas de texto são `VARCHAR` com tamanho justificado, inclusive o hash da senha (`usuarios.Senha`, `VARCHAR(255)` em ASCII binário).
 
 ---
 
@@ -187,8 +187,8 @@ Sim/Não comparam em binário (`Ativo COLLATE utf8mb4_bin IN ('S', 'N')`).
 | --- | --- |
 | 5.1 `INT(11)` | Nenhum `INT(n)`. Números pequenos usam `TINYINT UNSIGNED` (notas, gênero, idade, contagens) |
 | 5.2 `DATETIME(6)` | `DATETIME` sem precisão em todas as colunas; datas sem horário viraram `DATE` (data do diário, nascimento, data do contato) e `HoraContato` é `TIME` |
-| 5.3 `VARCHAR(255)` em tudo | Cada coluna tem tamanho justificado (tabela abaixo); texto livre longo usa `TEXT` |
-| 5.4 Senhas | Já são **hash** do ASP.NET Core Identity (PBKDF2). A coluna `Senha` **não foi alterada** por decisão da equipe (continua `LONGTEXT`); a recomendação `VARCHAR(255) ascii_bin` fica registrada para depois |
+| 5.3 `VARCHAR(255)` em tudo | Cada coluna tem tamanho justificado (tabela abaixo). Nenhuma coluna usa `TEXT` ou `LONGTEXT`: até o texto livre é `VARCHAR`, com limite medido nos dados reais e aplicado também nos formulários |
+| 5.4 Senhas | Já são **hash** do ASP.NET Core Identity (PBKDF2, 84 caracteres em base64). A coluna passou de `LONGTEXT` para `VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin`, como recomendado; as senhas existentes continuam válidas (só o tipo da coluna mudou) |
 | 5.5 Sim/Não | `CHAR(1)` + `CHECK ('S','N')` para os campos que já eram S/N; booleanos em `TINYINT UNSIGNED` + `CHECK (0,1)`. As respostas da ficha, que eram texto livre ("Sim"/"Não"/"S"), passaram a `CHAR(1)`; a aplicação continua mostrando "Sim"/"Não" |
 
 ### Tamanhos
@@ -205,8 +205,13 @@ Os tamanhos consideram o conteúdo real: a migração mede os dados atuais e par
 | `VARCHAR(254)` | e-mail e campos do Identity | limite de um endereço de e-mail (RFC 5321) |
 | `VARCHAR(255)` | papel social, interesse, complemento, endereço da ficha, estrutura familiar, localização, informação extra, caminho de foto | textos descritivos curtos ou caminhos de arquivo; papel social real chega a 152 caracteres |
 | `VARCHAR(500)` | endereço da comunidade e link do mapa | endereços reais trazem referências e horários (353 caracteres) |
+| `VARCHAR(255)` ASCII binário | hash da senha | o hash do Identity tem 84 caracteres; 255 comporta algoritmos futuros (revisão 5.4) |
+| `VARCHAR(2000)` | descrição da atividade, acessibilidade, serviços de recursos e vulnerabilidades, comentário da ficha | texto livre curto; maior texto real: 1.021 caracteres |
 | `VARCHAR(4000)` | descrição do diário pessoal | limite já imposto pela tela |
-| `TEXT` | descrições, comentários, serviços | texto livre sem limite na aplicação |
+| `VARCHAR(5000)` | descrição da comunidade | maior texto real: 3.433 caracteres |
+| `VARCHAR(8000)` | descrição do diário de campo | relatos de visita; maior texto real: 5.299 caracteres |
+
+Os limites de texto livre também foram colocados nos formulários (`maxlength` e validação), para a pessoa ser avisada ao digitar.
 
 O provedor (`acoes.Provedor`, `diariodacoes.ProvedorExterno`) continua **texto livre**: hoje é digitado em
 campo aberto. Uma tabela própria exigiria trocar a tela por uma lista; fica como **decisão pendente**.
@@ -272,7 +277,8 @@ Colunas renomeadas:
 ## 7. Conjunto de caracteres e collation
 
 - O script começa com `ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;` e as tabelas não
-  repetem `CHARSET`/`COLLATE`: herdam do banco.
+  repetem `CHARSET`/`COLLATE`: herdam do banco. A única coluna com conjunto próprio é o hash da senha
+  (`ascii` / `ascii_bin`), como a revisão recomenda (5.4).
 - Nenhuma tabela ou coluna usa `utf8` (utf8mb3).
 - A insensibilidade a acentos (`ai`) foi mantida: "Jose" encontra "José".
 - Espaços no fim deixaram de ser ignorados em comparações (`0900`): a migração remove espaços nas pontas dos
@@ -300,7 +306,7 @@ tabelas (só colunas) → PK/`AUTO_INCREMENT`, `UNIQUE` e `CHECK` → FKs → da
 | Tamanho de cada `VARCHAR` justificado | ✅ | seção 5 |
 | Nenhum `INT(n)`; `DATETIME` sem precisão | ✅ | `RevisaoDdlTests` |
 | Sim/Não como `TINYINT` ou `CHAR(1)` com `CHECK` | ✅ | seção 5 |
-| Senhas armazenadas apenas como hash | ✅ (já eram; coluna não alterada) | seção 5 |
+| Senhas armazenadas apenas como hash | ✅ hash do Identity em `VARCHAR(255)` ASCII binário | `RevisaoDdlTests` |
 | Colunas de auditoria com o mesmo critério | ✅ `DtCriacao NOT NULL DEFAULT CURRENT_TIMESTAMP` e `DtModificacao NULL ON UPDATE CURRENT_TIMESTAMP` nas 34 tabelas | script |
 | Nomes no padrão da seção 6 | ✅ | `RevisaoDdlTests` |
 | Nenhuma tabela/coluna `utf8`; collation herdado | ✅ | `RevisaoDdlTests` |
@@ -312,7 +318,8 @@ Resultado das consultas de verificação da revisão, no banco criado pelo scrip
 | --- | --- |
 | Restrições por tipo (`TABLE_CONSTRAINTS`) | 34 `PRIMARY KEY`, 57 `FOREIGN KEY`, 47 `CHECK`, 14 `UNIQUE` |
 | FKs existentes (`REFERENTIAL_CONSTRAINTS`) | 57, todas nomeadas |
-| Colunas com collation fora do padrão | nenhuma |
+| Colunas com collation fora do padrão | apenas `usuarios.Senha` (`ascii_bin`, proposital) |
+| Colunas `TEXT`/`LONGTEXT` | nenhuma |
 | Colunas `VARCHAR(255)` | 17 (papel social, interesse, complemento, endereço da ficha, estrutura familiar, localização, informação extra e caminho de foto), todas justificadas na seção 5 |
 
 ---
@@ -372,5 +379,4 @@ revistos com base nesses dados, sem cortar informação.
 1. `ON DELETE` ao excluir uma atividade: manter `CASCADE` (atual) ou usar `RESTRICT`.
 2. `UNIQUE` em `perfis.Nome`: hoje a aplicação permite nomes repetidos.
 3. Provedor das ações (`Provedor`, `ProvedorExterno`): manter texto livre ou criar tabela própria (exige mudança de tela).
-4. Coluna `Senha`: manter `LONGTEXT` (decisão atual da equipe) ou adotar `VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin`.
-5. Servidor de produção: a equipe vai para uma VPS (Hostinger) com MySQL 8.4 LTS; roteiro em [servidor-hostinger.md](servidor-hostinger.md).
+4. Servidor de produção: a equipe vai para uma VPS (Hostinger) com MySQL 8.4 LTS; roteiro em [servidor-hostinger.md](servidor-hostinger.md).

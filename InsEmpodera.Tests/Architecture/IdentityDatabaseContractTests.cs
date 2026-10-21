@@ -35,10 +35,10 @@ public sealed class IdentityDatabaseContractTests : ControllerTestBase
                  })
             Assert.Contains(column, columns.Keys);
 
-        // Revisão do DDL: chave INT UNSIGNED AUTO_INCREMENT; a coluna Senha continua como era.
+        // Revisão do DDL: chave INT UNSIGNED AUTO_INCREMENT; hash da senha em VARCHAR(255).
         Assert.Equal("int unsigned", columns["IdUsuario"].Type, ignoreCase: true);
         Assert.Contains("auto_increment", columns["IdUsuario"].Extra, StringComparison.OrdinalIgnoreCase);
-        Assert.Equal("longtext", columns["Senha"].Type, ignoreCase: true);
+        Assert.Equal("varchar(255)", columns["Senha"].Type, ignoreCase: true);
 
         var indexes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         await using (var command = connection.CreateCommand())

@@ -11,6 +11,7 @@ namespace Empodera.Models
         public string Nome { get; set; } = null!;
         [StringLength(255)]
         public string Localizacao { get; set; } = null!;
+        [StringLength(2000)]
         public string Servicos { get; set; } = null!;
         public int FkIdComunidade { get; set; } 
         

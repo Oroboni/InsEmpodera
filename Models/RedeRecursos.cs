@@ -17,6 +17,7 @@ namespace Empodera.Models
         public string? Dispositivo { get; set; }
         [StringLength(255)]
         public string? Localizacao { get; set; }
+        [StringLength(2000)]
         public string? Servicos { get; set; }
         public DateTime DtCriacao { get; set; }
         public DateTime? DtModificacao { get; set; }

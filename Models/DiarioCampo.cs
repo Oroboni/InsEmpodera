@@ -9,6 +9,7 @@ namespace Empodera.Models
         public int IdDCampo { get; set; }       
         public int FkIdComunidade { get; set; }  
         public DateTime Data { get; set; }
+        [StringLength(8000)]
         public string Descricao { get; set; } = null!;
         [StringLength(255)]
         public string? Localizacao { get; set; }

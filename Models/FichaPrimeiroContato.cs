@@ -57,6 +57,7 @@ namespace Empodera.Models
         [StringLength(150)]
         public string? LTrat { get; set; }
 
+        [StringLength(2000)]
         public string? Coment { get; set; }
 
         [DataType(DataType.Date)]

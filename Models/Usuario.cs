@@ -9,6 +9,7 @@ namespace Empodera.Models
         public int IdUsuario { get; set; }
         [StringLength(150)]
         public string Nome { get; set; } = null!;
+        [StringLength(255)]
         public string Senha { get; set; } = null!;
         [StringLength(255)]
         public string? Foto { get; set; } = null!;
