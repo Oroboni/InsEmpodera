@@ -6,7 +6,8 @@ namespace Empodera.Models
 {
     public class Eixo
     {
-        public Guid IdEixo { get; set; }       
+        public int IdEixo { get; set; }       
+        [StringLength(100)]
         public string Nome { get; set; } = null!;
 
         public List<RedeEixo> RedeEixos { get; set; } = new();

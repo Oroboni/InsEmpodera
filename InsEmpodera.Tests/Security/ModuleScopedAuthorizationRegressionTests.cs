@@ -26,7 +26,7 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
             new UsersController(NullLogger<UsersController>.Instance, Db), userId).Create());
         Assert.IsType<ViewResult>(Attach(new AccessProfileController(Db), userId).Create());
         Assert.IsType<ViewResult>(Attach(
-            new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), userId).ComunidadesDetalhes(Guid.Empty));
+            new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), userId).ComunidadesDetalhes(0));
         Assert.IsType<ViewResult>(await Attach(
             new AtoresController(NullLogger<AtoresController>.Instance, Db), userId).Create());
         Assert.IsType<ViewResult>(await Attach(new AtividadesController(Db), userId).Create());
@@ -62,17 +62,13 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
         Assert.Equal("S", (await Db.Atores.FindAsync(actor.IdAtores))!.Ativo);
     }
 
+    // Permissões conflitantes para o mesmo módulo não podem mais existir: o banco recusa
+    // (UQ_Permissoes_Perfil_Modulo).
     [Fact]
-    public async Task ConflictingDuplicateModulePermissions_AreDeniedConservatively()
+    public async Task ConflictingDuplicateModulePermissions_AreRejectedByTheDatabase()
     {
-        var userId = await CreateUserWithPermissionsAsync(Allow("Atores"), Deny("Atores"));
-        var actor = await CreateActorAsync();
-        var controller = Attach(new AtoresController(NullLogger<AtoresController>.Instance, Db), userId);
-
-        AssertForbidden(controller.Index());
-        Assert.IsType<RedirectToActionResult>(await controller.Create());
-        Assert.IsType<RedirectToActionResult>(await controller.Delete(actor.IdAtores));
-        Assert.Equal("S", (await Db.Atores.FindAsync(actor.IdAtores))!.Ativo);
+        await Assert.ThrowsAsync<DbUpdateException>(() =>
+            CreateUserWithPermissionsAsync(Allow("Atores"), Deny("Atores")));
     }
 
     [Fact]
@@ -115,11 +111,11 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
             "Comunidades", list: "S", details: "S", create: "N", update: "S", delete: "N"));
 
         var creator = Attach(new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), creatorId);
-        Assert.IsType<ViewResult>(creator.ComunidadesDetalhes(Guid.Empty));
+        Assert.IsType<ViewResult>(creator.ComunidadesDetalhes(0));
         Assert.IsType<RedirectToActionResult>(creator.ComunidadesDetalhes(community.Id_Comunidade));
 
         var editor = Attach(new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db), editorId);
-        Assert.IsType<RedirectToActionResult>(editor.ComunidadesDetalhes(Guid.Empty));
+        Assert.IsType<RedirectToActionResult>(editor.ComunidadesDetalhes(0));
         Assert.IsType<ViewResult>(editor.ComunidadesDetalhes(community.Id_Comunidade));
     }
 
@@ -171,7 +167,7 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
         Assert.False(user.CanList("ModuloAusente"));
     }
 
-    private async Task<Guid> CreateUserWithPermissionsAsync(params Permissoes[] permissions)
+    private async Task<int> CreateUserWithPermissionsAsync(params Permissoes[] permissions)
     {
         var profile = new Perfil
         {

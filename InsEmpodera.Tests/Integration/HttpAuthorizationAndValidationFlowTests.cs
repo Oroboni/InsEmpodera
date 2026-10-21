@@ -212,7 +212,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         await db.FichasPrimeiroContato.CountAsync(),
         await db.AvaliacaoPessoal.CountAsync()));
 
-    private async Task<Guid> SeedCommunityAsync() => await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+    private async Task<int> SeedCommunityAsync() => await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
     {
         var community = NewCommunity();
         db.Comunidades.Add(community);
@@ -272,7 +272,8 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         var assessment = new AvaliacaoPessoal
         {
             FK_id_Atores = actor.IdAtores, FkIdUsuario = TestIds.Seed(1),
-            DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+            DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow,
+            CCrimes = 3, Substancias = 3, Moradia = 3, Prevencao = 3, AssBasica = 3, Educacao = 3, Saude = 3, Ocupacao = 3, Lazer = 3,
         };
         var form = new FichaPrimeiroContato
         {
@@ -318,7 +319,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         ["Ativo"] = "S"
     };
 
-    private static Dictionary<string, string> AssessmentFields(Guid actorId, int score) => new()
+    private static Dictionary<string, string> AssessmentFields(int actorId, int score) => new()
     {
         ["FK_id_Atores"] = actorId.ToString(), ["CCrimes"] = score.ToString(),
         ["Substancias"] = score.ToString(), ["Moradia"] = score.ToString(),
@@ -330,6 +331,6 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
     private sealed record CrudCounts(int Users, int Profiles, int Communities, int Actors, int Activities,
         int Diaries, int Forms, int Assessments);
 
-    private sealed record DeletionTargets(Guid UserId, Guid CommunityId, Guid ActorId, Guid ActivityId,
-        Guid DiaryId, Guid AssessmentId, Guid FormId);
+    private sealed record DeletionTargets(int UserId, int CommunityId, int ActorId, int ActivityId,
+        int DiaryId, int AssessmentId, int FormId);
 }

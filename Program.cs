@@ -109,10 +109,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 "Defina ConnectionStrings__DefaultConnection por variável de ambiente ou cofre de segredos.");
         }
 
-        var mysqlConnection = new MySqlConnectionStringBuilder(connectionString)
-        {
-            GuidFormat = MySqlGuidFormat.Binary16
-        }.ConnectionString;
+        var mysqlConnection = connectionString;
 
         options.UseMySql(
             mysqlConnection,

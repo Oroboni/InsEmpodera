@@ -6,23 +6,30 @@ namespace Empodera.Models
 {
     public class Atores
     {
-        public Guid IdAtores { get; set; }   
+        public int IdAtores { get; set; }   
+        [StringLength(150)]
         public string Nome { get; set; } = null!;
+        [Range(0, 3)]
         public int? Genero { get; set; }
+        [Range(0, 130)]
         public int? Idade { get; set; }
+        [StringLength(255)]
         public string? PapelSocial1 { get; set; }
+        [StringLength(255)]
         public string? PapelSocial2 { get; set; }
+        [StringLength(255)]
         public string? Interesse { get; set; }
+        [StringLength(60)]
         public string? Telefone { get; set; }
         public bool DaEquipe { get; set; } = false;
         public bool Rope { get; set; } = false;
         public bool Lopiniao { get; set; } = false;
         public bool Mcomunidade { get; set; } = false;
         public DateTime DtCriacao { get; set; }
-        public DateTime DtModificacao { get; set; }
+        public DateTime? DtModificacao { get; set; }
         public string Ativo { get; set; } = "S";
-        public Guid FkIdUsuario { get; set; }
-        public Guid? FkIdUsuarioM { get; set; }
+        public int FkIdUsuario { get; set; }
+        public int? FkIdUsuarioM { get; set; }
         public Usuario Usuario { get; set; } = null!;
         public List<RedeRecursos> Redes { get; set; } = new();
         public List<AtorComunidade> Comunidades { get; set; } = new();

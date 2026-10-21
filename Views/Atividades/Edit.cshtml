@@ -101,7 +101,7 @@
         </div>
 
         <!-- Informações do Sistema -->
-        @if (Model.IdAtividade != Guid.Empty)
+        @if (Model.IdAtividade != 0)
         {
             <div class="purple-divider"></div>
             <div class="section-label">Informações do Sistema</div>
@@ -136,7 +136,7 @@
                     <div class="input-content">
                         <label>Última Atualização</label>
                         <div class="system-info-display">
-                            <span class="info-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                            <span class="info-date">@Model.DtModificacao?.ToString("dd/MM/yyyy HH:mm")</span>
                             <span class="info-user">
                                 <i class="fa-solid fa-user"></i>
                                 @ViewBag.UsuarioNovo.Nome
@@ -158,7 +158,7 @@
                     <i class="fa-solid fa-edit"></i> Editar
                 </button>
 
-                @if (Model.IdAtividade != Guid.Empty)
+                @if (Model.IdAtividade != 0)
                 {
                     <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
                         <i class="fa-solid fa-trash"></i> Deletar
@@ -170,7 +170,7 @@
 </form>
 
 <!-- Modal de Confirmação de Exclusão -->
-@if (Model.IdAtividade != Guid.Empty)
+@if (Model.IdAtividade != 0)
 {
     <div class="modal-overlay" id="deleteConfirmationModal">
         <div class="modal-content">

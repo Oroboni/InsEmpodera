@@ -20,7 +20,7 @@ public static class ActorAggregateExtensions
 
     public static void ConfigureCreationAggregate(
         this Atores actor,
-        Guid communityId,
+        int communityId,
         IEnumerable<string>? resources,
         IEnumerable<string>? vulnerabilities,
         int? tipoRelacionamento = null)

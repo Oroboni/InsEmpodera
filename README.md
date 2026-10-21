@@ -76,7 +76,7 @@ A descrição detalhada, com atores e situação de implementação de cada item
 - migrations do Entity Framework — o esquema é criado pelo EF Core a partir do modelo (ver [Banco de dados](#-banco-de-dados));
 - implantação automatizada — a publicação em servidor é manual.
 
-**Limitações conhecidas:** não há migrations; o script [`Banco.txt`](Banco.txt) apaga o banco antes de recriá-lo e contém registros de comunidades e pessoas; e parte das verificações de permissão ainda depende da sessão HTTP. A lista completa está em [docs/requisitos.md](docs/requisitos.md#limitações-conhecidas).
+**Limitações conhecidas:** não há migrations (o esquema vem do script [`Database/Empodera.schema.sql`](Database/Empodera.schema.sql)); e parte das verificações de permissão ainda depende da sessão HTTP. A lista completa está em [docs/requisitos.md](docs/requisitos.md#limitações-conhecidas).
 
 ## 📋 Requisitos
 
@@ -115,7 +115,7 @@ Resumo dos requisitos identificados no código. A especificação completa, com 
 | Plataforma | .NET / ASP.NET Core MVC | `net9.0` |
 | Linguagem | C# | — |
 | Acesso a dados | Entity Framework Core | 9.0.19 |
-| Banco principal | MySQL / MariaDB via `Pomelo.EntityFrameworkCore.MySql` | 9.0.0 (MariaDB 10.4.32 na CI) |
+| Banco principal | MySQL 8.4 LTS ou posterior via `Pomelo.EntityFrameworkCore.MySql` | 9.0.0 (MySQL 8.4 LTS na CI) |
 | Banco de demonstração | SQLite via `Microsoft.EntityFrameworkCore.Sqlite` | 9.0.19 |
 | Autenticação | ASP.NET Core Identity com cookies | 9.0.19 |
 | Planilhas | ExcelDataReader (leitura) e ClosedXML (escrita) | 3.8.0 / 0.105.0 |
@@ -138,7 +138,7 @@ flowchart LR
     C --> S["Services<br/>Excel, backup, e-mail e idioma"]
     C --> D["ApplicationDbContext<br/>Entity Framework Core"]
     S --> D
-    D --> DB[("MySQL / MariaDB<br/>ou SQLite")]
+    D --> DB[("MySQL<br/>ou SQLite")]
     C --> V["Razor Views"]
     V -->|HTML| U
     S -->|SMTP 587| G["Gmail"]
@@ -178,7 +178,6 @@ InsEmpodera/
 ├── docs/                     # Documentação técnica complementar
 ├── scripts/                  # Relatórios e diagnósticos dos testes (PowerShell)
 ├── wwwroot/                  # Arquivos estáticos e bibliotecas
-├── Banco.txt                 # Script SQL do banco MySQL/MariaDB (ver docs/banco-de-dados.md)
 ├── InsEmpodera.csproj        # Projeto web
 ├── InsEmpodera.sln           # Solução com a aplicação e os testes
 ├── Program.cs                # Inicialização da aplicação
@@ -194,7 +193,7 @@ InsEmpodera/
 | --- | --- | --- |
 | Git | recente | Clonar o repositório |
 | [.NET SDK](https://dotnet.microsoft.com/download/dotnet/9.0) | 9.0 | Compilar e executar |
-| MySQL ou MariaDB | MariaDB 10.4.32 na CI; validado também com MySQL 9.7.1 | Modo de desenvolvimento, produção e testes de backend/E2E |
+| MySQL | 8.4 LTS (versão adotada em todos os ambientes; também validado com 9.7.1). O MariaDB não é compatível com o esquema atual | Modo de desenvolvimento, produção e testes de backend/E2E |
 | Node.js e npm | 22.x na CI | Testes de frontend |
 | PowerShell | 7 ou superior | Script `testar.ps1` |
 
@@ -233,7 +232,7 @@ Nesse modo, os eixos temáticos não são cadastrados automaticamente; o passo o
 
 > **Atenção:** o modo `Testing` afrouxa proteções (limite de tentativas de login, redirecionamento HTTPS e registro de dados sensíveis em log) e serve **apenas para demonstração local**. Não o utilize com dados reais. Para recomeçar do zero, pare a aplicação e apague `Empodera.testing.db`.
 
-### 3. Executar em modo de desenvolvimento (MySQL/MariaDB)
+### 3. Executar em modo de desenvolvimento (MySQL)
 
 É o modo equivalente ao de produção. Em resumo:
 
@@ -282,7 +281,7 @@ A configuração segue o padrão do ASP.NET Core: `appsettings.json`, `appsettin
 | --- | --- | --- | --- |
 | `ASPNETCORE_ENVIRONMENT` | Sim | Ambiente: `Development`, `Testing` ou `Production` | `Development` |
 | `DatabaseProvider` | Não | `MySql` (padrão) ou `Sqlite` (padrão apenas em `Testing`) | `MySql` |
-| `ConnectionStrings__DefaultConnection` | Com MySQL | Conexão com o MySQL/MariaDB | `Server=127.0.0.1;Port=3306;Database=empodera;User=app;Password=...;` |
+| `ConnectionStrings__DefaultConnection` | Com MySQL | Conexão com o MySQL | `Server=127.0.0.1;Port=3306;Database=empodera;User=app;Password=...;` |
 | `ConnectionStrings__TestConnection` | Não | Conexão SQLite; padrão `Data Source=Empodera.testing.db` | `Data Source=demo.db` |
 | `Testing__AdminPassword` | Não | Senha aplicada ao usuário de ID 1, somente em `Testing` | `EscolhaUmaSenha@123` |
 | `Email__User` | Sim | Remetente; o código aceita apenas `empodera.ajuda@gmail.com` | já definido em `appsettings.json` |
@@ -295,10 +294,10 @@ Detalhes e valores padrão: [docs/instalacao-e-configuracao.md](docs/instalacao-
 ## 💾 Banco de dados
 
 - **Mapeamento:** Entity Framework Core com 34 entidades registradas em [`Data/ApplicationDbContext.cs`](Data/ApplicationDbContext.cs).
-- **Provedores:** MySQL/MariaDB em desenvolvimento e produção; SQLite no modo de demonstração.
-- **Criação do esquema:** não há migrations no repositório. O esquema é criado pelo próprio EF Core (`EnsureCreated`) quando a aplicação roda no ambiente `Testing`, tanto em SQLite quanto em MySQL. Alternativamente, o banco pode ser criado pelos scripts [`Database/Empodera.schema.sql`](Database/Empodera.schema.sql) (somente estrutura e dados de exemplo) ou [`Banco.txt`](Banco.txt) (estrutura e dados da equipe).
+- **Provedores:** MySQL (8.4 LTS ou posterior) em desenvolvimento e produção; SQLite no modo de demonstração.
+- **Criação do esquema:** não há migrations no repositório. O DDL oficial é [`Database/Empodera.schema.sql`](Database/Empodera.schema.sql), gerado a partir do modelo (`dotnet run --project scripts/GerarSchema`) conforme a [revisão técnica do DDL](docs/revisao-ddl-mysql.md). Bancos antigos (chaves UUID) são convertidos por [`Database/migracao-uuid-para-int.sql`](Database/migracao-uuid-para-int.sql). No ambiente `Testing` com SQLite, o EF Core cria as tabelas (`EnsureCreated`).
 - **Dados iniciais:** perfis, permissões e cinco usuários de exemplo, criados junto com o esquema; os dez eixos temáticos são cadastrados na inicialização em `Development` e `Production`, caso estejam ausentes.
-- **Chaves primárias:** inteiros aleatórios entre 100000 e 999999, gerados pela aplicação.
+- **Chaves primárias:** `INT UNSIGNED AUTO_INCREMENT`, geradas pelo banco; restrições (FK, `UNIQUE`, `CHECK`) nomeadas no padrão da revisão do DDL.
 
 O modelo de dados, os relacionamentos e os cuidados com os scripts estão em [docs/banco-de-dados.md](docs/banco-de-dados.md).
 
@@ -332,11 +331,11 @@ As suítes que usam banco criam e removem bancos temporários no servidor indica
 
 | Workflow | Gatilho | O que faz |
 | --- | --- | --- |
-| [`testes.yml`](.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel` | Executa `testar.ps1` com MariaDB 10.4.32 e publica os resultados como artefato |
+| [`testes.yml`](.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel` | Executa `testar.ps1` com MySQL 8.4 LTS e publica os resultados como artefato |
 | [`main.yml`](.github/workflows/main.yml) | Push na branch `import_exel` | Compila, testa e guarda o resultado de `dotnet publish` como artefato |
 | [`qualidade-periodica.yml`](.github/workflows/qualidade-periodica.yml) | Domingos às 03h (UTC) ou execução manual | Executa testes de mutação com Stryker.NET |
 
-Nenhum workflow publica a aplicação em servidor. A implantação é **manual**: o pacote gerado por `dotnet publish` é enviado a uma instância AWS EC2 com Nginx, systemd e MariaDB. O resumo está em [docs/deploy.md](docs/deploy.md), e o roteiro operacional completo, em [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md).
+Nenhum workflow publica a aplicação em servidor. A implantação é **manual**: o pacote gerado por `dotnet publish` é enviado a uma instância AWS EC2 com Nginx, systemd e MariaDB. O servidor novo (VPS Hostinger com MySQL 8.4 LTS) está em [docs/servidor-hostinger.md](docs/servidor-hostinger.md). O resumo está em [docs/deploy.md](docs/deploy.md), e o roteiro operacional completo, em [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md).
 
 ## 📚 Documentação complementar
 
@@ -346,9 +345,11 @@ Nenhum workflow publica a aplicação em servidor. A implantação é **manual**
 | [docs/arquitetura.md](docs/arquitetura.md) | Componentes, fluxo de requisição, autenticação, autorização e idiomas |
 | [docs/instalacao-e-configuracao.md](docs/instalacao-e-configuracao.md) | Instalação detalhada, variáveis e solução de problemas |
 | [docs/banco-de-dados.md](docs/banco-de-dados.md) | Entidades, relacionamentos, scripts e dados iniciais |
+| [docs/revisao-ddl-mysql.md](docs/revisao-ddl-mysql.md) | Revisão técnica do DDL: o que mudou, checklist e migração dos dados |
 | [docs/rotas-e-integracoes.md](docs/rotas-e-integracoes.md) | Rotas MVC, downloads, endpoints JSON e serviços externos |
 | [docs/testes.md](docs/testes.md) | Suítes automatizadas, execução e validação manual |
 | [docs/deploy.md](docs/deploy.md) | Pipelines, publicação e implantação |
+| [docs/servidor-hostinger.md](docs/servidor-hostinger.md) | Servidor novo na Hostinger (VPS) com MySQL 8.4 LTS, passo a passo |
 | [TESTES.md](TESTES.md) | Matriz de cobertura CRUD |
 | [InsEmpodera.E2ETests/README.md](InsEmpodera.E2ETests/README.md) | Detalhes da suíte Playwright |
 | [CONFIGURAR-GMAIL.md](CONFIGURAR-GMAIL.md) | Configuração do envio de e-mails |

@@ -19,9 +19,9 @@ public class AtoresController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Resumo(Guid id)
+    public async Task<IActionResult> Resumo(int id)
     {
-        if (!Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
             return RedirectToAction("Index", "Account");
 
         var usuario = await _context.Usuarios
@@ -44,7 +44,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanList("Atores"))
         {
             return StatusCode(StatusCodes.Status403Forbidden);
@@ -58,7 +58,7 @@ public class AtoresController : Controller
 
     // GET: /Actor/Create
     [HttpGet]
-    public async Task<IActionResult> Create(string? retorno = null, Guid? comunidadeId = null)
+    public async Task<IActionResult> Create(string? retorno = null, int? comunidadeId = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -66,7 +66,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -93,7 +93,7 @@ public class AtoresController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Atores ator, Guid ComunidadeId, List<string>? recursos = null, List<string>? vulnerabilidades = null, int? tipoRelacionamento = null, List<RedeVinculoInput>? vinculosRede = null, bool redesEnviadas = false, string? retorno = null)
+    public async Task<IActionResult> Create(Atores ator, int ComunidadeId, List<string>? recursos = null, List<string>? vulnerabilidades = null, int? tipoRelacionamento = null, List<RedeVinculoInput>? vinculosRede = null, bool redesEnviadas = false, string? retorno = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -102,7 +102,7 @@ public class AtoresController : Controller
         ViewBag.Retorno = retorno == RetornoJanela ? RetornoJanela : null;
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -121,15 +121,14 @@ public class AtoresController : Controller
             await CarregarDadosRedesAsync(null, vinculosRede);
             return View(ator);
         }
-        ator.IdAtores = Guid.NewGuid();
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
-        ator.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades, tipoRelacionamento);
         _context.Atores.Add(ator);
         if (redesEnviadas)
-            await SincronizarRedesAsync(ator.IdAtores, vinculosRede, ator.FkIdUsuario);
+            await SincronizarRedesAsync(ator, vinculosRede, ator.FkIdUsuario);
         await _context.SaveChangesAsync();
 
         if (ViewBag.Retorno == RetornoJanela)
@@ -143,7 +142,7 @@ public class AtoresController : Controller
 
 
     // GET: /Actor/Edit/5
-    public async Task<IActionResult> Edit(Guid? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -152,7 +151,7 @@ public class AtoresController : Controller
             return NotFound();
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -187,7 +186,7 @@ public class AtoresController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Atores atorFormulario, Guid id, Guid ComunidadeId, int? tipoRelacionamento = null, List<RedeVinculoInput>? vinculosRede = null, bool redesEnviadas = false)
+    public async Task<IActionResult> Edit(Atores atorFormulario, int id, int ComunidadeId, int? tipoRelacionamento = null, List<RedeVinculoInput>? vinculosRede = null, bool redesEnviadas = false)
     {
         if (HttpContext.Session.GetString("ID") == null)
         {
@@ -195,7 +194,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -220,7 +219,7 @@ public class AtoresController : Controller
         atorDb.Lopiniao = atorFormulario.Lopiniao;
         atorDb.Mcomunidade = atorFormulario.Mcomunidade;
         atorDb.Rope = atorFormulario.Rope;
-        atorDb.FkIdUsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
 
         var atorCom = await _context.AtorComunidades.FirstOrDefaultAsync(ac => ac.FK_id_Atores == id);
@@ -244,7 +243,7 @@ public class AtoresController : Controller
         }
 
         if (redesEnviadas)
-            await SincronizarRedesAsync(id, vinculosRede, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
+            await SincronizarRedesAsync(atorDb, vinculosRede, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
 
         await _context.SaveChangesAsync();
 
@@ -255,7 +254,7 @@ public class AtoresController : Controller
     // POST: /Actor/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid? id)
+    public async Task<IActionResult> Delete(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -263,7 +262,7 @@ public class AtoresController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanDelete("Atores"))
         {
             return RedirectToAction("Index", "Atores");
@@ -288,7 +287,7 @@ public class AtoresController : Controller
     private const string RetornoJanela = "janela";
 
     // Dados usados pelos modais de Rede Primária e Rede Subjetiva.
-    private async Task CarregarDadosRedesAsync(Guid? atorId, List<RedeVinculoInput>? redesPostadas)
+    private async Task CarregarDadosRedesAsync(int? atorId, List<RedeVinculoInput>? redesPostadas)
     {
         ViewBag.AtoresDisponiveisRede = await _context.AtorComunidades.AsNoTracking()
             .Where(ac => ac.Ator.Ativo != "N" && ac.FK_id_Atores != atorId)
@@ -318,9 +317,9 @@ public class AtoresController : Controller
                 .Select(r => new
                 {
                     tipoRede = r.TipoRede,
-                    atorId = (Guid?)r.FkIdAtorRelacionados,
+                    atorId = (int?)r.FkIdAtorRelacionados,
                     nome = r.AtorRelacionado.Nome,
-                    comunidadeId = (Guid?)null,
+                    comunidadeId = (int?)null,
                     tipoRelacao = r.TipoRelacao
                 })
                 .ToListAsync<object>();
@@ -328,13 +327,18 @@ public class AtoresController : Controller
 
     // Substitui os vínculos de rede do ator pelos enviados no formulário.
     // Ator relacionado sem Id é procurado pelo nome na comunidade informada; se não existir, é criado nela.
-    private async Task SincronizarRedesAsync(Guid atorId, List<RedeVinculoInput>? redes, Guid usuarioId)
+    // Os vínculos usam as entidades (e não só o Id) porque o Id de um ator novo só existe depois de salvo
+    // (AUTO_INCREMENT): o EF preenche as chaves estrangeiras ao gravar.
+    private async Task SincronizarRedesAsync(Atores principal, List<RedeVinculoInput>? redes, int usuarioId)
     {
-        var existentes = await _context.RedesPrimarias.Where(r => r.FkIdAtorPrincipal == atorId).ToListAsync();
-        _context.RedesPrimarias.RemoveRange(existentes);
+        if (principal.IdAtores != 0)
+        {
+            var existentes = await _context.RedesPrimarias.Where(r => r.FkIdAtorPrincipal == principal.IdAtores).ToListAsync();
+            _context.RedesPrimarias.RemoveRange(existentes);
+        }
 
-        var novosAtores = new Dictionary<(Guid, string), Atores>();
-        var vinculados = new HashSet<(string, Guid)>();
+        var novosAtores = new Dictionary<(int, string), Atores>();
+        var vinculados = new HashSet<(string, object)>();
 
         foreach (var rede in redes ?? [])
         {
@@ -342,56 +346,65 @@ public class AtoresController : Controller
             if (!TiposRede.EhValido(rede.TipoRede) || tipoRelacao.Length is 0 or > 100)
                 continue;
 
-            Guid? relacionadoId = null;
-            if (rede.AtorId is Guid idInformado)
+            int? relacionadoId = null;
+            Atores? novoRelacionado = null;
+            if (rede.AtorId is int idInformado)
             {
                 if (await _context.Atores.AnyAsync(a => a.IdAtores == idInformado && a.Ativo != "N"))
                     relacionadoId = idInformado;
             }
-            else if (!string.IsNullOrWhiteSpace(rede.Nome) && rede.ComunidadeId is Guid comunidadeId
+            else if (!string.IsNullOrWhiteSpace(rede.Nome) && rede.ComunidadeId is int comunidadeId
                 && await _context.Comunidades.AnyAsync(c => c.Id_Comunidade == comunidadeId && c.Ativo != "N"))
             {
                 var nome = rede.Nome.Trim();
-                if (nome.Length > 200)
+                if (nome.Length > 150)
                     continue;
                 var nomeNormalizado = nome.ToLower();
 
                 relacionadoId = await _context.AtorComunidades
                     .Where(ac => ac.FkIdComunidade == comunidadeId && ac.Ator.Ativo != "N" && ac.Ator.Nome.ToLower() == nomeNormalizado)
-                    .Select(ac => (Guid?)ac.FK_id_Atores)
+                    .Select(ac => (int?)ac.FK_id_Atores)
                     .FirstOrDefaultAsync();
 
                 if (relacionadoId is null)
                 {
-                    if (!novosAtores.TryGetValue((comunidadeId, nomeNormalizado), out var novo))
+                    if (!novosAtores.TryGetValue((comunidadeId, nomeNormalizado), out novoRelacionado))
                     {
-                        novo = new Atores
+                        novoRelacionado = new Atores
                         {
-                            IdAtores = Guid.NewGuid(),
                             Nome = nome,
                             DtCriacao = DateTime.Now,
                             DtModificacao = DateTime.Now,
                             FkIdUsuario = usuarioId
                         };
-                        novo.ConfigureCreationAggregate(comunidadeId, null, null);
-                        _context.Atores.Add(novo);
-                        novosAtores[(comunidadeId, nomeNormalizado)] = novo;
+                        novoRelacionado.ConfigureCreationAggregate(comunidadeId, null, null);
+                        _context.Atores.Add(novoRelacionado);
+                        novosAtores[(comunidadeId, nomeNormalizado)] = novoRelacionado;
                     }
-                    relacionadoId = novo.IdAtores;
                 }
             }
 
-            if (relacionadoId is not Guid relacionado || relacionado == atorId || !vinculados.Add((rede.TipoRede, relacionado)))
+            object chave;
+            if (novoRelacionado is not null)
+                chave = novoRelacionado;
+            else if (relacionadoId is int relacionado && relacionado != principal.IdAtores)
+                chave = relacionado;
+            else
+                continue;
+            if (!vinculados.Add((rede.TipoRede, chave)))
                 continue;
 
-            _context.RedesPrimarias.Add(new RedePrimaria
+            var vinculo = new RedePrimaria
             {
-                IdRedePrimaria = Guid.NewGuid(),
-                FkIdAtorPrincipal = atorId,
-                FkIdAtorRelacionados = relacionado,
+                AtorPrincipal = principal,
                 TipoRede = rede.TipoRede,
                 TipoRelacao = tipoRelacao
-            });
+            };
+            if (novoRelacionado is not null)
+                vinculo.AtorRelacionado = novoRelacionado;
+            else
+                vinculo.FkIdAtorRelacionados = (int)relacionadoId!;
+            _context.RedesPrimarias.Add(vinculo);
         }
     }
 

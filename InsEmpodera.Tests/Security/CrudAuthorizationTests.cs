@@ -31,7 +31,8 @@ public sealed class CrudAuthorizationTests : ControllerTestBase
         };
         var assessment = new AvaliacaoPessoal
         {
-            FK_id_Atores = actor.IdAtores, FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+            FK_id_Atores = actor.IdAtores, FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow,
+            CCrimes = 3, Substancias = 3, Moradia = 3, Prevencao = 3, AssBasica = 3, Educacao = 3, Saude = 3, Ocupacao = 3, Lazer = 3,
         };
         var form = new FichaPrimeiroContato
         {

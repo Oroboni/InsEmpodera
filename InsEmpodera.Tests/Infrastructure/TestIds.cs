@@ -2,9 +2,8 @@ namespace InsEmpodera.Tests.Infrastructure;
 
 internal static class TestIds
 {
-    // Matches the deterministic seed keys configured in ApplicationDbContext.
-    internal static Guid Seed(int value) =>
-        Guid.ParseExact($"000000000000000000000000{value:X8}", "N");
+    // Ids fixos dos dados iniciais (ApplicationDbContext.HasData e Database/Empodera.schema.sql).
+    internal static int Seed(int value) => value;
 
-    internal static Guid Missing => Seed(999_999);
+    internal static int Missing => Seed(999_999);
 }

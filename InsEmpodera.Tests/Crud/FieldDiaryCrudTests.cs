@@ -71,7 +71,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
         controller.ModelState.AddModelError(nameof(DiarioCampo.Descricao), "Obrigatória");
         var before = await Db.DiariosCampo.CountAsync();
 
-        var result = await controller.Create(NewDiary(community.Id_Comunidade, ""), Array.Empty<Guid>());
+        var result = await controller.Create(NewDiary(community.Id_Comunidade, ""), Array.Empty<int>());
 
         Assert.IsType<ViewResult>(result);
         Assert.Equal(before, await Db.DiariosCampo.CountAsync());
@@ -143,11 +143,11 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
     {
         var community = await CreateCommunityAsync();
         var controller = Attach(new DiarioCampoController(Db));
-        Assert.IsType<NotFoundResult>(await controller.Edit(TestIds.Seed(10), NewDiary(community.Id_Comunidade, "Mismatch"), Array.Empty<Guid>()));
+        Assert.IsType<NotFoundResult>(await controller.Edit(TestIds.Seed(10), NewDiary(community.Id_Comunidade, "Mismatch"), Array.Empty<int>()));
 
         var missing = NewDiary(community.Id_Comunidade, "Missing");
         missing.IdDCampo = TestIds.Missing;
-        Assert.IsType<NotFoundResult>(await controller.Edit(missing.IdDCampo, missing, Array.Empty<Guid>()));
+        Assert.IsType<NotFoundResult>(await controller.Edit(missing.IdDCampo, missing, Array.Empty<int>()));
     }
 
     [Fact]
@@ -203,7 +203,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
         return diary;
     }
 
-    private static DiarioCampo NewDiary(Guid communityId, string description) => new()
+    private static DiarioCampo NewDiary(int communityId, string description) => new()
     {
         FkIdComunidade = communityId,
         Data = new DateTime(2026, 8, 23),

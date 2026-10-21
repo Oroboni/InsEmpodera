@@ -20,7 +20,7 @@
       <h2>
         <a asp-controller="Comunidade" asp-action="Index" class="text-primary">Comunidades</a>
         <span class="separator">></span>
-        <strong class="text-muted">@(Model.Id_Comunidade != Guid.Empty ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
+        <strong class="text-muted">@(Model.Id_Comunidade != 0 ? "Detalhes da Comunidade" : "Nova Comunidade")</strong>
       </h2>
     </div>
 
@@ -32,7 +32,7 @@
       <div class="input-content">
         <label asp-for="Nome">Nome <span class="text-danger">*</span></label>
         <input type="text" asp-for="Nome" class="clean-input"
-               value="@(Model.Id_Comunidade != Guid.Empty ? Model.Nome : string.Empty)" required
+               value="@(Model.Id_Comunidade != 0 ? Model.Nome : string.Empty)" required
                placeholder="Digite o nome da comunidade" />
         <span asp-validation-for="Nome" class="text-danger"></span>
       </div>
@@ -58,7 +58,7 @@
       </div>
     </div>
     <input type="hidden" asp-for="LocalMapa" id="input-endereco-mapa"
-           value="@(Model.Id_Comunidade != Guid.Empty ? (Model.LocalMapa ?? Model.Local) : string.Empty)" />
+           value="@(Model.Id_Comunidade != 0 ? (Model.LocalMapa ?? Model.Local) : string.Empty)" />
 
     <div id="secondary-address-section"
          class="secondary-address-section @(string.IsNullOrWhiteSpace(Model.LocalSecundario) ? "is-hidden" : string.Empty)">
@@ -88,7 +88,7 @@
       <div class="input-content">
         <label asp-for="Complemento">Complemento/Referência</label>
         <input asp-for="Complemento" class="clean-input"
-               value="@(Model.Id_Comunidade != Guid.Empty ? Model.Complemento : string.Empty)"
+               value="@(Model.Id_Comunidade != 0 ? Model.Complemento : string.Empty)"
                placeholder="Ex: Ponto de referência, detalhes adicionais..." />
       </div>
     </div>
@@ -99,7 +99,7 @@
       <div class="input-content">
         <label asp-for="Descricao">Descrição</label>
         <textarea asp-for="Descricao" class="clean-input" rows="4"
-                  placeholder="Adicione uma descrição sobre a comunidade...">@(Model.Id_Comunidade != Guid.Empty ? Model.Descricao : string.Empty)</textarea>
+                  placeholder="Adicione uma descrição sobre a comunidade...">@(Model.Id_Comunidade != 0 ? Model.Descricao : string.Empty)</textarea>
       </div>
     </div>
 
@@ -108,7 +108,7 @@
       <div class="input-content no-icon">
         <label asp-for="Status">Status <span class="text-danger">*</span></label>
         @{
-          var currentStatus = Model.Id_Comunidade != Guid.Empty && !string.IsNullOrWhiteSpace(Model.Status) ? Model.Status : "Em diagnóstico";
+          var currentStatus = Model.Id_Comunidade != 0 && !string.IsNullOrWhiteSpace(Model.Status) ? Model.Status : "Em diagnóstico";
         }
         <select asp-for="Status" class="clean-input" required>
           <option value="Em processo" selected="@(currentStatus == "Em processo")">Em processo</option>
@@ -124,11 +124,11 @@
       <div class="input-content">
         <label asp-for="Descricao_Acessibilidade">Descrição de Acessibilidade</label>
         <textarea asp-for="Descricao_Acessibilidade" class="clean-input" rows="4"
-                  placeholder="Adicione informações sobre acessibilidade...">@(Model.Id_Comunidade != Guid.Empty ? Model.Descricao_Acessibilidade : string.Empty)</textarea>
+                  placeholder="Adicione informações sobre acessibilidade...">@(Model.Id_Comunidade != 0 ? Model.Descricao_Acessibilidade : string.Empty)</textarea>
       </div>
     </div>
 
-    @if (Model.Id_Comunidade != Guid.Empty)
+    @if (Model.Id_Comunidade != 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">Estatísticas da Comunidade</div>
@@ -164,7 +164,7 @@
     }
 
     <!-- Informações de Criação e Atualização -->
-    @if (Model.Id_Comunidade != Guid.Empty)
+    @if (Model.Id_Comunidade != 0)
     {
       <div class="purple-divider"></div>
       <div class="section-label">Informações do Sistema</div>
@@ -193,7 +193,7 @@
             <div class="user-info-display">
               <i class="fa-solid fa-user"></i>
               <span class="user-name">@ViewBag.UsuarioNovo.Nome</span>
-              <span class="user-date">@Model.Dt_Modificacao.ToString("dd/MM/yyyy HH:mm")</span>
+              <span class="user-date">@Model.Dt_Modificacao?.ToString("dd/MM/yyyy HH:mm")</span>
             </div>
           </div>
         </div>
@@ -207,7 +207,7 @@
       </a>
 
       <div class="action-buttons-group">
-        @if (Model.Id_Comunidade != Guid.Empty)
+        @if (Model.Id_Comunidade != 0)
         {
           <a asp-controller="Services" asp-action="ExportComunidadeCompleta"
              asp-route-id="@Model.Id_Comunidade" class="btn-export"
@@ -216,7 +216,7 @@
           </a>
         }
         <button type="button" class="wizard-btn" id="edit-save-btn">
-          @if (Model.Id_Comunidade == Guid.Empty)
+          @if (Model.Id_Comunidade == 0)
           {
             <text><i class="fa-solid fa-plus"></i> Criar Comunidade</text>
           }
@@ -226,7 +226,7 @@
           }
         </button>
 
-        @if (Model.Id_Comunidade != Guid.Empty)
+        @if (Model.Id_Comunidade != 0)
         {
           <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
             <i class="fa-solid fa-trash"></i> Deletar
@@ -321,7 +321,7 @@
     }
 
     // Configurar modo da página
-    const isCreateMode = @(Model.Id_Comunidade == Guid.Empty ? "true" : "false");
+    const isCreateMode = @(Model.Id_Comunidade == 0 ? "true" : "false");
     let isEditMode = isCreateMode;
     let isSubmitting = false;
 

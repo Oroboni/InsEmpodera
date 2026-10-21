@@ -3,7 +3,7 @@ using Empodera.Models;
 
 namespace Empodera.Data
 {
-    public class ApplicationDbContext : DbContext
+    public partial class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -482,6 +482,8 @@ namespace Empodera.Data
                 .HasForeignKey(ra => ra.FK_id_Atores)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            ConfigurarEsquema(modelBuilder);
+
             modelBuilder.Entity<Usuario>().HasData(
                 IdentitySeed(1, "joao", "joao@email.com", "Coordenador", 1, 1, "S", "foto1.jpg", new DateTime(1990, 1, 1)),
                 IdentitySeed(2, "Usuario Dois", "u2@example.com", "Pesquisador", 2, 2, "S", "foto2.jpg", new DateTime(1985, 2, 2)),
@@ -492,11 +494,11 @@ namespace Empodera.Data
 
             // Perfis
             modelBuilder.Entity<Perfil>().HasData(
-                new Perfil { IdPerfil = SeedGuid(1), FkIdUsuario = SeedGuid(1), Nome = "Admin" },
-                new Perfil { IdPerfil = SeedGuid(2), FkIdUsuario = SeedGuid(2), Nome = "Editor" },
-                new Perfil { IdPerfil = SeedGuid(3), FkIdUsuario = SeedGuid(3), Nome = "Colaborador" },
-                new Perfil { IdPerfil = SeedGuid(4), FkIdUsuario = SeedGuid(4), Nome = "Visualizador" },
-                new Perfil { IdPerfil = SeedGuid(5), FkIdUsuario = SeedGuid(5), Nome = "Supervisor" }
+                new Perfil { IdPerfil = SeedGuid(1), Nome = "Admin" },
+                new Perfil { IdPerfil = SeedGuid(2), Nome = "Editor" },
+                new Perfil { IdPerfil = SeedGuid(3), Nome = "Colaborador" },
+                new Perfil { IdPerfil = SeedGuid(4), Nome = "Visualizador" },
+                new Perfil { IdPerfil = SeedGuid(5), Nome = "Supervisor" }
             );
 
             // Permissoes
@@ -610,8 +612,8 @@ namespace Empodera.Data
             };
         }
 
-        private static Guid SeedGuid(int value) =>
-            Guid.ParseExact($"000000000000000000000000{value:X8}", "N");
+        // Ids fixos dos dados iniciais (os mesmos do script Database/Empodera.schema.sql).
+        private static int SeedGuid(int value) => value;
 
         private void PrepareIdentityFields()
         {

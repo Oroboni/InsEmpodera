@@ -164,7 +164,7 @@ As permissões são registradas por perfil e por módulo, com cinco ações: **l
 | RNF-008 | Integridade | Uploads de planilhas validam extensão e tamanho e são processados em transação | Enviar arquivo com extensão inválida retorna HTTP 400 | Implementado |
 | RNF-009 | Usabilidade | Interface em pt-BR, en e es, com layout adaptado a telas de computador e celular | Testes E2E de responsividade e idioma | Implementado |
 | RNF-010 | Portabilidade | Executar onde houver o .NET 9 (Windows, Linux e macOS) | Seguir o guia de instalação | Atendido pela plataforma; validado pela CI em Linux |
-| RNF-011 | Compatibilidade | Funcionar com MariaDB 10.4.32 (versão da CI) e com a versão instalada no servidor | Workflow `testes.yml`, job de compatibilidade | Implementado |
+| RNF-011 | Compatibilidade | Funcionar com MySQL 8.4 LTS (CI e servidor), conforme a revisão técnica do DDL | Workflow `testes.yml`, job de compatibilidade; `RevisaoDdlTests` | Implementado (o servidor de produção ainda precisa migrar do MariaDB) |
 | RNF-012 | Manutenibilidade | Executar testes automatizados de backend, interface e navegador a cada push | Aba Actions do GitHub | Implementado |
 | RNF-013 | Confiabilidade | Medir periodicamente a capacidade dos testes de detectar defeitos | Workflow `qualidade-periodica.yml` (Stryker.NET) | Implementado |
 | RNF-014 | Desempenho | Tempos de resposta adequados ao uso interno | — | Sem meta definida nem medição no repositório |
@@ -183,9 +183,8 @@ As permissões são registradas por perfil e por módulo, com cinco ações: **l
 
 | Limitação | Impacto |
 | --- | --- |
-| Não há migrations do Entity Framework no repositório | Em `Development` e produção, as tabelas não são criadas na inicialização; o esquema precisa ser criado antes (ver [instalacao-e-configuracao.md](instalacao-e-configuracao.md#opção-b--desenvolvimento-com-mysql-ou-mariadb)), e mudanças futuras no modelo exigem scripts manuais |
-| `Banco.txt` começa com `DROP DATABASE IF EXISTS empodera` | Executá-lo em um servidor com dados apaga o banco existente |
-| `Banco.txt` e `wwwroot/uploads/` contêm registros e planilhas de comunidades e pessoas | Possível exposição de dados pessoais em repositório público; recomenda-se revisão pela equipe |
+| Não há migrations do Entity Framework no repositório | Em `Development` e produção, as tabelas não são criadas na inicialização; o esquema precisa ser criado antes (ver [instalacao-e-configuracao.md](instalacao-e-configuracao.md#opção-b--desenvolvimento-com-mysql)), e mudanças futuras no modelo exigem scripts manuais |
+| `wwwroot/uploads/` contém registros e planilhas de comunidades e pessoas | Possível exposição de dados pessoais em repositório público; recomenda-se revisão pela equipe |
 | As verificações de permissão nos controllers leem o ID do usuário da sessão HTTP | A sessão é derivada da identidade autenticada, mas a lógica de permissão está repetida em cada controller |
 | `Email__User` aceita somente `empodera.ajuda@gmail.com` | Trocar o remetente exige alteração de código |
 | A recuperação de senha depende do Gmail | Sem credenciais configuradas, o fluxo é exibido, mas nenhum e-mail é enviado |

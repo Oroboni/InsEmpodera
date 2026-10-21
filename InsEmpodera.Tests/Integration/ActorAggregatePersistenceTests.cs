@@ -154,7 +154,7 @@ public sealed class ActorAggregatePersistenceTests : ControllerTestBase
         await Db.Database.ExecuteSqlRawAsync(
             """
             CREATE TRIGGER fail_actor_resource_insert
-            BEFORE INSERT ON `RecursosAtores`
+            BEFORE INSERT ON `recursosatores`
             FOR EACH ROW SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'forced actor resource failure';
             """);
@@ -174,7 +174,7 @@ public sealed class ActorAggregatePersistenceTests : ControllerTestBase
             expected,
             actor.RecursosAtores.Single(item => item.Tipo == type && item.Nome == name).Pode);
 
-    private static void AssertRandomKey(Guid id) => Assert.NotEqual(Guid.Empty, id);
+    private static void AssertRandomKey(int id) => Assert.NotEqual(0, id);
 
     private static Atores NewActor(string name) => new()
     {

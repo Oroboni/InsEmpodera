@@ -87,7 +87,7 @@ public sealed class IdentityAuthenticationHttpTests : IClassFixture<EmpoderaWebA
         var result = await userManager.CreateAsync(user, "Identity@123");
 
         Assert.True(result.Succeeded, string.Join(" ", result.Errors.Select(error => error.Description)));
-        Assert.NotEqual(Guid.Empty, user.IdUsuario);
+        Assert.NotEqual(0, user.IdUsuario);
         Assert.NotEqual(TestIds.Seed(1), user.IdUsuario);
         Assert.Equal(email.ToUpperInvariant(), user.NormalizedEmail);
         Assert.Equal(email.ToUpperInvariant(), user.NormalizedUserName);

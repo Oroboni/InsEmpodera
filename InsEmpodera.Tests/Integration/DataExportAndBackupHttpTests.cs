@@ -133,13 +133,31 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
     {
         var admin = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
         var actorName = $"Ator João — inclusão 🌎 {Guid.NewGuid():N}";
+        // Texto longo (maior que o limite de uma célula do Excel) numa coluna TEXT: na revisão do DDL,
+        // colunas curtas como Atores.PapelSocial1 passaram a ter tamanho justificado (VARCHAR(100)).
         var longDescription = string.Concat(Enumerable.Repeat("Informação comunitária com acentos. ", 1_200));
+        var communityName = $"Comunidade backup {Guid.NewGuid():N}";
+        var restoredCommunityId = await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+        {
+            var community = new Comunidade
+            {
+                Nome = communityName,
+                Status = "Em diagnóstico",
+                Descricao = longDescription,
+                Ativo = "S",
+                FK_Id_Usuario = admin.IdUsuario,
+                Dt_Criacao = DateTime.UtcNow
+            };
+            db.Comunidades.Add(community);
+            await db.SaveChangesAsync();
+            return community.Id_Comunidade;
+        });
         var restoredActorId = await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var actor = new Atores
             {
                 Nome = actorName,
-                PapelSocial1 = longDescription,
+                PapelSocial1 = "Liderança comunitária",
                 PapelSocial2 = null,
                 Telefone = string.Empty,
                 DaEquipe = true,
@@ -158,14 +176,14 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
         using var client = await AuthenticatedClientAsync(admin);
         var countsBefore = await GetTableCountsAsync();
 
-        using (var actorExport = await client.GetAsync("/Services/ExportAtores"))
+        using (var communityExport = await client.GetAsync("/Services/ExportComunidades"))
         {
-            Assert.Equal(HttpStatusCode.OK, actorExport.StatusCode);
-            await using var actorStream = await actorExport.Content.ReadAsStreamAsync();
-            using var actorWorkbook = new XLWorkbook(actorStream);
-            var longTexts = actorWorkbook.Worksheet("TextosLongos");
+            Assert.Equal(HttpStatusCode.OK, communityExport.StatusCode);
+            await using var communityStream = await communityExport.Content.ReadAsStreamAsync();
+            using var communityWorkbook = new XLWorkbook(communityStream);
+            var longTexts = communityWorkbook.Worksheet("TextosLongos");
             var reconstructed = string.Concat(longTexts.RowsUsed().Skip(1)
-                .Where(row => row.Cell(1).GetString() == "Atores" && row.Cell(3).GetString() == nameof(Atores.PapelSocial1))
+                .Where(row => row.Cell(3).GetString() == nameof(Comunidade.Descricao))
                 .OrderBy(row => row.Cell(4).GetValue<int>())
                 .Select(row => row.Cell(5).GetString()));
             Assert.Equal(longDescription, reconstructed);
@@ -197,6 +215,7 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
         await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             db.Atores.Remove(await db.Atores.SingleAsync(actor => actor.IdAtores == restoredActorId));
+            db.Comunidades.Remove(await db.Comunidades.SingleAsync(community => community.Id_Comunidade == restoredCommunityId));
             await db.SaveChangesAsync();
         });
 
@@ -204,13 +223,17 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
         HttpFlowTestSupport.AssertRedirect(import, "/Report");
         using var resultPage = await client.GetAsync("/Report");
         var html = await resultPage.Content.ReadAsStringAsync();
-        Assert.Contains("1 registros novos importados", html, StringComparison.Ordinal);
+        Assert.Contains("2 registros novos importados", html, StringComparison.Ordinal);
         Assert.Equal(countsBefore, await GetTableCountsAsync());
         var restoredActor = await HttpFlowTestSupport.InDatabaseAsync(_factory, db => db.Atores
             .AsNoTracking()
             .SingleAsync(actor => actor.IdAtores == restoredActorId));
         Assert.Equal(actorName, restoredActor.Nome);
-        Assert.Equal(longDescription, restoredActor.PapelSocial1);
+        Assert.Equal("Liderança comunitária", restoredActor.PapelSocial1);
+        var restoredCommunity = await HttpFlowTestSupport.InDatabaseAsync(_factory, db => db.Comunidades
+            .AsNoTracking()
+            .SingleAsync(community => community.Id_Comunidade == restoredCommunityId));
+        Assert.Equal(longDescription, restoredCommunity.Descricao);
         Assert.Null(restoredActor.PapelSocial2);
         Assert.Equal(string.Empty, restoredActor.Telefone);
         Assert.True(restoredActor.DaEquipe);
@@ -226,6 +249,12 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
             await secondResultPage.Content.ReadAsStringAsync(),
             StringComparison.Ordinal);
         Assert.Equal(countsBefore, await GetTableCountsAsync());
+        // A comunidade com texto longo não deve aparecer nas exportações dos outros testes da classe.
+        await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+        {
+            db.Comunidades.Remove(await db.Comunidades.SingleAsync(community => community.Id_Comunidade == restoredCommunityId));
+            await db.SaveChangesAsync();
+        });
     }
 
     [Fact]
@@ -281,7 +310,7 @@ public sealed class DataExportAndBackupHttpTests : IClassFixture<EmpoderaWebAppl
             return result;
         });
 
-    private Task<Guid> SeedCommunityAsync() =>
+    private Task<int> SeedCommunityAsync() =>
         HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var community = new Comunidade

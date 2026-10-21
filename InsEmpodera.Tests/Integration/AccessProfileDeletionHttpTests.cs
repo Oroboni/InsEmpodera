@@ -135,7 +135,7 @@ public sealed class AccessProfileDeletionHttpTests : IClassFixture<EmpoderaWebAp
             db => db.Perfis.AnyAsync(profile => profile.IdPerfil == unusedId)));
     }
 
-    private async Task<Guid> SeedProfileAsync(bool withInactiveUser) =>
+    private async Task<int> SeedProfileAsync(bool withInactiveUser) =>
         await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var profile = new Perfil

@@ -2,7 +2,9 @@
 
 [← Voltar ao README principal](../README.md)
 
-Este documento descreve a persistência do InsEmpodera conforme [`Data/ApplicationDbContext.cs`](../Data/ApplicationDbContext.cs) e [`Program.cs`](../Program.cs).
+Este documento descreve a persistência do InsEmpodera conforme [`Data/ApplicationDbContext.cs`](../Data/ApplicationDbContext.cs), [`Data/ApplicationDbContext.Esquema.cs`](../Data/ApplicationDbContext.Esquema.cs) e [`Program.cs`](../Program.cs).
+
+O esquema segue a **revisão técnica do DDL** feita pelo orientador; o que mudou e por quê está em [revisao-ddl-mysql.md](revisao-ddl-mysql.md).
 
 ## Sumário
 
@@ -21,11 +23,11 @@ Este documento descreve a persistência do InsEmpodera conforme [`Data/Applicati
 | --- | --- |
 | ORM | Entity Framework Core 9.0.19 |
 | Contexto | `Empodera.Data.ApplicationDbContext` (um único `DbContext`, 34 entidades) |
-| Provedor de produção e desenvolvimento | MySQL/MariaDB via `Pomelo.EntityFrameworkCore.MySql` 9.0.0, com detecção automática da versão do servidor |
+| Provedor de produção e desenvolvimento | MySQL 8.4 LTS ou posterior via `Pomelo.EntityFrameworkCore.MySql` 9.0.0, com detecção automática da versão do servidor |
 | Provedor de demonstração | SQLite via `Microsoft.EntityFrameworkCore.Sqlite` 9.0.19 |
 | Seleção do provedor | Chave `DatabaseProvider` (`MySql` ou `Sqlite`) |
 | Migrations | Não existem no repositório (foram removidas no commit `38efd15`) |
-| Versões de banco | MariaDB 10.4.32 na CI; pacote `mariadb105-server` (MariaDB 10.5) no servidor descrito em [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md) |
+| Versões de banco | **MySQL 8.4 LTS** em todos os ambientes (CI e servidor novo, ver [servidor-hostinger.md](servidor-hostinger.md)); também validado com MySQL 9.7.1. O servidor antigo descrito em [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md) usa MariaDB 10.5, que não é compatível (o collation `utf8mb4_0900_ai_ci` não existe no MariaDB) |
 
 ## Modelo de dados
 
@@ -57,32 +59,32 @@ erDiagram
         string Email UK
         string Senha "hash do Identity"
         string Ativo "S ou N"
-        int FkIdPerfil FK
+        int IdPerfil FK
     }
     PERMISSOES {
-        int IdPermissoes PK
-        int FkIdPerfil FK
+        int IdPermissao PK
+        int IdPerfil FK
         string Modulo
         string PodeListar
         string PodeCriar
     }
     COMUNIDADE {
-        int Id_Comunidade PK
+        int IdComunidade PK
         string Nome
         string Status
         string Ativo "S ou N"
-        int FK_Id_Usuario FK
+        int IdUsuario FK
     }
     ATORES {
-        int IdAtores PK
+        int IdAtor PK
         string Nome
         string Ativo "S ou N"
-        int FkIdUsuario FK
+        int IdUsuario FK
     }
     FICHA_PRIMEIRO_CONTATO {
         int IdFicha PK
-        int FK_id_Atores FK
-        int FkIdComunidade FK
+        int IdAtor FK
+        int IdComunidade FK
         string Status
     }
 ```
@@ -113,17 +115,19 @@ erDiagram
 | Eixos | `Eixo` | `Eixos` | Catálogo de eixos temáticos |
 | Eixos | `RedeEixo`, `AtividadesEixo`, `DiarioEixo`, `DetalhesEixos`, `VulnerabilidadesEixo`, `DiarioProcessoEixo` | `RedeEixos`, `AtividadesEixo`, `DiarioEixos`, `DetalhesEixos`, `VulnerabilidadesEixo`, `diariosprocessoeixos` | Associação de eixos a recursos, atividades, diários e vulnerabilidades |
 
-Os nomes de tabela criados pelo EF Core seguem os nomes das propriedades `DbSet`. Em servidores MySQL/MariaDB no Linux, nomes de tabela diferenciam maiúsculas de minúsculas; por isso, um dump gerado no Windows (nomes em minúsculas) precisa de ajuste, como descrito em [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md).
+As tabelas têm nomes em minúsculas (no MySQL para Linux os nomes diferenciam maiúsculas de minúsculas), definidos no `ApplicationDbContext`. As colunas do banco seguem o padrão da revisão (chave no singular, FK com o nome da PK referenciada, sem prefixo `Fk`); as propriedades C# mantiveram os nomes antigos e o mapeamento está em `ApplicationDbContext.Esquema.cs`. A lista de colunas renomeadas está em [revisao-ddl-mysql.md](revisao-ddl-mysql.md#6-nomenclatura-e-nomeação-de-restrições).
 
 ### Regras de exclusão
 
 - A maior parte dos relacionamentos usa exclusão em cascata: excluir uma ficha, um diário ou uma atividade remove seus registros filhos.
-- Relacionamentos com `Restrict` impedem a exclusão: usuário → perfil, usuário que modificou um registro (`FkIdUsuarioM`) e rede primária → atores.
+- Relacionamentos com `Restrict` impedem a exclusão: usuário → perfil, usuário que modificou um registro (`IdUsuarioModificacao`), autor do diário pessoal e rede primária → atores.
+- `SET NULL`: criador do perfil e ator da fonte de informação.
+- Todas as 57 chaves estrangeiras têm nome explícito; a lista completa com a regra de cada uma está em [revisao-ddl-mysql.md](revisao-ddl-mysql.md#regra-on-delete-de-cada-fk).
 - Comunidades, atores e usuários não são apagados pela interface; recebem `Ativo = "N"`.
 
 ## Geração de chaves primárias
 
-O `ApplicationDbContext` sobrescreve `SaveChanges` e `SaveChangesAsync` para atribuir, antes da gravação, uma chave inteira aleatória entre **100000 e 999999** a cada novo registro sem chave definida. A aplicação confere se a chave já existe e tenta até 128 vezes antes de falhar. Os registros iniciais usam chaves fixas (1, 2, 3…).
+Todas as tabelas usam `INT UNSIGNED AUTO_INCREMENT`: o banco gera a chave no `INSERT` e o EF a lê de volta. A aplicação não gera Ids. Quando um registro novo precisa ser referenciado antes de salvo (por exemplo, um ator criado dentro da Rede Primária), o código liga as entidades pela navegação e o EF preenche a FK ao gravar. Os registros iniciais usam chaves fixas (1, 2, 3…).
 
 ## Dados iniciais
 
@@ -138,31 +142,28 @@ Os usuários de exemplo são fictícios. A senha deles não é publicada: no amb
 
 ## Criação do esquema
 
-Como não há migrations, `Database.MigrateAsync()` (chamado fora do ambiente `Testing`) não cria tabelas. O esquema é criado de uma destas formas:
+Não há migrations do EF. O esquema oficial é o script [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql), **gerado a partir do modelo** por `dotnet run --project scripts/GerarSchema`.
 
 | Situação | Como criar | Validado nesta revisão |
 | --- | --- | --- |
-| Demonstração com SQLite | Executar no ambiente `Testing`; `EnsureCreated` cria o arquivo e as tabelas | Sim |
-| Banco MySQL/MariaDB novo | Executar uma vez no ambiente `Testing` com `DatabaseProvider=MySql` (ver [instalação, opção B](instalacao-e-configuracao.md#opção-b--desenvolvimento-com-mysql-ou-mariadb)) | Sim, em MySQL 9.7.1 |
-| Banco MySQL/MariaDB a partir de script | Importar `Database/Empodera.schema.sql` (somente exemplo) ou `Banco.txt` (dados da equipe) | Sim, em MySQL 9.7.1 |
-| Testes automatizados | Cada teste cria um banco temporário `insempodera_*` com `EnsureCreated` e o apaga ao final | Sim, em MySQL 9.7.1 |
-| Servidor de produção | Importação de um dump do banco existente, conforme [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md) | Não |
+| Demonstração com SQLite | Executar no ambiente `Testing`; `EnsureCreated` cria o arquivo e as tabelas a partir do modelo | Sim |
+| Banco MySQL novo | `CREATE DATABASE empodera;` e executar `Database/Empodera.schema.sql` nele | Sim, em MySQL 8.4.11 e 9.7.1 |
+| Banco atual (chaves UUID) | Migrar com `Database/migracao-uuid-para-int.sql` ([passo a passo](revisao-ddl-mysql.md#migração-dos-dados)) | Sim, com o dump da equipe |
+| Testes automatizados | Cada teste cria um banco temporário `insempodera_*` **executando `Empodera.schema.sql`** e o apaga ao final | Sim, em MySQL 8.4.11 e 9.7.1 |
 
-`EnsureCreated` não altera um banco que já tenha tabelas. Ao iniciar em `Development`, o EF Core também cria a tabela vazia `__EFMigrationsHistory`, sem efeito sobre os dados. Mudanças futuras no modelo precisam de scripts SQL incrementais, como o já existente em `Database/`, e da atualização de `Database/Empodera.schema.sql`.
+Ao mudar o modelo (`ApplicationDbContext*.cs`), rode o gerador e versione os dois scripts; o teste `RevisaoDdlTests` falha se eles estiverem desatualizados. Bancos já em uso precisam de um script incremental para a mudança.
 
 ## Scripts SQL do repositório
 
 | Arquivo | Conteúdo | Situação |
 | --- | --- | --- |
-| [`Banco.txt`](../Banco.txt) | `DROP DATABASE`, criação de 34 tabelas, dados da equipe e restrições | Compatível com o modelo; importado sem erros em MySQL 9.7.1 e usado pela aplicação nesta revisão. Tabelas em minúsculas. Também é lido pelo teste `IdentityDatabaseContractTests`, que confere as colunas do Identity |
-| [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql) | Esquema gerado pelo EF Core a partir do modelo atual, para MariaDB 10.4.32, com os dados de exemplo fictícios | Importado sem erros em MySQL 9.7.1 nesta revisão; não apaga bancos existentes |
-| [`Database/20260830_adicionar_endereco_secundario_comunidades.sql`](../Database/20260830_adicionar_endereco_secundario_comunidades.sql) | Adiciona `LocalSecundario` e `LocalMapaSecundario` em `Comunidades` | Script incremental para bancos existentes |
-
-> **Cuidado:** `Banco.txt` apaga o banco `empodera` antes de recriá-lo. Não o execute em servidores com dados.
+| [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql) | DDL oficial: 34 tabelas, restrições nomeadas e os dados de exemplo fictícios | Gerado pelo `scripts/GerarSchema`; não apaga bancos existentes nem desliga a verificação de FKs |
+| [`Database/migracao-uuid-para-int.sql`](../Database/migracao-uuid-para-int.sql) | Copia os dados do banco antigo (`empodera_antigo`, chaves UUID) para o novo | Gerado pelo `scripts/GerarSchema`; para sem gravar nada se encontrar problemas |
+| [`Database/20260830_adicionar_endereco_secundario_comunidades.sql`](../Database/20260830_adicionar_endereco_secundario_comunidades.sql), [`Database/20261016_adicionar_tipo_rede_redes_primarias.sql`](../Database/20261016_adicionar_tipo_rede_redes_primarias.sql) | Colunas adicionadas ao esquema antigo | Só para preparar um banco antigo antes da migração |
 
 ## Backup e preservação de dados
 
 - **Pela aplicação:** usuários `Admin` podem gerar o backup geral em `.xlsx` (`/Services/ExportBackupGeral`) e importá-lo em **Dados e Backup**. A importação insere apenas registros ausentes e preserva os existentes.
-- **Pelo banco:** o procedimento com `mariadb-dump` e a restauração no servidor estão em [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md).
+- **Pelo banco:** use `mysqldump` (o procedimento antigo com `mariadb-dump` está em [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md)). Backups em `.xlsx` gerados antes da troca para chaves inteiras não são compatíveis com o esquema novo.
 - **Arquivos locais:** `Empodera.testing.db` e os arquivos auxiliares do SQLite (`*.db-shm`, `*.db-wal`) estão no `.gitignore` e não devem ser versionados.
 - **Dados pessoais:** registros reais de comunidades e pessoas não devem ser publicados no repositório nem usados em ambientes de teste.

@@ -35,7 +35,7 @@ public class UsersController : Controller
     }
 
     var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
     if (!PodePerfis.CanList("Usuarios"))
     {
         return StatusCode(StatusCodes.Status403Forbidden);
@@ -61,7 +61,7 @@ public class UsersController : Controller
 }
 
     [HttpGet]
-    public async Task<IActionResult> Details(Guid? id)
+    public async Task<IActionResult> Details(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -98,7 +98,7 @@ public class UsersController : Controller
         }
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
         if (!PodePerfis.CanCreate("Usuarios"))
             return RedirectToAction("Index", "Users");
         
@@ -127,7 +127,7 @@ public class UsersController : Controller
         }
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
         if (!PodePerfis.CanCreate("Usuarios"))
             return RedirectToAction("Index", "Users");
 
@@ -196,7 +196,7 @@ public class UsersController : Controller
 
 
     // GET: /Actor/Edit/5
-    public async Task<IActionResult> Edit(Guid? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -207,7 +207,7 @@ public class UsersController : Controller
             return NotFound();
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
         if (!PodePerfis.CanUpdate("Usuarios"))
             return RedirectToAction("Index", "Users");
 
@@ -235,13 +235,13 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, Usuario usuario, IFormFile? fotoArquivo = null, bool removerFoto = false)
+    public async Task<IActionResult> Edit(int id, Usuario usuario, IFormFile? fotoArquivo = null, bool removerFoto = false)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Usuarios")).FirstOrDefault();
         if (!PodePerfis.CanUpdate("Usuarios"))
             return RedirectToAction("Index", "Users");
 
@@ -257,7 +257,7 @@ public class UsersController : Controller
             .FirstOrDefaultAsync(item => item.IdUsuario == id);
         if (usuariobd == null) return NotFound();
 
-        if (usuario.IdUsuario != Guid.Empty && usuario.IdUsuario != id)
+        if (usuario.IdUsuario != 0 && usuario.IdUsuario != id)
             return NotFound();
 
         usuario.Foto = usuariobd.Foto;
@@ -351,7 +351,7 @@ public class UsersController : Controller
 
 
     [HttpGet, ActionName("Delete")]
-    public async Task<IActionResult> DeleteConfirmation(Guid? id)
+    public async Task<IActionResult> DeleteConfirmation(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -378,7 +378,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid? id)
+    public async Task<IActionResult> Delete(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -386,7 +386,7 @@ public class UsersController : Controller
         if (id == null)
             return NotFound();
 
-        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         var loggedUser = await _context.Usuarios
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)
@@ -425,7 +425,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Reactivate(Guid id)
+    public async Task<IActionResult> Reactivate(int id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -466,7 +466,7 @@ public class UsersController : Controller
 
     private async Task<Usuario?> GetLoggedUserWithPermissionsAsync()
     {
-        if (!Guid.TryParse(HttpContext.Session.GetString("ID"), out var loggedUserId))
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var loggedUserId))
             return null;
 
         return await _context.Usuarios
@@ -510,7 +510,7 @@ public class UsersController : Controller
         user.Ativo = user.Ativo == "N" ? "N" : "S";
     }
 
-    private async Task LoadProfilesAsync(Guid? selectedProfile = null)
+    private async Task LoadProfilesAsync(int? selectedProfile = null)
     {
         ViewBag.PerfilLista = new SelectList(
             await _context.Perfis.OrderBy(profile => profile.Nome).ToListAsync(),
@@ -522,7 +522,7 @@ public class UsersController : Controller
     private Task<int> ActiveAdminCountAsync() =>
         _context.Usuarios.CountAsync(user => user.Ativo == "S" && user.Perfil.Nome == "Admin");
 
-    private Task<bool> EmailExistsAsync(string email, Guid? exceptUserId = null)
+    private Task<bool> EmailExistsAsync(string email, int? exceptUserId = null)
     {
         var normalized = email.Trim().ToUpperInvariant();
         return _context.Usuarios.AnyAsync(user =>
@@ -538,7 +538,7 @@ public class UsersController : Controller
 
     // GET: /Users/Foto/{id} — foto de perfil, só para usuários autenticados.
     [HttpGet]
-    public IActionResult Foto(Guid id)
+    public IActionResult Foto(int id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return Unauthorized();
@@ -553,7 +553,7 @@ public class UsersController : Controller
     private async Task SalvarFotoAsync(Usuario usuario, IFormFile? fotoArquivo, bool removerFoto)
     {
         var fotos = HttpContext?.RequestServices?.GetService<FotoUsuarioService>();
-        if (fotos is null || usuario.IdUsuario == Guid.Empty) return;
+        if (fotos is null || usuario.IdUsuario == 0) return;
 
         if (fotoArquivo is not null)
             usuario.Foto = await fotos.SalvarAsync(usuario.IdUsuario, fotoArquivo, HttpContext!.RequestAborted);

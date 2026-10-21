@@ -6,9 +6,10 @@ namespace Empodera.Models
 {
     public class DetalhesDAcoes
     {
-        public Guid Id { get; set; }             
+        public int Id { get; set; }             
+        [StringLength(150)]
         public string Nome { get; set; } = null!;
-        public Guid FkIdDDacoes { get; set; }    
+        public int FkIdDDacoes { get; set; }    
         public DiarioDAcoes DiarioDAcoes { get; set; } = null!;
         public List<DetalhesEixos> DetalhesEixos { get; set; } = new();
     }

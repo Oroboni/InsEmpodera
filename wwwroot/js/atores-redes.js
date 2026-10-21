@@ -22,9 +22,12 @@
 
         let dados = {};
         try { dados = JSON.parse(dadosEl.textContent || "{}") || {}; } catch { dados = {}; }
-        const atores = dados.atores || [];
-        const comunidades = dados.comunidades || [];
-        const redes = (dados.redes || []).filter(r => NOMES_REDE[r.tipoRede]);
+        // Ids viram texto: os valores dos <select> são texto e o servidor envia números (chaves INT).
+        const texto = v => (v === null || v === undefined || v === "") ? null : String(v);
+        const atores = (dados.atores || []).map(a => ({ ...a, id: texto(a.id), comunidadeId: texto(a.comunidadeId) }));
+        const comunidades = (dados.comunidades || []).map(c => ({ ...c, id: texto(c.id) }));
+        const redes = (dados.redes || []).filter(r => NOMES_REDE[r.tipoRede])
+            .map(r => ({ ...r, atorId: texto(r.atorId), comunidadeId: texto(r.comunidadeId) }));
         if (campos.dataset.editavel === "false") estado.editavel = false;
 
         const modalLista = document.getElementById("modalRedeLista");
@@ -200,8 +203,9 @@
             }
         }
 
-        function receberAtorCriado(dados) {
-            if (!dados || dados.tipo !== "empodera:ator-criado" || !dados.id) return;
+        function receberAtorCriado(mensagem) {
+            if (!mensagem || mensagem.tipo !== "empodera:ator-criado" || !mensagem.id) return;
+            const dados = { ...mensagem, id: texto(mensagem.id), comunidadeId: texto(mensagem.comunidadeId) };
             if (!atores.some(a => a.id === dados.id && a.comunidadeId === dados.comunidadeId)) {
                 atores.push({ id: dados.id, nome: dados.nome, comunidadeId: dados.comunidadeId });
                 atores.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));

@@ -99,7 +99,7 @@
                     <label>Última atualização</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                        <input type="text" value="@Model.DtModificacao?.ToString("dd/MM/yyyy - HH:mm")" readonly>
                     </div>
                 </div>
                 }

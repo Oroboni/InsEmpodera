@@ -3,10 +3,10 @@
 @{
     ViewData["Title"] = "Diário Pessoal";
     Layout = "_Layout";
-    Guid? selectedAtorId = ViewBag.SelectedAtorId;
+    int? selectedAtorId = ViewBag.SelectedAtorId;
     string? searchQuery = ViewBag.SearchQuery as string;
-    var mentionActors = ViewBag.MentionActors as IReadOnlyDictionary<Guid, string>
-        ?? new Dictionary<Guid, string>();
+    var mentionActors = ViewBag.MentionActors as IReadOnlyDictionary<int, string>
+        ?? new Dictionary<int, string>();
 }
 
 @section Styles {

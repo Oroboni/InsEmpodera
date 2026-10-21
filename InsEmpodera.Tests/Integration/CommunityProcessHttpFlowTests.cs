@@ -62,7 +62,7 @@ public sealed class CommunityProcessHttpFlowTests : IClassFixture<EmpoderaWebApp
         Assert.Contains("Em processo", html, StringComparison.Ordinal);
     }
 
-    private async Task<Guid> SeedCommunityAsync(string status) =>
+    private async Task<int> SeedCommunityAsync(string status) =>
         await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var community = new Comunidade
@@ -81,7 +81,7 @@ public sealed class CommunityProcessHttpFlowTests : IClassFixture<EmpoderaWebApp
             return community.Id_Comunidade;
         });
 
-    private Task<string> StatusAsync(Guid communityId) =>
+    private Task<string> StatusAsync(int communityId) =>
         HttpFlowTestSupport.InDatabaseAsync(
             _factory,
             db => db.Comunidades

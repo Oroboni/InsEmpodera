@@ -22,14 +22,13 @@ public abstract class ControllerTestBase : IAsyncLifetime
         var serverVersion = ServerVersion.AutoDetect(mysqlServer);
         var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer)
         {
-            Database = _databaseName,
-            GuidFormat = MySqlGuidFormat.Binary16
+            Database = _databaseName
         };
         Db = new ApplicationDbContext(
             new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseMySql(connectionBuilder.ConnectionString, serverVersion)
                 .Options);
-        await Db.Database.EnsureCreatedAsync();
+        await EsquemaMySql.CriarAsync(connectionBuilder.ConnectionString);
     }
 
     public async Task DisposeAsync()
@@ -46,11 +45,11 @@ public abstract class ControllerTestBase : IAsyncLifetime
         where T : Controller
         => AttachWithGuid(controller, userId.HasValue ? TestIds.Seed(userId.Value) : null, form);
 
-    protected T Attach<T>(T controller, Guid userId, IFormCollection? form = null)
+    protected T Attach<T>(T controller, int userId, IFormCollection? form = null)
         where T : Controller
         => AttachWithGuid(controller, userId, form);
 
-    private T AttachWithGuid<T>(T controller, Guid? userId, IFormCollection? form)
+    private T AttachWithGuid<T>(T controller, int? userId, IFormCollection? form)
         where T : Controller
     {
         var context = new DefaultHttpContext { Session = new TestSession() };

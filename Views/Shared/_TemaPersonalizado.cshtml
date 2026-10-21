@@ -1,7 +1,7 @@
 @inject Empodera.Services.TemaPersonalizadoService TemaPersonalizado
 @* Cores escolhidas pelo usuário logado em Configurações > Cores da plataforma (sobrepõem o tema base de tema.css). *@
 @{
-    var cssPersonalizado = Guid.TryParse(Context.Session.GetString("ID"), out var usuarioTemaId)
+    var cssPersonalizado = int.TryParse(Context.Session.GetString("ID"), out var usuarioTemaId)
         ? TemaPersonalizado.GerarCss(usuarioTemaId)
         : null;
 }

@@ -23,7 +23,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
             Ativo = "S"
         };
 
-        var result = controller.ComunidadesDetalhes(community, Guid.Empty);
+        var result = controller.ComunidadesDetalhes(community, 0);
 
         var redirect = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal(nameof(ComunidadeController.Index), redirect.ActionName);
@@ -75,7 +75,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         Assert.Equal("Em processo", saved.Status);
         Assert.Equal("Polo Comunitário, Avenida Sul, 50, Recife", saved.LocalSecundario);
         Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapaSecundario));
-        Assert.InRange((saved.Dt_Criacao - createdAt).Duration(), TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
+        Assert.InRange((saved.Dt_Criacao - createdAt).Duration(), TimeSpan.Zero, TimeSpan.FromSeconds(1)); // DATETIME sem frações de segundo: o banco arredonda para o segundo
         Assert.Equal("S", saved.Ativo);
         Assert.Equal(TestIds.Seed(1), saved.FK_Id_UsuarioM);
     }
@@ -167,7 +167,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var controller = Attach(new AtividadesController(Db));
         var activity = NewActivity("Atividade criada");
 
-        var result = await controller.Create(activity, new List<Guid> { firstAxis.IdEixo, secondAxis.IdEixo }, community.Id_Comunidade);
+        var result = await controller.Create(activity, new List<int> { firstAxis.IdEixo, secondAxis.IdEixo }, community.Id_Comunidade);
 
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Atividades.SingleAsync(item => item.Nome == activity.Nome);
@@ -192,7 +192,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
 
         var result = await controller.Edit(activity.IdAtividade,
             new Atividades { IdAtividade = activity.IdAtividade, Nome = "Depois", Descricao = "Atualizada" },
-            new List<Guid> { secondAxis.IdEixo }, community.Id_Comunidade);
+            new List<int> { secondAxis.IdEixo }, community.Id_Comunidade);
 
         Assert.IsType<RedirectToActionResult>(result);
         var savedLinks = await Db.AtividadesEixo.Where(item => item.FkIdAtividade == activity.IdAtividade).ToListAsync();

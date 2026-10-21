@@ -29,11 +29,11 @@ public sealed class PersonalProcessCrudTests : ControllerTestBase
         Assert.Equal(nameof(PersonalProcessController.Index), createRedirect.ActionName);
         Db.ChangeTracker.Clear();
         var saved = await Db.DiariosProcessoPessoal.Include(d => d.Eixos).SingleAsync();
-        Assert.NotEqual(Guid.Empty, saved.IdDiarioProcesso);
+        Assert.NotEqual(0, saved.IdDiarioProcesso);
         Assert.Equal(actor.IdAtores, saved.FK_id_Atores);
         Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.Single(saved.Eixos);
-        Assert.NotEqual(Guid.Empty, saved.Eixos[0].IdDiarioProcessoEixo);
+        Assert.NotEqual(0, saved.Eixos[0].IdDiarioProcessoEixo);
         Assert.Equal(firstAxis.IdEixo, saved.Eixos[0].FkIdEixo);
 
         var edit = await controller.Edit(saved.IdDiarioProcesso, new DiarioProcessoPessoal

@@ -34,18 +34,33 @@ public sealed class AuthenticationBoundaryHttpTests : IClassFixture<EmpoderaWebA
         HttpFlowTestSupport.AssertRedirect(protectedPage, "/Account");
     }
 
+    // Status fora de 'S'/'N' não chega mais ao login: o banco recusa (CK_Usuarios_Ativo).
     [Theory]
     [InlineData("")]
     [InlineData("X")]
     [InlineData("n")]
     [InlineData("s")]
-    public async Task Login_RejectsEveryStatusOtherThanCanonicalActive(string? status)
+    public async Task Database_RejectsEveryStatusOtherThanCanonicalValues(string status)
+    {
+        var user = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
+
+        await Assert.ThrowsAsync<DbUpdateException>(() =>
+            HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
+            {
+                var persisted = await db.Usuarios.SingleAsync(candidate => candidate.IdUsuario == user.IdUsuario);
+                persisted.Ativo = status;
+                await db.SaveChangesAsync();
+            }));
+    }
+
+    [Fact]
+    public async Task Login_RejectsInactiveStatus()
     {
         var user = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);
         await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var persisted = await db.Usuarios.SingleAsync(candidate => candidate.IdUsuario == user.IdUsuario);
-            persisted.Ativo = status!;
+            persisted.Ativo = "N";
             await db.SaveChangesAsync();
         });
         using var client = HttpFlowTestSupport.CreateClient(_factory);

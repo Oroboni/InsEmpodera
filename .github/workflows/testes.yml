@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     services:
-      mariadb:
-        image: mariadb:10.4.32
+      mysql:
+        image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: testes_empodera
         ports:
@@ -71,8 +71,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     services:
-      mariadb:
-        image: mariadb:10.4.32
+      mysql:
+        image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: testes_empodera
         ports:
@@ -92,18 +92,18 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Verificar a FK no MariaDB
+      - name: Verificar a FK no MySQL
         env:
           TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
         run: dotnet test scripts/ForeignKey.Tests/ForeignKey.Tests.csproj --configuration Release --logger "console;verbosity=normal"
 
-  banco-mariadb:
-    name: Compatibilidade com MariaDB 10.4.32
+  banco-mysql:
+    name: Compatibilidade com MySQL 8.4 LTS
     runs-on: ubuntu-latest
     timeout-minutes: 25
     services:
-      mariadb:
-        image: mariadb:10.4.32
+      mysql:
+        image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: testes_empodera
         ports:

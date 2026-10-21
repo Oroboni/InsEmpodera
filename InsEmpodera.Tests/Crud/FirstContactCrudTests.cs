@@ -72,7 +72,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         Assert.Equal("Concluida", saved.Status);
         Assert.Equal("Complemento importado", saved.Complemento);
         Assert.Equal("Fonte importada", saved.FonteDados);
-        Assert.InRange((saved.DtCriacao - form.DtCriacao).Duration(), TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
+        Assert.InRange((saved.DtCriacao - form.DtCriacao).Duration(), TimeSpan.Zero, TimeSpan.FromSeconds(1)); // DATETIME sem frações de segundo: o banco arredonda para o segundo
         Assert.Equal(form.FkIdUsuario, saved.FkIdUsuario);
         Assert.Equal(new[] { "Nova" }, await Db.FichaCondicoes.Where(item => item.FkIdFicha == form.IdFicha).Select(item => item.Cond).ToArrayAsync());
         Assert.Equal(new[] { "Nova" }, await Db.FichaPeticoes.Where(item => item.FkIdFicha == form.IdFicha).Select(item => item.Pet).ToArrayAsync());
@@ -149,7 +149,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         return form;
     }
 
-    private static FichaPrimeiroContato NewForm(Guid actorId, Guid communityId) => new()
+    private static FichaPrimeiroContato NewForm(int actorId, int communityId) => new()
     {
         FK_id_Atores = actorId,
         FkIdComunidade = communityId,

@@ -102,7 +102,7 @@ public sealed class CommunityExportAuthorizationHttpTests : IClassFixture<Empode
         Assert.DoesNotContain(otherName, exportedValues);
     }
 
-    private Task<Guid> SeedCommunityAsync(string name, string active) =>
+    private Task<int> SeedCommunityAsync(string name, string active) =>
         HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var community = new Comunidade

@@ -6,11 +6,12 @@ namespace Empodera.Models
 {
     public class Perfil
     {
-        public Guid IdPerfil { get; set; }
-        public Guid FkIdUsuario { get; set; }
+        public int IdPerfil { get; set; }
+        public int? FkIdUsuario { get; set; }
+        [StringLength(100)]
         public string Nome { get; set; } = null!;
         public DateTime DtCriacao { get; set; }
-        public DateTime DtModificacao { get; set; }
+        public DateTime? DtModificacao { get; set; }
 
         public List<Usuario> Usuarios { get; set; } = new();
         public List<Permissoes> Permissoes { get; set; } = new();

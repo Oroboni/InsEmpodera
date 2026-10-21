@@ -33,7 +33,7 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         };
 
         var result = await Attach(new AtividadesController(Db), userId: 2)
-            .Edit(activity.IdAtividade, payload, new List<Guid>(), community.Id_Comunidade);
+            .Edit(activity.IdAtividade, payload, new List<int>(), community.Id_Comunidade);
 
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Atividades.AsNoTracking().SingleAsync(item => item.IdAtividade == activity.IdAtividade);
@@ -132,7 +132,7 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
         Assert.False(await Db.RecursosAtores.AnyAsync(item => item.FK_id_Atores == actor.IdAtores));
     }
 
-    private static AvaliacaoPessoal Assessment(Guid actorId, int score) => new()
+    private static AvaliacaoPessoal Assessment(int actorId, int score) => new()
     {
         FK_id_Atores = actorId,
         CCrimes = score,

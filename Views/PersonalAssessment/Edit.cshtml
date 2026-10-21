@@ -105,7 +105,7 @@
         </div>
 
         <!-- Informações do Sistema -->
-        @if (Model.IdAvaliacao != Guid.Empty)
+        @if (Model.IdAvaliacao != 0)
         {
             <div class="purple-divider"></div>
             <div class="section-label">Informações do Sistema</div>
@@ -138,7 +138,7 @@
                 <div class="input-content">
                     <label>Última Atualização</label>
                     <div class="system-info-display">
-                        <span class="info-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                        <span class="info-date">@Model.DtModificacao?.ToString("dd/MM/yyyy HH:mm")</span>
                         @if (Model.Usuario != null)
                         {
                             <span class="info-user">
@@ -162,7 +162,7 @@
                     <i class="fa-solid fa-edit"></i> Editar
                 </button>
 
-                @if (Model.IdAvaliacao != Guid.Empty)
+                @if (Model.IdAvaliacao != 0)
                 {
                     <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
                         <i class="fa-solid fa-trash"></i> Deletar
@@ -174,7 +174,7 @@
 </form>
 
 <!-- Modal de Confirmação de Exclusão -->
-@if (Model.IdAvaliacao != Guid.Empty)
+@if (Model.IdAvaliacao != 0)
 {
     <div class="modal-overlay" id="deleteConfirmationModal">
         <div class="modal-content">

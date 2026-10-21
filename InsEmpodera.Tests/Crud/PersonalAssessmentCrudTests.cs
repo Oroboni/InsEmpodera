@@ -94,7 +94,7 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
         Assert.IsType<NotFoundResult>(await controller.Delete(TestIds.Missing));
     }
 
-    private static AvaliacaoPessoal NewPersistedAssessment(Guid actorId, int score)
+    private static AvaliacaoPessoal NewPersistedAssessment(int actorId, int score)
     {
         var assessment = NewAssessment(actorId, score);
         assessment.FkIdUsuario = TestIds.Seed(1);
@@ -103,7 +103,7 @@ public sealed class PersonalAssessmentCrudTests : ControllerTestBase
         return assessment;
     }
 
-    private static AvaliacaoPessoal NewAssessment(Guid actorId, int score) => new()
+    private static AvaliacaoPessoal NewAssessment(int actorId, int score) => new()
     {
         FK_id_Atores = actorId,
         CCrimes = score,

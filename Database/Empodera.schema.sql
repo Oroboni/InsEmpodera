@@ -1,725 +1,928 @@
--- Esquema gerado a partir do modelo do EF Core (Data/ApplicationDbContext.cs) para MariaDB 10.4.32.
--- Cria as 34 tabelas e os dados iniciais ficticios: perfis, permissoes e usuarios de exemplo.
--- Execute em um banco vazio. Este script nao apaga bancos existentes.
-
-ALTER DATABASE CHARACTER SET utf8mb4;
-
-
-CREATE TABLE `Eixos` (
-    `IdEixo` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_Eixos` PRIMARY KEY (`IdEixo`)
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Perfis` (
-    `IdPerfil` int NOT NULL AUTO_INCREMENT,
-    `FkIdUsuario` int NOT NULL,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    CONSTRAINT `PK_Perfis` PRIMARY KEY (`IdPerfil`)
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Permissoes` (
-    `IdPermissoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdPerfil` int NOT NULL,
-    `Modulo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PodeListar` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PodeDetalhar` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PodeCriar` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PodeAtualizar` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PodeDeletar` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_Permissoes` PRIMARY KEY (`IdPermissoes`),
-    CONSTRAINT `FK_Permissoes_Perfis_FkIdPerfil` FOREIGN KEY (`FkIdPerfil`) REFERENCES `Perfis` (`IdPerfil`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Usuarios` (
-    `IdUsuario` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Senha` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Foto` longtext CHARACTER SET utf8mb4 NULL,
-    `Email` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Ocupacao` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Genero` int NULL,
-    `DtNascimento` datetime(6) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtAtualizacao` datetime(6) NULL,
-    `Ativo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `IdiomaPreferido` int NOT NULL,
-    `FkIdPerfil` int NOT NULL,
-    `UserName` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `NormalizedUserName` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
-    `NormalizedEmail` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
-    `EmailConfirmed` tinyint(1) NOT NULL,
-    `SecurityStamp` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `ConcurrencyStamp` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PhoneNumber` longtext CHARACTER SET utf8mb4 NULL,
-    `PhoneNumberConfirmed` tinyint(1) NOT NULL,
-    `TwoFactorEnabled` tinyint(1) NOT NULL,
-    `LockoutEnd` datetime(6) NULL,
-    `LockoutEnabled` tinyint(1) NOT NULL,
-    `AccessFailedCount` int NOT NULL,
-    CONSTRAINT `PK_Usuarios` PRIMARY KEY (`IdUsuario`),
-    CONSTRAINT `FK_Usuarios_Perfis_FkIdPerfil` FOREIGN KEY (`FkIdPerfil`) REFERENCES `Perfis` (`IdPerfil`) ON DELETE RESTRICT
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Atores` (
-    `IdAtores` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Genero` int NULL,
-    `Idade` int NULL,
-    `PapelSocial1` longtext CHARACTER SET utf8mb4 NULL,
-    `PapelSocial2` longtext CHARACTER SET utf8mb4 NULL,
-    `interesse` longtext CHARACTER SET utf8mb4 NULL,
-    `Telefone` longtext CHARACTER SET utf8mb4 NULL,
-    `DaEquipe` tinyint(1) NOT NULL,
-    `Rope` tinyint(1) NOT NULL,
-    `Lopiniao` tinyint(1) NOT NULL,
-    `Mcomunidade` tinyint(1) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `Ativo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdUsuario` int NOT NULL,
-    `FkIdUsuarioM` int NULL,
-    CONSTRAINT `PK_Atores` PRIMARY KEY (`IdAtores`),
-    CONSTRAINT `FK_Atores_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE,
-    CONSTRAINT `FK_Atores_Usuarios_FkIdUsuarioM` FOREIGN KEY (`FkIdUsuarioM`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Comunidades` (
-    `Id_Comunidade` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Local` longtext CHARACTER SET utf8mb4 NULL,
-    `LocalMapa` longtext CHARACTER SET utf8mb4 NULL,
-    `LocalSecundario` longtext CHARACTER SET utf8mb4 NULL,
-    `LocalMapaSecundario` longtext CHARACTER SET utf8mb4 NULL,
-    `Status` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Complemento` longtext CHARACTER SET utf8mb4 NULL,
-    `Descricao` longtext CHARACTER SET utf8mb4 NULL,
-    `Descricao_Acessibilidade` longtext CHARACTER SET utf8mb4 NULL,
-    `Dt_Criacao` datetime(6) NOT NULL,
-    `Dt_Modificacao` datetime(6) NOT NULL,
-    `FK_Id_Usuario` int NOT NULL,
-    `FK_Id_UsuarioM` int NULL,
-    `Ativo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_Comunidades` PRIMARY KEY (`Id_Comunidade`),
-    CONSTRAINT `FK_Comunidades_Usuarios_FK_Id_Usuario` FOREIGN KEY (`FK_Id_Usuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE,
-    CONSTRAINT `FK_Comunidades_Usuarios_FK_Id_UsuarioM` FOREIGN KEY (`FK_Id_UsuarioM`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `AvaliacaoPessoal` (
-    `IdAvaliacao` int NOT NULL AUTO_INCREMENT,
-    `FK_id_Atores` int NOT NULL,
-    `CCrimes` int NOT NULL,
-    `Substancias` int NOT NULL,
-    `Moradia` int NOT NULL,
-    `Prevencao` int NOT NULL,
-    `AssBasica` int NOT NULL,
-    `Educacao` int NOT NULL,
-    `Saude` int NOT NULL,
-    `Ocupacao` int NOT NULL,
-    `Lazer` int NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` int NOT NULL,
-    CONSTRAINT `PK_AvaliacaoPessoal` PRIMARY KEY (`IdAvaliacao`),
-    CONSTRAINT `FK_AvaliacaoPessoal_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
-    CONSTRAINT `FK_AvaliacaoPessoal_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `diariosprocessopessoal` (
-    `IdDiarioProcesso` int NOT NULL AUTO_INCREMENT,
-    `FK_id_Atores` int NOT NULL,
-    `Data` datetime(6) NOT NULL,
-    `Descricao` varchar(4000) CHARACTER SET utf8mb4 NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` int NOT NULL,
-    `FkIdUsuarioM` int NULL,
-    CONSTRAINT `PK_diariosprocessopessoal` PRIMARY KEY (`IdDiarioProcesso`),
-    CONSTRAINT `FK_diariosprocessopessoal_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
-    CONSTRAINT `FK_diariosprocessopessoal_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT,
-    CONSTRAINT `FK_diariosprocessopessoal_Usuarios_FkIdUsuarioM` FOREIGN KEY (`FkIdUsuarioM`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `RecursosAtores` (
-    `Id_Recursos_Atores` int NOT NULL AUTO_INCREMENT,
-    `FK_id_Atores` int NOT NULL,
-    `Tipo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Pode` longtext CHARACTER SET utf8mb4 NULL,
-    CONSTRAINT `PK_RecursosAtores` PRIMARY KEY (`Id_Recursos_Atores`),
-    CONSTRAINT `FK_RecursosAtores_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `RedesPrimarias` (
-    `IdRedePrimaria` int NOT NULL AUTO_INCREMENT,
-    `FkIdAtorPrincipal` int NOT NULL,
-    `FkIdAtorRelacionados` int NOT NULL,
-    `TipoRelacao` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `TipoRede` varchar(20) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'Primaria',
-    CONSTRAINT `PK_RedesPrimarias` PRIMARY KEY (`IdRedePrimaria`),
-    CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorPrincipal` FOREIGN KEY (`FkIdAtorPrincipal`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT,
-    CONSTRAINT `FK_RedesPrimarias_Atores_FkIdAtorRelacionados` FOREIGN KEY (`FkIdAtorRelacionados`) REFERENCES `Atores` (`IdAtores`) ON DELETE RESTRICT
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Atividades` (
-    `IdAtividade` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Descricao` longtext CHARACTER SET utf8mb4 NULL,
-    `Foto` longtext CHARACTER SET utf8mb4 NULL,
-    `FkIdComunidade` int NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` int NOT NULL,
-    `FkIdUsuarioM` int NULL,
-    CONSTRAINT `PK_Atividades` PRIMARY KEY (`IdAtividade`),
-    CONSTRAINT `FK_Atividades_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
-    CONSTRAINT `FK_Atividades_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE,
-    CONSTRAINT `FK_Atividades_Usuarios_FkIdUsuarioM` FOREIGN KEY (`FkIdUsuarioM`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE RESTRICT
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `AtorComunidades` (
-    `IdAtorComunidade` int NOT NULL AUTO_INCREMENT,
-    `FkIdComunidade` int NOT NULL,
-    `FK_id_Atores` int NOT NULL,
-    `TipoRelacionamento` int NULL,
-    CONSTRAINT `PK_AtorComunidades` PRIMARY KEY (`IdAtorComunidade`),
-    CONSTRAINT `FK_AtorComunidades_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
-    CONSTRAINT `FK_AtorComunidades_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DiariosCampo` (
-    `IdDCampo` int NOT NULL AUTO_INCREMENT,
-    `FkIdComunidade` int NOT NULL,
-    `Data` datetime(6) NOT NULL,
-    `Descricao` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Localizacao` longtext CHARACTER SET utf8mb4 NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `Foto` longtext CHARACTER SET utf8mb4 NULL,
-    `FkIdUsuario` int NOT NULL,
-    CONSTRAINT `PK_DiariosCampo` PRIMARY KEY (`IdDCampo`),
-    CONSTRAINT `FK_DiariosCampo_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
-    CONSTRAINT `FK_DiariosCampo_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `FichasPrimeiroContato` (
-    `IdFicha` int NOT NULL AUTO_INCREMENT,
-    `FK_id_Atores` int NOT NULL,
-    `Endereco` longtext CHARACTER SET utf8mb4 NULL,
-    `Complemento` longtext CHARACTER SET utf8mb4 NULL,
-    `Emprego` longtext CHARACTER SET utf8mb4 NULL,
-    `CEstabeleceu` longtext CHARACTER SET utf8mb4 NULL,
-    `NovoParceiro` longtext CHARACTER SET utf8mb4 NULL,
-    `FornecidoParceiro` longtext CHARACTER SET utf8mb4 NULL,
-    `Telefone` longtext CHARACTER SET utf8mb4 NULL,
-    `LContato` longtext CHARACTER SET utf8mb4 NULL,
-    `FonteDados` longtext CHARACTER SET utf8mb4 NULL,
-    `EstaFamiliar` longtext CHARACTER SET utf8mb4 NULL,
-    `EstruFamiliar` longtext CHARACTER SET utf8mb4 NULL,
-    `NFIlhos` int NULL,
-    `NFilhas` int NULL,
-    `AEscolar` int NULL,
-    `Status` longtext CHARACTER SET utf8mb4 NULL,
-    `SLer` longtext CHARACTER SET utf8mb4 NULL,
-    `SCalc` longtext CHARACTER SET utf8mb4 NULL,
-    `SComp` longtext CHARACTER SET utf8mb4 NULL,
-    `QReabili` int NULL,
-    `LTrat` longtext CHARACTER SET utf8mb4 NULL,
-    `Coment` longtext CHARACTER SET utf8mb4 NULL,
-    `DtContato` datetime(6) NOT NULL,
-    `HoraContato` time(6) NOT NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `FkIdComunidade` int NULL,
-    `FkIdUsuario` int NOT NULL,
-    CONSTRAINT `PK_FichasPrimeiroContato` PRIMARY KEY (`IdFicha`),
-    CONSTRAINT `FK_FichasPrimeiroContato_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
-    CONSTRAINT `FK_FichasPrimeiroContato_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
-    CONSTRAINT `FK_FichasPrimeiroContato_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `RedeRecursos` (
-    `Id_Rede` int NOT NULL AUTO_INCREMENT,
-    `FK_id_Atores` int NULL,
-    `FkIdComunidade` int NOT NULL,
-    `Nome` longtext CHARACTER SET utf8mb4 NULL,
-    `Tipo` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Dispositivo` longtext CHARACTER SET utf8mb4 NULL,
-    `Localizacao` longtext CHARACTER SET utf8mb4 NULL,
-    `Servicos` longtext CHARACTER SET utf8mb4 NULL,
-    `DtCriacao` datetime(6) NOT NULL,
-    `DtModificacao` datetime(6) NOT NULL,
-    `FkIdUsuario` int NOT NULL,
-    CONSTRAINT `PK_RedeRecursos` PRIMARY KEY (`Id_Rede`),
-    CONSTRAINT `FK_RedeRecursos_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
-    CONSTRAINT `FK_RedeRecursos_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE,
-    CONSTRAINT `FK_RedeRecursos_Usuarios_FkIdUsuario` FOREIGN KEY (`FkIdUsuario`) REFERENCES `Usuarios` (`IdUsuario`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Vulnerabilidades` (
-    `IdVulnerabilidade` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Localizacao` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Servicos` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdComunidade` int NOT NULL,
-    CONSTRAINT `PK_Vulnerabilidades` PRIMARY KEY (`IdVulnerabilidade`),
-    CONSTRAINT `FK_Vulnerabilidades_Comunidades_FkIdComunidade` FOREIGN KEY (`FkIdComunidade`) REFERENCES `Comunidades` (`Id_Comunidade`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `diariosprocessoeixos` (
-    `IdDiarioProcessoEixo` int NOT NULL AUTO_INCREMENT,
-    `FkIdDiarioProcesso` int NOT NULL,
-    `FkIdEixo` int NOT NULL,
-    CONSTRAINT `PK_diariosprocessoeixos` PRIMARY KEY (`IdDiarioProcessoEixo`),
-    CONSTRAINT `FK_diariosprocessoeixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE,
-    CONSTRAINT `FK_diariosprocessoeixos_diariosprocessopessoal_FkIdDiarioProces~` FOREIGN KEY (`FkIdDiarioProcesso`) REFERENCES `diariosprocessopessoal` (`IdDiarioProcesso`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `Acoes` (
-    `IdAcoes` int NOT NULL AUTO_INCREMENT,
-    `Quantidade` int NOT NULL,
-    `FkIdAtividade` int NOT NULL,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Provedor` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_Acoes` PRIMARY KEY (`IdAcoes`),
-    CONSTRAINT `FK_Acoes_Atividades_FkIdAtividade` FOREIGN KEY (`FkIdAtividade`) REFERENCES `Atividades` (`IdAtividade`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `AtividadesEixo` (
-    `IdAEixo` int NOT NULL AUTO_INCREMENT,
-    `FkIdEixo` int NOT NULL,
-    `FkIdAtividade` int NOT NULL,
-    CONSTRAINT `PK_AtividadesEixo` PRIMARY KEY (`IdAEixo`),
-    CONSTRAINT `FK_AtividadesEixo_Atividades_FkIdAtividade` FOREIGN KEY (`FkIdAtividade`) REFERENCES `Atividades` (`IdAtividade`) ON DELETE CASCADE,
-    CONSTRAINT `FK_AtividadesEixo_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `AnexosDiario` (
-    `IdAnexos` int NOT NULL AUTO_INCREMENT,
-    `FkIdDiario` int NOT NULL,
-    `Caminho` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_AnexosDiario` PRIMARY KEY (`IdAnexos`),
-    CONSTRAINT `FK_AnexosDiario_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DiarioDAcoes` (
-    `IdDAcoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdDiario` int NOT NULL,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PeovedorEx` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Quantidade` int NOT NULL,
-    CONSTRAINT `PK_DiarioDAcoes` PRIMARY KEY (`IdDAcoes`),
-    CONSTRAINT `FK_DiarioDAcoes_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DiarioEixos` (
-    `IdDiarioEixo` int NOT NULL AUTO_INCREMENT,
-    `FkIdDiario` int NOT NULL,
-    `FkIdEixo` int NOT NULL,
-    CONSTRAINT `PK_DiarioEixos` PRIMARY KEY (`IdDiarioEixo`),
-    CONSTRAINT `FK_DiarioEixos_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE,
-    CONSTRAINT `FK_DiarioEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `FichaCondicoes` (
-    `IdCondicoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdFicha` int NOT NULL,
-    `Cond` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_FichaCondicoes` PRIMARY KEY (`IdCondicoes`),
-    CONSTRAINT `FK_FichaCondicoes_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `FichaPeticoes` (
-    `IdPeticoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdFicha` int NOT NULL,
-    `Pet` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_FichaPeticoes` PRIMARY KEY (`IdPeticoes`),
-    CONSTRAINT `FK_FichaPeticoes_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `FichaRespostas` (
-    `IdCondicoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdFicha` int NOT NULL,
-    `Resp` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_FichaRespostas` PRIMARY KEY (`IdCondicoes`),
-    CONSTRAINT `FK_FichaRespostas_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `FichaResultados` (
-    `IdCondicoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdFicha` int NOT NULL,
-    `Result` longtext CHARACTER SET utf8mb4 NOT NULL,
-    CONSTRAINT `PK_FichaResultados` PRIMARY KEY (`IdCondicoes`),
-    CONSTRAINT `FK_FichaResultados_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `FontesInfo` (
-    `IdFonte` int NOT NULL AUTO_INCREMENT,
-    `FkIdFicha` int NOT NULL,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Genero` int NULL,
-    `Idade` int NOT NULL,
-    `PapelSocial1` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `PapelSocial2` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Interesse` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Telefone` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Extra` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `Fk_Id_Ator` int NOT NULL,
-    `AtorIdAtores` int NULL,
-    CONSTRAINT `PK_FontesInfo` PRIMARY KEY (`IdFonte`),
-    CONSTRAINT `FK_FontesInfo_Atores_AtorIdAtores` FOREIGN KEY (`AtorIdAtores`) REFERENCES `Atores` (`IdAtores`),
-    CONSTRAINT `FK_FontesInfo_FichasPrimeiroContato_FkIdFicha` FOREIGN KEY (`FkIdFicha`) REFERENCES `FichasPrimeiroContato` (`IdFicha`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `RedeEixos` (
-    `IdRedeEixo` int NOT NULL AUTO_INCREMENT,
-    `FkIdRede` int NOT NULL,
-    `FkIdEixo` int NOT NULL,
-    CONSTRAINT `PK_RedeEixos` PRIMARY KEY (`IdRedeEixo`),
-    CONSTRAINT `FK_RedeEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE,
-    CONSTRAINT `FK_RedeEixos_RedeRecursos_FkIdRede` FOREIGN KEY (`FkIdRede`) REFERENCES `RedeRecursos` (`Id_Rede`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `VulnerabilidadesEixo` (
-    `IdVEixo` int NOT NULL AUTO_INCREMENT,
-    `FkIdEixo` int NOT NULL,
-    `FkIdVulnerabilidade` int NOT NULL,
-    CONSTRAINT `PK_VulnerabilidadesEixo` PRIMARY KEY (`IdVEixo`),
-    CONSTRAINT `FK_VulnerabilidadesEixo_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE,
-    CONSTRAINT `FK_VulnerabilidadesEixo_Vulnerabilidades_FkIdVulnerabilidade` FOREIGN KEY (`FkIdVulnerabilidade`) REFERENCES `Vulnerabilidades` (`IdVulnerabilidade`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `AcoesAtores` (
-    `IdAAtores` int NOT NULL AUTO_INCREMENT,
-    `FK_id_Atores` int NOT NULL,
-    `FkIdAcoes` int NOT NULL,
-    CONSTRAINT `PK_AcoesAtores` PRIMARY KEY (`IdAAtores`),
-    CONSTRAINT `FK_AcoesAtores_Acoes_FkIdAcoes` FOREIGN KEY (`FkIdAcoes`) REFERENCES `Acoes` (`IdAcoes`) ON DELETE CASCADE,
-    CONSTRAINT `FK_AcoesAtores_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DiarioAcoes` (
-    `IdDAcoes` int NOT NULL AUTO_INCREMENT,
-    `FkIdAcoes` int NOT NULL,
-    `FkIdDiario` int NOT NULL,
-    CONSTRAINT `PK_DiarioAcoes` PRIMARY KEY (`IdDAcoes`),
-    CONSTRAINT `FK_DiarioAcoes_Acoes_FkIdAcoes` FOREIGN KEY (`FkIdAcoes`) REFERENCES `Acoes` (`IdAcoes`) ON DELETE CASCADE,
-    CONSTRAINT `FK_DiarioAcoes_DiariosCampo_FkIdDiario` FOREIGN KEY (`FkIdDiario`) REFERENCES `DiariosCampo` (`IdDCampo`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DAAtores` (
-    `Id` int NOT NULL AUTO_INCREMENT,
-    `FkIdDDacoes` int NOT NULL,
-    `FK_id_Atores` int NOT NULL,
-    CONSTRAINT `PK_DAAtores` PRIMARY KEY (`Id`),
-    CONSTRAINT `FK_DAAtores_Atores_FK_id_Atores` FOREIGN KEY (`FK_id_Atores`) REFERENCES `Atores` (`IdAtores`) ON DELETE CASCADE,
-    CONSTRAINT `FK_DAAtores_DiarioDAcoes_FkIdDDacoes` FOREIGN KEY (`FkIdDDacoes`) REFERENCES `DiarioDAcoes` (`IdDAcoes`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DetalhesDAcoes` (
-    `Id` int NOT NULL AUTO_INCREMENT,
-    `Nome` longtext CHARACTER SET utf8mb4 NOT NULL,
-    `FkIdDDacoes` int NOT NULL,
-    CONSTRAINT `PK_DetalhesDAcoes` PRIMARY KEY (`Id`),
-    CONSTRAINT `FK_DetalhesDAcoes_DiarioDAcoes_FkIdDDacoes` FOREIGN KEY (`FkIdDDacoes`) REFERENCES `DiarioDAcoes` (`IdDAcoes`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-CREATE TABLE `DetalhesEixos` (
-    `IdDiarioEixo` int NOT NULL AUTO_INCREMENT,
-    `FkIdDetalhes` int NOT NULL,
-    `FkIdEixo` int NOT NULL,
-    CONSTRAINT `PK_DetalhesEixos` PRIMARY KEY (`IdDiarioEixo`),
-    CONSTRAINT `FK_DetalhesEixos_DetalhesDAcoes_FkIdDetalhes` FOREIGN KEY (`FkIdDetalhes`) REFERENCES `DetalhesDAcoes` (`Id`) ON DELETE CASCADE,
-    CONSTRAINT `FK_DetalhesEixos_Eixos_FkIdEixo` FOREIGN KEY (`FkIdEixo`) REFERENCES `Eixos` (`IdEixo`) ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
-
-
-INSERT INTO `Perfis` (`IdPerfil`, `DtCriacao`, `DtModificacao`, `FkIdUsuario`, `Nome`)
-VALUES (1, TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '0001-01-01 00:00:00', 1, 'Admin'),
-(2, TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '0001-01-01 00:00:00', 2, 'Editor'),
-(3, TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '0001-01-01 00:00:00', 3, 'Colaborador'),
-(4, TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '0001-01-01 00:00:00', 4, 'Visualizador'),
-(5, TIMESTAMP '0001-01-01 00:00:00', TIMESTAMP '0001-01-01 00:00:00', 5, 'Supervisor');
-
-
-INSERT INTO `Permissoes` (`IdPermissoes`, `FkIdPerfil`, `Modulo`, `PodeAtualizar`, `PodeCriar`, `PodeDeletar`, `PodeDetalhar`, `PodeListar`)
-VALUES (1, 1, 'Usuarios', 'S', 'S', 'S', 'S', 'S'),
-(2, 1, 'Perfis', 'S', 'S', 'S', 'S', 'S'),
-(3, 1, 'Atividades', 'S', 'S', 'S', 'S', 'S'),
-(4, 1, 'Comunidades', 'S', 'S', 'S', 'S', 'S'),
-(5, 1, 'Vulnerabilidades', 'S', 'S', 'S', 'S', 'S'),
-(6, 1, 'Recursos', 'S', 'S', 'S', 'S', 'S'),
-(7, 1, 'DiariosCampo', 'S', 'S', 'S', 'S', 'S'),
-(8, 1, 'Atores', 'S', 'S', 'S', 'S', 'S'),
-(9, 1, 'Ficha1Contato', 'S', 'S', 'S', 'S', 'S'),
-(10, 1, 'DiariosProcessoPessoal', 'S', 'S', 'S', 'S', 'S'),
-(11, 1, 'AvaliacoesPessoais', 'S', 'S', 'S', 'S', 'S'),
-(12, 1, 'SER', 'S', 'S', 'S', 'S', 'S'),
-(13, 2, 'Usuarios', 'S', 'S', 'N', 'S', 'S'),
-(14, 2, 'Perfis', 'S', 'S', 'N', 'S', 'S'),
-(15, 2, 'Atividades', 'S', 'S', 'N', 'S', 'S'),
-(16, 2, 'Comunidades', 'S', 'S', 'N', 'S', 'S'),
-(17, 2, 'Vulnerabilidades', 'S', 'S', 'N', 'S', 'S'),
-(18, 2, 'Recursos', 'S', 'S', 'N', 'S', 'S'),
-(19, 2, 'DiariosCampo', 'S', 'S', 'N', 'S', 'S'),
-(20, 2, 'Atores', 'S', 'S', 'N', 'S', 'S'),
-(21, 2, 'Ficha1Contato', 'S', 'S', 'N', 'S', 'S'),
-(22, 2, 'DiariosProcessoPessoal', 'S', 'S', 'N', 'S', 'S'),
-(23, 2, 'AvaliacoesPessoais', 'S', 'S', 'N', 'S', 'S'),
-(24, 2, 'SER', 'S', 'S', 'N', 'S', 'S'),
-(25, 3, 'Usuarios', 'N', 'N', 'N', 'S', 'S'),
-(26, 3, 'Perfis', 'N', 'N', 'N', 'S', 'S'),
-(27, 3, 'Atividades', 'N', 'N', 'N', 'S', 'S'),
-(28, 3, 'Comunidades', 'N', 'N', 'N', 'S', 'S'),
-(29, 3, 'Vulnerabilidades', 'N', 'N', 'N', 'S', 'S'),
-(30, 3, 'Recursos', 'N', 'N', 'N', 'S', 'S'),
-(31, 3, 'DiariosCampo', 'N', 'N', 'N', 'S', 'S'),
-(32, 3, 'Atores', 'N', 'N', 'N', 'S', 'S'),
-(33, 3, 'Ficha1Contato', 'N', 'N', 'N', 'S', 'S'),
-(34, 3, 'DiariosProcessoPessoal', 'N', 'N', 'N', 'S', 'S'),
-(35, 3, 'AvaliacoesPessoais', 'N', 'N', 'N', 'S', 'S'),
-(36, 3, 'SER', 'N', 'N', 'N', 'S', 'S'),
-(37, 4, 'Usuarios', 'N', 'N', 'N', 'N', 'S'),
-(38, 4, 'Perfis', 'N', 'N', 'N', 'N', 'S'),
-(39, 4, 'Atividades', 'N', 'N', 'N', 'N', 'S'),
-(40, 4, 'Comunidades', 'N', 'N', 'N', 'N', 'S'),
-(41, 4, 'Vulnerabilidades', 'N', 'N', 'N', 'N', 'S'),
-(42, 4, 'Recursos', 'N', 'N', 'N', 'N', 'S');
-INSERT INTO `Permissoes` (`IdPermissoes`, `FkIdPerfil`, `Modulo`, `PodeAtualizar`, `PodeCriar`, `PodeDeletar`, `PodeDetalhar`, `PodeListar`)
-VALUES (43, 4, 'DiariosCampo', 'N', 'N', 'N', 'N', 'S'),
-(44, 4, 'Atores', 'N', 'N', 'N', 'N', 'S'),
-(45, 4, 'Ficha1Contato', 'N', 'N', 'N', 'N', 'S'),
-(46, 4, 'DiariosProcessoPessoal', 'N', 'N', 'N', 'N', 'S'),
-(47, 4, 'AvaliacoesPessoais', 'N', 'N', 'N', 'N', 'S'),
-(48, 4, 'SER', 'N', 'N', 'N', 'N', 'S'),
-(49, 5, 'Usuarios', 'S', 'S', 'N', 'S', 'S'),
-(50, 5, 'Perfis', 'S', 'S', 'N', 'S', 'S'),
-(51, 5, 'Atividades', 'S', 'S', 'N', 'S', 'S'),
-(52, 5, 'Comunidades', 'S', 'S', 'N', 'S', 'S'),
-(53, 5, 'Vulnerabilidades', 'S', 'S', 'N', 'S', 'S'),
-(54, 5, 'Recursos', 'S', 'S', 'N', 'S', 'S'),
-(55, 5, 'DiariosCampo', 'S', 'S', 'N', 'S', 'S'),
-(56, 5, 'Atores', 'S', 'S', 'N', 'S', 'S'),
-(57, 5, 'Ficha1Contato', 'S', 'S', 'N', 'S', 'S'),
-(58, 5, 'DiariosProcessoPessoal', 'S', 'S', 'N', 'S', 'S'),
-(59, 5, 'AvaliacoesPessoais', 'S', 'S', 'N', 'S', 'S'),
-(60, 5, 'SER', 'S', 'S', 'N', 'S', 'S');
-
-
-INSERT INTO `Usuarios` (`IdUsuario`, `AccessFailedCount`, `Ativo`, `ConcurrencyStamp`, `DtAtualizacao`, `DtCriacao`, `DtNascimento`, `Email`, `EmailConfirmed`, `FkIdPerfil`, `Foto`, `Genero`, `IdiomaPreferido`, `LockoutEnabled`, `LockoutEnd`, `Nome`, `NormalizedEmail`, `NormalizedUserName`, `Ocupacao`, `PhoneNumber`, `PhoneNumberConfirmed`, `SecurityStamp`, `Senha`, `TwoFactorEnabled`, `UserName`)
-VALUES (1, 0, 'S', 'seed-concurrency-stamp-1', TIMESTAMP '2025-01-01 00:00:00', TIMESTAMP '2024-01-01 00:00:00', TIMESTAMP '1990-01-01 00:00:00', 'joao@email.com', TRUE, 1, 'foto1.jpg', 1, 0, TRUE, NULL, 'joao', 'JOAO@EMAIL.COM', 'JOAO@EMAIL.COM', 'Coordenador', NULL, FALSE, 'seed-security-stamp-1', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'joao@email.com'),
-(2, 0, 'S', 'seed-concurrency-stamp-2', TIMESTAMP '2025-02-01 00:00:00', TIMESTAMP '2024-02-01 00:00:00', TIMESTAMP '1985-02-02 00:00:00', 'u2@example.com', TRUE, 2, 'foto2.jpg', 2, 0, TRUE, NULL, 'Usuario Dois', 'U2@EXAMPLE.COM', 'U2@EXAMPLE.COM', 'Pesquisador', NULL, FALSE, 'seed-security-stamp-2', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u2@example.com'),
-(3, 0, 'S', 'seed-concurrency-stamp-3', TIMESTAMP '2025-03-01 00:00:00', TIMESTAMP '2024-03-01 00:00:00', TIMESTAMP '1995-03-03 00:00:00', 'u3@example.com', TRUE, 3, 'foto3.jpg', 1, 0, TRUE, NULL, 'Usuario Tres', 'U3@EXAMPLE.COM', 'U3@EXAMPLE.COM', 'Voluntario', NULL, FALSE, 'seed-security-stamp-3', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u3@example.com'),
-(4, 0, 'N', 'seed-concurrency-stamp-4', TIMESTAMP '2025-04-01 00:00:00', TIMESTAMP '2024-04-01 00:00:00', TIMESTAMP '1992-04-04 00:00:00', 'u4@example.com', TRUE, 4, 'foto4.jpg', 2, 0, TRUE, NULL, 'Usuario Quatro', 'U4@EXAMPLE.COM', 'U4@EXAMPLE.COM', 'Analista', NULL, FALSE, 'seed-security-stamp-4', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u4@example.com'),
-(5, 0, 'N', 'seed-concurrency-stamp-5', TIMESTAMP '2025-05-01 00:00:00', TIMESTAMP '2024-05-01 00:00:00', TIMESTAMP '1988-05-05 00:00:00', 'u5@example.com', TRUE, 5, 'foto5.jpg', 1, 0, TRUE, NULL, 'Usuario Cinco', 'U5@EXAMPLE.COM', 'U5@EXAMPLE.COM', 'Gerente', NULL, FALSE, 'seed-security-stamp-5', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', FALSE, 'u5@example.com');
-
-
-CREATE INDEX `IX_Acoes_FkIdAtividade` ON `Acoes` (`FkIdAtividade`);
-
-
-CREATE INDEX `IX_AcoesAtores_FK_id_Atores` ON `AcoesAtores` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_AcoesAtores_FkIdAcoes` ON `AcoesAtores` (`FkIdAcoes`);
-
-
-CREATE INDEX `IX_AnexosDiario_FkIdDiario` ON `AnexosDiario` (`FkIdDiario`);
-
-
-CREATE INDEX `IX_Atividades_FkIdComunidade` ON `Atividades` (`FkIdComunidade`);
-
-
-CREATE INDEX `IX_Atividades_FkIdUsuario` ON `Atividades` (`FkIdUsuario`);
-
-
-CREATE INDEX `IX_Atividades_FkIdUsuarioM` ON `Atividades` (`FkIdUsuarioM`);
-
-
-CREATE INDEX `IX_AtividadesEixo_FkIdAtividade` ON `AtividadesEixo` (`FkIdAtividade`);
-
-
-CREATE INDEX `IX_AtividadesEixo_FkIdEixo` ON `AtividadesEixo` (`FkIdEixo`);
-
-
-CREATE INDEX `IX_AtorComunidades_FK_id_Atores` ON `AtorComunidades` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_AtorComunidades_FkIdComunidade` ON `AtorComunidades` (`FkIdComunidade`);
-
-
-CREATE INDEX `IX_Atores_FkIdUsuario` ON `Atores` (`FkIdUsuario`);
-
-
-CREATE INDEX `IX_Atores_FkIdUsuarioM` ON `Atores` (`FkIdUsuarioM`);
-
-
-CREATE INDEX `IX_AvaliacaoPessoal_FK_id_Atores` ON `AvaliacaoPessoal` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_AvaliacaoPessoal_FkIdUsuario` ON `AvaliacaoPessoal` (`FkIdUsuario`);
-
-
-CREATE INDEX `IX_Comunidades_FK_Id_Usuario` ON `Comunidades` (`FK_Id_Usuario`);
-
-
-CREATE INDEX `IX_Comunidades_FK_Id_UsuarioM` ON `Comunidades` (`FK_Id_UsuarioM`);
-
-
-CREATE INDEX `IX_DAAtores_FK_id_Atores` ON `DAAtores` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_DAAtores_FkIdDDacoes` ON `DAAtores` (`FkIdDDacoes`);
-
-
-CREATE INDEX `IX_DetalhesDAcoes_FkIdDDacoes` ON `DetalhesDAcoes` (`FkIdDDacoes`);
-
-
-CREATE INDEX `IX_DetalhesEixos_FkIdDetalhes` ON `DetalhesEixos` (`FkIdDetalhes`);
-
-
-CREATE INDEX `IX_DetalhesEixos_FkIdEixo` ON `DetalhesEixos` (`FkIdEixo`);
-
-
-CREATE INDEX `IX_DiarioAcoes_FkIdAcoes` ON `DiarioAcoes` (`FkIdAcoes`);
-
-
-CREATE INDEX `IX_DiarioAcoes_FkIdDiario` ON `DiarioAcoes` (`FkIdDiario`);
-
-
-CREATE INDEX `IX_DiarioDAcoes_FkIdDiario` ON `DiarioDAcoes` (`FkIdDiario`);
-
-
-CREATE INDEX `IX_DiarioEixos_FkIdDiario` ON `DiarioEixos` (`FkIdDiario`);
-
-
-CREATE INDEX `IX_DiarioEixos_FkIdEixo` ON `DiarioEixos` (`FkIdEixo`);
-
-
-CREATE INDEX `IX_DiariosCampo_FkIdComunidade` ON `DiariosCampo` (`FkIdComunidade`);
-
-
-CREATE INDEX `IX_DiariosCampo_FkIdUsuario` ON `DiariosCampo` (`FkIdUsuario`);
-
-
-CREATE UNIQUE INDEX `IX_diariosprocessoeixos_FkIdDiarioProcesso_FkIdEixo` ON `diariosprocessoeixos` (`FkIdDiarioProcesso`, `FkIdEixo`);
-
-
-CREATE INDEX `IX_diariosprocessoeixos_FkIdEixo` ON `diariosprocessoeixos` (`FkIdEixo`);
-
-
-CREATE INDEX `IX_diariosprocessopessoal_FK_id_Atores` ON `diariosprocessopessoal` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_diariosprocessopessoal_FkIdUsuario` ON `diariosprocessopessoal` (`FkIdUsuario`);
-
-
-CREATE INDEX `IX_diariosprocessopessoal_FkIdUsuarioM` ON `diariosprocessopessoal` (`FkIdUsuarioM`);
-
-
-CREATE INDEX `IX_FichaCondicoes_FkIdFicha` ON `FichaCondicoes` (`FkIdFicha`);
-
-
-CREATE INDEX `IX_FichaPeticoes_FkIdFicha` ON `FichaPeticoes` (`FkIdFicha`);
-
-
-CREATE INDEX `IX_FichaRespostas_FkIdFicha` ON `FichaRespostas` (`FkIdFicha`);
-
-
-CREATE INDEX `IX_FichaResultados_FkIdFicha` ON `FichaResultados` (`FkIdFicha`);
-
-
-CREATE INDEX `IX_FichasPrimeiroContato_FK_id_Atores` ON `FichasPrimeiroContato` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_FichasPrimeiroContato_FkIdComunidade` ON `FichasPrimeiroContato` (`FkIdComunidade`);
-
-
-CREATE INDEX `IX_FichasPrimeiroContato_FkIdUsuario` ON `FichasPrimeiroContato` (`FkIdUsuario`);
-
-
-CREATE INDEX `IX_FontesInfo_AtorIdAtores` ON `FontesInfo` (`AtorIdAtores`);
-
-
-CREATE INDEX `IX_FontesInfo_FkIdFicha` ON `FontesInfo` (`FkIdFicha`);
-
-
-CREATE INDEX `IX_Permissoes_FkIdPerfil` ON `Permissoes` (`FkIdPerfil`);
-
-
-CREATE INDEX `IX_RecursosAtores_FK_id_Atores` ON `RecursosAtores` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_RedeEixos_FkIdEixo` ON `RedeEixos` (`FkIdEixo`);
-
-
-CREATE INDEX `IX_RedeEixos_FkIdRede` ON `RedeEixos` (`FkIdRede`);
-
-
-CREATE INDEX `IX_RedeRecursos_FK_id_Atores` ON `RedeRecursos` (`FK_id_Atores`);
-
-
-CREATE INDEX `IX_RedeRecursos_FkIdComunidade` ON `RedeRecursos` (`FkIdComunidade`);
-
-
-CREATE INDEX `IX_RedeRecursos_FkIdUsuario` ON `RedeRecursos` (`FkIdUsuario`);
-
-
-CREATE INDEX `IX_RedesPrimarias_FkIdAtorPrincipal` ON `RedesPrimarias` (`FkIdAtorPrincipal`);
-
-
-CREATE INDEX `IX_RedesPrimarias_FkIdAtorRelacionados` ON `RedesPrimarias` (`FkIdAtorRelacionados`);
-
-
-CREATE INDEX `IX_Usuarios_FkIdPerfil` ON `Usuarios` (`FkIdPerfil`);
-
-
-CREATE UNIQUE INDEX `IX_Usuarios_NormalizedEmail` ON `Usuarios` (`NormalizedEmail`);
-
-
-CREATE UNIQUE INDEX `IX_Usuarios_NormalizedUserName` ON `Usuarios` (`NormalizedUserName`);
-
-
-CREATE INDEX `IX_Vulnerabilidades_FkIdComunidade` ON `Vulnerabilidades` (`FkIdComunidade`);
-
-
-CREATE INDEX `IX_VulnerabilidadesEixo_FkIdEixo` ON `VulnerabilidadesEixo` (`FkIdEixo`);
-
-
-CREATE INDEX `IX_VulnerabilidadesEixo_FkIdVulnerabilidade` ON `VulnerabilidadesEixo` (`FkIdVulnerabilidade`);
-
+-- =====================================================================
+-- EcoRedes / Empodera — esquema do banco (MySQL 8.4 LTS ou posterior)
+-- Gerado por scripts/GerarSchema a partir de Data/ApplicationDbContext*.cs.
+-- Não edite à mão: altere o modelo e rode
+--   dotnet run --project scripts/GerarSchema
+-- Decisões e checklist da revisão: docs/revisao-ddl-mysql.md
+--
+-- Execute num banco vazio. O script não apaga bancos nem desliga a
+-- verificação de chaves estrangeiras.
+-- =====================================================================
+
+-- Padrão do banco: as tabelas herdam o conjunto de caracteres e o collation.
+ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+
+-- ---------------------------------------------------------------------
+-- 1. Tabelas (somente colunas)
+-- ---------------------------------------------------------------------
+CREATE TABLE acoes (
+    IdAcao        INT UNSIGNED NOT NULL,
+    Quantidade    INT NOT NULL,
+    IdAtividade   INT UNSIGNED NOT NULL,
+    Nome          VARCHAR(150) NOT NULL,
+    Provedor      VARCHAR(150) NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE acoesatores (
+    IdAcaoAtor    INT UNSIGNED NOT NULL,
+    IdAtor        INT UNSIGNED NOT NULL,
+    IdAcao        INT UNSIGNED NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE anexosdiario (
+    IdAnexo       INT UNSIGNED NOT NULL,
+    IdDiarioCampo INT UNSIGNED NOT NULL,
+    Caminho       VARCHAR(500) NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE atividades (
+    IdAtividade          INT UNSIGNED NOT NULL,
+    Nome                 VARCHAR(150) NOT NULL,
+    Descricao            TEXT NULL,
+    Foto                 VARCHAR(255) NULL,
+    IdComunidade         INT UNSIGNED NOT NULL,
+    DtCriacao            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao        DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    IdUsuario            INT UNSIGNED NOT NULL,
+    IdUsuarioModificacao INT UNSIGNED NULL
+);
+
+CREATE TABLE atividadeseixo (
+    IdAtividadeEixo INT UNSIGNED NOT NULL,
+    IdEixo          INT UNSIGNED NOT NULL,
+    IdAtividade     INT UNSIGNED NOT NULL,
+    DtCriacao       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao   DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE atorcomunidades (
+    IdAtorComunidade   INT UNSIGNED NOT NULL,
+    IdComunidade       INT UNSIGNED NOT NULL,
+    IdAtor             INT UNSIGNED NOT NULL,
+    TipoRelacionamento TINYINT UNSIGNED NULL,
+    DtCriacao          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao      DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE atores (
+    IdAtor               INT UNSIGNED NOT NULL,
+    Nome                 VARCHAR(150) NOT NULL,
+    Genero               TINYINT UNSIGNED NULL,
+    Idade                TINYINT UNSIGNED NULL,
+    PapelSocial1         VARCHAR(255) NULL,
+    PapelSocial2         VARCHAR(255) NULL,
+    Interesse            VARCHAR(255) NULL,
+    Telefone             VARCHAR(60) NULL,
+    DaEquipe             TINYINT UNSIGNED NOT NULL,
+    Rope                 TINYINT UNSIGNED NOT NULL,
+    Lopiniao             TINYINT UNSIGNED NOT NULL,
+    Mcomunidade          TINYINT UNSIGNED NOT NULL,
+    DtCriacao            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao        DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    Ativo                CHAR(1) NOT NULL,
+    IdUsuario            INT UNSIGNED NOT NULL,
+    IdUsuarioModificacao INT UNSIGNED NULL
+);
+
+CREATE TABLE avaliacaopessoal (
+    IdAvaliacao   INT UNSIGNED NOT NULL,
+    IdAtor        INT UNSIGNED NOT NULL,
+    CCrimes       TINYINT UNSIGNED NOT NULL,
+    Substancias   TINYINT UNSIGNED NOT NULL,
+    Moradia       TINYINT UNSIGNED NOT NULL,
+    Prevencao     TINYINT UNSIGNED NOT NULL,
+    AssBasica     TINYINT UNSIGNED NOT NULL,
+    Educacao      TINYINT UNSIGNED NOT NULL,
+    Saude         TINYINT UNSIGNED NOT NULL,
+    Ocupacao      TINYINT UNSIGNED NOT NULL,
+    Lazer         TINYINT UNSIGNED NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    IdUsuario     INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE comunidades (
+    IdComunidade            INT UNSIGNED NOT NULL,
+    Nome                    VARCHAR(150) NOT NULL,
+    Local                   VARCHAR(500) NULL,
+    LocalMapa               VARCHAR(500) NULL,
+    LocalSecundario         VARCHAR(500) NULL,
+    LocalMapaSecundario     VARCHAR(500) NULL,
+    Status                  VARCHAR(30) NOT NULL,
+    Complemento             VARCHAR(255) NULL,
+    Descricao               TEXT NULL,
+    DescricaoAcessibilidade TEXT NULL,
+    DtCriacao               DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao           DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    IdUsuario               INT UNSIGNED NOT NULL,
+    IdUsuarioModificacao    INT UNSIGNED NULL,
+    Ativo                   CHAR(1) NOT NULL
+);
+
+CREATE TABLE daatores (
+    IdDAAtor      INT UNSIGNED NOT NULL,
+    IdDiarioDAcao INT UNSIGNED NOT NULL,
+    IdAtor        INT UNSIGNED NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE detalhesdacoes (
+    IdDetalheDAcao INT UNSIGNED NOT NULL,
+    Nome           VARCHAR(150) NOT NULL,
+    IdDiarioDAcao  INT UNSIGNED NOT NULL,
+    DtCriacao      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao  DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE detalheseixos (
+    IdDetalheEixo  INT UNSIGNED NOT NULL,
+    IdDetalheDAcao INT UNSIGNED NOT NULL,
+    IdEixo         INT UNSIGNED NOT NULL,
+    DtCriacao      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao  DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE diarioacoes (
+    IdDiarioAcao  INT UNSIGNED NOT NULL,
+    IdAcao        INT UNSIGNED NOT NULL,
+    IdDiarioCampo INT UNSIGNED NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE diariodacoes (
+    IdDiarioDAcao   INT UNSIGNED NOT NULL,
+    IdDiarioCampo   INT UNSIGNED NOT NULL,
+    Nome            VARCHAR(150) NOT NULL,
+    ProvedorExterno VARCHAR(150) NOT NULL,
+    Quantidade      INT NOT NULL,
+    DtCriacao       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao   DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE diarioeixos (
+    IdDiarioEixo  INT UNSIGNED NOT NULL,
+    IdDiarioCampo INT UNSIGNED NOT NULL,
+    IdEixo        INT UNSIGNED NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE diarioscampo (
+    IdDiarioCampo INT UNSIGNED NOT NULL,
+    IdComunidade  INT UNSIGNED NOT NULL,
+    Data          DATE NOT NULL,
+    Descricao     TEXT NOT NULL,
+    Localizacao   VARCHAR(255) NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    Foto          VARCHAR(255) NULL,
+    IdUsuario     INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE diariosprocessoeixos (
+    IdDiarioProcessoEixo INT UNSIGNED NOT NULL,
+    IdDiarioProcesso     INT UNSIGNED NOT NULL,
+    IdEixo               INT UNSIGNED NOT NULL,
+    DtCriacao            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao        DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE diariosprocessopessoal (
+    IdDiarioProcesso     INT UNSIGNED NOT NULL,
+    IdAtor               INT UNSIGNED NOT NULL,
+    Data                 DATE NOT NULL,
+    Descricao            VARCHAR(4000) NOT NULL,
+    DtCriacao            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao        DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    IdUsuario            INT UNSIGNED NOT NULL,
+    IdUsuarioModificacao INT UNSIGNED NULL
+);
+
+CREATE TABLE eixos (
+    IdEixo        INT UNSIGNED NOT NULL,
+    Nome          VARCHAR(100) NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE fichacondicoes (
+    IdFichaCondicao INT UNSIGNED NOT NULL,
+    IdFicha         INT UNSIGNED NOT NULL,
+    Cond            VARCHAR(150) NOT NULL,
+    DtCriacao       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao   DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE fichapeticoes (
+    IdFichaPeticao INT UNSIGNED NOT NULL,
+    IdFicha        INT UNSIGNED NOT NULL,
+    Pet            VARCHAR(150) NOT NULL,
+    DtCriacao      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao  DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ficharespostas (
+    IdFichaResposta INT UNSIGNED NOT NULL,
+    IdFicha         INT UNSIGNED NOT NULL,
+    Resp            VARCHAR(150) NOT NULL,
+    DtCriacao       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao   DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ficharesultados (
+    IdFichaResultado INT UNSIGNED NOT NULL,
+    IdFicha          INT UNSIGNED NOT NULL,
+    Result           VARCHAR(150) NOT NULL,
+    DtCriacao        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao    DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE fichasprimeirocontato (
+    IdFicha           INT UNSIGNED NOT NULL,
+    IdAtor            INT UNSIGNED NOT NULL,
+    Endereco          VARCHAR(255) NULL,
+    Complemento       VARCHAR(255) NULL,
+    Emprego           VARCHAR(150) NULL,
+    CEstabeleceu      VARCHAR(100) NULL,
+    NovoParceiro      CHAR(1) NULL,
+    FornecidoParceiro CHAR(1) NULL,
+    Telefone          VARCHAR(60) NULL,
+    LContato          VARCHAR(150) NULL,
+    FonteDados        VARCHAR(150) NULL,
+    EstaFamiliar      VARCHAR(100) NULL,
+    EstruFamiliar     VARCHAR(255) NULL,
+    NFilhos           TINYINT UNSIGNED NULL,
+    NFilhas           TINYINT UNSIGNED NULL,
+    AEscolar          TINYINT UNSIGNED NULL,
+    Status            VARCHAR(20) NULL,
+    SLer              CHAR(1) NULL,
+    SCalc             CHAR(1) NULL,
+    SComp             CHAR(1) NULL,
+    QReabili          TINYINT UNSIGNED NULL,
+    LTrat             VARCHAR(150) NULL,
+    Coment            TEXT NULL,
+    DtContato         DATE NOT NULL,
+    HoraContato       TIME NOT NULL,
+    DtCriacao         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao     DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    IdComunidade      INT UNSIGNED NULL,
+    IdUsuario         INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE fontesinfo (
+    IdFonte       INT UNSIGNED NOT NULL,
+    IdFicha       INT UNSIGNED NOT NULL,
+    Nome          VARCHAR(150) NOT NULL,
+    Genero        TINYINT UNSIGNED NULL,
+    Idade         TINYINT UNSIGNED NOT NULL,
+    PapelSocial1  VARCHAR(255) NOT NULL,
+    PapelSocial2  VARCHAR(255) NOT NULL,
+    Interesse     VARCHAR(255) NOT NULL,
+    Telefone      VARCHAR(60) NOT NULL,
+    Extra         VARCHAR(255) NOT NULL,
+    IdAtor        INT UNSIGNED NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE perfis (
+    IdPerfil      INT UNSIGNED NOT NULL,
+    IdUsuario     INT UNSIGNED NULL,
+    Nome          VARCHAR(100) NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE permissoes (
+    IdPermissao   INT UNSIGNED NOT NULL,
+    IdPerfil      INT UNSIGNED NOT NULL,
+    Modulo        VARCHAR(50) NOT NULL,
+    PodeListar    CHAR(1) NOT NULL,
+    PodeDetalhar  CHAR(1) NOT NULL,
+    PodeCriar     CHAR(1) NOT NULL,
+    PodeAtualizar CHAR(1) NOT NULL,
+    PodeDeletar   CHAR(1) NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE recursosatores (
+    IdRecursoAtor INT UNSIGNED NOT NULL,
+    IdAtor        INT UNSIGNED NOT NULL,
+    Tipo          VARCHAR(50) NOT NULL,
+    Nome          VARCHAR(150) NOT NULL,
+    Pode          CHAR(1) NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE redeeixos (
+    IdRedeEixo    INT UNSIGNED NOT NULL,
+    IdRede        INT UNSIGNED NOT NULL,
+    IdEixo        INT UNSIGNED NOT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE rederecursos (
+    IdRede        INT UNSIGNED NOT NULL,
+    IdAtor        INT UNSIGNED NULL,
+    IdComunidade  INT UNSIGNED NOT NULL,
+    Nome          VARCHAR(150) NULL,
+    Tipo          VARCHAR(50) NOT NULL,
+    Dispositivo   VARCHAR(150) NULL,
+    Localizacao   VARCHAR(255) NULL,
+    Servicos      TEXT NULL,
+    DtCriacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    IdUsuario     INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE redesprimarias (
+    IdRedePrimaria    INT UNSIGNED NOT NULL,
+    IdAtorPrincipal   INT UNSIGNED NOT NULL,
+    IdAtorRelacionado INT UNSIGNED NOT NULL,
+    TipoRelacao       VARCHAR(100) NOT NULL,
+    TipoRede          VARCHAR(20) NOT NULL,
+    DtCriacao         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao     DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE usuarios (
+    IdUsuario            INT UNSIGNED NOT NULL,
+    Nome                 VARCHAR(150) NOT NULL,
+    Senha                LONGTEXT NOT NULL,
+    Foto                 VARCHAR(255) NULL,
+    Email                VARCHAR(254) NOT NULL,
+    Ocupacao             VARCHAR(100) NOT NULL,
+    Genero               TINYINT UNSIGNED NULL,
+    DtNascimento         DATE NOT NULL,
+    DtCriacao            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao        DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    Ativo                CHAR(1) NOT NULL,
+    IdiomaPreferido      TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    IdPerfil             INT UNSIGNED NOT NULL,
+    UserName             VARCHAR(254) NOT NULL,
+    NormalizedUserName   VARCHAR(254) NOT NULL,
+    NormalizedEmail      VARCHAR(254) NOT NULL,
+    EmailConfirmed       TINYINT UNSIGNED NOT NULL,
+    SecurityStamp        VARCHAR(100) NOT NULL,
+    ConcurrencyStamp     VARCHAR(100) NOT NULL,
+    PhoneNumber          VARCHAR(60) NULL,
+    PhoneNumberConfirmed TINYINT UNSIGNED NOT NULL,
+    TwoFactorEnabled     TINYINT UNSIGNED NOT NULL,
+    LockoutEnd           DATETIME NULL,
+    LockoutEnabled       TINYINT UNSIGNED NOT NULL,
+    AccessFailedCount    INT UNSIGNED NOT NULL
+);
+
+CREATE TABLE vulnerabilidades (
+    IdVulnerabilidade INT UNSIGNED NOT NULL,
+    Nome              VARCHAR(150) NOT NULL,
+    Localizacao       VARCHAR(255) NOT NULL,
+    Servicos          TEXT NOT NULL,
+    IdComunidade      INT UNSIGNED NOT NULL,
+    DtCriacao         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao     DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE vulnerabilidadeseixo (
+    IdVulnerabilidadeEixo INT UNSIGNED NOT NULL,
+    IdEixo                INT UNSIGNED NOT NULL,
+    IdVulnerabilidade     INT UNSIGNED NOT NULL,
+    DtCriacao             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DtModificacao         DATETIME NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+-- ---------------------------------------------------------------------
+-- 2. Chaves primárias (INT UNSIGNED AUTO_INCREMENT), unicidade e verificações
+-- ---------------------------------------------------------------------
+ALTER TABLE acoes
+    ADD PRIMARY KEY (IdAcao),
+    MODIFY IdAcao INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_Acoes_Quantidade CHECK (Quantidade >= 0);
+
+ALTER TABLE acoesatores
+    ADD PRIMARY KEY (IdAcaoAtor),
+    MODIFY IdAcaoAtor INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_AcoesAtores_Acao_Ator UNIQUE (IdAcao, IdAtor);
+
+ALTER TABLE anexosdiario
+    ADD PRIMARY KEY (IdAnexo),
+    MODIFY IdAnexo INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE atividades
+    ADD PRIMARY KEY (IdAtividade),
+    MODIFY IdAtividade INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE atividadeseixo
+    ADD PRIMARY KEY (IdAtividadeEixo),
+    MODIFY IdAtividadeEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_AtividadesEixo_Atividade_Eixo UNIQUE (IdAtividade, IdEixo);
+
+ALTER TABLE atorcomunidades
+    ADD PRIMARY KEY (IdAtorComunidade),
+    MODIFY IdAtorComunidade INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_AtorComunidades_TipoRelacionamento CHECK (TipoRelacionamento BETWEEN 1 AND 5);
+
+ALTER TABLE atores
+    ADD PRIMARY KEY (IdAtor),
+    MODIFY IdAtor INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_Atores_Ativo CHECK (Ativo COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_Atores_DaEquipe CHECK (DaEquipe IN (0, 1)),
+    ADD CONSTRAINT CK_Atores_Genero CHECK (Genero BETWEEN 0 AND 3),
+    ADD CONSTRAINT CK_Atores_Idade CHECK (Idade <= 130),
+    ADD CONSTRAINT CK_Atores_Lopiniao CHECK (Lopiniao IN (0, 1)),
+    ADD CONSTRAINT CK_Atores_Mcomunidade CHECK (Mcomunidade IN (0, 1)),
+    ADD CONSTRAINT CK_Atores_Rope CHECK (Rope IN (0, 1));
+
+ALTER TABLE avaliacaopessoal
+    ADD PRIMARY KEY (IdAvaliacao),
+    MODIFY IdAvaliacao INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_AvaliacaoPessoal_AssBasica CHECK (AssBasica BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_CCrimes CHECK (CCrimes BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Educacao CHECK (Educacao BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Lazer CHECK (Lazer BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Moradia CHECK (Moradia BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Ocupacao CHECK (Ocupacao BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Prevencao CHECK (Prevencao BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Saude CHECK (Saude BETWEEN 1 AND 5),
+    ADD CONSTRAINT CK_AvaliacaoPessoal_Substancias CHECK (Substancias BETWEEN 1 AND 5);
+
+ALTER TABLE comunidades
+    ADD PRIMARY KEY (IdComunidade),
+    MODIFY IdComunidade INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_Comunidades_Ativo CHECK (Ativo COLLATE utf8mb4_bin IN ('S', 'N'));
+
+ALTER TABLE daatores
+    ADD PRIMARY KEY (IdDAAtor),
+    MODIFY IdDAAtor INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_DAAtores_DiarioDAcao_Ator UNIQUE (IdDiarioDAcao, IdAtor);
+
+ALTER TABLE detalhesdacoes
+    ADD PRIMARY KEY (IdDetalheDAcao),
+    MODIFY IdDetalheDAcao INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE detalheseixos
+    ADD PRIMARY KEY (IdDetalheEixo),
+    MODIFY IdDetalheEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_DetalhesEixos_Detalhe_Eixo UNIQUE (IdDetalheDAcao, IdEixo);
+
+ALTER TABLE diarioacoes
+    ADD PRIMARY KEY (IdDiarioAcao),
+    MODIFY IdDiarioAcao INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_DiarioAcoes_Diario_Acao UNIQUE (IdDiarioCampo, IdAcao);
+
+ALTER TABLE diariodacoes
+    ADD PRIMARY KEY (IdDiarioDAcao),
+    MODIFY IdDiarioDAcao INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_DiarioDAcoes_Quantidade CHECK (Quantidade >= 0);
+
+ALTER TABLE diarioeixos
+    ADD PRIMARY KEY (IdDiarioEixo),
+    MODIFY IdDiarioEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_DiarioEixos_Diario_Eixo UNIQUE (IdDiarioCampo, IdEixo);
+
+ALTER TABLE diarioscampo
+    ADD PRIMARY KEY (IdDiarioCampo),
+    MODIFY IdDiarioCampo INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE diariosprocessoeixos
+    ADD PRIMARY KEY (IdDiarioProcessoEixo),
+    MODIFY IdDiarioProcessoEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_DiariosProcessoEixos_Diario_Eixo UNIQUE (IdDiarioProcesso, IdEixo);
+
+ALTER TABLE diariosprocessopessoal
+    ADD PRIMARY KEY (IdDiarioProcesso),
+    MODIFY IdDiarioProcesso INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE eixos
+    ADD PRIMARY KEY (IdEixo),
+    MODIFY IdEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_Eixos_Nome UNIQUE (Nome);
+
+ALTER TABLE fichacondicoes
+    ADD PRIMARY KEY (IdFichaCondicao),
+    MODIFY IdFichaCondicao INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE fichapeticoes
+    ADD PRIMARY KEY (IdFichaPeticao),
+    MODIFY IdFichaPeticao INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE ficharespostas
+    ADD PRIMARY KEY (IdFichaResposta),
+    MODIFY IdFichaResposta INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE ficharesultados
+    ADD PRIMARY KEY (IdFichaResultado),
+    MODIFY IdFichaResultado INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE fichasprimeirocontato
+    ADD PRIMARY KEY (IdFicha),
+    MODIFY IdFicha INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_FichasPrimeiroContato_AEscolar CHECK (AEscolar <= 30),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_FornecidoParceiro CHECK (FornecidoParceiro COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_NFilhas CHECK (NFilhas <= 30),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_NFilhos CHECK (NFilhos <= 30),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_NovoParceiro CHECK (NovoParceiro COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_QReabili CHECK (QReabili <= 100),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_SCalc CHECK (SCalc COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_SComp CHECK (SComp COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_SLer CHECK (SLer COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_FichasPrimeiroContato_Status CHECK (Status IN ('EmProgresso', 'Concluida', 'Abandonada'));
+
+ALTER TABLE fontesinfo
+    ADD PRIMARY KEY (IdFonte),
+    MODIFY IdFonte INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_FontesInfo_Genero CHECK (Genero BETWEEN 0 AND 3),
+    ADD CONSTRAINT CK_FontesInfo_Idade CHECK (Idade <= 130);
+
+ALTER TABLE perfis
+    ADD PRIMARY KEY (IdPerfil),
+    MODIFY IdPerfil INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE permissoes
+    ADD PRIMARY KEY (IdPermissao),
+    MODIFY IdPermissao INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_Permissoes_Perfil_Modulo UNIQUE (IdPerfil, Modulo),
+    ADD CONSTRAINT CK_Permissoes_PodeAtualizar CHECK (PodeAtualizar COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_Permissoes_PodeCriar CHECK (PodeCriar COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_Permissoes_PodeDeletar CHECK (PodeDeletar COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_Permissoes_PodeDetalhar CHECK (PodeDetalhar COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_Permissoes_PodeListar CHECK (PodeListar COLLATE utf8mb4_bin IN ('S', 'N'));
+
+ALTER TABLE recursosatores
+    ADD PRIMARY KEY (IdRecursoAtor),
+    MODIFY IdRecursoAtor INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT CK_RecursosAtores_Pode CHECK (Pode COLLATE utf8mb4_bin IN ('S', 'N'));
+
+ALTER TABLE redeeixos
+    ADD PRIMARY KEY (IdRedeEixo),
+    MODIFY IdRedeEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_RedeEixos_Rede_Eixo UNIQUE (IdRede, IdEixo);
+
+ALTER TABLE rederecursos
+    ADD PRIMARY KEY (IdRede),
+    MODIFY IdRede INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE redesprimarias
+    ADD PRIMARY KEY (IdRedePrimaria),
+    MODIFY IdRedePrimaria INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_RedesPrimarias_Principal_Relacionado_Tipo UNIQUE (IdAtorPrincipal, IdAtorRelacionado, TipoRede),
+    ADD CONSTRAINT CK_RedesPrimarias_AtoresDistintos CHECK (IdAtorPrincipal <> IdAtorRelacionado),
+    ADD CONSTRAINT CK_RedesPrimarias_TipoRede CHECK (TipoRede IN ('Primaria', 'Subjetiva'));
+
+ALTER TABLE usuarios
+    ADD PRIMARY KEY (IdUsuario),
+    MODIFY IdUsuario INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_Usuarios_NormalizedEmail UNIQUE (NormalizedEmail),
+    ADD CONSTRAINT UQ_Usuarios_NormalizedUserName UNIQUE (NormalizedUserName),
+    ADD CONSTRAINT CK_Usuarios_Ativo CHECK (Ativo COLLATE utf8mb4_bin IN ('S', 'N')),
+    ADD CONSTRAINT CK_Usuarios_EmailConfirmed CHECK (EmailConfirmed IN (0, 1)),
+    ADD CONSTRAINT CK_Usuarios_Genero CHECK (Genero BETWEEN 0 AND 3),
+    ADD CONSTRAINT CK_Usuarios_IdiomaPreferido CHECK (IdiomaPreferido BETWEEN 0 AND 3),
+    ADD CONSTRAINT CK_Usuarios_LockoutEnabled CHECK (LockoutEnabled IN (0, 1)),
+    ADD CONSTRAINT CK_Usuarios_PhoneNumberConfirmed CHECK (PhoneNumberConfirmed IN (0, 1)),
+    ADD CONSTRAINT CK_Usuarios_TwoFactorEnabled CHECK (TwoFactorEnabled IN (0, 1));
+
+ALTER TABLE vulnerabilidades
+    ADD PRIMARY KEY (IdVulnerabilidade),
+    MODIFY IdVulnerabilidade INT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE vulnerabilidadeseixo
+    ADD PRIMARY KEY (IdVulnerabilidadeEixo),
+    MODIFY IdVulnerabilidadeEixo INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ADD CONSTRAINT UQ_VulnerabilidadesEixo_Vulnerabilidade_Eixo UNIQUE (IdVulnerabilidade, IdEixo);
+
+
+-- ---------------------------------------------------------------------
+-- 3. Chaves estrangeiras (nome FK_<Filha>_<Pai>, regra de exclusão explícita)
+-- ---------------------------------------------------------------------
+ALTER TABLE acoes
+    ADD CONSTRAINT FK_Acoes_Atividades
+        FOREIGN KEY (IdAtividade) REFERENCES atividades (IdAtividade)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE acoesatores
+    ADD CONSTRAINT FK_AcoesAtores_Acoes
+        FOREIGN KEY (IdAcao) REFERENCES acoes (IdAcao)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_AcoesAtores_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE anexosdiario
+    ADD CONSTRAINT FK_AnexosDiario_DiariosCampo
+        FOREIGN KEY (IdDiarioCampo) REFERENCES diarioscampo (IdDiarioCampo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE atividades
+    ADD CONSTRAINT FK_Atividades_Comunidades
+        FOREIGN KEY (IdComunidade) REFERENCES comunidades (IdComunidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_Atividades_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_Atividades_Usuarios_Modificacao
+        FOREIGN KEY (IdUsuarioModificacao) REFERENCES usuarios (IdUsuario)
+        ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE atividadeseixo
+    ADD CONSTRAINT FK_AtividadesEixo_Atividades
+        FOREIGN KEY (IdAtividade) REFERENCES atividades (IdAtividade)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_AtividadesEixo_Eixos
+        FOREIGN KEY (IdEixo) REFERENCES eixos (IdEixo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE atorcomunidades
+    ADD CONSTRAINT FK_AtorComunidades_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_AtorComunidades_Comunidades
+        FOREIGN KEY (IdComunidade) REFERENCES comunidades (IdComunidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE atores
+    ADD CONSTRAINT FK_Atores_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_Atores_Usuarios_Modificacao
+        FOREIGN KEY (IdUsuarioModificacao) REFERENCES usuarios (IdUsuario)
+        ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE avaliacaopessoal
+    ADD CONSTRAINT FK_AvaliacaoPessoal_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_AvaliacaoPessoal_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE comunidades
+    ADD CONSTRAINT FK_Comunidades_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_Comunidades_Usuarios_Modificacao
+        FOREIGN KEY (IdUsuarioModificacao) REFERENCES usuarios (IdUsuario)
+        ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE daatores
+    ADD CONSTRAINT FK_DAAtores_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DAAtores_DiarioDAcoes
+        FOREIGN KEY (IdDiarioDAcao) REFERENCES diariodacoes (IdDiarioDAcao)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE detalhesdacoes
+    ADD CONSTRAINT FK_DetalhesDAcoes_DiarioDAcoes
+        FOREIGN KEY (IdDiarioDAcao) REFERENCES diariodacoes (IdDiarioDAcao)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE detalheseixos
+    ADD CONSTRAINT FK_DetalhesEixos_DetalhesDAcoes
+        FOREIGN KEY (IdDetalheDAcao) REFERENCES detalhesdacoes (IdDetalheDAcao)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DetalhesEixos_Eixos
+        FOREIGN KEY (IdEixo) REFERENCES eixos (IdEixo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE diarioacoes
+    ADD CONSTRAINT FK_DiarioAcoes_Acoes
+        FOREIGN KEY (IdAcao) REFERENCES acoes (IdAcao)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DiarioAcoes_DiariosCampo
+        FOREIGN KEY (IdDiarioCampo) REFERENCES diarioscampo (IdDiarioCampo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE diariodacoes
+    ADD CONSTRAINT FK_DiarioDAcoes_DiariosCampo
+        FOREIGN KEY (IdDiarioCampo) REFERENCES diarioscampo (IdDiarioCampo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE diarioeixos
+    ADD CONSTRAINT FK_DiarioEixos_DiariosCampo
+        FOREIGN KEY (IdDiarioCampo) REFERENCES diarioscampo (IdDiarioCampo)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DiarioEixos_Eixos
+        FOREIGN KEY (IdEixo) REFERENCES eixos (IdEixo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE diarioscampo
+    ADD CONSTRAINT FK_DiariosCampo_Comunidades
+        FOREIGN KEY (IdComunidade) REFERENCES comunidades (IdComunidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DiariosCampo_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE diariosprocessoeixos
+    ADD CONSTRAINT FK_DiariosProcessoEixos_DiariosProcessoPessoal
+        FOREIGN KEY (IdDiarioProcesso) REFERENCES diariosprocessopessoal (IdDiarioProcesso)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DiariosProcessoEixos_Eixos
+        FOREIGN KEY (IdEixo) REFERENCES eixos (IdEixo)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE diariosprocessopessoal
+    ADD CONSTRAINT FK_DiariosProcessoPessoal_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DiariosProcessoPessoal_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_DiariosProcessoPessoal_Usuarios_Modificacao
+        FOREIGN KEY (IdUsuarioModificacao) REFERENCES usuarios (IdUsuario)
+        ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE fichacondicoes
+    ADD CONSTRAINT FK_FichaCondicoes_FichasPrimeiroContato
+        FOREIGN KEY (IdFicha) REFERENCES fichasprimeirocontato (IdFicha)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE fichapeticoes
+    ADD CONSTRAINT FK_FichaPeticoes_FichasPrimeiroContato
+        FOREIGN KEY (IdFicha) REFERENCES fichasprimeirocontato (IdFicha)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE ficharespostas
+    ADD CONSTRAINT FK_FichaRespostas_FichasPrimeiroContato
+        FOREIGN KEY (IdFicha) REFERENCES fichasprimeirocontato (IdFicha)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE ficharesultados
+    ADD CONSTRAINT FK_FichaResultados_FichasPrimeiroContato
+        FOREIGN KEY (IdFicha) REFERENCES fichasprimeirocontato (IdFicha)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE fichasprimeirocontato
+    ADD CONSTRAINT FK_FichasPrimeiroContato_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_FichasPrimeiroContato_Comunidades
+        FOREIGN KEY (IdComunidade) REFERENCES comunidades (IdComunidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_FichasPrimeiroContato_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE fontesinfo
+    ADD CONSTRAINT FK_FontesInfo_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_FontesInfo_FichasPrimeiroContato
+        FOREIGN KEY (IdFicha) REFERENCES fichasprimeirocontato (IdFicha)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE perfis
+    ADD CONSTRAINT FK_Perfis_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE permissoes
+    ADD CONSTRAINT FK_Permissoes_Perfis
+        FOREIGN KEY (IdPerfil) REFERENCES perfis (IdPerfil)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE recursosatores
+    ADD CONSTRAINT FK_RecursosAtores_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE redeeixos
+    ADD CONSTRAINT FK_RedeEixos_Eixos
+        FOREIGN KEY (IdEixo) REFERENCES eixos (IdEixo)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_RedeEixos_RedeRecursos
+        FOREIGN KEY (IdRede) REFERENCES rederecursos (IdRede)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE rederecursos
+    ADD CONSTRAINT FK_RedeRecursos_Atores
+        FOREIGN KEY (IdAtor) REFERENCES atores (IdAtor)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_RedeRecursos_Comunidades
+        FOREIGN KEY (IdComunidade) REFERENCES comunidades (IdComunidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_RedeRecursos_Usuarios
+        FOREIGN KEY (IdUsuario) REFERENCES usuarios (IdUsuario)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE redesprimarias
+    ADD CONSTRAINT FK_RedesPrimarias_Atores_Principal
+        FOREIGN KEY (IdAtorPrincipal) REFERENCES atores (IdAtor)
+        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_RedesPrimarias_Atores_Relacionado
+        FOREIGN KEY (IdAtorRelacionado) REFERENCES atores (IdAtor)
+        ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE usuarios
+    ADD CONSTRAINT FK_Usuarios_Perfis
+        FOREIGN KEY (IdPerfil) REFERENCES perfis (IdPerfil)
+        ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE vulnerabilidades
+    ADD CONSTRAINT FK_Vulnerabilidades_Comunidades
+        FOREIGN KEY (IdComunidade) REFERENCES comunidades (IdComunidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE vulnerabilidadeseixo
+    ADD CONSTRAINT FK_VulnerabilidadesEixo_Eixos
+        FOREIGN KEY (IdEixo) REFERENCES eixos (IdEixo)
+        ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT FK_VulnerabilidadesEixo_Vulnerabilidades
+        FOREIGN KEY (IdVulnerabilidade) REFERENCES vulnerabilidades (IdVulnerabilidade)
+        ON DELETE CASCADE ON UPDATE RESTRICT;
+
+
+-- ---------------------------------------------------------------------
+-- 4. Dados iniciais fictícios: perfis, usuários de exemplo e permissões
+--    (os perfis padrão não têm usuário criador: IdUsuario fica NULL)
+-- ---------------------------------------------------------------------
+INSERT INTO perfis (IdPerfil, Nome, DtCriacao) VALUES
+    (1, 'Admin', '0001-01-01 00:00:00'),
+    (2, 'Editor', '0001-01-01 00:00:00'),
+    (3, 'Colaborador', '0001-01-01 00:00:00'),
+    (4, 'Visualizador', '0001-01-01 00:00:00'),
+    (5, 'Supervisor', '0001-01-01 00:00:00');
+
+INSERT INTO usuarios (IdUsuario, Nome, Senha, Foto, Email, Ocupacao, Genero, DtNascimento, DtCriacao, DtModificacao, Ativo, IdiomaPreferido, IdPerfil, UserName, NormalizedUserName, NormalizedEmail, EmailConfirmed, SecurityStamp, ConcurrencyStamp, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled, AccessFailedCount) VALUES
+    (1, 'joao', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto1.jpg', 'joao@email.com', 'Coordenador', 1, '1990-01-01', '2024-01-01 00:00:00', '2025-01-01 00:00:00', 'S', 0, 1, 'joao@email.com', 'JOAO@EMAIL.COM', 'JOAO@EMAIL.COM', 1, 'seed-security-stamp-1', 'seed-concurrency-stamp-1', 0, 0, 1, 0),
+    (2, 'Usuario Dois', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto2.jpg', 'u2@example.com', 'Pesquisador', 2, '1985-02-02', '2024-02-01 00:00:00', '2025-02-01 00:00:00', 'S', 0, 2, 'u2@example.com', 'U2@EXAMPLE.COM', 'U2@EXAMPLE.COM', 1, 'seed-security-stamp-2', 'seed-concurrency-stamp-2', 0, 0, 1, 0),
+    (3, 'Usuario Tres', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto3.jpg', 'u3@example.com', 'Voluntario', 1, '1995-03-03', '2024-03-01 00:00:00', '2025-03-01 00:00:00', 'S', 0, 3, 'u3@example.com', 'U3@EXAMPLE.COM', 'U3@EXAMPLE.COM', 1, 'seed-security-stamp-3', 'seed-concurrency-stamp-3', 0, 0, 1, 0),
+    (4, 'Usuario Quatro', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto4.jpg', 'u4@example.com', 'Analista', 2, '1992-04-04', '2024-04-01 00:00:00', '2025-04-01 00:00:00', 'N', 0, 4, 'u4@example.com', 'U4@EXAMPLE.COM', 'U4@EXAMPLE.COM', 1, 'seed-security-stamp-4', 'seed-concurrency-stamp-4', 0, 0, 1, 0),
+    (5, 'Usuario Cinco', 'AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==', 'foto5.jpg', 'u5@example.com', 'Gerente', 1, '1988-05-05', '2024-05-01 00:00:00', '2025-05-01 00:00:00', 'N', 0, 5, 'u5@example.com', 'U5@EXAMPLE.COM', 'U5@EXAMPLE.COM', 1, 'seed-security-stamp-5', 'seed-concurrency-stamp-5', 0, 0, 1, 0);
+
+INSERT INTO permissoes (IdPermissao, IdPerfil, Modulo, PodeListar, PodeDetalhar, PodeCriar, PodeAtualizar, PodeDeletar) VALUES
+    (1, 1, 'Usuarios', 'S', 'S', 'S', 'S', 'S'),
+    (2, 1, 'Perfis', 'S', 'S', 'S', 'S', 'S'),
+    (3, 1, 'Atividades', 'S', 'S', 'S', 'S', 'S'),
+    (4, 1, 'Comunidades', 'S', 'S', 'S', 'S', 'S'),
+    (5, 1, 'Vulnerabilidades', 'S', 'S', 'S', 'S', 'S'),
+    (6, 1, 'Recursos', 'S', 'S', 'S', 'S', 'S'),
+    (7, 1, 'DiariosCampo', 'S', 'S', 'S', 'S', 'S'),
+    (8, 1, 'Atores', 'S', 'S', 'S', 'S', 'S'),
+    (9, 1, 'Ficha1Contato', 'S', 'S', 'S', 'S', 'S'),
+    (10, 1, 'DiariosProcessoPessoal', 'S', 'S', 'S', 'S', 'S'),
+    (11, 1, 'AvaliacoesPessoais', 'S', 'S', 'S', 'S', 'S'),
+    (12, 1, 'SER', 'S', 'S', 'S', 'S', 'S'),
+    (13, 2, 'Usuarios', 'S', 'S', 'S', 'S', 'N'),
+    (14, 2, 'Perfis', 'S', 'S', 'S', 'S', 'N'),
+    (15, 2, 'Atividades', 'S', 'S', 'S', 'S', 'N'),
+    (16, 2, 'Comunidades', 'S', 'S', 'S', 'S', 'N'),
+    (17, 2, 'Vulnerabilidades', 'S', 'S', 'S', 'S', 'N'),
+    (18, 2, 'Recursos', 'S', 'S', 'S', 'S', 'N'),
+    (19, 2, 'DiariosCampo', 'S', 'S', 'S', 'S', 'N'),
+    (20, 2, 'Atores', 'S', 'S', 'S', 'S', 'N'),
+    (21, 2, 'Ficha1Contato', 'S', 'S', 'S', 'S', 'N'),
+    (22, 2, 'DiariosProcessoPessoal', 'S', 'S', 'S', 'S', 'N'),
+    (23, 2, 'AvaliacoesPessoais', 'S', 'S', 'S', 'S', 'N'),
+    (24, 2, 'SER', 'S', 'S', 'S', 'S', 'N'),
+    (25, 3, 'Usuarios', 'S', 'S', 'N', 'N', 'N'),
+    (26, 3, 'Perfis', 'S', 'S', 'N', 'N', 'N'),
+    (27, 3, 'Atividades', 'S', 'S', 'N', 'N', 'N'),
+    (28, 3, 'Comunidades', 'S', 'S', 'N', 'N', 'N'),
+    (29, 3, 'Vulnerabilidades', 'S', 'S', 'N', 'N', 'N'),
+    (30, 3, 'Recursos', 'S', 'S', 'N', 'N', 'N'),
+    (31, 3, 'DiariosCampo', 'S', 'S', 'N', 'N', 'N'),
+    (32, 3, 'Atores', 'S', 'S', 'N', 'N', 'N'),
+    (33, 3, 'Ficha1Contato', 'S', 'S', 'N', 'N', 'N'),
+    (34, 3, 'DiariosProcessoPessoal', 'S', 'S', 'N', 'N', 'N'),
+    (35, 3, 'AvaliacoesPessoais', 'S', 'S', 'N', 'N', 'N'),
+    (36, 3, 'SER', 'S', 'S', 'N', 'N', 'N'),
+    (37, 4, 'Usuarios', 'S', 'N', 'N', 'N', 'N'),
+    (38, 4, 'Perfis', 'S', 'N', 'N', 'N', 'N'),
+    (39, 4, 'Atividades', 'S', 'N', 'N', 'N', 'N'),
+    (40, 4, 'Comunidades', 'S', 'N', 'N', 'N', 'N'),
+    (41, 4, 'Vulnerabilidades', 'S', 'N', 'N', 'N', 'N'),
+    (42, 4, 'Recursos', 'S', 'N', 'N', 'N', 'N'),
+    (43, 4, 'DiariosCampo', 'S', 'N', 'N', 'N', 'N'),
+    (44, 4, 'Atores', 'S', 'N', 'N', 'N', 'N'),
+    (45, 4, 'Ficha1Contato', 'S', 'N', 'N', 'N', 'N'),
+    (46, 4, 'DiariosProcessoPessoal', 'S', 'N', 'N', 'N', 'N'),
+    (47, 4, 'AvaliacoesPessoais', 'S', 'N', 'N', 'N', 'N'),
+    (48, 4, 'SER', 'S', 'N', 'N', 'N', 'N'),
+    (49, 5, 'Usuarios', 'S', 'S', 'S', 'S', 'N'),
+    (50, 5, 'Perfis', 'S', 'S', 'S', 'S', 'N'),
+    (51, 5, 'Atividades', 'S', 'S', 'S', 'S', 'N'),
+    (52, 5, 'Comunidades', 'S', 'S', 'S', 'S', 'N'),
+    (53, 5, 'Vulnerabilidades', 'S', 'S', 'S', 'S', 'N'),
+    (54, 5, 'Recursos', 'S', 'S', 'S', 'S', 'N'),
+    (55, 5, 'DiariosCampo', 'S', 'S', 'S', 'S', 'N'),
+    (56, 5, 'Atores', 'S', 'S', 'S', 'S', 'N'),
+    (57, 5, 'Ficha1Contato', 'S', 'S', 'S', 'S', 'N'),
+    (58, 5, 'DiariosProcessoPessoal', 'S', 'S', 'S', 'S', 'N'),
+    (59, 5, 'AvaliacoesPessoais', 'S', 'S', 'S', 'S', 'N'),
+    (60, 5, 'SER', 'S', 'S', 'S', 'S', 'N');
 

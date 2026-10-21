@@ -87,14 +87,16 @@ describe('recuperação de senha', () => {
     expect(window.validateEmail(email)).toBe(expected);
   });
 
-  it('aplica e remove o estado visual de foco corretamente', () => {
+  it('aplica e remove o estado visual de foco sem mover o rótulo', () => {
     const input = document.getElementById('emailInput');
     const group = input.parentElement;
     const label = group.querySelector('label');
 
     input.dispatchEvent(new FocusEvent('focus'));
     expect(group.classList.contains('focused')).toBe(true);
-    expect(label.style.transform).toContain('translateY');
+    // O rótulo "E-mail" fica fixo acima do campo (antes ele subia e encolhia, quebrando o layout).
+    expect(label.style.transform).toBe('');
+    expect(label.style.color).toBe('');
 
     input.value = 'mantem@valor.com';
     input.dispatchEvent(new FocusEvent('blur'));

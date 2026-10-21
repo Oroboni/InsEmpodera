@@ -72,9 +72,9 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         using var client = await CreateAuthenticatedClientAsync();
         var name = $"Comunidade HTTP {Guid.NewGuid():N}";
 
-        var create = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{Guid.Empty}", $"/Comunidade/ComunidadesDetalhes?id={Guid.Empty}", new()
+        var create = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{0}", $"/Comunidade/ComunidadesDetalhes?id={0}", new()
         {
-            ["Id_Comunidade"] = Guid.Empty.ToString(), ["Nome"] = name,
+            ["Id_Comunidade"] = 0.ToString(), ["Nome"] = name,
             ["Local"] = "Rua HTTP, 10, São Paulo",
             ["LocalSecundario"] = "Rua HTTP Dois, 20, São Paulo",
             ["Status"] = "Em Processo", ["Ativo"] = "S"
@@ -264,7 +264,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         return await operation(db);
     }
 
-    private Task<Guid> SeedCommunityAsync() => QueryAsync(async db =>
+    private Task<int> SeedCommunityAsync() => QueryAsync(async db =>
     {
         var community = new Comunidade
         {
@@ -277,14 +277,14 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         return community.Id_Comunidade;
     });
 
-    private Task<Guid> SeedAxisAsync() => QueryAsync(async db =>
+    private Task<int> SeedAxisAsync() => QueryAsync(async db =>
     {
         var axis = new Eixo { Nome = $"Eixo HTTP {Guid.NewGuid():N}" };
         db.Eixos.Add(axis);
         await db.SaveChangesAsync();
         return axis.IdEixo;
     });
-    private async Task<Guid> SeedActorAsync(Guid? communityId = null)
+    private async Task<int> SeedActorAsync(int? communityId = null)
     {
         var actualCommunityId = communityId ?? await SeedCommunityAsync();
         return await QueryAsync(async db =>
@@ -302,14 +302,14 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         });
     }
 
-    private static Dictionary<string, string> AssessmentFields(Guid actorId, int score) => new()
+    private static Dictionary<string, string> AssessmentFields(int actorId, int score) => new()
     {
         ["FK_id_Atores"] = actorId.ToString(), ["CCrimes"] = score.ToString(), ["Substancias"] = score.ToString(),
         ["Moradia"] = score.ToString(), ["Prevencao"] = score.ToString(), ["AssBasica"] = score.ToString(),
         ["Educacao"] = score.ToString(), ["Saude"] = score.ToString(), ["Ocupacao"] = score.ToString(), ["Lazer"] = score.ToString()
     };
 
-    private static Dictionary<string, string> FirstContactFields(Guid actorId, Guid communityId, string comment) => new()
+    private static Dictionary<string, string> FirstContactFields(int actorId, int communityId, string comment) => new()
     {
         ["FK_id_Atores"] = actorId.ToString(), ["FkIdComunidade"] = communityId.ToString(), ["Endereco"] = "Rua HTTP, 100",
         ["Telefone"] = "11999990000", ["DtContato"] = "2026-08-23", ["HoraContato"] = "10:30",

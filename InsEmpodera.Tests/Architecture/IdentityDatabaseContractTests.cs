@@ -35,8 +35,10 @@ public sealed class IdentityDatabaseContractTests : ControllerTestBase
                  })
             Assert.Contains(column, columns.Keys);
 
-        Assert.Equal("binary(16)", columns["IdUsuario"].Type, ignoreCase: true);
-        Assert.DoesNotContain("auto_increment", columns["IdUsuario"].Extra, StringComparison.OrdinalIgnoreCase);
+        // Revisão do DDL: chave INT UNSIGNED AUTO_INCREMENT; a coluna Senha continua como era.
+        Assert.Equal("int unsigned", columns["IdUsuario"].Type, ignoreCase: true);
+        Assert.Contains("auto_increment", columns["IdUsuario"].Extra, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("longtext", columns["Senha"].Type, ignoreCase: true);
 
         var indexes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         await using (var command = connection.CreateCommand())
@@ -52,7 +54,7 @@ public sealed class IdentityDatabaseContractTests : ControllerTestBase
         }
 
         Assert.Contains("PRIMARY", indexes);
-        Assert.Contains("IX_Usuarios_NormalizedUserName", indexes);
-        Assert.Contains("IX_Usuarios_NormalizedEmail", indexes);
+        Assert.Contains("UQ_Usuarios_NormalizedUserName", indexes);
+        Assert.Contains("UQ_Usuarios_NormalizedEmail", indexes);
     }
 }

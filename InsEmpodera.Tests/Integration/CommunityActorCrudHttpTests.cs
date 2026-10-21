@@ -89,7 +89,7 @@ public sealed class CommunityActorCrudHttpTests : IClassFixture<EmpoderaWebAppli
                     .SingleAsync()));
     }
 
-    private Task<Guid> SeedCommunityAsync() =>
+    private Task<int> SeedCommunityAsync() =>
         HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var community = new Comunidade
@@ -117,7 +117,7 @@ public sealed class CommunityActorCrudHttpTests : IClassFixture<EmpoderaWebAppli
                 .Include(item => item.RecursosAtores)
                 .SingleAsync(item => item.Nome == name));
 
-    private Task<Atores> LoadActorByIdAsync(Guid id) =>
+    private Task<Atores> LoadActorByIdAsync(int id) =>
         HttpFlowTestSupport.InDatabaseAsync(
             _factory,
             db => db.Atores
@@ -130,5 +130,5 @@ public sealed class CommunityActorCrudHttpTests : IClassFixture<EmpoderaWebAppli
             expected,
             actor.RecursosAtores.Single(item => item.Tipo == type && item.Nome == name).Pode);
 
-    private static void AssertRandomKey(Guid id) => Assert.NotEqual(Guid.Empty, id);
+    private static void AssertRandomKey(int id) => Assert.NotEqual(0, id);
 }

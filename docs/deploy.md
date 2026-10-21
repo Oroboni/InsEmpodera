@@ -43,11 +43,11 @@ A integração contínua é automatizada; a **implantação é manual**. Nenhum 
 
 | Workflow | Gatilho | Resultado |
 | --- | --- | --- |
-| [`testes.yml`](../.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel`/`Import_exel`; manual | Executa backend, interface e E2E com MariaDB 10.4.32; artefatos `resultados-testes-*` por 14 dias |
+| [`testes.yml`](../.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel`/`Import_exel`; manual | Executa backend, interface e E2E com MySQL 8.4 LTS; artefatos `resultados-testes-*` por 14 dias |
 | [`main.yml`](../.github/workflows/main.yml) | Push em `import_exel`; pull request para `Import_exel` | `restore`, `build`, `test` e `dotnet publish`; artefato `app` |
 | [`qualidade-periodica.yml`](../.github/workflows/qualidade-periodica.yml) | Domingos às 03h (UTC); manual | Testes de mutação com Stryker.NET |
 
-As senhas usadas nos workflows (`MYSQL_ROOT_PASSWORD`) pertencem apenas aos contêineres temporários do MariaDB criados durante cada execução.
+As senhas usadas nos workflows (`MYSQL_ROOT_PASSWORD`) pertencem apenas aos contêineres temporários do MySQL criados durante cada execução.
 
 ## Gerar o pacote de publicação
 
@@ -61,13 +61,15 @@ A pasta `publish/` deve conter `InsEmpodera.dll`, `InsEmpodera.runtimeconfig.jso
 
 ## Ambiente de produção
 
+> **Servidor novo:** a equipe vai migrar para uma VPS da Hostinger com MySQL 8.4 LTS, como pede a revisão técnica do DDL. O passo a passo completo (MySQL, .NET, Nginx, migração dos dados e backup diário) está em [servidor-hostinger.md](servidor-hostinger.md). A descrição abaixo é a do servidor atual.
+
 Arquitetura descrita em [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md):
 
 ```mermaid
 flowchart LR
     I["Internet"] -->|"80 / 443"| N["Nginx<br/>proxy reverso e HTTPS (Certbot)"]
     N -->|"HTTP local :5000"| K["Kestrel<br/>InsEmpodera.dll (systemd)"]
-    K -->|"local :3306"| M[("MariaDB")]
+    K -->|"local :3306"| M[("MySQL")]
 ```
 
 | Item | Configuração |
@@ -75,7 +77,7 @@ flowchart LR
 | Servidor | AWS EC2 com Amazon Linux |
 | Runtime | `aspnetcore-runtime-9.0` |
 | Processo | Serviço systemd `empodera`, escutando somente em `127.0.0.1:5000` |
-| Banco | MariaDB local, banco `empodera` com usuário próprio da aplicação |
+| Banco | Banco local `empodera` com usuário próprio da aplicação. Hoje é MariaDB 10.5; o esquema revisado exige **MySQL 8.4 LTS ou posterior** — a troca e a migração dos dados estão em [revisao-ddl-mysql.md](revisao-ddl-mysql.md#migração-dos-dados) |
 | Configuração | Arquivo `/etc/empodera/empodera.env`, legível apenas pelo `root`, com `ASPNETCORE_ENVIRONMENT=Production`, conexão do banco e variáveis `Email__*` |
 | Uploads | Pasta persistente fora das versões, ligada a `wwwroot/uploads` |
 
@@ -90,7 +92,7 @@ Resumo do procedimento (comandos completos nas seções 8 a 16 de [HOSPEDAGEM-AW
 5. Apontar o link `~/empodera-current` para a nova versão e reiniciar o serviço `empodera`.
 6. Validar serviços, portas, HTTP/HTTPS e login.
 
-**Rollback:** apontar `~/empodera-current` para a versão anterior e reiniciar o serviço. O rollback não desfaz alterações feitas no banco; por isso, gere um backup do MariaDB antes de cada publicação.
+**Rollback:** apontar `~/empodera-current` para a versão anterior e reiniciar o serviço. O rollback não desfaz alterações feitas no banco; por isso, gere um backup do banco antes de cada publicação.
 
 **Atualização de esquema:** como não há migrations, alterações de estrutura precisam de scripts SQL incrementais aplicados manualmente, como [`Database/20260830_adicionar_endereco_secundario_comunidades.sql`](../Database/20260830_adicionar_endereco_secundario_comunidades.sql).
 

@@ -20,7 +20,7 @@
 | Tipo | Projeto / pasta | Ferramentas | O que verifica |
 | --- | --- | --- | --- |
 | Unidade | `InsEmpodera.Tests/Unit` | xUnit | Regras isoladas, como a escolha do idioma |
-| Contratos de arquitetura | `InsEmpodera.Tests/Architecture` | xUnit | Presença de autorização e token CSRF em ações, configuração de sessão, cookies, logs e colunas do Identity em `Banco.txt` |
+| Contratos de arquitetura | `InsEmpodera.Tests/Architecture` | xUnit | Presença de autorização e token CSRF em ações, configuração de sessão, cookies, logs, colunas do Identity e o checklist da revisão do DDL (`RevisaoDdlTests`) |
 | CRUD | `InsEmpodera.Tests/Crud` | xUnit + EF Core | Regras dos controllers chamadas diretamente, com banco real |
 | Integração HTTP | `InsEmpodera.Tests/Integration` | xUnit + `WebApplicationFactory` | Fluxos completos pela aplicação: login, cookies, model binding, views, exportação e backup |
 | Segurança | `InsEmpodera.Tests/Security` | xUnit | Autorização por módulo, usuários inativos, recuperação de senha, uploads e cabeçalhos |
@@ -35,11 +35,11 @@ A matriz de cobertura dos CRUDs está em [TESTES.md](../TESTES.md), e os detalhe
 
 | Suíte | Requer |
 | --- | --- |
-| Backend completo e E2E | .NET 9 e um servidor MySQL ou MariaDB acessível |
+| Backend completo e E2E | .NET 9 e um servidor MySQL 8.4 ou posterior acessível (os bancos de teste são criados com `Database/Empodera.schema.sql`) |
 | Subconjunto de arquitetura e unidade | .NET 9 |
 | Interface | Node.js 22 e npm |
 | E2E | Também PowerShell 7, para instalar o Chromium pelo script do Playwright |
-| Executor completo | .NET 9, Node.js, npm, PowerShell 7 e MySQL/MariaDB |
+| Executor completo | .NET 9, Node.js, npm, PowerShell 7 e MySQL 8.4 ou posterior |
 
 Os testes que usam banco leem a variável `TEST_MYSQL_CONNECTION`. Informe **somente o servidor**, sem `Database`: cada teste cria um banco temporário com prefixo `insempodera_` e o apaga ao final. O usuário precisa de permissão para criar e excluir bancos. O banco de desenvolvimento não é acessado.
 
@@ -125,7 +125,7 @@ dotnet stryker
 
 | Workflow | Quando executa | Etapas |
 | --- | --- | --- |
-| [`testes.yml`](../.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel`/`Import_exel`; também manual | Job `testes`: executa `testar.ps1` com MariaDB 10.4.32 e publica `TestResults`, cobertura e evidências de falha. Job `banco-mariadb`: executa a suíte de backend no MariaDB e gera um relatório de compatibilidade |
+| [`testes.yml`](../.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel`/`Import_exel`; também manual | Job `testes`: executa `testar.ps1` com MySQL 8.4 LTS e publica `TestResults`, cobertura e evidências de falha. Job `banco-mysql`: executa a suíte de backend no MySQL 8.4 LTS e gera um relatório de compatibilidade |
 | [`main.yml`](../.github/workflows/main.yml) | Push em `import_exel` e pull request para `Import_exel` | Restaura, compila, testa e publica o pacote como artefato |
 | [`qualidade-periodica.yml`](../.github/workflows/qualidade-periodica.yml) | Domingos às 03h (UTC) e manual | Testes de mutação com Stryker.NET e resumo em português |
 
@@ -162,4 +162,4 @@ Execução em 14/10/2026, em macOS (arm64), com .NET SDK 10.0.201, runtime ASP.N
 | `testar.ps1` | Não executado (PowerShell indisponível no ambiente) |
 | Mutação (Stryker.NET) | Não executado |
 
-Os testes não foram executados em MariaDB nesta revisão; a compatibilidade com MariaDB 10.4.32 é verificada pelo workflow `testes.yml`.
+Os testes rodam em MySQL 8.4 LTS na CI; nesta revisão passaram também localmente em MySQL 8.4.11 (Linux, via Docker) e 9.7.1 (macOS). O MariaDB deixou de ser suportado: o esquema usa o collation `utf8mb4_0900_ai_ci`, que só existe no MySQL.

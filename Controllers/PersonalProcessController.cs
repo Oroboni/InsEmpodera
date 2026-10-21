@@ -13,7 +13,7 @@ public class PersonalProcessController : Controller
 
     public PersonalProcessController(ApplicationDbContext context) => _context = context;
 
-    public async Task<IActionResult> Index(Guid? atorId, string? searchQuery)
+    public async Task<IActionResult> Index(int? atorId, string? searchQuery)
     {
         var user = await GetLoggedUserAsync();
         if (user is null) return RedirectToAction("Index", "Account");
@@ -41,19 +41,19 @@ public class PersonalProcessController : Controller
         return View(await query.OrderByDescending(d => d.Data).ThenByDescending(d => d.DtCriacao).ToListAsync());
     }
 
-    public async Task<IActionResult> Create(Guid? atorId)
+    public async Task<IActionResult> Create(int? atorId)
     {
         var user = await GetLoggedUserAsync();
         if (user is null) return RedirectToAction("Index", "Account");
         if (!HasCanonicalPermission(user) || !user.CanCreate(Module)) return StatusCode(StatusCodes.Status403Forbidden);
 
         await PopulateListsAsync(atorId);
-        return View(new DiarioProcessoPessoal { FK_id_Atores = atorId ?? Guid.Empty, Data = DateTime.Today });
+        return View(new DiarioProcessoPessoal { FK_id_Atores = atorId ?? 0, Data = DateTime.Today });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(DiarioProcessoPessoal diario, Guid[]? eixosIds)
+    public async Task<IActionResult> Create(DiarioProcessoPessoal diario, int[]? eixosIds)
     {
         var user = await GetLoggedUserAsync();
         if (user is null) return RedirectToAction("Index", "Account");
@@ -81,7 +81,7 @@ public class PersonalProcessController : Controller
         return RedirectToAction(nameof(Index), new { atorId = diario.FK_id_Atores });
     }
 
-    public async Task<IActionResult> Edit(Guid? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         var user = await GetLoggedUserAsync();
         if (user is null) return RedirectToAction("Index", "Account");
@@ -106,7 +106,7 @@ public class PersonalProcessController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, DiarioProcessoPessoal diario, Guid[]? eixosIds)
+    public async Task<IActionResult> Edit(int id, DiarioProcessoPessoal diario, int[]? eixosIds)
     {
         var user = await GetLoggedUserAsync();
         if (user is null) return RedirectToAction("Index", "Account");
@@ -144,7 +144,7 @@ public class PersonalProcessController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(int id)
     {
         var user = await GetLoggedUserAsync();
         if (user is null) return RedirectToAction("Index", "Account");
@@ -160,12 +160,12 @@ public class PersonalProcessController : Controller
 
     private async Task<Usuario?> GetLoggedUserAsync()
     {
-        if (!Guid.TryParse(HttpContext.Session.GetString("ID"), out var userId)) return null;
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var userId)) return null;
         return await _context.Usuarios.Include(u => u.Perfil).ThenInclude(p => p.Permissoes)
             .FirstOrDefaultAsync(u => u.IdUsuario == userId && u.Ativo == "S");
     }
 
-    private async Task PopulateListsAsync(Guid? actorId, IEnumerable<Guid>? selectedEixos = null)
+    private async Task PopulateListsAsync(int? actorId, IEnumerable<int>? selectedEixos = null)
     {
         ViewBag.AtorList = new SelectList(await _context.Atores.AsNoTracking().Where(a => a.Ativo != "N")
             .OrderBy(a => a.Nome).ToListAsync(), "IdAtores", "Nome", actorId);
@@ -174,10 +174,10 @@ public class PersonalProcessController : Controller
             .Select(a => new { id = a.IdAtores, nome = a.Nome })
             .ToListAsync();
         ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
-        ViewBag.SelectedEixos = selectedEixos?.ToHashSet() ?? new HashSet<Guid>();
+        ViewBag.SelectedEixos = selectedEixos?.ToHashSet() ?? new HashSet<int>();
     }
 
-    private async Task ValidateReferencesAsync(Guid actorId, Guid[]? eixosIds)
+    private async Task ValidateReferencesAsync(int actorId, int[]? eixosIds)
     {
         if (!await _context.Atores.AnyAsync(a => a.IdAtores == actorId && a.Ativo != "N"))
             ModelState.AddModelError(nameof(DiarioProcessoPessoal.FK_id_Atores), "Selecione um ator ativo.");
@@ -194,8 +194,8 @@ public class PersonalProcessController : Controller
         ModelState.Remove(nameof(DiarioProcessoPessoal.Eixos));
     }
 
-    private static IEnumerable<Guid> DistinctEixos(Guid[]? values) =>
-        (values ?? Array.Empty<Guid>()).Where(id => id != Guid.Empty).Distinct();
+    private static IEnumerable<int> DistinctEixos(int[]? values) =>
+        (values ?? Array.Empty<int>()).Where(id => id != 0).Distinct();
 
     private static bool HasCanonicalPermission(Usuario? user) =>
         user?.Perfil?.Permissoes?.Any(p => p.Modulo == "DiariosProcessoPessoal") == true;

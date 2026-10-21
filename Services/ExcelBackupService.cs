@@ -392,7 +392,6 @@ public sealed class ExcelBackupService(ApplicationDbContext context)
             if (type == typeof(float)) return cell.GetValue<float>();
             if (type == typeof(DateTime)) return DateTime.Parse(cell.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
             if (type == typeof(TimeSpan)) return TimeSpan.Parse(cell.GetString(), CultureInfo.InvariantCulture);
-            if (type == typeof(Guid)) return Guid.Parse(cell.GetString());
             if (type == typeof(byte[])) return Convert.FromBase64String(cell.GetString());
             if (type.IsEnum) return Enum.ToObject(type, cell.GetValue<int>());
             return Convert.ChangeType(cell.GetString(), type, CultureInfo.InvariantCulture);

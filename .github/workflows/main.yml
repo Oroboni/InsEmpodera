@@ -11,8 +11,8 @@ jobs:
 
     runs-on: ubuntu-latest
     services:
-      mariadb:
-        image: mariadb:10.4.32
+      mysql:
+        image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: testes_empodera
         ports:

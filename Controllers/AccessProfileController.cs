@@ -34,7 +34,7 @@ public class AccessProfileController : Controller
             .Include(c => c.Perfil)
             .ThenInclude(p => p.Permissoes)
             .Where(u =>
-                u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) &&
+                u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") &&
                 u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis"))
             .FirstOrDefault();
 
@@ -70,7 +70,7 @@ public class AccessProfileController : Controller
         }
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
         if (!PodePerfis.CanCreate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
@@ -97,7 +97,7 @@ public class AccessProfileController : Controller
             return View(model);
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
         if (!PodePerfis.CanCreate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
@@ -106,6 +106,7 @@ public class AccessProfileController : Controller
         var novoPerfil = new Perfil
         {
             Nome = model.Nome.Trim(),
+            FkIdUsuario = PodePerfis!.IdUsuario,
             DtCriacao = DateTime.Now,
             DtModificacao = DateTime.Now,
             Permissoes = new List<Permissoes>()
@@ -135,13 +136,13 @@ public class AccessProfileController : Controller
     }
 
     // GET: /AccessProfile/Edit/5
-    public async Task<IActionResult> Edit(Guid? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
         if (!PodePerfis.CanUpdate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
@@ -168,13 +169,13 @@ public class AccessProfileController : Controller
     // POST: /AccessProfile/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, Perfil perfilAtualizado)
+    public async Task<IActionResult> Edit(int id, Perfil perfilAtualizado)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodePerfis = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Perfis")).FirstOrDefault();
         if (!PodePerfis.CanUpdate("Perfis"))
         {
             return RedirectToAction("Index", "AccessProfile");
@@ -229,7 +230,7 @@ public class AccessProfileController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid? id)
+    public async Task<IActionResult> Delete(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -237,7 +238,7 @@ public class AccessProfileController : Controller
         if (id == null)
             return NotFound();
 
-        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         var loggedUser = await _context.Usuarios
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)

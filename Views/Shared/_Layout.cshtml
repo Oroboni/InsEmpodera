@@ -60,7 +60,7 @@
             <div class="section-1" id="sidebar">
                 @{
                     var nomeMenu = ViewContext.HttpContext?.Session?.GetString("Nome");
-                    var urlFotoMenu = Guid.TryParse(ViewContext.HttpContext?.Session?.GetString("ID"), out var idMenu) ? FotosMenu.Url(idMenu) : null;
+                    var urlFotoMenu = int.TryParse(ViewContext.HttpContext?.Session?.GetString("ID"), out var idMenu) ? FotosMenu.Url(idMenu) : null;
                 }
                 <h2 class="sidebar-user">
                     <span class="avatar avatar-md sidebar-avatar" aria-hidden="true">

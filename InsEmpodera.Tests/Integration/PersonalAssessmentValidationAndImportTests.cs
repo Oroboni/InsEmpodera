@@ -92,7 +92,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
         Assert.Equal(target.CreatedAt, stored.DtCriacao);
     }
 
-    private async Task<Guid> SeedActorAsync() =>
+    private async Task<int> SeedActorAsync() =>
         await HttpFlowTestSupport.InDatabaseAsync(_factory, async db =>
         {
             var actor = new Atores
@@ -128,7 +128,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
     private Task<int> CountAsync() =>
         HttpFlowTestSupport.InDatabaseAsync(_factory, db => db.AvaliacaoPessoal.CountAsync());
 
-    private static Dictionary<string, string> ValidFields(Guid actorId, int score) => new()
+    private static Dictionary<string, string> ValidFields(int actorId, int score) => new()
     {
         ["FK_id_Atores"] = actorId.ToString(),
         ["CCrimes"] = score.ToString(),
@@ -142,7 +142,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
         ["Lazer"] = score.ToString()
     };
 
-    private static AvaliacaoPessoal NewAssessment(Guid actorId, int score) => new()
+    private static AvaliacaoPessoal NewAssessment(int actorId, int score) => new()
     {
         FK_id_Atores = actorId,
         CCrimes = score,
@@ -156,7 +156,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
         Lazer = score
     };
 
-    private sealed record AssessmentTarget(Guid AssessmentId, Guid ActorId, DateTime CreatedAt);
+    private sealed record AssessmentTarget(int AssessmentId, int ActorId, DateTime CreatedAt);
 }
 
 public sealed class PersonalAssessmentImportTests : ControllerTestBase

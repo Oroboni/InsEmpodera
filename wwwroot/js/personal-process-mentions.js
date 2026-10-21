@@ -20,7 +20,7 @@
 
     // Nome exibido -> id do ator, para remontar o formato salvo no envio.
     const mencoes = new Map();
-    const TOKEN = /@\[([^\]\r\n]{1,120})\]\(ator:([^)\s]+)\)/g;
+    const TOKEN = /@\[([^\]\r\n]{1,150})\]\(ator:([^)\s]+)\)/g;
     const escaparRegex = texto => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     
     function padraoMencoes() {

@@ -46,7 +46,7 @@ flowchart TB
     SV --> DT
     DT --> MD
     VW --> RS
-    DT --> DB[("MySQL/MariaDB ou SQLite")]
+    DT --> DB[("MySQL ou SQLite")]
     SV --> SMTP["Gmail SMTP"]
 ```
 

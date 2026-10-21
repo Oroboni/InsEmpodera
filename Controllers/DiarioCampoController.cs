@@ -52,7 +52,7 @@ namespace Empodera.Controllers
         // ==========================================================
         // CREATE (GET)
         // ==========================================================
-        public async Task<IActionResult> Create(Guid? comunidadeId = null)
+        public async Task<IActionResult> Create(int? comunidadeId = null)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -61,7 +61,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index");
 
             await PreencherViewBagsDoBanco(); // Usa dados REAIS
-            return View(new DiarioCampo { FkIdComunidade = comunidadeId ?? Guid.Empty, Data = DateTime.Today });
+            return View(new DiarioCampo { FkIdComunidade = comunidadeId ?? 0, Data = DateTime.Today });
         }
 
         // ==========================================================
@@ -71,7 +71,7 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             DiarioCampo diarioCampo,
-            Guid[] EixosSelecionados,
+            int[] EixosSelecionados,
             List<DiarioAcaoInput>? TempAcoes = null)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
@@ -83,7 +83,7 @@ namespace Empodera.Controllers
             // Preenche dados automáticos
             diarioCampo.DtCriacao = DateTime.Now;
             diarioCampo.DtModificacao = DateTime.Now;
-            diarioCampo.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+            diarioCampo.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
             diarioCampo.Localizacao ??= string.Empty;
 
             // Remove validações de navegação que podem dar erro
@@ -117,7 +117,7 @@ namespace Empodera.Controllers
         // ==========================================================
         // EDIT (GET)
         // ==========================================================
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -144,10 +144,10 @@ namespace Empodera.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            Guid id,
+            int id,
             DiarioCampo diarioCampo,
-            Guid[] EixosSelecionados,
-            Guid[]? DAcoesExistentes = null,
+            int[] EixosSelecionados,
+            int[]? DAcoesExistentes = null,
             List<DiarioAcaoInput>? TempAcoes = null)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
@@ -192,7 +192,7 @@ namespace Empodera.Controllers
                     
                     if (EixosSelecionados != null)
                     {
-                        foreach (var eixoId in EixosSelecionados)
+                        foreach (var eixoId in EixosSelecionados.Distinct())
                         {
                             _context.DiarioEixos.Add(new DiarioEixo { FkIdDiario = id, FkIdEixo = eixoId });
                         }
@@ -234,7 +234,7 @@ namespace Empodera.Controllers
         // ==========================================================
         // DETAILS
         // ==========================================================
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
             if (id == null) return NotFound();
@@ -260,7 +260,7 @@ namespace Empodera.Controllers
         // ==========================================================
         // DELETE
         // ==========================================================
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
             if (id == null) return NotFound();
@@ -280,7 +280,7 @@ namespace Empodera.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
@@ -302,12 +302,12 @@ namespace Empodera.Controllers
         // MÉTODOS AUXILIARES (PRIVADOS)
         // ==========================================================
 
-        private bool DiarioCampoExists(Guid id)
+        private bool DiarioCampoExists(int id)
         {
             return _context.DiariosCampo.Any(e => e.IdDCampo == id);
         }
 
-        private async Task ValidarReferenciasAsync(Guid comunidadeId, Guid[] eixosSelecionados)
+        private async Task ValidarReferenciasAsync(int comunidadeId, int[] eixosSelecionados)
         {
             if (!await _context.Comunidades.AnyAsync(c => c.Id_Comunidade == comunidadeId))
                 ModelState.AddModelError(nameof(DiarioCampo.FkIdComunidade), "Selecione uma comunidade válida.");
@@ -417,7 +417,7 @@ namespace Empodera.Controllers
             return await _context.Usuarios
                 .Include(u => u.Perfil)
                 .ThenInclude(p => p.Permissoes)
-                .FirstOrDefaultAsync(u => u.IdUsuario == Guid.Parse(idString));
+                .FirstOrDefaultAsync(u => u.IdUsuario == int.Parse(idString));
         }
 
         // Auxiliar para verificar permissão

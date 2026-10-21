@@ -6,11 +6,13 @@ namespace Empodera.Models
 {
     public class RedePrimaria
     {
-        public Guid IdRedePrimaria { get; set; }   
-        public Guid FkIdAtorPrincipal { get; set; }    
-        public Guid FkIdAtorRelacionados { get; set; } 
+        public int IdRedePrimaria { get; set; }   
+        public int FkIdAtorPrincipal { get; set; }    
+        public int FkIdAtorRelacionados { get; set; } 
+        [StringLength(100)]
         public string TipoRelacao { get; set; } = null!;
         // "Primaria" ou "Subjetiva" (ver TiposRede).
+        [StringLength(20)]
         public string TipoRede { get; set; } = TiposRede.Primaria;
 
         public Atores AtorPrincipal { get; set; } = null!;

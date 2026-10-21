@@ -24,10 +24,11 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
             throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar integrações HTTP em MySQL.");
         var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer)
         {
-            Database = _databaseName,
-            GuidFormat = MySqlGuidFormat.Binary16
+            Database = _databaseName
         };
         _mysqlConnectionString = connectionBuilder.ConnectionString;
+        // Tabelas criadas pelo script oficial; na inicialização o EnsureCreated encontra o banco pronto.
+        EsquemaMySql.Criar(_mysqlConnectionString);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

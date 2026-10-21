@@ -6,20 +6,27 @@ namespace Empodera.Models
 {
     public class Comunidade
     {
-        public Guid Id_Comunidade { get; set; }
+        public int Id_Comunidade { get; set; }
+        [StringLength(150)]
         public string Nome { get; set; } = string.Empty;
+        [StringLength(500)]
         public string? Local { get; set; } = string.Empty;
+        [StringLength(500)]
         public string? LocalMapa { get; set; } = string.Empty;
+        [StringLength(500)]
         public string? LocalSecundario { get; set; } = string.Empty;
+        [StringLength(500)]
         public string? LocalMapaSecundario { get; set; } = string.Empty;
+        [StringLength(30)]
         public string Status { get; set; } = string.Empty;
+        [StringLength(255)]
         public string? Complemento { get; set; } = string.Empty;
         public string? Descricao { get; set; } = string.Empty;
         public string? Descricao_Acessibilidade { get; set; } = string.Empty;
         public DateTime Dt_Criacao { get; set; }
-        public DateTime Dt_Modificacao { get; set; }
-        public Guid FK_Id_Usuario { get; set; }
-        public Guid? FK_Id_UsuarioM { get; set; }
+        public DateTime? Dt_Modificacao { get; set; }
+        public int FK_Id_Usuario { get; set; }
+        public int? FK_Id_UsuarioM { get; set; }
         public string Ativo { get; set; } = "S";
         public Usuario Usuario { get; set; } = null!;
         public List<RedeRecursos> RedeRecursos { get; set; } = new();

@@ -18,7 +18,7 @@ public class AtividadesController : Controller
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanList("Atividades"))
         {
             return StatusCode(StatusCodes.Status403Forbidden);
@@ -38,7 +38,7 @@ public class AtividadesController : Controller
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
@@ -63,13 +63,13 @@ public class AtividadesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Atividades atividade, List<Guid> EixosSelecionados, Guid ComunidadeId)
+    public async Task<IActionResult> Create(Atividades atividade, List<int> EixosSelecionados, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
@@ -78,14 +78,14 @@ public class AtividadesController : Controller
         atividade.DtCriacao = DateTime.Now;
         atividade.DtModificacao = DateTime.Now;
         atividade.FkIdComunidade = ComunidadeId;
-        atividade.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        atividade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         _context.Atividades.Add(atividade);
         await _context.SaveChangesAsync();
 
         if (EixosSelecionados != null && EixosSelecionados.Count > 0)
         {
-            foreach (var eixoId in EixosSelecionados)
+            foreach (var eixoId in EixosSelecionados.Distinct())
             {
                 _context.AtividadesEixo.Add(new AtividadesEixo
                 {
@@ -99,13 +99,13 @@ public class AtividadesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Edit(Guid? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
@@ -136,13 +136,13 @@ public class AtividadesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, Atividades atividade, List<Guid> EixosSelecionados, Guid ComunidadeId)
+    public async Task<IActionResult> Edit(int id, Atividades atividade, List<int> EixosSelecionados, int ComunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("Index", "Atividades");
@@ -160,7 +160,7 @@ public class AtividadesController : Controller
         existingAtividade.Descricao = atividade.Descricao;
         existingAtividade.FkIdComunidade = ComunidadeId;
         existingAtividade.DtModificacao = DateTime.Now;
-        existingAtividade.FkIdUsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        existingAtividade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         var existingEixoIds = existingAtividade.AtividadesEixos.Select(ae => ae.FkIdEixo).ToList();
 
@@ -192,7 +192,7 @@ public class AtividadesController : Controller
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid? id)
+    public async Task<IActionResult> Delete(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -200,7 +200,7 @@ public class AtividadesController : Controller
         if (id == null)
             return NotFound();
 
-        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         var loggedUser = await _context.Usuarios
             .Include(user => user.Perfil)
             .ThenInclude(profile => profile.Permissoes)
