@@ -1,0 +1,52 @@
+# EcoRedes com MySQL 8.4 LTS. Passo a passo em docs/docker.md.
+#   cp .env.example .env   (e troque todos os valores)
+#   docker compose up -d --build
+# Os dados ficam em volumes nomeados e continuam lá ao reiniciar ou recriar os contêineres.
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no .env}
+      MYSQL_DATABASE: empodera
+      MYSQL_USER: ${MYSQL_USER:-empodera_app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?defina MYSQL_PASSWORD no .env}
+    volumes:
+      - mysql-dados:/var/lib/mysql
+      # Só na primeira vez (volume vazio): cria as 34 tabelas com o DDL oficial.
+      - ./Database/Empodera.schema.sql:/docker-entrypoint-initdb.d/01-empodera-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    # Sem porta publicada: o banco só é acessível pela aplicação (rede interna do compose).
+
+  app:
+    build: .
+    image: ecoredes-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=empodera;User=${MYSQL_USER:-empodera_app};Password=${MYSQL_PASSWORD};CharSet=utf8mb4;"
+      AllowedHosts: ${APP_DOMINIO:-localhost}
+      Email__User: ${EMAIL_USUARIO:-empodera.ajuda@gmail.com}
+      Email__Password: ${EMAIL_SENHA:?defina EMAIL_SENHA no .env}
+      Email__PublicBaseUrl: ${APP_URL_PUBLICA:?defina APP_URL_PUBLICA no .env}
+      Instalacao__SenhaAdmin: ${SENHA_INICIAL_ADMIN:-}
+    volumes:
+      - app-dados:/app/App_Data
+      - chaves:/var/lib/empodera/keys
+    ports:
+      # Só no próprio servidor; na internet o acesso passa pelo Nginx com HTTPS.
+      - "127.0.0.1:${APP_PORTA:-8080}:8080"
+
+volumes:
+  mysql-dados:
+  app-dados:
+  chaves:

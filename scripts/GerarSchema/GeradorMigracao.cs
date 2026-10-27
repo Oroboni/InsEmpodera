@@ -60,10 +60,11 @@ public static class GeradorMigracao
                 quantidade INT UNSIGNED NOT NULL
             );
 
-            -- O banco novo só pode ter os dados iniciais do script de criação.
+            -- O banco novo só pode ter os dados iniciais do script de criação e os eixos padrão
+            -- que a aplicação cadastra ao iniciar.
 
             """);
-        foreach (var e in entidades.Where(e => e.GetTableName() is not ("perfis" or "usuarios" or "permissoes")).OrderBy(e => e.GetTableName()))
+        foreach (var e in entidades.Where(e => e.GetTableName() is not ("perfis" or "usuarios" or "permissoes" or "eixos")).OrderBy(e => e.GetTableName()))
             Problema(sql, $"banco novo já tem dados em {e.GetTableName()}", $"SELECT COUNT(*) FROM {Novo}.{e.GetTableName()}");
 
         foreach (var e in entidades.OrderBy(e => e.GetTableName()))
@@ -124,6 +125,8 @@ public static class GeradorMigracao
             DELETE FROM {Novo}.permissoes;
             DELETE FROM {Novo}.usuarios;
             DELETE FROM {Novo}.perfis;
+            -- Eixos padrão cadastrados pela aplicação ao iniciar (nada aponta para eles: o resto está vazio).
+            DELETE FROM {Novo}.eixos;
 
 
             """);

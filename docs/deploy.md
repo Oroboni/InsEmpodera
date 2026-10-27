@@ -47,7 +47,7 @@ A integração contínua é automatizada; a **implantação é manual**. Nenhum 
 | [`main.yml`](../.github/workflows/main.yml) | Push em `import_exel`; pull request para `Import_exel` | `restore`, `build`, `test` e `dotnet publish`; artefato `app` |
 | [`qualidade-periodica.yml`](../.github/workflows/qualidade-periodica.yml) | Domingos às 03h (UTC); manual | Testes de mutação com Stryker.NET |
 
-As senhas usadas nos workflows (`MYSQL_ROOT_PASSWORD`) pertencem apenas aos contêineres temporários do MySQL criados durante cada execução.
+Os workflows não guardam senha: o MySQL temporário de cada execução usa o *secret* `TEST_MYSQL_PASSWORD`, se a equipe cadastrar um em *Settings → Secrets and variables → Actions*, ou uma senha gerada para aquela execução.
 
 ## Gerar o pacote de publicação
 

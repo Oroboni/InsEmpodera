@@ -335,7 +335,7 @@ As suítes que usam banco criam e removem bancos temporários no servidor indica
 | [`main.yml`](.github/workflows/main.yml) | Push na branch `import_exel` | Compila, testa e guarda o resultado de `dotnet publish` como artefato |
 | [`qualidade-periodica.yml`](.github/workflows/qualidade-periodica.yml) | Domingos às 03h (UTC) ou execução manual | Executa testes de mutação com Stryker.NET |
 
-Nenhum workflow publica a aplicação em servidor. A implantação é **manual**: o pacote gerado por `dotnet publish` é enviado a uma instância AWS EC2 com Nginx, systemd e MariaDB. O servidor novo (VPS Hostinger com MySQL 8.4 LTS) está em [docs/servidor-hostinger.md](docs/servidor-hostinger.md). O resumo está em [docs/deploy.md](docs/deploy.md), e o roteiro operacional completo, em [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md).
+Nenhum workflow publica a aplicação em servidor. A implantação é **manual**: o pacote gerado por `dotnet publish` é enviado a uma instância AWS EC2 com Nginx, systemd e MariaDB. O servidor novo (VPS Hostinger com Docker e MySQL 8.4) está em [docs/servidor-hostinger.md](docs/servidor-hostinger.md); a execução com Docker, em [docs/docker.md](docs/docker.md). O resumo está em [docs/deploy.md](docs/deploy.md), e o roteiro operacional completo, em [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md).
 
 ## 📚 Documentação complementar
 
@@ -349,7 +349,9 @@ Nenhum workflow publica a aplicação em servidor. A implantação é **manual**
 | [docs/rotas-e-integracoes.md](docs/rotas-e-integracoes.md) | Rotas MVC, downloads, endpoints JSON e serviços externos |
 | [docs/testes.md](docs/testes.md) | Suítes automatizadas, execução e validação manual |
 | [docs/deploy.md](docs/deploy.md) | Pipelines, publicação e implantação |
-| [docs/servidor-hostinger.md](docs/servidor-hostinger.md) | Servidor novo na Hostinger (VPS) com MySQL 8.4 LTS, passo a passo |
+| [docs/docker.md](docs/docker.md) | Docker (aplicação + MySQL 8.4): instalar, configurar, executar, atualizar, backup, restauração e migração |
+| [docs/servidor-hostinger.md](docs/servidor-hostinger.md) | Servidor na Hostinger (VPS) com Docker e MySQL 8.4, passo a passo |
+| [docs/seguranca-dados.md](docs/seguranca-dados.md) | Dados pessoais e credenciais: situação e plano para o histórico do Git |
 | [TESTES.md](TESTES.md) | Matriz de cobertura CRUD |
 | [InsEmpodera.E2ETests/README.md](InsEmpodera.E2ETests/README.md) | Detalhes da suíte Playwright |
 | [CONFIGURAR-GMAIL.md](CONFIGURAR-GMAIL.md) | Configuração do envio de e-mails |

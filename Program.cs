@@ -227,6 +227,21 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await EixoCatalogo.EnsureCreatedAsync(db);
+
+    // Instalação nova: define a senha do administrador (usuário 1) uma única vez. Só age enquanto ele ainda
+    // tiver a senha de fábrica do script de criação; bancos migrados e senhas já trocadas não são tocados.
+    var senhaInicial = builder.Configuration["Instalacao:SenhaAdmin"];
+    if (!string.IsNullOrWhiteSpace(senhaInicial) && !app.Environment.IsEnvironment("Testing"))
+    {
+        var admin = await db.Usuarios.FirstOrDefaultAsync(user => user.IdUsuario == 1 && user.Senha == ApplicationDbContext.SenhaDeFabrica);
+        if (admin is not null)
+        {
+            admin.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>().HashPassword(admin, senhaInicial);
+            admin.SecurityStamp = Guid.NewGuid().ToString("N");
+            await db.SaveChangesAsync();
+            app.Logger.LogWarning("Senha inicial do administrador ({Email}) definida. Remova Instalacao__SenhaAdmin da configuração.", admin.Email);
+        }
+    }
 }
 
 // Configure the HTTP request pipeline.

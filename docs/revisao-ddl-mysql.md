@@ -329,7 +329,10 @@ Resultado das consultas de verificação da revisão, no banco criado pelo scrip
 O banco em produção usa as chaves antigas (UUID em `BINARY(16)`) e os nomes antigos de colunas. A migração
 copia os dados para o esquema novo **sem perder registros nem vínculos**.
 
-**Passo a passo** (com a aplicação parada):
+**Com Docker** (recomendado), um único comando faz tudo e gera o relatório com os critérios de aceite:
+`scripts/migrar-dados.sh base-antiga.sql.gz app-data-antigo.tar.gz` — ver [docker.md](docker.md#7-migrar-os-dados-do-servidor-antigo).
+
+**Passo a passo manual** (com a aplicação parada):
 
 1. Faça backup do banco atual (`mariadb-dump`/`mysqldump`).
 2. Num servidor **MySQL 8.4 ou posterior**, importe o banco atual num schema chamado `empodera_antigo`.

@@ -30,7 +30,8 @@ CREATE TEMPORARY TABLE migracao_problemas (
     quantidade INT UNSIGNED NOT NULL
 );
 
--- O banco novo só pode ter os dados iniciais do script de criação.
+-- O banco novo só pode ter os dados iniciais do script de criação e os eixos padrão
+-- que a aplicação cadastra ao iniciar.
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em acoes', n FROM (SELECT COUNT(*) AS n FROM empodera.acoes) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em acoesatores', n FROM (SELECT COUNT(*) AS n FROM empodera.acoesatores) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em anexosdiario', n FROM (SELECT COUNT(*) AS n FROM empodera.anexosdiario) x WHERE n > 0;
@@ -49,7 +50,6 @@ INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em diarioeixos',
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em diarioscampo', n FROM (SELECT COUNT(*) AS n FROM empodera.diarioscampo) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em diariosprocessoeixos', n FROM (SELECT COUNT(*) AS n FROM empodera.diariosprocessoeixos) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em diariosprocessopessoal', n FROM (SELECT COUNT(*) AS n FROM empodera.diariosprocessopessoal) x WHERE n > 0;
-INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em eixos', n FROM (SELECT COUNT(*) AS n FROM empodera.eixos) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em fichacondicoes', n FROM (SELECT COUNT(*) AS n FROM empodera.fichacondicoes) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em fichapeticoes', n FROM (SELECT COUNT(*) AS n FROM empodera.fichapeticoes) x WHERE n > 0;
 INSERT INTO migracao_problemas SELECT 'banco novo já tem dados em ficharespostas', n FROM (SELECT COUNT(*) AS n FROM empodera.ficharespostas) x WHERE n > 0;
@@ -596,6 +596,8 @@ START TRANSACTION;
 DELETE FROM empodera.permissoes;
 DELETE FROM empodera.usuarios;
 DELETE FROM empodera.perfis;
+-- Eixos padrão cadastrados pela aplicação ao iniciar (nada aponta para eles: o resto está vazio).
+DELETE FROM empodera.eixos;
 
 INSERT INTO empodera.eixos (IdEixo, Nome)
 SELECT c0, c1 FROM (

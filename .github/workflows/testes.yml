@@ -24,7 +24,7 @@ jobs:
       mysql:
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: testes_empodera
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_MYSQL_PASSWORD || format('ci-{0}-{1}-{2}', github.run_id, github.run_attempt, github.job) }}
         ports:
           - 3306:3306
         options: >-
@@ -53,7 +53,7 @@ jobs:
       - name: Executar testes de backend e banco
         shell: pwsh
         env:
-          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
+          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=${{ secrets.TEST_MYSQL_PASSWORD || format('ci-{0}-{1}-{2}', github.run_id, github.run_attempt, github.job) }};Allow User Variables=true
         run: ./testar.ps1
 
       - name: Publicar resultados e cobertura
@@ -74,7 +74,7 @@ jobs:
       mysql:
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: testes_empodera
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_MYSQL_PASSWORD || format('ci-{0}-{1}-{2}', github.run_id, github.run_attempt, github.job) }}
         ports:
           - 3306:3306
         options: >-
@@ -94,7 +94,7 @@ jobs:
 
       - name: Verificar a FK no MySQL
         env:
-          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
+          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=${{ secrets.TEST_MYSQL_PASSWORD || format('ci-{0}-{1}-{2}', github.run_id, github.run_attempt, github.job) }};Allow User Variables=true
         run: dotnet test scripts/ForeignKey.Tests/ForeignKey.Tests.csproj --configuration Release --logger "console;verbosity=normal"
 
   banco-mysql:
@@ -105,7 +105,7 @@ jobs:
       mysql:
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: testes_empodera
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_MYSQL_PASSWORD || format('ci-{0}-{1}-{2}', github.run_id, github.run_attempt, github.job) }}
         ports:
           - 3306:3306
         options: >-
@@ -128,7 +128,7 @@ jobs:
         continue-on-error: true
         shell: pwsh
         env:
-          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=testes_empodera;Allow User Variables=true
+          TEST_MYSQL_CONNECTION: Server=127.0.0.1;Port=3306;User=root;Password=${{ secrets.TEST_MYSQL_PASSWORD || format('ci-{0}-{1}-{2}', github.run_id, github.run_attempt, github.job) }};Allow User Variables=true
         run: >-
           dotnet test InsEmpodera.Tests/InsEmpodera.Tests.csproj
           --configuration Release

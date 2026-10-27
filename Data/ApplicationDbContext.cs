@@ -595,7 +595,7 @@ namespace Empodera.Data
                 Email = email,
                 NormalizedEmail = normalizedEmail,
                 EmailConfirmed = true,
-                Senha = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==",
+                Senha = SenhaDeFabrica,
                 SecurityStamp = $"seed-security-stamp-{id}",
                 ConcurrencyStamp = $"seed-concurrency-stamp-{id}",
                 LockoutEnabled = true,
@@ -611,6 +611,9 @@ namespace Empodera.Data
                 IdiomaPreferido = IdiomaPreferido.Default
             };
         }
+
+        /// <summary>Hash da senha dos usuários de exemplo, gravado pelo script de criação do banco.</summary>
+        internal const string SenhaDeFabrica = "AQAAAAIAAYagAAAAEJcfohm0J9StjpodK4pthBMssFrYtCteqHFi8rtfIPs+0mjn9jbeYSGV2ri/Iq2tIA==";
 
         // Ids fixos dos dados iniciais (os mesmos do script Database/Empodera.schema.sql).
         private static int SeedGuid(int value) => value;
