@@ -99,7 +99,7 @@ public sealed class CommunityActorCrudHttpTests : IClassFixture<EmpoderaWebAppli
                 LocalMapa = "Rua do teste, 100, São Paulo",
                 Status = "Em processo",
                 Ativo = "S",
-                FK_Id_Usuario = 1,
+                FK_Id_Usuario = TestIds.Seed(1),
                 Dt_Criacao = DateTime.UtcNow,
                 Dt_Modificacao = DateTime.UtcNow
             };
@@ -130,5 +130,5 @@ public sealed class CommunityActorCrudHttpTests : IClassFixture<EmpoderaWebAppli
             expected,
             actor.RecursosAtores.Single(item => item.Tipo == type && item.Nome == name).Pode);
 
-    private static void AssertRandomKey(int id) => Assert.InRange(id, 100000, 999999);
+    private static void AssertRandomKey(int id) => Assert.NotEqual(0, id);
 }

@@ -26,7 +26,7 @@ public class ComunidadeController : Controller
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
         if (!PodeComunidade.CanList("Comunidades"))
         {
@@ -48,7 +48,7 @@ public class ComunidadeController : Controller
     }
 
     [HttpGet]
-    public IActionResult ComunidadesDetalhes(Guid id)
+    public IActionResult ComunidadesDetalhes(int id)
     {
         if (HttpContext.Session.GetString("ID") == null)
         {
@@ -57,18 +57,18 @@ public class ComunidadeController : Controller
         Comunidade? comunidade;
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
-        if (id != Guid.Empty && !PodeComunidade.CanUpdate("Comunidades"))
+        if (id != 0 && !PodeComunidade.CanUpdate("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
-        if (id == Guid.Empty && !PodeComunidade.CanCreate("Comunidades"))
+        if (id == 0 && !PodeComunidade.CanCreate("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
         }
 
-        if (id != Guid.Empty)
+        if (id != 0)
         {
             // Modo Edição: Busca a comunidade existente
             comunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == id);
@@ -84,7 +84,7 @@ public class ComunidadeController : Controller
         else
         {
             comunidade = new Comunidade();
-            comunidade.Id_Comunidade = Guid.Empty; 
+            comunidade.Id_Comunidade = 0; 
         }
 
         var qAtores = _context.AtorComunidades.Include(a => a.Ator).Where(a => a.Ator.Ativo != "N").Count(a => a.FkIdComunidade == id);
@@ -102,7 +102,7 @@ public class ComunidadeController : Controller
 
 [HttpPost]
 [ValidateAntiForgeryToken]
-public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, Guid id)
+public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, int id)
 {
     if (HttpContext.Session.GetString("Email") == null)
     {
@@ -110,17 +110,17 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     }
     
     var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-        .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
+        .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
     // 1. Verifica se tem o módulo OU se o módulo nega criação/atualização.
     // Usuário SEM o módulo OU com permissões negadas (N) deve ser redirecionado.
-    if ((comunidade.Id_Comunidade == Guid.Empty && !PodeComunidade.CanCreate("Comunidades")) || (comunidade.Id_Comunidade != Guid.Empty && !PodeComunidade.CanUpdate("Comunidades")))
+    if ((comunidade.Id_Comunidade == 0 && !PodeComunidade.CanCreate("Comunidades")) || (comunidade.Id_Comunidade != 0 && !PodeComunidade.CanUpdate("Comunidades")))
     {
         return RedirectToAction("Index", "Comunidade");
     }
 
 // Se a Id_Comunidade for 0, é uma nova criação
-    if (comunidade.Id_Comunidade == Guid.Empty)
+    if (comunidade.Id_Comunidade == 0)
     {
         comunidade.LocalMapa = BuildMapSearchAddress(comunidade.LocalMapa, comunidade.Local, comunidade.Nome);
         comunidade.LocalSecundario = NormalizeOptionalAddress(comunidade.LocalSecundario);
@@ -136,7 +136,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         comunidade.Dt_Criacao = DateTime.Now;
         comunidade.Dt_Modificacao = DateTime.Now;
-        comunidade.FK_Id_Usuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        comunidade.FK_Id_Usuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         comunidade.LocalMapa ??= comunidade.Local;
         
         _context.Comunidades.Add(comunidade);
@@ -145,7 +145,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return RedirectToAction(nameof(Index));
     }
         
-        // 2. Lógica de EDIÇÃO (Id_Comunidade != Guid.Empty)
+        // 2. Lógica de EDIÇÃO (Id_Comunidade != 0)
         var existingComunidade = _context.Comunidades.FirstOrDefault(c => c.Id_Comunidade == comunidade.Id_Comunidade);
         if (existingComunidade == null)
             return NotFound();
@@ -177,7 +177,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             existingComunidade.Descricao = comunidade.Descricao;
             existingComunidade.Descricao_Acessibilidade = comunidade.Descricao_Acessibilidade;
             existingComunidade.Dt_Modificacao = DateTime.Now;
-            existingComunidade.FK_Id_UsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+            existingComunidade.FK_Id_UsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
             _context.SaveChanges();
         }
@@ -385,7 +385,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid? id)
+    public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
         {
@@ -398,7 +398,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
 
         if (!PodeComunidade.CanDelete("Comunidades"))
         {
@@ -428,7 +428,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Processo(Guid? id)
+    public async Task<IActionResult> Processo(int? id)
     {
         if (id == null)
         {
@@ -439,7 +439,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("Index", "Account");
         }
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Comunidades")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Comunidades"))
         {
             return RedirectToAction("Index", "Comunidade");
@@ -463,7 +463,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return RedirectToAction("Index", "Comunidade");
     }
 
-    public IActionResult AtoresVinculados(Guid? id)
+    public IActionResult AtoresVinculados(int? id)
     {
         if (id == null)
         {
@@ -476,7 +476,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanList("Atores"))
         {
             return RedirectToAction("Index", "Comunidade");
@@ -500,13 +500,13 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     }
 
     //Recursos
-    public async Task<IActionResult> ComunidadeRecursos(Guid comunidadeId)
+    public async Task<IActionResult> ComunidadeRecursos(int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
         if (!PodeComunidade.CanList("Recursos"))
         {
             return RedirectToAction("ComunidadesDetalhes", "Comunidade");
@@ -517,7 +517,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .Include(r => r.Comunidade)       
             .Include(r => r.RedeEixos)  
                 .ThenInclude(re => re.Eixo)
-            .Where(r => r.FkIdComunidade == comunidadeId && r.Ator.Ativo != "N")
+            .Where(r => r.FkIdComunidade == comunidadeId && (r.FK_id_Atores == null || r.Ator.Ativo != "N"))
             .ToListAsync();
 
         ViewBag.ComunidadeId = comunidadeId;
@@ -526,15 +526,15 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     }
 
     [HttpGet]
-    public async Task<IActionResult> ComunidadeDetalhesRecursos(Guid? id)
+    public async Task<IActionResult> ComunidadeDetalhesRecursos(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        if (id == null || id == Guid.Empty) return NotFound();
+        if (id == null || id == 0) return NotFound();
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
         if (!PodeComunidade.CanViewDetails("Recursos"))
         {
             return RedirectToAction("Index", "Comunidade");
@@ -543,7 +543,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         // 1. Busca na tabela RedeRecursos em vez de Atividades
         var recurso = await _context.RedeRecursos
             .Include(r => r.RedeEixos).ThenInclude(re => re.Eixo)
-            .Include(r => r.Ator).Where(a => a.Ator.Ativo != "N")
+            .Include(r => r.Comunidade)
+            .Include(r => r.Ator).Where(r => r.FK_id_Atores == null || r.Ator.Ativo != "N")
             .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recurso == null) return NotFound();
@@ -566,14 +567,14 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return View(recurso);
     }
 
-    public async Task<IActionResult> Create_Recursos(Guid? comunidadeId)
+    public async Task<IActionResult> Create_Recursos(int? comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
-        if (comunidadeId == null || comunidadeId == Guid.Empty) return NotFound();
+        if (comunidadeId == null || comunidadeId == 0) return NotFound();
 
         var PodeRecurso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
         if (!PodeRecurso.CanCreate("Recursos"))
         {
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
@@ -603,7 +604,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     // POST: Recebe os dados e salva
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create_Recursos(RedeRecursos? recurso, List<Guid>? EixosSelecionados, Guid comunidadeId)
+    public async Task<IActionResult> Create_Recursos(RedeRecursos? recurso, List<int>? EixosSelecionados, int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -617,17 +618,20 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeRecurso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
         if (!PodeRecurso.CanCreate("Recursos"))
         {
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
         }
 
+        if (await PrepararRecursoAsync(recurso, comunidadeId) is { } erro)
+            return BadRequest(erro);
+
         // Preenche dados automáticos
         recurso.FkIdComunidade = comunidadeId;
         recurso.DtCriacao = DateTime.Now;
         recurso.DtModificacao = DateTime.Now;
-        recurso.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        recurso.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         _context.RedeRecursos.Add(recurso);
         await _context.SaveChangesAsync();
@@ -635,7 +639,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         // Salva os Eixos
         if (EixosSelecionados != null)
         {
-            foreach (var eixoId in EixosSelecionados)
+            foreach (var eixoId in EixosSelecionados.Distinct())
             {
                 _context.RedeEixos.Add(new RedeEixo { FkIdRede = recurso.Id_Rede, FkIdEixo = eixoId });
             }
@@ -647,7 +651,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit_Recursos(Guid id, RedeRecursos? recurso, List<Guid> EixosSelecionados)
+    public async Task<IActionResult> Edit_Recursos(int id, RedeRecursos? recurso, List<int> EixosSelecionados)
     {
         if (HttpContext.Session.GetString("Email") == null) return RedirectToAction("Index", "Account");
 
@@ -657,7 +661,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeRecurso = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Recursos")).FirstOrDefault();
         if (!PodeRecurso.CanUpdate("Recursos"))
         {
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
@@ -668,9 +672,11 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recursoDb == null) return NotFound();
+        if (await PrepararRecursoAsync(recurso, recursoDb.FkIdComunidade, recursoDb.Tipo) is { } erro)
+            return BadRequest(erro);
 
         recursoDb.Tipo = recurso.Tipo;
-        recursoDb.Dispositivo = recurso.Dispositivo;
+        recursoDb.Nome = recurso.Nome;
         recursoDb.Servicos = recurso.Servicos;
         recursoDb.FK_id_Atores = recurso.FK_id_Atores;
         recursoDb.DtModificacao = DateTime.Now;
@@ -678,7 +684,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         _context.RedeEixos.RemoveRange(recursoDb.RedeEixos);
         if (EixosSelecionados != null)
         {
-            foreach (var eixoId in EixosSelecionados)
+            foreach (var eixoId in EixosSelecionados.Distinct())
             {
                 _context.RedeEixos.Add(new RedeEixo { FkIdRede = id, FkIdEixo = eixoId });
             }
@@ -688,14 +694,47 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return RedirectToAction(nameof(ComunidadeDetalhesRecursos), new { id = recursoDb.Id_Rede });
     }
 
+    // Valida tipo e nome do recurso. Relacional: o nome vem do ator escolhido; os demais: texto livre,
+    // com ator responsável opcional. tipoGravado aceita o texto livre de recursos cadastrados antes da lista.
+    private async Task<string?> PrepararRecursoAsync(RedeRecursos recurso, int comunidadeId, string? tipoGravado = null)
+    {
+        recurso.Tipo = recurso.Tipo?.Trim() ?? string.Empty;
+        if (!TiposRecurso.EhValido(recurso.Tipo) && recurso.Tipo != tipoGravado)
+            return "Tipo de recurso inválido.";
+
+        Atores? ator = null;
+        if (recurso.FK_id_Atores is int atorId)
+        {
+            ator = await _context.AtorComunidades
+                .Where(ac => ac.FkIdComunidade == comunidadeId && ac.FK_id_Atores == atorId && ac.Ator.Ativo != "N")
+                .Select(ac => ac.Ator)
+                .FirstOrDefaultAsync();
+            if (ator is null)
+                return "O ator escolhido não pertence a esta comunidade.";
+        }
+
+        if (recurso.Tipo == TiposRecurso.Relacional)
+        {
+            if (ator is null)
+                return "Escolha o ator do recurso relacional.";
+            recurso.Nome = ator.Nome;
+            return null;
+        }
+
+        recurso.Nome = recurso.Nome?.Trim();
+        if (string.IsNullOrEmpty(recurso.Nome) || recurso.Nome.Length > 150)
+            return "Informe o nome do recurso (até 150 caracteres).";
+        return null;
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete_Recursos(Guid id)
+    public async Task<IActionResult> Delete_Recursos(int id)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
-        var userId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        var userId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         var user = await _context.Usuarios.Include(item => item.Perfil)
             .ThenInclude(profile => profile.Permissoes)
             .FirstOrDefaultAsync(item => item.IdUsuario == userId);
@@ -716,20 +755,20 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     // GET: /Actor/Create
     [HttpGet]
-    public async Task<IActionResult> Create_Atores(Guid? id)
+    public async Task<IActionResult> Create_Atores(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
             return RedirectToAction("Index", "Account");
         }
 
-        if (id == null || id == Guid.Empty)
+        if (id == null || id == 0)
         {
             return NotFound();
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
@@ -754,7 +793,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create_Atores(Atores ator, List<string>? recursos, List<string>? vulnerabilidades, Guid ComunidadeId, int? tipoRelacionamento = null)
+    public async Task<IActionResult> Create_Atores(Atores ator, List<string>? recursos, List<string>? vulnerabilidades, int ComunidadeId, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -762,7 +801,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanCreate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
@@ -789,10 +828,11 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         ator.DtCriacao = DateTime.Now;
         ator.DtModificacao = DateTime.Now;
-        ator.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        ator.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades, tipoRelacionamento);
 
         _context.Atores.Add(ator);
+        await TiposRecurso.GarantirRecursoRelacionalAsync(_context, ator, ComunidadeId, ator.FkIdUsuario);
         await _context.SaveChangesAsync();
 
 
@@ -802,7 +842,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     // GET: /Actor/Edit/5
     [HttpGet]
-    public async Task<IActionResult> Edit_Atores(Guid id, Guid comunidadeId)
+    public async Task<IActionResult> Edit_Atores(int id, int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -810,7 +850,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
@@ -848,13 +888,13 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit_Atores(Atores ator, Guid ComunidadeId, List<string>? recursos, List<string>? vulnerabilidades, int? tipoRelacionamento = null)
+    public async Task<IActionResult> Edit_Atores(Atores ator, int ComunidadeId, List<string>? recursos, List<string>? vulnerabilidades, int? tipoRelacionamento = null)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanUpdate("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
@@ -874,11 +914,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         atorDb.PapelSocial2 = ator.PapelSocial2;
         atorDb.Interesse = ator.Interesse;
         atorDb.Telefone = ator.Telefone;
-        atorDb.DaEquipe = ator.DaEquipe;
-        atorDb.Lopiniao = ator.Lopiniao;
-        atorDb.Mcomunidade = ator.Mcomunidade;
-        atorDb.Rope = ator.Rope;
-        atorDb.FkIdUsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        atorDb.CopiarRedesDe(ator);
+        atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
         var actorCommunity = await _context.AtorComunidades.FirstAsync(link =>
             link.FK_id_Atores == ator.IdAtores && link.FkIdComunidade == ComunidadeId);
@@ -900,6 +937,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             }
         }
 
+        await TiposRecurso.GarantirRecursoRelacionalAsync(_context, atorDb, ComunidadeId, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Edit_Atores), new { id = ator.IdAtores, comunidadeId = ComunidadeId });
@@ -909,7 +947,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     // GET: /Actor/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete_Atores(Guid? id)
+    public async Task<IActionResult> Delete_Atores(int? id)
     {
         if (HttpContext.Session.GetString("Email") == null)
         {
@@ -922,7 +960,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         var PodeComunidade = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atores")).FirstOrDefault();
         if (!PodeComunidade.CanDelete("Atores"))
         {
             return RedirectToAction("AtoresVinculados", "Comunidade");
@@ -935,20 +973,20 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return NotFound();
 
         ator.Ativo = "N";
-        ator.FkIdUsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        ator.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         ator.DtModificacao = DateTime.Now;
         await _context.SaveChangesAsync();
 
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = atorCom?.FkIdComunidade });
     }
 
-    public async Task<IActionResult> AtividadesVinculadas(Guid comunidadeId)
+    public async Task<IActionResult> AtividadesVinculadas(int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanList("Atividades"))
         {
             return RedirectToAction("Index", "Comunidade");
@@ -965,13 +1003,13 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return View(atividades);
     }
 
-    public async Task<IActionResult> Create_Atividades(Guid comunidadeId)
+    public async Task<IActionResult> Create_Atividades(int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
@@ -992,13 +1030,13 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create_Atividades(Atividades atividade, List<Guid> EixosSelecionados, Guid comunidadeId)
+    public async Task<IActionResult> Create_Atividades(Atividades atividade, List<int> EixosSelecionados, int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanCreate("Atividades"))
         {
             return RedirectToAction("Index", "Comunidade");
@@ -1007,14 +1045,14 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         atividade.DtCriacao = DateTime.Now;
         atividade.DtModificacao = DateTime.Now;
         atividade.FkIdComunidade = comunidadeId;
-        atividade.FkIdUsuario = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        atividade.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         _context.Atividades.Add(atividade);
         await _context.SaveChangesAsync();
 
         if (EixosSelecionados != null && EixosSelecionados.Count > 0)
         {
-            foreach (var eixoId in EixosSelecionados)
+            foreach (var eixoId in EixosSelecionados.Distinct())
             {
                 _context.AtividadesEixo.Add(new AtividadesEixo
                 {
@@ -1028,7 +1066,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         return RedirectToAction("AtividadesVinculadas", new { comunidadeId });
     }
 
-    public async Task<IActionResult> Edit_Atividades(Guid? id, Guid comunidadeId)
+    public async Task<IActionResult> Edit_Atividades(int? id, int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -1036,7 +1074,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         if (id == null) return NotFound();
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
@@ -1060,7 +1098,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit_Atividades(Guid id, Atividades atividade, List<Guid> EixosSelecionados, Guid comunidadeId)
+    public async Task<IActionResult> Edit_Atividades(int id, Atividades atividade, List<int> EixosSelecionados, int comunidadeId)
     {
         if (HttpContext.Session.GetString("Email") == null)
             return RedirectToAction("Index", "Account");
@@ -1068,7 +1106,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         if (id != atividade.IdAtividade) return NotFound();
 
         var PodeAtividades = _context.Usuarios.Include(c => c.Perfil).ThenInclude(p => p.Permissoes)
-            .Where(u => u.IdUsuario == Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString()) && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
+            .Where(u => u.IdUsuario == int.Parse(HttpContext.Session.GetString("ID") ?? "0") && u.Perfil.Permissoes.Any(p => p.Modulo == "Atividades")).FirstOrDefault();
         if (!PodeAtividades.CanUpdate("Atividades"))
         {
             return RedirectToAction("AtividadesVinculadas", "Comunidade");
@@ -1083,7 +1121,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         existingAtividade.Nome = atividade.Nome;
         existingAtividade.Descricao = atividade.Descricao;
         existingAtividade.DtModificacao = DateTime.Now;
-        existingAtividade.FkIdUsuarioM = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        existingAtividade.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
 
         var existingEixoIds = existingAtividade.AtividadesEixos.Select(ae => ae.FkIdEixo).ToList();
 

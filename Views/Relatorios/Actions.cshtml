@@ -1,78 +1,174 @@
 @model Empodera.Models.ActionsReportViewModel
 @{
     ViewData["Title"] = "Relatório - Ações";
-    ViewData["PageCSS"] = "reports";
+    ViewData["PageCSS"] = "homepage";
     Layout = "_Layout";
     string DateValue(DateTime? value) => value?.ToString("yyyy-MM-dd") ?? "";
+    // Exportação com os mesmos filtros aplicados na tela.
+    string Exportar(string formato) => Url.Action("Actions", new
+    {
+        comunidadeId = Model.ComunidadeId,
+        atorId = Model.AtorId,
+        eixoId = Model.EixoId,
+        dataDe = Model.DataDe?.ToString("yyyy-MM-dd"),
+        dataAte = Model.DataAte?.ToString("yyyy-MM-dd"),
+        exportar = formato
+    })!;
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
-    <style>
-        .date-row { display:flex; gap:15px; width:100%; }
-        .date-row .form-group { flex:1; margin-bottom:0; }
-        .report-totals { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
-        .report-total { background:var(--color-primary-50); color:var(--color-primary); padding:.6rem 1rem; border-radius:999px; font-weight:700; }
-    </style>
+    <partial name="_EstilosRelatorio" />
 }
 
-<div class="report-page-container">
-    <div class="report-breadcrumb"><h1><a asp-action="Index">Relatórios</a> &gt; <strong>Ações</strong></h1></div>
-    <div class="report-content-box">
-        <form asp-action="Actions" method="get" class="report-filters">
-            <div class="form-group">
-                <label for="comunidadeId">Comunidade</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-city"></i>
-                    <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
-                        <option value="">Selecione uma comunidade</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="atorId">Ator envolvido</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <select id="atorId" name="atorId" asp-items="ViewBag.AtorList"><option value="">Todos</option></select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
-                </div>
-            </div>
-            <div class="date-row">
-                <div class="form-group"><label for="dataDe">De</label><input id="dataDe" type="date" name="dataDe" value="@DateValue(Model.DataDe)" /></div>
-                <div class="form-group"><label for="dataAte">Até</label><input id="dataAte" type="date" name="dataAte" value="@DateValue(Model.DataAte)" /></div>
-            </div>
-            <div style="display:flex;gap:.75rem">
-                <a asp-action="Actions" class="btn btn-secondary">LIMPAR</a>
-                <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
-            </div>
-        </form>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Relatórios</a>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Ações</strong>
+        </h2>
+    </div>
 
-        <div class="report-body">
-            @if (!Model.ComunidadeId.HasValue)
-            {
-                <div class="report-empty-state"><i class="fa-solid fa-list-check" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Selecione uma comunidade para consultar as ações registradas.</p></div>
-            }
-            else if (Model.Rows.Count == 0)
-            {
-                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Nenhuma ação corresponde aos filtros escolhidos.</p></div>
-            }
-            else
-            {
-                <div class="report-totals">
-                    <span class="report-total">@Model.TotalActions ação(ões)</span>
-                    <span class="report-total">@Model.TotalQuantity atendimento(s)</span>
+    <form asp-action="Actions" method="get">
+        <div class="relatorio-filtros">
+            <partial name="_CampoFiltro" model='new Empodera.Models.RelatorioCampoFiltro("comunidadeId", "Comunidade", "fa-city",
+                (IEnumerable<SelectListItem>)ViewBag.Comunidades, "Selecione uma comunidade", Inteiro: true)' />
+            <partial name="_CampoFiltro" model='new Empodera.Models.RelatorioCampoFiltro("eixoId", "Eixo", "fa-tags",
+                (IEnumerable<SelectListItem>)ViewBag.EixoList, "Todos os eixos")' />
+            <partial name="_CampoFiltro" model='new Empodera.Models.RelatorioCampoFiltro("atorId", "Ator envolvido", "fa-user",
+                (IEnumerable<SelectListItem>)ViewBag.AtorList, "Todos os atores")' />
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="input-content">
+                    <label for="dataDe">De</label>
+                    <input id="dataDe" type="date" name="dataDe" value="@DateValue(Model.DataDe)" class="clean-input" />
                 </div>
-                <table class="matrix-table">
-                    <thead><tr><th>Eixo</th><th>Ações distintas</th><th>Quantidade atendida</th><th>Atores envolvidos</th></tr></thead>
-                    <tbody>
-                        @foreach (var row in Model.Rows)
-                        {
-                            <tr><td>@row.Axis</td><td>@row.Actions</td><td>@row.Quantity</td><td>@row.Actors</td></tr>
-                        }
-                    </tbody>
-                </table>
+            </div>
+            <div class="input-card">
+                <div class="icon-box purple"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="input-content">
+                    <label for="dataAte">Até</label>
+                    <input id="dataAte" type="date" name="dataAte" value="@DateValue(Model.DataAte)" class="clean-input" />
+                </div>
+            </div>
+        </div>
+        <div class="relatorio-botoes">
+            <a asp-action="Actions" class="wizard-btn btn-prev"><i class="fa-solid fa-rotate-left"></i> Limpar</a>
+            <button type="submit" class="wizard-btn btn-next"><i class="fa-solid fa-magnifying-glass"></i> Aplicar filtros</button>
+        </div>
+    </form>
+
+    @if (!Model.ComunidadeId.HasValue)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-list-check"></i></div>
+            <h3>Selecione uma comunidade</h3>
+            <p>Escolha a comunidade e aplique os filtros para consultar as ações registradas nos diários de campo.</p>
+        </div>
+    }
+    else if (Model.Details.Count == 0)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-filter-circle-xmark"></i></div>
+            <h3>Nenhuma ação encontrada</h3>
+            <p>Nenhuma ação corresponde aos filtros escolhidos.</p>
+        </div>
+    }
+    else
+    {
+        <div class="relatorio-cabecalho-secao">
+            <button type="button" class="section-label indicadores-toggle" data-indicadores aria-expanded="true"
+                    title="Recolher ou mostrar os indicadores">
+                <span>Indicadores</span>
+                <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+            </button>
+            <div class="relatorio-exportar">
+                <a href="@Exportar("excel")" class="btn-export" data-testid="actions-export-excel"
+                   aria-label="Exportar ações para Excel" title="Exportar ações para Excel">
+                    <i class="fa-solid fa-file-excel" aria-hidden="true"></i>
+                </a>
+                <a href="@Exportar("pdf")" class="btn-export pdf" data-testid="actions-export-pdf"
+                   aria-label="Exportar ações em PDF" title="Exportar ações em PDF">
+                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        <div class="actions-grid relatorio-indicadores-quatro">
+            <div class="action-card stats-card">
+                <span class="card-title">@Model.TotalActions</span>
+                <span class="card-subtitle">Ações</span>
+                <div class="card-icons"><i class="fas fa-list-check"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title">@Model.TotalQuantity</span>
+                <span class="card-subtitle">Atendimentos</span>
+                <div class="card-icons"><i class="fas fa-heart-pulse"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title">@Model.TotalAttended</span>
+                <span class="card-subtitle">Atendidos</span>
+                <div class="card-icons"><i class="fas fa-hand-holding-heart"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-magenta">
+                <span class="card-title">@Model.TotalActors</span>
+                <span class="card-subtitle">Atores envolvidos</span>
+                <div class="card-icons"><i class="fas fa-people-group"></i></div>
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Por eixo</div>
+        <div class="forms-list">
+            @foreach (var row in Model.Rows)
+            {
+                <div class="form-item">
+                    <div class="form-info">
+                        <div class="item-header">
+                            <div class="activity-icon activity-icon-purple"><i class="fas fa-tags"></i></div>
+                            <div class="item-content">
+                                <p class="name item-name">@row.Axis</p>
+                                <div class="tag-list">
+                                    <span class="tag-item tag-default"><i class="fas fa-list-check"></i> @row.Actions ação(ões)</span>
+                                    <span class="tag-item tag-lightgreen"><i class="fas fa-hand-holding-heart"></i> @row.Attended atendido(s)</span>
+                                    <span class="tag-item tag-blue"><i class="fas fa-heart-pulse"></i> @row.Quantity atendimento(s)</span>
+                                    <span class="tag-item tag-purple"><i class="fas fa-people-group"></i> @row.Actors ator(es) envolvido(s)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
-    </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Detalhamento das ações (@Model.Details.Count)</div>
+        <div class="forms-list" data-testid="actions-detail-table">
+            @foreach (var acao in Model.Details)
+            {
+                <div class="form-item">
+                    <div class="form-info">
+                        <div class="item-header">
+                            <div class="activity-icon activity-icon-purple"><i class="fas fa-heart-pulse"></i></div>
+                            <div class="item-content">
+                                <p class="name item-name">@acao.ActionName</p>
+                                <p class="item-subtitle">
+                                    <i class="fas fa-calendar-day"></i> @acao.Date.ToString("dd/MM/yyyy")
+                                    &nbsp;·&nbsp; <i class="fas fa-tags"></i> @acao.Axes
+                                </p>
+                                <div class="tag-list">
+                                    <span class="tag-item tag-lightgreen"><i class="fas fa-hand-holding-heart"></i> @acao.Attended atendido(s)</span>
+                                    <span class="tag-item tag-blue"><i class="fas fa-heart-pulse"></i> @acao.Services atendimento(s)</span>
+                                    <span class="tag-item tag-purple"><i class="fas fa-people-group"></i> @acao.ActorsInvolved ator(es) envolvido(s)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <p class="relatorio-nota">
+            Atendidos: atores cadastrados na ação que não são da equipe. Atendimentos: quantidade informada na ação.
+            Atores envolvidos: todos os atores cadastrados na ação. Nos indicadores, cada pessoa conta uma vez.
+        </p>
+    }
 </div>

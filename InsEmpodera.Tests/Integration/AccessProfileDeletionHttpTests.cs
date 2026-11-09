@@ -74,13 +74,13 @@ public sealed class AccessProfileDeletionHttpTests : IClassFixture<EmpoderaWebAp
 
         using var response = await HttpFlowTestSupport.PostFormAsync(
             client,
-            "/AccessProfile/Delete/1",
+            $"/AccessProfile/Delete/{TestIds.Seed(1)}",
             tokenPage: "/AccessProfile");
         HttpFlowTestSupport.AssertRedirect(response, "/AccessProfile");
 
         Assert.True(await HttpFlowTestSupport.InDatabaseAsync(
             _factory,
-            db => db.Perfis.AnyAsync(profile => profile.IdPerfil == 1)));
+            db => db.Perfis.AnyAsync(profile => profile.IdPerfil == TestIds.Seed(1))));
         using var index = await client.GetAsync("/AccessProfile");
         Assert.Contains(
             @"role=""alert""",
@@ -141,7 +141,7 @@ public sealed class AccessProfileDeletionHttpTests : IClassFixture<EmpoderaWebAp
             var profile = new Perfil
             {
                 Nome = $"Perfil exclusão {Guid.NewGuid():N}",
-                FkIdUsuario = 1,
+                FkIdUsuario = TestIds.Seed(1),
                 DtCriacao = DateTime.UtcNow,
                 DtModificacao = DateTime.UtcNow,
                 Permissoes = new List<Permissoes>

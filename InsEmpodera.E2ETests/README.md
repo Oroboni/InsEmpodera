@@ -2,31 +2,17 @@
 
 Esta pasta contém jornadas end-to-end em Chromium com Playwright 1.62.0. A suíte abre a interface real, atravessa o pipeline ASP.NET Core e confirma o resultado no banco, em vez de simular os controllers.
 
-## Execução recomendada
+## Execução manual opcional
 
-Na raiz do repositório, execute:
-
-```powershell
-.\testar.ps1
-```
-
-O runner restaura .NET e Node, compila em `Release`, instala de forma idempotente o Chromium compatível, executa os testes de backend com cobertura, os testes de eventos/contratos do DOM e, por fim, as jornadas no navegador.
-
-Para acompanhar o navegador localmente:
-
-```powershell
-.\testar.ps1 -Headed -SlowMo 250
-```
-
-Para executar apenas esta suíte depois do primeiro build:
+Esta suíte foi retirada de `testar.ps1` e dos workflows de CI. Seus arquivos permanecem disponíveis para uma execução manual, se desejada:
 
 ```powershell
 dotnet build .\InsEmpodera.E2ETests\InsEmpodera.E2ETests.csproj -c Release
-.\bin\InsEmpodera.E2ETests\Release\net9.0\playwright.ps1 install chromium
+.\bin\InsEmpodera.E2ETests\Release\net10.0\playwright.ps1 install chromium
 dotnet test .\InsEmpodera.E2ETests\InsEmpodera.E2ETests.csproj -c Release --no-build
 ```
 
-Pré-requisitos: .NET SDK 9, Node.js/npm, PowerShell 7 e um servidor MySQL ou MariaDB informado em `TEST_MYSQL_CONNECTION` (somente o servidor, sem `Database`). O banco de desenvolvimento não é usado.
+Pré-requisitos: .NET SDK 10, PowerShell 7 e um servidor MySQL ou MariaDB informado em `TEST_MYSQL_CONNECTION` (somente o servidor, sem `Database`). O banco de desenvolvimento não é usado.
 
 ## Isolamento e evidências
 
@@ -59,4 +45,4 @@ A recuperação de senha é implementada no servidor (`AccountController.ForgotP
 
 ## CI
 
-`.github/workflows/testes.yml` executa a bateria completa nas branches comuns e por acionamento manual, com caches de NuGet, npm e Playwright e upload dos artifacts mesmo em falha. O workflow legado `main.yml` foi preservado para as branches específicas de importação e publicação; os gatilhos são separados para não repetir a mesma bateria.
+Os workflows `.github/workflows/testes.yml` e `.github/workflows/main.yml` executam somente testes de backend e banco. Esta suíte de navegador não participa da CI.

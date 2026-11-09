@@ -21,7 +21,7 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         return Save(workbook);
     }
 
-    public async Task<byte[]> ExportCommunityAsync(Guid communityId, CancellationToken cancellationToken)
+    public async Task<byte[]> ExportCommunityAsync(int communityId, CancellationToken cancellationToken)
     {
         var community = await _context.Comunidades.AsNoTracking()
             .Where(item => item.Id_Comunidade == communityId)
@@ -91,7 +91,7 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         return Save(workbook);
     }
 
-    public async Task<byte[]> ExportCommunityActorsAsync(Guid communityId, CancellationToken cancellationToken)
+    public async Task<byte[]> ExportCommunityActorsAsync(int communityId, CancellationToken cancellationToken)
     {
         var links = await _context.AtorComunidades.AsNoTracking()
             .Where(item => item.FkIdComunidade == communityId).ToListAsync(cancellationToken);
@@ -111,7 +111,7 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         return Save(workbook);
     }
 
-    public async Task<byte[]> ExportCommunityActivitiesAsync(Guid communityId, CancellationToken cancellationToken)
+    public async Task<byte[]> ExportCommunityActivitiesAsync(int communityId, CancellationToken cancellationToken)
     {
         var activities = await _context.Atividades.AsNoTracking()
             .Where(item => item.FkIdComunidade == communityId)
@@ -140,7 +140,7 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         return Save(workbook);
     }
 
-    public async Task<byte[]> ExportCommunityResourcesAsync(Guid communityId, CancellationToken cancellationToken)
+    public async Task<byte[]> ExportCommunityResourcesAsync(int communityId, CancellationToken cancellationToken)
     {
         var resources = await _context.RedeRecursos.AsNoTracking()
             .Where(item => item.FkIdComunidade == communityId)
@@ -190,7 +190,7 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         return Save(workbook);
     }
 
-    private async Task AddDiarySheetsAsync(XLWorkbook workbook, Guid[] diaryIds, Guid[] institutionalActionIds, Guid[] detailIds, CancellationToken token)
+    private async Task AddDiarySheetsAsync(XLWorkbook workbook, int[] diaryIds, int[] institutionalActionIds, int[] detailIds, CancellationToken token)
     {
         AddSheet(workbook, "DiariosCampo", await _context.DiariosCampo.AsNoTracking().Where(item => diaryIds.Contains(item.IdDCampo)).ToListAsync(token));
         AddSheet(workbook, "DiariosEixos", await _context.DiarioEixos.AsNoTracking().Where(item => diaryIds.Contains(item.FkIdDiario)).ToListAsync(token));
@@ -202,7 +202,7 @@ public sealed class SpreadsheetExportService(ApplicationDbContext context)
         AddSheet(workbook, "AnexosDiario", await _context.AnexosDiario.AsNoTracking().Where(item => diaryIds.Contains(item.FkIdDiario)).ToListAsync(token));
     }
 
-    private async Task AddFirstContactSheetsAsync(XLWorkbook workbook, Guid[] formIds, CancellationToken token)
+    private async Task AddFirstContactSheetsAsync(XLWorkbook workbook, int[] formIds, CancellationToken token)
     {
         AddSheet(workbook, "FichasPrimeiroContato", await _context.FichasPrimeiroContato.AsNoTracking().Where(item => formIds.Contains(item.IdFicha)).ToListAsync(token));
         AddSheet(workbook, "FontesInformacao", await _context.FontesInfo.AsNoTracking().Where(item => formIds.Contains(item.FkIdFicha)).ToListAsync(token));

@@ -109,10 +109,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 "Defina ConnectionStrings__DefaultConnection por variável de ambiente ou cofre de segredos.");
         }
 
-        var mysqlConnection = new MySqlConnectionStringBuilder(connectionString)
-        {
-            GuidFormat = MySqlGuidFormat.Binary16
-        }.ConnectionString;
+        var mysqlConnection = connectionString;
 
         options.UseMySql(
             mysqlConnection,
@@ -153,6 +150,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<TemaPersonalizadoService>();
 builder.Services.AddSingleton<FotoUsuarioService>();
 builder.Services.AddScoped<RelatorioExcelService>();
+builder.Services.AddScoped<RelatoriosService>();
+builder.Services.AddScoped<RelatorioArquivosService>();
 builder.Services.AddScoped<SpreadsheetExportService>();
 builder.Services.AddScoped<ExcelBackupService>();
 
@@ -230,6 +229,21 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await EixoCatalogo.EnsureCreatedAsync(db);
+
+    // Instalação nova: define a senha do administrador (usuário 1) uma única vez. Só age enquanto ele ainda
+    // tiver a senha de fábrica do script de criação; bancos migrados e senhas já trocadas não são tocados.
+    var senhaInicial = builder.Configuration["Instalacao:SenhaAdmin"];
+    if (!string.IsNullOrWhiteSpace(senhaInicial) && !app.Environment.IsEnvironment("Testing"))
+    {
+        var admin = await db.Usuarios.FirstOrDefaultAsync(user => user.IdUsuario == 1 && user.Senha == ApplicationDbContext.SenhaDeFabrica);
+        if (admin is not null)
+        {
+            admin.Senha = new Microsoft.AspNetCore.Identity.PasswordHasher<Empodera.Models.Usuario>().HashPassword(admin, senhaInicial);
+            admin.SecurityStamp = Guid.NewGuid().ToString("N");
+            await db.SaveChangesAsync();
+            app.Logger.LogWarning("Senha inicial do administrador ({Email}) definida. Remova Instalacao__SenhaAdmin da configuração.", admin.Email);
+        }
+    }
 }
 
 // Configure the HTTP request pipeline.

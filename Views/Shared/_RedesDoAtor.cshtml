@@ -1,0 +1,43 @@
+@model Empodera.Models.Atores
+@* Redes de que o ator faz parte (múltipla escolha). Usado no cadastro e na edição de atores. *@
+@{
+    var desabilitado = ViewData["Desabilitado"] as bool? == true;
+}
+<div class="input-card full-width" data-testid="actor-network-flags">
+    <div class="icon-box purple"><i class="fa-solid fa-people-group"></i></div>
+    <div class="input-content">
+        <label>Redes do ator</label>
+        <small class="text-muted">Marque todas as opções que se aplicam:</small>
+        <div class="checkbox-group dense-grid">
+            <label class="checkbox-option">
+                <input asp-for="DaEquipe" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Da equipe</span>
+            </label>
+            <label class="checkbox-option">
+                <input asp-for="Rope" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Rede Operativa</span>
+            </label>
+            <label class="checkbox-option">
+                <input asp-for="Lopiniao" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Líder de opinião</span>
+            </label>
+            <label class="checkbox-option">
+                <input asp-for="Parceiro" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Parceiro</span>
+            </label>
+            <label class="checkbox-option">
+                <input asp-for="Mcomunidade" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Mora na comunidade</span>
+            </label>
+            <label class="checkbox-option">
+                <input asp-for="OperadorPar" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Operador par</span>
+            </label>
+            <label class="checkbox-option">
+                <input asp-for="RecursoRelacional" type="checkbox" disabled="@desabilitado" />
+                <span class="checkbox-label">Recurso relacional</span>
+            </label>
+        </div>
+        <small class="text-muted">Recurso relacional: o ator também entra nos recursos relacionais da comunidade.</small>
+    </div>
+</div>

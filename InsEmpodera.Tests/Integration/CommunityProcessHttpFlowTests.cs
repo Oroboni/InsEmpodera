@@ -72,7 +72,7 @@ public sealed class CommunityProcessHttpFlowTests : IClassFixture<EmpoderaWebApp
                 LocalMapa = "Rua do fluxo, 10, São Paulo",
                 Status = status,
                 Ativo = "S",
-                FK_Id_Usuario = 1,
+                FK_Id_Usuario = TestIds.Seed(1),
                 Dt_Criacao = DateTime.UtcNow,
                 Dt_Modificacao = DateTime.UtcNow
             };

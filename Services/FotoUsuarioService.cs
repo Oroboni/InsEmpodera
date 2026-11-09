@@ -46,7 +46,7 @@ public sealed class FotoUsuarioService
     }
 
     /// <summary>Valida e grava a foto. Retorna o nome do arquivo salvo ou lança ArgumentException com a mensagem para o usuário.</summary>
-    public async Task<string> SalvarAsync(Guid usuarioId, IFormFile arquivo, CancellationToken cancelamento = default)
+    public async Task<string> SalvarAsync(int usuarioId, IFormFile arquivo, CancellationToken cancelamento = default)
     {
         if (arquivo.Length == 0)
             throw new ArgumentException("O arquivo da foto está vazio.");
@@ -65,33 +65,33 @@ public sealed class FotoUsuarioService
 
         Directory.CreateDirectory(_pasta);
         Remover(usuarioId);
-        var nome = $"{usuarioId:N}{formato.Extensao}";
+        var nome = $"{usuarioId}{formato.Extensao}";
         await File.WriteAllBytesAsync(Path.Combine(_pasta, nome), bytes, cancelamento);
         return nome;
     }
 
-    public void Remover(Guid usuarioId)
+    public void Remover(int usuarioId)
     {
         foreach (var (extensao, _, _, _) in Formatos)
         {
-            var caminho = Path.Combine(_pasta, $"{usuarioId:N}{extensao}");
+            var caminho = Path.Combine(_pasta, $"{usuarioId}{extensao}");
             if (File.Exists(caminho)) File.Delete(caminho);
         }
     }
 
     /// <summary>Caminho e tipo da foto do usuário, ou null se ele não tiver foto.</summary>
-    public (string Caminho, string Tipo, DateTime Modificada)? Obter(Guid usuarioId)
+    public (string Caminho, string Tipo, DateTime Modificada)? Obter(int usuarioId)
     {
         foreach (var (extensao, tipo, _, _) in Formatos)
         {
-            var caminho = Path.Combine(_pasta, $"{usuarioId:N}{extensao}");
+            var caminho = Path.Combine(_pasta, $"{usuarioId}{extensao}");
             if (File.Exists(caminho)) return (caminho, tipo, File.GetLastWriteTimeUtc(caminho));
         }
         return null;
     }
 
     /// <summary>URL da foto com versão (para o navegador buscar a nova após troca), ou null.</summary>
-    public string? Url(Guid usuarioId)
+    public string? Url(int usuarioId)
     {
         var foto = Obter(usuarioId);
         return foto is null ? null : $"/Users/Foto/{usuarioId}?v={foto.Value.Modificada.Ticks:x}";

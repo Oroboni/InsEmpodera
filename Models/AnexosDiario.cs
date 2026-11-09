@@ -6,8 +6,9 @@ namespace Empodera.Models
 {
     public class AnexosDiario
     {
-        public Guid IdAnexos { get; set; }      
-        public Guid FkIdDiario { get; set; }     
+        public int IdAnexos { get; set; }      
+        public int FkIdDiario { get; set; }     
+        [StringLength(500)]
         public string Caminho { get; set; } = null!;
 
         public DiarioCampo Diario { get; set; } = null!;

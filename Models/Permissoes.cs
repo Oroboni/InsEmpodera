@@ -6,8 +6,9 @@ namespace Empodera.Models
 {
     public class Permissoes
     {
-        public Guid IdPermissoes { get; set; }
-        public Guid FkIdPerfil { get; set; }
+        public int IdPermissoes { get; set; }
+        public int FkIdPerfil { get; set; }
+        [StringLength(50)]
         public string Modulo { get; set; } = null!;
         public string PodeListar { get; set; } = null!;
         public string PodeDetalhar { get; set; } = null!;

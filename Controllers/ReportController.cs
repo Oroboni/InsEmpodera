@@ -67,7 +67,7 @@ public class ReportController : Controller
         if (files == null || files.Count == 0)
             return RedirectToAction("Index");
 
-        if (!Guid.TryParse(HttpContext.Session.GetString("ID"), out var userId))
+        if (!int.TryParse(HttpContext.Session.GetString("ID"), out var userId))
             return RedirectToAction("Index", "Account");
 
         const long maxUploadBytes = 20 * 1024 * 1024;
@@ -168,7 +168,7 @@ public class ReportController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private async Task ProcessarExcel(string filepath, Guid userId)
+    private async Task ProcessarExcel(string filepath, int userId)
     {
         var conf = new ExcelDataSetConfiguration
         {
@@ -217,7 +217,7 @@ public class ReportController : Controller
         // ─────────────────────────────────────────────────────────────
 
         // Mapa nome → IdAtores para uso nas abas seguintes
-        var atoresPorNome = new Dictionary<string, Guid>(StringComparer.OrdinalIgnoreCase);
+        var atoresPorNome = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
         if (dataSet.Tables.Count > 1)
         {
@@ -233,7 +233,7 @@ public class ReportController : Controller
                 {
                     Nome          = nome,
                     Genero        = NormalizeGenero(row[1]?.ToString()),
-                    Idade         = ParseInt(row[2]?.ToString()),
+                    Idade         = ParseInt(row[2]?.ToString()) is int idade and >= 0 and <= 130 ? idade : null,
                     PapelSocial1  = row[3]?.ToString()?.Trim(),
                     Telefone      = FormatPhone(row[4]?.ToString()),
                     Lopiniao      = ParseBool(row[5]?.ToString()),
@@ -303,7 +303,7 @@ public class ReportController : Controller
 
                 // Coluna 3 = Ator (nome do ator relacionado, se "Recurso Relacional")
                 var nomeAtor  = row[3]?.ToString()?.Trim();
-                Guid? idAtor   = null;
+                int? idAtor   = null;
                 if (!string.IsNullOrEmpty(nomeAtor) && atoresPorNome.TryGetValue(nomeAtor, out var aid))
                     idAtor = aid;
 
@@ -421,7 +421,7 @@ public class ReportController : Controller
                 var nomeAtor = row[0]?.ToString()?.Trim();
                 if (string.IsNullOrEmpty(nomeAtor)) continue;
 
-                if (!atoresPorNome.TryGetValue(nomeAtor, out Guid idAtor)) continue;
+                if (!atoresPorNome.TryGetValue(nomeAtor, out int idAtor)) continue;
 
                 DateTime.TryParse(row[1]?.ToString(), out DateTime dtAvaliacao);
 
@@ -463,7 +463,7 @@ public class ReportController : Controller
                 var descricao = row[2]?.ToString()?.Trim();
                 if (string.IsNullOrEmpty(nomeAtor) && string.IsNullOrEmpty(descricao)) continue;
 
-                if (!atoresPorNome.TryGetValue(nomeAtor ?? "", out Guid idAtor)) continue;
+                if (!atoresPorNome.TryGetValue(nomeAtor ?? "", out int idAtor)) continue;
 
                 DateTime.TryParse(row[1]?.ToString(), out DateTime data);
 
@@ -507,7 +507,7 @@ public class ReportController : Controller
                 if (string.IsNullOrEmpty(nomeAtor)) continue;
 
                 // Tenta resolver o ator; cria vínculo se já existir
-                atoresPorNome.TryGetValue(nomeAtor, out Guid idAtor);
+                atoresPorNome.TryGetValue(nomeAtor, out int idAtor);
 
                 DateTime.TryParse(row[3]?.ToString(), out DateTime dtNasc);
                 DateTime.TryParse(row[6]?.ToString(), out DateTime dtContato);
@@ -891,7 +891,8 @@ public class ReportController : Controller
             "masculino" => 1,
             "male"      => 1,
             "m"         => 1,
-            _           => ParseInt(value)
+            // Só os códigos aceitos pelo banco (CK_Atores_Genero: 0 a 3); o resto vira "não informado".
+            _           => ParseInt(value) is int codigo and >= 0 and <= 3 ? codigo : 0
         };
     }
 
@@ -945,18 +946,6 @@ public class ReportController : Controller
     // Rotas antigas de relatório: as telas ficam em RelatoriosController.
 
     // GET: /Report/Rsc
-    public async Task<IActionResult> Rsc(Guid? comunidadeId)
-    {
-        if (HttpContext.Session.GetString("Email") == null)
-            return RedirectToAction("Index", "Account");
-
-        var loggedUser = await CurrentUserWithPermissionsAsync();
-        if (!loggedUser.CanViewDetails("SER"))
-            return RedirectToAction("Index", "Relatorios");
-
-        ViewBag.ComunidadeList = new SelectList(await _context.Comunidades.Where(community => community.Ativo != "N").ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
-        return View();
-    }
     public Task<IActionResult> Rsc(int? comunidadeId) =>
         RedirectToReportAsync(nameof(RelatoriosController.Rsc), null);
 
@@ -1022,7 +1011,7 @@ public class ReportController : Controller
 
     private Task<Usuario?> CurrentUserWithPermissionsAsync()
     {
-        var loggedUserId = Guid.Parse(HttpContext.Session.GetString("ID") ?? Guid.Empty.ToString());
+        var loggedUserId = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         return _context.Usuarios
             .AsNoTracking()
             .Include(user => user.Perfil)

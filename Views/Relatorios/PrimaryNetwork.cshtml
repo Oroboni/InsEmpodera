@@ -1,80 +1,109 @@
+@model Empodera.Models.PrimaryNetworkReportViewModel
+@using Empodera.Models
 @{
     ViewData["Title"] = "Relatório - Rede Primária";
-    ViewData["PageCSS"] = "reports";
+    ViewData["PageCSS"] = "homepage";
     Layout = "_Layout";
-    // Rolagem ativada (linha DisableMainScroll removida)
-    
-    Guid? selectedAtorId = ViewBag.SelectedAtorId;
+    string Numero(decimal? valor, string sufixo = "") =>
+        valor is null ? "—" : valor.Value.ToString("0.##", System.Globalization.CultureInfo.GetCultureInfo("pt-BR")) + sufixo;
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
+    <partial name="_EstilosRelatorio" />
 }
 
-<div class="report-page-container">
-    <div class="report-breadcrumb">
-    <h1>
-        <a asp-controller="Relatorios" asp-action="Index">Relatórios</a>
-        > 
-        <strong>Rede Primária</strong>
-    </h1>
-</div>
-    <div class="report-content-box">
-        <div class="report-filters">
-            <form asp-action="PrimaryNetwork" method="get" id="atorSelectForm">
-                <div class="form-group">
-                    <label>Ator</label>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                        <select name="atorId" asp-items="ViewBag.AtorList" onchange="this.form.submit()">
-                            <option value="">Selecione um Ator...</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <div class="report-body">
-            @if (selectedAtorId == null)
-            {
-                <div class="report-empty-state">
-                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione um ator" />
-                    <p>Primeiro selecione um ator.</p>
-                </div>
-            }
-            else
-            {
-                <div class="metric-card-row">
-                    <div class="metric-card">
-                        <div class="title">Amplitude</div>
-                        <div class="value">2</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="title">Densidade</div>
-                        <div class="value">50.00%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="title">Centralidade</div>
-                        <div class="value" style="font-size: 1rem; color: #666; margin-top: 10px;">
-                            Nenhum item encontrado
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 40px; margin-top: 20px;">
-                    
-                    <div class="chart-container" style="max-width: 400px; margin: 0 auto;">
-                        <canvas id="networkDonutChart"></canvas>
-                    </div>
-
-                    <div class="chart-container-bar" style="width: 100%; height: 400px;">
-                        <canvas id="networkBarChart"></canvas>
-                    </div>
-                </div>
-            }
-        </div>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Relatórios</a>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Rede Primária</strong>
+        </h2>
     </div>
+
+    <div class="relatorio-filtros">
+        <form asp-action="PrimaryNetwork" method="get" style="display:contents">
+            <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("comunidadeId", "Comunidade", "fa-city",
+                (IEnumerable<SelectListItem>)ViewBag.Comunidades, "Todas as comunidades", EnviarAoMudar: true)' />
+        </form>
+        <form asp-action="PrimaryNetwork" method="get" style="display:contents" id="atorSelectForm">
+            <input type="hidden" name="comunidadeId" value="@Model.ComunidadeId" />
+            <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("atorId", "Ator", "fa-user",
+                (IEnumerable<SelectListItem>)ViewBag.AtorList, "Selecione um ator...", EnviarAoMudar: true)' />
+        </form>
+    </div>
+
+    @if (Model.AtorId == null)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-share-nodes"></i></div>
+            <h3>Selecione um ator</h3>
+            <p>Veja a amplitude, a densidade e a centralidade da rede primária do ator.</p>
+        </div>
+    }
+    else
+    {
+        <button type="button" class="section-label indicadores-toggle" data-indicadores aria-expanded="true"
+                title="Recolher ou mostrar os indicadores">
+            <span>Indicadores</span>
+            <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="actions-grid" data-testid="primary-network-metrics">
+            <div class="action-card stats-card">
+                <span class="card-title" data-metric="amplitude">@Model.Amplitude</span>
+                <span class="card-subtitle">Amplitude</span>
+                <div class="card-icons"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title" data-metric="densidade">@Numero(Model.Densidade, "%")</span>
+                <span class="card-subtitle">Densidade</span>
+                <div class="card-icons"><i class="fas fa-circle-nodes"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title" data-metric="centralidade">@Numero(Model.Centralidade)</span>
+                <span class="card-subtitle">Centralidade</span>
+                <div class="card-icons"><i class="fas fa-bullseye"></i></div>
+            </div>
+        </div>
+        <p class="relatorio-nota">
+            Amplitude: atores na rede primária do ator. Densidade: amplitude ÷ @Model.AtoresNaComunidade atores da comunidade
+            @(Model.ComunidadeNome is null ? "" : $"({Model.ComunidadeNome})").
+            Centralidade: grau (@Model.Grau vínculos que saem e chegam) ÷ (atores da comunidade − 1).
+        </p>
+
+        @if (Model.Amplitude == 0)
+        {
+            <div class="no-records">
+                <div class="no-records-icon"><i class="fas fa-people-roof"></i></div>
+                <h3>Sem rede primária</h3>
+                <p>Este ator ainda não tem rede primária cadastrada.</p>
+            </div>
+        }
+        else
+        {
+            <div class="purple-divider"></div>
+            <div class="section-label">Composição da rede</div>
+            <div class="relatorio-paineis">
+                <div class="relatorio-painel">
+                    <h3>Tipos de relação</h3>
+                    <div class="relatorio-grafico-rosca">
+                        <canvas id="networkDonutChart"
+                                data-labels="@System.Text.Json.JsonSerializer.Serialize(Model.Relacoes.Select(r => r.Label))"
+                                data-values="@System.Text.Json.JsonSerializer.Serialize(Model.Relacoes.Select(r => r.Value))"></canvas>
+                    </div>
+                </div>
+                <div class="relatorio-painel">
+                    <h3>Recursos e vulnerabilidades da rede</h3>
+                    <div class="relatorio-grafico-barras">
+                        <canvas id="networkBarChart"
+                                data-labels="@System.Text.Json.JsonSerializer.Serialize(Model.Eixos.Select(e => e.Axis))"
+                                data-resources="@System.Text.Json.JsonSerializer.Serialize(Model.Eixos.Select(e => e.Resources))"
+                                data-vulnerabilities="@System.Text.Json.JsonSerializer.Serialize(Model.Eixos.Select(e => e.Vulnerabilities))"></canvas>
+                    </div>
+                </div>
+            </div>
+            <p class="relatorio-nota">Barras: proporção dos atores da rede primária com cada recurso e vulnerabilidade marcados no cadastro.</p>
+        }
+    }
 </div>
 
 @section Scripts {

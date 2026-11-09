@@ -92,7 +92,7 @@
             <div class="icon-box"><i class="fa-solid fa-align-left"></i></div>
             <div class="input-content">
                 <label asp-for="Descricao">Descrição</label>
-                <textarea asp-for="Descricao" class="clean-input" rows="4"
+                <textarea asp-for="Descricao" maxlength="2000" class="clean-input" rows="4"
                           placeholder="Descreva a atividade..."></textarea>
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>

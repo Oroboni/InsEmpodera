@@ -5,7 +5,7 @@
     "removerFoto" apaga a foto atual. Pré-visualização em wwwroot/js/usuario-foto.js.
 *@
 @{
-    var urlFoto = Model.IdUsuario == Guid.Empty ? null : Fotos.Url(Model.IdUsuario);
+    var urlFoto = Model.IdUsuario == 0 ? null : Fotos.Url(Model.IdUsuario);
     var iniciais = Empodera.Services.FotoUsuarioService.Iniciais(Model.Nome);
 }
 <div class="input-card full-width user-photo-card" data-user-photo>

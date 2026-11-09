@@ -44,22 +44,22 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
             }),
             ("/Atores/Create", new Dictionary<string, string>
             {
-                ["Nome"] = "Ator bloqueado", ["Idade"] = "30", ["ComunidadeId"] = "1", ["Ativo"] = "S"
+                ["Nome"] = "Ator bloqueado", ["Idade"] = "30", ["ComunidadeId"] = TestIds.Seed(1).ToString(), ["Ativo"] = "S"
             }),
             ("/Atividades/Create", new Dictionary<string, string>
             {
-                ["Nome"] = "Atividade bloqueada", ["Descricao"] = "Sem permissão", ["ComunidadeId"] = "1"
+                ["Nome"] = "Atividade bloqueada", ["Descricao"] = "Sem permissão", ["ComunidadeId"] = TestIds.Seed(1).ToString()
             }),
             ("/DiarioCampo/Create", new Dictionary<string, string>
             {
-                ["FkIdComunidade"] = "1", ["Data"] = "2026-08-24", ["Descricao"] = "Diário bloqueado",
+                ["FkIdComunidade"] = TestIds.Seed(1).ToString(), ["Data"] = "2026-08-24", ["Descricao"] = "Diário bloqueado",
                 ["Localizacao"] = "Local", ["Foto"] = "foto.png"
             }),
             ("/FichaPrimeiroContato/Create", new Dictionary<string, string>
             {
-                ["FK_id_Atores"] = "1", ["DtContato"] = "2026-08-24", ["HoraContato"] = "10:00"
+                ["FK_id_Atores"] = TestIds.Seed(1).ToString(), ["DtContato"] = "2026-08-24", ["HoraContato"] = "10:00"
             }),
-            ("/PersonalAssessment/Create", AssessmentFields(actorId: 1, score: 3))
+            ("/PersonalAssessment/Create", AssessmentFields(actorId: TestIds.Seed(1), score: 3))
         };
 
         foreach (var (path, fields) in attempts)
@@ -142,7 +142,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
             ["Nome"] = marker,
             ["Idade"] = "31",
             ["Genero"] = "1",
-            ["ComunidadeId"] = "999999",
+            ["ComunidadeId"] = TestIds.Missing.ToString(),
             ["Ativo"] = "S"
         }, tokenPage: "/Atores/Create");
 
@@ -189,7 +189,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
             $"/Atividades/Edit/{activity.IdAtividade}",
             new Dictionary<string, string>
             {
-                ["IdAtividade"] = (activity.IdAtividade + 1).ToString(),
+                ["IdAtividade"] = TestIds.Missing.ToString(),
                 ["Nome"] = "Nome adulterado",
                 ["Descricao"] = "Não deve persistir",
                 ["ComunidadeId"] = activity.FkIdComunidade.ToString()
@@ -230,7 +230,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
             Nome = $"Atividade protegida {Guid.NewGuid():N}",
             Descricao = "Original",
             FkIdComunidade = community.Id_Comunidade,
-            FkIdUsuario = 1,
+            FkIdUsuario = TestIds.Seed(1),
             DtCriacao = DateTime.UtcNow,
             DtModificacao = DateTime.UtcNow
         };
@@ -248,7 +248,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         var actor = new Atores
         {
             Nome = $"Ator protegido {Guid.NewGuid():N}", Ativo = "S", Idade = 30,
-            FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+            FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         db.Atores.Add(actor);
         await db.SaveChangesAsync();
@@ -260,23 +260,24 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         var activity = new Atividades
         {
             Nome = $"Atividade protegida {Guid.NewGuid():N}", Descricao = "Protegida",
-            FkIdComunidade = community.Id_Comunidade, FkIdUsuario = 1,
+            FkIdComunidade = community.Id_Comunidade, FkIdUsuario = TestIds.Seed(1),
             DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         var diary = new DiarioCampo
         {
-            FkIdComunidade = community.Id_Comunidade, FkIdUsuario = 1, Data = DateTime.UtcNow,
+            FkIdComunidade = community.Id_Comunidade, FkIdUsuario = TestIds.Seed(1), Data = DateTime.UtcNow,
             Descricao = "Diário protegido", Localizacao = "Local", Foto = "foto.png",
             DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
         var assessment = new AvaliacaoPessoal
         {
-            FK_id_Atores = actor.IdAtores, FkIdUsuario = 1,
-            DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+            FK_id_Atores = actor.IdAtores, FkIdUsuario = TestIds.Seed(1),
+            DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow,
+            CCrimes = 3, Substancias = 3, Moradia = 3, Prevencao = 3, AssBasica = 3, Educacao = 3, Saude = 3, Ocupacao = 3, Lazer = 3,
         };
         var form = new FichaPrimeiroContato
         {
-            FK_id_Atores = actor.IdAtores, FkIdComunidade = community.Id_Comunidade, FkIdUsuario = 1,
+            FK_id_Atores = actor.IdAtores, FkIdComunidade = community.Id_Comunidade, FkIdUsuario = TestIds.Seed(1),
             DtContato = DateTime.UtcNow, HoraContato = TimeSpan.FromHours(10),
             DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
         };
@@ -284,7 +285,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         {
             Nome = "Usuário protegido", Email = $"protected-{Guid.NewGuid():N}@test.local", Senha = "Temporária@123",
             Ocupacao = "Teste", DtNascimento = new DateTime(1990, 1, 1), DtCriacao = DateTime.UtcNow,
-            DtAtualizacao = DateTime.UtcNow, FkIdPerfil = 1, Ativo = "S"
+            DtAtualizacao = DateTime.UtcNow, FkIdPerfil = TestIds.Seed(1), Ativo = "S"
         };
         targetUser.Senha = new PasswordHasher<Usuario>().HashPassword(targetUser, targetUser.Senha);
         db.AddRange(activity, diary, assessment, form, targetUser);
@@ -301,7 +302,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         LocalMapa = "Rua de teste, 10, São Paulo",
         Status = "Em processo",
         Ativo = "S",
-        FK_Id_Usuario = 1,
+        FK_Id_Usuario = TestIds.Seed(1),
         Dt_Criacao = DateTime.UtcNow,
         Dt_Modificacao = DateTime.UtcNow
     };
@@ -314,7 +315,7 @@ public sealed class HttpAuthorizationAndValidationFlowTests : IClassFixture<Empo
         ["Ocupacao"] = "QA",
         ["Genero"] = "1",
         ["DtNascimento"] = "1990-01-01",
-        ["FkIdPerfil"] = "1",
+        ["FkIdPerfil"] = TestIds.Seed(1).ToString(),
         ["Ativo"] = "S"
     };
 

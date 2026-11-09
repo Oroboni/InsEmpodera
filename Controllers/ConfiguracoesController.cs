@@ -12,7 +12,7 @@ namespace Empodera.Controllers
         private async Task<ContaUsuarioResumo?> CarregarContaAsync()
         {
             var db = HttpContext.RequestServices.GetService<ApplicationDbContext>();
-            if (db is null || !Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
+            if (db is null || !int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
                 return null;
 
             var usuario = await db.Usuarios.AsNoTracking()
@@ -34,7 +34,7 @@ namespace Empodera.Controllers
             }
             ViewBag.Conta = await CarregarContaAsync();
             ViewBag.TemaAtivo = (HttpContext.RequestServices.GetService<IConfiguration>()?["Tema"] ?? "verde").Trim().ToLowerInvariant();
-            ViewBag.CoresPersonalizadas = Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId)
+            ViewBag.CoresPersonalizadas = int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId)
                 && HttpContext.RequestServices.GetService<TemaPersonalizadoService>()?.Obter(usuarioId) is { Count: > 0 };
             return DefaultIndex();
         }
@@ -44,7 +44,7 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SalvarCores(Dictionary<string, string> cores)
         {
-            if (HttpContext.Session.GetString("Email") == null || !Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
+            if (HttpContext.Session.GetString("Email") == null || !int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
                 return RedirectToAction("Index", "Account");
 
             try
@@ -64,7 +64,7 @@ namespace Empodera.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RestaurarCores()
         {
-            if (HttpContext.Session.GetString("Email") == null || !Guid.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
+            if (HttpContext.Session.GetString("Email") == null || !int.TryParse(HttpContext.Session.GetString("ID"), out var usuarioId))
                 return RedirectToAction("Index", "Account");
 
             HttpContext.RequestServices.GetRequiredService<TemaPersonalizadoService>().Restaurar(usuarioId);

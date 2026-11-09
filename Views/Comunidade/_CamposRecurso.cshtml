@@ -1,0 +1,57 @@
+@model Empodera.Models.RedeRecursos
+@using Empodera.Data
+@* Tipo e nome do recurso. Relacional: o nome é um ator da comunidade; estrutural e simbólico: texto livre. *@
+@{
+    var tipoAtual = Model?.Tipo;
+    var tipoAntigo = !string.IsNullOrWhiteSpace(tipoAtual) && !TiposRecurso.EhValido(tipoAtual) ? tipoAtual : null;
+    var nomeAtual = Model?.Nome ?? Model?.Dispositivo;
+}
+<div class="form-group">
+    <label for="Tipo">Tipo de Recurso</label>
+    <div class="select-wrapper campo-select">
+        <i class="fa-solid fa-pencil"></i>
+        <select id="Tipo" name="Tipo" required data-recurso-tipo data-testid="resource-type">
+            <option value="">Selecione o tipo...</option>
+            @foreach (var (valor, descricao) in TiposRecurso.Opcoes)
+            {
+                <option value="@valor" selected="@(tipoAtual == valor)">@descricao</option>
+            }
+            @if (tipoAntigo is not null)
+            {
+                <option value="@tipoAntigo" selected>@tipoAntigo (cadastro antigo)</option>
+            }
+        </select>
+        <i class="fa-solid fa-chevron-down select-arrow"></i>
+    </div>
+</div>
+
+<div class="form-group" data-recurso-nome="texto">
+    <label for="Nome">Nome do recurso</label>
+    <div class="input-wrapper">
+        <i class="fa-solid fa-tag"></i>
+        <input id="Nome" name="Nome" type="text" maxlength="150" value="@nomeAtual" data-testid="resource-name"
+            placeholder="Ex.: campo de futebol, horta comunitária, cultura carnavalesca...">
+    </div>
+</div>
+
+<div class="form-group" data-recurso-nome="ator" hidden>
+    <label for="AtorRecurso">Nome do recurso (ator)</label>
+    <div class="select-wrapper campo-select">
+        <i class="fa-solid fa-user"></i>
+        <select id="AtorRecurso" name="FK_id_Atores" asp-items="ViewBag.Atores" data-testid="resource-actor">
+            <option value="">Selecione o ator...</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-arrow"></i>
+    </div>
+</div>
+
+<div class="form-group" data-recurso-responsavel>
+    <label for="AtorResponsavel">Ator Responsável (opcional)</label>
+    <div class="select-wrapper campo-select">
+        <i class="fa-solid fa-user"></i>
+        <select id="AtorResponsavel" name="FK_id_Atores" asp-items="ViewBag.Atores">
+            <option value="">Selecione quem gerencia este recurso...</option>
+        </select>
+        <i class="fa-solid fa-chevron-down select-arrow"></i>
+    </div>
+</div>

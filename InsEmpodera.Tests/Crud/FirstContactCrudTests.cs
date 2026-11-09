@@ -26,7 +26,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.FichasPrimeiroContato.SingleAsync(item => item.IdFicha == form.IdFicha);
         Assert.Equal("EmProgresso", saved.Status);
-        Assert.Equal(1, saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.Equal(2, await Db.FichaCondicoes.CountAsync(item => item.FkIdFicha == saved.IdFicha));
         Assert.Single(await Db.FichaPeticoes.Where(item => item.FkIdFicha == saved.IdFicha).ToListAsync());
         Assert.Single(await Db.FichaRespostas.Where(item => item.FkIdFicha == saved.IdFicha).ToListAsync());
@@ -40,7 +40,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         var controller = Attach(new FichaPrimeiroContatoController(Db));
 
         var existing = await controller.Edit(form.IdFicha);
-        var missing = await controller.Edit(999_999);
+        var missing = await controller.Edit(TestIds.Missing);
 
         Assert.Equal(form.IdFicha, Assert.IsType<FichaPrimeiroContato>(Assert.IsType<ViewResult>(existing).Model).IdFicha);
         Assert.IsType<NotFoundResult>(missing);
@@ -72,7 +72,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         Assert.Equal("Concluida", saved.Status);
         Assert.Equal("Complemento importado", saved.Complemento);
         Assert.Equal("Fonte importada", saved.FonteDados);
-        Assert.InRange((saved.DtCriacao - form.DtCriacao).Duration(), TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
+        Assert.InRange((saved.DtCriacao - form.DtCriacao).Duration(), TimeSpan.Zero, TimeSpan.FromSeconds(1)); // DATETIME sem frações de segundo: o banco arredonda para o segundo
         Assert.Equal(form.FkIdUsuario, saved.FkIdUsuario);
         Assert.Equal(new[] { "Nova" }, await Db.FichaCondicoes.Where(item => item.FkIdFicha == form.IdFicha).Select(item => item.Cond).ToArrayAsync());
         Assert.Equal(new[] { "Nova" }, await Db.FichaPeticoes.Where(item => item.FkIdFicha == form.IdFicha).Select(item => item.Pet).ToArrayAsync());
@@ -84,7 +84,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         var form = await AddFormAsync();
         var controller = Attach(new FichaPrimeiroContatoController(Db));
         var update = NewForm(form.FK_id_Atores, form.FkIdComunidade!.Value);
-        update.IdFicha = form.IdFicha + 1;
+        update.IdFicha = TestIds.Missing;
 
         var result = await controller.Edit(form.IdFicha, update, null, null, null, null);
 
@@ -141,7 +141,7 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         var community = await CreateCommunityAsync();
         var actor = await CreateActorAsync(community);
         var form = NewForm(actor.IdAtores, community.Id_Comunidade);
-        form.FkIdUsuario = 1;
+        form.FkIdUsuario = TestIds.Seed(1);
         form.DtCriacao = DateTime.UtcNow;
         form.DtModificacao = DateTime.UtcNow;
         Db.FichasPrimeiroContato.Add(form);

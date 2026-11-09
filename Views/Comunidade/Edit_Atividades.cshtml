@@ -63,7 +63,7 @@
             <label for="Descricao">Descrição</label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-align-left"></i>
-                <textarea asp-for="Descricao">@Model.Descricao</textarea>
+                <textarea asp-for="Descricao" maxlength="2000">@Model.Descricao</textarea>
             </div>
         </div>
 
@@ -99,7 +99,7 @@
                     <label>Última atualização</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-calendar-day"></i>
-                        <input type="text" value="@Model.DtModificacao.ToString("dd/MM/yyyy - HH:mm")" readonly>
+                        <input type="text" value="@Model.DtModificacao?.ToString("dd/MM/yyyy - HH:mm")" readonly>
                     </div>
                 </div>
                 }

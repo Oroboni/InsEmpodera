@@ -81,7 +81,7 @@ namespace Empodera.Services
                 foreach (var rede in comunidade.RedeRecursos)
                 {
                     wsRecursos.Cell(linhaRecurso, 1).Value =
-                        rede.Nome;
+                        rede.Nome ?? rede.Dispositivo;
 
                     wsRecursos.Cell(linhaRecurso, 2).Value =
                         rede.Tipo;
@@ -137,16 +137,14 @@ namespace Empodera.Services
 
             var wsAtores = workbook.Worksheets.Add("Atores");
 
-            wsAtores.Cell(1, 1).Value = "Nome";
-            wsAtores.Cell(1, 2).Value = "Gênero";
-            wsAtores.Cell(1, 3).Value = "Idade";
-            wsAtores.Cell(1, 4).Value = "Papel Social 1";
-            wsAtores.Cell(1, 5).Value = "Papel Social 2";
-            wsAtores.Cell(1, 6).Value = "Telefone";
-            wsAtores.Cell(1, 7).Value = "Da Equipe";
-            wsAtores.Cell(1, 8).Value = "ROPE";
-            wsAtores.Cell(1, 9).Value = "Lidera Opinião";
-            wsAtores.Cell(1, 10).Value = "Mobiliza Comunidade";
+            string[] cabecalhosAtores =
+            {
+                "Nome", "Gênero", "Idade", "Papel Social 1", "Papel Social 2", "Interesse", "Telefone",
+                "Da equipe", "Rede Operativa", "Líder de opinião", "Parceiro", "Mora na comunidade",
+                "Operador par", "Recurso relacional"
+            };
+            for (var coluna = 0; coluna < cabecalhosAtores.Length; coluna++)
+                wsAtores.Cell(1, coluna + 1).Value = cabecalhosAtores[coluna];
 
             int linhaAtor = 2;
 
@@ -162,12 +160,15 @@ namespace Empodera.Services
                 wsAtores.Cell(linhaAtor, 8).Value = ator.DaEquipe ? "Sim" : "Não";
                 wsAtores.Cell(linhaAtor, 9).Value = ator.Rope ? "Sim" : "Não";
                 wsAtores.Cell(linhaAtor, 10).Value = ator.Lopiniao ? "Sim" : "Não";
-                wsAtores.Cell(linhaAtor, 11).Value = ator.Mcomunidade ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 11).Value = ator.Parceiro ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 12).Value = ator.Mcomunidade ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 13).Value = ator.OperadorPar ? "Sim" : "Não";
+                wsAtores.Cell(linhaAtor, 14).Value = ator.RecursoRelacional ? "Sim" : "Não";
 
                 linhaAtor++;
             }
 
-            var cabecalho = wsAtores.Range("A1:J1");
+            var cabecalho = wsAtores.Range("A1:N1");
 
             cabecalho.Style.Font.Bold = true;
             cabecalho.Style.Fill.BackgroundColor = XLColor.LightBlue;

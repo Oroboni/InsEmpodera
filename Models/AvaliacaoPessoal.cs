@@ -6,8 +6,8 @@ namespace Empodera.Models
 {
     public class AvaliacaoPessoal
     {
-        public Guid IdAvaliacao { get; set; }   
-        public Guid FK_id_Atores{ get; set; }     
+        public int IdAvaliacao { get; set; }   
+        public int FK_id_Atores{ get; set; }     
         [Range(1, 5, ErrorMessage = "A pontuação deve estar entre 1 e 5.")]
         public int CCrimes { get; set; }
         [Range(1, 5, ErrorMessage = "A pontuação deve estar entre 1 e 5.")]
@@ -27,8 +27,8 @@ namespace Empodera.Models
         [Range(1, 5, ErrorMessage = "A pontuação deve estar entre 1 e 5.")]
         public int Lazer { get; set; }
         public DateTime DtCriacao { get; set; }
-        public DateTime DtModificacao { get; set; }
-        public Guid FkIdUsuario { get; set; }    
+        public DateTime? DtModificacao { get; set; }
+        public int FkIdUsuario { get; set; }    
 
         public Usuario Usuario { get; set; } = null!;
         public Atores Ator { get; set; } = null!;

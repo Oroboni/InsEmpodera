@@ -880,4 +880,76 @@
     <value>Início indisponível para o status</value>
     <comment>Source: Início indisponível para o status</comment>
   </data>
+  <data name='Ui_8650910f31075a8c' xml:space='preserve'>
+    <value>Redes do ator</value>
+    <comment>Source: Redes do ator</comment>
+  </data>
+  <data name='Ui_e32dda2f68677eca' xml:space='preserve'>
+    <value>Marque todas as opções que se aplicam:</value>
+    <comment>Source: Marque todas as opções que se aplicam:</comment>
+  </data>
+  <data name='Ui_fd8ddf596cf9c9fc' xml:space='preserve'>
+    <value>Da equipe</value>
+    <comment>Source: Da equipe</comment>
+  </data>
+  <data name='Ui_110ef15ace9a5bec' xml:space='preserve'>
+    <value>Líder de opinião</value>
+    <comment>Source: Líder de opinião</comment>
+  </data>
+  <data name='Ui_f2a864aa4c6d60ac' xml:space='preserve'>
+    <value>Parceiro</value>
+    <comment>Source: Parceiro</comment>
+  </data>
+  <data name='Ui_43895bb041aa84c7' xml:space='preserve'>
+    <value>Operador par</value>
+    <comment>Source: Operador par</comment>
+  </data>
+  <data name='Ui_26e577e1fb6bd673' xml:space='preserve'>
+    <value>Recurso relacional</value>
+    <comment>Source: Recurso relacional</comment>
+  </data>
+  <data name='Ui_b45c4b7991aa4214' xml:space='preserve'>
+    <value>Recurso relacional: o ator também entra nos recursos relacionais da comunidade.</value>
+    <comment>Source: Recurso relacional: o ator também entra nos recursos relacionais da comunidade.</comment>
+  </data>
+  <data name='Ui_87b61a6166929ce0' xml:space='preserve'>
+    <value>Selecione o tipo...</value>
+    <comment>Source: Selecione o tipo...</comment>
+  </data>
+  <data name='Ui_8451f1efce3eeff0' xml:space='preserve'>
+    <value>Estrutural (recursos materiais)</value>
+    <comment>Source: Estrutural (recursos materiais)</comment>
+  </data>
+  <data name='Ui_cec5b2fd448e4790' xml:space='preserve'>
+    <value>Relacional (pessoas)</value>
+    <comment>Source: Relacional (pessoas)</comment>
+  </data>
+  <data name='Ui_9108489055a0f0e2' xml:space='preserve'>
+    <value>Simbólico (sentimentos, características)</value>
+    <comment>Source: Simbólico (sentimentos, características)</comment>
+  </data>
+  <data name='Ui_8c33b8d78c75373c' xml:space='preserve'>
+    <value>(cadastro antigo)</value>
+    <comment>Source: (cadastro antigo)</comment>
+  </data>
+  <data name='Ui_fc7d2e9f371d65a2' xml:space='preserve'>
+    <value>Nome do recurso (ator)</value>
+    <comment>Source: Nome do recurso (ator)</comment>
+  </data>
+  <data name='Ui_a0196370a7bc4a4b' xml:space='preserve'>
+    <value>Nome do recurso</value>
+    <comment>Source: Nome do recurso</comment>
+  </data>
+  <data name='Ui_b535472916844604' xml:space='preserve'>
+    <value>Ex.: campo de futebol, horta comunitária, cultura carnavalesca...</value>
+    <comment>Source: Ex.: campo de futebol, horta comunitária, cultura carnavalesca...</comment>
+  </data>
+  <data name='Ui_161ba0820f6765ed' xml:space='preserve'>
+    <value>Selecione o ator...</value>
+    <comment>Source: Selecione o ator...</comment>
+  </data>
+  <data name='Ui_daadcb4b2c4d5c48' xml:space='preserve'>
+    <value>Ator Responsável (opcional)</value>
+    <comment>Source: Ator Responsável (opcional)</comment>
+  </data>
 </root>

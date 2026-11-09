@@ -25,9 +25,7 @@ public sealed class EmpoderaUserStore(ApplicationDbContext context) :
         ArgumentNullException.ThrowIfNull(user);
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (user.IdUsuario == Guid.Empty)
-            user.IdUsuario = Guid.NewGuid();
-
+        // IdUsuario é gerado pelo banco (AUTO_INCREMENT) ao salvar.
         user.ConcurrencyStamp = NewStamp();
         user.SecurityStamp = string.IsNullOrWhiteSpace(user.SecurityStamp) ? NewStamp() : user.SecurityStamp;
         context.Usuarios.Add(user);
@@ -76,7 +74,7 @@ public sealed class EmpoderaUserStore(ApplicationDbContext context) :
 
     public async Task<Usuario?> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-        if (!Guid.TryParse(userId, out var id))
+        if (!int.TryParse(userId, out var id))
             return null;
         return await context.Usuarios.SingleOrDefaultAsync(user => user.IdUsuario == id, cancellationToken);
     }

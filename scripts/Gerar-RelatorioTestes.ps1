@@ -313,7 +313,7 @@ function Add-TrxResults {
 
 function Add-FrontendResults {
     param([string]$Path)
-    if (-not (Test-Path -LiteralPath $Path)) { return }
+    if ([string]::IsNullOrWhiteSpace($Path) -or -not (Test-Path -LiteralPath $Path)) { return }
 
     $document = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
     foreach ($file in @($document.testResults)) {
@@ -393,14 +393,14 @@ Add-BuildResults -Path $BuildLog
 Add-TrxResults -Path $BackendTrx -Suite 'Backend e integrações HTTP' -AreaPadrao 'Backend'
 Add-FrontendResults -Path $FrontendJson
 Add-TrxResults -Path $NavegadorTrx -Suite 'Jornadas reais no Chromium' -AreaPadrao 'Navegador'
-Add-TrxResults -Path $MySqlTrx -Suite 'Compatibilidade com MySQL 8' -AreaPadrao 'MySQL'
+Add-TrxResults -Path $MySqlTrx -Suite 'Compatibilidade com MariaDB' -AreaPadrao 'Banco'
 
 $suitesEsperadas = @(
     if (-not [string]::IsNullOrWhiteSpace($BuildLog)) { [pscustomobject]@{ Nome = 'Compilação'; Arquivo = $BuildLog } }
     if (-not [string]::IsNullOrWhiteSpace($BackendTrx)) { [pscustomobject]@{ Nome = 'Backend e integrações HTTP'; Arquivo = $BackendTrx } }
     if (-not [string]::IsNullOrWhiteSpace($FrontendJson)) { [pscustomobject]@{ Nome = 'Interface e JavaScript'; Arquivo = $FrontendJson } }
     if (-not [string]::IsNullOrWhiteSpace($NavegadorTrx)) { [pscustomobject]@{ Nome = 'Jornadas reais no Chromium'; Arquivo = $NavegadorTrx } }
-    if (-not [string]::IsNullOrWhiteSpace($MySqlTrx)) { [pscustomobject]@{ Nome = 'Compatibilidade com MySQL 8'; Arquivo = $MySqlTrx } }
+    if (-not [string]::IsNullOrWhiteSpace($MySqlTrx)) { [pscustomobject]@{ Nome = 'Compatibilidade com MariaDB'; Arquivo = $MySqlTrx } }
 )
 $naoExecutadas = @($suitesEsperadas | Where-Object { -not (Test-Path -LiteralPath $_.Arquivo) })
 foreach ($missing in $naoExecutadas) {
@@ -425,6 +425,9 @@ foreach ($record in $registros) {
 }
 $falhas = @($registros | Where-Object Resultado -eq 'Falhou')
 $ignorados = @($registros | Where-Object Resultado -eq 'Ignorado')
+$testesExecutados = @($registros | Where-Object {
+    $_.Suite -notin @('Compilação', 'Pipeline') -and $_.NomeTecnico -notlike 'MISSING_RESULT_*'
+})
 
 foreach ($failure in $falhas) {
     $rule = Get-DiagnosticRule $failure
@@ -521,7 +524,7 @@ else {
 
     if ($causas.Count -gt 0) {
         $lines.Add('')
-        $lines.Add("Foram encontradas **$($causas.Count) causas distintas** para **$($falhas.Count) testes com falha**. Falhas iguais foram reunidas para evitar diagnósticos repetidos.")
+        $lines.Add("Foram encontradas **$($causas.Count) causas distintas** em **$($falhas.Count) ocorrências de falha** (incluindo compilação e etapas não executadas). Falhas iguais foram reunidas para evitar diagnósticos repetidos.")
         $lines.Add('')
         $lines.Add('### Distribuição por categoria')
         $lines.Add('')
@@ -659,10 +662,18 @@ foreach ($item in @($registros | Sort-Object DuracaoMs -Descending | Select-Obje
 $lines.Add('')
 $lines.Add('## Como interpretar')
 $lines.Add('')
-$lines.Add('- **Backend e integrações HTTP:** regras de negócio, banco, segurança, permissões e endpoints.')
-$lines.Add('- **Interface e JavaScript:** eventos, formulários, componentes e contratos do HTML.')
-$lines.Add('- **Jornadas reais no Chromium:** ações completas de uma pessoa usando o sistema no navegador.')
-$lines.Add('- **Compatibilidade com MySQL 8:** executa as integrações usando o mesmo provedor relacional da produção.')
+if (-not [string]::IsNullOrWhiteSpace($BackendTrx)) {
+    $lines.Add('- **Backend e integrações HTTP:** regras de negócio, banco, segurança, permissões e endpoints.')
+}
+if (-not [string]::IsNullOrWhiteSpace($FrontendJson)) {
+    $lines.Add('- **Interface e JavaScript:** eventos, formulários, componentes e contratos do HTML.')
+}
+if (-not [string]::IsNullOrWhiteSpace($NavegadorTrx)) {
+    $lines.Add('- **Jornadas reais no Chromium:** ações completas de uma pessoa usando o sistema no navegador.')
+}
+if (-not [string]::IsNullOrWhiteSpace($MySqlTrx)) {
+    $lines.Add('- **Compatibilidade com MariaDB:** executa as integrações usando o provedor relacional do projeto.')
+}
 $lines.Add('- Arquivos `.trx` e `.json` continuam disponíveis para diagnóstico técnico e integração com o GitHub.')
 
 $directory = Split-Path -Parent $Saida
@@ -687,10 +698,12 @@ $diagnosticJson = [pscustomobject]@{
         runAttempt = if ($env:GITHUB_RUN_ATTEMPT) { $env:GITHUB_RUN_ATTEMPT } else { '' }
     }
     summary = [pscustomobject]@{
-        executed = $registros.Count
-        passed = @($registros | Where-Object Resultado -eq 'Aprovado').Count
-        failed = $falhas.Count
-        skipped = $ignorados.Count
+        executed = $testesExecutados.Count
+        passed = @($testesExecutados | Where-Object Resultado -eq 'Aprovado').Count
+        failed = @($testesExecutados | Where-Object Resultado -eq 'Falhou').Count
+        skipped = @($testesExecutados | Where-Object Resultado -eq 'Ignorado').Count
+        diagnosticFailures = $falhas.Count
+        buildErrors = @($registros | Where-Object Suite -eq 'Compilação').Count
         missingSuites = @($naoExecutadas | ForEach-Object Nome)
         distinctCauses = $causas.Count
     }
@@ -757,7 +770,7 @@ if ($env:GITHUB_ACTIONS -eq 'true') {
 
 Write-Host "`n============================================================" -ForegroundColor DarkCyan
 Write-Host " RESULTADO GERAL: $resultadoGeral" -ForegroundColor $(if ($resultadoGeral -eq 'APROVADO') { 'Green' } else { 'Red' })
-Write-Host " Testes executados: $($registros.Count) | Falhas: $($falhas.Count) | Ignorados: $($ignorados.Count)"
+Write-Host " Testes executados: $($testesExecutados.Count) | Ocorrências de falha no diagnóstico: $($falhas.Count) | Ignorados: $($ignorados.Count)"
 Write-Host " Relatório fácil de ler: $Saida"
 Write-Host " Diagnóstico para automações: $SaidaJson"
 Write-Host "============================================================" -ForegroundColor DarkCyan

@@ -18,6 +18,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.19" />
+    <PackageReference Include="QuestPDF" Version="2026.9.1" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.13" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.19">
@@ -44,6 +45,8 @@
   <ItemGroup>
     <Compile Remove="InsEmpodera.Tests\**\*.cs" />
     <Compile Remove="scripts\ForeignKey.Tests\**\*.cs" />
+    <Compile Remove="scripts\PkBenchmark\**\*.cs" />
+    <Compile Remove="scripts\GerarSchema\**\*.cs" />
     <Content Remove="InsEmpodera.Tests\**" />
     <EmbeddedResource Remove="InsEmpodera.Tests\**" />
     <None Remove="InsEmpodera.Tests\**" />

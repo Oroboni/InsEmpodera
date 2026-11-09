@@ -1,0 +1,26 @@
+# Só o código da aplicação entra na imagem: nada de dados, testes, segredos ou artefatos locais.
+.git
+.github
+.vs
+.vscode
+**/bin
+**/obj
+**/node_modules
+.env
+*.env
+App_Data
+wwwroot/uploads
+*.db
+*.db-shm
+*.db-wal
+Banco.txt
+deploy
+docs
+scripts
+strix_runs
+TestResults
+Frontend.Tests
+InsEmpodera.Tests
+InsEmpodera.E2ETests
+backups
+*.md

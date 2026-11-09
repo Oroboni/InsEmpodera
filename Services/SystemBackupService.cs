@@ -169,7 +169,6 @@ public sealed class SystemBackupService(ApplicationDbContext context)
         if (type == typeof(DateOnly)) return DateOnly.Parse(element.GetString()!, CultureInfo.InvariantCulture);
         if (type == typeof(TimeOnly)) return TimeOnly.Parse(element.GetString()!, CultureInfo.InvariantCulture);
         if (type == typeof(TimeSpan)) return TimeSpan.Parse(element.GetString()!, CultureInfo.InvariantCulture);
-        if (type == typeof(Guid)) return element.GetGuid();
         if (type == typeof(byte[])) return element.GetBytesFromBase64();
         if (type.IsEnum) return JsonSerializer.Deserialize(element.GetRawText(), Enum.GetUnderlyingType(type), JsonOptions);
         return JsonSerializer.Deserialize(element.GetRawText(), type, JsonOptions);

@@ -13,7 +13,7 @@
 <div class="modern-container">
     <div class="header-section">
         <h2>
-            <a asp-action="Index" asp-route-atorId="@(Model.FK_id_Atores == Guid.Empty ? null : Model.FK_id_Atores)" class="text-primary">Diário de Processo Pessoal</a>
+            <a asp-action="Index" asp-route-atorId="@(Model.FK_id_Atores == 0 ? null : Model.FK_id_Atores)" class="text-primary">Diário de Processo Pessoal</a>
             <span class="separator">&gt;</span>
             <strong class="text-muted">Novo Registro</strong>
         </h2>
@@ -26,7 +26,7 @@
         <partial name="_CamposDiario" />
 
         <div class="buttons-container">
-            <a asp-action="Index" asp-route-atorId="@(Model.FK_id_Atores == Guid.Empty ? null : Model.FK_id_Atores)" class="wizard-btn btn-prev">
+            <a asp-action="Index" asp-route-atorId="@(Model.FK_id_Atores == 0 ? null : Model.FK_id_Atores)" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Cancelar
             </a>
             <button type="submit" class="wizard-btn btn-next">

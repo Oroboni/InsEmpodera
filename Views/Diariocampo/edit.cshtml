@@ -120,7 +120,7 @@
             </div>
             <div class="input-content">
                 <label asp-for="Descricao">Relato / Descrição</label>
-                <textarea asp-for="Descricao" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
+                <textarea asp-for="Descricao" maxlength="8000" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
                 <ul id="mention-list"></ul>
             </div>
         </div>

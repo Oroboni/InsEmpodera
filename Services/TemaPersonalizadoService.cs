@@ -26,7 +26,7 @@ public sealed partial class TemaPersonalizadoService
 
     private static readonly HashSet<string> TokensPermitidos = new(Tokens, StringComparer.Ordinal);
     private readonly string _pasta;
-    private readonly ConcurrentDictionary<Guid, Dictionary<string, string>?> _cache = new();
+    private readonly ConcurrentDictionary<int, Dictionary<string, string>?> _cache = new();
 
     public TemaPersonalizadoService(IWebHostEnvironment ambiente)
     {
@@ -36,10 +36,10 @@ public sealed partial class TemaPersonalizadoService
     [GeneratedRegex("^#[0-9a-fA-F]{6}$")]
     private static partial Regex CorHex();
 
-    // O nome do arquivo vem só do Id (Guid), nunca de algo digitado.
-    private string Arquivo(Guid usuarioId) => Path.Combine(_pasta, $"{usuarioId:N}.json");
+    // O nome do arquivo vem só do Id (int), nunca de algo digitado.
+    private string Arquivo(int usuarioId) => Path.Combine(_pasta, $"{usuarioId}.json");
 
-    public IReadOnlyDictionary<string, string>? Obter(Guid usuarioId) =>
+    public IReadOnlyDictionary<string, string>? Obter(int usuarioId) =>
         _cache.GetOrAdd(usuarioId, id =>
         {
             try
@@ -56,7 +56,7 @@ public sealed partial class TemaPersonalizadoService
         });
 
     /// <summary>Salva as cores do usuário. Ignora tokens desconhecidos; rejeita valores que não sejam #RRGGBB.</summary>
-    public void Salvar(Guid usuarioId, IDictionary<string, string> cores)
+    public void Salvar(int usuarioId, IDictionary<string, string> cores)
     {
         var validas = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var (token, valor) in cores)
@@ -75,7 +75,7 @@ public sealed partial class TemaPersonalizadoService
     }
 
     /// <summary>Remove a personalização do usuário; ele volta ao tema base.</summary>
-    public void Restaurar(Guid usuarioId)
+    public void Restaurar(int usuarioId)
     {
         var arquivo = Arquivo(usuarioId);
         if (File.Exists(arquivo)) File.Delete(arquivo);
@@ -83,7 +83,7 @@ public sealed partial class TemaPersonalizadoService
     }
 
     /// <summary>CSS com as variáveis personalizadas (inclui os canais *-rgb usados em transparências).</summary>
-    public string? GerarCss(Guid usuarioId)
+    public string? GerarCss(int usuarioId)
     {
         var cores = Obter(usuarioId);
         if (cores is null || cores.Count == 0) return null;

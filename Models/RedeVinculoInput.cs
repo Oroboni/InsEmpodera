@@ -6,8 +6,8 @@ namespace Empodera.Models;
 public class RedeVinculoInput
 {
     public string TipoRede { get; set; } = TiposRede.Primaria;
-    public Guid? AtorId { get; set; }
+    public int? AtorId { get; set; }
     public string? Nome { get; set; }
-    public Guid? ComunidadeId { get; set; }
+    public int? ComunidadeId { get; set; }
     public string TipoRelacao { get; set; } = string.Empty;
 }

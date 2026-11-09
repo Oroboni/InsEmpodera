@@ -6,15 +6,18 @@ namespace Empodera.Models
 {
     public class DiarioCampo
     {
-        public Guid IdDCampo { get; set; }       
-        public Guid FkIdComunidade { get; set; }  
+        public int IdDCampo { get; set; }       
+        public int FkIdComunidade { get; set; }  
         public DateTime Data { get; set; }
+        [StringLength(8000)]
         public string Descricao { get; set; } = null!;
+        [StringLength(255)]
         public string? Localizacao { get; set; }
         public DateTime DtCriacao { get; set; }
-        public DateTime DtModificacao { get; set; }
+        public DateTime? DtModificacao { get; set; }
+        [StringLength(255)]
         public string? Foto { get; set; }
-        public Guid FkIdUsuario { get; set; }     
+        public int FkIdUsuario { get; set; }     
 
         public Comunidade Comunidade { get; set; } = null!;
         public Usuario Usuario { get; set; } = null!;

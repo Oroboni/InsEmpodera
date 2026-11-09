@@ -189,41 +189,7 @@
             </div>
         </div>
 
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="daEquipeCheckbox" class="checkbox-inline-label">
-                    <input asp-for="DaEquipe" id="daEquipeCheckbox" type="checkbox" disabled />
-                    Da Equipe
-                </label>
-            </div>
-        </div>
-
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="ropeCheckbox" class="checkbox-inline-label">
-                    <input asp-for="Rope" id="ropeCheckbox" type="checkbox" disabled />
-                    Rede Operativa
-                </label>
-            </div>
-        </div>
-
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="liderOpiniaoCheckbox" class="checkbox-inline-label">
-                    <input asp-for="Lopiniao" id="liderOpiniaoCheckbox" type="checkbox" disabled />
-                    Líder de Opinião
-                </label>
-            </div>
-        </div>
-
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="moraNaComunidadeCheckbox" class="checkbox-inline-label">
-                    <input asp-for="Mcomunidade" id="moraNaComunidadeCheckbox" type="checkbox" disabled />
-                    Mora na comunidade
-                </label>
-            </div>
-        </div>
+        <partial name="_RedesDoAtor" model="Model" view-data='new ViewDataDictionary(ViewData) { ["Desabilitado"] = true }' />
 
         <div class="grid-row">
             <div class="input-card">
@@ -281,7 +247,7 @@
                     <div class="user-info-display">
                         <i class="fa-solid fa-user"></i>
                         <span class="user-name">@ViewBag.UsuarioNovo.Nome</span>
-                        <span class="user-date">@Model.DtModificacao.ToString("dd/MM/yyyy HH:mm")</span>
+                        <span class="user-date">@Model.DtModificacao?.ToString("dd/MM/yyyy HH:mm")</span>
                     </div>
                 </div>
             </div>

@@ -1,218 +1,160 @@
+@model Empodera.Models.RscReportViewModel
 @{
     ViewData["Title"] = "Relatório RSC";
-    ViewData["PageCSS"] = "reports";
+    ViewData["PageCSS"] = "homepage";
     Layout = "_Layout";
-    // ViewData["DisableMainScroll"] foi REMOVIDO para Corrigir o Scroll
+    var redes = new (string Sigla, string Nome, int Total, Func<Empodera.Models.RscRow, bool> Marcado)[]
+    {
+        ("EQ", "Equipe", Model.TotalEq, r => r.Eq),
+        ("RO", "Rede Operativa (inclui Operador par)", Model.TotalRo, r => r.Ro),
+        ("RLO", "Rede de Líderes de Opinião", Model.TotalRlo, r => r.Rlo),
+        ("PA", "Parceiro", Model.TotalPa, r => r.Pa),
+        ("CO", "Comunidade (mora na comunidade)", Model.TotalCo, r => r.Co),
+        ("RRC", "Rede de Recursos Comunitários", Model.TotalRrc, r => r.Rrc)
+    };
+    string GeneroTag(string genero) => genero switch
+    {
+        "Masculino" => "tag-blue",
+        "Feminino" => "tag-purple",
+        "Transgênero" => "tag-trans",
+        _ => "tag-default"
+    };
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/atores.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
+    <partial name="_EstilosRelatorio" />
 }
 
-<div class="report-page-container">
-    <div class="report-breadcrumb">
-        <h1>
-            <a asp-controller="Relatorios" asp-action="Index">Relatórios</a>
-            >
-            <strong>RSC</strong>
-        </h1>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Relatórios</a>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Rede Subjetiva Comunitária (RSC)</strong>
+        </h2>
     </div>
 
-    <div class="report-content-box">
-        <div class="report-filters" style="border-bottom: none; margin-bottom: 0;">
-            <form asp-action="Rsc" method="get" id="comunidadeForm" class="form-group">
-                <label for="ComunidadeId">Comunidade</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-city"></i>
-                    <select id="ComunidadeId" name="ComunidadeId" asp-items="ViewBag.Comunidades" class="clean-input" required>
-                        <option value="">Selecione a comunidade</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
-                </div>
-            </form>
+    <form asp-action="Rsc" method="get" class="relatorio-filtros">
+        <partial name="_CampoFiltro" model='new Empodera.Models.RelatorioCampoFiltro("comunidadeId", "Comunidade", "fa-city",
+            (IEnumerable<SelectListItem>)ViewBag.Comunidades, "Selecione a comunidade", EnviarAoMudar: true, Inteiro: true)' />
+    </form>
+
+    @if (!Model.ComunidadeId.HasValue)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-people-group"></i></div>
+            <h3>Selecione uma comunidade</h3>
+            <p>A RSC soma a rede subjetiva de todos os atores da comunidade escolhida.</p>
+        </div>
+    }
+    else if (Model.Rows.Count == 0)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-diagram-project"></i></div>
+            <h3>Nenhuma rede subjetiva cadastrada</h3>
+            <p>Nenhum ator desta comunidade tem rede subjetiva cadastrada.</p>
+        </div>
+    }
+    else
+    {
+        <button type="button" class="section-label indicadores-toggle" data-indicadores aria-expanded="true"
+                title="Recolher ou mostrar os indicadores">
+            <span>Indicadores</span>
+            <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="actions-grid">
+            <div class="action-card stats-card">
+                <span class="card-title">@Model.Nos</span>
+                <span class="card-subtitle">Nós (atores na rede)</span>
+                <div class="card-icons"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title">@Model.Rows.Count</span>
+                <span class="card-subtitle">Vínculos</span>
+                <div class="card-icons"><i class="fas fa-diagram-project"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title">@Model.Rows.Select(r => r.Ator1).Distinct().Count()</span>
+                <span class="card-subtitle">Atores com rede subjetiva</span>
+                <div class="card-icons"><i class="fas fa-user-check"></i></div>
+            </div>
         </div>
 
-        <div class="report-body">
-            @if (Context.Request.Query["comunidadeId"].Count == 0)
-            {
-                <div class="report-empty-state">
-                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione uma comunidade" />
-                    <p>Primeiro selecione uma comunidade.</p>
+        <div class="search-container">
+            <div class="search-input-group">
+                <div class="search-wrapper">
+                    <input type="search" id="buscaRsc" placeholder="Busque pelo nome do ator..." aria-label="Buscar atores na RSC" />
+                    <button type="button" class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
-            }
-            else
-            {
-                <div class="report-controls">
-                    <h2>RSC com um total de 12 nós</h2>
-                    <div class="toggle-buttons">
-                        <button id="btn-numbers" class="active">#</button>
-                        <button id="btn-percent">%</button>
-                    </div>
-                </div>
-
-                <table class="matrix-table" id="table-numbers">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Parceiro</th>
-                            <th>Equipe</th>
-                            <th>RRC</th>
-                            <th>RLO</th>
-                            <th>RO</th>
-                            <th>Habitante</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>RSC</td>
-                            <td>2</td>
-                            <td>4</td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td></td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td>Parceiro</td>
-                            <td>2</td>
-                            <td></td>
-                            <td>2</td>
-                            <td></td>
-                            <td></td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Equipe</td>
-                            <td></td>
-                            <td>4</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>RRC</td>
-                            <td>2</td>
-                            <td></td>
-                            <td>2</td>
-                            <td></td>
-                            <td></td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>RLO</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>2</td>
-                            <td></td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>RO</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Habitante</td>
-                            <td>2</td>
-                            <td></td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td></td>
-                            <td>8</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="matrix-table" id="table-percentages" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Parceiro</th>
-                            <th>Equipe</th>
-                            <th>RRC</th>
-                            <th>RLO</th>
-                            <th>RO</th>
-                            <th>Habitante</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>RSC</td>
-                            <td>16.7%</td>
-                            <td>33.3%</td>
-                            <td>16.7%</td>
-                            <td>16.7%</td>
-                            <td></td>
-                            <td>66.7%</td>
-                        </tr>
-                        <tr>
-                            <td>Parceiro</td>
-                            <td>100.0%</td>
-                            <td></td>
-                            <td>100.0%</td>
-                            <td></td>
-                            <td></td>
-                            <td>100.0%</td>
-                        </tr>
-                        <tr>
-                            <td>Equipe</td>
-                            <td></td>
-                            <td>100.0%</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>RRC</td>
-                            <td>100.0%</td>
-                            <td></td>
-                            <td>100.0%</td>
-                            <td></td>
-                            <td></td>
-                            <td>100.0%</td>
-                        </tr>
-                        <tr>
-                            <td>RLO</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>100.0%</td>
-                            <td></td>
-                            <td>100.0%</td>
-                        </tr>
-                        <tr>
-                            <td>RO</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Habitante</td>
-                            <td>25.0%</td>
-                            <td></td>
-                            <td>25.0%</td>
-                            <td>25.0%</td>
-                            <td></td>
-                            <td>100.0%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            }
+            </div>
+            <a asp-action="Rsc" asp-route-comunidadeId="@Model.ComunidadeId" asp-route-exportar="excel" class="btn-export"
+               data-testid="rsc-export-excel" aria-label="Exportar RSC para Excel" title="Exportar RSC para Excel">
+                <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+            </a>
         </div>
-    </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Vínculos da rede subjetiva (@Model.Rows.Count)</div>
+
+        <div class="relatorio-tabela-rsc">
+            <table data-testid="rsc-table">
+                <thead>
+                    <tr>
+                        <th>Ator 1</th>
+                        <th>Ator 2</th>
+                        <th>Relação</th>
+                        <th>Gênero</th>
+                        <th>Papel Social 1</th>
+                        <th>Papel Social 2</th>
+                        @foreach (var rede in redes)
+                        {
+                            <th class="sigla" title="@rede.Nome">@rede.Sigla</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var linha in Model.Rows)
+                    {
+                        <tr class="rsc-item" data-nome="@($"{linha.Ator1} {linha.Ator2}".ToLower())">
+                            <td class="ator">@linha.Ator1</td>
+                            <td>@linha.Ator2</td>
+                            <td><span class="tag-item tag-lightgreen">@linha.Relacao</span></td>
+                            <td><span class="tag-item @GeneroTag(linha.Genero)">@linha.Genero</span></td>
+                            <td>@linha.PapelSocial1</td>
+                            <td>@linha.PapelSocial2</td>
+                            @foreach (var rede in redes)
+                            {
+                                <td class="sigla">@if (rede.Marcado(linha)) { <span class="rsc-marca" title="@rede.Nome">1</span> }</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">Total</td>
+                        @foreach (var rede in redes)
+                        {
+                            <td class="sigla" data-rede="@rede.Sigla">@rede.Total</td>
+                        }
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <p class="relatorio-nota">
+            Ator 1 é de quem sai a rede subjetiva; Ator 2 é quem faz parte dela (as demais colunas são do Ator 2).
+        </p>
+        <p class="relatorio-nota">
+            EQ = Equipe · RO = Rede Operativa (inclui Operador par) · RLO = Rede de Líderes de Opinião · PA = Parceiro · CO = Comunidade · RRC = Rede de Recursos Comunitários
+        </p>
+    }
 </div>
 
 @section Scripts {
-    <script src="~/lib/chartjs/chart.umd.js" asp-append-version="true"></script>
-    <script src="~/js/reports.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('buscaRsc')?.addEventListener('input', function () {
+            const termo = this.value.toLowerCase().trim();
+            document.querySelectorAll('.rsc-item').forEach(item => {
+                item.style.display = item.dataset.nome.includes(termo) ? '' : 'none';
+            });
+        });
+    </script>
 }

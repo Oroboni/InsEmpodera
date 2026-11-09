@@ -22,8 +22,13 @@ public sealed class EmpoderaWebApplicationFactory : WebApplicationFactory<Progra
         var mysqlServer = Environment.GetEnvironmentVariable("TEST_MYSQL_CONNECTION");
         if (string.IsNullOrWhiteSpace(mysqlServer))
             throw new InvalidOperationException("Defina TEST_MYSQL_CONNECTION para executar integrações HTTP em MySQL.");
-        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer) { Database = _databaseName };
+        var connectionBuilder = new MySqlConnectionStringBuilder(mysqlServer)
+        {
+            Database = _databaseName
+        };
         _mysqlConnectionString = connectionBuilder.ConnectionString;
+        // Tabelas criadas pelo script oficial; na inicialização o EnsureCreated encontra o banco pronto.
+        EsquemaMySql.Criar(_mysqlConnectionString);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

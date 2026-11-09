@@ -46,7 +46,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
             ["Ocupacao"] = "Tester",
             ["Genero"] = "1",
             ["DtNascimento"] = "1990-01-01",
-            ["FkIdPerfil"] = "1",
+            ["FkIdPerfil"] = TestIds.Seed(1).ToString(),
             ["Ativo"] = "S"
         });
         AssertRedirect(create);
@@ -56,7 +56,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         {
             ["IdUsuario"] = id.ToString(), ["Nome"] = "Usuário HTTP editado", ["Senha"] = "",
             ["Email"] = email, ["Ocupacao"] = "QA", ["Genero"] = "2",
-            ["DtNascimento"] = "1990-01-01", ["FkIdPerfil"] = "1", ["Ativo"] = "S"
+            ["DtNascimento"] = "1990-01-01", ["FkIdPerfil"] = TestIds.Seed(1).ToString(), ["Ativo"] = "S"
         });
         AssertRedirect(edit);
         Assert.Equal("Usuário HTTP editado", await QueryAsync(db => db.Usuarios.Where(item => item.IdUsuario == id).Select(item => item.Nome).SingleAsync()));
@@ -72,9 +72,9 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         using var client = await CreateAuthenticatedClientAsync();
         var name = $"Comunidade HTTP {Guid.NewGuid():N}";
 
-        var create = await PostFormAsync(client, "/Comunidade/ComunidadesDetalhes/0", "/Comunidade/ComunidadesDetalhes?id=0", new()
+        var create = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{0}", $"/Comunidade/ComunidadesDetalhes?id={0}", new()
         {
-            ["Id_Comunidade"] = "0", ["Nome"] = name,
+            ["Id_Comunidade"] = 0.ToString(), ["Nome"] = name,
             ["Local"] = "Rua HTTP, 10, São Paulo",
             ["LocalSecundario"] = "Rua HTTP Dois, 20, São Paulo",
             ["Status"] = "Em Processo", ["Ativo"] = "S"
@@ -231,7 +231,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         });
         await QueryAsync(async db =>
         {
-            var user = await db.Usuarios.SingleAsync(item => item.IdUsuario == 1);
+            var user = await db.Usuarios.SingleAsync(item => item.IdUsuario == TestIds.Seed(1));
             user.Senha = new PasswordHasher<Usuario>().HashPassword(user, Password);
             user.Ativo = "S";
             await db.SaveChangesAsync();
@@ -270,7 +270,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
         {
             Nome = $"Pré-requisito {Guid.NewGuid():N}", Local = "Rua de Teste, 1, São Paulo",
             LocalMapa = "Rua de Teste, 1, São Paulo", Status = "Em processo", Ativo = "S",
-            FK_Id_Usuario = 1, Dt_Criacao = DateTime.UtcNow, Dt_Modificacao = DateTime.UtcNow
+            FK_Id_Usuario = TestIds.Seed(1), Dt_Criacao = DateTime.UtcNow, Dt_Modificacao = DateTime.UtcNow
         };
         db.Comunidades.Add(community);
         await db.SaveChangesAsync();
@@ -292,7 +292,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
             var actor = new Atores
             {
                 Nome = $"Ator pré-requisito {Guid.NewGuid():N}", Ativo = "S", Idade = 30,
-                FkIdUsuario = 1, DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
+                FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.UtcNow, DtModificacao = DateTime.UtcNow
             };
             db.Atores.Add(actor);
             await db.SaveChangesAsync();

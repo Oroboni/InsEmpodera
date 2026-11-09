@@ -10,7 +10,7 @@ Guia para instalar, configurar e executar o InsEmpodera em uma máquina de desen
 - [Ambientes de execução](#ambientes-de-execução)
 - [Obter e compilar o código](#obter-e-compilar-o-código)
 - [Opção A — demonstração com SQLite](#opção-a--demonstração-com-sqlite)
-- [Opção B — desenvolvimento com MySQL ou MariaDB](#opção-b--desenvolvimento-com-mysql-ou-mariadb)
+- [Opção B — desenvolvimento com MySQL](#opção-b--desenvolvimento-com-mysql)
 - [Variáveis de configuração](#variáveis-de-configuração)
 - [Solução de problemas](#solução-de-problemas)
 
@@ -20,7 +20,7 @@ Guia para instalar, configurar e executar o InsEmpodera em uma máquina de desen
 | --- | --- | --- |
 | Git | recente | `git --version` |
 | .NET SDK | 9.0 | `dotnet --list-sdks` deve listar uma versão `9.0.x` |
-| MySQL ou MariaDB | MariaDB 10.4.32 (CI), MariaDB 10.5 (servidor documentado) ou MySQL — validado nesta revisão com MySQL 9.7.1 | `mysql --version` — necessário apenas na opção B |
+| MySQL | 8.4 LTS (versão adotada; também validado com 9.7.1). Para usar a mesma versão do servidor: `docker run -d --name mysql84 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<senha_local> mysql:8.4`. O MariaDB não é compatível com o esquema atual | `mysql --version` — necessário apenas na opção B |
 | Node.js e npm | 22.x (versão da CI) | `node --version` — necessário apenas para os testes de frontend |
 | PowerShell | 7+ | `pwsh --version` — necessário apenas para `testar.ps1` |
 
@@ -33,8 +33,8 @@ O comportamento da aplicação muda conforme a variável `ASPNETCORE_ENVIRONMENT
 | Ambiente | Banco padrão | Criação do esquema | Uso indicado |
 | --- | --- | --- | --- |
 | `Testing` | SQLite (`Empodera.testing.db`) | Automática, pelo modelo do EF Core, com perfis, permissões e usuários de exemplo (sem os eixos) | Demonstração local e testes automatizados |
-| `Development` | MySQL/MariaDB | Não cria tabelas; apenas garante os eixos padrão | Desenvolvimento diário |
-| `Production` | MySQL/MariaDB | Não cria tabelas; apenas garante os eixos padrão | Servidor publicado |
+| `Development` | MySQL | Não cria tabelas; apenas garante os eixos padrão | Desenvolvimento diário |
+| `Production` | MySQL | Não cria tabelas; apenas garante os eixos padrão | Servidor publicado |
 
 Diferenças importantes do ambiente `Testing`: limites de login e de recuperação de senha ampliados para 1000, sem redirecionamento para HTTPS e com registro de dados sensíveis nos logs do EF Core. Por isso, ele **não deve ser usado com dados reais**.
 
@@ -119,13 +119,13 @@ Pare a aplicação (`Ctrl+C`) e apague o banco local:
 rm -f Empodera.testing.db Empodera.testing.db-shm Empodera.testing.db-wal
 ```
 
-## Opção B — desenvolvimento com MySQL ou MariaDB
+## Opção B — desenvolvimento com MySQL
 
 Este é o modo equivalente ao de produção. Use um servidor local e um banco **novo**.
 
 **1. Preparar o servidor**
 
-Instale o MySQL ou o MariaDB e anote o endereço, a porta, o usuário e a senha. O usuário precisa de permissão para criar o banco e as tabelas. Exemplo para criar um usuário dedicado no MariaDB/MySQL:
+Instale o MySQL (8.4 LTS ou posterior) e anote o endereço, a porta, o usuário e a senha. O usuário precisa de permissão para criar o banco e as tabelas. Exemplo para criar um usuário dedicado no MySQL:
 
 ```sql
 CREATE USER 'empodera_dev'@'localhost' IDENTIFIED BY 'SUA_SENHA_LOCAL';
@@ -187,21 +187,18 @@ O terminal deve exibir `Now listening on: https://localhost:7121` e `Hosting env
 
 Abra `https://localhost:7121` e entre com `joao@email.com` e a senha definida no passo 2.
 
-### Alternativa: criar o banco pelos scripts SQL
+### Recomendado: criar o banco pelo script oficial
 
-Em vez do passo 2, o banco pode ser criado por um dos scripts do repositório:
+O DDL oficial, no formato da [revisão técnica do DDL](revisao-ddl-mysql.md), é o script do repositório. Ele cria
+as tabelas com todas as restrições nomeadas (o passo 2 cria a partir do modelo do EF, sem o `ON UPDATE` das datas):
 
 | Script | Conteúdo | Comando |
 | --- | --- | --- |
 | [`Database/Empodera.schema.sql`](../Database/Empodera.schema.sql) | Estrutura e dados de exemplo fictícios | `mysql -u empodera_dev -p empodera < Database/Empodera.schema.sql` (o banco `empodera` precisa existir e estar vazio) |
-| [`Banco.txt`](../Banco.txt) | Estrutura e os dados usados pela equipe | `mysql -u root -p < Banco.txt` |
+| [`Database/migracao-uuid-para-int.sql`](../Database/migracao-uuid-para-int.sql) | Converte uma cópia do banco antigo (chaves UUID) | ver [passo a passo](revisao-ddl-mysql.md#migração-dos-dados) |
 
-Cuidados com o `Banco.txt`:
-
-- ele começa com `DROP DATABASE IF EXISTS empodera`: **apaga** qualquer banco com esse nome antes de recriá-lo;
-- contém registros de comunidades e pessoas; não o use em ambientes compartilhados nem o divulgue fora da equipe;
-- as senhas dos usuários não são publicadas; para definir a senha do usuário de ID 1 em uma cópia local, execute o passo 2 uma vez sobre o banco importado;
-- os nomes de tabela estão em minúsculas. Em servidores Linux, que diferenciam maiúsculas de minúsculas, é preciso ajustar os nomes ou configurar `lower_case_table_names`, como descrito na seção 6.3 de [HOSPEDAGEM-AWS.md](../HOSPEDAGEM-AWS.md).
+As senhas dos usuários de exemplo não são publicadas; para definir a senha do usuário de ID 1 numa cópia local,
+execute o passo 2 uma vez sobre o banco criado.
 
 A situação de cada script está detalhada em [banco-de-dados.md](banco-de-dados.md#scripts-sql-do-repositório).
 

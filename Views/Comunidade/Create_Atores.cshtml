@@ -187,41 +187,7 @@
             </div>
         </div>
 
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="daEquipeCheckbox" class="checkbox-inline-label">
-                    <input id="daEquipeCheckbox" name="DaEquipe" asp-for="DaEquipe" type="checkbox" />
-                    Da Equipe
-                </label>
-            </div>
-        </div>
-
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="ropeCheckbox" class="checkbox-inline-label">
-                    <input id="ropeCheckbox" name="Rope" asp-for="Rope" type="checkbox" />
-                    Rede Operativa
-                </label>
-            </div>
-        </div>
-
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="liderOpiniaoCheckbox" class="checkbox-inline-label">
-                    <input id="liderOpiniaoCheckbox" name="Lopiniao" asp-for="Lopiniao" type="checkbox" />
-                    Líder de Opinião
-                </label>
-            </div>
-        </div>
-
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="moraNaComunidadeCheckbox" class="checkbox-inline-label">
-                    <input id="moraNaComunidadeCheckbox" name="Mcomunidade" asp-for="Mcomunidade" type="checkbox" />
-                    Mora na comunidade
-                </label>
-            </div>
-        </div>
+        <partial name="_RedesDoAtor" model="Model" />
 
         <div class="grid-row">
             <div class="input-card">

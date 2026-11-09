@@ -65,3 +65,9 @@ InsEmpodera.E2ETests/TestResults/
 
 # Cores do site personalizadas pela administração (dados do ambiente, não do código)
 App_Data/
+
+# Segredos e dados de instalação: nunca versionar
+.env
+backups/
+# Planilhas com dados de comunidades e pessoas (a aplicação não usa esta pasta)
+wwwroot/uploads/

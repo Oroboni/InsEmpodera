@@ -49,9 +49,9 @@ public sealed class InactiveSessionAuthorizationHttpTests : IClassFixture<Empode
 
     public InactiveSessionAuthorizationHttpTests(EmpoderaWebApplicationFactory factory) => _factory = factory;
 
+    // Outros valores ('?', 's'...) são recusados pelo banco (CK_Usuarios_Ativo).
     [Theory]
     [InlineData("N")]
-    [InlineData("?")]
     public async Task ExistingSession_LosesModuleAccessAfterUserStopsBeingExactlyActive(string status)
     {
         var user = await HttpFlowTestSupport.SeedUserAsync(_factory, profileId: 1);

@@ -6,9 +6,9 @@
     Usado por Create.cshtml e Edit.cshtml.
 *@
 @{
-    var selectedEixos = (HashSet<Guid>)(ViewBag.SelectedEixos ?? new HashSet<Guid>());
-    var ehNovo = Model.IdDiarioProcesso == Guid.Empty;
-    var nomesMencao = ViewBag.MentionNames as IReadOnlyDictionary<Guid, string>;
+    var selectedEixos = (HashSet<int>)(ViewBag.SelectedEixos ?? new HashSet<int>());
+    var ehNovo = Model.IdDiarioProcesso == 0;
+    var nomesMencao = ViewBag.MentionNames as IReadOnlyDictionary<int, string>;
 }
 
 <div class="section-label">Informações Básicas</div>

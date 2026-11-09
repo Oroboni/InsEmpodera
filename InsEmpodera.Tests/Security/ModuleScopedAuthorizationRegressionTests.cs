@@ -62,17 +62,13 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
         Assert.Equal("S", (await Db.Atores.FindAsync(actor.IdAtores))!.Ativo);
     }
 
+    // Permissões conflitantes para o mesmo módulo não podem mais existir: o banco recusa
+    // (UQ_Permissoes_Perfil_Modulo).
     [Fact]
-    public async Task ConflictingDuplicateModulePermissions_AreDeniedConservatively()
+    public async Task ConflictingDuplicateModulePermissions_AreRejectedByTheDatabase()
     {
-        var userId = await CreateUserWithPermissionsAsync(Allow("Atores"), Deny("Atores"));
-        var actor = await CreateActorAsync();
-        var controller = Attach(new AtoresController(NullLogger<AtoresController>.Instance, Db), userId);
-
-        AssertForbidden(controller.Index());
-        Assert.IsType<RedirectToActionResult>(await controller.Create());
-        Assert.IsType<RedirectToActionResult>(await controller.Delete(actor.IdAtores));
-        Assert.Equal("S", (await Db.Atores.FindAsync(actor.IdAtores))!.Ativo);
+        await Assert.ThrowsAsync<DbUpdateException>(() =>
+            CreateUserWithPermissionsAsync(Allow("Atores"), Deny("Atores")));
     }
 
     [Fact]
@@ -176,7 +172,7 @@ public sealed class ModuleScopedAuthorizationRegressionTests : ControllerTestBas
         var profile = new Perfil
         {
             Nome = $"Perfil misto {Guid.NewGuid():N}",
-            FkIdUsuario = 1,
+            FkIdUsuario = TestIds.Seed(1),
             DtCriacao = DateTime.UtcNow,
             DtModificacao = DateTime.UtcNow,
             Permissoes = permissions.ToList()

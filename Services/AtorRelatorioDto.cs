@@ -10,7 +10,7 @@ namespace Empodera.Services
 {
     public class AtorRelatorioDto
     {
-        public Guid IdAtor { get; set; }
+        public int IdAtor { get; set; }
         public string Nome { get; set; } = string.Empty;
         public int? Genero { get; set; }
         public int Idade { get; set; }

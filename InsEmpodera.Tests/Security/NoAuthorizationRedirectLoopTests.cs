@@ -56,7 +56,7 @@ public sealed class NoAuthorizationRedirectLoopHttpTests : IClassFixture<Empoder
             var profile = new Perfil
             {
                 Nome = $"Sem listagem {Guid.NewGuid():N}",
-                FkIdUsuario = 1,
+                FkIdUsuario = TestIds.Seed(1),
                 DtCriacao = DateTime.UtcNow,
                 DtModificacao = DateTime.UtcNow,
                 Permissoes = modules.Select(module => new Permissoes

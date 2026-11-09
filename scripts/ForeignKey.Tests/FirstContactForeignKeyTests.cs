@@ -35,9 +35,9 @@ public sealed class FirstContactForeignKeyTests
                     FROM information_schema.KEY_COLUMN_USAGE
                     WHERE TABLE_SCHEMA = @database
                       AND TABLE_NAME = 'fichasprimeirocontato'
-                      AND COLUMN_NAME = 'FK_id_Atores'
+                      AND COLUMN_NAME = 'IdAtor'
                       AND REFERENCED_TABLE_NAME = 'atores'
-                      AND REFERENCED_COLUMN_NAME = 'IdAtores'
+                      AND REFERENCED_COLUMN_NAME = 'IdAtor'
                     """;
                 command.Parameters.AddWithValue("@database", databaseName);
                 Assert.Equal(1L, Convert.ToInt64(await command.ExecuteScalarAsync()));
@@ -46,7 +46,6 @@ public sealed class FirstContactForeignKeyTests
             var userId = await db.Usuarios.Select(user => user.IdUsuario).FirstAsync();
             var actor = new Atores
             {
-                IdAtores = Guid.NewGuid(),
                 Nome = "Ator do teste de FK",
                 FkIdUsuario = userId,
                 DtCriacao = DateTime.UtcNow,
@@ -61,9 +60,8 @@ public sealed class FirstContactForeignKeyTests
             Assert.True(await db.FichasPrimeiroContato.AsNoTracking()
                 .AnyAsync(form => form.IdFicha == validForm.IdFicha && form.FK_id_Atores == actor.IdAtores));
 
-            var missingActorId = Guid.NewGuid();
-            while (await db.Atores.AnyAsync(item => item.IdAtores == missingActorId))
-                missingActorId = Guid.NewGuid();
+            // Ids são AUTO_INCREMENT: um valor acima do maior Id existente não aponta para ninguém.
+            var missingActorId = await db.Atores.MaxAsync(item => item.IdAtores) + 1000;
 
             var orphanForm = NewForm(missingActorId, userId);
             db.FichasPrimeiroContato.Add(orphanForm);
@@ -89,9 +87,8 @@ public sealed class FirstContactForeignKeyTests
         }
     }
 
-    private static FichaPrimeiroContato NewForm(Guid actorId, Guid userId) => new()
+    private static FichaPrimeiroContato NewForm(int actorId, int userId) => new()
     {
-        IdFicha = Guid.NewGuid(),
         FK_id_Atores = actorId,
         FkIdUsuario = userId,
         DtContato = DateTime.UtcNow,

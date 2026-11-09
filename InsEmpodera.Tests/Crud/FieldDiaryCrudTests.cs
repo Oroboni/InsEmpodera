@@ -22,7 +22,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
 
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.DiariosCampo.SingleAsync(item => item.Descricao == "Criado");
-        Assert.Equal(1, saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.NotEqual(default, saved.DtCriacao);
         Assert.Equal(2, await Db.DiarioEixos.CountAsync(item => item.FkIdDiario == saved.IdDCampo));
     }
@@ -81,7 +81,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
     public async Task Create_InvalidCommunityShowsValidationWithoutPersisting()
     {
         var controller = Attach(new DiarioCampoController(Db));
-        var result = await controller.Create(NewDiary(999_999, "Comunidade inválida"), []);
+        var result = await controller.Create(NewDiary(TestIds.Missing, "Comunidade inválida"), []);
 
         Assert.IsType<ViewResult>(result);
         Assert.Contains(controller.ModelState[nameof(DiarioCampo.FkIdComunidade)]!.Errors,
@@ -94,7 +94,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
     {
         var community = await CreateCommunityAsync();
         var controller = Attach(new DiarioCampoController(Db));
-        var result = await controller.Create(NewDiary(community.Id_Comunidade, "Eixo inválido"), [999_999]);
+        var result = await controller.Create(NewDiary(community.Id_Comunidade, "Eixo inválido"), [TestIds.Missing]);
 
         Assert.IsType<ViewResult>(result);
         Assert.Contains(controller.ModelState["eixosSelecionados"]!.Errors,
@@ -109,7 +109,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
         var controller = Attach(new DiarioCampoController(Db));
 
         var details = await controller.Details(diary.IdDCampo);
-        var missing = await controller.Details(999_999);
+        var missing = await controller.Details(TestIds.Missing);
 
         Assert.Equal(diary.IdDCampo, Assert.IsType<DiarioCampo>(Assert.IsType<ViewResult>(details).Model).IdDCampo);
         Assert.IsType<NotFoundResult>(missing);
@@ -143,10 +143,10 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
     {
         var community = await CreateCommunityAsync();
         var controller = Attach(new DiarioCampoController(Db));
-        Assert.IsType<NotFoundResult>(await controller.Edit(10, NewDiary(community.Id_Comunidade, "Mismatch"), Array.Empty<int>()));
+        Assert.IsType<NotFoundResult>(await controller.Edit(TestIds.Seed(10), NewDiary(community.Id_Comunidade, "Mismatch"), Array.Empty<int>()));
 
         var missing = NewDiary(community.Id_Comunidade, "Missing");
-        missing.IdDCampo = 999_999;
+        missing.IdDCampo = TestIds.Missing;
         Assert.IsType<NotFoundResult>(await controller.Edit(missing.IdDCampo, missing, Array.Empty<int>()));
     }
 
@@ -195,7 +195,7 @@ public sealed class FieldDiaryCrudTests : ControllerTestBase
     {
         var community = await CreateCommunityAsync();
         var diary = NewDiary(community.Id_Comunidade, $"Diário {Guid.NewGuid():N}");
-        diary.FkIdUsuario = 1;
+        diary.FkIdUsuario = TestIds.Seed(1);
         diary.DtCriacao = DateTime.UtcNow;
         diary.DtModificacao = DateTime.UtcNow;
         Db.DiariosCampo.Add(diary);

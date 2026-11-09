@@ -29,7 +29,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         Assert.Equal(nameof(ComunidadeController.Index), redirect.ActionName);
         var saved = await Db.Comunidades.SingleAsync(item => item.Nome == community.Nome);
         Assert.Equal("Em processo", saved.Status);
-        Assert.Equal(1, saved.FK_Id_Usuario);
+        Assert.Equal(TestIds.Seed(1), saved.FK_Id_Usuario);
         Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapa));
         Assert.Equal("Anexo Comunitário, Rua Dois, 20, Fortaleza", saved.LocalSecundario);
         Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapaSecundario));
@@ -43,7 +43,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var controller = Attach(new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db));
 
         var existing = controller.ComunidadesDetalhes(community.Id_Comunidade);
-        var missing = controller.ComunidadesDetalhes(999_999);
+        var missing = controller.ComunidadesDetalhes(TestIds.Missing);
 
         Assert.Equal(community.Id_Comunidade, Assert.IsType<Comunidade>(Assert.IsType<ViewResult>(existing).Model).Id_Comunidade);
         Assert.IsType<NotFoundResult>(missing);
@@ -75,16 +75,16 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         Assert.Equal("Em processo", saved.Status);
         Assert.Equal("Polo Comunitário, Avenida Sul, 50, Recife", saved.LocalSecundario);
         Assert.False(string.IsNullOrWhiteSpace(saved.LocalMapaSecundario));
-        Assert.InRange((saved.Dt_Criacao - createdAt).Duration(), TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
+        Assert.InRange((saved.Dt_Criacao - createdAt).Duration(), TimeSpan.Zero, TimeSpan.FromSeconds(1)); // DATETIME sem frações de segundo: o banco arredonda para o segundo
         Assert.Equal("S", saved.Ativo);
-        Assert.Equal(1, saved.FK_Id_UsuarioM);
+        Assert.Equal(TestIds.Seed(1), saved.FK_Id_UsuarioM);
     }
 
     [Fact]
     public async Task Community_Edit_MissingRecordReturnsNotFound()
     {
         var controller = Attach(new ComunidadeController(NullLogger<ComunidadeController>.Instance, Db));
-        var result = controller.ComunidadesDetalhes(new Comunidade { Id_Comunidade = 999_999, Nome = "Ausente" }, 999_999);
+        var result = controller.ComunidadesDetalhes(new Comunidade { Id_Comunidade = TestIds.Missing, Nome = "Ausente" }, TestIds.Missing);
         Assert.IsType<NotFoundResult>(result);
     }
 
@@ -113,7 +113,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
 
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Atores.SingleAsync(item => item.Nome == actor.Nome);
-        Assert.Equal(1, saved.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuario);
         Assert.True(await Db.AtorComunidades.AnyAsync(link => link.FK_id_Atores == saved.IdAtores && link.FkIdComunidade == community.Id_Comunidade));
     }
 
@@ -123,7 +123,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var controller = Attach(new AtoresController(NullLogger<AtoresController>.Instance, Db));
         var before = await Db.Atores.CountAsync();
 
-        var result = await controller.Create(NewActor("Sem comunidade"), 999_999);
+        var result = await controller.Create(NewActor("Sem comunidade"), TestIds.Missing);
 
         Assert.IsType<ViewResult>(result);
         Assert.Equal(before, await Db.Atores.CountAsync());
@@ -144,7 +144,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Atores.FindAsync(actor.IdAtores);
         Assert.Equal("Depois", saved!.Nome);
-        Assert.Equal(1, saved.FkIdUsuarioM);
+        Assert.Equal(TestIds.Seed(1), saved.FkIdUsuarioM);
         Assert.Equal(second.Id_Comunidade, (await Db.AtorComunidades.SingleAsync(item => item.FK_id_Atores == actor.IdAtores)).FkIdComunidade);
     }
 
@@ -183,7 +183,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var secondAxis = await CreateAxisAsync("Novo");
         var activity = NewActivity("Antes");
         activity.FkIdComunidade = community.Id_Comunidade;
-        activity.FkIdUsuario = 1;
+        activity.FkIdUsuario = TestIds.Seed(1);
         Db.Atividades.Add(activity);
         await Db.SaveChangesAsync();
         Db.AtividadesEixo.Add(new AtividadesEixo { FkIdAtividade = activity.IdAtividade, FkIdEixo = firstAxis.IdEixo });
@@ -208,7 +208,7 @@ public sealed class CommunityActorsActivitiesCrudTests : ControllerTestBase
         var axis = await CreateAxisAsync();
         var activity = NewActivity("Excluir");
         activity.FkIdComunidade = community.Id_Comunidade;
-        activity.FkIdUsuario = 1;
+        activity.FkIdUsuario = TestIds.Seed(1);
         Db.Atividades.Add(activity);
         await Db.SaveChangesAsync();
         Db.AtividadesEixo.Add(new AtividadesEixo { FkIdAtividade = activity.IdAtividade, FkIdEixo = axis.IdEixo });

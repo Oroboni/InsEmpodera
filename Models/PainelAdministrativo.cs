@@ -21,4 +21,4 @@ public sealed class PainelInicial
     public IReadOnlyList<AtorRecente> AtoresRecentes { get; init; } = [];
 }
 
-public sealed record AtorRecente(Guid Id, string Nome, string? Comunidade, DateTime CriadoEm);
+public sealed record AtorRecente(int Id, string Nome, string? Comunidade, DateTime CriadoEm);

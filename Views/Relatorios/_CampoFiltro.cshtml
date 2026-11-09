@@ -1,0 +1,20 @@
+@model Empodera.Models.RelatorioCampoFiltro
+@* Campo de filtro no padrão dos formulários de Atores: cartão com ícone, rótulo e lista. *@
+<div class="input-card @(Model.Inteiro ? "inteiro" : null)">
+    <div class="icon-box purple"><i class="fa-solid @Model.Icone"></i></div>
+    <div class="input-content">
+        <label for="@Model.Nome">@Model.Rotulo</label>
+        <select id="@Model.Nome" name="@Model.Nome" class="clean-input simple-select" disabled="@Model.Desabilitado"
+                onchange="@(Model.EnviarAoMudar ? "this.form.submit()" : null)">
+            @if (Model.OpcaoVazia is not null)
+            {
+                <option value="">@Model.OpcaoVazia</option>
+            }
+            @foreach (var opcao in Model.Opcoes)
+            {
+                <option value="@opcao.Value" selected="@opcao.Selected">@opcao.Text</option>
+            }
+        </select>
+        <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+    </div>
+</div>

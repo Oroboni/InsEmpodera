@@ -54,7 +54,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
         using var response = await HttpFlowTestSupport.PostFormAsync(
             client,
             "/PersonalAssessment/Create",
-            ValidFields(999_999, 3),
+            ValidFields(TestIds.Missing, 3),
             tokenPage: "/PersonalAssessment/Create");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -71,9 +71,9 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
                    client, admin.Email, HttpFlowTestSupport.ValidPassword))
             HttpFlowTestSupport.AssertRedirect(login, "/");
 
-        var fields = ValidFields(999_999, 4);
+        var fields = ValidFields(TestIds.Missing, 4);
         fields["Saude"] = "6";
-        fields["FkIdUsuario"] = "999999";
+        fields["FkIdUsuario"] = TestIds.Missing.ToString();
         fields["DtCriacao"] = "2099-01-01";
         using var response = await HttpFlowTestSupport.PostFormAsync(
             client,
@@ -88,7 +88,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
                 .SingleAsync(item => item.IdAvaliacao == target.AssessmentId));
         Assert.Equal(2, stored.Saude);
         Assert.Equal(target.ActorId, stored.FK_id_Atores);
-        Assert.Equal(1, stored.FkIdUsuario);
+        Assert.Equal(TestIds.Seed(1), stored.FkIdUsuario);
         Assert.Equal(target.CreatedAt, stored.DtCriacao);
     }
 
@@ -100,7 +100,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
                 Nome = $"Ator avaliação {Guid.NewGuid():N}",
                 Idade = 30,
                 Ativo = "S",
-                FkIdUsuario = 1,
+                FkIdUsuario = TestIds.Seed(1),
                 DtCriacao = DateTime.UtcNow,
                 DtModificacao = DateTime.UtcNow
             };
@@ -116,7 +116,7 @@ public sealed class PersonalAssessmentValidationHttpTests : IClassFixture<Empode
         {
             var createdAt = new DateTime(2026, 1, 2, 3, 4, 5, DateTimeKind.Utc);
             var assessment = NewAssessment(actorId, score);
-            assessment.FkIdUsuario = 1;
+            assessment.FkIdUsuario = TestIds.Seed(1);
             assessment.DtCriacao = createdAt;
             assessment.DtModificacao = createdAt;
             db.AvaliacaoPessoal.Add(assessment);

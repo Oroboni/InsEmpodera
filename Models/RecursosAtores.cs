@@ -6,9 +6,11 @@ namespace Empodera.Models
 {
     public class RecursosAtores
     {
-        public Guid Id_Recursos_Atores { get; set; }
-        public Guid FK_id_Atores { get; set; }     
+        public int Id_Recursos_Atores { get; set; }
+        public int FK_id_Atores { get; set; }     
+        [StringLength(50)]
         public string Tipo { get; set; } = null!;
+        [StringLength(150)]
         public string Nome { get; set; } = null!;
         public string? Pode { get; set; } = null!;
         public Atores? Atores { get; set; }

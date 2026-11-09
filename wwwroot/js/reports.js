@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. Gráfico Radar (Avaliações Pessoais)
+    // 2. Gráfico Radar (Avaliações Pessoais): uma série por data escolhida, sobrepostas e com cores diferentes.
     const radarChartCtx = document.getElementById('assessmentRadarChart');
     if (radarChartCtx) {
+        const series = JSON.parse(radarChartCtx.dataset.series || '[]');
         new Chart(radarChartCtx, {
             type: 'radar',
             data: {
@@ -44,14 +45,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Condições de crimes', 'Substâncias', 'Moradia', 'Prevenção',
                     'Assistência Básica', 'Educação', 'Saúde', 'Ocupação', 'Lazer'
                 ],
-                datasets: [{
-                    label: radarChartCtx.dataset.label,
-                    data: JSON.parse(radarChartCtx.dataset.points),
+                datasets: series.map(serie => ({
+                    label: serie.label,
+                    data: serie.pontos,
                     fill: true,
-                    backgroundColor: `rgb(${corPrimariaRgb} / 0.2)`,
-                    borderColor: corPrimaria,
-                    pointBackgroundColor: corPrimaria,
-                }]
+                    backgroundColor: serie.cor + '26',
+                    borderColor: serie.cor,
+                    pointBackgroundColor: serie.cor,
+                }))
             },
             options: {
                 responsive: true,
@@ -68,88 +69,60 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ==========================================================
-    // [CÓDIGO CORRIGIDO/ADICIONADO]
-    // 3. Gráfico Donut (Rede Primária)
-    // ==========================================================
+    // 3. Gráfico Donut (Rede Primária): vínculos por tipo de relação.
     const donutChartCtx = document.getElementById('networkDonutChart');
     if (donutChartCtx) {
         new Chart(donutChartCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Conhecido', 'Amigo', 'Familiar', 'Vizinho', 'Colega de trabalho'],
+                labels: JSON.parse(donutChartCtx.dataset.labels || '[]'),
                 datasets: [{
-                    data: [1, 0, 0, 0, 0], // Dados fictícios (1 Conhecido)
-                    backgroundColor: ['#4C51BF', '#D61F7A', '#38A169', '#3182CE', '#805AD5'],
+                    data: JSON.parse(donutChartCtx.dataset.values || '[]'),
+                    backgroundColor: ['#4C51BF', '#D61F7A', '#38A169', '#3182CE', '#805AD5', '#E8A33D', '#C05621', '#4A5568'],
                 }]
             },
             options: {
                 responsive: true,
-                cutout: '70%', // O "buraco" do donut
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
-                }
+                cutout: '70%',
+                plugins: { legend: { position: 'bottom' } }
             }
         });
     }
 
-    // ==========================================================
-    // [CÓDIGO CORRIGIDO/ADICIONADO]
-    // 4. Gráfico de Barras Horizontais (Rede Primária)
-    // ==========================================================
+    // 4. Gráfico de Barras Horizontais (Rede Primária): proporção de atores da rede com cada recurso/vulnerabilidade.
     const barChartCtx = document.getElementById('networkBarChart');
     if (barChartCtx) {
         new Chart(barChartCtx, {
             type: 'bar',
             data: {
-                labels: [
-                    'Número de nós', 'Rede primária', 'Seguridade Social', 'Substâncias',
-                    'Moradia', 'Prevenção', 'Assistência Básica', 'Educação', 'Saúde', 'Ocupação', 'Lazer'
-                ],
+                labels: JSON.parse(barChartCtx.dataset.labels || '[]'),
                 datasets: [
                     {
                         label: 'Recursos',
-                        data: [0.9, 0.9, 0.9, 0.1, 0, 0, 0, 0, 0, 0, 0], // Dados fictícios (Azul)
-                        backgroundColor: '#026AA2', 
+                        data: JSON.parse(barChartCtx.dataset.resources || '[]'),
+                        backgroundColor: '#026AA2',
                         barPercentage: 0.6,
                     },
                     {
                         label: 'Vulnerabilidades',
-                        data: [0.1, 0.1, 0.1, 0, 0.9, 0, 0, 0, 0, 0, 0], // Dados fictícios (Rosa)
-                        backgroundColor: '#D61F7A', 
+                        data: JSON.parse(barChartCtx.dataset.vulnerabilities || '[]'),
+                        backgroundColor: '#D61F7A',
                         barPercentage: 0.6,
                     }
                 ]
             },
             options: {
-                indexAxis: 'y', // <-- Isso torna o gráfico horizontal
+                indexAxis: 'y',
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
-                    x: {
-                        stacked: true, // Empilha as barras
-                        min: 0,
-                        max: 1.0,
-                        ticks: {
-                             stepSize: 0.1
-                        }
-                    },
-                    y: {
-                        stacked: true // Empilha as barras
-                    }
+                    x: { min: 0, max: 1, ticks: { stepSize: 0.1 } }
                 },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
-                }
+                plugins: { legend: { position: 'bottom' } }
             }
         });
     }
-    
 
-    
     // ==========================================================
     // 5. LÓGICA DO TOGGLE DA PÁGINA RSC
     // ==========================================================

@@ -172,7 +172,7 @@ describe('relatórios', () => {
   it('instancia somente os gráficos presentes e mantém suas configurações críticas', () => {
     document.body.innerHTML = `
       <canvas id="firstContactPieChart"></canvas>
-      <canvas id="networkBarChart"></canvas>
+      <canvas id="networkBarChart" data-labels='["Saúde","Lazer"]' data-resources='[1,0]' data-vulnerabilities='[0,0.5]'></canvas>
     `;
     const chart = vi.fn();
     window.Chart = chart;
@@ -184,7 +184,11 @@ describe('relatórios', () => {
     expect(chart.mock.calls[0][1].data.labels).toHaveLength(3);
     expect(chart.mock.calls[1][1].type).toBe('bar');
     expect(chart.mock.calls[1][1].options.indexAxis).toBe('y');
-    expect(chart.mock.calls[1][1].options.scales.x.stacked).toBe(true);
+    // Recursos e vulnerabilidades são proporções independentes (0 a 1): barras lado a lado, não empilhadas.
+    expect(chart.mock.calls[1][1].options.scales.x.stacked).toBeUndefined();
+    expect(chart.mock.calls[1][1].options.scales.x.max).toBe(1);
+    expect(chart.mock.calls[1][1].data.labels).toEqual(['Saúde', 'Lazer']);
+    expect(chart.mock.calls[1][1].data.datasets.map(d => d.data)).toEqual([[1, 0], [0, 0.5]]);
   });
 
   it('alterna tabelas numéricas e percentuais e sincroniza o botão ativo', () => {
@@ -234,5 +238,43 @@ describe('tags de eixos em recursos da comunidade', () => {
     tag.querySelector('.tag-remove-btn').click();
     expect(checkbox.checked).toBe(false);
     expect(document.querySelector('[data-axis-tags] .tag-item')).toBeNull();
+  });
+});
+
+describe('tipo e nome do recurso da comunidade', () => {
+  it('relacional troca o nome livre pela escolha de um ator e só envia o campo visível', () => {
+    document.body.innerHTML = `
+      <select data-recurso-tipo>
+        <option value="">Selecione</option><option value="Estrutural">Estrutural</option><option value="Relacional">Relacional</option>
+      </select>
+      <div data-recurso-nome="texto"><input id="Nome" name="Nome"></div>
+      <div data-recurso-nome="ator" hidden><select id="AtorRecurso" name="FK_id_Atores"><option value="1">Ana</option></select></div>
+      <div data-recurso-responsavel><select id="AtorResponsavel" name="FK_id_Atores"><option value="">-</option></select></div>
+    `;
+    runPublicScript('recurso-form.js');
+    dispatchReady();
+    const tipo = document.querySelector('[data-recurso-tipo]');
+    const nome = document.getElementById('Nome');
+    const ator = document.getElementById('AtorRecurso');
+    const responsavel = document.getElementById('AtorResponsavel');
+
+    expect(nome.disabled).toBe(false);
+    expect(nome.required).toBe(true);
+    expect(ator.disabled).toBe(true);
+    expect(responsavel.disabled).toBe(false);
+    expect(responsavel.required).toBe(false);
+
+    tipo.value = 'Relacional';
+    tipo.dispatchEvent(new Event('change'));
+    expect(nome.disabled).toBe(true);
+    expect(ator.disabled).toBe(false);
+    expect(ator.required).toBe(true);
+    expect(ator.closest('[data-recurso-nome]').hidden).toBe(false);
+    expect(responsavel.disabled).toBe(true);
+
+    tipo.value = 'Estrutural';
+    tipo.dispatchEvent(new Event('change'));
+    expect(nome.disabled).toBe(false);
+    expect(ator.disabled).toBe(true);
   });
 });
