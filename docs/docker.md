@@ -42,7 +42,7 @@ Edite o `.env` e troque **todos** os valores. Gere senhas fortes com `openssl ra
 | --- | --- |
 | `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD` | Senhas do MySQL (administração e aplicação) |
 | `APP_URL_PUBLICA`, `APP_DOMINIO` | Endereço HTTPS e domínio aceitos pela aplicação (no computador: `https://localhost` e `localhost`) |
-| `EMAIL_SENHA` | Senha de aplicativo do Gmail para "Esqueci minha senha" |
+| `EMAIL_SENHA` | Senha de aplicativo do Gmail para "Esqueci minha senha". Vazio: a recuperação por e-mail fica desligada e o administrador troca senhas em Usuários |
 | `SENHA_INICIAL_ADMIN` | Só em instalação nova: senha do administrador (usuário 1). Apague depois do primeiro acesso |
 
 O `.env` está no `.gitignore`. Nenhuma senha fica no repositório nem na imagem.

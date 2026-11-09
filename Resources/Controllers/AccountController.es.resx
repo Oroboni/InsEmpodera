@@ -277,4 +277,12 @@
     <value>Tu nueva contraseña ya está activa. Puedes volver al inicio de sesión y acceder a EcoRedes.</value>
     <comment>Source: Sua nova senha já está ativa. Você pode voltar ao login e acessar o EcoRedes.</comment>
   </data>
+  <data name='Ui_3b3bbe75736caf51' xml:space='preserve'>
+    <value>La recuperación de contraseña por correo aún no está activa. Pida al administrador de EcoRedes que restablezca su contraseña en la pantalla Usuarios.</value>
+    <comment>Source: A recuperação de senha por e-mail ainda não está ativa. Peça ao administrador do EcoRedes para redefinir sua senha na tela Usuários.</comment>
+  </data>
+  <data name='Ui_0fe6598d4da8d7b9' xml:space='preserve'>
+    <value>Volver al inicio de sesión</value>
+    <comment>Source: Voltar ao login</comment>
+  </data>
 </root>

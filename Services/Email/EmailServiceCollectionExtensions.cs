@@ -21,12 +21,13 @@ public static class EmailServiceCollectionExtensions
         if (!environment.IsDevelopment() && !environment.IsEnvironment("Testing"))
         {
             options
+                // Sem Email__Password a recuperação por e-mail fica desligada; com ela, a configuração precisa ser válida.
                 .Validate(
-                    value => (value.Password ?? string.Empty).Replace(" ", string.Empty).Length >= 16,
-                    "Defina Email__Password com uma senha de aplicativo válida do Gmail.")
+                    value => !value.Configurado || value.Password.Replace(" ", string.Empty).Length >= 16,
+                    "Defina Email__Password com uma senha de aplicativo válida do Gmail (ou deixe vazio para desligar a recuperação por e-mail).")
                 .Validate(
-                    value => Uri.TryCreate(value.PublicBaseUrl, UriKind.Absolute, out var uri) &&
-                             uri.Scheme == Uri.UriSchemeHttps,
+                    value => !value.Configurado ||
+                             (Uri.TryCreate(value.PublicBaseUrl, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps),
                     "Defina Email__PublicBaseUrl com a URL HTTPS pública do Empodera.")
                 .ValidateOnStart();
         }

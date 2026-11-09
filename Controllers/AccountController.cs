@@ -84,6 +84,7 @@ public class AccountController : Controller
     [AllowAnonymous]
     public IActionResult Forgot()
     {
+        ViewData["RecuperacaoIndisponivel"] = !_passwordResetEmailSender.Disponivel;
         return View(new ForgotPasswordViewModel());
     }
 
@@ -94,6 +95,12 @@ public class AccountController : Controller
     public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
     {
         var responseTimer = Stopwatch.StartNew();
+
+        if (!_passwordResetEmailSender.Disponivel)
+        {
+            ViewData["RecuperacaoIndisponivel"] = true;
+            return View("Forgot", new ForgotPasswordViewModel());
+        }
 
         if (ModelState.IsValid)
         {

@@ -25,8 +25,15 @@ public sealed class GmailSmtpPasswordResetEmailSender : BackgroundService, IPass
         _logger = logger;
     }
 
+    public bool Disponivel => _options.CurrentValue.Configurado;
+
     public bool TryQueue(string recipientEmail, string resetUrl)
     {
+        if (!Disponivel)
+        {
+            _logger.LogWarning("Recuperação de senha por e-mail desligada: Email__Password não foi configurado.");
+            return false;
+        }
         if (string.IsNullOrWhiteSpace(recipientEmail) ||
             !Uri.TryCreate(resetUrl, UriKind.Absolute, out var resetUri) ||
             resetUri.Scheme != Uri.UriSchemeHttps)

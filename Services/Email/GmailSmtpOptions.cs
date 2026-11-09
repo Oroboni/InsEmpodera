@@ -10,4 +10,7 @@ public sealed class GmailSmtpOptions
     public string Password { get; set; } = string.Empty;
     public string FromName { get; set; } = "Instituto Empodera";
     public string PublicBaseUrl { get; set; } = string.Empty;
+
+    // Sem senha de aplicativo o sistema sobe normalmente e só a recuperação por e-mail fica desligada.
+    public bool Configurado => !string.IsNullOrWhiteSpace(Password);
 }

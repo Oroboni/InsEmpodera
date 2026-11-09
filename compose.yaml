@@ -36,7 +36,8 @@ services:
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=empodera;User=${MYSQL_USER:-empodera_app};Password=${MYSQL_PASSWORD};CharSet=utf8mb4;"
       AllowedHosts: ${APP_DOMINIO:-localhost}
       Email__User: ${EMAIL_USUARIO:-empodera.ajuda@gmail.com}
-      Email__Password: ${EMAIL_SENHA:?defina EMAIL_SENHA no .env}
+      # Vazio = recuperação de senha por e-mail desligada (o administrador troca senhas em Usuários).
+      Email__Password: ${EMAIL_SENHA:-}
       Email__PublicBaseUrl: ${APP_URL_PUBLICA:?defina APP_URL_PUBLICA no .env}
       Instalacao__SenhaAdmin: ${SENHA_INICIAL_ADMIN:-}
     volumes:

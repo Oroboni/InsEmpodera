@@ -3,6 +3,7 @@
     ViewData["Title"] = "Recuperar Senha";
     Layout = "_LoginLayout";
     var submitted = ViewData["RecoverySubmitted"] as bool? == true;
+    var indisponivel = ViewData["RecuperacaoIndisponivel"] as bool? == true;
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/forget.css" asp-append-version="true" />
@@ -40,6 +41,19 @@
                 </div>
             }
 
+            @if (indisponivel)
+            {
+                <div class="success-message show recovery-unavailable" role="status" data-testid="recovery-unavailable">
+                    <div class="success-icon" aria-hidden="true">i</div>
+                    <div class="success-text">
+                        A recuperação de senha por e-mail ainda não está ativa. Peça ao administrador do EcoRedes
+                        para redefinir sua senha na tela Usuários.
+                    </div>
+                </div>
+                <a asp-action="Index" asp-controller="Account" class="cancel-button">Voltar ao login</a>
+            }
+            else
+            {
             <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
             <div class="form-group">
                 <label asp-for="Email" class="input-label">E-mail</label>
@@ -52,6 +66,7 @@
                 Enviar link
             </button>
             <a asp-action="Index" asp-controller="Account" class="cancel-button">Cancelar</a>
+            }
         </form>
     </section>
 
