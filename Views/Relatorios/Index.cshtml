@@ -2,6 +2,42 @@
     ViewData["Title"] = "Relatórios";
     ViewData["PageCSS"] = "reports";
     Layout = "_Layout";
+
+    var grupos = new[]
+    {
+        (
+            Titulo: "Comunidade",
+            Descricao: "Visão do território como um todo: quem está na rede, quais vínculos existem e o que já foi feito.",
+            Relatorios: new[]
+            {
+                (Acao: "Rsc", Icone: "fa-people-group", Titulo: "RSC — Rede Subjetiva Comunitária",
+                 Texto: "Soma a rede subjetiva de cada ator da comunidade: quem cita quem, o tipo de relação e de que redes a pessoa citada faz parte (EQ, RO, RLO, PA, CO, RRC).",
+                 Saidas: new[] { "Excel" }),
+                (Acao: "FirstContact", Icone: "fa-file-signature", Titulo: "Fichas de 1º Contato",
+                 Texto: "Agrupa as fichas de primeiro contato por status, gênero, estrutura familiar, horário e outros campos, com filtros por período.",
+                 Saidas: Array.Empty<string>()),
+                (Acao: "Community", Icone: "fa-chart-column", Titulo: "Relatório Geral",
+                 Texto: "Resumo da comunidade em números: atores, recursos, vulnerabilidades, atividades, atendidos, atendimentos e atores envolvidos.",
+                 Saidas: new[] { "PDF" })
+            }
+        ),
+        (
+            Titulo: "Parceiro",
+            Descricao: "Acompanhamento das pessoas e das ações: como cada ator evolui e o que a equipe realizou.",
+            Relatorios: new[]
+            {
+                (Acao: "PersonalAssessment", Icone: "fa-user-check", Titulo: "Avaliações Pessoais",
+                 Texto: "Gráfico das nove dimensões da avaliação do ator. Escolha várias datas para comparar a evolução, com cores diferentes.",
+                 Saidas: new[] { "PDF", "Excel" }),
+                (Acao: "Actions", Icone: "fa-heart-pulse", Titulo: "Ações",
+                 Texto: "Ações registradas nos diários de campo, por eixo: atendidos, atendimentos e atores envolvidos, com filtros de eixo, ator e período.",
+                 Saidas: new[] { "PDF", "Excel" }),
+                (Acao: "PrimaryNetwork", Icone: "fa-share-nodes", Titulo: "Rede Primária",
+                 Texto: "Amplitude, densidade e centralidade da rede primária do ator, os tipos de relação e os recursos e vulnerabilidades dessa rede.",
+                 Saidas: Array.Empty<string>())
+            }
+        )
+    };
 }
 
 @section Styles {
@@ -9,39 +45,50 @@
 }
 
 <div class="report-page-container">
-    <div class="report-breadcrumb">
-        <h2 class="page-title">Relatórios</h2>
-    </div>
-
-    <div class="report-menu-group">
-        <h2>Comunidade</h2>
-        <div class="report-card-grid">
-            <a asp-action="Rsc" class="report-card">
-                <i class="fa-solid fa-people-group"></i>
-                <span>RSC</span>
-            </a>
-            <a asp-action="FirstContact" class="report-card">
-                <i class="fa-solid fa-file-signature"></i>
-                <span>Fichas de 1º Contato</span>
-            </a>
+    <section class="relatorios-intro">
+        <div>
+            <h2 class="page-title">Relatórios</h2>
+            <p>
+                Escolha um relatório para analisar os dados das comunidades. Em todos eles você começa
+                selecionando a comunidade (e, quando for o caso, o ator); os que têm exportação geram
+                arquivos em PDF ou Excel com a identidade do EcoRedes.
+            </p>
         </div>
-    </div>
+        <i class="fa-solid fa-chart-pie relatorios-intro-icone" aria-hidden="true"></i>
+    </section>
 
-    <div class="report-menu-group">
-        <h2>Parceiro</h2>
-        <div class="report-card-grid">
-            <a asp-action="PersonalAssessment" class="report-card">
-                <i class="fa-solid fa-user-check"></i>
-                <span>Avaliações Pessoais</span>
-            </a>
-            <a asp-action="Actions" class="report-card">
-                <i class="fa-solid fa-heart-pulse"></i>
-                <span>Ações</span>
-            </a>
-             <a asp-action="PrimaryNetwork" class="report-card">
-                <i class="fa-solid fa-share-nodes"></i>
-                <span>Rede Primária</span>
-            </a>
+    @foreach (var grupo in grupos)
+    {
+        <div class="report-menu-group">
+            <h2>@grupo.Titulo</h2>
+            <p class="relatorios-grupo-descricao">@grupo.Descricao</p>
+            <div class="relatorios-grid">
+                @foreach (var relatorio in grupo.Relatorios)
+                {
+                    <a asp-action="@relatorio.Acao" class="relatorio-card" data-testid="report-card-@relatorio.Acao">
+                        <div class="relatorio-card-topo">
+                            <span class="relatorio-card-icone"><i class="fa-solid @relatorio.Icone" aria-hidden="true"></i></span>
+                            <h3>@relatorio.Titulo</h3>
+                        </div>
+                        <p>@relatorio.Texto</p>
+                        <div class="relatorio-card-rodape">
+                            <div class="relatorio-card-saidas">
+                                @if (relatorio.Saidas.Length == 0)
+                                {
+                                    <span class="relatorio-saida tela">Na tela</span>
+                                }
+                                @foreach (var saida in relatorio.Saidas)
+                                {
+                                    <span class="relatorio-saida">
+                                        <i class="fa-solid @(saida == "PDF" ? "fa-file-pdf" : "fa-file-excel")" aria-hidden="true"></i> @saida
+                                    </span>
+                                }
+                            </div>
+                            <span class="relatorio-card-abrir">Abrir <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                        </div>
+                    </a>
+                }
+            </div>
         </div>
-    </div>
+    }
 </div>

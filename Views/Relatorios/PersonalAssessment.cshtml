@@ -1,86 +1,103 @@
+@model Empodera.Models.PersonalAssessmentReportViewModel
+@using Empodera.Models
 @{
     ViewData["Title"] = "Relatório - Avaliações Pessoais";
-    ViewData["PageCSS"] = "reports";
+    ViewData["PageCSS"] = "homepage";
     Layout = "_Layout";
-    // A linha "DisableMainScroll" FOI REMOVIDA daqui para CORRIGIR a rolagem.
-    
-    // Pega o AtorId selecionado (enviado pelo Controller)
-    int? selectedAtorId = ViewBag.SelectedAtorId; 
-    var avaliacoes = ViewBag.Avaliacoes as IReadOnlyList<Empodera.Models.AvaliacaoPessoal>
-        ?? Array.Empty<Empodera.Models.AvaliacaoPessoal>();
-    var avaliacao = ViewBag.AvaliacaoSelecionada as Empodera.Models.AvaliacaoPessoal;
+    var cores = PersonalAssessmentReportViewModel.Cores;
+    var selecionadas = Model.Selecionadas.Select(a => a.IdAvaliacao).ToHashSet();
+    // Cor de cada avaliação: a mesma da sua posição (da mais antiga para a mais recente) no gráfico e no PDF.
+    var corPorAvaliacao = Model.Selecionadas.Select((a, i) => (a.IdAvaliacao, Cor: cores[i % cores.Length]))
+        .ToDictionary(x => x.IdAvaliacao, x => x.Cor);
+    var series = Model.Selecionadas.Select(a => new
+    {
+        label = a.DtCriacao.ToString("dd/MM/yyyy"),
+        cor = corPorAvaliacao[a.IdAvaliacao],
+        pontos = PersonalAssessmentReportViewModel.Valores(a)
+    });
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
+    <partial name="_EstilosRelatorio" />
 }
 
-<div class="report-page-container">
-    <div class="report-breadcrumb">
-    <h1>
-        <a asp-controller="Relatorios" asp-action="Index">Relatórios</a>
-        > 
-        <strong>Avaliações Pessoais</strong>
-    </h1>
-</div>
-
-    <div class="report-content-box">
-        <div class="report-filters">
-            
-            <form asp-action="PersonalAssessment" method="get" id="atorSelectForm">
-                <div class="form-group">
-                    <label>Ator</label>
-                    <div class="select-wrapper">
-                        <i class="fa-solid fa-user"></i>
-                        <select name="atorId" asp-items="ViewBag.AtorList" onchange="this.form.submit()">
-                            <option value="">Selecione um Ator...</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    </div>
-                </div>
-            </form>
-
-            @if (selectedAtorId != null && avaliacoes.Count > 0)
-            {
-                <form asp-action="PersonalAssessment" method="get">
-                    <input type="hidden" name="atorId" value="@selectedAtorId" />
-                    <div class="form-group">
-                        <label for="avaliacaoId">Avaliações pessoais</label>
-                        <div class="select-wrapper">
-                            <select id="avaliacaoId" name="avaliacaoId" onchange="this.form.submit()">
-                                @foreach (var item in avaliacoes)
-                                {
-                                    <option value="@item.IdAvaliacao" selected="@(avaliacao?.IdAvaliacao == item.IdAvaliacao)">@item.DtCriacao.ToString("dd/MM/yyyy")</option>
-                                }
-                            </select>
-                            <i class="fa-solid fa-chevron-down select-arrow"></i>
-                        </div>
-                    </div>
-                </form>
-            }
-        </div>
-
-        <div class="report-body">
-            @if (selectedAtorId == null)
-            {
-                <div class="report-empty-state">
-                    <img src="~/images/MulherPlaceholder.webp" alt="Selecione um ator" />
-                    <p>Primeiro selecione um ator.</p>
-                </div>
-            }
-            else if (avaliacao != null)
-            {
-                <div class="chart-container-radar">
-                    <canvas id="assessmentRadarChart"
-                            data-points="@System.Text.Json.JsonSerializer.Serialize(new[] { avaliacao.CCrimes, avaliacao.Substancias, avaliacao.Moradia, avaliacao.Prevencao, avaliacao.AssBasica, avaliacao.Educacao, avaliacao.Saude, avaliacao.Ocupacao, avaliacao.Lazer })"
-                            data-label="@avaliacao.DtCriacao.ToString("dd/MM/yyyy")"></canvas>
-                </div>
-            }
-            else
-            {
-                <div class="report-empty-state"><p>Este ator ainda não possui avaliações pessoais.</p></div>
-            }
-        </div>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Relatórios</a>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Avaliações Pessoais</strong>
+        </h2>
     </div>
+
+    <div class="relatorio-filtros">
+        <form asp-action="PersonalAssessment" method="get" style="display:contents">
+            <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("comunidadeId", "Comunidade", "fa-city",
+                (IEnumerable<SelectListItem>)ViewBag.Comunidades, "Todas as comunidades", EnviarAoMudar: true)' />
+        </form>
+        <form asp-action="PersonalAssessment" method="get" style="display:contents" id="atorSelectForm">
+            <input type="hidden" name="comunidadeId" value="@Model.ComunidadeId" />
+            <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("atorId", "Ator", "fa-user",
+                (IEnumerable<SelectListItem>)ViewBag.AtorList, "Selecione um ator...", EnviarAoMudar: true)' />
+        </form>
+    </div>
+
+    @if (Model.AtorId == null)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-user-check"></i></div>
+            <h3>Selecione um ator</h3>
+            <p>Use o filtro de comunidade para encontrar o ator mais rápido.</p>
+        </div>
+    }
+    else if (Model.Selecionadas.Count == 0)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-clipboard-list"></i></div>
+            <h3>Sem avaliações</h3>
+            <p>Este ator ainda não possui avaliações pessoais.</p>
+        </div>
+    }
+    else
+    {
+        <form asp-action="PersonalAssessment" method="get" id="avaliacoesForm">
+            <input type="hidden" name="comunidadeId" value="@Model.ComunidadeId" />
+            <input type="hidden" name="atorId" value="@Model.AtorId" />
+            <div class="relatorio-cabecalho-secao">
+                <div class="section-label">Datas para comparar</div>
+                <div class="relatorio-exportar">
+                    <button type="submit" name="exportar" value="excel" class="btn-export" data-testid="assessment-export-excel"
+                            aria-label="Exportar avaliações para Excel" title="Exportar avaliações para Excel">
+                        <i class="fa-solid fa-file-excel" aria-hidden="true"></i>
+                    </button>
+                    <button type="submit" name="exportar" value="pdf" class="btn-export pdf" data-testid="assessment-export-pdf"
+                            aria-label="Exportar avaliações em PDF" title="Exportar avaliações em PDF">
+                        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="relatorio-grupo-descricao">Marque uma ou mais datas: cada avaliação aparece no gráfico com uma cor.</p>
+            <div class="date-chips" data-testid="assessment-dates">
+                @foreach (var item in Model.Avaliacoes)
+                {
+                    var marcada = selecionadas.Contains(item.IdAvaliacao);
+                    var cor = marcada ? corPorAvaliacao[item.IdAvaliacao] : null;
+                    <label class="date-chip" style="@(cor is null ? null : $"--chip-cor:{cor}")">
+                        <input type="checkbox" name="avaliacaoIds" value="@item.IdAvaliacao" checked="@marcada" onchange="this.form.submit()" />
+                        @if (cor is not null) { <span class="chip-cor" aria-hidden="true"></span> }
+                        @item.DtCriacao.ToString("dd/MM/yyyy")
+                    </label>
+                }
+            </div>
+        </form>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Gráfico das avaliações</div>
+        <div class="relatorio-painel">
+            <div class="relatorio-grafico-radar">
+                <canvas id="assessmentRadarChart" data-series="@System.Text.Json.JsonSerializer.Serialize(series)"></canvas>
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts {

@@ -84,6 +84,9 @@ CREATE TABLE atores (
     Rope                 TINYINT UNSIGNED NOT NULL,
     Lopiniao             TINYINT UNSIGNED NOT NULL,
     Mcomunidade          TINYINT UNSIGNED NOT NULL,
+    Parceiro             TINYINT UNSIGNED NOT NULL,
+    OperadorPar          TINYINT UNSIGNED NOT NULL,
+    RecursoRelacional    TINYINT UNSIGNED NOT NULL,
     DtCriacao            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     DtModificacao        DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
     Ativo                CHAR(1) NOT NULL,
@@ -444,6 +447,9 @@ ALTER TABLE atores
     ADD CONSTRAINT CK_Atores_Idade CHECK (Idade <= 130),
     ADD CONSTRAINT CK_Atores_Lopiniao CHECK (Lopiniao IN (0, 1)),
     ADD CONSTRAINT CK_Atores_Mcomunidade CHECK (Mcomunidade IN (0, 1)),
+    ADD CONSTRAINT CK_Atores_OperadorPar CHECK (OperadorPar IN (0, 1)),
+    ADD CONSTRAINT CK_Atores_Parceiro CHECK (Parceiro IN (0, 1)),
+    ADD CONSTRAINT CK_Atores_RecursoRelacional CHECK (RecursoRelacional IN (0, 1)),
     ADD CONSTRAINT CK_Atores_Rope CHECK (Rope IN (0, 1));
 
 ALTER TABLE avaliacaopessoal

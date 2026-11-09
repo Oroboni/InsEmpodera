@@ -856,4 +856,428 @@
     <value>para consultar las acciones registradas.</value>
     <comment>Source: para consultar as ações registradas.</comment>
   </data>
+  <data name='Ui_b5ac64d68118c7a2' xml:space='preserve'>
+    <value>Todas las comunidades</value>
+    <comment>Source: Todas as comunidades</comment>
+  </data>
+  <data name='Ui_45f8f8baaf804425' xml:space='preserve'>
+    <value>Red Subjetiva Comunitaria (RSC)</value>
+    <comment>Source: Rede Subjetiva Comunitária (RSC)</comment>
+  </data>
+  <data name='Ui_f9b3a0b4f8162cef' xml:space='preserve'>
+    <value>Ningún actor de esta comunidad tiene red subjetiva registrada.</value>
+    <comment>Source: Nenhum ator desta comunidade tem rede subjetiva cadastrada.</comment>
+  </data>
+  <data name='Ui_6cdf9335247293b9' xml:space='preserve'>
+    <value>RSC con un total de</value>
+    <comment>Source: RSC com um total de</comment>
+  </data>
+  <data name='Ui_101a718c55ab0b00' xml:space='preserve'>
+    <value>nodos y</value>
+    <comment>Source: nós e</comment>
+  </data>
+  <data name='Ui_e770591978f1a844' xml:space='preserve'>
+    <value>vínculos</value>
+    <comment>Source: vínculos</comment>
+  </data>
+  <data name='Ui_8be94f4e51a9133f' xml:space='preserve'>
+    <value>Exportar Excel</value>
+    <comment>Source: Exportar Excel</comment>
+  </data>
+  <data name='Ui_b532da72ee7560df' xml:space='preserve'>
+    <value>Exportar PDF</value>
+    <comment>Source: Exportar PDF</comment>
+  </data>
+  <data name='Ui_9db106bd4e2e9fb3' xml:space='preserve'>
+    <value>Actor 1</value>
+    <comment>Source: Ator 1</comment>
+  </data>
+  <data name='Ui_0005619c4019cbf3' xml:space='preserve'>
+    <value>Actor 2</value>
+    <comment>Source: Ator 2</comment>
+  </data>
+  <data name='Ui_eb85a833076682d2' xml:space='preserve'>
+    <value>Relación</value>
+    <comment>Source: Relação</comment>
+  </data>
+  <data name='Ui_43ed4d8226265572' xml:space='preserve'>
+    <value>Rol Social 1</value>
+    <comment>Source: Papel Social 1</comment>
+  </data>
+  <data name='Ui_1363a58a71e59cd6' xml:space='preserve'>
+    <value>Rol Social 2</value>
+    <comment>Source: Papel Social 2</comment>
+  </data>
+  <data name='Ui_c9b3c38247f744e1' xml:space='preserve'>
+    <value>Total</value>
+    <comment>Source: Total</comment>
+  </data>
+  <data name='Ui_814baac3f3f7b6e1' xml:space='preserve'>
+    <value>El Actor 1 es de quien sale la red subjetiva; el Actor 2 forma parte de ella (las demás columnas son del Actor 2).</value>
+    <comment>Source: Ator 1 é de quem sai a rede subjetiva; Ator 2 é quem faz parte dela (as demais colunas são do Ator 2).</comment>
+  </data>
+  <data name='Ui_53909ac9a195fcf6' xml:space='preserve'>
+    <value>EQ = Equipo · RO = Red Operativa (incluye Operador par) · RLO = Red de Líderes de Opinión · PA = Socio · CO = Comunidad · RRC = Red de Recursos Comunitarios</value>
+    <comment>Source: EQ = Equipe · RO = Rede Operativa (inclui Operador par) · RLO = Rede de Líderes de Opinião · PA = Parceiro · CO = Comunidade · RRC = Rede de Recursos Comunitários</comment>
+  </data>
+  <data name='Ui_45c96b46008e07de' xml:space='preserve'>
+    <value>Eje</value>
+    <comment>Source: Eixo</comment>
+  </data>
+  <data name='Ui_b8a5668882d01e0e' xml:space='preserve'>
+    <value>Por eje</value>
+    <comment>Source: Por eixo</comment>
+  </data>
+  <data name='Ui_6951341cd0e0cde5' xml:space='preserve'>
+    <value>Acciones distintas</value>
+    <comment>Source: Ações distintas</comment>
+  </data>
+  <data name='Ui_fe55a636c61baa0a' xml:space='preserve'>
+    <value>Atendidos</value>
+    <comment>Source: Atendidos</comment>
+  </data>
+  <data name='Ui_730c491e2c6115cd' xml:space='preserve'>
+    <value>Atenciones</value>
+    <comment>Source: Atendimentos</comment>
+  </data>
+  <data name='Ui_ec2b9607d0bd3856' xml:space='preserve'>
+    <value>Actores involucrados</value>
+    <comment>Source: Atores envolvidos</comment>
+  </data>
+  <data name='Ui_cd6ec312b0d18a2b' xml:space='preserve'>
+    <value>Detalle de las acciones</value>
+    <comment>Source: Detalhamento das ações</comment>
+  </data>
+  <data name='Ui_2e0ea54ad2b37d1b' xml:space='preserve'>
+    <value>Nombre de la acción</value>
+    <comment>Source: Nome da ação</comment>
+  </data>
+  <data name='Ui_50b3eb2366410d15' xml:space='preserve'>
+    <value>Fecha de la acción</value>
+    <comment>Source: Data da ação</comment>
+  </data>
+  <data name='Ui_9553ea5b69897d8d' xml:space='preserve'>
+    <value>Atendidos: actores registrados en la acción que no son del equipo. Atenciones: cantidad informada en la acción. Actores involucrados: todos los actores registrados en la acción.</value>
+    <comment>Source: Atendidos: atores cadastrados na ação que não são da equipe. Atendimentos: quantidade informada na ação. Atores envolvidos: todos os atores cadastrados na ação.</comment>
+  </data>
+  <data name='Ui_b2339ac33beefff7' xml:space='preserve'>
+    <value>Atendidos: actores de las acciones que no son del equipo. Atenciones: suma de las cantidades de las acciones. Actores involucrados: todos los actores registrados en las acciones.</value>
+    <comment>Source: Atendidos: atores das ações que não são da equipe. Atendimentos: soma das quantidades das ações. Atores envolvidos: todos os atores cadastrados nas ações.</comment>
+  </data>
+  <data name='Ui_ffa2ca3f841241cc' xml:space='preserve'>
+    <value>Evaluaciones personales (elija una o más fechas para comparar)</value>
+    <comment>Source: Avaliações pessoais (escolha uma ou mais datas para comparar)</comment>
+  </data>
+  <data name='Ui_8591fd8577aed63d' xml:space='preserve'>
+    <value>Amplitud: actores en la red primaria del actor. Densidad: amplitud ÷</value>
+    <comment>Source: Amplitude: atores na rede primária do ator. Densidade: amplitude ÷</comment>
+  </data>
+  <data name='Ui_b61dfd19835b008a' xml:space='preserve'>
+    <value>actores de la comunidad</value>
+    <comment>Source: atores da comunidade</comment>
+  </data>
+  <data name='Ui_c18913fd63b32b63' xml:space='preserve'>
+    <value>Centralidad: grado (</value>
+    <comment>Source: Centralidade: grau (</comment>
+  </data>
+  <data name='Ui_f3f54688824e6633' xml:space='preserve'>
+    <value>vínculos que salen y llegan) ÷ (actores de la comunidad − 1).</value>
+    <comment>Source: vínculos que saem e chegam) ÷ (atores da comunidade − 1).</comment>
+  </data>
+  <data name='Ui_ce7cb0cc8af73798' xml:space='preserve'>
+    <value>Este actor aún no tiene red primaria registrada.</value>
+    <comment>Source: Este ator ainda não tem rede primária cadastrada.</comment>
+  </data>
+  <data name='Ui_44e6380968f46c59' xml:space='preserve'>
+    <value>Barras: proporción de los actores de la red primaria con cada recurso y vulnerabilidad marcados en el registro.</value>
+    <comment>Source: Barras: proporção dos atores da rede primária com cada recurso e vulnerabilidade marcados no cadastro.</comment>
+  </data>
+  <data name='Ui_da9903436bf36ad5' xml:space='preserve'>
+    <value>Informe General de la Comunidad</value>
+    <comment>Source: Relatório Geral da Comunidade</comment>
+  </data>
+  <data name='Ui_4a437f2b71248300' xml:space='preserve'>
+    <value>Informe General</value>
+    <comment>Source: Relatório Geral</comment>
+  </data>
+  <data name='Ui_95e78a693ceb632b' xml:space='preserve'>
+    <value>Actores (nodos)</value>
+    <comment>Source: Atores (nós)</comment>
+  </data>
+  <data name='Ui_9b2274d648272eee' xml:space='preserve'>
+    <value>Recursos</value>
+    <comment>Source: Recursos</comment>
+  </data>
+  <data name='Ui_a7d576b50a35e3a3' xml:space='preserve'>
+    <value>Vulnerabilidades</value>
+    <comment>Source: Vulnerabilidades</comment>
+  </data>
+  <data name='Ui_2aa433464ed0c24c' xml:space='preserve'>
+    <value>Actividades realizadas</value>
+    <comment>Source: Atividades realizadas</comment>
+  </data>
+  <data name='Ui_41b4ab1f17469653' xml:space='preserve'>
+    <value>Elija un informe para analizar los datos de las comunidades. En todos empieza seleccionando la comunidad (y, cuando corresponda, el actor); los que tienen exportación generan archivos PDF o Excel con la identidad de EcoRedes.</value>
+    <comment>Source: Escolha um relatório para analisar os dados das comunidades. Em todos eles você começa selecionando a comunidade (e, quando for o caso, o ator); os que têm exportação geram arquivos em PDF ou Excel com a identidade do EcoRedes.</comment>
+  </data>
+  <data name='Ui_592e566d5cf41e04' xml:space='preserve'>
+    <value>Visión del territorio en su conjunto: quién está en la red, qué vínculos existen y qué se ha hecho.</value>
+    <comment>Source: Visão do território como um todo: quem está na rede, quais vínculos existem e o que já foi feito.</comment>
+  </data>
+  <data name='Ui_2302eb28a2524a06' xml:space='preserve'>
+    <value>Seguimiento de las personas y de las acciones: cómo evoluciona cada actor y qué realizó el equipo.</value>
+    <comment>Source: Acompanhamento das pessoas e das ações: como cada ator evolui e o que a equipe realizou.</comment>
+  </data>
+  <data name='Ui_1deef4f336c3eb4d' xml:space='preserve'>
+    <value>RSC — Red Subjetiva Comunitaria</value>
+    <comment>Source: RSC — Rede Subjetiva Comunitária</comment>
+  </data>
+  <data name='Ui_30c5bad20cd23f21' xml:space='preserve'>
+    <value>Suma la red subjetiva de cada actor de la comunidad: quién menciona a quién, el tipo de relación y de qué redes forma parte la persona mencionada (EQ, RO, RLO, PA, CO, RRC).</value>
+    <comment>Source: Soma a rede subjetiva de cada ator da comunidade: quem cita quem, o tipo de relação e de que redes a pessoa citada faz parte (EQ, RO, RLO, PA, CO, RRC).</comment>
+  </data>
+  <data name='Ui_9c63157a461ed629' xml:space='preserve'>
+    <value>Agrupa las fichas de primer contacto por estado, género, estructura familiar, horario y otros campos, con filtros por período.</value>
+    <comment>Source: Agrupa as fichas de primeiro contato por status, gênero, estrutura familiar, horário e outros campos, com filtros por período.</comment>
+  </data>
+  <data name='Ui_8ea7ad28d17c41cb' xml:space='preserve'>
+    <value>Resumen de la comunidad en números: actores, recursos, vulnerabilidades, actividades, atendidos, atenciones y actores involucrados.</value>
+    <comment>Source: Resumo da comunidade em números: atores, recursos, vulnerabilidades, atividades, atendidos, atendimentos e atores envolvidos.</comment>
+  </data>
+  <data name='Ui_687bc0a9b50ddf04' xml:space='preserve'>
+    <value>Gráfico de las nueve dimensiones de la evaluación del actor. Elija varias fechas para comparar la evolución, con colores diferentes.</value>
+    <comment>Source: Gráfico das nove dimensões da avaliação do ator. Escolha várias datas para comparar a evolução, com cores diferentes.</comment>
+  </data>
+  <data name='Ui_15eb2f8b15ca73a3' xml:space='preserve'>
+    <value>Acciones registradas en los diarios de campo, por eje: atendidos, atenciones y actores involucrados, con filtros de eje, actor y período.</value>
+    <comment>Source: Ações registradas nos diários de campo, por eixo: atendidos, atendimentos e atores envolvidos, com filtros de eixo, ator e período.</comment>
+  </data>
+  <data name='Ui_2ea11e75cf7a5161' xml:space='preserve'>
+    <value>Amplitud, densidad y centralidad de la red primaria del actor, los tipos de relación y los recursos y vulnerabilidades de esa red.</value>
+    <comment>Source: Amplitude, densidade e centralidade da rede primária do ator, os tipos de relação e os recursos e vulnerabilidades dessa rede.</comment>
+  </data>
+  <data name='Ui_8ea1169dfac7960a' xml:space='preserve'>
+    <value>En pantalla</value>
+    <comment>Source: Na tela</comment>
+  </data>
+  <data name='Ui_a01a5fce396edb61' xml:space='preserve'>
+    <value>Abrir</value>
+    <comment>Source: Abrir</comment>
+  </data>
+  <data name='Ui_1aa0b2d780d00837' xml:space='preserve'>
+    <value>Persona</value>
+    <comment>Source: Pessoa</comment>
+  </data>
+  <data name='Ui_28594e2a878cd767' xml:space='preserve'>
+    <value>Contacto</value>
+    <comment>Source: Contato</comment>
+  </data>
+  <data name='Ui_94bb534e4e0fb638' xml:space='preserve'>
+    <value>Ficha</value>
+    <comment>Source: Ficha</comment>
+  </data>
+  <data name='Ui_0f7f283bb61595fd' xml:space='preserve'>
+    <value>Agrupar resultado por</value>
+    <comment>Source: Agrupar resultado por</comment>
+  </data>
+  <data name='Ui_5585ca453806844e' xml:space='preserve'>
+    <value>Limpiar</value>
+    <comment>Source: Limpar</comment>
+  </data>
+  <data name='Ui_d78d81586a74ebc5' xml:space='preserve'>
+    <value>Aplicar filtros</value>
+    <comment>Source: Aplicar filtros</comment>
+  </data>
+  <data name='Ui_baeb3610ff27631b' xml:space='preserve'>
+    <value>activo(s)</value>
+    <comment>Source: ativo(s)</comment>
+  </data>
+  <data name='Ui_d9034d90077db552' xml:space='preserve'>
+    <value>Ninguna registrada</value>
+    <comment>Source: Nenhuma registrada</comment>
+  </data>
+  <data name='Ui_3448af18bbf93041' xml:space='preserve'>
+    <value>Filtros avanzados</value>
+    <comment>Source: Filtros avançados</comment>
+  </data>
+  <data name='Ui_e2eca64bd73ce867' xml:space='preserve'>
+    <value>Desde</value>
+    <comment>Source: De</comment>
+  </data>
+  <data name='Ui_db8a5f6c9cae15be' xml:space='preserve'>
+    <value>La RSC suma la red subjetiva de todos los actores de la comunidad elegida.</value>
+    <comment>Source: A RSC soma a rede subjetiva de todos os atores da comunidade escolhida.</comment>
+  </data>
+  <data name='Ui_49f8772c39a86f12' xml:space='preserve'>
+    <value>Ninguna red subjetiva registrada</value>
+    <comment>Source: Nenhuma rede subjetiva cadastrada</comment>
+  </data>
+  <data name='Ui_b46a4fcc9a4f8bfd' xml:space='preserve'>
+    <value>Indicadores</value>
+    <comment>Source: Indicadores</comment>
+  </data>
+  <data name='Ui_d870cf32630ffc2b' xml:space='preserve'>
+    <value>Nodos (actores en la red)</value>
+    <comment>Source: Nós (atores na rede)</comment>
+  </data>
+  <data name='Ui_587dcc0f637df4e1' xml:space='preserve'>
+    <value>Vínculos</value>
+    <comment>Source: Vínculos</comment>
+  </data>
+  <data name='Ui_33ceaf4729605e5e' xml:space='preserve'>
+    <value>Actores con red subjetiva</value>
+    <comment>Source: Atores com rede subjetiva</comment>
+  </data>
+  <data name='Ui_ae64cfc2eafd5a2c' xml:space='preserve'>
+    <value>Totales por red</value>
+    <comment>Source: Totais por rede</comment>
+  </data>
+  <data name='Ui_68243d1834bfcca9' xml:space='preserve'>
+    <value>Busque por el nombre del actor...</value>
+    <comment>Source: Busque pelo nome do ator...</comment>
+  </data>
+  <data name='Ui_0e261904cba2afc0' xml:space='preserve'>
+    <value>Vínculos de la red subjetiva</value>
+    <comment>Source: Vínculos da rede subjetiva</comment>
+  </data>
+  <data name='Ui_76d385f3c99cef99' xml:space='preserve'>
+    <value>Rol:</value>
+    <comment>Source: Papel:</comment>
+  </data>
+  <data name='Ui_e09c5eef014b39cd' xml:space='preserve'>
+    <value>Cada tarjeta es un vínculo: el primer nombre es el actor de quien sale la red subjetiva y el segundo, quien forma parte de ella. Relación, género, rol y redes son del segundo actor. El Excel trae la tabla completa con los totales.</value>
+    <comment>Source: Cada cartão é um vínculo: o primeiro nome é o ator de quem sai a rede subjetiva e o segundo, quem faz parte dela. Relação, gênero, papel e redes são do segundo ator. O Excel traz a tabela completa com os totais.</comment>
+  </data>
+  <data name='Ui_c9d0decb8a486583' xml:space='preserve'>
+    <value>Todos los ejes</value>
+    <comment>Source: Todos os eixos</comment>
+  </data>
+  <data name='Ui_6476f132b397b090' xml:space='preserve'>
+    <value>Todos los actores</value>
+    <comment>Source: Todos os atores</comment>
+  </data>
+  <data name='Ui_08f0a38ae1aab3b2' xml:space='preserve'>
+    <value>Actor involucrado</value>
+    <comment>Source: Ator envolvido</comment>
+  </data>
+  <data name='Ui_ae1bbe5bee3002ae' xml:space='preserve'>
+    <value>Elija la comunidad y aplique los filtros para consultar las acciones registradas en los diarios de campo.</value>
+    <comment>Source: Escolha a comunidade e aplique os filtros para consultar as ações registradas nos diários de campo.</comment>
+  </data>
+  <data name='Ui_a3f0da6c6113e1d7' xml:space='preserve'>
+    <value>Ninguna acción encontrada</value>
+    <comment>Source: Nenhuma ação encontrada</comment>
+  </data>
+  <data name='Ui_5da8243639849a5a' xml:space='preserve'>
+    <value>Ninguna acción corresponde a los filtros elegidos.</value>
+    <comment>Source: Nenhuma ação corresponde aos filtros escolhidos.</comment>
+  </data>
+  <data name='Ui_18b827abe1bd578c' xml:space='preserve'>
+    <value>acción(es)</value>
+    <comment>Source: ação(ões)</comment>
+  </data>
+  <data name='Ui_34f3fadf785a2d56' xml:space='preserve'>
+    <value>atendido(s)</value>
+    <comment>Source: atendido(s)</comment>
+  </data>
+  <data name='Ui_f4ff0ca413e6e1bc' xml:space='preserve'>
+    <value>atención(es)</value>
+    <comment>Source: atendimento(s)</comment>
+  </data>
+  <data name='Ui_01417a4f8dbc7dbe' xml:space='preserve'>
+    <value>actor(es) involucrado(s)</value>
+    <comment>Source: ator(es) envolvido(s)</comment>
+  </data>
+  <data name='Ui_78e7bb4b6a7414b9' xml:space='preserve'>
+    <value>Atendidos: actores registrados en la acción que no son del equipo. Atenciones: cantidad informada en la acción. Actores involucrados: todos los actores registrados en la acción. En los indicadores, cada persona cuenta una vez.</value>
+    <comment>Source: Atendidos: atores cadastrados na ação que não são da equipe. Atendimentos: quantidade informada na ação. Atores envolvidos: todos os atores cadastrados na ação. Nos indicadores, cada pessoa conta uma vez.</comment>
+  </data>
+  <data name='Ui_a3e0f173d255c26d' xml:space='preserve'>
+    <value>Seleccione un actor...</value>
+    <comment>Source: Selecione um ator...</comment>
+  </data>
+  <data name='Ui_1a3be4fcb3094d65' xml:space='preserve'>
+    <value>Use el filtro de comunidad para encontrar el actor más rápido.</value>
+    <comment>Source: Use o filtro de comunidade para encontrar o ator mais rápido.</comment>
+  </data>
+  <data name='Ui_6bdbd0feca7806a6' xml:space='preserve'>
+    <value>Sin evaluaciones</value>
+    <comment>Source: Sem avaliações</comment>
+  </data>
+  <data name='Ui_7654060c52ced0a3' xml:space='preserve'>
+    <value>Este actor aún no tiene evaluaciones personales.</value>
+    <comment>Source: Este ator ainda não possui avaliações pessoais.</comment>
+  </data>
+  <data name='Ui_487a99f8689a2eaf' xml:space='preserve'>
+    <value>Fechas para comparar</value>
+    <comment>Source: Datas para comparar</comment>
+  </data>
+  <data name='Ui_e47a4089cb11fb9d' xml:space='preserve'>
+    <value>Marque una o más fechas: cada evaluación aparece en el gráfico con un color.</value>
+    <comment>Source: Marque uma ou mais datas: cada avaliação aparece no gráfico com uma cor.</comment>
+  </data>
+  <data name='Ui_92d239a9e0000716' xml:space='preserve'>
+    <value>Gráfico de las evaluaciones</value>
+    <comment>Source: Gráfico das avaliações</comment>
+  </data>
+  <data name='Ui_d4c63507eff03ad3' xml:space='preserve'>
+    <value>Vea la amplitud, la densidad y la centralidad de la red primaria del actor.</value>
+    <comment>Source: Veja a amplitude, a densidade e a centralidade da rede primária do ator.</comment>
+  </data>
+  <data name='Ui_d75bb09e2cc8d9a4' xml:space='preserve'>
+    <value>Sin red primaria</value>
+    <comment>Source: Sem rede primária</comment>
+  </data>
+  <data name='Ui_ef8f35056964660c' xml:space='preserve'>
+    <value>Composición de la red</value>
+    <comment>Source: Composição da rede</comment>
+  </data>
+  <data name='Ui_43163822f4c7ae89' xml:space='preserve'>
+    <value>Tipos de relación</value>
+    <comment>Source: Tipos de relação</comment>
+  </data>
+  <data name='Ui_11d3863c51d74ede' xml:space='preserve'>
+    <value>Recursos y vulnerabilidades de la red</value>
+    <comment>Source: Recursos e vulnerabilidades da rede</comment>
+  </data>
+  <data name='Ui_f51a89625b94b3d6' xml:space='preserve'>
+    <value>El informe general resume en números la red y la actuación en la comunidad.</value>
+    <comment>Source: O relatório geral resume em números a rede e a atuação na comunidade.</comment>
+  </data>
+  <data name='Ui_0459e90355c5ce6d' xml:space='preserve'>
+    <value>Red de la comunidad</value>
+    <comment>Source: Rede da comunidade</comment>
+  </data>
+  <data name='Ui_3d5c018027772490' xml:space='preserve'>
+    <value>Actuación</value>
+    <comment>Source: Atuação</comment>
+  </data>
+  <data name='Ui_6968722df7fa22bb' xml:space='preserve'>
+    <value>Vea cómo se distribuyen las fichas de primer contacto y filtre por persona, contacto y ficha.</value>
+    <comment>Source: Veja como as fichas de primeiro contato se distribuem e filtre por pessoa, contato e ficha.</comment>
+  </data>
+  <data name='Ui_c23e8ce6169e50d1' xml:space='preserve'>
+    <value>Ninguna ficha encontrada</value>
+    <comment>Source: Nenhuma ficha encontrada</comment>
+  </data>
+  <data name='Ui_9e96c6375806f4c3' xml:space='preserve'>
+    <value>Ninguna ficha corresponde a los filtros elegidos.</value>
+    <comment>Source: Nenhuma ficha corresponde aos filtros escolhidos.</comment>
+  </data>
+  <data name='Ui_0d36a4d33d2ebea2' xml:space='preserve'>
+    <value>Fichas encontradas</value>
+    <comment>Source: Fichas encontradas</comment>
+  </data>
+  <data name='Ui_053f0755eeb3d882' xml:space='preserve'>
+    <value>Grupos</value>
+    <comment>Source: Grupos</comment>
+  </data>
+  <data name='Ui_4daf031f3045a4cb' xml:space='preserve'>
+    <value>Grupo más frecuente</value>
+    <comment>Source: Grupo mais frequente</comment>
+  </data>
+  <data name='Ui_20e9838de229cf7a' xml:space='preserve'>
+    <value>Distribución de las fichas</value>
+    <comment>Source: Distribuição das fichas</comment>
+  </data>
 </root>

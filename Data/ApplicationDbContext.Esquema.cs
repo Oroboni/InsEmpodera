@@ -140,6 +140,9 @@ namespace Empodera.Data
                 Booleano(e, a => a.Rope, "Rope", "CK_Atores_Rope");
                 Booleano(e, a => a.Lopiniao, "Lopiniao", "CK_Atores_Lopiniao");
                 Booleano(e, a => a.Mcomunidade, "Mcomunidade", "CK_Atores_Mcomunidade");
+                Booleano(e, a => a.Parceiro, "Parceiro", "CK_Atores_Parceiro");
+                Booleano(e, a => a.OperadorPar, "OperadorPar", "CK_Atores_OperadorPar");
+                Booleano(e, a => a.RecursoRelacional, "RecursoRelacional", "CK_Atores_RecursoRelacional");
                 Criacao(e, a => a.DtCriacao);
                 Modificacao(e, a => a.DtModificacao);
                 SimNao(e, a => a.Ativo, "Ativo", "CK_Atores_Ativo");

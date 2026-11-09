@@ -1,0 +1,93 @@
+@model Empodera.Models.CommunitySummaryViewModel
+@using Empodera.Models
+@{
+    ViewData["Title"] = "Relatório Geral da Comunidade";
+    ViewData["PageCSS"] = "homepage";
+    Layout = "_Layout";
+}
+@section Styles {
+    <partial name="_EstilosRelatorio" />
+}
+
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Relatórios</a>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Relatório Geral da Comunidade</strong>
+        </h2>
+    </div>
+
+    <form asp-action="Community" method="get" class="relatorio-filtros">
+        <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("comunidadeId", "Comunidade", "fa-city",
+            (IEnumerable<SelectListItem>)ViewBag.Comunidades, "Selecione a comunidade", EnviarAoMudar: true, Inteiro: true)' />
+    </form>
+
+    @if (!Model.ComunidadeId.HasValue)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-chart-column"></i></div>
+            <h3>Selecione uma comunidade</h3>
+            <p>O relatório geral resume em números a rede e a atuação na comunidade.</p>
+        </div>
+    }
+    else
+    {
+        <div class="relatorio-cabecalho-secao">
+            <div class="section-label">Rede da comunidade</div>
+            <div class="relatorio-exportar">
+                <a asp-action="Community" asp-route-comunidadeId="@Model.ComunidadeId" asp-route-exportar="pdf"
+                   class="btn-export pdf" data-testid="community-export-pdf"
+                   aria-label="Exportar relatório geral em PDF" title="Exportar relatório geral em PDF">
+                    <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        <div class="actions-grid" data-testid="community-summary">
+            <div class="action-card stats-card">
+                <span class="card-title">@Model.Atores</span>
+                <span class="card-subtitle">Atores (nós)</span>
+                <div class="card-icons"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title">@Model.Recursos</span>
+                <span class="card-subtitle">Recursos</span>
+                <div class="card-icons"><i class="fas fa-star"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title">@Model.Vulnerabilidades</span>
+                <span class="card-subtitle">Vulnerabilidades</span>
+                <div class="card-icons"><i class="fas fa-shield-halved"></i></div>
+            </div>
+        </div>
+
+        <div class="purple-divider"></div>
+        <div class="section-label">Atuação</div>
+        <div class="actions-grid relatorio-indicadores-quatro">
+            <div class="action-card stats-card">
+                <span class="card-title">@Model.Atividades</span>
+                <span class="card-subtitle">Atividades realizadas</span>
+                <div class="card-icons"><i class="fas fa-list-check"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title" data-metric="atendimentos">@Model.Atendimentos</span>
+                <span class="card-subtitle">Atendimentos</span>
+                <div class="card-icons"><i class="fas fa-heart-pulse"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title">@Model.Atendidos</span>
+                <span class="card-subtitle">Atendidos</span>
+                <div class="card-icons"><i class="fas fa-hand-holding-heart"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-magenta">
+                <span class="card-title">@Model.AtoresEnvolvidos</span>
+                <span class="card-subtitle">Atores envolvidos</span>
+                <div class="card-icons"><i class="fas fa-people-group"></i></div>
+            </div>
+        </div>
+        <p class="relatorio-nota">
+            Atendidos: atores das ações que não são da equipe. Atendimentos: soma das quantidades das ações.
+            Atores envolvidos: todos os atores cadastrados nas ações.
+        </p>
+    }
+</div>

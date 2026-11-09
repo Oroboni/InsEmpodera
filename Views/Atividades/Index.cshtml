@@ -66,6 +66,11 @@
             .OrderBy(e => e.Nome)
             .Select(e => new { e.Nome, Total = Model.Count(a => a.AtividadesEixos.Any(ae => ae.FkIdEixo == e.IdEixo)) })
             .ToList();
+        var comunidadesFiltro = Model.Where(a => a.Comunidade != null)
+            .GroupBy(a => new { a.FkIdComunidade, a.Comunidade.Nome })
+            .OrderBy(g => g.Key.Nome)
+            .Select(g => new { Id = g.Key.FkIdComunidade, g.Key.Nome, Total = g.Count() })
+            .ToList();
     }
     <div class="search-container">
         <div class="search-input-group">
@@ -77,6 +82,21 @@
                 </button>
             </div>
         </div>
+
+        @if (comunidadesFiltro.Count > 0)
+        {
+            <div class="list-filter">
+                <i class="fa-solid fa-city list-filter-icon" aria-hidden="true"></i>
+                <select id="filtroComunidade" aria-label="Filtrar por comunidade" data-testid="activities-community-filter">
+                    <option value="todas">Todas as comunidades</option>
+                    @foreach (var comunidade in comunidadesFiltro)
+                    {
+                        <option value="@comunidade.Id">@comunidade.Nome (@comunidade.Total)</option>
+                    }
+                </select>
+                <i class="fa-solid fa-chevron-down list-filter-arrow" aria-hidden="true"></i>
+            </div>
+        }
 
         @if (eixosFiltro.Count > 0)
         {
@@ -111,7 +131,7 @@
 
                 var eixosString = string.Join("|", atividade.AtividadesEixos.Select(ae => ae.Eixo.Nome.ToLower()));
 
-                <div class="form-item activity-item" data-nome="@atividade.Nome?.ToLower()" data-eixos="@eixosString">
+                <div class="form-item activity-item" data-nome="@atividade.Nome?.ToLower()" data-eixos="@eixosString" data-comunidade="@atividade.FkIdComunidade">
 
                     <div class="form-info" style="flex: 1;">
                         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
@@ -193,7 +213,10 @@
             const activityItems = document.querySelectorAll('.activity-item');
             const filtroEixo = document.getElementById('filtroEixo');
 
+            const filtroComunidade = document.getElementById('filtroComunidade');
+
             let currentEixoFilter = 'todos';
+            let currentComunidadeFilter = 'todas';
 
             // Função para filtrar atividades
             function filterActivities() {
@@ -211,7 +234,10 @@
                     const matchesEixo = currentEixoFilter === 'todos' ||
                         eixos.split('|').includes(currentEixoFilter);
 
-                    const shouldShow = matchesSearch && matchesEixo;
+                    const matchesComunidade = currentComunidadeFilter === 'todas' ||
+                        item.getAttribute('data-comunidade') === currentComunidadeFilter;
+
+                    const shouldShow = matchesSearch && matchesEixo && matchesComunidade;
 
                     if (shouldShow) {
                         item.style.display = 'flex';
@@ -238,6 +264,12 @@
             filtroEixo?.addEventListener('change', function () {
                 currentEixoFilter = this.value;
                 this.closest('.list-filter')?.classList.toggle('is-active', currentEixoFilter !== 'todos');
+                filterActivities();
+            });
+
+            filtroComunidade?.addEventListener('change', function () {
+                currentComunidadeFilter = this.value;
+                this.closest('.list-filter')?.classList.toggle('is-active', currentComunidadeFilter !== 'todas');
                 filterActivities();
             });
 

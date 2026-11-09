@@ -30,32 +30,7 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="Tipo">Tipo de Recurso</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-pencil"></i>
-                <input asp-for="Tipo" type="text" required placeholder="Ex: Wifi, Ponto de Acesso...">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="Dispositivo">Dispositivo</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-laptop"></i>
-                <input asp-for="Dispositivo" type="text" placeholder="Ex: Roteador, Switch...">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Ator Responsável</label>
-            <div class="select-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <select asp-for="FK_id_Atores" asp-items="ViewBag.Atores" required>
-                    <option value="">Selecione um ator...</option>
-                </select>
-                <i class="fa-solid fa-chevron-down select-arrow"></i>
-            </div>
-        </div>
+        <partial name="_CamposRecurso" model="Model ?? new Empodera.Models.RedeRecursos()" />
 
         <div class="form-group" data-axis-picker>
             <label>Eixos</label>
@@ -130,4 +105,5 @@
 
 @section Scripts {
     <script src="~/js/axis-picker.js" asp-append-version="true"></script>
+    <script src="~/js/recurso-form.js" asp-append-version="true"></script>
 }

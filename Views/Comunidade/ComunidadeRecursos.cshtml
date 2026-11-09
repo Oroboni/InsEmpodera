@@ -44,8 +44,8 @@
         {
             <div class="ator-card">
                 <div class="activity-card-info">
-                    <span class="ator-name">@item.Tipo</span>
-                    <span style="font-size: 0.8em; color: #666;">@item.Dispositivo</span>
+                    <span class="ator-name">@(item.Nome ?? item.Dispositivo ?? item.Tipo)</span>
+                    <span style="font-size: 0.8em; color: #666;">@item.Tipo</span>
                     
                     <div class="tag-list" style="margin-top: 8px;">
                         @if(item.RedeEixos != null)

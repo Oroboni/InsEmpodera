@@ -84,14 +84,7 @@
             </div>
         </div>
 
-        <div class="input-card full-width checkbox-card">
-            <div class="input-content">
-                <label for="da-equipe" class="checkbox-inline-label">
-                    <input type="checkbox" id="da-equipe" asp-for="DaEquipe" disabled>
-                    Da Equipe
-                </label>
-            </div>
-        </div>
+        <partial name="_RedesDoAtor" model="Model" view-data='new ViewDataDictionary(ViewData) { ["Desabilitado"] = true }' />
 
         <div class="grid-row">
             <div class="input-card">

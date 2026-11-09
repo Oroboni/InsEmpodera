@@ -517,7 +517,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .Include(r => r.Comunidade)       
             .Include(r => r.RedeEixos)  
                 .ThenInclude(re => re.Eixo)
-            .Where(r => r.FkIdComunidade == comunidadeId && r.Ator.Ativo != "N")
+            .Where(r => r.FkIdComunidade == comunidadeId && (r.FK_id_Atores == null || r.Ator.Ativo != "N"))
             .ToListAsync();
 
         ViewBag.ComunidadeId = comunidadeId;
@@ -543,7 +543,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         // 1. Busca na tabela RedeRecursos em vez de Atividades
         var recurso = await _context.RedeRecursos
             .Include(r => r.RedeEixos).ThenInclude(re => re.Eixo)
-            .Include(r => r.Ator).Where(a => a.Ator.Ativo != "N")
+            .Include(r => r.Comunidade)
+            .Include(r => r.Ator).Where(r => r.FK_id_Atores == null || r.Ator.Ativo != "N")
             .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recurso == null) return NotFound();
@@ -623,6 +624,9 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             return RedirectToAction("ComunidadeRecursos", "Comunidade");
         }
 
+        if (await PrepararRecursoAsync(recurso, comunidadeId) is { } erro)
+            return BadRequest(erro);
+
         // Preenche dados automáticos
         recurso.FkIdComunidade = comunidadeId;
         recurso.DtCriacao = DateTime.Now;
@@ -668,9 +672,11 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             .FirstOrDefaultAsync(r => r.Id_Rede == id);
 
         if (recursoDb == null) return NotFound();
+        if (await PrepararRecursoAsync(recurso, recursoDb.FkIdComunidade, recursoDb.Tipo) is { } erro)
+            return BadRequest(erro);
 
         recursoDb.Tipo = recurso.Tipo;
-        recursoDb.Dispositivo = recurso.Dispositivo;
+        recursoDb.Nome = recurso.Nome;
         recursoDb.Servicos = recurso.Servicos;
         recursoDb.FK_id_Atores = recurso.FK_id_Atores;
         recursoDb.DtModificacao = DateTime.Now;
@@ -686,6 +692,39 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(ComunidadeDetalhesRecursos), new { id = recursoDb.Id_Rede });
+    }
+
+    // Valida tipo e nome do recurso. Relacional: o nome vem do ator escolhido; os demais: texto livre,
+    // com ator responsável opcional. tipoGravado aceita o texto livre de recursos cadastrados antes da lista.
+    private async Task<string?> PrepararRecursoAsync(RedeRecursos recurso, int comunidadeId, string? tipoGravado = null)
+    {
+        recurso.Tipo = recurso.Tipo?.Trim() ?? string.Empty;
+        if (!TiposRecurso.EhValido(recurso.Tipo) && recurso.Tipo != tipoGravado)
+            return "Tipo de recurso inválido.";
+
+        Atores? ator = null;
+        if (recurso.FK_id_Atores is int atorId)
+        {
+            ator = await _context.AtorComunidades
+                .Where(ac => ac.FkIdComunidade == comunidadeId && ac.FK_id_Atores == atorId && ac.Ator.Ativo != "N")
+                .Select(ac => ac.Ator)
+                .FirstOrDefaultAsync();
+            if (ator is null)
+                return "O ator escolhido não pertence a esta comunidade.";
+        }
+
+        if (recurso.Tipo == TiposRecurso.Relacional)
+        {
+            if (ator is null)
+                return "Escolha o ator do recurso relacional.";
+            recurso.Nome = ator.Nome;
+            return null;
+        }
+
+        recurso.Nome = recurso.Nome?.Trim();
+        if (string.IsNullOrEmpty(recurso.Nome) || recurso.Nome.Length > 150)
+            return "Informe o nome do recurso (até 150 caracteres).";
+        return null;
     }
 
     [HttpPost]
@@ -793,6 +832,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         ator.ConfigureCreationAggregate(ComunidadeId, recursos, vulnerabilidades, tipoRelacionamento);
 
         _context.Atores.Add(ator);
+        await TiposRecurso.GarantirRecursoRelacionalAsync(_context, ator, ComunidadeId, ator.FkIdUsuario);
         await _context.SaveChangesAsync();
 
 
@@ -874,10 +914,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         atorDb.PapelSocial2 = ator.PapelSocial2;
         atorDb.Interesse = ator.Interesse;
         atorDb.Telefone = ator.Telefone;
-        atorDb.DaEquipe = ator.DaEquipe;
-        atorDb.Lopiniao = ator.Lopiniao;
-        atorDb.Mcomunidade = ator.Mcomunidade;
-        atorDb.Rope = ator.Rope;
+        atorDb.CopiarRedesDe(ator);
         atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
         var actorCommunity = await _context.AtorComunidades.FirstAsync(link =>
@@ -900,6 +937,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             }
         }
 
+        await TiposRecurso.GarantirRecursoRelacionalAsync(_context, atorDb, ComunidadeId, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Edit_Atores), new { id = ator.IdAtores, comunidadeId = ComunidadeId });

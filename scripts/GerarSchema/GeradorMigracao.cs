@@ -16,6 +16,12 @@ public static class GeradorMigracao
     private const string Antigo = "empodera_antigo";
     private const string Novo = "empodera";
 
+    // Colunas criadas depois do banco antigo: não existem lá e começam desmarcadas (0).
+    private static readonly HashSet<(string Tabela, string Propriedade)> SemOrigem =
+    [
+        ("atores", "Parceiro"), ("atores", "OperadorPar"), ("atores", "RecursoRelacional")
+    ];
+
     public static string Gerar()
     {
         var opcoes = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -185,7 +191,8 @@ public static class GeradorMigracao
             Problema(sql, $"{tabela}.{coluna} vazio (obrigatório)", $"SELECT COUNT(*) FROM {Antigo}.{tabela} WHERE {coluna} IS NULL");
         }
 
-        foreach (var p in e.GetProperties().Where(p => !p.IsShadowProperty() && !p.IsPrimaryKey() && !p.IsForeignKey()))
+        foreach (var p in e.GetProperties().Where(p => !p.IsShadowProperty() && !p.IsPrimaryKey() && !p.IsForeignKey()
+                     && !SemOrigem.Contains((tabela, p.Name))))
         {
             var coluna = p.Name;
             var nova = p.GetColumnName(t)!;
@@ -265,6 +272,11 @@ public static class GeradorMigracao
             if (p.IsPrimaryKey())
             {
                 valores.Add("m.novo");
+                continue;
+            }
+            if (SemOrigem.Contains((tabela, p.Name)))
+            {
+                valores.Add("0");
                 continue;
             }
             var fk = p.GetContainingForeignKeys().FirstOrDefault();

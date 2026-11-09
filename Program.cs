@@ -150,6 +150,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<TemaPersonalizadoService>();
 builder.Services.AddSingleton<FotoUsuarioService>();
 builder.Services.AddScoped<RelatorioExcelService>();
+builder.Services.AddScoped<RelatoriosService>();
+builder.Services.AddScoped<RelatorioArquivosService>();
 builder.Services.AddScoped<SpreadsheetExportService>();
 builder.Services.AddScoped<ExcelBackupService>();
 

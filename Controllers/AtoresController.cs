@@ -129,6 +129,7 @@ public class AtoresController : Controller
         _context.Atores.Add(ator);
         if (redesEnviadas)
             await SincronizarRedesAsync(ator, vinculosRede, ator.FkIdUsuario);
+        await TiposRecurso.GarantirRecursoRelacionalAsync(_context, ator, ComunidadeId, ator.FkIdUsuario);
         await _context.SaveChangesAsync();
 
         if (ViewBag.Retorno == RetornoJanela)
@@ -215,10 +216,7 @@ public class AtoresController : Controller
         atorDb.PapelSocial2 = atorFormulario.PapelSocial2;
         atorDb.Interesse = atorFormulario.Interesse;
         atorDb.Telefone = atorFormulario.Telefone;
-        atorDb.DaEquipe = atorFormulario.DaEquipe;
-        atorDb.Lopiniao = atorFormulario.Lopiniao;
-        atorDb.Mcomunidade = atorFormulario.Mcomunidade;
-        atorDb.Rope = atorFormulario.Rope;
+        atorDb.CopiarRedesDe(atorFormulario);
         atorDb.FkIdUsuarioM = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         atorDb.DtModificacao = DateTime.Now;
 
@@ -244,6 +242,7 @@ public class AtoresController : Controller
 
         if (redesEnviadas)
             await SincronizarRedesAsync(atorDb, vinculosRede, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
+        await TiposRecurso.GarantirRecursoRelacionalAsync(_context, atorDb, ComunidadeId, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
 
         await _context.SaveChangesAsync();
 

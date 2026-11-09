@@ -632,9 +632,9 @@ JOIN empodera_antigo.migracao_mapa_usuarios m ON m.antigo = o.IdUsuario
 LEFT JOIN empodera_antigo.migracao_mapa_perfis f1 ON f1.antigo = o.FkIdPerfil
 ) dados;
 
-INSERT INTO empodera.atores (IdAtor, Ativo, DaEquipe, DtCriacao, DtModificacao, IdUsuario, IdUsuarioModificacao, Genero, Idade, Interesse, Lopiniao, Mcomunidade, Nome, PapelSocial1, PapelSocial2, Rope, Telefone)
-SELECT c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16 FROM (
-SELECT m.novo AS c0, o.Ativo AS c1, o.DaEquipe AS c2, o.DtCriacao AS c3, o.DtModificacao AS c4, f1.novo AS c5, f2.novo AS c6, o.Genero AS c7, o.Idade AS c8, o.Interesse AS c9, o.Lopiniao AS c10, o.Mcomunidade AS c11, o.Nome AS c12, o.PapelSocial1 AS c13, o.PapelSocial2 AS c14, o.Rope AS c15, o.Telefone AS c16
+INSERT INTO empodera.atores (IdAtor, Ativo, DaEquipe, DtCriacao, DtModificacao, IdUsuario, IdUsuarioModificacao, Genero, Idade, Interesse, Lopiniao, Mcomunidade, Nome, OperadorPar, PapelSocial1, PapelSocial2, Parceiro, RecursoRelacional, Rope, Telefone)
+SELECT c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19 FROM (
+SELECT m.novo AS c0, o.Ativo AS c1, o.DaEquipe AS c2, o.DtCriacao AS c3, o.DtModificacao AS c4, f1.novo AS c5, f2.novo AS c6, o.Genero AS c7, o.Idade AS c8, o.Interesse AS c9, o.Lopiniao AS c10, o.Mcomunidade AS c11, o.Nome AS c12, 0 AS c13, o.PapelSocial1 AS c14, o.PapelSocial2 AS c15, 0 AS c16, 0 AS c17, o.Rope AS c18, o.Telefone AS c19
 FROM empodera_antigo.atores o
 JOIN empodera_antigo.migracao_mapa_atores m ON m.antigo = o.IdAtores
 LEFT JOIN empodera_antigo.migracao_mapa_usuarios f1 ON f1.antigo = o.FkIdUsuario

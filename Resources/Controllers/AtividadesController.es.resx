@@ -464,4 +464,12 @@
     <value>Filtrar por eje</value>
     <comment>Source: Filtrar por eixo</comment>
   </data>
+  <data name='Ui_b5ac64d68118c7a2' xml:space='preserve'>
+    <value>Todas las comunidades</value>
+    <comment>Source: Todas as comunidades</comment>
+  </data>
+  <data name='Ui_e9b1cfbc19223fc5' xml:space='preserve'>
+    <value>Filtrar por comunidad</value>
+    <comment>Source: Filtrar por comunidade</comment>
+  </data>
 </root>

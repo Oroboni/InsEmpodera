@@ -80,7 +80,14 @@ docker compose up -d --build         # recria só o que mudou; os volumes são m
 ```
 
 Se a versão nova mudar o esquema do banco, ela traz um script incremental em `Database/`; aplique-o antes de subir
-a versão nova. Para voltar atrás: `git checkout <versão anterior>`, `docker compose up -d --build` e, se o banco
+a versão nova. Exemplo: `Database/20261108_adicionar_redes_atores.sql` (novas redes do ator: Parceiro,
+Operador par e Recurso relacional):
+
+```bash
+docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" empodera' < Database/20261108_adicionar_redes_atores.sql
+```
+
+Para voltar atrás: `git checkout <versão anterior>`, `docker compose up -d --build` e, se o banco
 tiver mudado, restaure o backup (seção 6).
 
 ## 5. Backup
@@ -127,7 +134,7 @@ nada é gravado: corrija em `empodera_antigo`, apague o banco novo (`docker comp
 
 | Etapa | Critério | Como verificar |
 | --- | --- | --- |
-| Criação do banco | 34 tabelas; 34 PK, 57 FK, 47 CHECK, 14 UNIQUE; nenhum erro | `docker compose up` num volume vazio; testes `RevisaoDdlTests` |
+| Criação do banco | 34 tabelas; 34 PK, 57 FK, 50 CHECK, 14 UNIQUE; nenhum erro | `docker compose up` num volume vazio; testes `RevisaoDdlTests` |
 | Persistência | Dados, fotos e login continuam após `restart` e após `down`/`up` | criar registro, reiniciar, conferir |
 | Migração | Nenhum problema na verificação; mesma quantidade de registros por tabela (exceto vínculos repetidos, listados); restrições ativas; nenhuma menção com UUID | relatório do `scripts/migrar-dados.sh` (falha se algum critério não for atendido) |
 | Funcionamento | Login, listagens, cadastro, menções viram links, fotos aparecem, três idiomas | conferência manual no navegador |

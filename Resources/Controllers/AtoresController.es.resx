@@ -736,4 +736,44 @@
     <value>Cerrar esta ventana</value>
     <comment>Source: Fechar esta janela</comment>
   </data>
+  <data name='Ui_8650910f31075a8c' xml:space='preserve'>
+    <value>Redes del actor</value>
+    <comment>Source: Redes do ator</comment>
+  </data>
+  <data name='Ui_e32dda2f68677eca' xml:space='preserve'>
+    <value>Marque todas las opciones que correspondan:</value>
+    <comment>Source: Marque todas as opções que se aplicam:</comment>
+  </data>
+  <data name='Ui_fd8ddf596cf9c9fc' xml:space='preserve'>
+    <value>Del equipo</value>
+    <comment>Source: Da equipe</comment>
+  </data>
+  <data name='Ui_c784f20a5b4f0d85' xml:space='preserve'>
+    <value>Red Operativa</value>
+    <comment>Source: Rede Operativa</comment>
+  </data>
+  <data name='Ui_110ef15ace9a5bec' xml:space='preserve'>
+    <value>Líder de opinión</value>
+    <comment>Source: Líder de opinião</comment>
+  </data>
+  <data name='Ui_f2a864aa4c6d60ac' xml:space='preserve'>
+    <value>Socio</value>
+    <comment>Source: Parceiro</comment>
+  </data>
+  <data name='Ui_c1828bf2903dcb35' xml:space='preserve'>
+    <value>Vive en la comunidad</value>
+    <comment>Source: Mora na comunidade</comment>
+  </data>
+  <data name='Ui_43895bb041aa84c7' xml:space='preserve'>
+    <value>Operador par</value>
+    <comment>Source: Operador par</comment>
+  </data>
+  <data name='Ui_26e577e1fb6bd673' xml:space='preserve'>
+    <value>Recurso relacional</value>
+    <comment>Source: Recurso relacional</comment>
+  </data>
+  <data name='Ui_b45c4b7991aa4214' xml:space='preserve'>
+    <value>Recurso relacional: el actor también se incluye en los recursos relacionales de la comunidad.</value>
+    <comment>Source: Recurso relacional: o ator também entra nos recursos relacionais da comunidade.</comment>
+  </data>
 </root>

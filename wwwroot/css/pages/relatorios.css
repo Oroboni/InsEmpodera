@@ -1,0 +1,224 @@
+/* ==========================================================
+   RELATÓRIOS — no mesmo padrão das telas de Atores.
+   Os componentes (modern-container, header-section, input-card, stats-card,
+   forms-list, tag-item...) vêm do site.css; aqui ficam só os complementos.
+   ========================================================== */
+
+.relatorio-subtitulo {
+    margin: calc(var(--space-2) * -1) 0 var(--space-5);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    max-width: 820px;
+}
+
+.relatorio-grupo-descricao {
+    margin: calc(var(--space-2) * -1) 0 var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Filtros: cartões de campo (input-card) em grade. */
+.relatorio-filtros {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+.relatorio-filtros.tres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.relatorio-filtros > .input-card { margin-bottom: 0; min-width: 0; }
+.relatorio-filtros > .inteiro { grid-column: 1 / -1; }
+.relatorio-filtros .input-content { position: relative; min-width: 0; }
+.relatorio-filtros select.clean-input:disabled { cursor: not-allowed; opacity: .7; }
+
+.relatorio-filtros-grupo {
+    margin: var(--space-4) 0 var(--space-2);
+    font-size: .72rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+}
+
+/* Bloco recolhível de filtros avançados, com o título no estilo de section-label. */
+.relatorio-filtros-avancados > summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    list-style: none;
+    margin: var(--space-4) 0 var(--space-3);
+}
+.relatorio-filtros-avancados > summary::-webkit-details-marker { display: none; }
+.relatorio-filtros-avancados > summary .fa-chevron-down { font-size: .8rem; transition: transform .2s ease; }
+.relatorio-filtros-avancados[open] > summary .fa-chevron-down { transform: rotate(180deg); }
+.relatorio-contador {
+    padding: .1rem .55rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: .72rem;
+    font-weight: var(--font-weight-semibold);
+}
+
+.relatorio-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin: var(--space-2) 0 var(--space-4);
+}
+
+/* Botões redondos de exportação, como o de Atores (Excel verde; PDF na cor do tema). */
+.relatorio-exportar { display: flex; gap: var(--space-3); align-items: center; justify-content: flex-end; }
+.relatorio-exportar .btn-export { text-decoration: none; }
+.relatorio-exportar .btn-export.pdf { background: var(--color-primary); }
+.relatorio-exportar .btn-export.pdf:hover { background: var(--color-primary-dark); }
+.relatorio-cabecalho-secao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+.relatorio-cabecalho-secao .section-label { margin-bottom: var(--space-3); }
+
+/* Cartão branco para gráficos e distribuições (mesmo visual dos itens da lista). */
+.relatorio-painel {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-5);
+}
+.relatorio-paineis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.relatorio-painel h3 {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+.relatorio-grafico-radar { max-width: 620px; margin: 0 auto; }
+.relatorio-grafico-barras { position: relative; height: 380px; }
+.relatorio-grafico-rosca { max-width: 320px; margin: 0 auto; }
+
+/* Cartão de indicador na cor magenta do logo (completa a paleta dos stats-card). */
+.stats-card-magenta { background: linear-gradient(135deg, #C2379F 0%, #8E2A75 100%); }
+.relatorio-indicadores-quatro { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+/* Totais por rede (RSC): cartões pequenos com a sigla. */
+.relatorio-redes {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+.relatorio-rede {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-primary-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    box-shadow: var(--shadow-sm);
+}
+.relatorio-rede strong { display: block; font-size: 1.6rem; line-height: 1.1; color: var(--color-primary); }
+.relatorio-rede span { display: block; font-size: .72rem; font-weight: var(--font-weight-semibold); color: var(--color-text-primary); }
+.relatorio-rede small { display: block; font-size: .7rem; color: var(--color-text-secondary); line-height: 1.3; }
+
+/* Item da lista com seta entre dois atores. */
+.relatorio-vinculo-seta { margin: 0 .4rem; color: var(--color-primary-light); font-size: .8em; }
+.form-item.relatorio-link { text-decoration: none; color: inherit; }
+.form-item.relatorio-link:hover .btn-action { transform: translateX(2px); }
+
+/* Datas das avaliações: chips marcáveis com a cor da série no gráfico. */
+.date-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.date-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: .45rem .9rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    background: #fff;
+}
+.date-chip input { accent-color: var(--chip-cor, var(--color-primary)); }
+.date-chip .chip-cor { width: .7rem; height: .7rem; border-radius: 50%; background: var(--chip-cor, var(--color-primary)); }
+
+/* Distribuição das fichas (barras). */
+.relatorio-series { display: grid; gap: .9rem; }
+.relatorio-serie { display: grid; grid-template-columns: minmax(140px, 240px) 1fr 96px; gap: 1rem; align-items: center; }
+.relatorio-serie strong { color: var(--color-text-primary); font-weight: var(--font-weight-semibold); }
+.relatorio-serie-trilho { height: 22px; background: rgb(var(--color-primary-rgb) / 0.08); border-radius: 999px; overflow: hidden; }
+.relatorio-serie-barra { height: 100%; min-width: 3px; background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light)); border-radius: inherit; }
+.relatorio-serie-valor { text-align: right; font-weight: var(--font-weight-semibold); color: var(--color-primary); }
+
+.relatorio-nota { font-size: var(--font-size-sm); color: var(--color-text-secondary); margin: var(--space-3) 0 0; line-height: 1.6; }
+
+@media (max-width: 1100px) {
+    .relatorio-filtros.tres { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relatorio-redes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+    .relatorio-filtros, .relatorio-filtros.tres, .relatorio-paineis { grid-template-columns: 1fr; }
+    .relatorio-redes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .relatorio-serie { grid-template-columns: 1fr; gap: .35rem; }
+    .relatorio-serie-valor { text-align: left; }
+    .relatorio-botoes { flex-direction: column-reverse; }
+    .relatorio-botoes .wizard-btn { width: 100%; justify-content: center; }
+}
+
+/* Indicador com texto (ex.: nome do grupo mais frequente) em vez de número. */
+.stats-card .card-title.relatorio-titulo-texto { font-size: 1.35rem; line-height: 1.25; }
+
+/* Tabela da RSC no visual das listas de Atores: cartão branco arredondado, sem caixa extra em volta. */
+.relatorio-tabela-rsc {
+    width: 100%;
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+.relatorio-tabela-rsc table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: var(--font-size-sm); }
+.relatorio-tabela-rsc th {
+    text-align: left;
+    padding: .85rem 1rem;
+    font-size: .72rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    background: rgb(var(--color-primary-rgb) / 0.05);
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+.relatorio-tabela-rsc td {
+    padding: .8rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+.relatorio-tabela-rsc tbody tr:hover { background: rgb(var(--color-primary-rgb) / 0.03); }
+.relatorio-tabela-rsc td.ator { font-weight: var(--font-weight-semibold); color: var(--color-primary); }
+.relatorio-tabela-rsc .sigla { text-align: center; width: 56px; }
+.relatorio-tabela-rsc .tag-item { white-space: nowrap; }
+.rsc-marca {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgb(var(--color-primary-rgb) / 0.12);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+}
+.relatorio-tabela-rsc tfoot td {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    background: rgb(var(--color-primary-rgb) / 0.06);
+    border-bottom: 0;
+}
+.relatorio-tabela-rsc td:nth-child(-n+2) { white-space: nowrap; }

@@ -1,5 +1,6 @@
 using Empodera.Data;
 using Empodera.Models;
+using Empodera.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,16 @@ namespace Empodera.Controllers;
 public class RelatoriosController : BaseController
 {
     private readonly ApplicationDbContext _context;
+    private readonly RelatoriosService _relatorios;
+    private readonly RelatorioArquivosService _arquivos;
 
-    public RelatoriosController(ILogger<AtoresController> logger, ApplicationDbContext context)
+    private const string TipoExcel = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+    public RelatoriosController(ApplicationDbContext context, RelatoriosService relatorios, RelatorioArquivosService arquivos)
     {
         _context = context;
+        _relatorios = relatorios;
+        _arquivos = arquivos;
     }
 
     public async Task<IActionResult> Index()
@@ -21,43 +28,62 @@ public class RelatoriosController : BaseController
         return denied ?? View();
     }
 
-    public async Task<IActionResult> Rsc()
+    public async Task<IActionResult> Rsc(int? comunidadeId, string? exportar)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null)
             return denied;
 
-        await PopulateActiveCommunitiesAsync();
-        return View();
+        var model = await _relatorios.RscAsync(comunidadeId, HttpContext.RequestAborted);
+        if (exportar == "excel" && model.ComunidadeId.HasValue)
+            return File(_arquivos.RscExcel(model), TipoExcel, NomeArquivo("rsc", model.ComunidadeNome, "xlsx"));
+
+        await PopulateActiveCommunitiesAsync(comunidadeId);
+        return View(model);
     }
 
-    public async Task<IActionResult> PrimaryNetwork(int? atorId)
+    public async Task<IActionResult> PrimaryNetwork(int? comunidadeId, int? atorId)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null)
             return denied;
 
-        await PopulateActiveActorsAsync(atorId);
-        return View();
+        await PopulateActiveCommunitiesAsync(comunidadeId);
+        await PopulateActiveActorsAsync(atorId, comunidadeId);
+        return View(await _relatorios.RedePrimariaAsync(comunidadeId, atorId, HttpContext.RequestAborted));
     }
 
-    public async Task<IActionResult> PersonalAssessment(int? atorId, int? avaliacaoId)
+    public async Task<IActionResult> PersonalAssessment(int? comunidadeId, int? atorId, List<int>? avaliacaoIds, int? avaliacaoId, string? exportar)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null) return denied;
 
-        await PopulateActiveActorsAsync(atorId);
-        var avaliacoes = atorId.HasValue
-            ? await _context.AvaliacaoPessoal.AsNoTracking()
-                .Where(a => a.FK_id_Atores == atorId.Value)
-                .OrderByDescending(a => a.DtCriacao)
-                .ToListAsync(HttpContext.RequestAborted)
-            : [];
-        var selecionada = avaliacoes.FirstOrDefault(a => a.IdAvaliacao == avaliacaoId)
-            ?? avaliacoes.FirstOrDefault();
-        ViewBag.Avaliacoes = avaliacoes;
-        ViewBag.AvaliacaoSelecionada = selecionada;
-        return View();
+        // avaliacaoId: link antigo com uma só data.
+        if (avaliacaoId.HasValue)
+            (avaliacaoIds ??= []).Add(avaliacaoId.Value);
+        var model = await _relatorios.AvaliacoesAsync(comunidadeId, atorId, avaliacaoIds, HttpContext.RequestAborted);
+        if (model.Selecionadas.Count > 0 && exportar is "excel" or "pdf")
+            return exportar == "excel"
+                ? File(_arquivos.AvaliacoesExcel(model), TipoExcel, NomeArquivo("avaliacoes", model.AtorNome, "xlsx"))
+                : File(_arquivos.AvaliacoesPdf(model), "application/pdf", NomeArquivo("avaliacoes", model.AtorNome, "pdf"));
+
+        await PopulateActiveCommunitiesAsync(comunidadeId);
+        await PopulateActiveActorsAsync(atorId, comunidadeId);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Community(int? comunidadeId, string? exportar)
+    {
+        var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
+        if (denied is not null)
+            return denied;
+
+        var model = await _relatorios.ResumoComunidadeAsync(comunidadeId, HttpContext.RequestAborted);
+        if (exportar == "pdf" && model.ComunidadeId.HasValue)
+            return File(_arquivos.ResumoComunidadePdf(model), "application/pdf", NomeArquivo("relatorio-geral", model.ComunidadeNome, "pdf"));
+
+        await PopulateActiveCommunitiesAsync(comunidadeId);
+        return View(model);
     }
 
     public async Task<IActionResult> FirstContact(
@@ -79,6 +105,17 @@ public class RelatoriosController : BaseController
             return denied;
 
         await PopulateActiveCommunitiesAsync(comunidadeId);
+        if (comunidadeId.HasValue)
+        {
+            // Opções dos filtros: os valores que existem nas fichas da comunidade (o filtro compara o texto exato).
+            var fichas = _context.FichasPrimeiroContato.AsNoTracking().Where(f => f.FkIdComunidade == comunidadeId.Value);
+            ViewBag.OpcoesCondicao = await fichas.SelectMany(f => f.FichaCondicoes!).Select(c => c.Cond)
+                .Distinct().OrderBy(v => v).ToListAsync(HttpContext.RequestAborted);
+            ViewBag.OpcoesResposta = await fichas.SelectMany(f => f.FichaRespostas!).Select(r => r.Resp)
+                .Distinct().OrderBy(v => v).ToListAsync(HttpContext.RequestAborted);
+            ViewBag.OpcoesResultado = await fichas.SelectMany(f => f.FichaResultados!).Select(r => r.Result)
+                .Distinct().OrderBy(v => v).ToListAsync(HttpContext.RequestAborted);
+        }
         var records = new List<FichaPrimeiroContato>();
         if (comunidadeId.HasValue)
         {
@@ -129,11 +166,17 @@ public class RelatoriosController : BaseController
         });
     }
 
-    public async Task<IActionResult> Actions(int? comunidadeId, int? atorId, DateTime? dataDe, DateTime? dataAte)
+    public async Task<IActionResult> Actions(int? comunidadeId, int? atorId, int? eixoId, DateTime? dataDe, DateTime? dataAte, string? exportar)
     {
         var denied = await RequireSerPermissionAsync(user => user.CanViewDetails("SER"));
         if (denied is not null)
             return denied;
+
+        var model = await _relatorios.AcoesAsync(comunidadeId, atorId, eixoId, dataDe, dataAte, HttpContext.RequestAborted);
+        if (model.ComunidadeId.HasValue && exportar is "excel" or "pdf")
+            return exportar == "excel"
+                ? File(_arquivos.AcoesExcel(model), TipoExcel, NomeArquivo("acoes", model.ComunidadeNome, "xlsx"))
+                : File(_arquivos.AcoesPdf(model), "application/pdf", NomeArquivo("acoes", model.ComunidadeNome, "pdf"));
 
         await PopulateActiveCommunitiesAsync(comunidadeId);
         ViewBag.AtorList = new SelectList(
@@ -142,44 +185,17 @@ public class RelatoriosController : BaseController
                     && (!comunidadeId.HasValue || actor.Comunidades.Any(link => link.FkIdComunidade == comunidadeId.Value)))
                 .OrderBy(actor => actor.Nome).ToListAsync(HttpContext.RequestAborted),
             "IdAtores", "Nome", atorId);
+        ViewBag.EixoList = new SelectList(await EixoCatalogo.ListarDisponiveisAsync(_context), "IdEixo", "Nome", eixoId);
+        return View(model);
+    }
 
-        var actions = new List<DiarioDAcoes>();
-        if (comunidadeId.HasValue)
-        {
-            var query = _context.DiarioDAcoes.AsNoTracking()
-                .Include(action => action.Diario)
-                .Include(action => action.DAtores)
-                .Include(action => action.Detalhes)
-                .ThenInclude(detail => detail.DetalhesEixos)
-                .ThenInclude(link => link.Eixo)
-                .Where(action => action.Diario.FkIdComunidade == comunidadeId.Value);
-            if (atorId.HasValue) query = query.Where(action => action.DAtores.Any(link => link.FK_id_Atores == atorId.Value));
-            if (dataDe.HasValue) query = query.Where(action => action.Diario.Data >= dataDe.Value.Date);
-            if (dataAte.HasValue) query = query.Where(action => action.Diario.Data < dataAte.Value.Date.AddDays(1));
-            actions = await query.ToListAsync(HttpContext.RequestAborted);
-        }
-
-        var rows = actions
-            .SelectMany(action => action.Detalhes
-                .SelectMany(detail => detail.DetalhesEixos)
-                .Select(link => new { Action = action, Axis = link.Eixo.Nome }))
-            .GroupBy(item => item.Axis)
-            .OrderBy(group => group.Key)
-            .Select(group => new ActionReportRow(
-                group.Key,
-                group.Select(item => item.Action.IdDAcoes).Distinct().Count(),
-                group.GroupBy(item => item.Action.IdDAcoes).Sum(items => items.First().Action.Quantidade),
-                group.SelectMany(item => item.Action.DAtores).Select(link => link.FK_id_Atores).Distinct().Count()))
-            .ToList();
-
-        return View(new ActionsReportViewModel
-        {
-            ComunidadeId = comunidadeId,
-            AtorId = atorId,
-            DataDe = dataDe,
-            DataAte = dataAte,
-            Rows = rows
-        });
+    // Nome do arquivo baixado: relatório + comunidade/ator + data, só com caracteres seguros.
+    private static string NomeArquivo(string relatorio, string? complemento, string extensao)
+    {
+        var limpo = new string((complemento ?? string.Empty).Normalize(System.Text.NormalizationForm.FormD)
+            .Where(c => char.IsAsciiLetterOrDigit(c) || c is ' ' or '-')
+            .ToArray()).Trim().Replace(' ', '-').ToLowerInvariant();
+        return $"{relatorio}{(limpo.Length > 0 ? "-" + limpo : "")}-{DateTime.Now:yyyyMMdd}.{extensao}";
     }
 
     private async Task<IActionResult?> RequireSerPermissionAsync(Func<Usuario?, bool> permission)
@@ -214,10 +230,13 @@ public class RelatoriosController : BaseController
             selectedId);
     }
 
-    private async Task PopulateActiveActorsAsync(int? selectedId = null)
+    // comunidadeId filtra a lista de atores (facilita achar o ator nas comunidades grandes).
+    private async Task PopulateActiveActorsAsync(int? selectedId = null, int? comunidadeId = null)
     {
         ViewBag.AtorList = new SelectList(
-            await _context.Atores.AsNoTracking().Where(a => a.Ativo == "S")
+            await _context.Atores.AsNoTracking()
+                .Where(a => a.Ativo == "S"
+                    && (comunidadeId == null || a.Comunidades.Any(link => link.FkIdComunidade == comunidadeId)))
                 .OrderBy(a => a.Nome).ToListAsync(HttpContext.RequestAborted),
             "IdAtores", "Nome", selectedId);
         ViewBag.SelectedAtorId = selectedId;

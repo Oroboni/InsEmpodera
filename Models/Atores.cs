@@ -25,6 +25,9 @@ namespace Empodera.Models
         public bool Rope { get; set; } = false;
         public bool Lopiniao { get; set; } = false;
         public bool Mcomunidade { get; set; } = false;
+        public bool Parceiro { get; set; } = false;
+        public bool OperadorPar { get; set; } = false;
+        public bool RecursoRelacional { get; set; } = false;
         public DateTime DtCriacao { get; set; }
         public DateTime? DtModificacao { get; set; }
         public string Ativo { get; set; } = "S";

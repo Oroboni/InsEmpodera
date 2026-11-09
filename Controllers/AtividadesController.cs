@@ -25,6 +25,7 @@ public class AtividadesController : Controller
         }
 
         var atividades = await _context.Atividades
+            .Include(a => a.Comunidade)
             .Include(a => a.AtividadesEixos)
             .ThenInclude(ae => ae.Eixo)
             .ToListAsync();

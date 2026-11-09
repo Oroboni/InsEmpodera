@@ -1,169 +1,180 @@
 @model Empodera.Models.FirstContactReportViewModel
+@using Empodera.Models
 @{
     ViewData["Title"] = "Relatório - Fichas de 1º Contato";
-    ViewData["PageCSS"] = "reports";
+    ViewData["PageCSS"] = "homepage";
     Layout = "_Layout";
     string DateValue(DateTime? value) => value?.ToString("yyyy-MM-dd") ?? "";
+    var opcoesCondicao = ViewBag.OpcoesCondicao as List<string> ?? [];
+    var opcoesResposta = ViewBag.OpcoesResposta as List<string> ?? [];
+    var opcoesResultado = ViewBag.OpcoesResultado as List<string> ?? [];
+    var filtrosAtivos = new object?[]
+    {
+        Model.Genero, Model.EstruturaFamiliar, Model.Escolaridade, Model.ComoEstabeleceu, Model.Horario,
+        Model.DataDe, Model.DataAte, Model.Condicao, Model.Resposta, Model.Resultado
+    }.Count(valor => valor is not null && valor as string != "");
+
+    IEnumerable<SelectListItem> Opcoes(string? atual, params (string Valor, string Texto)[] itens) =>
+        itens.Select(i => new SelectListItem(i.Texto, i.Valor, i.Valor == atual));
+
+    // Condição, resposta e resultado: valores existentes nas fichas da comunidade (o filtro compara o texto exato).
+    RelatorioCampoFiltro Lista(string nome, string rotulo, string icone, List<string> valores, string? atual)
+    {
+        var itens = valores.Select(v => new SelectListItem(v, v, v == atual)).ToList();
+        if (!string.IsNullOrEmpty(atual) && !valores.Contains(atual))
+            itens.Add(new SelectListItem(atual, atual, true));
+        var vazio = itens.Count == 0;
+        return new RelatorioCampoFiltro(nome, rotulo, icone, itens, vazio ? "Nenhuma registrada" : "Todas", Desabilitado: vazio);
+    }
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/reports.css" asp-append-version="true" />
-    <style>
-        .report-summary { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
-        .report-total { background:var(--color-primary-50); color:var(--color-primary); padding:.6rem 1rem; border-radius:999px; font-weight:700; }
-        .report-series { width:100%; display:grid; gap:.9rem; }
-        .series-row { display:grid; grid-template-columns:minmax(150px, 240px) 1fr 92px; gap:1rem; align-items:center; }
-        .series-track { height:24px; background:var(--color-primary-50); border-radius:999px; overflow:hidden; }
-        .series-bar { height:100%; min-width:3px; background:linear-gradient(90deg,var(--color-primary),var(--color-primary-light)); border-radius:inherit; }
-        .series-value { text-align:right; font-weight:700; }
-        .filter-actions { display:flex; gap:.75rem; align-items:end; }
-        @@media (max-width:760px) { .series-row { grid-template-columns:1fr; gap:.35rem; } .series-value { text-align:left; } }
-    </style>
+    <partial name="_EstilosRelatorio" />
 }
 
-<div class="report-page-container">
-    <div class="report-breadcrumb">
-        <h1><a asp-action="Index">Relatórios</a> &gt; <strong>Fichas de 1º Contato</strong></h1>
+<div class="modern-container">
+    <div class="header-section">
+        <h2>
+            <a asp-action="Index" class="text-primary">Relatórios</a>
+            <span class="separator"> > </span>
+            <strong class="text-muted">Fichas de 1º Contato</strong>
+        </h2>
     </div>
 
-    <div class="report-content-box">
-        <form asp-action="FirstContact" method="get" class="report-filters" id="firstContactFilters">
-            <div class="form-group">
-                <label for="comunidadeId">Comunidade</label>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-city"></i>
-                    <select id="comunidadeId" name="comunidadeId" asp-items="ViewBag.Comunidades" required>
-                        <option value="">Selecione uma comunidade</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
-                </div>
-            </div>
-
-            @if (Model.ComunidadeId.HasValue)
-            {
-                <details class="filter-box" open>
-                    <summary><span><i class="fa-solid fa-filter"></i> Filtros avançados</span><i class="fa-solid fa-chevron-down"></i></summary>
-                    <div class="filter-grid">
-                        <div class="form-group">
-                            <label for="genero">Gênero</label>
-                            <select id="genero" name="genero">
-                                <option value="">Todos</option>
-                                <option value="2" selected="@(Model.Genero == 2)">Feminino</option>
-                                <option value="1" selected="@(Model.Genero == 1)">Masculino</option>
-                                <option value="3" selected="@(Model.Genero == 3)">Transgênero</option>
-                                <option value="0" selected="@(Model.Genero == 0)">Não declarado</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="estruturaFamiliar">Estrutura familiar</label>
-                            <select id="estruturaFamiliar" name="estruturaFamiliar">
-                                <option value="">Todas</option>
-                                <option value="SemMatrimonio" selected="@(Model.EstruturaFamiliar == "SemMatrimonio")">Companheiro/a sem matrimônio</option>
-                                <option value="FamiliaNuclear" selected="@(Model.EstruturaFamiliar == "FamiliaNuclear")">Família nuclear</option>
-                                <option value="SemMatrimonioF" selected="@(Model.EstruturaFamiliar == "SemMatrimonioF")">Família sem matrimônio formal</option>
-                                <option value="MoraCFilhos" selected="@(Model.EstruturaFamiliar == "MoraCFilhos")">Mora com filhos/as</option>
-                                <option value="MoraSozinho" selected="@(Model.EstruturaFamiliar == "MoraSozinho")">Mora sozinho</option>
-                                <option value="Outro" selected="@(Model.EstruturaFamiliar == "Outro")">Outro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="condicao">Condição</label>
-                            <input id="condicao" name="condicao" value="@Model.Condicao" placeholder="Ex.: Problemas de saúde" />
-                        </div>
-                        <div class="form-group">
-                            <label for="resultado">Resultado</label>
-                            <input id="resultado" name="resultado" value="@Model.Resultado" placeholder="Ex.: Seguiu contato" />
-                        </div>
-                        <div class="form-group">
-                            <label for="resposta">Resposta</label>
-                            <input id="resposta" name="resposta" value="@Model.Resposta" placeholder="Ex.: Encaminhamento" />
-                        </div>
-                        <div class="form-group">
-                            <label for="horario">Horário</label>
-                            <select id="horario" name="horario">
-                                <option value="">Qualquer horário</option>
-                                <option value="06_12" selected="@(Model.Horario == "06_12")">06:00 às 12:00</option>
-                                <option value="12_20" selected="@(Model.Horario == "12_20")">12:01 às 20:00</option>
-                                <option value="20_06" selected="@(Model.Horario == "20_06")">20:01 às 05:59</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="comoEstabeleceu">Como se estabeleceu</label>
-                            <select id="comoEstabeleceu" name="comoEstabeleceu">
-                                <option value="">Todos</option>
-                                <option value="OutrasInstituicoes" selected="@(Model.ComoEstabeleceu == "OutrasInstituicoes")">Em outras instituições</option>
-                                <option value="CasaDaPessoa" selected="@(Model.ComoEstabeleceu == "CasaDaPessoa")">Na casa da pessoa</option>
-                                <option value="EstruturaOrganizacao" selected="@(Model.ComoEstabeleceu == "EstruturaOrganizacao")">Na estrutura da organização</option>
-                                <option value="NaRua" selected="@(Model.ComoEstabeleceu == "NaRua")">Na rua</option>
-                                <option value="Outro" selected="@(Model.ComoEstabeleceu == "Outro")">Outro</option>
-                                <option value="PorTelefone" selected="@(Model.ComoEstabeleceu == "PorTelefone")">Por telefone</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="escolaridade">Escolaridade</label>
-                            <select id="escolaridade" name="escolaridade">
-                                <option value="">Todas</option>
-                                <option value="sabe_calcular" selected="@(Model.Escolaridade == "sabe_calcular")">Sabe calcular</option>
-                                <option value="sabe_ler_escrever" selected="@(Model.Escolaridade == "sabe_ler_escrever")">Sabe ler e escrever</option>
-                                <option value="sabe_usar_computador" selected="@(Model.Escolaridade == "sabe_usar_computador")">Sabe usar computador</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label for="dataDe">De</label><input id="dataDe" type="date" name="dataDe" value="@DateValue(Model.DataDe)" /></div>
-                        <div class="form-group"><label for="dataAte">Até</label><input id="dataAte" type="date" name="dataAte" value="@DateValue(Model.DataAte)" /></div>
-                    </div>
-                </details>
-
-                <div class="report-type-filters">
-                    <div class="form-group">
-                        <label for="campo">Agrupar por</label>
-                        <select id="campo" name="campo">
-                            <option value="status" selected="@(Model.Campo == "status")">Situação da ficha</option>
-                            <option value="como_estabeleceu_contato" selected="@(Model.Campo == "como_estabeleceu_contato")">Como se estabeleceu o contato</option>
-                            <option value="emprego" selected="@(Model.Campo == "emprego")">Emprego</option>
-                            <option value="estado_familiar" selected="@(Model.Campo == "estado_familiar")">Estado familiar</option>
-                            <option value="estrutura_familiar" selected="@(Model.Campo == "estrutura_familiar")">Estrutura familiar</option>
-                            <option value="genero" selected="@(Model.Campo == "genero")">Gênero</option>
-                            <option value="hora_primeiro_contato" selected="@(Model.Campo == "hora_primeiro_contato")">Hora do contato</option>
-                            <option value="local_tratamento" selected="@(Model.Campo == "local_tratamento")">Local de tratamento</option>
-                        </select>
-                    </div>
-                    <div class="filter-actions">
-                        <a asp-action="FirstContact" asp-route-comunidadeId="@Model.ComunidadeId" class="btn btn-secondary">LIMPAR</a>
-                        <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-primary">CARREGAR RELATÓRIO</button>
-            }
-        </form>
-
-        <div class="report-body">
-            @if (!Model.ComunidadeId.HasValue)
-            {
-                <div class="report-empty-state"><i class="fa-solid fa-chart-pie" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Primeiro selecione uma comunidade.</p></div>
-            }
-            else if (Model.Total == 0)
-            {
-                <div class="report-empty-state"><i class="fa-solid fa-filter-circle-xmark" style="font-size:4rem;color:var(--color-primary-300)"></i><p>Nenhuma ficha corresponde aos filtros escolhidos.</p></div>
-            }
-            else
-            {
-                <div class="report-summary"><h2>Distribuição das fichas</h2><span class="report-total">@Model.Total ficha(s)</span></div>
-                <div class="report-series">
-                    @foreach (var item in Model.Series)
-                    {
-                        <div class="series-row">
-                            <strong>@item.Label</strong>
-                            <div class="series-track" role="img" aria-label="@item.Label: @item.Value ficha(s), @item.Percentage%">
-                                <div class="series-bar" style="width:@item.Percentage.ToString(System.Globalization.CultureInfo.InvariantCulture)%"></div>
-                            </div>
-                            <span class="series-value">@item.Value (@item.Percentage%)</span>
-                        </div>
-                    }
-                </div>
-            }
+    <form asp-action="FirstContact" method="get" id="firstContactFilters">
+        <div class="relatorio-filtros">
+            <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("comunidadeId", "Comunidade", "fa-city",
+                (IEnumerable<SelectListItem>)ViewBag.Comunidades, "Selecione uma comunidade", EnviarAoMudar: true, Inteiro: true)' />
         </div>
-    </div>
+
+        @if (Model.ComunidadeId.HasValue)
+        {
+            <details class="relatorio-filtros-avancados" open>
+                <summary class="section-label">
+                    Filtros avançados
+                    @if (filtrosAtivos > 0)
+                    {
+                        <span class="relatorio-contador" data-testid="first-contact-active-filters">@filtrosAtivos ativo(s)</span>
+                    }
+                    <i class="fa-solid fa-chevron-down"></i>
+                </summary>
+
+                <div class="relatorio-filtros-grupo">Pessoa</div>
+                <div class="relatorio-filtros tres">
+                    <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("genero", "Gênero", "fa-venus-mars",
+                        Opcoes(Model.Genero?.ToString(), ("2", "Feminino"), ("1", "Masculino"), ("3", "Transgênero"), ("0", "Não declarado")), "Todos")' />
+                    <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("estruturaFamiliar", "Estrutura familiar", "fa-house-user",
+                        Opcoes(Model.EstruturaFamiliar, ("SemMatrimonio", "Companheiro/a sem matrimônio"), ("FamiliaNuclear", "Família nuclear"),
+                            ("SemMatrimonioF", "Família sem matrimônio formal"), ("MoraCFilhos", "Mora com filhos/as"),
+                            ("MoraSozinho", "Mora sozinho"), ("Outro", "Outro")), "Todas")' />
+                    <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("escolaridade", "Escolaridade", "fa-graduation-cap",
+                        Opcoes(Model.Escolaridade, ("sabe_calcular", "Sabe calcular"), ("sabe_ler_escrever", "Sabe ler e escrever"),
+                            ("sabe_usar_computador", "Sabe usar computador")), "Todas")' />
+                </div>
+
+                <div class="relatorio-filtros-grupo">Contato</div>
+                <div class="relatorio-filtros">
+                    <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("comoEstabeleceu", "Como se estabeleceu", "fa-handshake",
+                        Opcoes(Model.ComoEstabeleceu, ("OutrasInstituicoes", "Em outras instituições"), ("CasaDaPessoa", "Na casa da pessoa"),
+                            ("EstruturaOrganizacao", "Na estrutura da organização"), ("NaRua", "Na rua"), ("Outro", "Outro"),
+                            ("PorTelefone", "Por telefone")), "Todos")' />
+                    <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("horario", "Horário", "fa-clock",
+                        Opcoes(Model.Horario, ("06_12", "06:00 às 12:00"), ("12_20", "12:01 às 20:00"), ("20_06", "20:01 às 05:59")), "Qualquer horário")' />
+                    <div class="input-card">
+                        <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="input-content">
+                            <label for="dataDe">De</label>
+                            <input id="dataDe" type="date" name="dataDe" value="@DateValue(Model.DataDe)" class="clean-input" />
+                        </div>
+                    </div>
+                    <div class="input-card">
+                        <div class="icon-box purple"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div class="input-content">
+                            <label for="dataAte">Até</label>
+                            <input id="dataAte" type="date" name="dataAte" value="@DateValue(Model.DataAte)" class="clean-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relatorio-filtros-grupo">Ficha</div>
+                <div class="relatorio-filtros tres">
+                    <partial name="_CampoFiltro" model='Lista("condicao", "Condição", "fa-notes-medical", opcoesCondicao, Model.Condicao)' />
+                    <partial name="_CampoFiltro" model='Lista("resposta", "Resposta", "fa-reply", opcoesResposta, Model.Resposta)' />
+                    <partial name="_CampoFiltro" model='Lista("resultado", "Resultado", "fa-flag-checkered", opcoesResultado, Model.Resultado)' />
+                </div>
+            </details>
+
+            <div class="relatorio-filtros">
+                <partial name="_CampoFiltro" model='new RelatorioCampoFiltro("campo", "Agrupar resultado por", "fa-layer-group",
+                    Opcoes(Model.Campo, ("status", "Situação da ficha"), ("como_estabeleceu_contato", "Como se estabeleceu o contato"),
+                        ("emprego", "Emprego"), ("estado_familiar", "Estado familiar"), ("estrutura_familiar", "Estrutura familiar"),
+                        ("genero", "Gênero"), ("hora_primeiro_contato", "Hora do contato"), ("local_tratamento", "Local de tratamento")), Inteiro: true)' />
+            </div>
+            <div class="relatorio-botoes">
+                <a asp-action="FirstContact" asp-route-comunidadeId="@Model.ComunidadeId" class="wizard-btn btn-prev">
+                    <i class="fa-solid fa-rotate-left"></i> Limpar
+                </a>
+                <button type="submit" class="wizard-btn btn-next"><i class="fa-solid fa-magnifying-glass"></i> Aplicar filtros</button>
+            </div>
+        }
+    </form>
+
+    @if (!Model.ComunidadeId.HasValue)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-file-signature"></i></div>
+            <h3>Selecione uma comunidade</h3>
+            <p>Veja como as fichas de primeiro contato se distribuem e filtre por pessoa, contato e ficha.</p>
+        </div>
+    }
+    else if (Model.Total == 0)
+    {
+        <div class="no-records">
+            <div class="no-records-icon"><i class="fas fa-filter-circle-xmark"></i></div>
+            <h3>Nenhuma ficha encontrada</h3>
+            <p>Nenhuma ficha corresponde aos filtros escolhidos.</p>
+        </div>
+    }
+    else
+    {
+        <div class="purple-divider"></div>
+        <button type="button" class="section-label indicadores-toggle" data-indicadores aria-expanded="true"
+                title="Recolher ou mostrar os indicadores">
+            <span>Indicadores</span>
+            <i class="fa-solid fa-chevron-up indicadores-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="actions-grid">
+            <div class="action-card stats-card">
+                <span class="card-title">@Model.Total</span>
+                <span class="card-subtitle">Fichas encontradas</span>
+                <div class="card-icons"><i class="fas fa-file-signature"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-purple">
+                <span class="card-title">@Model.Series.Count</span>
+                <span class="card-subtitle">Grupos</span>
+                <div class="card-icons"><i class="fas fa-layer-group"></i></div>
+            </div>
+            <div class="action-card stats-card stats-card-cyan">
+                <span class="card-title relatorio-titulo-texto">@(Model.Series.FirstOrDefault()?.Label ?? "—")</span>
+                <span class="card-subtitle">Grupo mais frequente</span>
+                <div class="card-icons"><i class="fas fa-ranking-star"></i></div>
+            </div>
+        </div>
+
+        <div class="section-label">Distribuição das fichas</div>
+        <div class="relatorio-painel">
+            <div class="relatorio-series">
+                @foreach (var item in Model.Series)
+                {
+                    <div class="relatorio-serie">
+                        <strong>@item.Label</strong>
+                        <div class="relatorio-serie-trilho" role="img" aria-label="@item.Label: @item.Value ficha(s), @item.Percentage%">
+                            <div class="relatorio-serie-barra" style="width:@item.Percentage.ToString(System.Globalization.CultureInfo.InvariantCulture)%"></div>
+                        </div>
+                        <span class="relatorio-serie-valor">@item.Value (@item.Percentage%)</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 </div>
