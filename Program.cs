@@ -25,6 +25,11 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
     options.KnownProxies.Add(IPAddress.Loopback);
     options.KnownProxies.Add(IPAddress.IPv6Loopback);
+    // No Docker o Nginx do servidor chega ao contêiner pela rede interna do Docker (ex.: 172.18.0.1), não por 127.0.0.1.
+    // ForwardedHeaders:RedesConfiaveis (CIDR, separados por ";") libera essas redes para valer o IP real e o HTTPS do Nginx.
+    foreach (var rede in (builder.Configuration["ForwardedHeaders:RedesConfiaveis"] ?? string.Empty)
+                 .Split([';', ','], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        options.KnownIPNetworks.Add(System.Net.IPNetwork.Parse(rede));
 });
 
 var dataProtectionKeysPath = builder.Configuration["DataProtection:KeysPath"];

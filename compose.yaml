@@ -35,6 +35,8 @@ services:
       Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=empodera;User=${MYSQL_USER:-empodera_app};Password=${MYSQL_PASSWORD};CharSet=utf8mb4;"
       AllowedHosts: ${APP_DOMINIO:-localhost}
+      # O Nginx do servidor chega pela rede interna do Docker; a porta só é publicada em 127.0.0.1.
+      ForwardedHeaders__RedesConfiaveis: ${APP_REDES_PROXY:-172.16.0.0/12}
       Email__User: ${EMAIL_USUARIO:-empodera.ajuda@gmail.com}
       # Vazio = recuperação de senha por e-mail desligada (o administrador troca senhas em Usuários).
       Email__Password: ${EMAIL_SENHA:-}
