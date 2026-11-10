@@ -126,6 +126,10 @@ Pede confirmação (digitar `RESTAURAR`), para a aplicação, substitui o banco 
    scripts/migrar-dados.sh base-antiga.sql.gz app-data-antigo.tar.gz
    ```
 
+Aceita backups do MariaDB 10.5 a 11.8 (o script ajusta a linha "sandbox mode", o `uuid_v4()` e as ordenações
+`uca1400`, que o MySQL não conhece) e bancos antigos sem `fontesinfo.Interesse` (a coluna entra vazia).
+Se a importação falhar, a mensagem do MySQL aparece na tela.
+
 O script guarda uma cópia do dump em `backups/`, importa a base em `empodera_antigo`, migra, compara e grava um
 relatório em `backups/relatorio-migracao-<data>.txt`. Se a verificação encontrar problemas nos dados antigos,
 nada é gravado: corrija em `empodera_antigo`, apague o banco novo (`docker compose down -v`) e recomece.

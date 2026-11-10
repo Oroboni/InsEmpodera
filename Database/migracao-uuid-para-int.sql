@@ -21,6 +21,27 @@
 USE empodera;
 
 -- ---------------------------------------------------------------------
+-- 0. Versões antigas do banco: colunas que ainda não existiam são criadas
+--    vazias na cópia empodera_antigo (o banco original não é alterado)
+-- ---------------------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS migracao_garantir_coluna;
+DELIMITER //
+CREATE PROCEDURE migracao_garantir_coluna(IN tabela VARCHAR(64), IN coluna VARCHAR(64), IN definicao VARCHAR(255))
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
+                   WHERE TABLE_SCHEMA = 'empodera_antigo' AND TABLE_NAME = tabela AND COLUMN_NAME = coluna) THEN
+        SET @migracao_ddl = CONCAT('ALTER TABLE empodera_antigo.`', tabela, '` ADD COLUMN `', coluna, '` ', definicao);
+        PREPARE migracao_comando FROM @migracao_ddl;
+        EXECUTE migracao_comando;
+        DEALLOCATE PREPARE migracao_comando;
+    END IF;
+END //
+DELIMITER ;
+CALL migracao_garantir_coluna('fontesinfo', 'Interesse', 'VARCHAR(255) NOT NULL DEFAULT ''''');
+DROP PROCEDURE migracao_garantir_coluna;
+
+-- ---------------------------------------------------------------------
 -- 1. Verificações (nada é gravado se houver problema)
 -- ---------------------------------------------------------------------
 

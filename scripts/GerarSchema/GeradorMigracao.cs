@@ -22,6 +22,13 @@ public static class GeradorMigracao
         ("atores", "Parceiro"), ("atores", "OperadorPar"), ("atores", "RecursoRelacional")
     ];
 
+    // Colunas que versões antigas do banco não têm (ex.: o banco em produção na VPS não tem fontesinfo.Interesse).
+    // Antes das verificações, a migração cria a coluna vazia na cópia `empodera_antigo`; o banco real não é tocado.
+    private static readonly (string Tabela, string Coluna, string Definicao)[] AusentesEmVersoesAntigas =
+    [
+        ("fontesinfo", "Interesse", "VARCHAR(255) NOT NULL DEFAULT ''")
+    ];
+
     public static string Gerar()
     {
         var opcoes = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -55,6 +62,31 @@ public static class GeradorMigracao
             -- =====================================================================
 
             USE {Novo};
+
+            -- ---------------------------------------------------------------------
+            -- 0. Versões antigas do banco: colunas que ainda não existiam são criadas
+            --    vazias na cópia {Antigo} (o banco original não é alterado)
+            -- ---------------------------------------------------------------------
+
+            DROP PROCEDURE IF EXISTS migracao_garantir_coluna;
+            DELIMITER //
+            CREATE PROCEDURE migracao_garantir_coluna(IN tabela VARCHAR(64), IN coluna VARCHAR(64), IN definicao VARCHAR(255))
+            BEGIN
+                IF NOT EXISTS (SELECT 1 FROM information_schema.COLUMNS
+                               WHERE TABLE_SCHEMA = '{Antigo}' AND TABLE_NAME = tabela AND COLUMN_NAME = coluna) THEN
+                    SET @migracao_ddl = CONCAT('ALTER TABLE {Antigo}.`', tabela, '` ADD COLUMN `', coluna, '` ', definicao);
+                    PREPARE migracao_comando FROM @migracao_ddl;
+                    EXECUTE migracao_comando;
+                    DEALLOCATE PREPARE migracao_comando;
+                END IF;
+            END //
+            DELIMITER ;
+
+            """);
+        foreach (var (tabela, coluna, definicao) in AusentesEmVersoesAntigas)
+            sql.Append($"CALL migracao_garantir_coluna('{tabela}', '{coluna}', '{definicao.Replace("'", "''")}');\n");
+        sql.Append($"""
+            DROP PROCEDURE migracao_garantir_coluna;
 
             -- ---------------------------------------------------------------------
             -- 1. Verificações (nada é gravado se houver problema)

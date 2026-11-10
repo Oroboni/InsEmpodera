@@ -21,7 +21,11 @@ mkdir -p backups
 RELATORIO="backups/relatorio-migracao-$MOMENTO.txt"
 
 # SQL sempre pela entrada padrão (sem aspas aninhadas); o argumento opcional é o banco padrão.
-root_sql() { docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 -N -B '"${1:-}"' 2>/dev/null'; }
+# Os erros do MySQL aparecem na tela; só o aviso de senha na linha de comando é filtrado.
+root_sql() {
+  docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 -N -B '"${1:-}" \
+    2> >(grep -v "Using a password on the command line" >&2)
+}
 consulta() { printf '%s\n' "$1" | root_sql; }
 ler_dump() { case "$DUMP" in *.gz) gunzip -c "$DUMP" ;; *) cat "$DUMP" ;; esac; }
 
@@ -42,12 +46,19 @@ if [ "$(consulta "SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_
   exit 1
 fi
 consulta "CREATE DATABASE empodera_antigo"
-# Dumps feitos com --databases trazem CREATE DATABASE/USE do banco original: são ignorados para tudo cair em empodera_antigo.
-# Funções do MariaDB em valores padrão de colunas são trocadas pelas do MySQL (a migração só lê os dados).
-ler_dump \
+# Ajustes para importar no MySQL 8.4 um backup do MariaDB (10.5 a 11.8); a migração só lê os dados:
+#  - CREATE DATABASE/USE do banco original são ignorados, para tudo cair em empodera_antigo;
+#  - a linha "sandbox mode" do mariadb-dump 11.x (o cliente do MySQL não a reconhece) é removida;
+#  - o valor padrão unhex(replace(uuid_v4(),'-','')), em qualquer grafia, vira (UUID_TO_BIN(UUID()));
+#  - ordenações uca1400 (padrão do MariaDB 11) viram utf8mb4_0900_ai_ci.
+if ! ler_dump \
   | LC_ALL=C sed -E '/^(CREATE DATABASE|USE |drop DATABASE|DROP DATABASE)/Id; /^[[:space:]]*(use|create database|drop database) /Id' \
-  | LC_ALL=C sed "s/UNHEX(REPLACE(UUID_v4(), '-', ''))/UUID_TO_BIN(UUID())/g" \
-  | root_sql empodera_antigo
+  | perl -pe 's{^/\*M!999999\\- enable the sandbox mode \*/\s*$}{}; s{unhex\(\s*replace\(\s*uuid_v4\(\)\s*,\s*'"'"'-'"'"'\s*,\s*'"'"''"'"'\s*\)\s*\)}{(UUID_TO_BIN(UUID()))}gi; s{utf8mb4_uca1400_\w+}{utf8mb4_0900_ai_ci}g' \
+  | root_sql empodera_antigo; then
+  echo "ERRO: a importação do backup antigo falhou (mensagem do MySQL acima). Nada foi gravado no banco novo." >&2
+  echo "Antes de tentar de novo: DROP DATABASE empodera_antigo" >&2
+  exit 1
+fi
 echo "Tabelas importadas: $(consulta "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA='empodera_antigo'")"
 
 echo "== 4. Migrando (verifica antes; grava tudo ou nada)"
