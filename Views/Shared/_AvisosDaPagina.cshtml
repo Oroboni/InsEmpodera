@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@* Avisos padrão de todas as telas: mensagem de sucesso (TempData) e erros do formulário (ModelState). *@
+@{
+    // Chaves antigas (SuccessMessage/ErrorMessage) também caem aqui: um único padrão de aviso.
+    var sucesso = TempData["Sucesso"] as string ?? TempData["SuccessMessage"] as string;
+    var falha = TempData["Erro"] as string ?? TempData["ErrorMessage"] as string;
+    var erroDaTela = ViewBag.ErrorMessage as string;
+    // Erros de propriedades de navegação (ex.: "Usuario") não dizem nada a quem preenche o formulário.
+    var ocultos = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "Usuario", "Comunidade", "Ator", "Atores", "Perfil", "Diario", "Ficha", "Atividades", "Acoes",
+        "DiarioDAcoes", "Detalhes", "Eixo", "AtorPrincipal", "AtorRelacionado", "Avaliacoes"
+    };
+    // Só depois de um envio: em telas de consulta (GET) filtros vazios não são "campos com erro".
+    var houveEnvio = HttpMethods.IsPost(Context.Request.Method);
+    var erros = ViewData.ModelState
+        .Where(item => houveEnvio)
+        .Where(item => item.Value?.ValidationState == ModelValidationState.Invalid && !ocultos.Contains(item.Key))
+        .SelectMany(item => item.Value!.Errors.Select(e => string.IsNullOrWhiteSpace(e.ErrorMessage) ? null : e.ErrorMessage))
+        .Where(mensagem => mensagem is not null)
+        .Distinct()
+        .ToList();
+    if (!string.IsNullOrWhiteSpace(erroDaTela) && !erros.Contains(erroDaTela))
+        erros.Insert(0, erroDaTela);
+}
+@if (erros.Count > 0)
+{
+    <div class="aviso-formulario" role="alert" data-testid="form-errors">
+        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+        <div>
+            <p class="aviso-formulario-titulo">Revise os campos abaixo antes de salvar:</p>
+            <ul>
+                @foreach (var mensagem in erros)
+                {
+                    <li>@mensagem</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+<div class="toast-area" aria-live="polite" aria-atomic="true">
+    @if (!string.IsNullOrWhiteSpace(sucesso))
+    {
+        <div class="toast-aviso sucesso" role="status" data-testid="toast-success">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <span>@sucesso</span>
+            <button type="button" class="toast-fechar" aria-label="Fechar aviso"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(falha))
+    {
+        <div class="toast-aviso falha" role="alert" data-testid="toast-error">
+            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+            <span>@falha</span>
+            <button type="button" class="toast-fechar" aria-label="Fechar aviso"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    }
+</div>

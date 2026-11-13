@@ -8,6 +8,8 @@ services:
     image: mysql:8.4
     restart: unless-stopped
     environment:
+      # Horário de Brasília (antes os registros apareciam 3 horas adiantados, em UTC).
+      TZ: ${APP_FUSO:-America/Sao_Paulo}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no .env}
       MYSQL_DATABASE: empodera
       MYSQL_USER: ${MYSQL_USER:-empodera_app}
@@ -32,6 +34,7 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      TZ: ${APP_FUSO:-America/Sao_Paulo}
       Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=empodera;User=${MYSQL_USER:-empodera_app};Password=${MYSQL_PASSWORD};CharSet=utf8mb4;"
       AllowedHosts: ${APP_DOMINIO:-localhost}

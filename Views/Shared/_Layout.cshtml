@@ -73,7 +73,7 @@
                             @Empodera.Services.FotoUsuarioService.Iniciais(nomeMenu)
                         }
                     </span>
-                    <span class="sidebar-user-text">Olá, @nomeMenu</span>
+                    <span class="sidebar-user-text">Olá, @Empodera.Services.TextoExibicao.Nome(nomeMenu)</span>
                 </h2>
                 <ul>
                     <p>Principais</p>
@@ -104,7 +104,7 @@
                     </li>
                     <li data-page="PersonalProcess" class="@IsActive("PersonalProcess")">
                         <a asp-controller="PersonalProcess" asp-action="Index">
-                            <p><i class="fas fa-book-open"></i> Diário Pessoal</p>
+                            <p><i class="fas fa-book-open"></i> Diário de Processo Pessoal</p>
                         </a>
                     </li>
                     <li data-page="PersonalAssessment" class="@IsActive("PersonalAssessment")">
@@ -172,6 +172,7 @@
                     <span style="font-weight: bold; font-size: 1.2rem; color: var(--color-primary-600);">Menu</span>
                 </div>
 
+                <partial name="_AvisosDaPagina" />
                 @RenderBody()
             </div>
         </div>
@@ -224,6 +225,7 @@
     </script>
 
     <script src="~/js/indicadores.js" asp-append-version="true"></script>
+    <script src="~/js/avisos.js" asp-append-version="true"></script>
     <script src="~/js/tooltip.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 

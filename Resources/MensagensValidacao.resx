@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name='resmimetype'>
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name='version'>
+    <value>2.0</value>
+  </resheader>
+  <resheader name='reader'>
+    <value>
+      System.Resources.ResXResourceReader, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <resheader name='writer'>
+    <value>
+      System.Resources.ResXResourceWriter, System.Windows.Forms,
+      Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <data name='Obrigatorio' xml:space='preserve'>
+    <value>O campo “{0}” é obrigatório.</value>
+  </data>
+  <data name='Intervalo' xml:space='preserve'>
+    <value>O campo “{0}” deve estar entre {1} e {2}.</value>
+  </data>
+  <data name='TamanhoMaximo' xml:space='preserve'>
+    <value>O campo “{0}” pode ter no máximo {1} caracteres.</value>
+  </data>
+  <data name='TamanhoEntre' xml:space='preserve'>
+    <value>O campo “{0}” deve ter entre {2} e {1} caracteres.</value>
+  </data>
+  <data name='TamanhoMinimo' xml:space='preserve'>
+    <value>O campo “{0}” deve ter pelo menos {1} caracteres.</value>
+  </data>
+  <data name='Email' xml:space='preserve'>
+    <value>Informe um e-mail válido.</value>
+  </data>
+  <data name='Comparar' xml:space='preserve'>
+    <value>Os campos “{0}” e “{1}” não conferem.</value>
+  </data>
+  <data name='ValorInvalido' xml:space='preserve'>
+    <value>O valor "{0}" não é válido para {1}.</value>
+  </data>
+  <data name='ValorInvalidoSemCampo' xml:space='preserve'>
+    <value>O valor "{0}" não é válido.</value>
+  </data>
+  <data name='ValorObrigatorio' xml:space='preserve'>
+    <value>O campo “{0}” é obrigatório.</value>
+  </data>
+  <data name='DeveSerNumero' xml:space='preserve'>
+    <value>O campo “{0}” deve ser um número.</value>
+  </data>
+  <data name='DataFutura' xml:space='preserve'>
+    <value>O campo “{0}” não pode ter uma data futura.</value>
+  </data>
+  <data name='CorpoInvalido' xml:space='preserve'>
+    <value>Os dados enviados não são válidos.</value>
+  </data>
+</root>

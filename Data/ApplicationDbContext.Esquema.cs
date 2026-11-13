@@ -124,6 +124,9 @@ namespace Empodera.Data
                 Referencia(e, c => c.FK_Id_Usuario, "IdUsuario");
                 Referencia(e, c => c.FK_Id_UsuarioM, "IdUsuarioModificacao");
                 SimNao(e, c => c.Ativo, "Ativo", "CK_Comunidades_Ativo");
+                // Exclusão é lógica (Ativo = 'N'): a comunidade excluída some de listas, selects e URLs.
+                // O backup completo lê as tabelas por SQL e continua trazendo tudo.
+                e.HasQueryFilter(c => c.Ativo != "N");
             });
 
             mb.Entity<Atores>(e =>
@@ -146,6 +149,8 @@ namespace Empodera.Data
                 Criacao(e, a => a.DtCriacao);
                 Modificacao(e, a => a.DtModificacao);
                 SimNao(e, a => a.Ativo, "Ativo", "CK_Atores_Ativo");
+                // Mesmo filtro da comunidade: ator excluído não aparece em lugar nenhum.
+                e.HasQueryFilter(a => a.Ativo != "N");
                 Referencia(e, a => a.FkIdUsuario, "IdUsuario");
                 Referencia(e, a => a.FkIdUsuarioM, "IdUsuarioModificacao");
             });

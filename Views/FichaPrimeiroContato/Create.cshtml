@@ -9,7 +9,7 @@
     <div class="header-section">
         <h2>
             <a asp-controller="FichaPrimeiroContato" asp-action="Index" class="text-primary">Ficha Primeiro Contato</a>
-            <span class="separato1r">></span>
+            <span class="separator" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
             <strong class="text-muted">Nova Ficha</strong>
         </h2>
     </div>
@@ -22,7 +22,13 @@
         <div class="step" id="header-step-3">3</div>
     </div>
 
-    <form asp-action="Create" class="main-form" id="wizardForm" data-mode="create">
+    @{
+        var marcadosCondicoes = ViewBag.SelectedCondicoes as List<string> ?? new List<string>();
+        var marcadosPeticoes = ViewBag.SelectedPeticoes as List<string> ?? new List<string>();
+        var marcadosRespostas = ViewBag.SelectedRespostas as List<string> ?? new List<string>();
+        var marcadosResultados = ViewBag.SelectedResultados as List<string> ?? new List<string>();
+    }
+    <form asp-action="Create" class="main-form" id="wizardForm" data-mode="create" novalidate>
         <div class="step-content active" id="step-1">
 
             <div class="section-label">Comunidade</div>
@@ -42,8 +48,15 @@
                 <div class="icon-box"><i class="fa-solid fa-person"></i></div>
                 <div class="input-content">
                     <label asp-for="FK_id_Atores">Ator <span class="text-danger">*</span></label>
-                    <select asp-for="FK_id_Atores" asp-items="ViewBag.Atores" class="clean-input" required>
+                    <select asp-for="FK_id_Atores" class="clean-input" required data-filtro-comunidade="#FkIdComunidade">
                         <option value="">Selecione o nome do ator</option>
+                        @{ var comunidadesDoAtor = ViewBag.AtoresComunidades as Dictionary<int, string> ?? new(); }
+                        @foreach (var ator in (IEnumerable<SelectListItem>)ViewBag.Atores)
+                        {
+                            var idAtor = int.Parse(ator.Value);
+                            <option value="@ator.Value" selected="@(ator.Value == Model?.FK_id_Atores.ToString())"
+                                    data-comunidades="@(comunidadesDoAtor.TryGetValue(idAtor, out var lista) ? lista : "")">@ator.Text</option>
+                        }
                     </select>
                     <span asp-validation-for="FK_id_Atores" class="text-danger"></span>
                 </div>
@@ -101,7 +114,7 @@
                 <div class="input-card">
                     <div class="input-content no-icon">
                         <label asp-for="DtContato">Data do 1º Contato <span class="text-danger">*</span></label>
-                        <input asp-for="DtContato" type="date" class="clean-input" required />
+                        <input asp-for="DtContato" type="date" class="clean-input" required min="1900-01-01" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
 
                         <span asp-validation-for="DtContato" class="text-danger"></span>
                     </div>
@@ -356,7 +369,7 @@
                         {
                             <label class="checkbox-option">
                                 <!-- 'name' deve ser um array para o Controller receber List<string> -->
-                                <input type="checkbox" name="SelectedCondicoes" value="@item" />
+                                <input type="checkbox" name="SelectedCondicoes" value="@item" checked="@(marcadosCondicoes.Contains(item))" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -373,7 +386,7 @@
                         @foreach (var item in listaPeticoes)
                         {
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedPeticoes" value="@item" />
+                                <input type="checkbox" name="SelectedPeticoes" value="@item" checked="@(marcadosPeticoes.Contains(item))" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -390,7 +403,7 @@
                         @foreach (var item in listaRespostas)
                         {
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedRespostas" value="@item" />
+                                <input type="checkbox" name="SelectedRespostas" value="@item" checked="@(marcadosRespostas.Contains(item))" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }
@@ -407,7 +420,7 @@
                         @foreach (var item in listaResultados)
                         {
                             <label class="checkbox-option">
-                                <input type="checkbox" name="SelectedResultados" value="@item" />
+                                <input type="checkbox" name="SelectedResultados" value="@item" checked="@(marcadosResultados.Contains(item))" />
                                 <span class="radio-label" style="border:none; padding:0; margin-left:5px;">@item</span>
                             </label>
                         }

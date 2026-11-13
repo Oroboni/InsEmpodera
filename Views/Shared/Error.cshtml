@@ -1,25 +1,48 @@
-﻿@model ErrorViewModel
-@{
-    ViewData["Title"] = "Error";
+﻿@{
+    int codigo = ViewBag.Codigo as int? ?? 500;
+    bool logado = ViewBag.Logado as bool? == true;
+    Layout = logado ? "_Layout" : null;
+    var (icone, titulo, texto) = codigo switch
+    {
+        404 => ("fa-map-signs", "Página não encontrada", "O endereço não existe ou o registro foi excluído."),
+        403 => ("fa-lock", "Acesso não permitido", "Seu perfil não tem permissão para esta tela. Fale com o administrador do EcoRedes."),
+        400 => ("fa-triangle-exclamation", "Pedido inválido", "Os dados enviados não puderam ser processados. Volte e tente de novo."),
+        429 => ("fa-hourglass-half", "Muitas tentativas", "Aguarde alguns minutos antes de tentar de novo."),
+        _ => ("fa-triangle-exclamation", "Algo deu errado", "Não foi possível concluir a ação. O que já estava salvo não foi perdido. Tente de novo; se o erro continuar, avise a equipe e informe o código abaixo.")
+    };
+    ViewData["Title"] = titulo;
 }
-
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
-
-@if (Model.ShowRequestId)
+@if (!logado)
 {
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
+    @:<!DOCTYPE html>
+    @:<html lang="pt-BR"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @:<title>@titulo - EcoRedes</title>
+    <link rel="icon" href="~/images/Logo-empodera.svg" />
+    <link rel="stylesheet" href="~/css/_variaveis.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/tema.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
+    @:</head><body class="erro-pagina-solta">
 }
-
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+<link rel="stylesheet" href="~/css/erro.css" asp-append-version="true" />
+<main class="erro-pagina" data-testid="pagina-erro" data-codigo="@codigo">
+    <div class="erro-cartao">
+        <div class="erro-icone" aria-hidden="true"><i class="fa-solid @icone"></i></div>
+        <p class="erro-codigo">Erro @codigo</p>
+        <h1>@titulo</h1>
+        <p class="erro-texto">@texto</p>
+        <div class="erro-acoes">
+            <a href="javascript:history.back()" class="erro-botao secundario"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            <a href="@(logado ? Url.Action("Index", "Home") : Url.Action("Index", "Account"))" class="erro-botao primario">
+                <i class="fa-solid fa-house"></i> @(logado ? "Ir para o início" : "Ir para o login")
+            </a>
+        </div>
+        @if (codigo >= 500)
+        {
+            <p class="erro-id">Código para suporte: <code>@ViewBag.RequestId</code></p>
+        }
+    </div>
+</main>
+@if (!logado)
+{
+    @:</body></html>
+}

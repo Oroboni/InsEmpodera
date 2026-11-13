@@ -1,3 +1,5 @@
+using Empodera.Services;
+using Empodera.Services.Validacao;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
@@ -48,8 +50,8 @@ public class AtividadesController : Controller
         ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
 
         ViewBag.Comunidades = new SelectList(
-            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), 
-            "Id_Comunidade", 
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(),
+            "Id_Comunidade",
             "Nome"
         );
 
@@ -76,6 +78,13 @@ public class AtividadesController : Controller
             return RedirectToAction("Index", "Atividades");
         }
 
+        await ValidacaoCadastros.ValidarAtividadeAsync(_context, ModelState, atividade, ComunidadeId, EixosSelecionados);
+        if (!ModelState.IsValid)
+        {
+            await CarregarListasAsync(ComunidadeId);
+            return View(atividade);
+        }
+
         atividade.DtCriacao = DateTime.Now;
         atividade.DtModificacao = DateTime.Now;
         atividade.FkIdComunidade = ComunidadeId;
@@ -97,7 +106,16 @@ public class AtividadesController : Controller
             await _context.SaveChangesAsync();
         }
 
+        this.AvisarSucesso("Atividade criada com sucesso.");
         return RedirectToAction(nameof(Index));
+    }
+
+    // Comunidades ativas e eixos dos formulários de atividade.
+    private async Task CarregarListasAsync(int? comunidadeId)
+    {
+        ViewBag.EixosList = await EixoCatalogo.ListarDisponiveisAsync(_context);
+        ViewBag.Comunidades = new SelectList(
+            await _context.Comunidades.OrderBy(c => c.Nome).ToListAsync(), "Id_Comunidade", "Nome", comunidadeId);
     }
 
     public async Task<IActionResult> Edit(int? id)
@@ -157,6 +175,16 @@ public class AtividadesController : Controller
 
         if (existingAtividade == null) return NotFound();
 
+        await ValidacaoCadastros.ValidarAtividadeAsync(_context, ModelState, atividade, ComunidadeId, EixosSelecionados);
+        if (!ModelState.IsValid)
+        {
+            await CarregarListasAsync(ComunidadeId);
+            atividade.AtividadesEixos = (EixosSelecionados ?? []).Select(e => new AtividadesEixo { FkIdEixo = e }).ToList();
+            ViewBag.UsuarioOriginal = _context.Usuarios.FirstOrDefault(z => z.IdUsuario == existingAtividade.FkIdUsuario);
+            ViewBag.UsuarioNovo = _context.Usuarios.FirstOrDefault(z => z.IdUsuario == existingAtividade.FkIdUsuarioM);
+            return View(atividade);
+        }
+
         existingAtividade.Nome = atividade.Nome;
         existingAtividade.Descricao = atividade.Descricao;
         existingAtividade.FkIdComunidade = ComunidadeId;
@@ -189,6 +217,7 @@ public class AtividadesController : Controller
 
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit), new { id = atividade.IdAtividade });
     }
     [HttpPost]
@@ -215,6 +244,7 @@ public class AtividadesController : Controller
 
         _context.Atividades.Remove(activity);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Atividade excluída.");
         return RedirectToAction(nameof(Index));
     }
 }

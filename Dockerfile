@@ -15,7 +15,9 @@ COPY --from=build /publicado .
 RUN mkdir -p /app/App_Data /var/lib/empodera/keys \
     && chown -R app:app /app/App_Data /var/lib/empodera
 USER app
+# TZ: datas e horas gravadas no horário de Brasília (a imagem já traz o tzdata).
 ENV ASPNETCORE_URLS=http://+:8080 \
-    DataProtection__KeysPath=/var/lib/empodera/keys
+    DataProtection__KeysPath=/var/lib/empodera/keys \
+    TZ=America/Sao_Paulo
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "InsEmpodera.dll"]

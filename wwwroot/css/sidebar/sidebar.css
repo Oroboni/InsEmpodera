@@ -156,6 +156,8 @@
 /* === SECTION 2 - CONTEÚDO PRINCIPAL === */
 .section-2 {
     flex: 1;
+    /* Sem isto o item flex cresce até o conteúdo mais largo e o clip corta a direita no celular. */
+    min-width: 0;
     margin-left: 280px;
     background-color: var(--color-gray-300);
     padding: var(--space-8);

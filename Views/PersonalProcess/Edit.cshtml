@@ -23,7 +23,6 @@
     <form asp-action="Edit" asp-route-id="@Model.IdDiarioProcesso" method="post" class="main-form" id="processForm">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdDiarioProcesso" />
-        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
         <partial name="_CamposDiario" />
 
@@ -65,7 +64,7 @@
                 @if (canDelete)
                 {
                     <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
-                        <i class="fa-solid fa-trash"></i> Deletar
+                        <i class="fa-solid fa-trash"></i> Excluir
                     </button>
                 }
             </div>
@@ -78,16 +77,16 @@
     <div class="modal-overlay" id="deleteConfirmationModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
         <div class="modal-content">
             <div class="modal-icon"><i class="fas fa-exclamation-triangle"></i></div>
-            <h3 class="modal-title" id="deleteModalTitle">Confirmar Exclusão</h3>
+            <h3 class="modal-title" id="deleteModalTitle">Excluir registro?</h3>
             <p class="modal-text">
-                Você tem certeza que deseja deletar o registro de <strong>@Model.Data.ToString("dd/MM/yyyy")</strong>?<br>
+                Você tem certeza que deseja excluir o registro de <strong>@Model.Data.ToString("dd/MM/yyyy")</strong>?<br>
                 Essa ação não pode ser desfeita.
             </p>
             <div class="modal-actions">
                 <button type="button" class="wizard-btn btn-prev" id="cancelDeleteBtn">Cancelar</button>
                 <form asp-action="Delete" asp-route-id="@Model.IdDiarioProcesso" method="post">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn-modal-confirm wizard-btn btn-next">Sim, Deletar</button>
+                    <button type="submit" class="btn-modal-confirm wizard-btn btn-next">Excluir</button>
                 </form>
             </div>
         </div>

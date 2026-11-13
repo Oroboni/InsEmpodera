@@ -41,7 +41,7 @@
 <div class="modern-container">
     <div class="header-section">
         <h2>
-            <a asp-action="Index" class="text-primary">Diários de Campo</a>
+            <a asp-action="Index" asp-route-comunidadeId="@(Model?.FkIdComunidade > 0 ? Model.FkIdComunidade : null)" class="text-primary">Diários de Campo</a>
             <span class="separator">></span>
             <strong class="text-muted">Novo Registro</strong>
         </h2>
@@ -49,7 +49,6 @@
 
     <form asp-action="Create" method="post" enctype="multipart/form-data" class="main-form">
         @Html.AntiForgeryToken()
-        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
 
         <div class="section-label">Informações Básicas</div>
 
@@ -76,7 +75,7 @@
             </div>
             <div class="input-content">
                 <label asp-for="Data">Data <span class="text-danger">*</span></label>
-                <input asp-for="Data" type="date" class="clean-input" required />
+                <input asp-for="Data" type="date" class="clean-input" required max="@DateTime.Today.ToString("yyyy-MM-dd")" min="1900-01-01" />
             </div>
         </div>
 
@@ -110,8 +109,9 @@
                 <i class="fa-solid fa-align-left"></i>
             </div>
             <div class="input-content">
-                <label for="descricaoInput">Relato / Descrição</label>
-                <textarea asp-for="Descricao" maxlength="8000" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
+                <label for="descricaoInput">Relato / Descrição <span class="text-danger">*</span></label>
+                <textarea asp-for="Descricao" maxlength="8000" id="descricaoInput" class="clean-input" rows="6" required placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
                 <ul id="mention-list"></ul>
             </div>
         </div>
@@ -177,7 +177,7 @@
         <div class="purple-divider"></div>
 
         <div class="buttons-container">
-            <a asp-action="Index" class="wizard-btn btn-prev">
+            <a asp-action="Index" asp-route-comunidadeId="@(Model?.FkIdComunidade > 0 ? Model.FkIdComunidade : null)" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Cancelar
             </a>
             <button type="submit" class="wizard-btn btn-next">
@@ -248,7 +248,7 @@
                              }
                         }
                     </select>
-                    <button type="button" class="wizard-btn btn-prev" onclick="adicionarAtorAcao()" aria-label="Adicionar participante">+ Adicionar ator</button>
+                    <small class="dica-campo">Escolha um ou mais atores; cada nome escolhido aparece abaixo.</small>
                     <ul id="atoresSelecionadosAcao" class="selected-actors" aria-live="polite"></ul>
                 </div>
             </div>

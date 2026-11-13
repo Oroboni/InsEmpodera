@@ -21,9 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
         isEditing = true;
     }
 
-    setViewMode();
+    // Voltou do servidor com erros: continua editando para a pessoa corrigir.
+    if (form.dataset.comErros === "true") setEditMode();
+    else setViewMode();
 
     editBtn?.addEventListener("click", () => {
-        isEditing ? form.submit() : setEditMode();
+        if (!isEditing) { setEditMode(); return; }
+        // Confere todas as etapas antes de enviar (form.submit() sozinho pulava a validação).
+        if (typeof window.validarFormularioFicha === "function" && !window.validarFormularioFicha()) return;
+        form.submit();
     });
 });

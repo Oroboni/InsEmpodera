@@ -144,6 +144,7 @@ public sealed class ActorAggregatePersistenceTests : ControllerTestBase
         Assert.Equal(
             "N",
             await Db.Atores
+                .IgnoreQueryFilters()
                 .Where(item => item.IdAtores == saved.IdAtores)
                 .Select(item => item.Ativo)
                 .SingleAsync());

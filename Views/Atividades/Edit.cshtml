@@ -161,7 +161,7 @@
                 @if (Model.IdAtividade != 0)
                 {
                     <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
-                        <i class="fa-solid fa-trash"></i> Deletar
+                        <i class="fa-solid fa-trash"></i> Excluir
                     </button>
                 }
             </div>
@@ -177,9 +177,9 @@
             <div class="modal-icon">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h3 class="modal-title">Confirmar Exclusão</h3>
+            <h3 class="modal-title">Excluir registro?</h3>
             <p class="modal-text">
-                Você tem certeza que deseja deletar a atividade <strong>@Model.Nome</strong>?
+                Você tem certeza que deseja excluir a atividade <strong>@Model.Nome</strong>?
                 <br><br>
                 Essa ação não pode ser desfeita.
             </p>
@@ -192,7 +192,7 @@
                 <form asp-controller="Atividades" asp-action="Delete" method="post" asp-route-id="@Model.IdAtividade">
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn-modal-confirm wizard-btn btn-delete">
-                        Sim, Deletar
+                        Excluir
                     </button>
                 </form>
             </div>

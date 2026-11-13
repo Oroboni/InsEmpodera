@@ -56,10 +56,18 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.Configure<Microsoft.Extensions.WebEncoders.WebEncoderOptions>(options =>
     options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(System.Text.Unicode.UnicodeRanges.All));
 builder.Services.AddAntiforgery(options => options.SuppressXFrameOptionsHeader = true);
+// HSTS de 1 ano, incluindo subdomínios (o padrão do .NET é 30 dias).
+builder.Services.AddHsts(options =>
+{
+    options.MaxAge = TimeSpan.FromDays(365);
+    options.IncludeSubDomains = true;
+});
 builder.Services.AddControllersWithViews(options =>
     {
         // Protege automaticamente toda ação insegura atual ou adicionada no futuro.
         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+        // Mensagens de validação no idioma da tela, com nomes de campo legíveis.
+        Empodera.Services.Validacao.ValidacaoAmigavelProvider.Configurar(options);
     })
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
@@ -254,9 +262,11 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    // Erros inesperados e códigos 404/403 mostram uma página no visual do EcoRedes (ErroController).
+    app.UseExceptionHandler("/Erro");
     app.UseHsts();
 }
+app.UseStatusCodePagesWithReExecute("/Erro/{0}");
 
 if (!app.Environment.IsEnvironment("Testing"))
     app.UseHttpsRedirection();

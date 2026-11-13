@@ -54,11 +54,11 @@
         <input type="hidden" asp-for="IdDCampo" />
         
         <div class="buttons-container" style="justify-content: center; gap: 15px;">
-            <a asp-action="Index" class="wizard-btn btn-prev">
+            <a asp-action="Index" asp-route-comunidadeId="@Model.FkIdComunidade" class="wizard-btn btn-prev">
                 Cancelar
             </a>
             <button type="submit" class="wizard-btn btn-delete">
-                <i class="fa-solid fa-trash"></i> Sim, Excluir
+                <i class="fa-solid fa-trash"></i> Excluir
             </button>
         </div>
     </form>

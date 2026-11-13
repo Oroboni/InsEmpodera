@@ -1,3 +1,4 @@
+using Empodera.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Data;
@@ -132,6 +133,7 @@ public class AccessProfileController : Controller
         _context.Perfis.Add(novoPerfil);
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Perfil criado com sucesso.");
         return RedirectToAction(nameof(Index));
     }
 
@@ -225,6 +227,7 @@ public class AccessProfileController : Controller
                 throw;
         }
 
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit), new { id = perfilDb.IdPerfil });
     }
 
@@ -279,5 +282,6 @@ public class AccessProfileController : Controller
             throw;
         }
 
+        this.AvisarSucesso("Perfil excluído.");
         return RedirectToAction(nameof(Index));
     }}

@@ -4,6 +4,13 @@ document.querySelectorAll('[data-axis-picker]').forEach(picker => {
     const options = [...(panel?.querySelectorAll('input[type="checkbox"]') || [])];
     if (!tags) return;
 
+    // Nome do eixo no idioma da pessoa: o data-tag-name vem em português do banco, então passa
+    // pelo catálogo de traduções (antes as tags apareciam em português nas telas em inglês/espanhol).
+    const nomeDoEixo = option => {
+        const nome = option.dataset.tagName || option.value;
+        return typeof window.translateText === 'function' ? window.translateText(nome) : nome;
+    };
+
     const render = () => {
         tags.replaceChildren();
         options.forEach(option => {
@@ -12,11 +19,12 @@ document.querySelectorAll('[data-axis-picker]').forEach(picker => {
 
             const tag = document.createElement('span');
             tag.className = 'tag-item tag-purple';
-            tag.append(document.createTextNode(option.dataset.tagName || option.value));
+            tag.dataset.i18nText = ''; // traduzido também se o catálogo chegar depois
+            tag.append(document.createTextNode(nomeDoEixo(option)));
             const remove = document.createElement('button');
             remove.type = 'button';
             remove.className = 'tag-remove-btn';
-            remove.setAttribute('aria-label', `Remover eixo ${option.dataset.tagName || option.value}`);
+            remove.setAttribute('aria-label', `${window.translateText ? window.translateText('Remover eixo') : 'Remover eixo'} ${nomeDoEixo(option)}`);
             remove.textContent = '×';
             remove.addEventListener('click', () => {
                 if (option.disabled) return;

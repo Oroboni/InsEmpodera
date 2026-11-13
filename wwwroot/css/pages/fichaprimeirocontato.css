@@ -210,11 +210,12 @@ a {
 }
 
 /* VARIAÇÃO: BOTÃO SALVAR (Verde Sucesso) */
+/* Salvar segue a mesma cor de ação principal em todas as telas (antes era quase preto). */
 .btn-save-final {
-    background-color: var(--color-primary-800);
+    background-color: var(--color-primary);
 }
 .btn-save-final:hover {
-    background-color: var(--color-success-dark);
+    background-color: var(--color-primary-dark);
 }
 @media (min-width: 640px) {
     .buttons-container {
@@ -895,3 +896,4 @@ input[type="checkbox"]:disabled + .radio-label {
         box-sizing: border-box;
     }
 }
+

@@ -95,7 +95,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
 
         var delete = await PostFormAsync(client, $"/Comunidade/ComunidadesDetalhes/{id}", $"/Comunidade/Delete/{id}", new());
         AssertRedirect(delete);
-        Assert.Equal("N", await QueryAsync(db => db.Comunidades.Where(item => item.Id_Comunidade == id).Select(item => item.Ativo).SingleAsync()));
+        Assert.Equal("N", await QueryAsync(db => db.Comunidades.IgnoreQueryFilters().Where(item => item.Id_Comunidade == id).Select(item => item.Ativo).SingleAsync()));
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public sealed class EndToEndCrudTests : IClassFixture<EmpoderaWebApplicationFact
 
         var delete = await PostFormAsync(client, $"/Atores/Edit/{id}", $"/Atores/Delete/{id}", new());
         AssertRedirect(delete);
-        Assert.Equal("N", await QueryAsync(db => db.Atores.Where(item => item.IdAtores == id).Select(item => item.Ativo).SingleAsync()));
+        Assert.Equal("N", await QueryAsync(db => db.Atores.IgnoreQueryFilters().Where(item => item.IdAtores == id).Select(item => item.Ativo).SingleAsync()));
     }
 
     [Fact]

@@ -34,6 +34,7 @@ public static class IdentityServiceCollectionExtensions
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             })
             .AddSignInManager()
+            .AddErrorDescriber<ErrosIdentityEmPortugues>()
             .AddDefaultTokenProviders();
 
         services.AddScoped<IUserStore<Usuario>, EmpoderaUserStore>();

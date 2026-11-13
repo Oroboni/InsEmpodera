@@ -41,7 +41,7 @@
 <div class="modern-container">
     <div class="header-section">
         <h2>
-            <a asp-controller="DiarioCampo" asp-action="Index" class="text-primary">Diários de Campo</a>
+            <a asp-controller="DiarioCampo" asp-action="Index" asp-route-comunidadeId="@(Model?.FkIdComunidade > 0 ? Model.FkIdComunidade : null)" class="text-primary">Diários de Campo</a>
             <span class="separator">></span>
             <strong class="text-muted">Editar Registro</strong>
         </h2>
@@ -56,7 +56,6 @@
     <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editForm" class="main-form">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="IdDCampo" />
-        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
 
         <div class="section-label">Informações Básicas</div>
 
@@ -84,7 +83,7 @@
                 </div>
                 <div class="input-content">
                     <label asp-for="Data">Data <span class="text-danger">*</span></label>
-                    <input asp-for="Data" type="date" class="clean-input" required />
+                    <input asp-for="Data" type="date" class="clean-input" required max="@DateTime.Today.ToString("yyyy-MM-dd")" min="1900-01-01" />
                 </div>
             </div>
         </div>
@@ -119,8 +118,9 @@
                 <i class="fa-solid fa-align-left"></i>
             </div>
             <div class="input-content">
-                <label asp-for="Descricao">Relato / Descrição</label>
-                <textarea asp-for="Descricao" maxlength="8000" id="descricaoInput" class="clean-input" rows="6" placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
+                <label asp-for="Descricao">Relato / Descrição <span class="text-danger">*</span></label>
+                <textarea asp-for="Descricao" maxlength="8000" id="descricaoInput" class="clean-input" rows="6" required placeholder="Digite aqui... Use @@ para mencionar atores"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
                 <ul id="mention-list"></ul>
             </div>
         </div>
@@ -203,7 +203,7 @@
         <div class="purple-divider"></div>
 
         <div class="buttons-container">
-            <a asp-action="Index" class="wizard-btn btn-prev">
+            <a asp-action="Index" asp-route-comunidadeId="@(Model?.FkIdComunidade > 0 ? Model.FkIdComunidade : null)" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </a>
 
@@ -225,7 +225,7 @@
         <div class="modal-icon" style="margin: 0 auto var(--space-4);">
             <i class="fa-solid fa-exclamation-triangle"></i>
         </div>
-        <h3 style="margin-bottom: var(--space-3);">Confirmar Exclusão</h3>
+        <h3 style="margin-bottom: var(--space-3);">Excluir registro?</h3>
         <p class="text-muted" style="margin-bottom: var(--space-6);">
             Tem certeza que deseja excluir este diário de campo? Esta ação não pode ser desfeita.
         </p>
@@ -233,7 +233,7 @@
             <button class="wizard-btn btn-prev" style="flex: 1;" id="cancelDeleteBtn">Cancelar</button>
             <form asp-action="Delete" asp-route-id="@Model.IdDCampo" method="post" style="flex: 1;">
                 @Html.AntiForgeryToken()
-                <button type="submit" class="wizard-btn btn-delete" style="width: 100%;">Sim, Excluir</button>
+                <button type="submit" class="wizard-btn btn-delete" style="width: 100%;">Excluir</button>
             </form>
         </div>
     </div>
@@ -300,7 +300,7 @@
                              }
                         }
                     </select>
-                    <button type="button" class="wizard-btn btn-prev" onclick="adicionarAtorAcao()" aria-label="Adicionar participante">+ Adicionar ator</button>
+                    <small class="dica-campo">Escolha um ou mais atores; cada nome escolhido aparece abaixo.</small>
                     <ul id="atoresSelecionadosAcao" class="selected-actors" aria-live="polite"></ul>
                 </div>
             </div>

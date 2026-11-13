@@ -37,14 +37,19 @@ public class ReportController : Controller
             "Id_Comunidade", "Nome");
         ViewBag.IsAdmin = string.Equals(loggedUser.Perfil?.Nome, "Admin", StringComparison.OrdinalIgnoreCase);
 
-
-
-
-
-
-
-
-
+        // Inventário de dados (antes a seção aparecia vazia: nada preenchia esta lista).
+        ViewBag.Inventario = new List<IndicadorInventario>
+        {
+            new("Comunidades", "fa-people-roof", await _context.Comunidades.CountAsync()),
+            new("Atores", "fa-users", await _context.Atores.CountAsync()),
+            new("Atividades", "fa-list-check", await _context.Atividades.CountAsync()),
+            new("Recursos da rede", "fa-hand-holding-heart", await _context.RedeRecursos.CountAsync()),
+            new("Diários de campo", "fa-book-open", await _context.DiariosCampo.CountAsync()),
+            new("Fichas de 1º contato", "fa-file-lines", await _context.FichasPrimeiroContato.CountAsync()),
+            new("Avaliações pessoais", "fa-clipboard-check", await _context.AvaliacaoPessoal.CountAsync()),
+            new("Diários de processo pessoal", "fa-book", await _context.DiariosProcessoPessoal.CountAsync()),
+            new("Usuários ativos", "fa-user-shield", await _context.Usuarios.CountAsync(u => u.Ativo == "S")),
+        };
 
         return View();
     }

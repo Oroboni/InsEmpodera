@@ -1,3 +1,5 @@
+using Empodera.Services;
+using Empodera.Services.Validacao;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
@@ -87,17 +89,22 @@ public class ComunidadeController : Controller
             comunidade.Id_Comunidade = 0; 
         }
 
-        var qAtores = _context.AtorComunidades.Include(a => a.Ator).Where(a => a.Ator.Ativo != "N").Count(a => a.FkIdComunidade == id);
-
-        ViewBag.qAtores = qAtores;
-
-        var qAtividades = _context.Atividades.Count(a => a.FkIdComunidade == id);
-        ViewBag.qAtividades = qAtividades;
-
-        var qRecursos = _context.RedeRecursos.Count(a => a.FkIdComunidade == id);
-        ViewBag.qRecursos = qRecursos;
-
+        CarregarResumoDaComunidade(id);
         return View(comunidade);
+    }
+
+    // Contadores mostrados no formulário da comunidade (também usados ao voltar com erro de validação).
+    private void CarregarResumoDaComunidade(int id)
+    {
+        ViewBag.qAtores = _context.AtorComunidades.Include(a => a.Ator).Where(a => a.Ator.Ativo != "N").Count(a => a.FkIdComunidade == id);
+        ViewBag.qAtividades = _context.Atividades.Count(a => a.FkIdComunidade == id);
+        ViewBag.qRecursos = _context.RedeRecursos.Count(a => a.FkIdComunidade == id);
+        if (id != 0)
+        {
+            var atual = _context.Comunidades.AsNoTracking().FirstOrDefault(c => c.Id_Comunidade == id);
+            ViewBag.UsuarioOriginal = atual is null ? null : _context.Usuarios.FirstOrDefault(z => z.IdUsuario == atual.FK_Id_Usuario);
+            ViewBag.UsuarioNovo = atual is null ? null : _context.Usuarios.FirstOrDefault(z => z.IdUsuario == atual.FK_Id_UsuarioM);
+        }
     }
 
 [HttpPost]
@@ -117,6 +124,27 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
     if ((comunidade.Id_Comunidade == 0 && !PodeComunidade.CanCreate("Comunidades")) || (comunidade.Id_Comunidade != 0 && !PodeComunidade.CanUpdate("Comunidades")))
     {
         return RedirectToAction("Index", "Comunidade");
+    }
+
+    // Edição de comunidade que não existe (ou já excluída): 404 antes de validar o formulário.
+    if (comunidade.Id_Comunidade != 0 && !_context.Comunidades.Any(c => c.Id_Comunidade == comunidade.Id_Comunidade))
+        return NotFound();
+
+    // Campos só com espaços contam como vazios (antes geravam erro 500 no banco).
+    comunidade.Nome = comunidade.Nome?.Trim() ?? string.Empty;
+    comunidade.Local = comunidade.Local?.Trim();
+    comunidade.LocalMapa = comunidade.LocalMapa?.Trim();
+    ModelState.Clear();
+    if (comunidade.Nome.Length == 0)
+        ModelState.AddModelError(nameof(Comunidade.Nome), string.Format(MensagensValidacao.Obrigatorio, ValidacaoAmigavelProvider.NomeDoCampo(nameof(Comunidade.Nome))));
+    else if (comunidade.Nome.Length > 150)
+        ModelState.AddModelError(nameof(Comunidade.Nome), string.Format(MensagensValidacao.TamanhoMaximo, ValidacaoAmigavelProvider.NomeDoCampo(nameof(Comunidade.Nome)), 150));
+    if (string.IsNullOrWhiteSpace(comunidade.Local) && string.IsNullOrWhiteSpace(comunidade.LocalMapa))
+        ModelState.AddModelError(nameof(Comunidade.Local), string.Format(MensagensValidacao.Obrigatorio, ValidacaoAmigavelProvider.NomeDoCampo(nameof(Comunidade.Local))));
+    if (!ModelState.IsValid)
+    {
+        CarregarResumoDaComunidade(comunidade.Id_Comunidade);
+        return View(comunidade);
     }
 
 // Se a Id_Comunidade for 0, é uma nova criação
@@ -141,7 +169,8 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         
         _context.Comunidades.Add(comunidade);
         _context.SaveChanges();
-        
+        this.AvisarSucesso("Comunidade criada com sucesso.");
+
         return RedirectToAction(nameof(Index));
     }
         
@@ -181,6 +210,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
             _context.SaveChanges();
         }
+        this.AvisarSucesso("Alterações salvas com sucesso.");
 
         return RedirectToAction("ComunidadesDetalhes", new { id = comunidade.Id_Comunidade });
 
@@ -422,6 +452,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         _context.Comunidades.Update(comunidade);
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Comunidade excluída.");
         return RedirectToAction("Index", "Comunidade");
     }
 
@@ -646,6 +677,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             await _context.SaveChangesAsync();
         }
 
+        this.AvisarSucesso("Recurso cadastrado com sucesso.");
         return RedirectToAction("ComunidadeRecursos", new { comunidadeId });
     }
 
@@ -691,6 +723,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         }
 
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(ComunidadeDetalhesRecursos), new { id = recursoDb.Id_Rede });
     }
 
@@ -750,6 +783,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         _context.RedeEixos.RemoveRange(existing.RedeEixos);
         _context.RedeRecursos.Remove(existing);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Recurso excluído.");
         return RedirectToAction("ComunidadeRecursos", new { comunidadeId = existing.FkIdComunidade });
     }
 
@@ -837,6 +871,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
 
 
+        this.AvisarSucesso("Ator cadastrado com sucesso.");
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = ComunidadeId });
     }
 
@@ -940,6 +975,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         await TiposRecurso.GarantirRecursoRelacionalAsync(_context, atorDb, ComunidadeId, atorDb.FkIdUsuarioM ?? atorDb.FkIdUsuario);
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit_Atores), new { id = ator.IdAtores, comunidadeId = ComunidadeId });
     }
 
@@ -977,6 +1013,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
         ator.DtModificacao = DateTime.Now;
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Ator removido da comunidade.");
         return RedirectToAction("AtoresVinculados", "Comunidade", new { id = atorCom?.FkIdComunidade });
     }
 
@@ -1063,6 +1100,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
             await _context.SaveChangesAsync();
         }
 
+        this.AvisarSucesso("Atividade criada com sucesso.");
         return RedirectToAction("AtividadesVinculadas", new { comunidadeId });
     }
 
@@ -1149,6 +1187,7 @@ public IActionResult ComunidadesDetalhes(Empodera.Models.Comunidade comunidade, 
 
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit_Atividades), new { id, comunidadeId });
 
     }

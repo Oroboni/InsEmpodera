@@ -1,3 +1,4 @@
+using Empodera.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Data;
@@ -119,6 +120,7 @@ public class PersonalAssessmentController : Controller
         avaliacao.FkIdUsuario = int.Parse(HttpContext.Session.GetString("ID") ?? "0");
         _context.AvaliacaoPessoal.Add(avaliacao);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Avaliação salva com sucesso.");
         return RedirectToAction("Index", "PersonalAssessment", new {atorId = avaliacao.FK_id_Atores});
     }
 
@@ -220,6 +222,7 @@ public class PersonalAssessmentController : Controller
 
         _context.AvaliacaoPessoal.Update(avaliacaobd);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit), new { id = avaliacaobd.IdAvaliacao });
     }
     private async Task PopulateActorsListAsync(int? selectedActorId)
@@ -258,6 +261,7 @@ public class PersonalAssessmentController : Controller
         var actorId = assessment.FK_id_Atores;
         _context.AvaliacaoPessoal.Remove(assessment);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Avaliação excluída.");
         return RedirectToAction(nameof(Index), new { atorId = actorId });
     }
 }

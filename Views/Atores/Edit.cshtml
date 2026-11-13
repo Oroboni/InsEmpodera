@@ -68,7 +68,7 @@
                         <option value="">Selecione</option>
                         <option value="2">Feminino</option>
                         <option value="1">Masculino</option>
-                        <option value="">Não declarado</option>
+                        <option value="0">Não declarado</option>
                         <option value="3">Transgênero</option>
                     </select>
                     <i class="fa-solid fa-chevron-down dropdown-icon"></i>
@@ -79,7 +79,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-days"></i></div>
                 <div class="input-content">
                     <label for="Idade">Idade</label>
-                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" disabled>
+                    <input asp-for="Idade" type="number" min="0" max="130" class="clean-input" disabled>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="input-content">
                     <label asp-for="PapelSocial1">Papel Social</label>
-                    <input asp-for="PapelSocial1" type="text" class="clean-input" placeholder="Papel social principal"
+                    <input list="papeis-sociais" asp-for="PapelSocial1" type="text" class="clean-input" placeholder="Papel social principal"
                         maxlength="200" disabled>
                 </div>
             </div>
@@ -100,7 +100,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="input-content">
                     <label asp-for="PapelSocial2">Papel Social (Adicional)</label>
-                    <input asp-for="PapelSocial2" type="text" class="clean-input" placeholder="Papel social secundário"
+                    <input list="papeis-sociais" asp-for="PapelSocial2" type="text" class="clean-input" placeholder="Papel social secundário"
                         maxlength="200" disabled>
                 </div>
             </div>
@@ -171,6 +171,8 @@
         }
 
         <!-- Botões de Ação -->
+        <partial name="_PapeisSociais" />
+
         <div class="buttons-container">
             <a asp-controller="Atores" asp-action="Index" class="wizard-btn btn-prev">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
@@ -182,7 +184,7 @@
                 </button>
 
                 <button type="button" class="wizard-btn btn-delete" id="openDeleteModalBtn">
-                    <i class="fa-solid fa-trash"></i> Deletar
+                    <i class="fa-solid fa-trash"></i> Excluir
                 </button>
             </div>
         </div>
@@ -199,10 +201,10 @@
             <i class="fas fa-exclamation-triangle"></i>
         </div>
 
-        <h3 class="modal-title">Confirmar Exclusão</h3>
+        <h3 class="modal-title">Excluir registro?</h3>
 
         <p class="modal-text">
-            Você tem certeza que deseja deletar o Ator <strong>@Model.Nome</strong>?<br>
+            Você tem certeza que deseja excluir o Ator <strong>@Model.Nome</strong>?<br>
             Essa ação não pode ser desfeita.
         </p>
 
@@ -215,7 +217,7 @@
                 <form asp-controller="Atores" asp-action="Delete" method="post" asp-route-id="@Model.IdAtores">
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn-modal-confirm wizard-btn btn-next">
-                        Sim, Deletar
+                        Excluir
                     </button>
                 </form>
             </div>

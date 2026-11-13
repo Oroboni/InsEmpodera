@@ -30,7 +30,7 @@
                     {
                         foreach (dynamic item in ViewBag.Comunidades)
                         {
-                            <option value="@item.Id">@item.Nome</option>
+                            <option value="@item.Id" selected="@(ViewBag.ComunidadeSelecionada is int sel && sel == (int)item.Id)">@item.Nome</option>
                         }
                     }
                 </select>
@@ -57,7 +57,7 @@
                 <div class="card-icons"><i class="fas fa-calendar-week"></i></div>
             </div>
             <div class="action-card stats-card stats-card-cyan">
-                <span class="card-title" id="kpiUltimo">—</span>
+                <span class="card-title card-title-texto" id="kpiUltimo">—</span>
                 <span class="card-subtitle">Último registro</span>
                 <div class="card-icons"><i class="fas fa-calendar-check"></i></div>
             </div>
@@ -105,7 +105,7 @@
         <div class="forms-list" id="diariosGrid">
             @if (Model != null && Model.Any())
             {
-                foreach (var item in Model.OrderByDescending(x => x.Data))
+                foreach (var item in Model)
                 {
                     string comunidadeNome = item.Comunidade?.Nome ?? "Sem Comunidade";
                     string dataFormatada = item.Data.ToString("dd/MM/yyyy");
@@ -254,11 +254,29 @@
                 noRecordsMessage.style.display = count === 0 ? 'block' : 'none';
             }
 
+            // A comunidade escolhida fica no endereço (voltar de ver/editar não perde o filtro)
+            // e na sessão do navegador (entrar pelo menu reabre a última).
+            const chaveComunidade = 'diarioCampo.comunidade';
+            if (!comunidadeFilter.value) {
+                try {
+                    const salva = sessionStorage.getItem(chaveComunidade);
+                    if (salva && comunidadeFilter.querySelector(`option[value="${salva}"]`)) comunidadeFilter.value = salva;
+                } catch (e) { /* armazenamento indisponível */ }
+            }
+            function lembrarComunidade() {
+                const url = new URL(window.location.href);
+                if (comunidadeFilter.value) url.searchParams.set('comunidadeId', comunidadeFilter.value);
+                else url.searchParams.delete('comunidadeId');
+                history.replaceState(null, '', url);
+                try { sessionStorage.setItem(chaveComunidade, comunidadeFilter.value); } catch (e) { }
+            }
+
             // Event listeners
-            comunidadeFilter.addEventListener('change', updateView);
+            comunidadeFilter.addEventListener('change', () => { lembrarComunidade(); updateView(); });
             searchInput.addEventListener('input', updateView);
 
             // Inicialização
+            if (comunidadeFilter.value) lembrarComunidade();
             updateView();
         });
     </script>

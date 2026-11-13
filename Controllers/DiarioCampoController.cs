@@ -1,3 +1,4 @@
+using Empodera.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Empodera.Data;
@@ -21,7 +22,7 @@ namespace Empodera.Controllers
         // ==========================================================
         // INDEX
         // ==========================================================
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? comunidadeId = null)
         {
             if (HttpContext.Session.GetString("Email") == null)
                 return RedirectToAction("Index", "Account");
@@ -36,7 +37,10 @@ namespace Empodera.Controllers
                 .Include(d => d.Comunidade)
                 // .Include(d => d.DiarioEixos).ThenInclude(de => de.Eixo) // Descomente se precisar mostrar eixos na lista
                 .OrderByDescending(d => d.Data)
+                .ThenByDescending(d => d.DtCriacao)
+                .ThenByDescending(d => d.IdDCampo)
                 .ToListAsync();
+            ViewBag.ComunidadeSelecionada = comunidadeId;
 
             // 2. Preenche a lista para o Filtro de Comunidades (Dropdown do topo)
             // Pegamos apenas comunidades que existem no banco
@@ -91,6 +95,7 @@ namespace Empodera.Controllers
             ModelState.Remove("Usuario");
             ModelState.Remove(nameof(DiarioCampo.Localizacao));
 
+            ValidarCampos(diarioCampo);
             await ValidarReferenciasAsync(diarioCampo.FkIdComunidade, EixosSelecionados);
             await ValidarAcoesTemporariasAsync(TempAcoes);
 
@@ -107,7 +112,8 @@ namespace Empodera.Controllers
                 _context.Add(diarioCampo);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                this.AvisarSucesso("Diário de campo salvo com sucesso.");
+                return RedirectToAction(nameof(Index), new { comunidadeId = diarioCampo.FkIdComunidade });
             }
 
             await PreencherViewBagsDoBanco();
@@ -164,6 +170,7 @@ namespace Empodera.Controllers
             ModelState.Remove(nameof(DiarioCampo.Localizacao));
             diarioCampo.Localizacao ??= string.Empty;
 
+            ValidarCampos(diarioCampo);
             await ValidarReferenciasAsync(diarioCampo.FkIdComunidade, EixosSelecionados);
             await ValidarAcoesTemporariasAsync(TempAcoes);
 
@@ -214,7 +221,8 @@ namespace Empodera.Controllers
                     if (!DiarioCampoExists(diarioCampo.IdDCampo)) return NotFound();
                     throw;
                 }
-                return RedirectToAction(nameof(Edit), new { id = diarioCampo.IdDCampo });
+                this.AvisarSucesso("Alterações salvas com sucesso.");
+                return RedirectToAction(nameof(Index), new { comunidadeId = diarioCampo.FkIdComunidade });
             }
 
             var persisted = await _context.DiariosCampo
@@ -290,12 +298,14 @@ namespace Empodera.Controllers
                 return RedirectToAction(nameof(Index));
 
             var diarioCampo = await _context.DiariosCampo.FindAsync(id);
-            if (diarioCampo != null)
-            {
-                _context.DiariosCampo.Remove(diarioCampo);
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
+            if (diarioCampo == null)
+                return RedirectToAction(nameof(Index));
+
+            var comunidadeId = diarioCampo.FkIdComunidade;
+            _context.DiariosCampo.Remove(diarioCampo);
+            await _context.SaveChangesAsync();
+            this.AvisarSucesso("Diário de campo excluído.");
+            return RedirectToAction(nameof(Index), new { comunidadeId });
         }
 
         // ==========================================================
@@ -307,8 +317,29 @@ namespace Empodera.Controllers
             return _context.DiariosCampo.Any(e => e.IdDCampo == id);
         }
 
+        // Data obrigatória e não futura; relato obrigatório (a tela marca os dois com *).
+        private void ValidarCampos(DiarioCampo diario)
+        {
+            var nomeData = nameof(DiarioCampo.Data);
+            var dataComErro = ModelState.TryGetValue(nomeData, out var estado) && estado.Errors.Count > 0;
+            ModelState.Remove(nomeData);
+            if (dataComErro || diario.Data == default)
+                ModelState.AddModelError(nomeData, Empodera.Services.Validacao.ValidacaoCadastros.Obrigatorio(nomeData));
+            else if (diario.Data.Date > DateTime.Today)
+                ModelState.AddModelError(nomeData, string.Format(Empodera.Services.Validacao.MensagensValidacao.DataFutura,
+                    Empodera.Services.Validacao.ValidacaoAmigavelProvider.NomeDoCampo(nomeData)));
+
+            ModelState.Remove(nameof(DiarioCampo.Descricao));
+            diario.Descricao = diario.Descricao?.Trim() ?? string.Empty;
+            if (diario.Descricao.Length == 0)
+                ModelState.AddModelError(nameof(DiarioCampo.Descricao), "Escreva o relato do diário.");
+            else if (diario.Descricao.Length > 8000)
+                ModelState.AddModelError(nameof(DiarioCampo.Descricao), "O relato pode ter no máximo 8000 caracteres.");
+        }
+
         private async Task ValidarReferenciasAsync(int comunidadeId, int[] eixosSelecionados)
         {
+            ModelState.Remove(nameof(DiarioCampo.FkIdComunidade));
             if (!await _context.Comunidades.AnyAsync(c => c.Id_Comunidade == comunidadeId))
                 ModelState.AddModelError(nameof(DiarioCampo.FkIdComunidade), "Selecione uma comunidade válida.");
 

@@ -1,3 +1,4 @@
+using Empodera.Services;
 using Empodera.Data;
 using Empodera.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -78,6 +79,7 @@ public class PersonalProcessController : Controller
             .ToList();
         _context.DiariosProcessoPessoal.Add(diario);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Registro salvo com sucesso.");
         return RedirectToAction(nameof(Index), new { atorId = diario.FK_id_Atores });
     }
 
@@ -139,6 +141,7 @@ public class PersonalProcessController : Controller
             .Select(eixoId => new DiarioProcessoEixo { FkIdDiarioProcesso = id, FkIdEixo = eixoId })
             .ToList();
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit), new { id = persisted.IdDiarioProcesso });
     }
 
@@ -155,6 +158,7 @@ public class PersonalProcessController : Controller
         var actorId = diario.FK_id_Atores;
         _context.DiariosProcessoPessoal.Remove(diario);
         await _context.SaveChangesAsync();
+        this.AvisarSucesso("Registro excluído.");
         return RedirectToAction(nameof(Index), new { atorId = actorId });
     }
 

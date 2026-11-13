@@ -21,7 +21,6 @@
 
     <form asp-action="Create" method="post" class="main-form">
         @Html.AntiForgeryToken()
-        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
         <partial name="_CamposDiario" />
 

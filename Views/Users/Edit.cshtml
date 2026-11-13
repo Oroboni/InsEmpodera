@@ -26,12 +26,6 @@
             </h2>
         </div>
 
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger" role="alert">
-                @ViewBag.ErrorMessage
-            </div>
-        }
 
         <div class="section-label">Informações Básicas</div>
 
@@ -91,7 +85,7 @@
             <div class="input-content">
                 <label asp-for="Senha">Nova senha <span class="text-muted">(opcional)</span></label>
                 <input asp-for="Senha" type="password" class="clean-input" placeholder="Deixe vazio para manter a atual"
-                    minlength="6" maxlength="100" autocomplete="new-password" disabled
+                    minlength="8" maxlength="100" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="Pelo menos 8 caracteres, com letra maiúscula, letra minúscula, número e símbolo." autocomplete="new-password" disabled
                     data-locked="@((!canManageIdentity).ToString().ToLowerInvariant())">
                 <small class="text-muted" style="margin-top: 4px; display: block;">Preencha somente quando quiser trocar a senha.</small>
             </div>
@@ -132,7 +126,7 @@
                         <option value="">Selecione</option>
                         <option value="2">Feminino</option>
                         <option value="1">Masculino</option>
-                        <option value="">Não declarado</option>
+                        <option value="0">Não declarado</option>
                         <option value="3">Transgênero</option>
                     </select>
                     <i class="fa-solid fa-chevron-down dropdown-icon"></i>

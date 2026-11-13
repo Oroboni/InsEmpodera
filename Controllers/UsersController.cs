@@ -110,7 +110,8 @@ public class UsersController : Controller
         return View(new Usuario
         {
             Ativo = "S",
-            FkIdPerfil = PodePerfis!.FkIdPerfil,
+            // Admin escolhe o perfil (nada pré-selecionado); quem não é admin só cria no próprio perfil.
+            FkIdPerfil = CanManageIdentity(PodePerfis) ? 0 : PodePerfis!.FkIdPerfil,
             DtNascimento = DateTime.Today.AddYears(-18)
         });
     }
@@ -136,6 +137,9 @@ public class UsersController : Controller
 
         usuario.Foto = null; // a foto só muda pelo envio validado (fotoArquivo), nunca pelo campo do formulário
         NormalizeEditableFields(usuario);
+        // A validação desta tela é a de ValidateEditableFieldsAsync; campos internos do Identity
+        // (UserName, NormalizedEmail...) não vêm do formulário e não devem aparecer como erro.
+        ModelState.Clear();
         var validationError = await ValidateEditableFieldsAsync(usuario, requirePassword: true)
             ?? FotoUsuarioService.Validar(fotoArquivo);
         if (validationError != null)
@@ -262,6 +266,9 @@ public class UsersController : Controller
 
         usuario.Foto = usuariobd.Foto;
         NormalizeEditableFields(usuario);
+        // A validação desta tela é a de ValidateEditableFieldsAsync; campos internos do Identity
+        // (UserName, NormalizedEmail...) não vêm do formulário e não devem aparecer como erro.
+        ModelState.Clear();
         var validationError = await ValidateEditableFieldsAsync(usuario, requirePassword: false)
             ?? FotoUsuarioService.Validar(fotoArquivo);
         if (validationError != null)
@@ -496,10 +503,16 @@ public class UsersController : Controller
             return "Informe uma data de nascimento válida.";
         if (requirePassword && string.IsNullOrWhiteSpace(user.Senha))
             return "Informe uma senha.";
+        if (!string.IsNullOrEmpty(user.Senha) && !SenhaForte(user.Senha))
+            return "A senha deve ter pelo menos 8 caracteres, com letra maiúscula, letra minúscula, número e símbolo.";
         if (!await _context.Perfis.AnyAsync(profile => profile.IdPerfil == user.FkIdPerfil))
             return "Selecione um perfil de acesso válido.";
         return null;
     }
+
+    private static bool SenhaForte(string senha) =>
+        senha.Length >= 8 && senha.Any(char.IsUpper) && senha.Any(char.IsLower)
+        && senha.Any(char.IsDigit) && senha.Any(c => !char.IsLetterOrDigit(c));
 
     private static void NormalizeEditableFields(Usuario user)
     {

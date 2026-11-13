@@ -59,7 +59,7 @@
 <div class="modern-container">
     <div class="header-section">
         <h2>
-            <a asp-controller="DiarioCampo" asp-action="Index" class="text-primary">Diários de Campo</a>
+            <a asp-controller="DiarioCampo" asp-action="Index" asp-route-comunidadeId="@Model.FkIdComunidade" class="text-primary">Diários de Campo</a>
             <span class="separator">></span>
             <strong class="text-muted">Detalhes do Registro</strong>
         </h2>
@@ -202,7 +202,7 @@
     <div class="purple-divider"></div>
 
     <div class="buttons-container">
-        <a asp-action="Index" class="wizard-btn btn-prev">
+        <a asp-action="Index" asp-route-comunidadeId="@Model.FkIdComunidade" class="wizard-btn btn-prev">
             <i class="fa-solid fa-arrow-left"></i> Voltar
         </a>
         

@@ -22,12 +22,6 @@
             </h2>
         </div>
 
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger" role="alert">
-                @ViewBag.ErrorMessage
-            </div>
-        }
 
         <div class="section-label">Informações Básicas</div>
 
@@ -81,7 +75,7 @@
                 </div>
                 <div class="input-content">
                     <label asp-for="Senha">Senha <span class="text-danger">*</span></label>
-                    <input asp-for="Senha" type="password" class="clean-input" placeholder="Digite a senha" required minlength="6" maxlength="100" autocomplete="new-password" />
+                    <input asp-for="Senha" type="password" class="clean-input" placeholder="Digite a senha" required minlength="8" maxlength="100" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="Pelo menos 8 caracteres, com letra maiúscula, letra minúscula, número e símbolo." autocomplete="new-password" />
                     <small class="text-muted">Use pelo menos 8 caracteres, com maiúscula, minúscula, número e símbolo.</small>
                 </div>
         </div>
@@ -102,7 +96,7 @@
                         <option value="">Selecione</option>
                         <option value="2">Feminino</option>
                         <option value="1">Masculino</option>
-                        <option value="">Não declarado</option>
+                        <option value="0">Não declarado</option>
                         <option value="3">Transgênero</option>
                     </select>
                 </div>

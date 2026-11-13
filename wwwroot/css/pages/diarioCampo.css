@@ -989,12 +989,19 @@ input[type="file"] {
     color: var(--color-primary-dark);
 }
 .selected-actors button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
     border: 0;
-    background: transparent;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.06);
     color: var(--color-primary-600);
     cursor: pointer;
-    text-decoration: underline;
 }
+.selected-actors button:hover { background: rgb(0 0 0 / 0.12); }
+.dica-campo { display: block; margin-top: .45rem; font-size: .78rem; color: var(--color-gray-500, #6b7280); }
 .input-card[data-axis-picker] { overflow: visible; position: relative; z-index: 20; }
 [data-axis-picker] .eixos-tag-container { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; margin-bottom: 8px; padding: 9px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
 [data-axis-picker] .tag-item { display: inline-flex; align-items: center; gap: 7px; padding: 4px 10px; border-radius: 16px; font-size: .8rem; font-weight: 600; }

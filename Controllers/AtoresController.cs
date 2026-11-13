@@ -1,3 +1,4 @@
+using Empodera.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Empodera.Models;
@@ -52,7 +53,10 @@ public class AtoresController : Controller
 
         ViewBag.qgenero = _context.Atores.Select(a => a.Genero).Distinct().ToList();
 
-        var Atores = _context.Atores.Where(a => a.Ativo != "N").ToList();
+        // Ordem estável (nome, depois id): antes a lista vinha na ordem do banco e mudava entre acessos.
+        var Atores = _context.Atores.Where(a => a.Ativo != "N")
+            .OrderBy(a => a.Nome).ThenBy(a => a.IdAtores)
+            .ToList();
         return View(Atores);
     }
 
@@ -138,6 +142,7 @@ public class AtoresController : Controller
             return View("AtorCriado", ator);
         }
 
+        this.AvisarSucesso("Ator cadastrado com sucesso.");
         return RedirectToAction("Index", "Atores");
     }
 
@@ -246,6 +251,7 @@ public class AtoresController : Controller
 
         await _context.SaveChangesAsync();
 
+        this.AvisarSucesso("Alterações salvas com sucesso.");
         return RedirectToAction(nameof(Edit), new { id });
     }
 
@@ -278,6 +284,7 @@ public class AtoresController : Controller
             ator.Ativo = "N";
             _context.Atores.Update(ator);
             await _context.SaveChangesAsync();
+            this.AvisarSucesso("Ator excluído.");
             return RedirectToAction("Index", "Atores");
         }
         return RedirectToAction("Index", "Atores");

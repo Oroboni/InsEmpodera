@@ -1,3 +1,5 @@
+using Empodera.Services;
+using Empodera.Services.Validacao;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +18,7 @@ namespace Empodera.Controllers
         }
 
         // GET: FichaPrimeiroContato
-        public async Task<IActionResult> Index(string search, string status, int? comunidade)
+        public async Task<IActionResult> Index(string? search, string? status, int? comunidade)
         {
             if (HttpContext.Session.GetString("Email") == null)
             {
@@ -90,24 +92,7 @@ namespace Empodera.Controllers
                 return RedirectToAction("Index", "FichaPrimeiroContato");
             }
 
-            // Filtrar atores ativos
-            ViewBag.Atores = new SelectList(
-                _context.Atores
-                    .Where(a => a.Ativo == "S")  // Filtra apenas atores ativos
-                    .OrderBy(a => a.Nome),
-                "IdAtores",
-                "Nome"
-            );
-
-            // Filtrar comunidades ativas
-            ViewBag.ComunidadesList = new SelectList(
-                _context.Comunidades
-                    .Where(c => c.Ativo == "S")
-                    .OrderBy(c => c.Nome),
-                "Id_Comunidade",
-                "Nome"
-            );
-
+            CarregarListas(null);
             return View();
         }
 
@@ -134,6 +119,12 @@ namespace Empodera.Controllers
             if (!PodeDiario.CanCreate("Ficha1Contato"))
             {
                 return RedirectToAction("Index", "FichaPrimeiroContato");
+            }
+
+            if (!await ValidarFichaAsync(ficha))
+            {
+                CarregarListas(ficha, SelectedCondicoes, SelectedPeticoes, SelectedRespostas, SelectedResultados);
+                return View(ficha);
             }
 
             ficha.DtCriacao = DateTime.Now;
@@ -198,7 +189,67 @@ namespace Empodera.Controllers
             }
 
             await _context.SaveChangesAsync();
+            this.AvisarSucesso("Ficha salva com sucesso.");
             return RedirectToAction(nameof(Index));
+        }
+
+        // Comunidades e atores ativos dos formulários; cada ator leva as comunidades dele (filtro na tela).
+        private void CarregarListas(FichaPrimeiroContato? ficha,
+            List<string>? condicoes = null, List<string>? peticoes = null,
+            List<string>? respostas = null, List<string>? resultados = null)
+        {
+            ViewBag.Atores = new SelectList(_context.Atores.OrderBy(a => a.Nome), "IdAtores", "Nome", ficha?.FK_id_Atores);
+            ViewBag.AtoresComunidades = _context.AtorComunidades.AsNoTracking()
+                .Where(ac => ac.Ator.Ativo != "N")
+                .Select(ac => new { ac.FK_id_Atores, ac.FkIdComunidade })
+                .AsEnumerable()
+                .GroupBy(ac => ac.FK_id_Atores)
+                .ToDictionary(g => g.Key, g => string.Join(",", g.Select(ac => ac.FkIdComunidade)));
+            ViewBag.ComunidadesList = new SelectList(_context.Comunidades.OrderBy(c => c.Nome), "Id_Comunidade", "Nome", ficha?.FkIdComunidade);
+            ViewBag.SelectedCondicoes = condicoes ?? new List<string>();
+            ViewBag.SelectedPeticoes = peticoes ?? new List<string>();
+            ViewBag.SelectedRespostas = respostas ?? new List<string>();
+            ViewBag.SelectedResultados = resultados ?? new List<string>();
+        }
+
+        // Regras da ficha no servidor (antes, uma ficha incompleta estourava erro 500 no banco).
+        private async Task<bool> ValidarFichaAsync(FichaPrimeiroContato ficha)
+        {
+            var errosDeConversao = ModelState
+                .Where(item => item.Key is nameof(FichaPrimeiroContato.DtContato) or nameof(FichaPrimeiroContato.HoraContato)
+                    && item.Value?.Errors.Count > 0)
+                .Select(item => item.Key)
+                .ToHashSet();
+            ModelState.Clear();
+
+            await ValidacaoCadastros.ComunidadeAtivaAsync(_context, ModelState, ficha.FkIdComunidade, nameof(FichaPrimeiroContato.FkIdComunidade));
+            if (ficha.FK_id_Atores <= 0 || !await _context.Atores.AnyAsync(a => a.IdAtores == ficha.FK_id_Atores))
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.FK_id_Atores), ValidacaoCadastros.Obrigatorio(nameof(FichaPrimeiroContato.FK_id_Atores)));
+
+            if (ficha.DtContato == default || errosDeConversao.Contains(nameof(FichaPrimeiroContato.DtContato)))
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.DtContato), ValidacaoCadastros.Obrigatorio(nameof(FichaPrimeiroContato.DtContato)));
+            else if (ficha.DtContato.Date > DateTime.Today)
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.DtContato),
+                    string.Format(MensagensValidacao.DataFutura, ValidacaoAmigavelProvider.NomeDoCampo(nameof(FichaPrimeiroContato.DtContato))));
+            if (errosDeConversao.Contains(nameof(FichaPrimeiroContato.HoraContato)) || (HttpContext?.Request.HasFormContentType == true && string.IsNullOrWhiteSpace(Request.Form["HoraContato"])))
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.HoraContato), ValidacaoCadastros.Obrigatorio(nameof(FichaPrimeiroContato.HoraContato)));
+
+            if (string.IsNullOrWhiteSpace(ficha.CEstabeleceu))
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.CEstabeleceu), "Informe como o contato foi estabelecido.");
+            if (string.IsNullOrWhiteSpace(ficha.NovoParceiro))
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.NovoParceiro), "Informe se é um novo parceiro.");
+            if (string.IsNullOrWhiteSpace(ficha.FornecidoParceiro))
+                ModelState.AddModelError(nameof(FichaPrimeiroContato.FornecidoParceiro), "Informe se o contato foi fornecido por um parceiro.");
+
+            // Tamanhos e intervalos declarados no modelo (StringLength, Range).
+            var resultados = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            System.ComponentModel.DataAnnotations.Validator.TryValidateObject(
+                ficha, new System.ComponentModel.DataAnnotations.ValidationContext(ficha), resultados, validateAllProperties: true);
+            foreach (var r in resultados)
+                foreach (var membro in r.MemberNames.DefaultIfEmpty(string.Empty))
+                    ModelState.AddModelError(membro, r.ErrorMessage ?? string.Empty);
+
+            return ModelState.IsValid;
         }
 
         // GET: FichaPrimeiroContato/Edit/5
@@ -228,30 +279,12 @@ namespace Empodera.Controllers
 
             if (ficha == null) return NotFound();
 
-            // Filtrar atores ativos
-            ViewBag.Atores = new SelectList(
-                _context.Atores
-                    .Where(a => a.Ativo == "S")
-                    .OrderBy(a => a.Nome),
-                "IdAtores",
-                "Nome",
-                ficha.FK_id_Atores
-            );
-
-            // Filtrar comunidades ativas
-            ViewBag.ComunidadesList = new SelectList(
-                _context.Comunidades
-                    .Where(c => c.Ativo == "S")
-                    .OrderBy(c => c.Nome),
-                "Id_Comunidade",
-                "Nome",
-                ficha.FkIdComunidade
-            );
-
-            ViewBag.SelectedCondicoes = ficha.FichaCondicoes?.Select(c => c.Cond).ToList() ?? new List<string>();
-            ViewBag.SelectedPeticoes = ficha.FichaPeticoes?.Select(p => p.Pet).ToList() ?? new List<string>();
-            ViewBag.SelectedRespostas = ficha.FichaRespostas?.Select(r => r.Resp).ToList() ?? new List<string>();
-            ViewBag.SelectedResultados = ficha.FichaResultados?.Select(res => res.Result).ToList() ?? new List<string>();
+            CarregarListas(ficha,
+                ficha.FichaCondicoes?.Select(c => c.Cond).ToList(),
+                ficha.FichaPeticoes?.Select(p => p.Pet).ToList(),
+                ficha.FichaRespostas?.Select(r => r.Resp).ToList(),
+                ficha.FichaResultados?.Select(res => res.Result).ToList());
+            ViewBag.NomeAtor = await _context.Atores.Where(a => a.IdAtores == ficha.FK_id_Atores).Select(a => a.Nome).FirstOrDefaultAsync();
 
             return View(ficha);
         }
@@ -284,6 +317,13 @@ namespace Empodera.Controllers
 
             if (id != ficha.IdFicha)
                 return NotFound();
+
+            if (!await ValidarFichaAsync(ficha))
+            {
+                CarregarListas(ficha, SelectedCondicoes, SelectedPeticoes, SelectedRespostas, SelectedResultados);
+                ViewBag.NomeAtor = await _context.Atores.Where(a => a.IdAtores == ficha.FK_id_Atores).Select(a => a.Nome).FirstOrDefaultAsync();
+                return View(ficha);
+            }
 
             try
             {
@@ -401,6 +441,7 @@ namespace Empodera.Controllers
                 throw;
             }
 
+            this.AvisarSucesso("Alterações salvas com sucesso.");
             return RedirectToAction(nameof(Edit), new { id });
         }
 
@@ -432,6 +473,7 @@ namespace Empodera.Controllers
             ficha.DtModificacao = DateTime.Now;
 
             await _context.SaveChangesAsync();
+            this.AvisarSucesso("Ficha concluída.");
 
             if (IsSafeLocalReturnUrl(returnUrl))
                 return LocalRedirect(returnUrl);
@@ -467,6 +509,7 @@ namespace Empodera.Controllers
             ficha.DtModificacao = DateTime.Now;
 
             await _context.SaveChangesAsync();
+            this.AvisarSucesso("Ficha marcada como abandonada.");
 
             if (IsSafeLocalReturnUrl(returnUrl))
                 return LocalRedirect(returnUrl);
@@ -525,6 +568,7 @@ namespace Empodera.Controllers
             {
                 _context.FichasPrimeiroContato.Remove(ficha);
                 await _context.SaveChangesAsync();
+                this.AvisarSucesso("Ficha excluída.");
             }
 
             return RedirectToAction(nameof(Index));

@@ -174,6 +174,18 @@
     }
 
     <!-- Mensagem quando nenhum resultado for encontrado -->
+    @if (Model != null && Model.Count() > 0)
+    {
+        <div class="lista-paginacao" id="atoresPaginacao">
+            <span class="lista-paginacao-contador" aria-live="polite">
+                Mostrando <strong id="atoresMostrando">0</strong> / <strong id="atoresTotal">0</strong>
+            </span>
+            <button type="button" class="wizard-btn btn-prev lista-paginacao-mais" id="atoresMostrarMais">
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Mostrar mais
+            </button>
+        </div>
+    }
+
     <div class="no-records" id="noResultsMessage" style="display: none;">
         <div class="no-records-icon">
             <i class="fas fa-search"></i>
@@ -185,47 +197,49 @@
 
 @section Scripts {
     <script>
+        // Busca sem acento e lista em páginas de 20 (antes todos os atores vinham de uma vez).
         document.addEventListener('DOMContentLoaded', function () {
+            const POR_PAGINA = 20;
             const searchInput = document.getElementById('searchInput');
             const atoresGrid = document.getElementById('atoresGrid');
             const noResultsMessage = document.getElementById('noResultsMessage');
-            const atorItems = document.querySelectorAll('.ator-item');
+            const atorItems = Array.from(document.querySelectorAll('.ator-item'));
+            const btnMais = document.getElementById('atoresMostrarMais');
+            const mostrando = document.getElementById('atoresMostrando');
+            const total = document.getElementById('atoresTotal');
+            const paginacao = document.getElementById('atoresPaginacao');
+            const semAcento = texto => (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+            let limite = POR_PAGINA;
 
             function filterAtores() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                let visibleCount = 0;
+                const searchTerm = semAcento(searchInput?.value);
+                const encontrados = atorItems.filter(item => semAcento(item.getAttribute('data-nome')).includes(searchTerm));
 
-                atorItems.forEach(item => {
-                    const nome = item.getAttribute('data-nome') || '';
-                    const matchesSearch = nome.includes(searchTerm);
+                atorItems.forEach(item => { item.style.display = 'none'; });
+                encontrados.slice(0, limite).forEach(item => { item.style.display = 'flex'; });
 
-                    if (matchesSearch) {
-                        item.style.display = 'flex';
-                        visibleCount++;
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-
-                if (visibleCount === 0 && atorItems.length > 0) {
-                    if (atoresGrid) atoresGrid.style.display = 'none';
-                    if (noResultsMessage) noResultsMessage.style.display = 'block';
-                } else {
-                    if (atoresGrid) atoresGrid.style.display = 'flex';
-                    if (noResultsMessage) noResultsMessage.style.display = 'none';
-                }
+                const nada = encontrados.length === 0 && atorItems.length > 0;
+                if (atoresGrid) atoresGrid.style.display = nada ? 'none' : 'flex';
+                if (noResultsMessage) noResultsMessage.style.display = nada ? 'block' : 'none';
+                if (paginacao) paginacao.hidden = nada;
+                if (mostrando) mostrando.textContent = Math.min(limite, encontrados.length);
+                if (total) total.textContent = encontrados.length;
+                if (btnMais) btnMais.hidden = encontrados.length <= limite;
             }
 
-            if (searchInput) {
-                searchInput.addEventListener('input', filterAtores);
+            btnMais?.addEventListener('click', () => { limite += POR_PAGINA; filterAtores(); });
 
+            if (searchInput) {
+                searchInput.addEventListener('input', () => { limite = POR_PAGINA; filterAtores(); });
                 searchInput.addEventListener('keydown', function (e) {
                     if (e.key === 'Escape') {
                         searchInput.value = '';
+                        limite = POR_PAGINA;
                         filterAtores();
                     }
                 });
             }
+            filterAtores();
         });
     </script>
 }

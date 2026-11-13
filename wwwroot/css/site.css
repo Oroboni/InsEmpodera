@@ -1049,12 +1049,13 @@ label:has(input[type="checkbox"]) {
     background-color: var(--color-primary-dark);
 }
 
+/* Salvar segue a mesma cor de ação principal em todas as telas (antes era quase preto). */
 .btn-save-final {
-    background-color: var(--color-primary-800);
+    background-color: var(--color-primary);
 }
 
 .btn-save-final:hover {
-    background-color: var(--color-success-dark);
+    background-color: var(--color-primary-dark);
 }
 
 /* ===== INPUT CARDS ===== */
@@ -2460,4 +2461,199 @@ input[type="checkbox"]:disabled + .radio-label {
 
 .header-section + .indicadores-toggle {
     margin-top: 0;
+}
+
+/* ===== AVISOS PADRÃO (Views/Shared/_AvisosDaPagina.cshtml) ===== */
+.aviso-formulario {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin: 0 0 var(--space-5, 20px);
+    padding: 16px 20px;
+    border-radius: 14px;
+    background: #FDECEC;
+    border: 1px solid #F5B5B5;
+    color: #8A1C1C;
+    font-size: 0.95rem;
+}
+.aviso-formulario > i { font-size: 1.25rem; margin-top: 2px; }
+.aviso-formulario-titulo { margin: 0 0 4px; font-weight: 600; }
+.aviso-formulario ul { margin: 0; padding-left: 18px; }
+.aviso-formulario li { margin: 2px 0; }
+.campo-com-erro,
+.input-card.campo-com-erro {
+    border-color: #D64545 !important;
+    box-shadow: 0 0 0 3px rgb(214 69 69 / 0.15) !important;
+}
+.input-validation-error { border-color: #D64545 !important; }
+.field-validation-error, .text-danger.field-validation-error { color: #B42318; font-size: 0.85rem; }
+
+.toast-area {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: min(420px, calc(100vw - 32px));
+}
+.toast-aviso {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+    animation: toast-entrada 0.25s ease-out;
+    transition: opacity 0.25s, transform 0.25s;
+}
+.toast-aviso.sucesso { background: var(--color-primary, #2B5748); }
+.toast-aviso.falha { background: #B42318; }
+.toast-aviso > span { flex: 1; }
+.toast-aviso.saindo { opacity: 0; transform: translateY(8px); }
+.toast-fechar {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    opacity: 0.8;
+}
+.toast-fechar:hover { opacity: 1; }
+@keyframes toast-entrada { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (max-width: 640px) {
+    .toast-area { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+}
+
+/* ===== Modal de exclusão: um só padrão em todas as telas =====
+   Cancelar neutro, ação destrutiva sempre vermelha, botões da mesma altura e largura. */
+#deleteConfirmationModal .modal-content { max-width: 440px; padding: 32px 28px 28px; }
+#deleteConfirmationModal .modal-icon {
+    width: 64px; height: 64px; font-size: 28px; margin: 0 auto 16px;
+    background: #FDECEC; color: #C62828;
+}
+#deleteConfirmationModal .modal-title,
+#deleteConfirmationModal h3 { font-size: 1.3rem; margin-bottom: 10px; }
+#deleteConfirmationModal .modal-text,
+#deleteConfirmationModal .modal-content > p { margin-bottom: 24px; font-size: 0.95rem; }
+#deleteConfirmationModal .button-container { width: 100%; }
+#deleteConfirmationModal .modal-actions,
+#deleteConfirmationModal .modal-content > div:has(> form) {
+    display: flex; gap: 12px; width: 100%; justify-content: stretch;
+}
+#deleteConfirmationModal .modal-actions > *,
+#deleteConfirmationModal .modal-content > div:has(> form) > * { flex: 1 1 0; min-width: 0; margin: 0; }
+#deleteConfirmationModal form { display: flex; margin: 0; }
+#deleteConfirmationModal button,
+#deleteConfirmationModal .wizard-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; min-width: 0; height: 46px; padding: 0 18px;
+    border-radius: 10px; font-weight: 600; font-size: 0.95rem;
+    box-shadow: none; transform: none; cursor: pointer;
+}
+#deleteConfirmationModal #cancelDeleteBtn,
+#deleteConfirmationModal .btn-modal-cancel {
+    background: #fff; color: var(--color-gray-700, #374151); border: 1px solid var(--color-gray-300, #d1d5db);
+}
+#deleteConfirmationModal #cancelDeleteBtn:hover,
+#deleteConfirmationModal .btn-modal-cancel:hover { background: var(--color-gray-50, #f9fafb); }
+#deleteConfirmationModal button[type="submit"],
+#deleteConfirmationModal .btn-modal-confirm,
+#deleteConfirmationModal .btn-delete {
+    background: #C62828; color: #fff; border: 1px solid #C62828;
+}
+#deleteConfirmationModal button[type="submit"]:hover,
+#deleteConfirmationModal .btn-modal-confirm:hover { background: #A61F1F; border-color: #A61F1F; }
+#deleteConfirmationModal button[type="submit"]:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 480px) {
+    #deleteConfirmationModal .modal-content { padding: 26px 18px 20px; }
+    #deleteConfirmationModal .modal-actions,
+    #deleteConfirmationModal .modal-content > div:has(> form) { flex-direction: column-reverse; }
+}
+/* Botão de excluir das telas: sempre vermelho (P1). */
+.wizard-btn.btn-delete { background: #C62828; color: #fff; }
+.wizard-btn.btn-delete:hover { background: #A61F1F; color: #fff; }
+
+/* ===== Indicadores no celular (R2): 2 por linha, cartões baixos e texto que não estoura ===== */
+.stats-card .card-title { overflow-wrap: anywhere; line-height: 1.1; }
+.stats-card .card-title.card-title-texto { font-size: clamp(1.25rem, 2.2vw, 1.75rem); }
+@media (max-width: 640px) {
+    .actions-grid:has(> .stats-card) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+    .actions-grid:has(> .stats-card) > .stats-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .actions-grid > .stats-card.action-card {
+        padding: 14px 14px 12px;
+        gap: 2px;
+        min-height: 0;
+        border-radius: 12px;
+    }
+    .actions-grid > .stats-card .card-title { font-size: 1.6rem; }
+    .actions-grid > .stats-card .card-title.card-title-texto { font-size: 1.1rem; }
+    .actions-grid > .stats-card .card-subtitle { font-size: .78rem; line-height: 1.25; }
+    .actions-grid > .stats-card .card-icons {
+        position: absolute; top: 12px; right: 12px; padding: 0; margin: 0;
+    }
+    .actions-grid > .stats-card .card-icons i { font-size: .95rem; opacity: .85; }
+    .action-card:hover { transform: none; }
+}
+
+/* ===== Matriz de permissões (perfis de acesso) no celular ===== */
+@media (max-width: 768px) {
+    .permission-table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .permission-table { min-width: 560px; }
+    .permission-table th:first-child,
+    .permission-table td:first-child {
+        position: sticky; left: 0; z-index: 1;
+        background: #fff; box-shadow: 1px 0 0 var(--color-gray-200, #e5e7eb);
+    }
+    .permission-table thead th:first-child { background: inherit; }
+}
+
+/* ===== Paginação "Mostrar mais" das listas ===== */
+.lista-paginacao {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap; margin: 16px 0 8px;
+}
+.lista-paginacao[hidden] { display: none; }
+.lista-paginacao-contador { font-size: .85rem; color: var(--color-gray-600, #4b5563); }
+.lista-paginacao-mais[hidden] { display: none; }
+@media (max-width: 480px) {
+    .lista-paginacao { flex-direction: column; align-items: stretch; text-align: center; }
+    .lista-paginacao-mais { width: 100%; justify-content: center; }
+}
+
+/* ===== Rodapé de formulários no celular (P7) =====
+   Com Editar/Excluir: linha 1 = ações do registro; linha 2 = Voltar e Próximo/Salvar. Nada espremido nem cortado. */
+@media (max-width: 640px) {
+    .buttons-container:has(.action-buttons-group) {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+    .buttons-container:has(.action-buttons-group) > .wizard-btn,
+    .buttons-container .action-buttons-group .wizard-btn {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+        white-space: nowrap;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .buttons-container .action-buttons-group {
+        grid-column: 1 / -1;
+        order: -1;
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+        margin: 0;
+    }
+    .buttons-container:has(.action-buttons-group) > .wizard-btn:only-of-type { grid-column: 1 / -1; }
 }

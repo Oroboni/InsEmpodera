@@ -172,7 +172,7 @@
                         <option value="">Selecione</option>
                         <option value="2">Feminino</option>
                         <option value="1">Masculino</option>
-                        <option value="">Não declarado</option>
+                        <option value="0">Não declarado</option>
                         <option value="3">Transgênero</option>
                     </select>
                 </div>
@@ -182,7 +182,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-calendar-day"></i></div>
                 <div class="input-content">
                     <label for="Idade">Idade</label>
-                    <input asp-for="Idade" type="number" min="0" max="120" class="clean-input" />
+                    <input asp-for="Idade" type="number" min="0" max="130" class="clean-input" />
                 </div>
             </div>
         </div>
@@ -194,7 +194,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="input-content">
                     <label for="PapelSocial1">Papel Social</label>
-                    <input id="PapelSocial1" name="PapelSocial1" asp-for="PapelSocial1" type="text" class="clean-input"
+                    <input list="papeis-sociais" id="PapelSocial1" name="PapelSocial1" asp-for="PapelSocial1" type="text" class="clean-input"
                         placeholder="Digite o papel social" />
                 </div>
             </div>
@@ -203,7 +203,7 @@
                 <div class="icon-box purple"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="input-content">
                     <label for="PapelSocial2">Papel Social (Adicional)</label>
-                    <input id="PapelSocial2" name="PapelSocial2" asp-for="PapelSocial2" type="text" class="clean-input"
+                    <input list="papeis-sociais" id="PapelSocial2" name="PapelSocial2" asp-for="PapelSocial2" type="text" class="clean-input"
                         placeholder="Digite outro papel social (opcional)" />
                 </div>
             </div>
@@ -217,6 +217,8 @@
                     maxlength="40" placeholder="Ex.: +1 202 555 0199" autocomplete="tel" />
             </div>
         </div>
+
+        <partial name="_PapeisSociais" />
 
         <div class="buttons-container">
             <a asp-controller="Comunidade" asp-action="AtoresVinculados" asp-route-id="@ViewBag.ComunidadeId" class="wizard-btn btn-prev">

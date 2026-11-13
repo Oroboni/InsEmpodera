@@ -157,6 +157,10 @@ public sealed class FirstContactCrudTests : ControllerTestBase
         Telefone = "11999990000",
         DtContato = new DateTime(2026, 8, 23),
         HoraContato = new TimeSpan(10, 30, 0),
+        // Campos obrigatórios da etapa 1 (a tela marca com * e o servidor agora confere).
+        CEstabeleceu = "Visita",
+        NovoParceiro = "Sim",
+        FornecidoParceiro = "Não",
         Status = "EmProgresso"
     };
 }

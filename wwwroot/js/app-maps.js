@@ -41,7 +41,13 @@ function initMapSelector(mapId, inputId, options = {}) {
     }
 
     // 1. Inicializa o Mapa
+    // A roda do mouse só dá zoom depois de clicar no mapa: rolar a página não fica "preso" nele.
     var map = L.map(mapId).setView([latitude, longitude], startZoom);
+    if (map.scrollWheelZoom && !isReadOnly) {
+        map.scrollWheelZoom.disable();
+        map.on('click', () => map.scrollWheelZoom.enable());
+        mapElement.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
+    }
     window.__empoderaMaps[mapId] = map;
 
     // Recalcula o mapa quando o contêiner muda de tamanho (fontes/CSS carregando, abas,
@@ -60,7 +66,10 @@ function initMapSelector(mapId, inputId, options = {}) {
 
     const ensureMarker = () => {
         if (!marker) {
-            marker = L.marker([latitude, longitude]).addTo(map);
+            marker = L.marker([latitude, longitude], { draggable: !isReadOnly }).addTo(map);
+            if (!isReadOnly && typeof marker.on === "function") {
+                marker.on('dragend', () => preencherPeloPino(marker.getLatLng()));
+            }
         }
         return marker;
     };
@@ -109,6 +118,45 @@ function initMapSelector(mapId, inputId, options = {}) {
         if (syncManual && manualInputId) {
             const manualInput = document.getElementById(manualInputId);
             setFieldValue(manualInput, value);
+        }
+    };
+
+    // Número digitado pela pessoa (ex.: "Rua das Flores, 120"); CEP e anos não contam.
+    const numeroDigitado = (texto) => {
+        const semCep = (texto || "").replace(/\b\d{5}-?\d{3}\b/g, " ");
+        const achado = semCep.match(/(?:,|\s)\s*(?:n[ºo°.]?\s*)?(\d{1,5}[A-Za-z]?)(?=\s*(?:,|-|$))/i);
+        return achado ? achado[1] : null;
+    };
+
+    // As sugestões vêm sem o número da casa: devolve o número logo após o nome da rua.
+    const manterNumero = (nome, digitado) => {
+        const numero = numeroDigitado(digitado);
+        if (!numero || !nome || new RegExp(`(^|[^\\d])${numero}([^\\d]|$)`).test(nome)) return nome;
+        const partes = nome.split(",");
+        partes[0] = `${partes[0].trim()}, ${numero}`;
+        return partes.join(",");
+    };
+
+    // Pino arrastado ou clique no mapa: busca o endereço daquele ponto (ajuste manual).
+    let pedidoReverso = 0;
+    const preencherPeloPino = async (latlng) => {
+        const pedido = ++pedidoReverso;
+        try {
+            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&addressdetails=1&lat=${latlng.lat}&lon=${latlng.lng}`;
+            const resposta = await fetch(url, { headers: { Accept: "application/json" } });
+            if (!resposta.ok || pedido !== pedidoReverso) return;
+            const dados = await resposta.json();
+            const a = dados.address || {};
+            const rua = [a.road || a.pedestrian || a.footway, a.house_number].filter(Boolean).join(", ");
+            const resto = [a.suburb || a.neighbourhood, a.city || a.town || a.village, a.state, a.postcode]
+                .filter(Boolean).join(", ");
+            const nome = [rua, resto].filter(Boolean).join(" - ") || dados.display_name;
+            if (!nome) return;
+            isSyncingManualInput = true;
+            updateInputValue(nome, true, true);
+            isSyncingManualInput = false;
+        } catch (e) {
+            // Sem rede ou serviço fora: o pino fica onde a pessoa colocou.
         }
     };
 
@@ -565,6 +613,7 @@ function initMapSelector(mapId, inputId, options = {}) {
             if (!suggestion) {
                 return;
             }
+            suggestion = { ...suggestion, name: manterNumero(suggestion.name, manualInput.value) };
 
             isSyncingManualInput = true;
             applyGeocodeResult(suggestion, true, true, true);
@@ -731,7 +780,6 @@ function initMapSelector(mapId, inputId, options = {}) {
     // 4. Clique no mapa (Opcional: move o pino manualmente)
     map.on('click', function(e) {
         ensureMarker().setLatLng(e.latlng);
-        // Nota: Para pegar o nome da rua pelo clique (Geocodificação Reversa)
-        // seria necessário uma chamada API extra. Por enquanto, movemos só o pino visual.
+        preencherPeloPino(e.latlng);
     });
 }

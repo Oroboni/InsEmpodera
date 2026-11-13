@@ -1,0 +1,25 @@
+@inject Empodera.Data.ApplicationDbContext Banco
+@using Microsoft.EntityFrameworkCore
+@* Sugestões de papel social já usados (o campo continua livre, mas evita variações da mesma coisa). *@
+@{
+    var papeis = await Banco.Atores.AsNoTracking()
+        .Where(a => a.PapelSocial1 != null && a.PapelSocial1 != "")
+        .Select(a => a.PapelSocial1!)
+        .Concat(Banco.Atores.AsNoTracking()
+            .Where(a => a.PapelSocial2 != null && a.PapelSocial2 != "")
+            .Select(a => a.PapelSocial2!))
+        .ToListAsync();
+    var unicos = papeis
+        .Select(p => p.Trim())
+        .Where(p => p.Length > 0)
+        .GroupBy(p => p, StringComparer.OrdinalIgnoreCase)
+        .OrderByDescending(g => g.Count()).ThenBy(g => g.Key)
+        .Select(g => g.First())
+        .Take(200);
+}
+<datalist id="papeis-sociais">
+    @foreach (var papel in unicos)
+    {
+        <option value="@papel"></option>
+    }
+</datalist>

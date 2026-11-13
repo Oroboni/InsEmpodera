@@ -84,6 +84,7 @@ public sealed class CommunityActorCrudHttpTests : IClassFixture<EmpoderaWebAppli
             await HttpFlowTestSupport.InDatabaseAsync(
                 _factory,
                 db => db.Atores
+                    .IgnoreQueryFilters()
                     .Where(item => item.IdAtores == actor.IdAtores)
                     .Select(item => item.Ativo)
                     .SingleAsync()));

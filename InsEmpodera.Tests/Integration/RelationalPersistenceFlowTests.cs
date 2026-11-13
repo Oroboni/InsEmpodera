@@ -32,8 +32,9 @@ public sealed class RelationalPersistenceFlowTests : ControllerTestBase
             DtModificacao = DateTime.UtcNow.AddYears(10)
         };
 
+        var axis = await CreateAxisAsync(); // a tela exige ao menos um eixo
         var result = await Attach(new AtividadesController(Db), userId: 2)
-            .Edit(activity.IdAtividade, payload, new List<int>(), community.Id_Comunidade);
+            .Edit(activity.IdAtividade, payload, new List<int> { axis.IdEixo }, community.Id_Comunidade);
 
         Assert.IsType<RedirectToActionResult>(result);
         var saved = await Db.Atividades.AsNoTracking().SingleAsync(item => item.IdAtividade == activity.IdAtividade);

@@ -299,4 +299,292 @@
     <value>Collapse or show the indicators</value>
     <comment>Source: Recolher ou mostrar os indicadores</comment>
   </data>
+  <data name='Ui_6bb7c76e875b85b8' xml:space='preserve'>
+    <value>Select the axes</value>
+    <comment>Source: Selecione os eixos</comment>
+  </data>
+  <data name='Ui_a923d5ef565a11e2' xml:space='preserve'>
+    <value>Select an actor</value>
+    <comment>Source: Selecione um ator</comment>
+  </data>
+  <data name='Ui_515dc4c9aac705d6' xml:space='preserve'>
+    <value>Select the actor's name</value>
+    <comment>Source: Selecione o nome do ator</comment>
+  </data>
+  <data name='Ui_255ac3041e6c3427' xml:space='preserve'>
+    <value>Select the community</value>
+    <comment>Source: Selecione a comunidade</comment>
+  </data>
+  <data name='Ui_02c5feb465ccb10c' xml:space='preserve'>
+    <value>Choose one or more actors; each chosen name appears below.</value>
+    <comment>Source: Escolha um ou mais atores; cada nome escolhido aparece abaixo.</comment>
+  </data>
+  <data name='Ui_837e0c964a33cb9c' xml:space='preserve'>
+    <value>Remove participant</value>
+    <comment>Source: Remover participante</comment>
+  </data>
+  <data name='Ui_111b013b8bb988ae' xml:space='preserve'>
+    <value>Remove axis</value>
+    <comment>Source: Remover eixo</comment>
+  </data>
+  <data name='Ui_07718341c39c94b8' xml:space='preserve'>
+    <value>Please review the fields below before saving:</value>
+    <comment>Source: Revise os campos abaixo antes de salvar:</comment>
+  </data>
+  <data name='Ui_f39dd9babf20effb' xml:space='preserve'>
+    <value>Close notice</value>
+    <comment>Source: Fechar aviso</comment>
+  </data>
+  <data name='Ui_177b0300e0a2c10e' xml:space='preserve'>
+    <value>Changes saved successfully.</value>
+    <comment>Source: Alterações salvas com sucesso.</comment>
+  </data>
+  <data name='Ui_b8d466064347b7c4' xml:space='preserve'>
+    <value>Community created successfully.</value>
+    <comment>Source: Comunidade criada com sucesso.</comment>
+  </data>
+  <data name='Ui_7b5cd30ea061705e' xml:space='preserve'>
+    <value>Community deleted.</value>
+    <comment>Source: Comunidade excluída.</comment>
+  </data>
+  <data name='Ui_b354ea42032f1e30' xml:space='preserve'>
+    <value>Activity created successfully.</value>
+    <comment>Source: Atividade criada com sucesso.</comment>
+  </data>
+  <data name='Ui_ae846f98af06dd33' xml:space='preserve'>
+    <value>Activity deleted.</value>
+    <comment>Source: Atividade excluída.</comment>
+  </data>
+  <data name='Ui_21a84a37d16de7f9' xml:space='preserve'>
+    <value>Actor registered successfully.</value>
+    <comment>Source: Ator cadastrado com sucesso.</comment>
+  </data>
+  <data name='Ui_5191ce062efdeed5' xml:space='preserve'>
+    <value>Actor deleted.</value>
+    <comment>Source: Ator excluído.</comment>
+  </data>
+  <data name='Ui_e32b789bf198f6cd' xml:space='preserve'>
+    <value>Actor removed from the community.</value>
+    <comment>Source: Ator removido da comunidade.</comment>
+  </data>
+  <data name='Ui_c6d1e7c08ce5541c' xml:space='preserve'>
+    <value>Resource registered successfully.</value>
+    <comment>Source: Recurso cadastrado com sucesso.</comment>
+  </data>
+  <data name='Ui_b9990e766ad01bf5' xml:space='preserve'>
+    <value>Resource deleted.</value>
+    <comment>Source: Recurso excluído.</comment>
+  </data>
+  <data name='Ui_cd9dd67928edcb0b' xml:space='preserve'>
+    <value>Assessment saved successfully.</value>
+    <comment>Source: Avaliação salva com sucesso.</comment>
+  </data>
+  <data name='Ui_398ad6edeecd0c21' xml:space='preserve'>
+    <value>Assessment deleted.</value>
+    <comment>Source: Avaliação excluída.</comment>
+  </data>
+  <data name='Ui_de50e8c743a1f2d0' xml:space='preserve'>
+    <value>Record saved successfully.</value>
+    <comment>Source: Registro salvo com sucesso.</comment>
+  </data>
+  <data name='Ui_b88a59395ed7b57c' xml:space='preserve'>
+    <value>Record deleted.</value>
+    <comment>Source: Registro excluído.</comment>
+  </data>
+  <data name='Ui_6b149e0081992bc0' xml:space='preserve'>
+    <value>Profile created successfully.</value>
+    <comment>Source: Perfil criado com sucesso.</comment>
+  </data>
+  <data name='Ui_f7b80741e75183e8' xml:space='preserve'>
+    <value>Profile deleted.</value>
+    <comment>Source: Perfil excluído.</comment>
+  </data>
+  <data name='Ui_74ad01a144d8703d' xml:space='preserve'>
+    <value>Form saved successfully.</value>
+    <comment>Source: Ficha salva com sucesso.</comment>
+  </data>
+  <data name='Ui_289e2133c8ce762e' xml:space='preserve'>
+    <value>Form completed.</value>
+    <comment>Source: Ficha concluída.</comment>
+  </data>
+  <data name='Ui_e56a6696c02d63b0' xml:space='preserve'>
+    <value>Form marked as abandoned.</value>
+    <comment>Source: Ficha marcada como abandonada.</comment>
+  </data>
+  <data name='Ui_93559d5bcc09b034' xml:space='preserve'>
+    <value>Form deleted.</value>
+    <comment>Source: Ficha excluída.</comment>
+  </data>
+  <data name='Ui_d5c3c45efaece0e8' xml:space='preserve'>
+    <value>Field diary saved successfully.</value>
+    <comment>Source: Diário de campo salvo com sucesso.</comment>
+  </data>
+  <data name='Ui_a3107245042ac767' xml:space='preserve'>
+    <value>Field diary deleted.</value>
+    <comment>Source: Diário de campo excluído.</comment>
+  </data>
+  <data name='Ui_5ebf7a0536245092' xml:space='preserve'>
+    <value>Tell how the contact was established.</value>
+    <comment>Source: Informe como o contato foi estabelecido.</comment>
+  </data>
+  <data name='Ui_0ad584806458c9be' xml:space='preserve'>
+    <value>Tell whether this is a new partner.</value>
+    <comment>Source: Informe se é um novo parceiro.</comment>
+  </data>
+  <data name='Ui_bdf1ad06525aa334' xml:space='preserve'>
+    <value>Tell whether the contact was provided by a partner.</value>
+    <comment>Source: Informe se o contato foi fornecido por um parceiro.</comment>
+  </data>
+  <data name='Ui_c2fbbae2b9348e35' xml:space='preserve'>
+    <value>Write the diary report.</value>
+    <comment>Source: Escreva o relato do diário.</comment>
+  </data>
+  <data name='Ui_99faf3e7253e8f64' xml:space='preserve'>
+    <value>The report can have at most 8000 characters.</value>
+    <comment>Source: O relato pode ter no máximo 8000 caracteres.</comment>
+  </data>
+  <data name='Ui_0e84a2413faa5987' xml:space='preserve'>
+    <value>The password must have at least 8 characters, with an uppercase letter, a lowercase letter, a number and a symbol.</value>
+    <comment>Source: A senha deve ter pelo menos 8 caracteres, com letra maiúscula, letra minúscula, número e símbolo.</comment>
+  </data>
+  <data name='Ui_bff637141019c19f' xml:space='preserve'>
+    <value>Enter the user's name.</value>
+    <comment>Source: Informe o nome do usuário.</comment>
+  </data>
+  <data name='Ui_6172057bb308af49' xml:space='preserve'>
+    <value>Enter a valid e-mail.</value>
+    <comment>Source: Informe um e-mail válido.</comment>
+  </data>
+  <data name='Ui_57e3ad4b8f1dc054' xml:space='preserve'>
+    <value>Enter the user's occupation.</value>
+    <comment>Source: Informe a ocupação do usuário.</comment>
+  </data>
+  <data name='Ui_90f3031213999a0a' xml:space='preserve'>
+    <value>Enter a valid date of birth.</value>
+    <comment>Source: Informe uma data de nascimento válida.</comment>
+  </data>
+  <data name='Ui_53fba15c5a66e2a6' xml:space='preserve'>
+    <value>Enter a password.</value>
+    <comment>Source: Informe uma senha.</comment>
+  </data>
+  <data name='Ui_6466e07e7ba16058' xml:space='preserve'>
+    <value>Select a valid access profile.</value>
+    <comment>Source: Selecione um perfil de acesso válido.</comment>
+  </data>
+  <data name='Ui_f5c2ee444cb0bcb8' xml:space='preserve'>
+    <value>E-mail already registered.</value>
+    <comment>Source: Email já cadastrado.</comment>
+  </data>
+  <data name='Ui_c28a571dd6d0dc61' xml:space='preserve'>
+    <value>The status changes in the community list, with the “Start process” button.</value>
+    <comment>Source: O status muda na lista de comunidades, pelo botão “Iniciar processo”.</comment>
+  </data>
+  <data name='Ui_e59e9b57131bd08f' xml:space='preserve'>
+    <value>Delete record?</value>
+    <comment>Source: Excluir registro?</comment>
+  </data>
+  <data name='Ui_c890a7195f9f50c4' xml:space='preserve'>
+    <value>Form of</value>
+    <comment>Source: Ficha de</comment>
+  </data>
+  <data name='Ui_aae7fecaa7eac914' xml:space='preserve'>
+    <value>Leave form</value>
+    <comment>Source: Sair da ficha</comment>
+  </data>
+  <data name='Ui_b54c9d9c7d28723e' xml:space='preserve'>
+    <value>Report / Description</value>
+    <comment>Source: Relato / Descrição</comment>
+  </data>
+  <data name='Ui_829c38bbfe6258d5' xml:space='preserve'>
+    <value>Page not found</value>
+    <comment>Source: Página não encontrada</comment>
+  </data>
+  <data name='Ui_a8cd2238b10b32fb' xml:space='preserve'>
+    <value>The address does not exist or the record was deleted.</value>
+    <comment>Source: O endereço não existe ou o registro foi excluído.</comment>
+  </data>
+  <data name='Ui_c95202fb282623a0' xml:space='preserve'>
+    <value>Access not allowed</value>
+    <comment>Source: Acesso não permitido</comment>
+  </data>
+  <data name='Ui_56eb39d5d5ea5776' xml:space='preserve'>
+    <value>Your profile is not allowed to use this screen. Talk to the EcoRedes administrator.</value>
+    <comment>Source: Seu perfil não tem permissão para esta tela. Fale com o administrador do EcoRedes.</comment>
+  </data>
+  <data name='Ui_902666494364e729' xml:space='preserve'>
+    <value>Invalid request</value>
+    <comment>Source: Pedido inválido</comment>
+  </data>
+  <data name='Ui_23ca3d08adb33cd7' xml:space='preserve'>
+    <value>The data sent could not be processed. Go back and try again.</value>
+    <comment>Source: Os dados enviados não puderam ser processados. Volte e tente de novo.</comment>
+  </data>
+  <data name='Ui_15b72ac9051db55d' xml:space='preserve'>
+    <value>Too many attempts</value>
+    <comment>Source: Muitas tentativas</comment>
+  </data>
+  <data name='Ui_9cb038d54febdb3f' xml:space='preserve'>
+    <value>Wait a few minutes before trying again.</value>
+    <comment>Source: Aguarde alguns minutos antes de tentar de novo.</comment>
+  </data>
+  <data name='Ui_8851485f672f4ea0' xml:space='preserve'>
+    <value>Something went wrong</value>
+    <comment>Source: Algo deu errado</comment>
+  </data>
+  <data name='Ui_babcaeb2ba0273d2' xml:space='preserve'>
+    <value>The action could not be completed. What was already saved was not lost. Try again; if the error continues, tell the team and give them the code below.</value>
+    <comment>Source: Não foi possível concluir a ação. O que já estava salvo não foi perdido. Tente de novo; se o erro continuar, avise a equipe e informe o código abaixo.</comment>
+  </data>
+  <data name='Ui_ef49e5940ae92b65' xml:space='preserve'>
+    <value>Go to home</value>
+    <comment>Source: Ir para o início</comment>
+  </data>
+  <data name='Ui_56f343dab3cbb31d' xml:space='preserve'>
+    <value>Go to login</value>
+    <comment>Source: Ir para o login</comment>
+  </data>
+  <data name='Ui_f6db53b5fe4c6bb3' xml:space='preserve'>
+    <value>Support code:</value>
+    <comment>Source: Código para suporte:</comment>
+  </data>
+  <data name='Ui_d07701c9462afe38' xml:space='preserve'>
+    <value>Personal Process Diary</value>
+    <comment>Source: Diário de Processo Pessoal</comment>
+  </data>
+  <data name='Ui_7c1679025ff67cf0' xml:space='preserve'>
+    <value>Showing</value>
+    <comment>Source: Mostrando</comment>
+  </data>
+  <data name='Ui_70187495711a9ae2' xml:space='preserve'>
+    <value>Show more</value>
+    <comment>Source: Mostrar mais</comment>
+  </data>
+  <data name='Ui_70eef0073f42b6fc' xml:space='preserve'>
+    <value>Network resources</value>
+    <comment>Source: Recursos da rede</comment>
+  </data>
+  <data name='Ui_6fbbda17207ff812' xml:space='preserve'>
+    <value>Field diaries</value>
+    <comment>Source: Diários de campo</comment>
+  </data>
+  <data name='Ui_799a56f648559db8' xml:space='preserve'>
+    <value>First contact forms</value>
+    <comment>Source: Fichas de 1º contato</comment>
+  </data>
+  <data name='Ui_55e7a18ecab74b9d' xml:space='preserve'>
+    <value>Personal assessments</value>
+    <comment>Source: Avaliações pessoais</comment>
+  </data>
+  <data name='Ui_87c1376bee68bdf9' xml:space='preserve'>
+    <value>Personal process diaries</value>
+    <comment>Source: Diários de processo pessoal</comment>
+  </data>
+  <data name='Ui_f352a7dba6d9ae0a' xml:space='preserve'>
+    <value>Active users</value>
+    <comment>Source: Usuários ativos</comment>
+  </data>
+  <data name='Ui_3c6ed1c89a273e01' xml:space='preserve'>
+    <value>Please fill in this field.</value>
+    <comment>Source: Preencha este campo.</comment>
+  </data>
 </root>

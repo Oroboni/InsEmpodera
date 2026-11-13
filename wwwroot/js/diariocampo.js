@@ -5,24 +5,30 @@
         
         let atoresDaAcao = new Map();
 
+        // Participantes: escolher um nome no seletor já o adiciona (vários seguidos, sem botão extra).
         function adicionarAtorAcao() {
             const select = document.getElementById('atorAcao');
             const lista = document.getElementById('atoresSelecionadosAcao');
-            if (!select?.value || !lista || atoresDaAcao.has(select.value)) return;
+            if (!select?.value || !lista || atoresDaAcao.has(select.value)) { if (select) select.value = ''; return; }
 
             const id = select.value;
-            const nome = select.selectedOptions[0].textContent.trim();
+            const opcao = select.selectedOptions[0];
+            const nome = opcao.textContent.trim();
             atoresDaAcao.set(id, nome);
+            opcao.disabled = true;
             const item = document.createElement('li');
             item.dataset.actorId = id;
             const rotulo = document.createElement('span');
             rotulo.textContent = nome;
             const remover = document.createElement('button');
             remover.type = 'button';
-            remover.textContent = 'Remover';
-            remover.setAttribute('aria-label', `Remover participante ${nome}`);
+            remover.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+            const textoRemover = window.translateText ? window.translateText('Remover participante') : 'Remover participante';
+            remover.setAttribute('aria-label', `${textoRemover} ${nome}`);
+            remover.title = textoRemover;
             remover.addEventListener('click', () => {
                 atoresDaAcao.delete(id);
+                opcao.disabled = false;
                 item.remove();
             });
             item.append(rotulo, remover);
@@ -33,6 +39,10 @@
                 quantidade.value = String(atoresDaAcao.size);
         }
 
+        document.addEventListener('change', (ev) => {
+            if (ev.target?.id === 'atorAcao') adicionarAtorAcao();
+        });
+
         function abrirModalAcao(tipo) {
             document.getElementById('tipoAcaoInput').value = tipo;
             
@@ -42,6 +52,7 @@
             document.getElementById('atorAcao').value = '';
             atoresDaAcao = new Map();
             document.getElementById('atoresSelecionadosAcao')?.replaceChildren();
+            document.querySelectorAll('#atorAcao option').forEach(o => { o.disabled = false; });
             document.getElementById('quantidadeAcao').value = '1';
 
             // Create usa checkboxes múltiplos; Edit usa um select simples.
@@ -93,7 +104,7 @@
             // 2. Capturar Eixos dos Checkboxes Marcados
             const checkboxesMarcados = document.querySelectorAll('input[name="modalEixos"]:checked');
             let eixosIds = Array.from(checkboxesMarcados).map(cb => cb.value);
-            let eixosNomes = Array.from(checkboxesMarcados).map(cb => cb.getAttribute('data-nome') || '');
+            let eixosNomes = Array.from(checkboxesMarcados).map(cb => document.querySelector(`label[for="${cb.id}"]`)?.textContent.trim() || cb.getAttribute('data-nome') || '');
 
             const eixoSelect = document.getElementById('eixoAcao');
             if (eixosIds.length === 0 && eixoSelect?.value) {
