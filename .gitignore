@@ -22,7 +22,9 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-deploy/
+deploy/*
+# Scripts e configuração do servidor AWS (sem segredos) entram no Git.
+!deploy/aws/
 
 # .NET Core
 project.lock.json

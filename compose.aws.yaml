@@ -1,0 +1,35 @@
+# Complemento do compose.yaml para a AWS (EC2 do AWS Academy).
+#   docker compose -f compose.yaml -f compose.aws.yaml up -d --build
+# Envia os registros dos contêineres para o Amazon CloudWatch Logs (grupo /ecoredes/*).
+# A permissão vem do perfil da instância (LabInstanceProfile / LabRole): nenhuma chave de acesso fica no servidor.
+
+x-cloudwatch: &cloudwatch
+  driver: awslogs
+  options: &cloudwatch-opcoes
+    awslogs-region: ${AWS_REGIAO:-us-east-1}
+    awslogs-create-group: "true"
+    mode: non-blocking
+
+services:
+  app:
+    environment:
+      # Uma linha por registro (INFO/WARN/ERROR), com data, para leitura no CloudWatch.
+      Logging__Console__FormatterName: simple
+      Logging__Console__FormatterOptions__SingleLine: "true"
+      Logging__Console__FormatterOptions__TimestampFormat: "yyyy-MM-dd HH:mm:ss "
+      Logging__LogLevel__Default: Information
+      Logging__LogLevel__Microsoft.AspNetCore: Warning
+    logging:
+      <<: *cloudwatch
+      options:
+        <<: *cloudwatch-opcoes
+        awslogs-group: /ecoredes/app
+        awslogs-stream: app
+
+  mysql:
+    logging:
+      <<: *cloudwatch
+      options:
+        <<: *cloudwatch-opcoes
+        awslogs-group: /ecoredes/mysql
+        awslogs-stream: mysql

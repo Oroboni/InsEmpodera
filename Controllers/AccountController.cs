@@ -59,6 +59,8 @@ public class AccountController : Controller
         var user = await _userManager.FindByEmailAsync(Email.Trim());
         if (user is null || user.Ativo != "S")
         {
+            // Sem o e-mail digitado: nunca registrar credenciais ou dados pessoais.
+            _logger.LogWarning("Login recusado: usuário inexistente ou inativo.");
             ViewData["LoginError"] = "E-mail ou senha inválidos.";
             return View();
         }
@@ -75,6 +77,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home");
         }
 
+        _logger.LogWarning("Login recusado: usuário={Usuario} bloqueado={Bloqueado}", user.IdUsuario, result.IsLockedOut);
         ViewData["LoginError"] = result.IsLockedOut
             ? "Acesso temporariamente bloqueado após várias tentativas. Tente novamente mais tarde."
             : "E-mail ou senha inválidos.";

@@ -68,6 +68,8 @@ builder.Services.AddControllersWithViews(options =>
         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
         // Mensagens de validação no idioma da tela, com nomes de campo legíveis.
         Empodera.Services.Validacao.ValidacaoAmigavelProvider.Configurar(options);
+        // INFO/WARN de cada operação (sem dados pessoais) para os logs do CloudWatch.
+        options.Filters.Add<Empodera.Services.RegistroDeOperacoes>();
     })
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();

@@ -1,0 +1,48 @@
+name: Deploy na AWS
+
+# CD: merge/push na main -> "Testes de backend e banco" (CI: build + testes) -> se passou, publica na EC2.
+# Também pode ser disparado à mão (aba Actions > Deploy na AWS > Run workflow).
+on:
+  workflow_run:
+    workflows: ["Testes de backend e banco"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-aws
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Só publica uma versão que passou nos testes.
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Conferir os segredos do deploy
+        id: segredos
+        env:
+          HOST: ${{ secrets.AWS_EC2_HOST }}
+          CHAVE: ${{ secrets.AWS_EC2_CHAVE_SSH }}
+        run: |
+          if [ -z "$HOST" ] || [ -z "$CHAVE" ]; then
+            echo "::warning::Segredos AWS_EC2_HOST / AWS_EC2_CHAVE_SSH não configurados: deploy pulado."
+            echo "pular=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publicar na EC2 (git pull + docker compose)
+        if: steps.segredos.outputs.pular != 'true'
+        env:
+          HOST: ${{ secrets.AWS_EC2_HOST }}
+          USUARIO: ${{ secrets.AWS_EC2_USUARIO || 'ubuntu' }}
+          CHAVE: ${{ secrets.AWS_EC2_CHAVE_SSH }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$CHAVE" > ~/.ssh/ec2 && chmod 600 ~/.ssh/ec2
+          ssh -i ~/.ssh/ec2 -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 \
+            "$USUARIO@$HOST" 'cd /opt/ecoredes && git fetch --quiet origin main && git reset --quiet --hard origin/main && ./deploy/aws/atualizar.sh'
+          rm -f ~/.ssh/ec2

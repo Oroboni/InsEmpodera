@@ -1,0 +1,139 @@
+# EcoRedes na AWS — prontidão para produção
+
+Como o EcoRedes atende aos requisitos do **PI de Computação em Nuvem** no **AWS Academy (Learner Lab)**.
+Onde o Academy limita algo, a seção mostra **como está no Academy** e **como seria numa conta AWS real**.
+
+## Arquitetura
+
+```text
+ Navegador ──HTTPS──▶ Amazon CloudFront (https://dxxxxxxxx.cloudfront.net)
+                            │  HTTP, só da lista de IPs do CloudFront (Security Group)
+                            ▼
+              EC2 Ubuntu 24.04 (IP elástico) ─ LabInstanceProfile (LabRole)
+              ├─ Nginx :80  ──▶  contêiner "app"   ASP.NET Core 10 (127.0.0.1:8080)
+              │                    └─▶ contêiner "mysql"  MySQL 8.4 (rede interna, sem porta pública)
+              │                          └─ volume Docker mysql-dados (dados persistentes)
+              └─ Docker awslogs ──▶ Amazon CloudWatch Logs (/ecoredes/app, /ecoredes/mysql)
+
+ GitHub (main) ──push──▶ GitHub Actions: CI (build + testes) ──passou──▶ CD: SSH na EC2 → git pull → docker compose up
+```
+
+| Peça | Serviço AWS | Arquivo no repositório |
+|---|---|---|
+| Aplicação e banco | Amazon EC2 + Docker Compose | `compose.yaml`, `compose.aws.yaml`, `Dockerfile` |
+| HTTPS público | Amazon CloudFront (certificado `*.cloudfront.net`) | — (configurado no console) |
+| Proxy reverso | Nginx na EC2 | `deploy/aws/nginx-ecoredes.conf` |
+| Logs | Amazon CloudWatch Logs | `compose.aws.yaml`, `Services/RegistroDeOperacoes.cs` |
+| Permissões | IAM (LabRole) | — |
+| CI / CD | GitHub Actions | `.github/workflows/testes.yml`, `.github/workflows/deploy-aws.yml` |
+| Preparo do servidor | — | `deploy/aws/preparar-ec2.sh`, `deploy/aws/atualizar.sh` |
+
+## 1. Aplicação implantada na AWS
+
+Frontend (páginas MVC), backend, banco MySQL e armazenamento (volumes) rodam na EC2. Nada depende do computador
+de um integrante: os contêineres têm `restart: unless-stopped` e o Docker sobe com a instância.
+
+- **Academy:** a sessão do laboratório termina e a EC2 para; ao iniciar o lab de novo, a instância e os contêineres voltam
+  sozinhos. O **IP elástico** mantém o mesmo endereço (o CloudFront continua apontando para ele).
+- **Conta real:** banco no **Amazon RDS for MySQL** (Multi-AZ, backups automáticos), aplicação em **ECS Fargate** ou
+  **EC2 com Auto Scaling** atrás de um **Application Load Balancer**, imagens no **Amazon ECR**.
+
+## 2. HTTPS
+
+Todo acesso público é por `https://<distribuição>.cloudfront.net`. O CloudFront redireciona HTTP para HTTPS
+(*Redirect HTTP to HTTPS*) e usa o certificado da própria AWS. A porta 80 da EC2 só aceita a lista gerenciada
+`com.amazonaws.global.cloudfront.origin-facing`; ninguém acessa a EC2 direto pela internet.
+A aplicação ainda envia **HSTS** (1 ano) e cookies `Secure`.
+
+- **Conta real:** domínio próprio no **Route 53**, certificado do **ACM** no CloudFront/ALB e HTTPS também entre
+  CloudFront e origem.
+
+## 3. Código no GitHub
+
+Repositório: `https://github.com/Oroboni/InsEmpodera` (branch `main`). Contém código, documentação (`docs/`),
+configuração (`compose*.yaml`, `Dockerfile`, `deploy/aws/`), CI/CD (`.github/workflows/`), `README.md` e esta arquitetura.
+**Não versiona** senhas, tokens, Access Keys nem credenciais de banco: o `.env` está no `.gitignore` e o repositório só traz
+o `.env.example` com valores de exemplo.
+
+## 4. Segredos e configuração
+
+| Segredo | Onde fica |
+|---|---|
+| Senhas do MySQL, senha inicial do admin, senha do e-mail | `/opt/ecoredes/.env` na EC2 (`chmod 600`, fora do Git) → variáveis de ambiente dos contêineres |
+| Chave SSH do deploy | GitHub → *Settings › Secrets and variables › Actions* (`AWS_EC2_CHAVE_SSH`) |
+| Credenciais AWS para os logs | Nenhuma: o Docker usa o **perfil da instância** (LabInstanceProfile) |
+| Chaves de proteção de dados (login) | Volume Docker `chaves` |
+
+- **Conta real:** senhas no **AWS Secrets Manager** (rotação automática) ou **SSM Parameter Store** (SecureString),
+  lidas pela aplicação com a role da instância/tarefa.
+
+## 5. IAM e limites do AWS Academy
+
+**Academy:** não é possível criar usuários, roles nem políticas IAM. A EC2 usa o perfil **LabInstanceProfile**
+(role **LabRole**), que tem permissões amplas.
+
+Fluxo no Academy: `EC2 → LabRole → CloudWatch Logs`
+
+Fluxo em produção: `EC2 → role própria "ecoredes-ec2" → só as permissões abaixo → CloudWatch Logs`
+
+**Quais permissões essa aplicação realmente precisaria?** Apenas gravar os próprios logs (menor privilégio):
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LogsDoEcoRedes",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams"],
+      "Resource": "arn:aws:logs:us-east-1:<conta>:log-group:/ecoredes/*"
+    }
+  ]
+}
+```
+
+Com RDS/Secrets Manager seriam somadas só `secretsmanager:GetSecretValue` no segredo do banco
+(`arn:aws:secretsmanager:us-east-1:<conta>:secret:ecoredes/*`). Para o deploy, o GitHub Actions usaria **OIDC**
+(sem chave fixa) com uma role que só pode executar `ssm:SendCommand` nesta instância.
+
+## 6. CI — GitHub Actions
+
+`.github/workflows/testes.yml` roda em todo push e pull request: dependências → build → testes (244 testes de backend
+contra um MySQL 8.4 real, além dos testes de banco e chave estrangeira). Se algo falha, a execução fica vermelha e o
+deploy **não** acontece.
+
+## 7. CD — deploy automático
+
+`.github/workflows/deploy-aws.yml`: quando o CI da `main` termina com sucesso, o Actions entra na EC2 por SSH e roda
+`deploy/aws/atualizar.sh` (git pull → `docker compose up -d --build` → confere se a aplicação responde).
+
+- **Limitação do Academy:** sem OIDC/roles próprias e com a sessão do lab expirando, o deploy usa **SSH com chave**
+  guardada nos *Secrets* do GitHub, e a porta 22 precisa aceitar os IPs do GitHub Actions (que mudam). Com o lab
+  desligado, o deploy falha até a instância voltar; basta reexecutar o workflow.
+- **Conta real:** GitHub OIDC → role com `ssm:SendCommand` (sem porta 22 aberta), ou imagem no ECR + deploy no ECS.
+
+## 8. CloudWatch Logs
+
+O Docker envia a saída dos contêineres ao CloudWatch (driver `awslogs`): grupos **/ecoredes/app** e **/ecoredes/mysql**,
+uma linha por registro, com data e nível:
+
+```text
+2026-11-13 18:02:11 info: Empodera.Services.RegistroDeOperacoes[0] Operação concluída DiarioCampo/Create usuário=1
+2026-11-13 18:03:40 warn: Empodera.Services.RegistroDeOperacoes[0] Formulário recusado FichaPrimeiroContato/Create usuário=1 campos=DtContato
+2026-11-13 18:05:02 fail: Empodera.Controllers.ErroController[0] Erro não tratado em /Atividades/Create
+```
+
+- **INFO:** operação concluída (cadastro, edição, exclusão).
+- **WARN:** situação inesperada (formulário recusado, acesso negado, login inválido).
+- **ERROR:** falha ao processar (exceções, com o código mostrado ao usuário na página de erro).
+
+**Nunca registramos:** senhas, tokens, chaves, cookies, conteúdo dos formulários, e-mails, telefones nem dados pessoais
+das comunidades. O log leva só a tela, a ação, o id do usuário, os *nomes* dos campos recusados e o resultado.
+
+## Como verificar (roteiro de apresentação)
+
+1. Abrir `https://<distribuição>.cloudfront.net` → cadeado HTTPS → login.
+2. EC2 › Instâncias → instância `ecoredes`, IP elástico, perfil **LabInstanceProfile**, Security Group (80 só CloudFront).
+3. CloudWatch › Log groups › `/ecoredes/app` → criar um diário e ver a linha `Operação concluída`.
+4. GitHub › Actions → execução verde de *Testes de backend e banco* seguida de *Deploy na AWS*.
+5. GitHub › Settings › Secrets → segredos do deploy existem, mas o valor não aparece; `.env` não está no repositório.

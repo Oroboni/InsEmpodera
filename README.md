@@ -333,8 +333,11 @@ As suítes que usam banco criam e removem bancos temporários no servidor indica
 | [`testes.yml`](.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel` | Executa `testar.ps1` com MySQL 8.4 LTS e publica os resultados como artefato |
 | [`main.yml`](.github/workflows/main.yml) | Push na branch `import_exel` | Compila, testa e guarda o resultado de `dotnet publish` como artefato |
 | [`qualidade-periodica.yml`](.github/workflows/qualidade-periodica.yml) | Domingos às 03h (UTC) ou execução manual | Executa testes de mutação com Stryker.NET |
+| [`deploy-aws.yml`](.github/workflows/deploy-aws.yml) | Sucesso do `testes.yml` na `main`, ou execução manual | **CD:** entra na EC2 da AWS por SSH e roda `deploy/aws/atualizar.sh` (git pull + Docker Compose) |
 
-Nenhum workflow publica a aplicação em servidor. A implantação é **manual**: o pacote gerado por `dotnet publish` é enviado a uma instância AWS EC2 com Nginx, systemd e MariaDB. O servidor novo (VPS Hostinger com Docker e MySQL 8.4) está em [docs/servidor-hostinger.md](docs/servidor-hostinger.md); a execução com Docker, em [docs/docker.md](docs/docker.md). O resumo está em [docs/deploy.md](docs/deploy.md), e o roteiro operacional completo, em [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md).
+**AWS (PI de Computação em Nuvem):** EC2 com Docker Compose, HTTPS pelo Amazon CloudFront, logs no Amazon CloudWatch e deploy automático pelo `deploy-aws.yml`. Arquitetura, segredos, IAM e limitações do AWS Academy em [docs/aws-producao.md](docs/aws-producao.md).
+
+Implantação antiga (branch `Online`) — manual: o pacote gerado por `dotnet publish` é enviado a uma instância AWS EC2 com Nginx, systemd e MariaDB. O servidor novo (VPS Hostinger com Docker e MySQL 8.4) está em [docs/servidor-hostinger.md](docs/servidor-hostinger.md); a execução com Docker, em [docs/docker.md](docs/docker.md). O resumo está em [docs/deploy.md](docs/deploy.md), e o roteiro operacional completo, em [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md).
 
 ## 📚 Documentação complementar
 
