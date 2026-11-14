@@ -90,7 +90,7 @@
         </a>
 
         <button type="button" class="btn-add" 
-            onclick="window.location.href='@Url.Action("Create", "Atores")'"
+            data-ir="@Url.Action("Create", "Atores")"
             title="Adicionar Novo Ator">
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -167,7 +167,7 @@
             <h3>Nenhum ator cadastrado</h3>
             <p>Comece adicionando o primeiro ator ao sistema.</p>
             <button type="button" class="btn-save" 
-                onclick="window.location.href='@Url.Action("Create", "Atores")'">
+                data-ir="@Url.Action("Create", "Atores")">
                 <i class="fa-solid fa-plus"></i> Adicionar Primeiro Ator
             </button>
         </div>

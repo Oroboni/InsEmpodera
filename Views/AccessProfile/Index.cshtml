@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create", "AccessProfile")'"
+        <button type="button" class="btn-add" data-ir="@Url.Action("Create", "AccessProfile")"
             title="Adicionar Novo Perfil">
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -165,7 +165,7 @@
                 <h3>Nenhum perfil cadastrado</h3>
                 <p>Comece adicionando seu primeiro perfil de acesso ao sistema.</p>
                 <button type="button" class="btn-save"
-                    onclick="window.location.href='@Url.Action("Create", "AccessProfile")'">
+                    data-ir="@Url.Action("Create", "AccessProfile")">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeiro Perfil
                 </button>
             </div>

@@ -30,7 +30,7 @@
             <label for="atorId">Selecione o Ator</label>
             <form asp-action="Index" method="get" id="atorSelectForm">
                 <select id="atorId" name="atorId" class="clean-input" asp-items="ViewBag.AtorList"
-                        onchange="this.form.submit()">
+                        data-enviar-ao-mudar>
                     <option value="">Selecione um Ator</option>
                 </select>
             </form>
@@ -83,7 +83,7 @@
             </form>
 
             <button type="button" class="btn-add"
-                    onclick="window.location.href='@Url.Action("Create", new { atorId = selectedAtorId })'"
+                    data-ir="@Url.Action("Create", new { atorId = selectedAtorId })"
                     title="Adicionar Novo Registro">
                 <i class="fa-solid fa-plus"></i>
             </button>
@@ -151,7 +151,7 @@
                 <h3>Nenhum registro cadastrado</h3>
                 <p>Comece adicionando o primeiro registro do diário pessoal deste ator.</p>
                 <button type="button" class="btn-save"
-                        onclick="window.location.href='@Url.Action("Create", new { atorId = selectedAtorId })'">
+                        data-ir="@Url.Action("Create", new { atorId = selectedAtorId })">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeiro Registro
                 </button>
             </div>

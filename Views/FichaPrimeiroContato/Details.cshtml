@@ -404,11 +404,11 @@
         <!-- BOTÕES DE NAVEGAÇÃO -->
         <!-- ================================================= -->
         <div class="buttons-container">
-            <button type="button" id="btn-prev" class="wizard-btn btn-prev" onclick="changeStep(-1)" style="display: none;">
+            <button type="button" id="btn-prev" class="wizard-btn btn-prev" data-acao="changeStep" data-args='[-1]' style="display: none;">
                 <i class="fa-solid fa-arrow-left"></i> Voltar
             </button>
 
-            <button type="button" id="btn-next" class="wizard-btn btn-next" onclick="changeStep(1)">
+            <button type="button" id="btn-next" class="wizard-btn btn-next" data-acao="changeStep" data-args='[1]'>
                 Próximo <i class="fa-solid fa-arrow-right"></i>
             </button>
 

@@ -30,7 +30,7 @@
             <label for="atorSelect">Selecione o Ator</label>
             <form asp-action="Index" method="get" id="atorSelectForm">
                 <select id="atorSelect" name="atorId" class="clean-input" asp-items="ViewBag.AtoresList"
-                    onchange="document.getElementById('atorSelectForm').submit();">
+                    data-enviar-ao-mudar>
                     <option value="">Selecione um Ator</option>
                 </select>
             </form>
@@ -96,7 +96,7 @@
             </div>
 
             <button type="button" class="btn-add" 
-                onclick="window.location.href='@Url.Action("Create", "PersonalAssessment", new { atorId = selectedAtorId })'"
+                data-ir="@Url.Action("Create", "PersonalAssessment", new { atorId = selectedAtorId })"
                 title="Adicionar Nova Avaliação">
                 <i class="fa-solid fa-plus"></i>
             </button>
@@ -178,7 +178,7 @@
                 <h3>Nenhuma avaliação cadastrada</h3>
                 <p>Comece adicionando a primeira avaliação pessoal para este ator.</p>
                 <button type="button" class="btn-save" data-testid="assessment-create-first"
-                    onclick="window.location.href='@Url.Action("Create", "PersonalAssessment", new { atorId = selectedAtorId })'">
+                    data-ir="@Url.Action("Create", "PersonalAssessment", new { atorId = selectedAtorId })">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeira Avaliação
                 </button>
             </div>

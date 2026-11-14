@@ -21,6 +21,8 @@
     <PackageReference Include="QuestPDF" Version="2026.9.1" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.13" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+    <!-- Versão explícita: a 2.4.0 que vem com o Pomelo envia a senha antes de validar o TLS (GHSA-473q-m89c-ghf8). -->
+    <PackageReference Include="MySqlConnector" Version="2.6.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.19">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

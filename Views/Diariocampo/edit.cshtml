@@ -136,7 +136,7 @@
                     <i class="fa-solid fa-building" style="color: var(--color-primary);"></i>
                     Ações Institucionais (<span id="count-institucional">0</span> itens)
                 </label>
-                <button type="button" class="btn-add-circle" onclick="abrirModalAcao('institucional')" title="Adicionar Ação">
+                <button type="button" class="btn-add-circle" data-acao="abrirModalAcao" data-args='["institucional"]' title="Adicionar Ação">
                     <i class="fa-solid fa-plus" style="font-size: 12px;"></i>
                 </button>
             </div>
@@ -159,7 +159,7 @@
                                     <i class="fa-solid fa-building"></i> @acao.PeovedorEx
                                 </div>
                             </div>
-                            <button type="button" onclick="removerItemGrid(this, 'institucional')" style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
+                            <button type="button" data-acao="removerItemGrid" data-com-elemento data-args='["institucional"]' style="background: none; border: none; color: #ef5350; cursor: pointer; padding: 5px;" title="Remover">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                              
@@ -247,7 +247,7 @@
                 <h3 id="modalAcaoTitulo" class="modal-title">Detalhes de ação</h3>
                 <p>Informe os dados da ação realizada.</p>
             </div>
-            <button type="button" class="btn-close-modal" onclick="fecharModal('modalAcao')" aria-label="Fechar modal">
+            <button type="button" class="btn-close-modal" data-acao="fecharModal" data-args='["modalAcao"]' aria-label="Fechar modal">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -313,10 +313,10 @@
             </div>
 
             <div class="modal-actions action-modal-actions">
-                <button type="button" onclick="fecharModal('modalAcao')" class="wizard-btn action-modal-cancel">
+                <button type="button" data-acao="fecharModal" data-args='["modalAcao"]' class="wizard-btn action-modal-cancel">
                     Cancelar
                 </button>
-                <button type="button" onclick="salvarAcaoNoGrid()" class="wizard-btn btn-save-final btn-confirm">
+                <button type="button" data-acao="salvarAcaoNoGrid" class="wizard-btn btn-save-final btn-confirm">
                     <i class="fa-solid fa-plus"></i> ADICIONAR AÇÃO
                 </button>
             </div>

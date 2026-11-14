@@ -89,7 +89,7 @@ Ordem dos middlewares configurada em `Program.cs`:
 | Ordem | Middleware | Função |
 | :---: | --- | --- |
 | 1 | `UseRequestLocalization` | Define o idioma pelo cookie ou pelo cabeçalho `Accept-Language` |
-| 2 | Middleware de cabeçalhos | Adiciona CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` e `Permissions-Policy` |
+| 2 | Middleware de cabeçalhos | Adiciona CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` e `Permissions-Policy`. A CSP não permite script inline: cada requisição gera um *nonce* que o `NonceScriptTagHelper` coloca em todo `<script>` das views, e ações de clique/mudança usam atributos `data-*` tratados por `wwwroot/js/acoes.js` (nunca `onclick=`) |
 | 3 | `UseExceptionHandler` / `UseHsts` | Página de erro e HSTS fora de `Development` |
 | 4 | `UseHttpsRedirection` | Redireciona para HTTPS, exceto em `Testing` |
 | 5 | `UseStaticFiles` | Entrega os arquivos de `wwwroot/` |

@@ -199,6 +199,9 @@ app.UseRequestLocalization(localizationOptions);
 
 app.Use(async (context, next) =>
 {
+    // Nonce por requisição: só os <script> das views (marcados pelo NonceScriptTagHelper) executam.
+    var nonce = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(16));
+    context.Items[Empodera.TagHelpers.NonceScriptTagHelper.ChaveNonce] = nonce;
     context.Response.OnStarting(() =>
     {
         var headers = context.Response.Headers;
@@ -209,7 +212,7 @@ app.Use(async (context, next) =>
         headers.TryAdd(
             "Content-Security-Policy",
             "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; " +
-            "form-action 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; " +
+            "form-action 'self'; script-src 'self' 'nonce-" + nonce + "' https://unpkg.com; script-src-attr 'none'; " +
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; " +
             "font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; " +
             "connect-src 'self' https://nominatim.openstreetmap.org https://geocode.arcgis.com https://viacep.com.br; " +

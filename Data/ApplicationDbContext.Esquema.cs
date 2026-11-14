@@ -394,7 +394,48 @@ namespace Empodera.Data
             Associativa<DiarioProcessoEixo>(mb, "IdDiarioProcessoEixo", x => x.IdDiarioProcessoEixo,
                 (x => x.FkIdDiarioProcesso, "IdDiarioProcesso"), (x => x.FkIdEixo, "IdEixo"), "UQ_DiariosProcessoEixos_Diario_Eixo", x => new { x.FkIdDiarioProcesso, x.FkIdEixo });
 
+            FiltrarDependentesDeExcluidos(mb);
             NomearChavesEstrangeiras(mb);
+        }
+
+        // Ator ou comunidade excluídos (Ativo = 'N') levam junto o que depende deles: assim nenhuma tela mostra
+        // um diário, ficha ou avaliação "órfão" (sem o nome de quem foi excluído) e todas as consultas concordam,
+        // com ou sem Include. Os dados continuam no banco e no backup completo (lido por SQL) e voltam se o
+        // registro for reativado.
+        private static void FiltrarDependentesDeExcluidos(ModelBuilder mb)
+        {
+            mb.Entity<AcoesAtores>().HasQueryFilter(x => x.Ator.Ativo != "N");
+            mb.Entity<AtorComunidade>().HasQueryFilter(x => x.Ator.Ativo != "N" && x.Comunidade.Ativo != "N");
+            mb.Entity<AvaliacaoPessoal>().HasQueryFilter(x => x.Ator.Ativo != "N");
+            mb.Entity<DAAtores>().HasQueryFilter(x => x.Ator.Ativo != "N" && x.DiarioDAcoes.Diario.Comunidade.Ativo != "N");
+            mb.Entity<DiarioProcessoPessoal>().HasQueryFilter(x => x.Ator.Ativo != "N");
+            mb.Entity<FichaPrimeiroContato>().HasQueryFilter(x => x.Ator.Ativo != "N");
+            mb.Entity<RecursosAtores>().HasQueryFilter(x => x.Atores!.Ativo != "N");
+            mb.Entity<RedePrimaria>().HasQueryFilter(x => x.AtorPrincipal.Ativo != "N" && x.AtorRelacionado.Ativo != "N");
+            mb.Entity<Atividades>().HasQueryFilter(x => x.Comunidade.Ativo != "N");
+            mb.Entity<DiarioCampo>().HasQueryFilter(x => x.Comunidade.Ativo != "N");
+            mb.Entity<RedeRecursos>().HasQueryFilter(x => x.Comunidade.Ativo != "N");
+            mb.Entity<Vulnerabilidade>().HasQueryFilter(x => x.Comunidade.Ativo != "N");
+
+            // Segundo nível: detalhes dos registros acima.
+            mb.Entity<Acoes>().HasQueryFilter(x => x.Atividades.Comunidade.Ativo != "N");
+            mb.Entity<AtividadesEixo>().HasQueryFilter(x => x.Atividades.Comunidade.Ativo != "N");
+            mb.Entity<AnexosDiario>().HasQueryFilter(x => x.Diario.Comunidade.Ativo != "N");
+            mb.Entity<DiarioAcoes>().HasQueryFilter(x => x.Diario.Comunidade.Ativo != "N");
+            mb.Entity<DiarioDAcoes>().HasQueryFilter(x => x.Diario.Comunidade.Ativo != "N");
+            mb.Entity<DiarioEixo>().HasQueryFilter(x => x.Diario.Comunidade.Ativo != "N");
+            mb.Entity<DiarioProcessoEixo>().HasQueryFilter(x => x.DiarioProcesso.Ator.Ativo != "N");
+            mb.Entity<FichaCondicoes>().HasQueryFilter(x => x.Ficha.Ator.Ativo != "N");
+            mb.Entity<FichaPeticoes>().HasQueryFilter(x => x.Ficha.Ator.Ativo != "N");
+            mb.Entity<FichaResp>().HasQueryFilter(x => x.Ficha.Ator.Ativo != "N");
+            mb.Entity<FichaResult>().HasQueryFilter(x => x.Ficha.Ator.Ativo != "N");
+            mb.Entity<FonteInf>().HasQueryFilter(x => x.Ficha.Ator.Ativo != "N");
+            mb.Entity<RedeEixo>().HasQueryFilter(x => x.RedeRecursos.Comunidade.Ativo != "N");
+            mb.Entity<VulnerabilidadesEixo>().HasQueryFilter(x => x.Vulnerabilidade.Comunidade.Ativo != "N");
+
+            // Terceiro nível: detalhes das ações do diário.
+            mb.Entity<DetalhesDAcoes>().HasQueryFilter(x => x.DiarioDAcoes.Diario.Comunidade.Ativo != "N");
+            mb.Entity<DetalhesEixos>().HasQueryFilter(x => x.Detalhes.DiarioDAcoes.Diario.Comunidade.Ativo != "N");
         }
 
         // FK_<Filha>_<Pai>; quando a filha aponta duas vezes para o mesmo pai, o papel vai no fim

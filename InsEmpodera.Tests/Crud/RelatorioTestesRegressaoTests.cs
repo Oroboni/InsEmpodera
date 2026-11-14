@@ -119,6 +119,30 @@ public sealed class RelatorioTestesRegressaoTests : ControllerTestBase
         Assert.False(await Db.Comunidades.AnyAsync(c => c.Id_Comunidade == community.Id_Comunidade));
         Assert.True(await Db.Comunidades.IgnoreQueryFilters().AnyAsync(c => c.Id_Comunidade == community.Id_Comunidade));
     }
+
+    [Fact(DisplayName = "C5 — ator excluído leva junto a ficha: a lista não mostra órfãos e o dado fica no banco")]
+    public async Task AtorExcluido_EscondeFichaSemQuebrarALista()
+    {
+        var community = await CreateCommunityAsync();
+        var actor = await CreateActorAsync(community);
+        Db.FichasPrimeiroContato.Add(new FichaPrimeiroContato
+        {
+            FK_id_Atores = actor.IdAtores, FkIdComunidade = community.Id_Comunidade,
+            DtContato = DateTime.Today, HoraContato = new TimeSpan(9, 0, 0), Status = "EmProgresso",
+            CEstabeleceu = "Visita", NovoParceiro = "Sim", FornecidoParceiro = "Não",
+            FkIdUsuario = TestIds.Seed(1), DtCriacao = DateTime.Now
+        });
+        await Db.SaveChangesAsync();
+        actor.Ativo = "N";
+        await Db.SaveChangesAsync();
+        Db.ChangeTracker.Clear();
+
+        var result = await Attach(new FichaPrimeiroContatoController(Db)).Index(null, null, null);
+
+        var view = Assert.IsType<ViewResult>(result);
+        Assert.DoesNotContain(((IEnumerable<FichaPrimeiroContato>)view.Model!), f => f.FK_id_Atores == actor.IdAtores);
+        Assert.Equal(1, await Db.FichasPrimeiroContato.IgnoreQueryFilters().CountAsync(f => f.FK_id_Atores == actor.IdAtores));
+    }
 }
 
 public sealed class PaginasDeErroHttpTests : IClassFixture<EmpoderaWebApplicationFactory>
@@ -136,5 +160,24 @@ public sealed class PaginasDeErroHttpTests : IClassFixture<EmpoderaWebApplicatio
 
         Assert.Equal(HttpStatusCode.NotFound, resposta.StatusCode);
         Assert.Contains("data-testid=\"pagina-erro\"", await resposta.Content.ReadAsStringAsync());
+    }
+
+    [Fact(DisplayName = "S3 — CSP sem 'unsafe-inline' em scripts: só executam os <script> com o nonce da requisição")]
+    public async Task Csp_ScriptsSoComNonce()
+    {
+        using var client = HttpFlowTestSupport.CreateClient(_factory);
+
+        using var resposta = await client.GetAsync("/Account");
+        var csp = string.Join(" ", resposta.Headers.GetValues("Content-Security-Policy"));
+        var scriptSrc = System.Text.RegularExpressions.Regex.Match(csp, "script-src ([^;]*)").Groups[1].Value;
+        var nonce = System.Text.RegularExpressions.Regex.Match(scriptSrc, "'nonce-([^']+)'").Groups[1].Value;
+        var html = System.Net.WebUtility.HtmlDecode(await resposta.Content.ReadAsStringAsync());
+
+        Assert.DoesNotContain("unsafe-inline", scriptSrc);
+        Assert.Contains("script-src-attr 'none'", csp);
+        Assert.False(string.IsNullOrEmpty(nonce));
+        var scripts = System.Text.RegularExpressions.Regex.Matches(html, "<script\\b[^>]*>");
+        Assert.NotEmpty(scripts);
+        Assert.All(scripts, tag => Assert.Contains($"nonce=\"{nonce}\"", tag.Value));
     }
 }

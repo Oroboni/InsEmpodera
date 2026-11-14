@@ -108,8 +108,16 @@ reais ([seguranca-dados.md](seguranca-dados.md)).
 echo "30 2 * * * equipe cd /opt/ecoredes && scripts/backup.sh >> /opt/ecoredes/backups/backup.log 2>&1" | sudo tee /etc/cron.d/ecoredes-backup
 ```
 
-Copie `/opt/ecoredes/backups` periodicamente para fora da VPS (ou contrate o backup da Hostinger): se a VPS for
-perdida, os backups locais vão junto. Teste a restauração ([docker.md](docker.md), seção 6) pelo menos uma vez
+Copie `/opt/ecoredes/backups` para fora da VPS: se a VPS for perdida, os backups locais vão junto.
+`scripts/copiar-backups.sh` faz isso de outro computador (rsync pelo SSH, confere o arquivo e avisa se falhar):
+
+```bash
+scripts/copiar-backups.sh deploy@<ip-da-vps> ~/.ssh/<chave> ~/Backups-EcoRedes 60   # guarda 60 dias
+```
+
+No Mac, um LaunchAgent (`~/Library/LaunchAgents/org.ecoredes.copiar-backups.plist`) roda o script às 10h e às 20h;
+o histórico fica em `~/Backups-EcoRedes/copias.log`. O IP desse computador precisa estar liberado na porta 22 do
+firewall da VPS. Teste a restauração ([docker.md](docker.md), seção 6) pelo menos uma vez
 antes de liberar o sistema.
 
 ## 7. Conferência final (critérios de aceite em produção)

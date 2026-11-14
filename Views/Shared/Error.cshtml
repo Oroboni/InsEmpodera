@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="~/css/_variaveis.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/tema.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
+    <script src="~/js/acoes.js" asp-append-version="true" defer></script>
     @:</head><body class="erro-pagina-solta">
 }
 <link rel="stylesheet" href="~/css/erro.css" asp-append-version="true" />
@@ -31,7 +32,7 @@
         <h1>@titulo</h1>
         <p class="erro-texto">@texto</p>
         <div class="erro-acoes">
-            <a href="javascript:history.back()" class="erro-botao secundario"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            <a href="#" data-voltar class="erro-botao secundario"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
             <a href="@(logado ? Url.Action("Index", "Home") : Url.Action("Index", "Account"))" class="erro-botao primario">
                 <i class="fa-solid fa-house"></i> @(logado ? "Ir para o início" : "Ir para o login")
             </a>

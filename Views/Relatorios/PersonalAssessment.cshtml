@@ -82,7 +82,7 @@
                     var marcada = selecionadas.Contains(item.IdAvaliacao);
                     var cor = marcada ? corPorAvaliacao[item.IdAvaliacao] : null;
                     <label class="date-chip" style="@(cor is null ? null : $"--chip-cor:{cor}")">
-                        <input type="checkbox" name="avaliacaoIds" value="@item.IdAvaliacao" checked="@marcada" onchange="this.form.submit()" />
+                        <input type="checkbox" name="avaliacaoIds" value="@item.IdAvaliacao" checked="@marcada" data-enviar-ao-mudar />
                         @if (cor is not null) { <span class="chip-cor" aria-hidden="true"></span> }
                         @item.DtCriacao.ToString("dd/MM/yyyy")
                     </label>

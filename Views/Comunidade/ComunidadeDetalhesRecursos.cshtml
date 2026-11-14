@@ -95,7 +95,7 @@
     </form>
     <form method="post" asp-controller="Comunidade" asp-action="Delete_Recursos"
           asp-route-id="@Model.Id_Rede" class="form-buttons"
-          onsubmit="return confirm('Deseja excluir este recurso?');">
+          data-confirmar="Deseja excluir este recurso?">
         @Html.AntiForgeryToken()
         <button type="submit" class="btn-full-width" data-testid="delete-community-resource">
             Excluir recurso

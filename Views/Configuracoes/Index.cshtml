@@ -216,7 +216,7 @@
         @if (podeEditarCores && coresPersonalizadas)
         {
             <form asp-controller="Configuracoes" asp-action="RestaurarCores" method="post" class="colors-restore"
-                  onsubmit="return confirm('Voltar às cores padrão? As suas cores personalizadas serão removidas.');">
+                  data-confirmar="Voltar às cores padrão? As suas cores personalizadas serão removidas.">
                 @Html.AntiForgeryToken()
                 <span><i class="fa-solid fa-circle-info"></i> Você está usando cores personalizadas.</span>
                 <button type="submit" class="colors-button colors-button-ghost"><i class="fa-solid fa-arrow-rotate-left"></i> Restaurar cores padrão</button>

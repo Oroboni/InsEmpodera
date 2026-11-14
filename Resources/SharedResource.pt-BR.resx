@@ -587,4 +587,12 @@
     <value>Preencha este campo.</value>
     <comment>Source: Preencha este campo.</comment>
   </data>
+  <data name='Ui_ee04ef64249d27a6' xml:space='preserve'>
+    <value>Modo edição: as alterações só valem depois de salvar.</value>
+    <comment>Source: Modo edição: as alterações só valem depois de salvar.</comment>
+  </data>
+  <data name='Ui_f1cb621ee9d8396d' xml:space='preserve'>
+    <value>Cancelar edição</value>
+    <comment>Source: Cancelar edição</comment>
+  </data>
 </root>

@@ -81,7 +81,7 @@
         </a>
 
         <button type="button" class="btn-add" 
-            onclick="window.location.href='@Url.Action("ComunidadesDetalhes", "Comunidade", new { id = 0 })'"
+            data-ir="@Url.Action("ComunidadesDetalhes", "Comunidade", new { id = 0 })"
             title="Adicionar Nova Comunidade">
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -182,7 +182,7 @@
             <h3>Nenhuma comunidade cadastrada</h3>
             <p>Comece adicionando a primeira comunidade ao sistema.</p>
             <button type="button" class="btn-save" 
-                onclick="window.location.href='@Url.Action("ComunidadesDetalhes", "Comunidade", new { id = 0 })'">
+                data-ir="@Url.Action("ComunidadesDetalhes", "Comunidade", new { id = 0 })">
                 <i class="fa-solid fa-plus"></i> Adicionar Primeira Comunidade
             </button>
         </div>

@@ -111,7 +111,7 @@
             </div>
         }
 
-        <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create")'"
+        <button type="button" class="btn-add" data-ir="@Url.Action("Create")"
             title="Adicionar Nova Ficha">
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -212,7 +212,7 @@
             </div>
             <h3>Nenhuma ficha cadastrada</h3>
             <p>Comece adicionando a primeira ficha de primeiro contato ao sistema.</p>
-            <button type="button" class="btn-save" onclick="window.location.href='@Url.Action("Create")'">
+            <button type="button" class="btn-save" data-ir="@Url.Action("Create")">
                 <i class="fa-solid fa-plus"></i> Adicionar Primeira Ficha
             </button>
         </div>

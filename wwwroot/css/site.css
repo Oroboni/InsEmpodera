@@ -838,23 +838,23 @@ label:has(input[type="checkbox"]) {
 }
 
 .btn-eye {
-    background-color: var(--color-primary-800);
+    background-color: var(--color-primary);
     color: var(--color-white);
     border: none;
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     margin-left: var(--space-3);
     transition: var(--transition-fast);
-    box-shadow: var(--shadow-md);
+    box-shadow: none;
 }
 
 .btn-eye:hover {
-    background-color: var(--color-primary-600);
+    background-color: var(--color-primary-dark);
     transform: scale(1.05);
 }
 
@@ -2657,3 +2657,30 @@ input[type="checkbox"]:disabled + .radio-label {
     }
     .buttons-container:has(.action-buttons-group) > .wizard-btn:only-of-type { grid-column: 1 / -1; }
 }
+
+/* ===== Formulário de Atividade (P10): sem "card dentro de card" =====
+   Quando o <form class="main-form"> envolve o container da página, ele não desenha um segundo cartão,
+   e os campos ficam iguais aos de Atores/Diário (sem caixa interna nem recuo para ícone). */
+form.main-form:has(> .modern-container) {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+}
+form.main-form:has(> .modern-container) .input-card .input-content input.clean-input[type="text"],
+form.main-form:has(> .modern-container) .input-card .input-content textarea.clean-input {
+    height: auto;
+    padding: 4px 2px;
+    border: 0;
+    background: transparent;
+}
+form.main-form:has(> .modern-container) .input-card .input-content textarea.clean-input { min-height: 120px; }
+
+/* ===== Modo edição padrão (P4) ===== */
+.modo-edicao-selo {
+    display: flex; align-items: center; gap: 8px;
+    margin: 0 0 16px; padding: 10px 14px;
+    border-radius: 10px; border: 1px solid #F5C26B;
+    background: #FFF7E6; color: #8A5300; font-size: .9rem; font-weight: 500;
+}
+.modo-edicao-selo[hidden], .btn-cancelar-edicao[hidden] { display: none !important; }

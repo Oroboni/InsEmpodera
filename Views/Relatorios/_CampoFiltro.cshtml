@@ -5,7 +5,7 @@
     <div class="input-content">
         <label for="@Model.Nome">@Model.Rotulo</label>
         <select id="@Model.Nome" name="@Model.Nome" class="clean-input simple-select" disabled="@Model.Desabilitado"
-                onchange="@(Model.EnviarAoMudar ? "this.form.submit()" : null)">
+                data-enviar-ao-mudar="@(Model.EnviarAoMudar ? "true" : null)">
             @if (Model.OpcaoVazia is not null)
             {
                 <option value="">@Model.OpcaoVazia</option>

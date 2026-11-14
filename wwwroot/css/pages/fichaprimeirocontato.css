@@ -382,23 +382,23 @@ a {
 }
 
 .btn-eye {
-    background-color: var(--color-primary-800);
+    background-color: var(--color-primary);
     color: var(--color-white);
     border: none;
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     margin-left: var(--space-3);
     transition: var(--transition-fast);
-    box-shadow: var(--shadow-md);
+    box-shadow: none;
 }
 
 .btn-eye:hover {
-    background-color: var(--color-primary-600);
+    background-color: var(--color-primary-dark);
     transform: scale(1.05);
 }
 

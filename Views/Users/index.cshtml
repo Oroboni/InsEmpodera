@@ -85,7 +85,7 @@
 
         @if ((ViewBag.CanCreateUsers as bool?) == true)
         {
-            <button type="button" class="btn-add" onclick="window.location.href='@Url.Action("Create", "Users")'"
+            <button type="button" class="btn-add" data-ir="@Url.Action("Create", "Users")"
                 title="Adicionar Novo Usuário" data-testid="user-create">
                 <i class="fa-solid fa-plus"></i>
             </button>
@@ -177,7 +177,7 @@
                 </div>
                 <h3>Nenhum usuário cadastrado</h3>
                 <p>Comece adicionando seu primeiro usuário ao sistema.</p>
-                <button type="button" class="btn-save" onclick="window.location.href='@Url.Action("Create", "Users")'">
+                <button type="button" class="btn-save" data-ir="@Url.Action("Create", "Users")">
                     <i class="fa-solid fa-plus"></i> Adicionar Primeiro Usuário
                 </button>
             </div>
