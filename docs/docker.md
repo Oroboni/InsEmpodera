@@ -90,6 +90,14 @@ docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" empode
 Para voltar atrás: `git checkout <versão anterior>`, `docker compose up -d --build` e, se o banco
 tiver mudado, restaure o backup (seção 6).
 
+### Atualização automática
+
+Com o deploy automático ligado (`./deploy/servidor/instalar-deploy-automatico.sh`, uma vez por servidor), o próprio
+servidor confere a `main` a cada 5 minutos e publica sozinho o commit novo cujos testes passaram no GitHub Actions:
+faz backup antes, volta para a versão anterior se a nova não responder e **não** publica sozinho commit com script novo em
+`Database/` (aplique a migração e rode `./deploy/servidor/atualizar.sh`). Histórico: `journalctl -u ecoredes-deploy -n 30`.
+Para desligar: `sudo systemctl disable --now ecoredes-deploy.timer`.
+
 ## 5. Backup
 
 ```bash

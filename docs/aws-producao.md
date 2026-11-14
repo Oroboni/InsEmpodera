@@ -26,7 +26,7 @@ Onde o Academy limita algo, a seção mostra **como está no Academy** e **como 
 | Logs | Amazon CloudWatch Logs | `compose.aws.yaml`, `Services/RegistroDeOperacoes.cs` |
 | Permissões | IAM (LabRole via LabInstanceProfile) | — |
 | CI / CD | GitHub Actions | `.github/workflows/testes.yml`, `.github/workflows/deploy-aws.yml` |
-| Atualização do servidor (CD) | — | `deploy/aws/atualizar.sh`, `deploy/aws/deploy-automatico.sh`, `deploy/aws/ecoredes-deploy.timer` |
+| Atualização do servidor (CD) | — | `deploy/servidor/atualizar.sh`, `deploy/servidor/deploy-automatico.sh`, `deploy/servidor/instalar-deploy-automatico.sh` |
 | Servidor novo (Ubuntu + CloudFront), se a conta permitir | — | `deploy/aws/preparar-ec2.sh`, `deploy/aws/nginx-ecoredes.conf` |
 
 ## 1. Aplicação implantada na AWS
@@ -108,9 +108,11 @@ deploy **não** acontece.
 ## 7. CD — deploy automático
 
 **Ativo na AWS (modelo "pull", sem segredos):** a EC2 roda o timer do systemd `ecoredes-deploy.timer` a cada 5 minutos.
-O `deploy/aws/deploy-automatico.sh` busca a `main`; se há commit novo **e** o CI *Testes de backend e banco* daquele
-commit terminou com sucesso (consulta pública à API do GitHub Actions), executa `deploy/aws/atualizar.sh`
-(git pull → `docker compose up -d --build` → confere se a aplicação responde). Commit com teste falhando não é publicado.
+O `deploy/servidor/deploy-automatico.sh` busca a `main`; se há commit novo **e** o CI *Testes de backend e banco* daquele
+commit terminou com sucesso (consulta pública à API do GitHub Actions), faz backup do banco, executa
+`deploy/servidor/atualizar.sh` (git pull → `docker compose up -d --build` → confere se a aplicação responde) e, se a versão
+nova não responder, volta sozinho para a anterior. Commit com teste falhando ou com migração de banco nova não é publicado
+automaticamente. O `.env` da AWS define `COMPOSE_FILE=compose.yaml:compose.aws.yaml` (logs no CloudWatch).
 
 ```text
 Merge na main → GitHub Actions (CI: build + testes) → sucesso → EC2 detecta em até 5 min → build → deploy

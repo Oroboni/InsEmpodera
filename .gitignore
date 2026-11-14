@@ -25,6 +25,7 @@ bld/
 deploy/*
 # Scripts e configuração do servidor AWS (sem segredos) entram no Git.
 !deploy/aws/
+!deploy/servidor/
 
 # .NET Core
 project.lock.json
