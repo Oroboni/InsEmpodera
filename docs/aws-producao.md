@@ -16,7 +16,7 @@ Onde o Academy limita algo, a seção mostra **como está no Academy** e **como 
 
  Amazon RDS for MySQL 8.4 (ecoredes-prod-db): banco da versão anterior, mantido como histórico; só aceita conexões da EC2.
 
- GitHub (main) ──push──▶ GitHub Actions: CI (build + testes) ──passou──▶ CD: SSH na EC2 → git pull → docker compose up
+ GitHub (main) ──push──▶ GitHub Actions: CI (build + testes) ──passou──▶ CD: a EC2 detecta (timer de 5 min) → git pull → docker compose up
 ```
 
 | Peça | Serviço AWS | Arquivo no repositório |
@@ -26,7 +26,7 @@ Onde o Academy limita algo, a seção mostra **como está no Academy** e **como 
 | Logs | Amazon CloudWatch Logs | `compose.aws.yaml`, `Services/RegistroDeOperacoes.cs` |
 | Permissões | IAM (LabRole via LabInstanceProfile) | — |
 | CI / CD | GitHub Actions | `.github/workflows/testes.yml`, `.github/workflows/deploy-aws.yml` |
-| Atualização do servidor | — | `deploy/aws/atualizar.sh` |
+| Atualização do servidor (CD) | — | `deploy/aws/atualizar.sh`, `deploy/aws/deploy-automatico.sh`, `deploy/aws/ecoredes-deploy.timer` |
 | Servidor novo (Ubuntu + CloudFront), se a conta permitir | — | `deploy/aws/preparar-ec2.sh`, `deploy/aws/nginx-ecoredes.conf` |
 
 ## 1. Aplicação implantada na AWS
@@ -107,13 +107,21 @@ deploy **não** acontece.
 
 ## 7. CD — deploy automático
 
-`.github/workflows/deploy-aws.yml`: quando o CI da `main` termina com sucesso, o Actions entra na EC2 por SSH e roda
-`deploy/aws/atualizar.sh` (git pull → `docker compose up -d --build` → confere se a aplicação responde).
+**Ativo na AWS (modelo "pull", sem segredos):** a EC2 roda o timer do systemd `ecoredes-deploy.timer` a cada 5 minutos.
+O `deploy/aws/deploy-automatico.sh` busca a `main`; se há commit novo **e** o CI *Testes de backend e banco* daquele
+commit terminou com sucesso (consulta pública à API do GitHub Actions), executa `deploy/aws/atualizar.sh`
+(git pull → `docker compose up -d --build` → confere se a aplicação responde). Commit com teste falhando não é publicado.
 
-- **Limitação do Academy:** sem OIDC/roles próprias e com a sessão do lab expirando, o deploy usa **SSH com chave**
-  guardada nos *Secrets* do GitHub, e a porta 22 precisa aceitar os IPs do GitHub Actions (que mudam). Com o lab
-  desligado, o deploy falha até a instância voltar; basta reexecutar o workflow.
-- **Conta real:** GitHub OIDC → role com `ssm:SendCommand` (sem porta 22 aberta), ou imagem no ECR + deploy no ECS.
+```text
+Merge na main → GitHub Actions (CI: build + testes) → sucesso → EC2 detecta em até 5 min → build → deploy
+```
+
+Histórico: `journalctl -u ecoredes-deploy` na EC2 (linhas `INFO deploy:` / `WARN deploy:`).
+
+- **Limitação:** o modelo "push" (`.github/workflows/deploy-aws.yml`, GitHub entrando na EC2 por SSH) exige cadastrar a chave
+  nos *Secrets* do repositório, o que só o dono do repositório pode fazer; o workflow fica pronto e pula o deploy enquanto
+  os segredos não existem. Com o lab desligado, a EC2 publica a versão pendente assim que volta (timer com `Persistent=true`).
+- **Conta real:** GitHub OIDC → role IAM com `ssm:SendCommand` (sem porta 22 aberta), ou imagem no ECR + deploy no ECS.
 
 ## 8. CloudWatch Logs
 
@@ -138,5 +146,5 @@ das comunidades. O log leva só a tela, a ação, o id do usuário, os *nomes* d
 1. Abrir `https://44.215.85.75` → cadeado HTTPS → login; `http://44.215.85.75` redireciona para HTTPS.
 2. EC2 › Instâncias → `ecoredes-prod-web`, IP elástico, perfil **LabInstanceProfile**; RDS › `ecoredes-prod-db` (acesso só da EC2).
 3. CloudWatch › Log groups › `/ecoredes/app` → criar um diário e ver a linha `Operação concluída`.
-4. GitHub › Actions → execução verde de *Testes de backend e banco* seguida de *Deploy na AWS*.
+4. GitHub › Actions → execução verde de *Testes de backend e banco*; na EC2, `journalctl -u ecoredes-deploy` mostra a publicação.
 5. GitHub › Settings › Secrets → segredos do deploy existem, mas o valor não aparece; `.env` não está no repositório.
