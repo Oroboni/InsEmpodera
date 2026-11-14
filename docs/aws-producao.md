@@ -6,14 +6,15 @@ Onde o Academy limita algo, a seção mostra **como está no Academy** e **como 
 ## Arquitetura
 
 ```text
- Navegador ──HTTPS──▶ Amazon CloudFront (https://dxxxxxxxx.cloudfront.net)
-                            │  HTTP, só da lista de IPs do CloudFront (Security Group)
-                            ▼
-              EC2 Ubuntu 24.04 (IP elástico) ─ LabInstanceProfile (LabRole)
-              ├─ Nginx :80  ──▶  contêiner "app"   ASP.NET Core 10 (127.0.0.1:8080)
-              │                    └─▶ contêiner "mysql"  MySQL 8.4 (rede interna, sem porta pública)
-              │                          └─ volume Docker mysql-dados (dados persistentes)
+ Navegador ──HTTPS (Let's Encrypt)──▶ IP elástico 44.215.85.75
+                                         │
+              EC2 ecoredes-prod-web (Amazon Linux 2023, t3.small) ─ LabInstanceProfile (LabRole)
+              ├─ Nginx :443 (certificado renovado pelo certbot) ──▶ contêiner "app" ASP.NET Core 10 (127.0.0.1:8080)
+              │                                                     └─▶ contêiner "mysql" MySQL 8.4 (rede interna, sem porta pública)
+              │                                                           └─ volume Docker ecoredes_mysql-dados
               └─ Docker awslogs ──▶ Amazon CloudWatch Logs (/ecoredes/app, /ecoredes/mysql)
+
+ Amazon RDS for MySQL 8.4 (ecoredes-prod-db): banco da versão anterior, mantido como histórico; só aceita conexões da EC2.
 
  GitHub (main) ──push──▶ GitHub Actions: CI (build + testes) ──passou──▶ CD: SSH na EC2 → git pull → docker compose up
 ```
@@ -21,32 +22,34 @@ Onde o Academy limita algo, a seção mostra **como está no Academy** e **como 
 | Peça | Serviço AWS | Arquivo no repositório |
 |---|---|---|
 | Aplicação e banco | Amazon EC2 + Docker Compose | `compose.yaml`, `compose.aws.yaml`, `Dockerfile` |
-| HTTPS público | Amazon CloudFront (certificado `*.cloudfront.net`) | — (configurado no console) |
-| Proxy reverso | Nginx na EC2 | `deploy/aws/nginx-ecoredes.conf` |
+| HTTPS público | Nginx + Let's Encrypt no IP elástico (CloudFront bloqueado no Academy) | `/etc/nginx/conf.d/empodera.conf` na EC2 |
 | Logs | Amazon CloudWatch Logs | `compose.aws.yaml`, `Services/RegistroDeOperacoes.cs` |
-| Permissões | IAM (LabRole) | — |
+| Permissões | IAM (LabRole via LabInstanceProfile) | — |
 | CI / CD | GitHub Actions | `.github/workflows/testes.yml`, `.github/workflows/deploy-aws.yml` |
-| Preparo do servidor | — | `deploy/aws/preparar-ec2.sh`, `deploy/aws/atualizar.sh` |
+| Atualização do servidor | — | `deploy/aws/atualizar.sh` |
+| Servidor novo (Ubuntu + CloudFront), se a conta permitir | — | `deploy/aws/preparar-ec2.sh`, `deploy/aws/nginx-ecoredes.conf` |
 
 ## 1. Aplicação implantada na AWS
 
-Frontend (páginas MVC), backend, banco MySQL e armazenamento (volumes) rodam na EC2. Nada depende do computador
-de um integrante: os contêineres têm `restart: unless-stopped` e o Docker sobe com a instância.
+Frontend (páginas MVC), backend, banco MySQL e armazenamento (volumes) rodam na EC2 `ecoredes-prod-web`. Nada depende
+do computador de um integrante: os contêineres têm `restart: unless-stopped` e o Docker sobe com a instância.
 
 - **Academy:** a sessão do laboratório termina e a EC2 para; ao iniciar o lab de novo, a instância e os contêineres voltam
-  sozinhos. O **IP elástico** mantém o mesmo endereço (o CloudFront continua apontando para ele).
-- **Conta real:** banco no **Amazon RDS for MySQL** (Multi-AZ, backups automáticos), aplicação em **ECS Fargate** ou
-  **EC2 com Auto Scaling** atrás de um **Application Load Balancer**, imagens no **Amazon ECR**.
+  sozinhos, e o **IP elástico** mantém o endereço `44.215.85.75`.
+- **Conta real:** banco no **Amazon RDS** (já existe `ecoredes-prod-db`, MySQL 8.4, acessível só pelo Security Group da EC2;
+  em produção, Multi-AZ e backups automáticos), aplicação em **ECS Fargate** ou **EC2 com Auto Scaling** atrás de um
+  **Application Load Balancer**, imagens no **Amazon ECR**.
 
 ## 2. HTTPS
 
-Todo acesso público é por `https://<distribuição>.cloudfront.net`. O CloudFront redireciona HTTP para HTTPS
-(*Redirect HTTP to HTTPS*) e usa o certificado da própria AWS. A porta 80 da EC2 só aceita a lista gerenciada
-`com.amazonaws.global.cloudfront.origin-facing`; ninguém acessa a EC2 direto pela internet.
-A aplicação ainda envia **HSTS** (1 ano) e cookies `Secure`.
+Todo acesso público é por **`https://44.215.85.75`**: o Nginx redireciona HTTP → HTTPS (301) e usa um certificado
+**Let's Encrypt emitido para o IP elástico**, renovado automaticamente pelo `certbot-renew.timer`. A aplicação envia
+**HSTS** (1 ano) e cookies `Secure`; o Nginx não informa a versão (`server_tokens off`).
 
-- **Conta real:** domínio próprio no **Route 53**, certificado do **ACM** no CloudFront/ALB e HTTPS também entre
-  CloudFront e origem.
+- **Limitação do Academy:** o **Amazon CloudFront** está bloqueado para a role do laboratório
+  (`AccessDenied` em `cloudfront:ListDistributions`/`CreateDistribution`), e sem domínio próprio não há certificado do ACM.
+- **Conta real:** domínio no **Route 53**, certificado do **ACM** no **CloudFront** ou num **ALB**, e a EC2 aceitando a porta 80
+  só da lista `com.amazonaws.global.cloudfront.origin-facing` (configuração pronta em `deploy/aws/nginx-ecoredes.conf`).
 
 ## 3. Código no GitHub
 
@@ -60,7 +63,7 @@ o `.env.example` com valores de exemplo.
 | Segredo | Onde fica |
 |---|---|
 | Senhas do MySQL, senha inicial do admin, senha do e-mail | `/opt/ecoredes/.env` na EC2 (`chmod 600`, fora do Git) → variáveis de ambiente dos contêineres |
-| Chave SSH do deploy | GitHub → *Settings › Secrets and variables › Actions* (`AWS_EC2_CHAVE_SSH`) |
+| Chave SSH do deploy | GitHub → *Settings › Secrets and variables › Actions* (`AWS_EC2_CHAVE_SSH`, com `AWS_EC2_HOST` e `AWS_EC2_USUARIO`) |
 | Credenciais AWS para os logs | Nenhuma: o Docker usa o **perfil da instância** (LabInstanceProfile) |
 | Chaves de proteção de dados (login) | Volume Docker `chaves` |
 
@@ -132,8 +135,8 @@ das comunidades. O log leva só a tela, a ação, o id do usuário, os *nomes* d
 
 ## Como verificar (roteiro de apresentação)
 
-1. Abrir `https://<distribuição>.cloudfront.net` → cadeado HTTPS → login.
-2. EC2 › Instâncias → instância `ecoredes`, IP elástico, perfil **LabInstanceProfile**, Security Group (80 só CloudFront).
+1. Abrir `https://44.215.85.75` → cadeado HTTPS → login; `http://44.215.85.75` redireciona para HTTPS.
+2. EC2 › Instâncias → `ecoredes-prod-web`, IP elástico, perfil **LabInstanceProfile**; RDS › `ecoredes-prod-db` (acesso só da EC2).
 3. CloudWatch › Log groups › `/ecoredes/app` → criar um diário e ver a linha `Operação concluída`.
 4. GitHub › Actions → execução verde de *Testes de backend e banco* seguida de *Deploy na AWS*.
 5. GitHub › Settings › Secrets → segredos do deploy existem, mas o valor não aparece; `.env` não está no repositório.
