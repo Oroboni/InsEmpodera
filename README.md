@@ -4,11 +4,12 @@ Aplicação web desenvolvida em ASP.NET Core MVC para apoiar o Instituto Empoder
 
 > **Contexto acadêmico:** projeto criado por estudantes da Fatec para o Instituto Empodera no segundo semestre de 2025, com orientação de Paula Rocha e Antonio Munari. Esta documentação foi revisada como entrega da Tarefa 09 — Documentação de Software, da disciplina de Integração e Entrega Contínua (DevOps).
 
-> **Branch documentada:** o código descrito aqui corresponde à branch `Online`, que concentra o desenvolvimento ativo. A branch `main` está desatualizada em relação a ela.
+> **Sistema publicado:** <https://ecoredes.org/Account> — **sistema fechado**, de uso exclusivo do Instituto Empodera. Veja [Acesso ao sistema publicado](#-acesso-ao-sistema-publicado-deploy).
 
 ## 📑 Sumário
 
 - [Visão geral](#-visão-geral)
+- [Acesso ao sistema publicado (deploy)](#-acesso-ao-sistema-publicado-deploy)
 - [Funcionalidades](#-funcionalidades)
 - [Escopo e limitações](#-escopo-e-limitações)
 - [Requisitos](#-requisitos)
@@ -22,6 +23,7 @@ Aplicação web desenvolvida em ASP.NET Core MVC para apoiar o Instituto Empoder
 - [Testes](#-testes)
 - [Integração contínua e deploy](#-integração-contínua-e-deploy)
 - [Documentação complementar](#-documentação-complementar)
+- [Trabalho escrito (ABNT)](#-trabalho-escrito-abnt)
 - [Equipe](#-equipe)
 
 ## 🎯 Visão geral
@@ -43,6 +45,18 @@ Centralizar, em uma aplicação web com controle de acesso, o cadastro das comun
 | Administração do sistema | Gerencia usuários, perfis de acesso, importações e backups |
 
 O acesso é controlado por **perfis**. Os perfis `Admin`, `Editor`, `Colaborador`, `Visualizador` e `Supervisor` são criados inicialmente, e cada um possui permissões de listar, detalhar, criar, atualizar e excluir em cada módulo.
+
+## 🌐 Acesso ao sistema publicado (deploy)
+
+| | |
+| --- | --- |
+| **Endereço** | <https://ecoredes.org/Account> |
+| **Nome na interface** | EcoRedes (InsEmpodera) |
+| **Tipo de acesso** | Sistema **fechado** |
+
+> **Sistema fechado:** o EcoRedes é de uso **exclusivo do Instituto Empodera**. Não há cadastro público: todas as páginas, exceto o login e a recuperação de senha, exigem autenticação, e as contas são criadas e gerenciadas pela administração do Instituto (módulo **Usuários**). Quem não é da equipe do Instituto não tem acesso ao sistema; por isso, a página abre na tela de login e não há dados públicos para consulta.
+
+Para **avaliar o projeto sem acesso ao ambiente publicado**, execute-o localmente em modo de demonstração (SQLite, sem instalar banco): veja [Como executar](#-como-executar).
 
 ## ✨ Funcionalidades
 
@@ -103,7 +117,7 @@ Resumo dos requisitos identificados no código. A especificação completa, com 
 | RNF-003 | Limitar tentativas de login e de recuperação de senha | Implementado |
 | RNF-004 | Aplicar política de senha forte e armazenar senhas somente como hash | Implementado |
 | RNF-007 | Não versionar credenciais nem dados pessoais reais | Parcial |
-| RNF-010 | Executar onde houver o .NET 9 (Windows, Linux e macOS) | Atendido pela plataforma |
+| RNF-010 | Executar onde houver o .NET 10 (Windows, Linux e macOS) | Atendido pela plataforma |
 | RNF-012 | Executar testes automatizados a cada push | Implementado |
 | RNF-014 | Desempenho adequado ao uso interno | Sem meta definida nem medição |
 
@@ -111,13 +125,15 @@ Resumo dos requisitos identificados no código. A especificação completa, com 
 
 | Camada | Tecnologia | Versão |
 | --- | --- | --- |
-| Plataforma | .NET / ASP.NET Core MVC | `net9.0` |
+| Plataforma | .NET / ASP.NET Core MVC | `net10.0` |
 | Linguagem | C# | — |
 | Acesso a dados | Entity Framework Core | 9.0.19 |
 | Banco principal | MySQL 8.4 LTS ou posterior via `Pomelo.EntityFrameworkCore.MySql` | 9.0.0 (MySQL 8.4 LTS na CI) |
 | Banco de demonstração | SQLite via `Microsoft.EntityFrameworkCore.Sqlite` | 9.0.19 |
 | Autenticação | ASP.NET Core Identity com cookies | 9.0.19 |
 | Planilhas | ExcelDataReader (leitura) e ClosedXML (escrita) | 3.8.0 / 0.105.0 |
+| Relatórios em PDF | QuestPDF | 2026.9.1 |
+| Contêineres | Docker e Docker Compose (aplicação + MySQL 8.4) | — |
 | Interface | Razor Views, Bootstrap, jQuery, jQuery Validation | 5.3.3 / 3.7.1 / 1.21.0 |
 | Mapas e gráficos | Leaflet, Leaflet Control Geocoder, Chart.js | 1.9.4 / — / 4.5.1 |
 | Testes | xUnit, Microsoft.AspNetCore.Mvc.Testing, Playwright, Vitest | 2.9.3 / 9.0.19 / 1.62.0 / 3.2.7 |
@@ -177,6 +193,9 @@ InsEmpodera/
 ├── docs/                     # Documentação técnica complementar
 ├── scripts/                  # Relatórios e diagnósticos dos testes (PowerShell)
 ├── wwwroot/                  # Arquivos estáticos e bibliotecas
+├── Dockerfile                # Imagem da aplicação (.NET 10)
+├── compose.yaml              # Aplicação + MySQL 8.4 com Docker Compose
+├── .env.example              # Modelo das variáveis do Docker (copiar para .env)
 ├── InsEmpodera.csproj        # Projeto web
 ├── InsEmpodera.sln           # Solução com a aplicação e os testes
 ├── Program.cs                # Inicialização da aplicação
@@ -186,17 +205,26 @@ InsEmpodera/
 
 ## 🚀 Como executar
 
+Há três formas de rodar o projeto na sua máquina. Para **avaliar ou conhecer o sistema**, use a **Opção A** (a mais curta: não precisa instalar banco de dados).
+
+| Opção | Banco | Quando usar | Tempo aproximado |
+| --- | --- | --- | --- |
+| **A — Demonstração** | SQLite (arquivo local) | Conhecer e avaliar o sistema | 5 min |
+| **B — Desenvolvimento** | MySQL 8.4 | Desenvolver, equivalente à produção | 15 min |
+| **C — Docker** | MySQL 8.4 em contêiner | Subir aplicação e banco juntos, sem instalar o .NET | 10 min |
+
 ### Pré-requisitos
 
-| Ferramenta | Versão | Necessária para |
-| --- | --- | --- |
-| Git | recente | Clonar o repositório |
-| [.NET SDK](https://dotnet.microsoft.com/download/dotnet/9.0) | 9.0 | Compilar e executar |
-| MySQL | 8.4 LTS (versão adotada em todos os ambientes; também validado com 9.7.1). O MariaDB não é compatível com o esquema atual | Modo de desenvolvimento, produção e testes de backend/E2E |
-| Node.js e npm | 22.x na CI | Testes de frontend |
-| PowerShell | 7 ou superior | Script `testar.ps1` |
+| Ferramenta | Versão | Necessária para | Como conferir |
+| --- | --- | --- | --- |
+| [Git](https://git-scm.com/downloads) | recente | Todas as opções | `git --version` |
+| [.NET SDK](https://dotnet.microsoft.com/download/dotnet/10.0) | **10.0** | Opções A e B | `dotnet --list-sdks` deve listar `10.0.x` |
+| MySQL | 8.4 LTS (MariaDB **não** é compatível) | Opção B | `mysql --version` |
+| Docker com Compose | recente | Opção C | `docker compose version` |
+| Node.js e npm | 22.x | Somente testes de frontend | `node --version` |
+| PowerShell | 7 ou superior | Somente `testar.ps1` | `pwsh --version` |
 
-### 1. Clonar e compilar
+### Passo 1 — Baixar o código e compilar (todas as opções)
 
 ```bash
 git clone -b Online https://github.com/Oroboni/InsEmpodera.git
@@ -205,9 +233,13 @@ dotnet restore InsEmpodera.sln
 dotnet build InsEmpodera.sln
 ```
 
-### 2. Executar em modo de demonstração (SQLite, sem MySQL)
+Resultado esperado: `Build succeeded` com **0 erros**. (Quem for usar apenas a Opção C pode pular a compilação.)
 
-É o caminho mais curto para conhecer o sistema. No ambiente `Testing`, a aplicação cria um banco SQLite local (`Empodera.testing.db`, ignorado pelo Git) a partir do modelo, já com perfis, permissões e usuários de exemplo. A variável `Testing__AdminPassword` define a senha do administrador de exemplo: escolha qualquer valor.
+### Opção A — Demonstração com SQLite (recomendada para avaliação)
+
+Não exige servidor de banco. No ambiente `Testing`, a aplicação cria o arquivo `Empodera.testing.db` na pasta do projeto, já com perfis, permissões, eixos temáticos e usuários de exemplo. A variável `Testing__AdminPassword` define a senha do administrador de exemplo: escolha qualquer valor.
+
+**Passo 2 — Iniciar a aplicação**
 
 macOS e Linux:
 
@@ -225,45 +257,93 @@ $env:Testing__AdminPassword = "EscolhaUmaSenha@123"
 dotnet run --no-launch-profile --urls "http://localhost:5000"
 ```
 
-Acesse `http://localhost:5000` e entre com o e-mail `joao@email.com` e a senha escolhida. Esse usuário pertence ao perfil `Admin`.
+> O parâmetro `--no-launch-profile` é obrigatório: sem ele, o `dotnet run` usa `Properties/launchSettings.json`, que força o ambiente `Development` (que exige MySQL).
 
-Nesse modo, os eixos temáticos não são cadastrados automaticamente; o passo opcional para cadastrá-los está em [docs/instalacao-e-configuracao.md](docs/instalacao-e-configuracao.md#opção-a--demonstração-com-sqlite).
+**Passo 3 — Confirmar a inicialização.** O terminal deve exibir:
 
-> **Atenção:** o modo `Testing` afrouxa proteções (limite de tentativas de login, redirecionamento HTTPS e registro de dados sensíveis em log) e serve **apenas para demonstração local**. Não o utilize com dados reais. Para recomeçar do zero, pare a aplicação e apague `Empodera.testing.db`.
+```text
+Now listening on: http://localhost:5000
+Hosting environment: Testing
+```
 
-### 3. Executar em modo de desenvolvimento (MySQL)
+**Passo 4 — Acessar.** Abra <http://localhost:5000> e entre com:
 
-É o modo equivalente ao de produção. Em resumo:
+| Campo | Valor |
+| --- | --- |
+| E-mail | `joao@email.com` (usuário de exemplo do perfil `Admin`) |
+| Senha | o valor definido em `Testing__AdminPassword` |
 
-1. Criar o esquema e os dados iniciais **uma única vez**, executando a aplicação no ambiente `Testing` com um banco MySQL novo (o EF Core cria as tabelas a partir do modelo):
+**Passo 5 — Conhecer o sistema.** Siga o [exemplo de uso](#exemplo-de-uso) abaixo.
 
-   ```bash
-   ASPNETCORE_ENVIRONMENT=Testing \
-   DatabaseProvider=MySql \
-   ConnectionStrings__DefaultConnection="Server=127.0.0.1;Port=3306;Database=empodera;User=SEU_USUARIO;Password=SUA_SENHA;" \
-   Testing__AdminPassword='EscolhaUmaSenha@123' \
-   dotnet run --no-launch-profile --urls "http://localhost:5000"
-   ```
+**Para recomeçar do zero:** pare a aplicação (`Ctrl+C`) e apague o banco local:
 
-   Quando aparecer `Now listening on`, encerre com `Ctrl+C`.
+```bash
+rm -f Empodera.testing.db Empodera.testing.db-shm Empodera.testing.db-wal
+```
 
-2. Registrar a connection string fora do repositório:
+> **Atenção:** o modo `Testing` afrouxa proteções (limite de tentativas de login, redirecionamento HTTPS e registro de dados sensíveis em log) e serve **apenas para demonstração local**. Nunca o utilize com dados reais.
 
-   ```bash
-   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=127.0.0.1;Port=3306;Database=empodera;User=SEU_USUARIO;Password=SUA_SENHA;"
-   ```
+### Opção B — Desenvolvimento com MySQL
 
-3. Iniciar com o perfil definido em `Properties/launchSettings.json`:
+Modo equivalente ao de produção. Use um servidor local e um banco **novo**.
 
-   ```bash
-   dotnet run --launch-profile https
-   ```
+**Passo 2 — Criar o banco e as tabelas (uma única vez).** Com o MySQL 8.4 em execução, crie o banco vazio e carregue o DDL oficial (cria as 34 tabelas, perfis, permissões e usuários de exemplo):
 
-4. Acessar `https://localhost:7121` e entrar com `joao@email.com` e a senha definida no passo 1.
+```bash
+mysql -u root -p -e "CREATE DATABASE empodera CHARACTER SET utf8mb4;"
+mysql -u root -p empodera -e "source Database/Empodera.schema.sql"
+```
 
-> **Atenção:** nunca execute o passo 1 contra um banco com dados reais — ele redefine a senha do usuário de ID 1.
+> Sem MySQL instalado, suba um temporário com Docker: `docker run -d --name mysql84 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=SUA_SENHA mysql:8.4`.
 
-O passo a passo completo (inclusive para Windows), as alternativas com os scripts SQL do repositório e a solução de problemas estão em [docs/instalacao-e-configuracao.md](docs/instalacao-e-configuracao.md).
+**Passo 3 — Registrar a conexão e a senha inicial fora do repositório** (*user secrets*; nada disso vai para o Git). Execute na pasta do projeto:
+
+```bash
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=127.0.0.1;Port=3306;Database=empodera;User=root;Password=SUA_SENHA;"
+dotnet user-secrets set "Instalacao:SenhaAdmin" "EscolhaUmaSenha@123"
+```
+
+A senha inicial só é aplicada enquanto o usuário de ID 1 ainda tem a senha de fábrica do script; depois do primeiro acesso, remova-a com `dotnet user-secrets remove "Instalacao:SenhaAdmin"`.
+
+**Passo 4 — Confiar no certificado HTTPS de desenvolvimento (uma única vez):**
+
+```bash
+dotnet dev-certs https --trust
+```
+
+**Passo 5 — Executar:**
+
+```bash
+dotnet run --launch-profile https
+```
+
+O terminal deve exibir `Now listening on: https://localhost:7121` e `Hosting environment: Development`. Na primeira execução, a aplicação garante os dez eixos temáticos.
+
+**Passo 6 — Acessar.** Abra <https://localhost:7121> e entre com `joao@email.com` e a senha definida no passo 3.
+
+### Opção C — Docker (aplicação + MySQL 8.4)
+
+```bash
+cp .env.example .env        # edite o .env e troque TODOS os valores (senhas do MySQL, SENHA_INICIAL_ADMIN etc.)
+docker compose up -d --build
+docker compose ps           # mysql "healthy" e app "Up"
+```
+
+Acesse <http://localhost:8080> e entre com `joao@email.com` e a `SENHA_INICIAL_ADMIN` definida no `.env`. Na primeira vez, o MySQL cria as tabelas com `Database/Empodera.schema.sql`. Os dados ficam em volumes e permanecem ao reiniciar; `docker compose down -v` apaga tudo. Detalhes (atualização, backup e restauração) em [docs/docker.md](docs/docker.md).
+
+### Problemas comuns
+
+| Sintoma | Solução |
+| --- | --- |
+| `You must install or update .NET to run this application` | Instale o **.NET 10** (SDK para compilar; runtime ASP.NET Core 10 para executar) |
+| O ambiente `Testing` abre como `Development` | Inclua `--no-launch-profile` no `dotnet run` |
+| `Defina ConnectionStrings__DefaultConnection...` | Você está fora do ambiente `Testing` sem MySQL configurado: refaça o passo 3 da Opção B ou use a Opção A |
+| `Table 'empodera.Usuarios' doesn't exist` | O esquema não foi carregado: refaça o passo 2 da Opção B |
+| Aviso de certificado em `https://localhost:7121` | Execute `dotnet dev-certs https --trust` |
+| HTTP 400 `Invalid Hostname` | Acesse por `localhost` ou `127.0.0.1` |
+| HTTP 429 ou "Acesso temporariamente bloqueado" no login | Aguarde 1 minuto (limite de tentativas) ou 15 minutos (cinco senhas erradas) |
+
+A lista completa, as variáveis de ambiente e alternativas estão em [docs/instalacao-e-configuracao.md](docs/instalacao-e-configuracao.md).
 
 ### Exemplo de uso
 
@@ -295,7 +375,7 @@ Detalhes e valores padrão: [docs/instalacao-e-configuracao.md](docs/instalacao-
 - **Mapeamento:** Entity Framework Core com 34 entidades registradas em [`Data/ApplicationDbContext.cs`](Data/ApplicationDbContext.cs).
 - **Provedores:** MySQL (8.4 LTS ou posterior) em desenvolvimento e produção; SQLite no modo de demonstração.
 - **Criação do esquema:** não há migrations no repositório. O DDL oficial é [`Database/Empodera.schema.sql`](Database/Empodera.schema.sql), gerado a partir do modelo (`dotnet run --project scripts/GerarSchema`) conforme a [revisão técnica do DDL](docs/revisao-ddl-mysql.md). Bancos antigos (chaves UUID) são convertidos por [`Database/migracao-uuid-para-int.sql`](Database/migracao-uuid-para-int.sql). No ambiente `Testing` com SQLite, o EF Core cria as tabelas (`EnsureCreated`).
-- **Dados iniciais:** perfis, permissões e cinco usuários de exemplo, criados junto com o esquema; os dez eixos temáticos são cadastrados na inicialização em `Development` e `Production`, caso estejam ausentes.
+- **Dados iniciais:** perfis, permissões e cinco usuários de exemplo, criados junto com o esquema; os dez eixos temáticos são cadastrados na inicialização, em qualquer ambiente, caso estejam ausentes.
 - **Chaves primárias:** `INT UNSIGNED AUTO_INCREMENT`, geradas pelo banco; restrições (FK, `UNIQUE`, `CHECK`) nomeadas no padrão da revisão do DDL.
 
 O modelo de dados, os relacionamentos e os cuidados com os scripts estão em [docs/banco-de-dados.md](docs/banco-de-dados.md).
@@ -328,6 +408,8 @@ As suítes que usam banco criam e removem bancos temporários no servidor indica
 
 ## 🔄 Integração contínua e deploy
 
+**Link do deploy:** <https://ecoredes.org/Account> (sistema fechado, exclusivo do Instituto Empodera — ver [Acesso ao sistema publicado](#-acesso-ao-sistema-publicado-deploy)).
+
 | Workflow | Gatilho | O que faz |
 | --- | --- | --- |
 | [`testes.yml`](.github/workflows/testes.yml) | Push e pull request em todas as branches, exceto `import_exel` | Executa `testar.ps1` com MySQL 8.4 LTS e publica os resultados como artefato |
@@ -358,6 +440,10 @@ Implantação antiga (branch `Online`) — manual: o pacote gerado por `dotnet p
 | [InsEmpodera.E2ETests/README.md](InsEmpodera.E2ETests/README.md) | Detalhes da suíte Playwright |
 | [CONFIGURAR-GMAIL.md](CONFIGURAR-GMAIL.md) | Configuração do envio de e-mails |
 | [HOSPEDAGEM-AWS.md](HOSPEDAGEM-AWS.md) | Implantação na AWS |
+
+## 📝 Trabalho escrito (ABNT)
+
+O trabalho escrito do projeto, no padrão ABNT, está **em execução** e ficará disponível neste repositório assim que for concluído.
 
 ## 👥 Equipe
 
